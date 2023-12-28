@@ -73,6 +73,8 @@
 \SNAPSHOT::TOP:EMISSMOL "Molecular H-alpha emissivity (photons/m3/s)"
 \SNAPSHOT::TOP:EMOLRAD "Power loss due to molecule radiation (W)"
 \SNAPSHOT::TOP:ENEUTRAD "Power loss due to atom radiation (W)"
+\SNAPSHOT::TOP:EMOLRAD "Power loss due to molecule radiation (W)"
+\SNAPSHOT::TOP:EIONRAD "Power loss due to molecular ion radiation (W)"
 \SNAPSHOT::TOP:FCHDIAX "Poloidal diamagnetic current"
 \SNAPSHOT::TOP:FCHDIAY "Radial diamagnetic current"
 \SNAPSHOT::TOP:FCHINERTX "Poloidal ion inertial current"

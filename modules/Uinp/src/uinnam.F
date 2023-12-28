@@ -20,7 +20,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=180)
+      parameter(lunm=184)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -76,8 +76,9 @@ c*** lugwt : counter for the grid-wall ties
      2    'glb_pwrf','glb_tmst','spcs_crk','spcs_crp','spcs_crf',
      3    'spcs_scn','tgminhst','gpf_mhst','chords'  ,'linintg' ,
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
-     5    'set_list','n_points','linprfs' ,'lm_equ'  ,'crr_mode',
-     6    'grd_mode','tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm'  /
+     5    'set_list','n_points','linprfs' ,'lm_equ'  ,'refcell' ,
+     6    'refpress','trefcell','trfpress','crr_mode','grd_mode',
+     7    'tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm' /
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -1098,17 +1099,37 @@ c***  input elements indices for current rectangle
         call resima(uam)
         lena=i
         ln_cnfg = uam(1:1).eq.'-'.and.lm_cnfg
-      case (175) ! crr_mode
+      case (175) ! refcell
+        call rearri(refcell,nlim,i)
+        if(i.gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',i
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      case (176) ! refpress
+        call rearre(refpress,nlim,i)
+        if(i.gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',i
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+        end if !}
+      case (177) ! trefcell
+        call resimi(trefcell(luswch))
+      case (178) ! trfpress
+        call resime(trfpress(luswch))
+      case (179) ! crr_mode
         call resimi(carre_mode)
-      case (176) ! grd_mode
+      case (180) ! grd_mode
         call resimi(grid_mode)
-      case (177) ! tgfclbl
+      case (181) ! tgfclbl
         call resimi(tgfclbl(luswch))
-      case (178) ! fclbl
+      case (182) ! fclbl
         call rearri(fclbl,nlim,i)
-      case (179) ! omp_elm
+      case (183) ! omp_elm
         call resimi(omp_elm)
-      case (180) ! imp_elm
+      case (184) ! imp_elm
         call resimi(imp_elm)
       case default
         call skipit

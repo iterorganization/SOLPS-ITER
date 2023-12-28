@@ -143,23 +143,19 @@ c*** 1.  General data for the run
      . " Created with SOLPS-ITER Uinp version "//git_version_Uinp
       write(iunoo,700) utxtgt
       write(iunoo,700) utxthd(1)
-      if (nbgk.gt.0) then
-        j=nfile/10000
-        k=(nfile-j*10000)/1000
-        l=(nfile-j*10000-k*1000)/100
-        m=(nfile-j*10000-k*1000-l*100)/10
-        n=mod(nfile,10)
-        if (l.le.2) then
-          l=4
-        else if (l.eq.6.or.l.eq.7.or.l.eq.9) then
-          l=4
-        else if (l.eq.8) then
-          l=3
-        endif
-        if (n.ne.1) n=6
-        nfile=j*10000+k*1000+l*100+m*10+n
+      j=nfile/10000
+      k=(nfile-j*10000)/1000
+      l=(nfile-j*10000-k*1000)/100
+      m=(nfile-j*10000-k*1000-l*100)/10
+      n=mod(nfile,10)
+      if (nprnli.gt.0) then
+        if (j.eq.0) j=3
       end if
-      write(iunoo,707) nmach,nmode,ntcpu,nfile,niter0,niter,
+      if (nbgk.gt.0) then
+        if (l.eq.0) l=8
+      end if
+      nfile=j*10000+k*1000+l*100+m*10+n
+      write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
@@ -360,13 +356,13 @@ c*** 3a.  data for non-default surface models on standard surfaces
           else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
             ii=10*ilsptc(ists)+ilsptp(ists)
             write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
-     ,                                    lchspnws(ists)
+     ,                                    lchspnws(ists),arefcell(ists)
             write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
      ,                       transp(ists,1),transp(ists,2),fsheat(ists)
             write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
      ,                              exppl(ists),expel(ists),expil(ists)
             write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
-     ,                        fchspts(ists),sptprm(ists)
+     ,                        fchspts(ists),sptprm(ists),arfpress(ists)
           end if !}
         end do !}
         i=nstsi-nskip
@@ -396,13 +392,13 @@ c       first write the core regions
           else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
             ii=10*ilsptc(ists)+ilsptp(ists)
             write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
-     ,                      lchspnws(ists)
+     ,                      lchspnws(ists),arefcell(ists)
             write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
      ,                      transp(ists,1),transp(ists,2),fsheat(ists)
             write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
      ,                      exppl(ists),expel(ists),expil(ists)
             write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
-     ,                      fchspts(ists),sptprm(ists)
+     ,                      fchspts(ists),sptprm(ists),arfpress(ists)
           end if !}
         end do !}
 c       then write the positive face labels
@@ -522,13 +518,14 @@ c**  Local reflection model ?
           write(iunoo,715) scard_name(jscrd(i))
         else if (jliin(i).eq.1) then !}{
           ii=10*jlsptc(i)+jlsptp(i)
-          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i)
+          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i),
+     ,                refcell(i)
           write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
           write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
      ,                exppla(i),expela(i),expila(i)
           write(iunoo,703) rcycsa(i),rcycca(i),
-     ,                echspta(i),fchspta(i),sptpra(i)
+     ,                echspta(i),fchspta(i),sptpra(i),refpress(i)
         end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
@@ -810,6 +807,8 @@ c** To be done (in Eirene first)
      ,                                                        i=1,nplsi)
       end if !}
       if (indpro(5).le.5) write(iunoo,703) b0,b1,b2,b3,b4,b5
+      if (indpro(11).le.5) write(iunoo,703) (zi0(i),zi1(i),zi2(i),
+     ,                                   zi3(i),zi4(i),zi5(i),i=1,nplsi)
       if (indpro(12).le.5) write(iunoo,703) vl0,vl1,vl2,vl3,vl4,vl5
 
 c*** 6a.  data for reflection model
@@ -845,13 +844,13 @@ c*** surface cards
       do i=1,nscards
         write(iunoo,715) scard_name(i)
         write(iunoo,707) scilref(i),scilspt(i),scisrs(i),
-     ,                   scisrc(i),sclchspnwl(i)
+     ,                   scisrc(i),sclchspnwl(i),screfcell(i)
         write(iunoo,703) scxmlim(i),scewall(i),scewbin(i),
      ,                   sctransp(i,1),sctransp(i,2),scfsheat(i)
         write(iunoo,703) screcycf(i),screcyct(i),scrcprm(i),
      ,                   scexppl(i),scexpel(i),scexpil(i)
         write(iunoo,703) screcycs(i),scychsptg(i),scstprm(i),0.0,
-     ,                               scechsptg(i)
+     ,                               scechsptg(i),screfpress(i)
         do j=1,nnchemvar(i) !{
           k=k+1
           ich=indchemvar(k)

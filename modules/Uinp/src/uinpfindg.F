@@ -15,6 +15,7 @@ c=======================================================================
 #include "uinput.inc"
       integer, save :: ntcpu_save, nfile_save, nprmul_save
       integer, save :: npts_save(nstra)
+      integer :: jk
 c=======================================================================
       call subini ('uinpfindg')
       if(lc) then !{
@@ -25,7 +26,9 @@ c=======================================================================
        nprmul_save=nprmul
        nprmul=max(1,nprmul)*10
        nfile_save=nfile
-       nfile=30000+mod(nfile_save,10000)
+       jk=nfile/1000
+       nfile=jk*1000+800+mod(nfile_save,100)
+       nfile=30000+mod(nfile,10000)
       else !}{
        ntcpu=ntcpu_save
        npts=npts_save

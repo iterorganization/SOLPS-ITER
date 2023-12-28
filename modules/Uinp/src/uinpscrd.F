@@ -122,6 +122,7 @@ c        character*(72) cardname
       scisrs(k)=isrss(ists)
       scisrc(k)=0
       sclchspnwl(k)=1
+      screfcell(k)=arefcell(ists)
 
       scxmlim(k)=xmlim(ists)
       scewall(k)=ewall(ists)
@@ -138,6 +139,7 @@ c        character*(72) cardname
       scychsptg(k)=recycc(ists)
       scechsptg(k)=1.0
       scfchsptg(k)=0.0
+      screfpress(k)=arfpress(ists)
 
       scard_name(k)=cardname(k)
 
@@ -156,6 +158,7 @@ c***  check if surface card for NDS k is already present in the list
       if(scilref(k).NE.ilref(ists)
      .    .OR.scilspt(k).NE.ii
      .    .OR.scisrs(k).NE.isrss(ists)
+     .    .OR.screfcell(k).NE.arefcell(ists)
      .    .OR.scxmlim(k).NE.xmlim(ists)
      .    .OR.scewall(k).NE.ewall(ists)
      .    .OR.scewbin(k).NE.ewbin(ists)
@@ -169,7 +172,8 @@ c***  check if surface card for NDS k is already present in the list
      .    .OR.scexpil(k).NE.expil(ists)
      .    .OR.scychsptg(k).NE.recycc(ists)
      .    .OR.screcycs(k).NE.recycs(ists)
-     .    .OR.scisrsg(k).NE.isrsg(ists))
+     .    .OR.scisrsg(k).NE.isrsg(ists)
+     .    .OR.screfpress(k).NE.arfpress(ists))
      .     checknds=.FALSE.
       return
       end function checknds !}
@@ -186,6 +190,7 @@ c        character*(72) cardname
       scisrs(k)=jsrss(i)
       scisrc(k)=0
       sclchspnwl(k)=1
+      screfcell(k)=refcell(i)
 
       scxmlim(k)=xmlma(i)
       scewall(k)=ewala(i)
@@ -202,6 +207,7 @@ c        character*(72) cardname
       scychsptg(k)=rcycca(i)
       scechsptg(k)=1.0
       scfchsptg(k)=0.
+      screfpress(k)=refpress(i)
 
       scard_name(k)=cardname(k)
 
@@ -220,6 +226,7 @@ c***  check if surface card for AS k is already present in the list
       if(scilref(k).NE.jlref(i)
      .    .OR.scilspt(k).NE.ii
      .    .OR.scisrs(k).NE.jsrss(i)
+     .    .OR.screfcell(k).NE.refcell(i)
      .    .OR.scxmlim(k).NE.xmlma(i)
      .    .OR.scewall(k).NE.ewala(i)
      .    .OR.scewbin(k).NE.ewbna(i)
@@ -233,7 +240,8 @@ c***  check if surface card for AS k is already present in the list
      .    .OR.scexpil(k).NE.expila(i)
      .    .OR.scychsptg(k).NE.rcycca(i)
      .    .OR.screcycs(k).NE.rcycsa(i)
-     .    .OR.scisrsg(k).NE.jsrsg(i))
+     .    .OR.scisrsg(k).NE.jsrsg(i)
+     .    .OR.screfpress(k).NE.refpress(i))
      .     checkas=.FALSE.
       return
       end function checkas !}
@@ -241,7 +249,7 @@ c***  check if surface card for AS k is already present in the list
 c=======================================================================
 c***  function to generate surface card name for reaction k
 c***  name format:
-C***  SURFMOD_k_<MATERIAL>_<SPT>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
+C***  SURFMOD_k_<MATERIAL>_<SPT>_<PUMP>_<PRESS>_<SEMITRANSP>_<TEMPERATURE K>
       character*(72) function cardname(k) !{
       use b2mod_constants
       implicit none
@@ -275,6 +283,8 @@ C***  SURFMOD_k_<MATERIAL>_<SPT>_<PUMP>_<SEMITRANSP>_<TEMPERATURE K>
       if(scilspt(k).NE.0) cnam=cnam(1:len_trim(cnam))//'_SPT'
       if(screcycf(k).LT.1.0.OR.screcyct(k).LT.1.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_PUMP'
+      if(scilref(k).EQ.4)
+     .                 cnam=cnam(1:len_trim(cnam))//'_PRESS'
       if(sctransp(k,1).GT.0.OR.sctransp(k,2).GT.0)
      .                 cnam=cnam(1:len_trim(cnam))//'_SMTRANS'
       if(scewall(k).LT.0) then

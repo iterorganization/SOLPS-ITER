@@ -1076,7 +1076,7 @@ SOLPSTOP
 |   |   |   +---grsoft-dummy
 |   |   |   +---interfaces
 |   |   |   |   +---couple_B2
-|   |   |   |   +---couple_B2_parallel
+|   |   |   |   +---couple_B2.5
 |   |   |   |   +---couple_Dummy
 |   |   |   |   +---couple_SOLPS-ITER
 |   |   |   |   +---couple_SOLPS-ITER_structured
@@ -1098,10 +1098,12 @@ SOLPSTOP
 |   |   |   +---tetrahedra
 |   |   |   +---user-routines
 |   |   |   |   +---user_default
+|   |   |   |   +---user_EDGE2D
 |   |   |   |   +---user_generalized_interface
 |   |   |   |   +---user_iter
+|   |   |   |   +---user_solps4.3
+|   |   |   |   +---user_solps5.0
 |   |   |   +---volume-processes
-|   |   |   +---xdr-dummy
 \end{verbatim}
 
 The command\index{sei}
@@ -3029,6 +3031,8 @@ See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
 
 When referring to array length {\tt (NREG+1)} above, we mean range {\tt [0:NREG]} in the code, while {\tt NS} refers to {\tt [0:NS-1]}.
 
+When running in dynamic mode ({\tt b2mndt\_style.eq.2}), the total momentum and energy equations are not solved, and the timestep multipliers should not be used, unless their product with the under-relaxation parameters is 1 (as the code defaults provide).
+
 The region indices are defined as follows for a SN case:
 \begin{itemize}\index{regions}
   \item[0] Dead regions (unused cells)
@@ -4461,16 +4465,36 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently four possible choices supported. They are:
+There are currently five possible choices supported. They are:
 \begin{description}
-  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy.
-  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors.
-  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors.
+  \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
 
 The default strategy depends on the version of the MPI library with which {\tt Eirene} was compiled. If MPI version 3 or greater was used, then the default strategy is the {\bf BALANCED} one. Otherwise, the {\bf ORIGINAL} strategy is chosen. If {\tt Eirene} is used outside the \SOLPSITER environment, the default strategy will be the {\bf EMBARASSINGLY PARALLEL} one.
+
+\section{Pressure Feedback Loop}
+
+This type of boundary condition modifies the recycling probability {\tt RECYCT} by means of a proportional-integral loop so that the pressure in a given cell matches a given reference value. It is activated by setting {\tt ILREF = 4} in the desired reflection model in block 6a of the Eirene input file. Two new values, related with the reference cell and pressure, have to be provided. The first one in the line:
+
+\begin{verbatim}
+ILREF ILSPT ISRS ISRC REFCELL
+\end{verbatim}
+
+in which {\tt REFCELL} is an integer referencing the cell in the Eirene mesh in which the pressure will be computed. This value can be easily obtained with {\tt triang} by means of the {\tt (I)nquire} function. The second value is provided in the line:
+
+\begin{verbatim}
+RECYCS RECYCC SPTPRM ESPUTS ESPUTC REFPRESS
+\end{verbatim}
+
+in which {\tt REFPRESS} is the reference pressure in $Pa$.
+
+This loop will not provide values of {\tt RECYCT} larger than $1$ or below $0$.
+The coefficients of the proportional-integral loop are hard-coded.
 
 \chapter{Running the coupled version of B2.5-Eirene}
 \label{cha:coupledb2eirene}
@@ -4582,8 +4606,8 @@ triangular grid regions.
 When running the coupled version of \SOLPSITERns, you will obtain additional output files, named {\tt fort.44} and {\tt fort.46}, which contain data computed from {\tt Eirene}. The contents of the {\tt fort.44} file is a series of data blocks, each starting with a title line, after a header providing the grid size and species list, as well as a format identifier. The relevant dimensions are (please also refer to the {\tt Eirene} manual for further details and to the code for the actual way the arrays are written out):
 
 \begin{description}
-  \item[NDX] Number of poloidal cells in the {\tt Eirene} computational grid
-  \item[NDY] Number of radial cells in the {\tt Eirene} computational grid
+  \item[NCV] Number of cells in the {\tt B2.5} computational grid
+  \item[NFC] Number of cell faces in the {\tt B2.5} computational grid
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
@@ -4592,6 +4616,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
   \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
   \item[NTRII] Number of triangles forming the {\tt Eirene} computational grid
+  \item[NCVTOT] Number of coarse cells forming the {\tt Eirene} computational grid
   \item[NCL] Number of segments for resolved tallies on non-standard surfaces
 \end{description}
 
@@ -4599,24 +4624,24 @@ The data blocks are:
 
 \begin{sloppypar}
 \begin{description}
-  \item[dab2] Atom density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[tab2] Atom temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[dmb2] Molecule density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[tmb2] Molecule temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[dib2] Test ion density ($m^{-3}$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
-  \item[tib2] Test ion temperature ($eV$), dimension ({\tt NDX},{\tt NDY},{\tt NION})
-  \item[rfluxa] Radial flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[rfluxm] Radial flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[pfluxa] Poloidal flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[pfluxm] Poloidal flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[refluxa] Radial energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[refluxm] Radial energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[pefluxa] Poloidal energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[pefluxm] Poloidal energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[emiss] $H_\alpha$ emissivity due to atoms ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
-  \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
-  \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[dab2] Atom density ($m^{-3}$), dimension ({\tt NCV},{\tt NATM})
+  \item[tab2] Atom temperature ($eV$), dimension ({\tt NCV},{\tt NATM})
+  \item[dmb2] Molecule density ($m^{-3}$), dimension ({\tt NCV},{\tt NMOL})
+  \item[tmb2] Molecule temperature ($eV$), dimension ({\tt NCV},{\tt NMOL})
+  \item[dib2] Test ion density ($m^{-3}$), dimension ({\tt NCV},{\tt NION})
+  \item[tib2] Test ion temperature ($eV$), dimension ({\tt NCV},{\tt NION})
+  \item[rfluxa] Radial flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NCV},{\tt NATM})
+  \item[rfluxm] Radial flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NCV},{\tt NMOL})
+  \item[pfluxa] Poloidal flux density of atoms ($m^{-2}.s^{-1}$), dimension ({\tt NCV},{\tt NATM})
+  \item[pfluxm] Poloidal flux density of molecules ($m^{-2}.s^{-1}$), dimension ({\tt NCV},{\tt NMOL})
+  \item[refluxa] Radial energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NCV},{\tt NATM})
+  \item[refluxm] Radial energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NCV},{\tt NMOL})
+  \item[pefluxa] Poloidal energy flux density carried by atoms ($W.m^{-2}$), dimension ({\tt NCV},{\tt NATM})
+  \item[pefluxm] Poloidal energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NCV},{\tt NMOL})
+  \item[emiss] $H_\alpha$ emissivity due to atoms ($photons.m^{-3}.s^{-1}$), dimension ({\tt NCV}}
+  \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NCV})
+  \item[srcml] Molecule particle source ($A$), dimension ({\tt NCV},{\tt NMOL})
+  \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NCV},{\tt NMOL})
   \item[wldnek] Net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldna] Flux of atoms impinging on surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
@@ -4664,9 +4689,11 @@ The data blocks are:
   \item[wlpump(M)] Pumped flux per molecule ($particles.s^{-1}$), dimension ({\tt NMOL}, {\tt NLIM}+{\tt NSTS})
   \item[wlpump(I)] Pumped flux per test ion ($particles.s^{-1}$), dimension ({\tt NION}, {\tt NLIM}+{\tt NSTS})
   \item[wlpump(P)] Pumped flux per plasma ion ($particles.s^{-1}$), dimension ({\tt NPLS}, {\tt NLIM}+{\tt NSTS})
-  \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NATM})
-  \item[eirdiag] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS +  1})
-  \item[fnmti\_b2] Face indices forming the non-standard surfaces, dimension ({\tt eirdiag(NSTS+1)})
+  \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NCV},{\tt NATM})
+  \item[emolrad] Radiation rate due to molecules ($W$), dimension ({\tt NCV},{\tt NMOL})
+  \item[eionrad] Radiation rate due to test ions ($W$), dimension ({\tt NCV},{\tt NION})
+  \item[eirdiag] Indices for segments on resolved non-standard surfaces, dimension ({\tt NSTS +  1})
+  \item[fnmti\_b2] Face indices forming the non-standard surfaces, dimension ({\tt eirdiag(NSTS)})
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
   \item[wldna\_res] Flux of atoms impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NATM}, {\tt NCL})
   \item[wldnm\_res] Flux of molecules impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NMOL}, {\tt NCL})
@@ -4683,6 +4710,7 @@ The data blocks are:
   \item[wlpump\_res(M)] Pumped flux per molecule ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NMOL})
   \item[wlpump\_res(I)] Pumped flux per test ion ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NION})
   \item[wlpump\_res(P)] Pumped flux per plasma ion ($A.m^{-2}$), dimension ({\tt NCL}, {\tt NPLS})
+  \item[ewldt\_res] Total wall power loading from {\tt Eirene} particles ($W.m^{-2}$), dimension ({\tt NCL})
   \item[pdena\_int] Integral number of atoms over the entire {\tt Eirene} computational grid, dimension ({\tt NATM}, {\tt 0:NSTRA})
   \item[pdenm\_int] Integral number of molecules over the entire {\tt Eirene} computational grid, dimension ({\tt NMOL}, {\tt 0:NSTRA})
   \item[pdeni\_int] Integral number of test ions over the entire {\tt Eirene} computational grid, dimension ({\tt NION}, {\tt 0:NSTRA})
@@ -4701,26 +4729,26 @@ The data blocks are:
 Similarly, the {\tt fort.46} file contains the following data blocks, this time all defined on the {\tt Eirene} triangle grid, which are:
 
 \begin{description}
-  \item[PDENA] Atom particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[PDENM] Molecule particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[PDENI] Test ion particle density (in $cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
-  \item[EDENA] Energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[EDENM] Energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[EDENI] Energy density carried by test ions (in $eV.cm^{-3}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VXDENA] $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VXDENM] $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VXDENI] $X$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VYDENA] $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VYDENM] $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VYDENI] $Y$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
-  \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NATM})
-  \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
-  \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
+  \item[PDENA] Atom particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[PDENM] Molecule particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[PDENI] Test ion particle density (in $cm^{-3}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[EDENA] Energy density carried by atoms (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[EDENM] Energy density carried by molecules (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[EDENI] Energy density carried by test ions (in $eV.cm^{-3}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VXDENA] $X$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VXDENM] $X$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VXDENI] $X$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VYDENA] $Y$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VYDENM] $Y$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VYDENI] $Y$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
+  \item[VZDENA] $Z$-directed momentum density carried by atoms (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NATM})
+  \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NMOL})
+  \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NCVTOT},{\tt NION})
   \item[VOL] Triangle volumes (in $cm^3$), dimension ({\tt NTRII})
-  \item[PUX] $X$-component of the poloidal unit vector at the triangle center
-  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center
-  \item[PVX] $X$-component of the radial unit vector at the triangle center
-  \item[PVY] $Y$-component of the radial unit vector at the triangle center
+  \item[PUX] $X$-component of the poloidal unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PVX] $X$-component of the radial unit vector at the triangle center, dimension ({\tt NCV})
+  \item[PVY] $Y$-component of the radial unit vector at the triangle center, dimension ({\tt NCV})
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
@@ -4877,6 +4905,70 @@ several values of $\Delta_t$.
     \caption{Total electron content for several timesteps after puff b.c. applied.}
     \label{fig:tmne1}
 \end{figure}
+
+\section{Dynamic ("Time-dependent") mode}
+\label{sec:dynamic}\index{Dynamic mode}
+
+{\em This feature is experimental and should be used with caution!}
+
+There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
+
+The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+
+When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
+
+More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
+
+\begin{equation}\label{eq:mom_dt_1}
+m_a h_z \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
+\end{equation}
+
+and the time derivative terms for the energy equations, (\ref{eq:ene_new}) and (\ref{eq:eni}), are discretized as:
+
+\begin{equation}\label{eq:en_dt_1}
+\sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} T_\alpha^{(k+1)} - n_\alpha^{(k)} T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f}
+\end{equation}
+
+where $\alpha$ stands for $e$ or $i$, $\tau$ is the time step size, $\delta_x$ is the time step multiplier for the $x$ equation (i.e. the value of the {\tt DTMO}, {\tt DTEE}, or {\tt DTEI} arrays for that region and species), and $\tau_f$ is an additional optional time step multiplier, governed by the {\tt CORE\_DT\_FACTOR} switch from the {\tt NUMERICS} namelist (see Section \ref{lab:b2:numerics:parameters} and Appendix \ref{lis:b2cdcn} for details).
+
+According to the under-relaxation scheme, the updated values of the parallel velocity and temperatures at time step $k+1$ are given by:
+
+\begin{equation*}
+V_{\parallel a}^{(k+1)} = V_{\parallel a}^{(k)} + r_{xf_{V_{\parallel a}}} \left( \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)} \right)
+\end{equation*}
+\begin{equation*}
+T_\alpha^{(k+1)} = T_\alpha^{(k)} + r_{xf_{T_\alpha}} \left( \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)} \right)
+\end{equation*}
+
+where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxation factors, which are equal to {\tt rxf*xfm1} and {\tt rxf*xfm3} respectively, and the tilde quantities are the actual solutions to the equations. The factors {\tt rxf}, {\tt xfm1}, and {\tt xfm3}, are given by the values of the {\tt b2mndr\_rxf}, {\tt b2news\_xfm1}, and {\tt b2news\_xfm3} switches, respectively.
+
+When applying the dynamic mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
+
+\begin{equation}\label{eq:mom_dt_2}
+m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
+\end{equation}
+
+and, for the energy equations:
+
+\begin{equation}\label{eq:en_dt_2}
+\sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau} T_\alpha^{(k)}
+\end{equation}
+
+Note that, since the order of solution of the equations has been changed in the dynamic mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
+
+The conditions
+\begin{equation}\label{eq:rxf_mo}
+\delta_{m_a} \tau_f r_{xf_{V_{\parallel a}}} = 1
+\end{equation}
+\begin{equation}\label{eq:rxf_en}
+\delta_{e \alpha} \tau_f r_{xf_{T_\alpha}} = 1
+\end{equation}
+\begin{equation}\label{eq:rxf_na}
+\delta_{n_a} \tau_f r_{xf_{f_{n_a}}} = 1
+\end{equation}
+must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
+
+When computing the residuals in dynamic mode, the contribution from the time derivative terms is not included. If using internal iterations ({\tt b2mndt\_nstg0}, {\tt b2mndt\_nstg1}, or {\tt b2mndt\_nstg2} larger than 1), the time derivative is computed from one internal iteration to the next.
 
 \section{Time-dependent puff functions}
 \label{sec:time-dep-puff}
@@ -9566,7 +9658,7 @@ If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from r
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
 \left(
 - \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
-- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} (\frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x})
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} \left( \frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x} \right)
 + \sigma_{aa_0} B_z V_{a_{0}y}
 \right)
 \end{equation}
@@ -9584,18 +9676,18 @@ z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 \right.
 \end{equation}
 
-If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used:
 
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
 
-If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used
-
 % This factor probably has to do with CX between particles of unlike mass, but it doesn't seem to be implemented in this code version.
 %\begin{equation}
 %\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
 %\end{equation}
+
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used.
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
 
@@ -14385,6 +14477,7 @@ when calculating derived data.
     hy1      & \index{b2plot, hy1} Shear-corrected radial cell width $(m)$ \\
     iix      & \index{b2plot, iix} Poloidal cell index {\em ix} \\
     iiy      & \index{b2plot, iiy} Radial cell index {\em iy} \\
+    ionrad   & \index{b2plot, ionrad} Power loss due to molecular ion radiation $(W)$ \\
     iseq     & \index{b2plot, iseq} Species index {\em is} is equal to \\
     isge     & \index{b2plot, isge} Species index {\em is} is greater than or equal to \\
     isgt     & \index{b2plot, isgt} Species index {\em is} is greater than \\
@@ -14421,6 +14514,7 @@ when calculating derived data.
     mhal     & \index{b2plot, mhal} Molecular $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
     mi       & \index{b2plot, mi} Ion mass $(kg)$ \\
     mi\_ext  & \index{b2plot, mi\_ext} External species mass $(kg)$ \\
+    molrad   & \index{b2plot, molrad} Power loss due to molecule radiation $(W)$ \\
     na       & \index{b2plot, na} Ion density $(m^{-3})$ (\SOLPSfive and \SOLPSITER runs) \\
     na0      & \index{b2plot, na0} Ion density {\em na} at previous time step $(m^{-3})$ \\
     na\_ext  & \index{b2plot, na\_ext} External species density $(m^{-3})$ \\
@@ -17169,6 +17263,14 @@ Copies {\tt Eirene} data onto {\tt B2.5} data. Will only be performed once.
 Specifically, the densities of neutrals species (when a match between {\tt B2.5} and
 {\tt Eirene} species can be found) computed from {\tt Eirene} ({\em dab2}) are added
 to the fluid neutral densities from {\tt B2.5} ({\em na}).
+Same for the mass density field {\em ro}.
+If the atomic particle fluxes {\em pfla} and {\em rfla} are available, then the
+velocities for the neutral species are also updated, meaning the
+{\em ua}, {\em up}, and {\em vv} fields, along with the default values of the {\em uutraj},
+{\em vvtraj}, {\em arrowx}, and {\em arrowy} arrays.
+
+\subsubsection{$<$filename,{\bf S}$>$ etal}\index{b2plot, etal}\label{sec:etal}
+Copies data from the Eirene tally output file $\langle${\tt filename}$\rangle$ to the Eirene data stack. Such files are written from the volume tally output in block 11 of the Eirene input file. This function assumes the tally file contains 2-D data on the Eirene triangular grid.
 
 \subsubsection{$<$value,{\bf R}$>$ evac}\index{b2plot, evac}\label{sec:evac}
 Assigns real value $\langle${\tt value}$\rangle$ to all triangles from the top of the Eirene data stack that do not map to a {\tt B2.5} grid cell.
@@ -17800,8 +17902,11 @@ labelling the graphs "Carbon" and "Neon" respectively.
 Please note that {\bf b2ra} only contains the line radiation emanating
 from the fluid species followed by {\tt B2.5}. If you wish to also
 include the radiation emanating from the neutral kinetic species computed
-by {\tt Eirene}, you need to add contributions from {\bf neutrad} as well.
-Please be mindful however that {\bf neutrad} has dimensions $natmi$ while
+by {\tt Eirene}, you need to add contributions from {\bf neutrad}, {\bf molrad},
+and {\bf ionrad}, which correspond to the radiation due to atoms, molecules, and
+molecular ions, respectively.
+Please be mindful however that {\bf neutrad} has dimensions $natmi$
+({\bf molrad} $nmoli$ and {\bf ionrad} $nioni$) while
 {\bf b2ra} has dimensions $ns$.
 Moreover, if you are intending to compute the
 total radiation rate, you should also include the bremsstrahlung contribution
@@ -17811,7 +17916,7 @@ D+He+C example:
 \begin{verbatim}
 a4l 3 1 page lbof logf phys sep vesl outl 1.5 lbsz 5 ndec
 b2ra b2br m+ abs 0  1 sumz
-neutrad 0 zsel m+ pvol 0 ' ' slbl
+neutrad 0 zsel m+ molrad  0 zsel m+ ionrad  0 zsel m+ pvol 0 ' ' slbl
 'Total radiation loss (W/m^{3})' glbl 'Hydrogenic species' extl surf
 b2ra b2br m+  abs 2  4 sumz
 neutrad 1 zsel m+ pvol 0 ' ' slbl
