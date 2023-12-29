@@ -14223,8 +14223,8 @@ transformations, and then the plot command.
 based: seven different stacks are used\index{b2plot, stacks}.
 The most important stack is
 the "matrix" stack which is used to store quantities on the
-computational grid.  These quantities can be $nx \times ny \times
-ns$ where $nx$ and $ny$ are the size of the grid, and $ns$ ranges over
+computational grid.  These quantities can be of size $nCv \times ns$
+where $nCv$ is the number of cells in the grid, and $ns$ ranges over
 the species.  An "integer" stack is used to supply arguments for some of
 the commands.  A "real" stack is also used to supply arguments for some
 commands and, importantly, for storing values to be used in doing
@@ -14296,6 +14296,10 @@ temperature, or the particle densities and typically store the results
 on the "matrix" stack.  Some of these commands also take arguments
 when calculating derived data.
 
+Note that some commands will only work if the {\tt B2.5} grid is built from
+an underlying structured base grid, i.e. those referring to an $ix$ or $iy$
+coordinate index.
+
 \begin{center}\index{b2plot, plasma quantities}
   \begin{longtable}{|l|l|}
     \hline
@@ -14328,8 +14332,11 @@ when calculating derived data.
     bcch     & \index{b2plot, bcch} Boundary charge source {\em b2stbc\_sch} $(A)$ \\
     bche     & \index{b2plot, bche} Boundary electron heat source {\em b2stbc\_she} $(W)$ \\
     bchi     & \index{b2plot, bchi} Boundary ion heat source {\em b2stbc\_shi} $(W)$ \\
+    bchn     & \index{b2plot, bchn} Boundary fluid neutral heat source {\em b2stbc\_shn} $(W)$ \\
+    bckt     & \index{b2plot, bckt} Boundary ExB turbulent energy source {\em b2stbc\_skt} $(W)$ \\
     bcmo     & \index{b2plot, bcmo} Boundary parallel momentum source {\em b2stbc\_smo} $(N)$ \\
     bcna     & \index{b2plot, bcna} Boundary particle source {\em b2stbc\_sna} $(particles.s^{-1})$ \\
+    bczt     & \index{b2plot, bczt} Boundary enstrophy source {\em b2stbc\_szt} $(?)$ \\
     bix      & \index{b2plot, bix} Bottom neighbour {\em ix} coordinate \\
     biy      & \index{b2plot, biy} Bottom neighbour {\em iy} coordinate  \\
     brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ \\
@@ -14338,16 +14345,20 @@ when calculating derived data.
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brhi     & \index{b2plot, brhi} Recycling ion heat source {\em b2stbr\_shi} $(W)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
+    brhn     & \index{b2plot, brhn} Recycling fluid neutral heat source {\em b2stbr\_shn} $(W)$ \\
+    brkt     & \index{b2plot, brkt} Recycling ExB turbulent energy source {\em b2stbr\_skt} $(W)$ \\
     brmo     & \index{b2plot, brmo} Recycling parallel momentum source {\em b2stbr\_smo} $(N)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brna     & \index{b2plot, brna} Recycling particle source {\em b2stbr\_sna} $(particles.s^{-1})$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
+    brzt     & \index{b2plot, brzt} Recycling enstrophy source {\em b2stbr\_skt} $(W)$ \\
     bvis     & \index{b2plot, bvis} Braams viscosity piece $(m.kg^{-1}.s^{-1})$ \\
     bx, bpol & \index{b2plot, bx} Poloidal magnetic field $(T)$ \index{b2plot, bpol} \\
     by, brad & \index{b2plot, by} Radial magnetic field $(T)$ \index{b2plot, brad} \\
     bz, btor & \index{b2plot, bz} Toroidal magnetic field $(T)$ \index{b2plot, btor} \\
     cd       & \index{b2plot, cd} Poloidal component of diamagnetic current $(m.s^{-1})$ \\
     ceqp     & \index{b2plot, ceqp} Equipartition term multiplier \\
+    ckt      & \index{b2plot, ckt} ExB turbulent energy correction $(?)$ \\
     chhichii & \index{b2plot, chhichii} Chang-Hinton $\chi_i$ $(m^2.s^{-1})$ \\
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
@@ -14360,12 +14371,14 @@ when calculating derived data.
     cry      & \index{b2plot, cry} Corner vertical coordinate $(m)$ \\
     cte      & \index{b2plot, cte} Electron temperature correction $(eV)$ \\
     cti      & \index{b2plot, cti} Ion temperature correction $(eV)$ \\
+    ctn      & \index{b2plot, ctn} Fluid neutral temperature correction $(eV)$ \\
     cua      & \index{b2plot, cua} Parallel velocity correction $(m.s^{-1})$ \\
     cut      & \index{b2plot, cut} Total momentum correction $(kg.m.s^{-1})$ \\
     cvsx     & \index{b2plot, cvsx} Parallel classical viscosity $(m.kg^{-1}.s^{-1})$ \\
     cvsy     & \index{b2plot, cvsy} Radial classical viscosity $(m.kg^{-1}.s^{-1})$ \\
     cvv      & \index{b2plot, cvv} {\em CORVV} (\SOLPSfour runs) \\
     cz       & \index{b2plot, cz} Vertical coordinate $(m)$ \\
+    czt      & \index{b2plot, czt} Enstrophy correction $(?)$ \\
     d        & \index{b2plot, d} Particle density diffusion coefficient $(m^2.s^{-1})$ \\
     dab2     & \index{b2plot, dab2} Atomic density $(m^{-3})$ \\
     dd       & \index{b2plot, dd} Radial component of diamagnetic current $(m.s^{-1})$ \\
@@ -14379,12 +14392,16 @@ when calculating derived data.
     dfhi     & \index{b2plot, dfhi} Divergence of the ion energy flux $(W)$ \\
     dfhj     & \index{b2plot, dfhj} Divergence of the electrostatic energy flux $(A)$ \\
     dfhm     & \index{b2plot, dfhm} Divergence of the parallel kinetic energy flux $(W)$ \\
+    dfhn     & \index{b2plot, dfhn} Divergence of the fluid neutral energy flux $(W)$ \\
     dfhp     & \index{b2plot, dfhp} Divergence of the potential energy flux $(W)$ \\
+    dfkt     & \index{b2plot, dfkt} Divergence of the ExB turbulent energy flux $(W)$ \\
     dfmo     & \index{b2plot, dfmo} Divergence of the momentum flux $(N.s)$ \\
     dfna     & \index{b2plot, dfna} Divergence of the particle flux $(s^{-1})$ \\
+    dfzt     & \index{b2plot, dfzt} Divergence of the enstrophy flux $(W)$ \\
     dhet, dfhet     & \index{b2plot, dhet} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhet} \\
     dhit, dfhit     & \index{b2plot, dhit} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhit} \\
     dib2     & \index{b2plot, dib2} Test ion density $(m^{-3})$ \\
+    dkt      & \index{b2plot, dkt} ExB turbulent energy diffusion coefficient $(m^2.s^{-1})$ \\
     dmb2     & \index{b2plot, dmb2} Molecular density $(m^{-3})$ \\
     dnneo    & \index{b2plot, dnneo} Neoclassical particle diffusivity $D_n$ $(m^2.s^{-1})$ \\
     dp       & \index{b2plot, dp} Particle pressure diffusion coefficient $(m^2.s^{-1})$ \\
@@ -14392,6 +14409,7 @@ when calculating derived data.
     dvue     & \index{b2plot, dvue} Electron heat source {\em b2sihs\_divue} $(W)$ \\
     dx       & \index{b2plot, dx} Cell poloidal length {\em dx} $(m)$ (\SOLPSfour runs) \\
     dy       & \index{b2plot, dy} Cell radial width {\em dy} $(m)$ (\SOLPSfour runs) \\
+    dzt      & \index{b2plot, dzt} Enstrophy diffusion coefficient $(?)$ \\
     ebal     & \index{b2plot, ebal} Energy balance $(W)$ \\
     ebld     & \index{b2plot, ebld} Energy balance (-divergence of fluxes) $(W)$ \\
     ebls     & \index{b2plot, ebls} Energy balance (sources) $(W)$ \\
@@ -14423,6 +14441,8 @@ when calculating derived data.
     fchyn    & \index{b2plot, fchyn} Radial component of inertial current {\em fchin} $(A)$ \\
     fchyvspa & \index{b2plot, fchyvspa} Radial component of parallel viscosity current {\em fchvispar} $(A)$ \\
     fchyvspe & \index{b2plot, fchyvspe} Radial component of perpendicular viscosity current {\em fchvisper} $(A)$ \\
+    fcxviskt & \index{b2plot, fcxviskt} Poloidal current due to RS of {\em kt}-model $(A)$ \\
+    fcyviskt & \index{b2plot, fcyviskt} Radial current due to RS of {\em kt}-model $(A)$ \\
     fetx     & \index{b2plot, fetx} Total poloidal internal energy flux $(W)$ \\
     fety     & \index{b2plot, fety} Total radial internal energy flux $(W)$ \\
     ffbz     & \index{b2plot, ffbz} Toroidal magnetic flux function {\em ffbz} $(Wb/m)$ \\
@@ -14438,10 +14458,14 @@ when calculating derived data.
     fhjy     & \index{b2plot, fhjy} Radial electrostatic energy flux $(W)$ \\
     fhmx     & \index{b2plot, fhmx} Poloidal parallel kinetic energy flux $(W)$ \\
     fhmy     & \index{b2plot, fhmy} Radial parallel kinetic energy flux $(W)$ \\
+    fhnx     & \index{b2plot, fhnx} Poloidal fluid neutral energy flux $(W)$ \\
+    fhny     & \index{b2plot, fhny} Radial fluid neutral energy flux $(W)$ \\
     fhpx     & \index{b2plot, fhpx} Poloidal potential energy flux $(W)$ \\
     fhpy     & \index{b2plot, fhpy} Radial potential energy flux $(W)$ \\
     fhtx     & \index{b2plot, fhtx} Poloidal total energy flux $(W)$ \\
     fhty     & \index{b2plot, fhty} Peprendicular total energy flux $(W)$ \\
+    fktx     & \index{b2plot, fktx} Poloidal ExB turbulent energy flux $(W)$ \\
+    fkty     & \index{b2plot, fkty} Peprendicular ExB turbulent energy flux $(W)$ \\
     flal     & \index{b2plot, flal} Thermo-electric classical flux limit factor \\
     flalc    & \index{b2plot, flalc} Thermo-electric coefficient limit factor \\
     fle      & \index{b2plot, fle} Electron heat flux limit factor \\
@@ -14476,7 +14500,15 @@ when calculating derived data.
     fnix52   & \index{b2plot, fnix52} Conductive poloidal total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy32   & \index{b2plot, fniy32} Convective radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
     fniy52   & \index{b2plot, fniy52} Conductive radial total ion flux $(s^{-1})$ (Does not include drift contributions) \\
+    fnnx     & \index{b2plot, fnnx} Poloidal fluid neutral particle flux $(s^{-1})$ \\
+    fnnx32   & \index{b2plot, fnnx32} Convective fluid neutral poloidal particle flux $(s^{-1})$ \\
+    fnnx52   & \index{b2plot, fnnx52} Conductive fluid neutral poloidal particle flux $(s^{-1})$ \\
+    fnny     & \index{b2plot, fnny} Radial fluid neutral particle flux $(s^{-1})$ \\
+    fnny32   & \index{b2plot, fnny32} Convective fluid neutral radial particle flux $(s^{-1})$ \\
+    fnny52   & \index{b2plot, fnny52} Conductive fluid neutral radial particle flux $(s^{-1})$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
+    fztx     & \index{b2plot, fztx} Poloidal enstrophy flux $(?)$ \\
+    fzty     & \index{b2plot, fzty} Peprendicular enstrophy flux $(?)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
     hy       & \index{b2plot, hy} Radial cell width $(m)$ \\
@@ -14506,9 +14538,12 @@ when calculating derived data.
     iyne     & \index{b2plot, iyne} Radial cell index {\em iy} is not equal to \\
     joul     & \index{b2plot, joul} Joule heating term {\em b2sihs\_joule} $(W)$ \\
     ke       & \index{b2plot, ke} Parallel kinetic energy $(J)$ \\
+    kt       & \index{b2plot, kt} ExB turbulent kinetic energy density $(?)$ \\
+    kt0      & \index{b2plot, kt0} ExB turbulent kinetic energy density {\em kt} at previous time step $(?)$ \\
     kye      & \index{b2plot, kye} Electron heat diffusivity $\chi_e$ $(m^2.s^{-1})$ \\
     kyi      & \index{b2plot, kyi} Ion heat diffusivity $\chi_i$ $(m^2.s^{-1})$ \\
     kyi0     & \index{b2plot, kyi0} Total ion heat diffusivity $(m^2.s^{-1})$ \\
+    kyn0     & \index{b2plot, kyn0} Fluid neutral heat diffusivity $(m^2.s^{-1})$ \\
     lix      & \index{b2plot, lix} Left neighbour poloidal index {\em leftix} \\
     liy      & \index{b2plot, liy} Left neighbour radial index {\em leftiy} \\
     lnlam    & \index{b2plot, lnlam} Coulomb logarithm \\
@@ -14573,9 +14608,11 @@ when calculating derived data.
     refa     & \index{b2plot, refa} Radial atomic energy flux $(W.m^{-2})$ \\
     refm     & \index{b2plot, refm} Radial molecular energy flux $(W.m^{-2})$ \\
     rei      & \index{b2plot, rei} Ion energy equation residuals $(W)$ \\
+    ren      & \index{b2plot, ren} Fluid neutral energy equation residuals $(W)$ \\
     rfla     & \index{b2plot, rfla} Radial atomic flux $(s^{-1}.m^{-2})$ \\
     rflm     & \index{b2plot, rflm} Radial molecular flux $(s^{-1}.m^{-2})$ \\
     rhol     & \index{b2plot, rhol} Full-B Larmor radius $(m)$ \\
+    rkt      & \index{b2plot, rkt} ExB turbulent energy equation residuals $(W)$ \\
     rix      & \index{b2plot, rix} Right neighbour poloidal index {\em rightix} \\
     riy      & \index{b2plot, riy} Right neighbour radial index {\em rightiy} \\
     rlcl     & \index{b2plot, rlcl} Real cells \\
@@ -14593,11 +14630,14 @@ when calculating derived data.
     rud      & \index{b2plot, rud} {\em RESUD} (\SOLPSfour runs) \\
     rudc     & \index{b2plot, rudc} {\em RESUDC} (\SOLPSfour runs) \\
     rvd      & \index{b2plot, rvd} {\em RESVD} (\SOLPSfour runs) \\
+    rzt      & \index{b2plot, rzt} Enstrophy equation residuals $(?)$ \\
     s        & \index{b2plot, s} Magnetic shear \\
     sch      & \index{b2plot, sch} Charge sources $(C)$ \\
     she      & \index{b2plot, she} Electron energy sources $(W)$ (excluding equipartition) \\
     shi      & \index{b2plot, shi} Ion energy sources $(W)$ (excluding equipartition) \\
+    shn      & \index{b2plot, shn} Fluid neutral energy sources $(W)$ \\
     sig      & \index{b2plot, sig} Anomalous conductivity $(\Omega^{-1}.m^{-1})$ \\
+    skt      & \index{b2plot, skt} ExB turbulent energy sources $(W)$ \\
     smaf     & \index{b2plot, smaf} Parallel momentum source from friction {\em b2npmo\_smaf} $(N)$ \\
     smag     & \index{b2plot, smag} Parallel momentum source from pressure gradient {\em b2npmo\_smag} $(N)$ \\
     smav     & \index{b2plot, smav} Parallel momentum source from additional viscosity {\em b2npmo\_smav} $(N)$ \\
@@ -14616,6 +14656,7 @@ when calculating derived data.
     sxperp   & \index{b2plot, sxperp} Poloidal area perpendicular to $x$-direction $(m^2)$ \\
     sy       & \index{b2plot, sy} Radial area of contact for cell $(m^2)$ \\
     sz       & \index{b2plot, sz} Poloidal cross-sectional area for cell $(m^2)$ \\
+    szt      & \index{b2plot, szt} Enstrophy sources $(?)$ \\
     tab2     & \index{b2plot, tab2} Neutral atom temperature $(eV)$ \\
     ta\_ext  & \index{b2plot, ta\_ext} External species temperature $(eV)$ \\
     te       & \index{b2plot, te} Electron temperature $(eV)$ \\
@@ -14626,6 +14667,8 @@ when calculating derived data.
     tix      & \index{b2plot, tix} Top neighbour poloidal index {\em topix} \\
     tiy      & \index{b2plot, tiy} Top neighbour radial index {\em topiy} \\
     tmb2     & \index{b2plot, tmb2} Neutral molecule temperature $(eV)$ \\
+    tn       & \index{b2plot, tn} Fluid neutral temperature $(eV)$ \\
+    tn0      & \index{b2plot, tn0} Fluid neutral temperature {\em tn} at previous time step $(eV)$ \\
     ua       & \index{b2plot, ua} Parallel velocity ({\em ua}) $(m.s^{-1})$ (\SOLPSfive and \SOLPSITER runs) \\
     ua0      & \index{b2plot, ua0} Parallel velocity {\em ua} at previous time step $(m.s^{-1})$ \\
     ua\_ext  & \index{b2plot, ua\_ext} External species parallel velocity $(m.s^{-1})$ \\
@@ -14673,6 +14716,8 @@ when calculating derived data.
     zi, za   & \index{b2plot, zi} Ion charge $(amu)$ \index{b2plot, za} \\
     zn       & \index{b2plot, zn} Nuclear charge $(amu)$ \\
     zn\_ext  & \index{b2plot, zn\_ext} External species nuclear charge $(amu)$ \\
+    zt       & \index{b2plot, zt} Enstrophy $(?)$ \\
+    zt0      & \index{b2plot, zt0} Enstrophy {\em zt} at previous time step $(?)$ \\
     \hline
     \caption{Available quantities}
     \label{tab:available-quantities}
@@ -14683,8 +14728,10 @@ Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands requir
 argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region
 number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. If $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
 
-The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
-{\bf sch} can take an optional integer argument $\langle${\tt isel}$\rangle$, varying from {\tt 0} to {\tt 3} ({\tt 0} to {\tt 1} for {\bf sna}). Then the data
+The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi},
+{\bf shn}, {\bf sch}, {\bf skt}, and {\bf szt} can take an optional integer
+argument $\langle${\tt isel}$\rangle$, varying from {\tt 0} to {\tt 3}
+({\tt 0} to {\tt 1} for {\bf sna}). Then the data
 stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
 The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
@@ -15104,11 +15151,11 @@ commands take one value off the "string" stack.
     movi \index{b2plot, movi}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movi}     & Movie \\
     movie\index{b2plot, movie}, nmovie \index{b2plot, nmovie} & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movie} & New movie option \\
     mprt \index{b2plot, mprt}    & 0 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mprt}     & Output top of matrix stack to a file \\
-    mtab \index{b2plot, mtab}    & 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top \\
+    mtab \index{b2plot, mtab}    & 2 or 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} of the stack to a file \\
     omovie \index{b2plot, omovie} & 2 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:omovie}   & Old movie option \\
     oson \index{b2plot, oson}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:oson}     & Output geometry in {\tt Sonnet} format \\
-    outp \index{b2plot, outp}    & 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
+    outp \index{b2plot, outp}    & 1 or 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
     pdev \index{b2plot, pdev}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:pdev}     & {\tt PLPLOT} device name \\
     saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data \\
                                  &   &   &   &   &   &   &   &   & \hspace{1cm} onto the matrix stack \\
@@ -17339,10 +17386,10 @@ or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\r
 \subsubsection{$<$x1,{\bf R}$>$ $<$y1,{\bf R}$>$ $<$x2,{\bf R}$>$ $<$y2,{\bf R}$>$ $<$x3,{\bf R}$>$ $<$y3,{\bf R}$>$ $<$x4,{\bf R}$>$ $<$y4,{\bf R}$>$ eavg}\index{b2plot, eavg}\label{sec:eavg}
 Writes out the volume average of the data on top of the Eirene stack over the quadrangular region delimited by the four doublets of coordinates [($x1$,$y1$);($x2$,$y2$);($x3$,$y3$);($x4$,$y4$)].
 
-\subsubsection{$<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
+\subsubsection{$<$iCv1,{\bf I}$>$ $<$iCv2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab OR $<$ix1,{\bf I}$>$ $<$ix2,{\bf I}$>$ $<$iy1,{\bf I}$>$ $<$iy2,{\bf I}$>$ $<$filename,{\bf S}$>$ mtab}\index{b2plot, mtab}\label{sec:mtab}
 Writes out a table extracted from the matrix on the top of the stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
-or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. $0$ $0$ pairs for the $ix$ or $iy$ values will
-output the entire $ix$ or $iy$ range, respectively.
+or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. $0$ $0$ pairs for the $iCv$, $ix$, or $iy$ values will
+output their entire respective ranges.
 
 \subsubsection{$<$filename,{\bf S}$>$ wprt}\index{b2plot, wprt}\label{sec:wprt}
 Writes out the top of the wall stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
@@ -17362,8 +17409,8 @@ Writes out a table extracted from the matrix on the top of the target stack to $
 or (in the \SOLPSfive environment) {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$. $0$ $0$ pairs for the $iw$ or $depth$ values will
 output the entire wall element or depth ranges, respectively.
 
-\subsubsection{$<$ix,{\bf I}$>$ $<$iy,{\bf I}$>$ $<$filename,{\bf S}$>$ outp}\index{b2plot, outp}\label{sec:outp}
-Writes out data from element $ ( \langle${\tt ix}$\rangle , \langle${\tt iy}$\rangle )$ from the top of the matrix stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
+\subsubsection{$<$iCv,{\bf I}$>$ $<$filename,{\bf S}$>$ outp OR $<$ix,{\bf I}$>$ $<$iy,{\bf I}$>$ $<$filename,{\bf S}$>$ outp}\index{b2plot, outp}\label{sec:outp}
+Writes out data from element $iCv$ or $ ( \langle${\tt ix}$\rangle , \langle${\tt iy}$\rangle )$ (if a structured base grid exists) from the top of the matrix stack to $\langle${\tt filename}$\rangle$ (in the \SOLPSfour environment)
 or {\tt b2pl.exe.dir/}$\langle${\tt filename}$\rangle$ (in the \SOLPSfive environment).
 
 \subsubsection{$<$i,{\bf I}$>$ $<$filename,{\bf S}$>$ eoutp}\index{b2plot, eoutp}\label{sec:eoutp}
