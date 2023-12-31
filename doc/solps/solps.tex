@@ -14801,13 +14801,16 @@ are not met, an error is returned and no action is taken.
     drop \index{b2plot, drop}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:drop}  & Drop array on top of stack \\
     dup \index{b2plot, dup}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:dup}   & Duplicate array on top of stack \\
     eirc \index{b2plot, eirc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eirc}  & Copy {\tt Eirene} data onto {\tt B2.5} data \\
+    f.imp \index{b2plot, f.imp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.imp}  & Plot along the inner midplane \\
     f.lx \index{b2plot, f.lx}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.lx}  & Plot against $\log(x)$ \\
     f.ly \index{b2plot, f.ly}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
+    f.omp \index{b2plot, f.omp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.omp}  & Plot along the outer midplane \\
+    f.t \index{b2plot, f.t}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.t}   & Plot along a flux tube \\
     f.x \index{b2plot, f.x}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
     fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against poloidal \\
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} magnetic flux ($\Psi$) value \\
-    intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along $x$ \\
+    intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along flux tubes \\
     inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
     line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
     list \index{b2plot, list}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:list}  & List the contents of the matrix stack \\
@@ -14848,6 +14851,7 @@ are not met, an error is returned and no action is taken.
     rm+ \index{b2plot, rm+}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm+}   & Real added to matrix \\
     rm- \index{b2plot, rm-}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm-}   & Real substracted from matrix \\
     rm/ \index{b2plot, rm/}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm/}   & Matrix divided by real \\
+    rmaj \index{b2plot, rmaj}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rmaj}  & Plot data against major radius $R$ value \\
     rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
     rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}         & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
     rpsi \index{b2plot, rpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rpsi}  & Plot data against $\rho_{pol}~\left(~=~\sqrt{\psi}\right)$ value \\
@@ -15912,10 +15916,11 @@ against poloidal or parallel distance along the field line.
 \subsubsection{$<$pos,{\bf I}$>$ f.y}\index{b2plot, f.y}\label{sec:f.y}
 Plots the 2-D graph of the matrix data at $ix = \langle${\tt pos}$\rangle$ versus $y$.
 Use of the {\bf mmid} (see \ref{sec:mmid}), {\bf fpsi} (see \ref{sec:fpsi}),
-{\bf mpsi} (see \ref{sec:mpsi}) or {\bf rpsi} (see \ref{sec:rpsi})
-commands allows for plotting versus the outer midplane (or another position
-chosen by the user) radial coordinate, full poloidal magnetic flux,
-normalized flux, or $\rho_{pol}$, respectively.
+{\bf mpsi} (see \ref{sec:mpsi}), {\bf rpsi} (see \ref{sec:rpsi}), or {\bf rmaj}
+(see \ref{sec:rmaj}) commands allows for plotting versus the outer midplane
+(or another position chosen by the user) radial coordinate, full poloidal
+magnetic flux, normalized flux, $\rho_{pol}$, or the major radius $R$,
+respectively.
 
 \subsubsection{$<$n1,{\bf I}$>$ f.lx}\index{b2plot, f.lx}\label{sec:f.lx}
 Plots the 2-D graph of the matrix data at $iy = \langle${\tt pos}$\rangle$ versus $\log(x)$.
@@ -15926,6 +15931,26 @@ but remembers ths old setting of linear or logarithmic abscissa scale.
 Plots the 2-D graph of the matrix data at $ix = \langle${\tt pos}$\rangle$ versus $\log(y)$.
 Equivalent to a combination of {\bf logx} (see \ref{sec:logx}) and {\bf f.y} above,
 but remembers ths old setting of linear or logarithmic abscissa scale.
+
+\subsubsection{f.imp}\index{b2plot, f.imp}\label{sec:f.imp}
+Plots the 2-D graph of the matrix data along the inner midplane, as defined
+in the {\tt b2.user.parameters} file.
+Use of the {\bf fpsi} (see \ref{sec:fpsi}), {\bf mpsi} (see \ref{sec:mpsi}),
+{\bf rpsi} (see \ref{sec:rpsi}), or {\bf rmaj} (see \ref{sec:rmaj})
+commands allows for plotting versus the full poloidal magnetic flux,
+normalized flux, $\rho_{pol}$, or major radius $R$, respectively.
+
+\subsubsection{f.omp}\index{b2plot, f.omp}\label{sec:f.omp}
+Plots the 2-D graph of the matrix data along the outer midplane, as defined
+in the {\tt b2.user.parameters} file.
+Use of the {\bf fpsi} (see \ref{sec:fpsi}), {\bf mpsi} (see \ref{sec:mpsi}),
+{\bf rpsi} (see \ref{sec:rpsi}), or {\bf rmaj} (see \ref{sec:rmaj})
+commands allows for plotting versus the full poloidal magnetic flux,
+normalized flux, $\rho_{pol}$, or major radius $R$, respectively.
+
+\subsubsection{$<$iFt,{\bf I}$>$ f.t}\index{b2plot, f.t}\label{sec:f.t}
+Plots the 2-D graph of the matrix data along flux tube with index {\tt iFt}.
+Use of {\bf xpol} (default, see \ref{sec:xpol}) or {\bf xpar} (see \ref{sec:xpar}) commands allows one to toggle between plotting against poloidal or parallel distance along the field tube.
 
 \subsubsection{plwl}\index{b2plot, plwl}\label{sec:plwl}
 Plots in the "wall" domain (applicable to wall data only).
@@ -16887,15 +16912,19 @@ X-point.
 
 \subsubsection{fpsi}\index{b2plot, fpsi}\label{sec:fpsi}
 Toggles plotting 2-D radial plots against the full poloidal flux coordinate $\Psi$.
-If turned on, then turns off {\bf mpsi} and {\bf rpsi}.
+If turned on, then turns off {\bf mpsi}, {\bf rpsi}, and {\bf rmaj}.
 
 \subsubsection{mpsi}\index{b2plot, mpsi}\label{sec:mpsi}
 Toggles plotting 2-D radial plots against the normalised poloidal flux coordinate $\psi$.
-If turned on, then turns off {\bf fpsi} and {\bf rpsi}.
+If turned on, then turns off {\bf fpsi}, {\bf rpsi}, and {\bf rmaj}.
 
 \subsubsection{rpsi}\index{b2plot, rpsi}\label{sec:rpsi}
 Toggles plotting 2-D radial plots against the square root of normalised poloidal flux coordinate ($\rho_{pol} = \sqrt{\Psi}$).
-If turned on, then turns off {\bf fpsi} and {\bf mpsi}.
+If turned on, then turns off {\bf fpsi}, {\bf mpsi}, and {\bf rmaj}.
+
+\subsubsection{rmaj}\index{b2plot, rmaj}\label{sec:rmaj}
+Toggles plotting 2-D radial plots against the major radius coordinate $R$.
+If turned on, then turns off {\bf fpsi}, {\bf mpsi}, and {\bf rpsi}.
 
 \subsection{Graph appearance commands}\label{sec:graphappearance}
 \index{b2plot, graph appearance commands}
