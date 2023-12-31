@@ -14860,6 +14860,7 @@ are not met, an error is returned and no action is taken.
     stoe \index{b2plot, stoe}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stoe}  & Copy top of matrix stack to \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} Eirene stack \\
     stow \index{b2plot, stow}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stow}  & Copy top of matrix stack to wall stack \\
+    sumft \index{b2plot, sumft}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumft}  & Sum over flux tube \\
     sumx \index{b2plot, sumx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumx}  & Sum over $x$ \\
     sumy \index{b2plot, sumy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumy}  & Sum over $y$ \\
     sumz \index{b2plot, sumz}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
@@ -16183,6 +16184,9 @@ Divides the Eirene data by the triangular element area.
 
 \subsubsection{pstv}\index{b2plot, pstv}\label{sec:pstv}
 Divides the Eirene data by the triangular element volume.
+
+\subsubsection{sumft}\index{b2plot, sumft}\label{sec:sumft}
+Sums the matrix data over flux tubes, and then copies the sum to all cells within the flux tube.
 
 \subsubsection{sumt}\index{b2plot, sumt}\label{sec:sumt}
 Sums the Eirene data over all triangles, and then copies the sum to all elements.
