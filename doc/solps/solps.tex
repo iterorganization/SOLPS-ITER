@@ -13658,14 +13658,14 @@ cell faces, it is necessary to compute it from the quantities also computed at c
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
-  \frac23 \left(q_{ex}^{ExB} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  \frac23 \left(q_{ex}^{E \times B} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  \frac23 \left(q_{ix}^{E \times B} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
-  \frac23 q_{ey}^{ExB} \\
+  \frac23 q_{ey}^{E \times B} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}
+  \frac23 q_{iy}^{E \times B} + q_{iy}^{conv} + q_{iy}^{j}
 \end{gather}
 
 \begin{gather}
@@ -13687,10 +13687,10 @@ to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
- q_{ex}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
- q_{ey}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
- q_{ix}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+ q_{ex}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
@@ -14333,10 +14333,10 @@ coordinate index.
     bche     & \index{b2plot, bche} Boundary electron heat source {\em b2stbc\_she} $(W)$ \\
     bchi     & \index{b2plot, bchi} Boundary ion heat source {\em b2stbc\_shi} $(W)$ \\
     bchn     & \index{b2plot, bchn} Boundary fluid neutral heat source {\em b2stbc\_shn} $(W)$ \\
-    bckt     & \index{b2plot, bckt} Boundary ExB turbulent energy source {\em b2stbc\_skt} $(W)$ \\
+    bckt     & \index{b2plot, bckt} Boundary ${\bf E} \times {\bf B}$ turbulent energy source {\em b2stbc\_skt} $(W)$ \\
     bcmo     & \index{b2plot, bcmo} Boundary parallel momentum source {\em b2stbc\_smo} $(N)$ \\
     bcna     & \index{b2plot, bcna} Boundary particle source {\em b2stbc\_sna} $(particles.s^{-1})$ \\
-    bczt     & \index{b2plot, bczt} Boundary enstrophy source {\em b2stbc\_szt} $(?)$ \\
+    bczt     & \index{b2plot, bczt} Boundary ${\bf E} \times {\bf B}$ turbulent enstrophy source {\em b2stbc\_szt} $(s^{-3}?)$ \\
     bix      & \index{b2plot, bix} Bottom neighbour {\em ix} coordinate \\
     biy      & \index{b2plot, biy} Bottom neighbour {\em iy} coordinate  \\
     brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ \\
@@ -14346,19 +14346,19 @@ coordinate index.
     brhi     & \index{b2plot, brhi} Recycling ion heat source {\em b2stbr\_shi} $(W)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brhn     & \index{b2plot, brhn} Recycling fluid neutral heat source {\em b2stbr\_shn} $(W)$ \\
-    brkt     & \index{b2plot, brkt} Recycling ExB turbulent energy source {\em b2stbr\_skt} $(W)$ \\
+    brkt     & \index{b2plot, brkt} Recycling ${\bf E} \times {\bf B}$ turbulent energy source {\em b2stbr\_skt} $(W)$ \\
     brmo     & \index{b2plot, brmo} Recycling parallel momentum source {\em b2stbr\_smo} $(N)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brna     & \index{b2plot, brna} Recycling particle source {\em b2stbr\_sna} $(particles.s^{-1})$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
-    brzt     & \index{b2plot, brzt} Recycling enstrophy source {\em b2stbr\_skt} $(W)$ \\
+    brzt     & \index{b2plot, brzt} Recycling ${\bf E} \times {\bf B}$ turbulent enstrophy source {\em b2stbr\_skt} $(s^{-3}?)$ \\
     bvis     & \index{b2plot, bvis} Braams viscosity piece $(m.kg^{-1}.s^{-1})$ \\
     bx, bpol & \index{b2plot, bx} Poloidal magnetic field $(T)$ \index{b2plot, bpol} \\
     by, brad & \index{b2plot, by} Radial magnetic field $(T)$ \index{b2plot, brad} \\
     bz, btor & \index{b2plot, bz} Toroidal magnetic field $(T)$ \index{b2plot, btor} \\
     cd       & \index{b2plot, cd} Poloidal component of diamagnetic current $(m.s^{-1})$ \\
     ceqp     & \index{b2plot, ceqp} Equipartition term multiplier \\
-    ckt      & \index{b2plot, ckt} ExB turbulent energy correction $(?)$ \\
+    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
     chhichii & \index{b2plot, chhichii} Chang-Hinton $\chi_i$ $(m^2.s^{-1})$ \\
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
@@ -14378,7 +14378,7 @@ coordinate index.
     cvsy     & \index{b2plot, cvsy} Radial classical viscosity $(m.kg^{-1}.s^{-1})$ \\
     cvv      & \index{b2plot, cvv} {\em CORVV} (\SOLPSfour runs) \\
     cz       & \index{b2plot, cz} Vertical coordinate $(m)$ \\
-    czt      & \index{b2plot, czt} Enstrophy correction $(?)$ \\
+    czt      & \index{b2plot, czt} ${\bf E} \times {\bf B}$ turbulent enstrophy correction $(s^{-2}?)$ \\
     d        & \index{b2plot, d} Particle density diffusion coefficient $(m^2.s^{-1})$ \\
     dab2     & \index{b2plot, dab2} Atomic density $(m^{-3})$ \\
     dd       & \index{b2plot, dd} Radial component of diamagnetic current $(m.s^{-1})$ \\
@@ -14394,14 +14394,14 @@ coordinate index.
     dfhm     & \index{b2plot, dfhm} Divergence of the parallel kinetic energy flux $(W)$ \\
     dfhn     & \index{b2plot, dfhn} Divergence of the fluid neutral energy flux $(W)$ \\
     dfhp     & \index{b2plot, dfhp} Divergence of the potential energy flux $(W)$ \\
-    dfkt     & \index{b2plot, dfkt} Divergence of the ExB turbulent energy flux $(W)$ \\
+    dfkt     & \index{b2plot, dfkt} Divergence of the ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
     dfmo     & \index{b2plot, dfmo} Divergence of the momentum flux $(N.s)$ \\
     dfna     & \index{b2plot, dfna} Divergence of the particle flux $(s^{-1})$ \\
     dfzt     & \index{b2plot, dfzt} Divergence of the enstrophy flux $(W)$ \\
     dhet, dfhet     & \index{b2plot, dhet} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhet} \\
     dhit, dfhit     & \index{b2plot, dhit} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhit} \\
     dib2     & \index{b2plot, dib2} Test ion density $(m^{-3})$ \\
-    dkt      & \index{b2plot, dkt} ExB turbulent energy diffusion coefficient $(m^2.s^{-1})$ \\
+    dkt      & \index{b2plot, dkt} ${\bf E} \times {\bf B}$ turbulent energy diffusion coefficient $(m^2.s^{-1})$ \\
     dmb2     & \index{b2plot, dmb2} Molecular density $(m^{-3})$ \\
     dnneo    & \index{b2plot, dnneo} Neoclassical particle diffusivity $D_n$ $(m^2.s^{-1})$ \\
     dp       & \index{b2plot, dp} Particle pressure diffusion coefficient $(m^2.s^{-1})$ \\
@@ -14409,7 +14409,7 @@ coordinate index.
     dvue     & \index{b2plot, dvue} Electron heat source {\em b2sihs\_divue} $(W)$ \\
     dx       & \index{b2plot, dx} Cell poloidal length {\em dx} $(m)$ (\SOLPSfour runs) \\
     dy       & \index{b2plot, dy} Cell radial width {\em dy} $(m)$ (\SOLPSfour runs) \\
-    dzt      & \index{b2plot, dzt} Enstrophy diffusion coefficient $(?)$ \\
+    dzt      & \index{b2plot, dzt} ${\bf E} \times {\bf B}$ turbulent enstrophy diffusion coefficient $(m^2.s^{-1})$ \\
     ebal     & \index{b2plot, ebal} Energy balance $(W)$ \\
     ebld     & \index{b2plot, ebld} Energy balance (-divergence of fluxes) $(W)$ \\
     ebls     & \index{b2plot, ebls} Energy balance (sources) $(W)$ \\
@@ -14441,8 +14441,8 @@ coordinate index.
     fchyn    & \index{b2plot, fchyn} Radial component of inertial current {\em fchin} $(A)$ \\
     fchyvspa & \index{b2plot, fchyvspa} Radial component of parallel viscosity current {\em fchvispar} $(A)$ \\
     fchyvspe & \index{b2plot, fchyvspe} Radial component of perpendicular viscosity current {\em fchvisper} $(A)$ \\
-    fcxviskt & \index{b2plot, fcxviskt} Poloidal current due to RS of {\em kt}-model $(A)$ \\
-    fcyviskt & \index{b2plot, fcyviskt} Radial current due to RS of {\em kt}-model $(A)$ \\
+    fcxviskt & \index{b2plot, fcxviskt} Poloidal current due to Reynolds stress of {\em kt}-model $(A)$ \\
+    fcyviskt & \index{b2plot, fcyviskt} Radial current due to Reynolds stress of {\em kt}-model $(A)$ \\
     fetx     & \index{b2plot, fetx} Total poloidal internal energy flux $(W)$ \\
     fety     & \index{b2plot, fety} Total radial internal energy flux $(W)$ \\
     ffbz     & \index{b2plot, ffbz} Toroidal magnetic flux function {\em ffbz} $(Wb/m)$ \\
@@ -14464,8 +14464,8 @@ coordinate index.
     fhpy     & \index{b2plot, fhpy} Radial potential energy flux $(W)$ \\
     fhtx     & \index{b2plot, fhtx} Poloidal total energy flux $(W)$ \\
     fhty     & \index{b2plot, fhty} Peprendicular total energy flux $(W)$ \\
-    fktx     & \index{b2plot, fktx} Poloidal ExB turbulent energy flux $(W)$ \\
-    fkty     & \index{b2plot, fkty} Peprendicular ExB turbulent energy flux $(W)$ \\
+    fktx     & \index{b2plot, fktx} Poloidal ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
+    fkty     & \index{b2plot, fkty} Peprendicular ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
     flal     & \index{b2plot, flal} Thermo-electric classical flux limit factor \\
     flalc    & \index{b2plot, flalc} Thermo-electric coefficient limit factor \\
     fle      & \index{b2plot, fle} Electron heat flux limit factor \\
@@ -14507,8 +14507,8 @@ coordinate index.
     fnny32   & \index{b2plot, fnny32} Convective fluid neutral radial particle flux $(s^{-1})$ \\
     fnny52   & \index{b2plot, fnny52} Conductive fluid neutral radial particle flux $(s^{-1})$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
-    fztx     & \index{b2plot, fztx} Poloidal enstrophy flux $(?)$ \\
-    fzty     & \index{b2plot, fzty} Peprendicular enstrophy flux $(?)$ \\
+    fztx     & \index{b2plot, fztx} Poloidal ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
+    fzty     & \index{b2plot, fzty} Peprendicular ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
     hy       & \index{b2plot, hy} Radial cell width $(m)$ \\
@@ -14539,8 +14539,8 @@ coordinate index.
     iyne     & \index{b2plot, iyne} Radial cell index {\em iy} is not equal to \\
     joul     & \index{b2plot, joul} Joule heating term {\em b2sihs\_joule} $(W)$ \\
     ke       & \index{b2plot, ke} Parallel kinetic energy $(J)$ \\
-    kt       & \index{b2plot, kt} ExB turbulent kinetic energy density $(?)$ \\
-    kt0      & \index{b2plot, kt0} ExB turbulent kinetic energy density {\em kt} at previous time step $(?)$ \\
+    kt       & \index{b2plot, kt} ${\bf E} \times {\bf B}$ turbulent kinetic energy $(eV)$ \\
+    kt0      & \index{b2plot, kt0} ${\bf E} \times {\bf B}$ turbulent kinetic energy {\em kt} at previous time step $(eV)$ \\
     kye      & \index{b2plot, kye} Electron heat diffusivity $\chi_e$ $(m^2.s^{-1})$ \\
     kyi      & \index{b2plot, kyi} Ion heat diffusivity $\chi_i$ $(m^2.s^{-1})$ \\
     kyi0     & \index{b2plot, kyi0} Total ion heat diffusivity $(m^2.s^{-1})$ \\
@@ -14613,7 +14613,7 @@ coordinate index.
     rfla     & \index{b2plot, rfla} Radial atomic flux $(s^{-1}.m^{-2})$ \\
     rflm     & \index{b2plot, rflm} Radial molecular flux $(s^{-1}.m^{-2})$ \\
     rhol     & \index{b2plot, rhol} Full-B Larmor radius $(m)$ \\
-    rkt      & \index{b2plot, rkt} ExB turbulent energy equation residuals $(W)$ \\
+    rkt      & \index{b2plot, rkt} ${\bf E} \times {\bf B}$ turbulent energy equation residuals $(W)$ \\
     rix      & \index{b2plot, rix} Right neighbour poloidal index {\em rightix} \\
     riy      & \index{b2plot, riy} Right neighbour radial index {\em rightiy} \\
     rlcl     & \index{b2plot, rlcl} Real cells \\
@@ -14631,14 +14631,14 @@ coordinate index.
     rud      & \index{b2plot, rud} {\em RESUD} (\SOLPSfour runs) \\
     rudc     & \index{b2plot, rudc} {\em RESUDC} (\SOLPSfour runs) \\
     rvd      & \index{b2plot, rvd} {\em RESVD} (\SOLPSfour runs) \\
-    rzt      & \index{b2plot, rzt} Enstrophy equation residuals $(?)$ \\
+    rzt      & \index{b2plot, rzt} ${\bf E} \times {\bf B}$ turbulent enstrophy equation residuals $(s^{-3}?)$ \\
     s        & \index{b2plot, s} Magnetic shear \\
     sch      & \index{b2plot, sch} Charge sources $(C)$ \\
     she      & \index{b2plot, she} Electron energy sources $(W)$ (excluding equipartition) \\
     shi      & \index{b2plot, shi} Ion energy sources $(W)$ (excluding equipartition) \\
     shn      & \index{b2plot, shn} Fluid neutral energy sources $(W)$ \\
     sig      & \index{b2plot, sig} Anomalous conductivity $(\Omega^{-1}.m^{-1})$ \\
-    skt      & \index{b2plot, skt} ExB turbulent energy sources $(W)$ \\
+    skt      & \index{b2plot, skt} ${\bf E} \times {\bf B}$ turbulent energy sources $(W)$ \\
     smaf     & \index{b2plot, smaf} Parallel momentum source from friction {\em b2npmo\_smaf} $(N)$ \\
     smag     & \index{b2plot, smag} Parallel momentum source from pressure gradient {\em b2npmo\_smag} $(N)$ \\
     smav     & \index{b2plot, smav} Parallel momentum source from additional viscosity {\em b2npmo\_smav} $(N)$ \\
@@ -14657,7 +14657,7 @@ coordinate index.
     sxperp   & \index{b2plot, sxperp} Poloidal area perpendicular to $x$-direction $(m^2)$ \\
     sy       & \index{b2plot, sy} Radial area of contact for cell $(m^2)$ \\
     sz       & \index{b2plot, sz} Poloidal cross-sectional area for cell $(m^2)$ \\
-    szt      & \index{b2plot, szt} Enstrophy sources $(?)$ \\
+    szt      & \index{b2plot, szt} ${\bf E} \times {\bf B}$ turbulent enstrophy sources $(s^{-3}?)$ \\
     tab2     & \index{b2plot, tab2} Neutral atom temperature $(eV)$ \\
     ta\_ext  & \index{b2plot, ta\_ext} External species temperature $(eV)$ \\
     te       & \index{b2plot, te} Electron temperature $(eV)$ \\
@@ -14717,8 +14717,8 @@ coordinate index.
     zi, za   & \index{b2plot, zi} Ion charge $(amu)$ \index{b2plot, za} \\
     zn       & \index{b2plot, zn} Nuclear charge $(amu)$ \\
     zn\_ext  & \index{b2plot, zn\_ext} External species nuclear charge $(amu)$ \\
-    zt       & \index{b2plot, zt} Enstrophy $(?)$ \\
-    zt0      & \index{b2plot, zt0} Enstrophy {\em zt} at previous time step $(?)$ \\
+    zt       & \index{b2plot, zt} ${\bf E} \times {\bf B}$ turbulent enstrophy $(s^{-2}?)$ \\
+    zt0      & \index{b2plot, zt0} ${\bf E} \times {\bf B}$ turbulent enstrophy {\em zt} at previous time step $(s^{-2}?)$ \\
     \hline
     \caption{Available quantities}
     \label{tab:available-quantities}
