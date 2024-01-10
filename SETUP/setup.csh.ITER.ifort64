@@ -97,4 +97,3 @@ endif
 
 # Other environment variables
 setenv SOLPSWORK /work/projects/solps-iter/$USER
-

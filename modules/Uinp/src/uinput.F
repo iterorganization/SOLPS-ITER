@@ -473,7 +473,7 @@ c*** Create the b2ai.dat file
           open(2,file='b2ai.dat')
           write(2,'(a)') '*dimens         (ns; free format)'
           write(2,'(3x,i4)') natmi-nmeta+nplsi
-          write(2,'(a)') 
+          write(2,'(a)')
      .     '*label          (lblps, character*60; free format)'
           if (texta(1)(2:2).eq.' ') then
             lblps(1:25) = '''Flat initial state for '//texta(1)(1:1)
@@ -532,7 +532,7 @@ c*** Create the b2ai.dat file
           print *,'    ... b2ai.dat created'
           deallocate(na0)
       endif
- 
+
 c*** Create the b2ar.dat file
       inquire(file='b2ar.dat', exist=uex)
       if(uex) then

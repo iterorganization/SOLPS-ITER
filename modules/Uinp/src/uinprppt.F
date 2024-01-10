@@ -573,6 +573,7 @@ c*** Plasma ions:
           end if  !}
         end if  !}
       end do  !}
+
 c!#{
 c      print *
 c      print *,'nspcatm nspcmol nspcion nspcpls'
