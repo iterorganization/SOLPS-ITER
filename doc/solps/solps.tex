@@ -10514,7 +10514,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_W
 \end{equation}
@@ -10527,7 +10527,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_x}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_W
 \end{equation}
@@ -10576,7 +10576,7 @@ $p_{n,a,1} = +1 $
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_E
 \end{equation}
@@ -10590,7 +10590,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
 \left. \left[
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_E
 \end{equation}
@@ -10866,7 +10866,7 @@ c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum
 
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$
 
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x} \right\}$
+$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{|b_x|} + u_a^{(dia)} b_z \right\}$
 
 If $p_{m,a,2} > 0.5$:
 
@@ -10922,11 +10922,13 @@ $p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$.
 
 {\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
 
-$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$
+\right|_E
+\end{equation*}
 
 If $p_{m,a,2} < 0.5$:
 
@@ -10936,9 +10938,9 @@ c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum
 
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
 
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} - \frac{u_a^{(dia)}}{b_x}  \right\}$
+$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{|b_x|} - u_a^{(dia)} b_z \right\}$
 
-If $p_{m,a,2} < 0.5$:
+If $p_{m,a,2} > 0.5$:
 
 $c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
 
@@ -11456,11 +11458,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
     \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
     \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
     \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i + \\
-  + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
-    \left( \frac{3}{2} + BoRiS \right)
+  + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+    \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
     \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
-    \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-    r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+    \left. k_B T_{surf} \right\}
+    r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
   \end{matrix}
   \right] \right|_{S_0} & \text{mdf\_fhi} = 0
 \\
@@ -11472,11 +11474,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
       \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
       - q_{iy}^{P.Sch} +
       \frac{\sqrt g}{h_y} \frac{3}{2} \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i + \\
-    + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
-      \left( \frac{3}{2} + BoRiS \right)
+    + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+      \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
       \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
-      \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-      r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+      \left. k_B T_{surf} \right\}
+      r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
    \end{matrix}
    \right] \right|_{S_0} & & \text{mdf\_fhi} = 1
   \end{matrix}
@@ -11569,11 +11571,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
        \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
        \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
        \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
-       + \sum \limits_{a=0}^{ns-1} \max \left\{
-         e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
-         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
-         \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+       + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+         \sum \limits_{a=0}^{ns-1} \max \left\{
+         e_{rec,a} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+         \left. k_B T_{surf} \right\}
+       r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
     \end{matrix}
     \right] \right|_{N} & \text{mdf\_fhi} = 0
     \\
@@ -11585,11 +11587,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
        - q_{iy}^{P.Sch} +
        \frac{\sqrt g}{h_y} \frac{3}{2}
        \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i \\
-       + \sum \limits_{a=0}^{ns-1} \max \left\{
-         e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
-         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
-       \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+       + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+         \sum \limits_{a=0}^{ns-1} \max \left\{
+         e_{rec,a} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+       \left. k_B T_{surf} \right\}
+       r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
     \end{matrix}
     \right] \right|_{N} & \text{mdf\_fhi} = 1
   \end{matrix}
@@ -11659,8 +11661,8 @@ $p_{h_i,1} = +1.5$
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
 \left. \left[
+        \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
         \left(
                 c_{h_i,a,7}
                 \frac{\sqrt g}{h_x} |b_x|
@@ -11677,23 +11679,17 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 \left. \left[
 \begin{matrix}
-  \sum \limits_{z_a \neq 0} \left(
-        \frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
-        \left( u_{p_{out}}^2 + \left( u_{a,x}^{(dia)} \right)^2 \right) T_i -
-        \frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i \right) \\
- + \sum \limits_{a=0}^{ns-1} \max
-     \left\{ r_{rec,a,1} \left( \frac{3}{2} + BoRiS \right)
-                       \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right)
+ - \frac{\sqrt g}{h_x} p_{h_i,1} \sum \limits_{z_a \neq 0} \left(
+        u_{u_{out}} n_a \right) T_i
+ - \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \\
+ + c_{nsr} \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \max
+     \left\{ r_{rec,a,1} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right)
      \right., \\
-     \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-     r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
+     \left. k_B T_{surf} \right\}
+     r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \end{matrix}
 \right] \right|_W
 \end{equation*}
-
-$u_{a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{xa}^{(dia)}$
-
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_{1,x}^{(dia)}}{b_x} \right\}$
 
 $p_{m,a_{main},1} = 1.0$
 
@@ -11750,9 +11746,9 @@ $p_{h_i,1} = +1.5$
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
 \left. \left[
-        -\left(
+        - \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
+        \left(
                 c_{h_i,a,7}
                 \frac{\sqrt g}{h_x} |b_x|
                 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}}
@@ -11770,37 +11766,19 @@ $p_{h_i,1} = +1.5$
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 & \left. \left[
 \begin{matrix}
-\sum \limits_{z_a \neq 0} \left(
-        -\frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
-        \left(
-                u_{p_{out}}^2 + \left(
-                        u_{a,x}^{(dia)}
-                \right)^2
-        \right)
-        -
+- \sum \limits_{z_a \neq 0} \left(
         \frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i
-\right)+ \\
-+ \sum \limits_{a=0}^{ns-1} \max \left\{
+\right)
++ \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \\
++ c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+  \sum \limits_{a=0}^{ns-1} \max \left\{
         r_{rec,a,1} \left(
-                \frac{3}{2} + BoRiS
-        \right)\left(
                 T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-        \right) \right. , \\ \left. \left(
-                \frac{3}{2} + BoRiS
-        \right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-        0, \frac{\sqrt g}{h_x} \Gamma_{ax}
-\right\}
+        \right) \right. , \\ \left. k_B T_{surf} \right\}
+        r_{rec,a,0} \max \left\{ 0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \end{matrix} \right] \right|_E ,
 \end{matrix}
 \end{equation*}
-
-$u_{a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{ax}^{(dia)}$
-
-$u_{p_{out}} = \max \left\{
-        0, \frac{u_{u_{out}}}{b_x} - \frac{u_{1,x}^{(dia)}}{b_x}
-\right\}$
 
 $p_{m,a_{main},1} = 1.0$
 
