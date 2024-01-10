@@ -10641,11 +10641,13 @@ $S_{m_a} = S_{m_a,0} + S_{m_a,1} V_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3}
 
 {\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
-$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\begin{equation*}
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
 \left. \left[
 p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_0}$
+\right] \right|_{S_0}
+\end{equation*}
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
@@ -10745,16 +10747,14 @@ $c_{m,a,1} = 0$, $c_{m,a,3} = -10^{10}$
 
 {\em Prescribe the value of the parallel velocity as a function of the poloidal coordinate:} {\tt BCMOM = 15}
 
-$
+\begin{equation*}
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
 \left. v_{big} n_{e0} m_{a} h_z \frac{\sqrt g}{h_y} \left[
         \frac{\langle B \rangle}{B} p_{m,a,1} - V_{\parallel a}
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
-where  $\langle B \rangle =
-\frac{\mathlarger{\oint}_{S_1} B \sqrt{g} \, dx}{\mathlarger{\oint}_{S_1} \sqrt{g} \, dx}
-$, the integration is done over the innermost magnetic surface,
-$v_{big} = 10^{8} \sqrt{\frac{100 \text{eV}}{m_p}}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is the given value of the average parallel velocity, in $m.s^{-1}$.
+where $\langle B \rangle = \frac{\mathlarger{\oint}_{S_1} B \sqrt{g} \, dx}{\mathlarger{\oint}_{S_1} \sqrt{g} \, dx}$, the integration is done over the innermost magnetic surface, $v_{big} = 10^{8} \sqrt{\frac{100 \text{eV}}{m_p}}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is the given value of the average parallel velocity, in $m.s^{-1}$.
 
 \subsubsection{North}
 
@@ -10781,8 +10781,7 @@ delete term with {\tt max} !
 
 $c_{m,a,3} = -10^{10}$, we have  $c_{m,a,6} = -1$, but not $c_{m,a,6} = 0$
 
-Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
-p_{m,a,1} = -1$
+Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow p_{m,a,1} = -1$
 
 \underline{If $z_a \neq 0$}
 
@@ -10797,13 +10796,15 @@ $ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left[
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
-$\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
+\begin{equation*}
+\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
 \left. \left[
 c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 c_{m,a,6} \max \left(
         0, h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{Cor}}{n_a}
 \right) m_a n_a V_{\parallel a}
-\right] \right|_N$
+\right] \right|_N
+\end{equation*}
 
 $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
@@ -10817,19 +10818,23 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
-$ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+\begin{equation*}
+\left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
         p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
         \frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\right|_W$
+\right|_W
+\end{equation*}
 
 with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
 
-$V_{West} =
+\begin{equation*}
+V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
-{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
 
 \underline{If $z_a = 0$}
 
@@ -10847,13 +10852,13 @@ $p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $n_{e00} = 10^{20}$.
 
 {\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
 
-If $p_{m,a,2} < 0.5$:
-
-$\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_W$
+\right|_W
+\end{equation*}
 
 %-------- end of 28th page -------------
 
@@ -10873,21 +10878,21 @@ $c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
 
 where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}),
 
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x}  \right\}$,
-$u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+$u_{u_{out}} = \max \left\{ p_{m,a,1} c_{s,a}, u_{extrap} \right\}$
+
+where $u_{extrap}$ is the extrapolated value to the sheath edge of the poloidal velocity $u_a$,
+
+$u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\}$.
 
 \subsubsection{East}
 
 \underline{If $z_a = 0$}, $p_{m,a,1} = 0$
 
-\underline{If $z_a \neq 0$}
+\underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
-
-$p_{m,a,1} = 1$
 
 $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{East} m_a n_a -
@@ -10895,29 +10900,31 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 \right]
 \right|_E$
 
-$V_{East} =
+\begin{equation*}
+V_{East} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
-{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
 
 \underline{If $z_a = 0$}
 
 {\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
-$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
         u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$
+\right|_E
+\end{equation*}
 
 $p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$.
 
 \underline{If $z_a \neq 0$}
 
 {\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
-
-If $p_{m,a,2} < 0.5$:
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
@@ -10927,9 +10934,13 @@ If $p_{m,a,2} < 0.5$:
 \right|_E
 \end{equation*}
 
+If $p_{m,a,2} < 0.5$:
+
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
 
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
 
 $u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{|b_x|} - u_a^{(dia)} b_z \right\}$
 
@@ -11066,27 +11077,27 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
-\begin{small}
-$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\begin{small}\begin{equation*}
+\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
                 p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$
-\end{small}
+\right] \right|_W
+\end{equation*}\end{small}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}
-$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\begin{small}\begin{equation*}
+\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$
-\end{small}
+\right] \right|_W
+\end{equation*}\end{small}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11106,27 +11117,27 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
-\begin{small}
-$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\begin{small}\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
                 p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$
-\end{small}
+\right] \right|_E
+\end{equation*}\end{small}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}
-$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\begin{small}\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$
-\end{small}
+\right] \right|_E
+\end{equation*}\end{small}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11150,7 +11161,8 @@ $S_{h_e} = S_{h_e,0} + S_{h_e,1} T_e + S_{h_e,2} n_e + S_{h_e,3} n_e T_e$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition:} {\tt BCENE = 11}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
         \left(
                 c_{h_e,2} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
         \right) T_e n_e
@@ -11158,7 +11170,8 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
         c_{h_e,7} \max \left(
                 0, -\frac{\sqrt g}{h_y} \widetilde f_{ey}
         \right) T_e - q_{ex}^{P.Sch}
-\right] \right|_{S_0}$
+\right] \right|_{S_0}
+\end{equation*}
 
 $c_{h_e,2} = -10^{-4}$, $c_{h_e,7} = -1$, $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$, $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
 
@@ -11203,15 +11216,17 @@ $\left. -\frac{\sqrt g}{h_y} \kappa_{ey} \frac{\partial T_e}{h_y \partial y} \ri
 
 {\em In {\tt b2stbc\_spb}:}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
         \left(
                 c_{h_e,0} \frac{\sqrt g}{h_y}
                 +
                 c_{h_e,1} \frac{\sqrt g}{h_y} T_e
         \right)
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
-$c_{h_e,0} = 4 \cdot 10^{13}$,  $c_{h_e,a,1} = -10^{30}$,
+$c_{h_e,0} = 4 \cdot 10^{13}$, $c_{h_e,a,1} = -10^{30}$
 
 {\em Imposing a total electron energy flux:} {\tt BCENE = 8}
 
@@ -11226,7 +11241,8 @@ $p_{h_e,1}$ is the imposed total electron energy flux, in $W$.
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition:} {\tt BCENE = 11}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
         \left(
                 p_{h_e,1} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
         \right) T_e n_e
@@ -11234,7 +11250,8 @@ $\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
         p_{h_e,2} \max \left(
                 0, \frac{\sqrt g}{h_y} \widetilde f_{ey}
         \right) T_e - q_{ex}^{P.Sch}
-\right] \right|_N$
+\right] \right|_N
+\end{equation*}
 
 %-------- end of 32nd page -------------
 
@@ -11287,7 +11304,8 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
         \right)
@@ -11300,11 +11318,13 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$
+\right] \right|_W
+\end{equation*}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \Phi
@@ -11312,13 +11332,10 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$
+\right] \right|_W
+\end{equation*}
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
-
-If $p_{m,a_{main},2} < 0.5$:
-
-If $p_{h_e,1} > 0$ then
 
 $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
         p_{h_e,1} + \frac{ e \left( \Phi - p_{\Phi,2} \right) }{T_e}
@@ -11330,15 +11347,27 @@ $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
+If $p_{m,a_{main},2} < 0.5$:
+
 %-------- end of 33rd page -------------
 
-$\nu_{e_{out}} = \min \left\{
-        0,-u_{u_{out}} n_e - \frac{j_x}{e}
-\right\}
-,\;\;\;\;\;\;\;\;\;
-u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
-,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+$\nu_{e_{out}} = \min \left\{ 0, -u_{u_{out}} n_e - \frac{j_x}{e} \right\}$,
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$\nu_{e_{out}} = \min \left\{ 0, - \sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} u_{a_{out}} z_a n_a - \frac{j_x}{e} \right\}$
+
+$u_{a_{out}} = \max \left\{ p_{m,a,1} c_{s,a} |b_x|, u_{extrap} \right\}$
+
+where $u_{extrap}$ is the extrapolated value of the plasma poloidal velocity defined as $u = \sum \limits_{a=0}^{ns-1} \frac{\Gamma_{a,x}}{n_a}$.
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}).
 
 \subsubsection{East}
 
@@ -11348,7 +11377,8 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
         \right)
@@ -11361,11 +11391,13 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \Phi
@@ -11373,31 +11405,38 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
-If $p_{m,a_{main},2} < 0.5$:
-
-If $p_{h_e,1} > 0$ then
-
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
         p_{h_e,1} + \frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e}
 \right)
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 + \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
-$\nu_{e_{out}} = max \left\{
-        0,u_{u_{out}} n_e - \frac{j_x}{e}
-\right\}
-,\;\;\;\;\;\;\;\;\;
-u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
-,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+If $p_{m,a_{main},2} < 0.5$:
+
+$\nu_{e_{out}} = \max \left\{ 0, u_{u_{out}} n_e - \frac{j_x}{e} \right\}$,
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$\nu_{e_{out}} = \min \left\{ 0, \sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} u_{a_{out}} z_a n_a - \frac{j_x}{e} \right\}$
+
+$u_{a_{out}} = \max \left\{ p_{m,a,1} c_{s,a} |b_x|, u_{extrap} \right\}$
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
 
 %-------- end of 34th page -------------
 
@@ -11452,13 +11491,15 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
 {\em Imposing a constant ion temperature:} {\tt BCENI = 21}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         \frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0} + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_{S_0}$
+\right|_{S_0}
+\end{equation*}
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
 
@@ -11491,12 +11532,14 @@ $c_{h_i,a,2} = -10^{-2}$
 
 %-------- end of 35th page -------------
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h_i,1} \frac{
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h_i,1} \frac{
         \frac{\sqrt g}{h_y}}
         {\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
         - q_{iy}^{P.Sch}
         + \frac{3}{2} \frac{\left( j_y^{(AN)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + \widetilde{j}_y^{(visq)} + j_y^{(vis \perp)} \right)}{e} T_i
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
 $p_{h_i,1}$ is the imposed total ion energy flux, in $W$.
 
@@ -11561,14 +11604,16 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 21}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         \frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_N
 + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$
+\right|_N
+\end{equation*}
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = 10^{-2}$
 
@@ -11584,14 +11629,16 @@ $p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
 
 {\em Boundary condition in {\tt b2stbc\_spb}:}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         c_{h_i,a,2}  \frac{\sqrt g}{h_y} \frac{n_a }{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_N
 + \left.
 c_{h_i,a,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$
+\right|_N
+\end{equation*}
 
 %-------- end of 36th page -------------
 
@@ -11603,13 +11650,15 @@ $c_{h_i,a,2} = -10^{-2}$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_W$
+\right|_W
+\end{equation*}
 
 $p_{h_i,1} = +1.5$
 
@@ -11629,8 +11678,6 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 \right] \right|_W$
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
-
-If $p_{m,a_{main},2} < 0.5$:
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
@@ -11664,7 +11711,7 @@ $c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
 
 where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}),
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = \max \left\{ p_{m,a_{main},1} c_{s,a}, u_{extrap} \right\}$
 
 \begin{sloppypar}
 If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
@@ -11687,13 +11734,15 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 +
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_E$
+\right|_E
+\end{equation*}
 
 $p_{h_i,1} = +1.5$
 
@@ -11711,11 +11760,10 @@ $p_{h_i,1} = +1.5$
         \right) n_i T_i
         +
         \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
-
-If $p_{m,a_{main},2} < 0.5$:
 
 \begin{equation*}
 \begin{matrix}
