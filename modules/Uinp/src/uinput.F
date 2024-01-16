@@ -208,45 +208,6 @@ c*** Create a b2ah.dat.stencil file
      .       specs(is),'0.0','0.0',nchara(iatm),'.0',
      .                             nmassa(iatm),'.0'
 cxpb Default data for neutrals
-            do ireg = cbirso, cbirso+cbnrso-1
-              if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-                cbsna(1,is,ireg) =-1.0e10
-                cbsmo(3,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 4.0e13
-                cbshi(1,is,ireg) =-1.0e30
-              else ! PFR boundary
-                cbsna(2,is,ireg) =-0.01
-                cbsmo(3,is,ireg) =-1.0e10
-                cbsmo(6,is,ireg) =-1.0
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(2,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-2.5
-              end if
-            end do
-            do ireg = cbirno, cbirno+cbnrno-1
-              cbsna(2,is,ireg) =-0.01
-              cbsmo(3,is,ireg) =-1.0e10
-              cbsmo(6,is,ireg) =-1.0
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(2,is,ireg) =-0.1
-              cbshi(7,is,ireg) =-2.5
-            end do
-            do ireg = cbirwe, cbirwe+cbnrwe-1
-              cbsna(7,is,ireg) =-1.0
-              cbsmo(4,is,ireg) =-1.0e10
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(7,is,ireg) =-1.5
-            end do
-            do ireg = cbirea, cbirea+cbnrea-1
-              cbsna(7,is,ireg) =-1.0
-              cbsmo(4,is,ireg) =-1.0e10
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(7,is,ireg) =-1.5
-            end do
             cfdf0(0,is) = 100.0
             cfdf0(2,is) = 1.0
             if (nchara(iatm).eq.1) then
@@ -275,116 +236,12 @@ cxpb Default data for neutrals
      .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
 cxpb Default data for ions
-              do ireg = cbirso, cbirso+cbnrso-1
-                if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-                  cbsna(1,is,ireg) =-1.0e10
-                  cbsmo(3,is,ireg) =-1.0e10
-                  cbshi(0,is,ireg) = 4.0e13
-                  cbshi(1,is,ireg) =-1.0e30
-                  if (iss.eq.nchara(iatm)) then ! highest charge state ion
-                    if (spcicrk(iatm).ne.3) then ! setting core density
-                      cbsna(0,is,ireg) = spcicrp(iatm)*1.e10
-                    else ! setting core flux
-                      if (cbnrso.eq.6 .and. ireg.eq.2) then ! DN HFS core
-                        cbsna(0,is,ireg) = spcicrp(iatm)*spcicrf(iatm)
-                      else if (cbnrso.eq.6 .and. ireg.eq.5) then ! DN LFS core
-                        cbsna(0,is,ireg) =
-     .                   spcicrp(iatm)*(1.-spcicrf(iatm))
-                      else
-                        cbsna(0,is,ireg) = spcicrp(iatm)
-                      end if
-                      cbsna(1,is,ireg) = 0.0
-                    end if
-                  end if
-                else ! PFR boundary
-                  cbsna(2,is,ireg) =-1.0e-3
-                  cbsmo(6,is,ireg) =-1.0
-                  cbshi(0,is,ireg) = 1.0e-18
-                  cbshi(1,is,ireg) =-100.0
-                  cbshi(2,is,ireg) =-0.01
-                  cbshi(7,is,ireg) =-2.5
-                  if (dscbndx(j).eq.'=') then ! recycling species
-                    cbrec(0,is,ireg) = 1.0
-                    cbrec(1,is,ireg) = 0.3
-                  end if
-                end if
-              end do
-              do ireg = cbirno, cbirno+cbnrno-1
-                cbsmo(6,is,ireg) =-1.0
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(2,is,ireg) =-0.01
-                cbshi(7,is,ireg) =-2.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
-              do ireg = cbirwe, cbirwe+cbnrwe-1
-                cbsna(7,is,ireg) =-1.0
-                cbsmo(2,is,ireg) = 1.0e10
-                cbsmo(4,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(3,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-1.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
-              do ireg = cbirea, cbirea+cbnrea-1
-                cbsna(7,is,ireg) =-1.0
-                cbsmo(2,is,ireg) = 1.0e10
-                cbsmo(4,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(3,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-1.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
               cfdf0(0,is) = 0.5
               cfdna(2,is) = 1.0
               cfvsa(2,is) = 0.4
               cfhci(2,is) = 1.4
               is = is + 1
             end do
-          end do
-          do ireg = cbirso, cbirso+cbnrso-1
-            if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-              cbshe(0,ireg) = 4.0e13
-              cbshe(1,ireg) =-1.0e30
-            else ! PFR boundary
-              cbshe(0,ireg) = 1.0e-18
-              cbshe(1,ireg) =-100.0
-              cbshe(2,ireg) =-1.0e-4
-              cbshe(7,ireg) =-2.5
-            end if
-          end do
-          do ireg = cbirno, cbirno+cbnrno-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(2,ireg) =-1.0e-4
-            cbshe(7,ireg) =-2.5
-          end do
-          do ireg = cbirwe, cbirwe+cbnrwe-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(3,ireg) =-0.1
-            cbshe(7,ireg) =-1.5
-            cbsch(6,ireg) = 1.0
-            cbsch(7,ireg) = 0.5
-          end do
-          do ireg = cbirea, cbirea+cbnrea-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(3,ireg) =-0.1
-            cbshe(7,ireg) =-1.5
-            cbsch(6,ireg) = 1.0
-            cbsch(7,ireg) = 0.5
           end do
           cfhce(0) = 0.7
           cfsig(0) = 1.0e-7
@@ -393,65 +250,6 @@ cxpb Default data for ions
           cflim(2) = 0.5
           cflim(3) = 0.5
           cflim(4) = 0.5
-          write(2,'(a)') '*b2cmpb         boundary conditions'
-          write(2,'(a)') '*cbregs'
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrso,'(3x,f7.4))'
-          write(2,hlp_frm) '''south''', cbnrso,
-     .     (cbrbrk(i),i=cbirso,cbirso+cbnrso-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrno,'(3x,f7.4))'
-          write(2,hlp_frm) '''north''', cbnrno,
-     .     (cbrbrk(i),i=cbirno,cbirno+cbnrno-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrwe,'(3x,f7.4))'
-          write(2,hlp_frm) '''west'' ', cbnrwe,
-     .     (cbrbrk(i),i=cbirwe,cbirwe+cbnrwe-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrea,'(3x,f7.4))'
-          write(2,hlp_frm) '''east'' ', cbnrea,
-     .     (cbrbrk(i),i=cbirea,cbirea+cbnrea-1)
-          nreg = cbnrso + cbnrno + cbnrwe + cbnrea
-          lbreg(cbirso  :cbirso+cbnrso-1:3)='''south, private flux'''
-          lbreg(cbirso+1:cbirso+cbnrso-1:3)='''south, core plasma'' '
-          lbreg(cbirso+2:cbirso+cbnrso-1:3)='''south, private flux'''
-          lbreg(cbirno:cbirno+cbnrno-1)='''north, SOL/DIV outer wall'''
-          lbreg(cbirwe:cbirwe+cbnrwe-1)='''west, target plate'' '
-          lbreg(cbirea:cbirea+cbnrea-1)='''east, target plate'' '
-          do ireg = 0, nreg-1
-            write(2,'(a)') '*region'
-            write(2,'(i2,2x,a)') ireg,lbreg(ireg)
-            write(2,'(a)') '*cbsna'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbsna(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbsmo'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbsmo(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbshi'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbshi(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbshe'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbshe(i,ireg),i=0,7)
-            write(2,'(a)') '*cbsch'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbsch(i,ireg),i=0,7)
-            write(2,'(a)') '*cbrec'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbrec(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbmsa'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbmsa(i,ireg),i=0,7)
-            write(2,'(a)') '*cbmsb'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbmsb(i,is,ireg),i=0,7)
-            end do
-          end do
           write(2,'(a)') '*b2cmpt  transport coefficients'
           write(2,'(a)') '*cfdf0'//column_header
           do is = 0, ns-1

@@ -9,6 +9,11 @@ function [bcList,fcList] = bc_cell_list(gmtry,fcLbl,sort)
 % Also the corresponding face list can be returned.
 %
 
+% Set default values for some arguments, if not supplied
+if ~exist('sort','var') || isempty(sort)
+  sort = '';
+end
+
 % Find all faces with the corresponding label(s)
 fcList = face_list(gmtry,fcLbl,sort);
 

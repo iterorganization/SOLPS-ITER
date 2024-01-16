@@ -87,7 +87,7 @@ prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
 
 target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
-target_ai = b2ai.prt b2fstati b2fstati_st
+target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
 target_opt = target_mn
@@ -197,20 +197,19 @@ $(target_ag) : b2ag.dat
 	-[ -s b2ag.exe.dir/info.dat ] && mv b2ag.exe.dir/info.dat . || echo > /dev/null
 	-rmdir b2ag.exe.dir
 
-$(target_ah) : b2ah.dat b2fgmtry
+$(target_ah) : b2ah.dat
 	rm -rf b2ah.exe.dir >& /dev/null ; mkdir b2ah.exe.dir ; cp $^ b2ah.exe.dir
-	-[ -s b2fgmtry_st ] && cp b2fgmtry_st b2ah.exe.dir || echo "Could not find b2fgmtry_st. Please provide!"
 	rm -f $(target_ah)
 	cd b2ah.exe.dir ; ${TIME} ${B2OBJ}/b2ah.exe ${RUN_OPTIONS} ; mv $(target_ah) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -s b2ah.exe.dir/b2fgmtry_st ] && rm b2ah.exe.dir/b2fgmtry_st || echo > /dev/null
 	-rmdir b2ah.exe.dir
 
-$(target_ai) : b2ag.dat b2ai.dat b2fgmtry
+$(target_ai) : b2ai.dat b2fgmtry
 	rm -rf b2ai.exe.dir >& /dev/null ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
-	-[ -s b2fgmtry_st ] && cp b2fgmtry_st b2ai.exe.dir || echo "Could not find b2fgmtry_st. Please provide!"
 	rm -f $(target_ai)
 	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ${RUN_OPTIONS} ; mv $(target_ai) .. ; rm -f $(notdir $^) >& /dev/null
 	-[ -s b2ai.exe.dir/b2fgmtry_st ] && rm b2ai.exe.dir/b2fgmtry_st   || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fstate_st ] && mv b2ai.exe.dir/b2fstate_st b2fstati_st   || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fplasmf_st ] && rm b2ai.exe.dir/b2fplasmf_st   || echo > /dev/null
 	-rmdir b2ai.exe.dir
 
 $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
