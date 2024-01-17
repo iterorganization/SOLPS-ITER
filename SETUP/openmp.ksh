@@ -21,7 +21,13 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   USE_OPENMP="-D_OPENMP"
   export   SOLPS_OPENMP="yes"
   export   KMP_STACKSIZE="48M"
-  export   KMP_AFFINITY="norespect,compact"
+  export   KMP_AFFINITY="noverbose,respect,compact"
+  export   OMP_DISPLAY_AFFINITY="true"
+  export   OMP_WAIT_POLICY="active"
+  export   OMP_DISPLAY_ENV="true"
+  export   OMP_PROC_BIND="true"
+  export   OMP_DYNAMIC="false"
+  export   OMP_PLACES="cores"
   unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER OpenMP mode turned on"
 else
