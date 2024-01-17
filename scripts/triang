@@ -84,10 +84,9 @@ Uinp    (u) run uinp to produce the input files for the initial short run of Eir
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
 B2a*    (b) run b2ag, b2ai, b2ah and b2ar to produce the B2.5 input files;
-Eirene  (e) run eirobjx to produce the geometry data for tria;
+triaiNp (n) run triainp to produce the geometry data / contours for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
-triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
-b2us    (f) run b2us to complete plasma grid triangulation;
+b2us    (g) run b2us to complete plasma Grid triangulation;
 Plot    (p) produce PostScript plots of the structures and triangular mesh using gnuplot;
 View    (v) view the PostScript output from tria (v) or triageom (V);
 Store   (s) store the combined mesh, giving it a serial number and linking to fort.3[345];
@@ -237,7 +236,7 @@ while true; do {
             }
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
-              [ -r $eirinp ] && q=e || q=q
+              [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
@@ -262,7 +261,7 @@ while true; do {
             }
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
-              [ -r $eirinp ] && q=e || q=q
+              [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
@@ -329,15 +328,14 @@ while true; do {
             [ -r $b2arout ] && {
               [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
               print -u2 -- "Produced $b2arout file"
-              print -u2 -- "For extended cases without void regions, proceed with (f)"
-              q=e
+              q=n
             } || {
               print -u2 -- "Could not produce the $b2arout file"
               print -u2 -- "    ==> Check b2ar.log file or provide separately"
               q=u
             }
             break;;
-      ( e|E )                                               # run EIRENE to make input file for TRIA:
+      ( n|N )                                               # run TRIAINP to make input file for TRIA:
             [ -r $tripbin ] && {
               [ -r $tripuin ] && {
                 N=
@@ -386,49 +384,47 @@ while true; do {
                 print -u2 -- "For extended cases without void regions, proceed with (f)"
                 q=p
               }
-              q=f
+              q=g
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
               q=u
             } 
             break;;
-      ( g|G )                                               # run TRIAGEOM to make combined mesh:  
-            [ -r $b2agout ] && [ -s $b2agout ] && {
-              check_files $triaoutlist && {
-                N=
-                print -u2 -- "Starting a TRIAGEOM run"
-                print -u2 -- "Command line: $TRIAGEOM > $triglog"
-                "$TRIAGEOM" > $triglog
-                [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
-                check_files $trigoutlist && {
-                  q=f
-                  set -A L -- $triglnklist
-                  ln -sf $trignodes ${L[0]}
-                  ln -sf $trigcells ${L[1]}
-                  ln -sf $triglinks ${L[2]}
-                } || {
-                  print -u2 -- "Not all output files, $trigoutlist, are produced"
-                  print -u2 -- "    ==> Check $triglog"
-                  q=u
-                }
-                true
-              } || {
-                print -u2 -- "Not all valid input files, $triaoutlist, are present"
-                print -u2 -- "Probably, some of the previous steps forgotten?"
-                q=t 
-              }
-              true
-            } || {
-              print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
-              q=b
-            }
-            break;;
-      ( f|F )                                               # run b2us to triangulate unstructured plasma grid
+      ( g|G )                                               # run b2us to triangulate unstructured plasma Grid and build combined mesh
+            #[ -r $b2agout ] && [ -s $b2agout ] && {
+            #  check_files $triaoutlist && {
+            #    N=
+            #    print -u2 -- "Starting a TRIAGEOM run"
+            #    print -u2 -- "Command line: $TRIAGEOM > $triglog"
+            #    "$TRIAGEOM" > $triglog
+            #    [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
+            #    check_files $trigoutlist && {
+            #      q=g
+            #      set -A L -- $triglnklist
+            #      ln -sf $trignodes ${L[0]}
+            #      ln -sf $trigcells ${L[1]}
+            #      ln -sf $triglinks ${L[2]}
+            #    } || {
+            #      print -u2 -- "Not all output files, $trigoutlist, are produced"
+            #      print -u2 -- "    ==> Check $triglog"
+            #      q=u
+            #    }
+            #    true
+            #  } || {
+            #    print -u2 -- "Not all valid input files, $triaoutlist, are present"
+            #    print -u2 -- "Probably, some of the previous steps forgotten?"
+            #    q=t 
+            #  }
+            #  true
+            #} || {
+            #  print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
+            #  q=b
+            #}
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
             [ -r $b2usinp ] && {
               [ -r b2mn.dat ] && {
-                mv b2mn.dat b2mn.dat.backup 
+                mv b2mn.dat b2mn.dat.triang_backup 
               }
               ln -s $b2usinp b2mn.dat
             } || {
@@ -443,9 +439,9 @@ while true; do {
               } || {
                 print -u2 -- "Could not find b2.boundary.parameters(.stencil) file"
                 print -u2 -- "    ==> Rerun uinp or provide separately"
-                [ -r b2mn.dat.backup ] && {
+                [ -r b2mn.dat.triang_backup ] && {
                   rm b2mn.dat
-                  mv b2mn.dat.backup b2mn.dat
+                  mv b2mn.dat.triang_backup b2mn.dat
                 }
                 q=u
                 break
@@ -457,38 +453,31 @@ while true; do {
               } || {
                 print -u2 -- "Could not find b2.neutrals.parameters(.stencil) file"
                 print -u2 -- "    ==> Rerun uinp or provide separately"
-                [ -r b2mn.dat.backup ] && {
+                [ -r b2mn.dat.triang_backup ] && {
                   rm b2mn.dat
-                  mv b2mn.dat.backup b2mn.dat
+                  mv b2mn.dat.triang_backup b2mn.dat
                 }
                 q=u
                 break
               }
             }
-            [ -r b2fgmtry ] && {
-              cp -p b2fgmtry b2fgmtry.backup 
-              cp -p b2fgmtry_st b2fgmtry
-            } || {
+            [ -r b2fgmtry ] || {
               print -u2 -- "Could not find b2fgmtry file"
               print -u2 -- "    ==> Rerun B2a* or provide separately"
-              [ -r b2mn.dat.backup ] && {
+              [ -r b2mn.dat.triang_backup ] && {
                 rm b2mn.dat
-                mv b2mn.dat.backup b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
               }
               q=b
               break
             }
-            [ -r b2fstati ] && {
-              cp -p b2fstati b2fstati.backup 
-              cp -p b2fstati_st b2fstati
-            } || {
+            [ -r b2fstati ]  || {
               print -u2 -- "Could not find b2fstati file"
               print -u2 -- "    ==> Rerun B2a* or provide separately"
-              [ -r b2mn.dat.backup ] && {
+              [ -r b2mn.dat.triang_backup ] && {
                 rm b2mn.dat
-                mv b2mn.dat.backup b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
               }
-              mv b2fgmtry.backup b2fgmtry
               q=b
               break
             }
@@ -513,14 +502,10 @@ while true; do {
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log
             [ -r $b2usout ] && {
               [ -d b2us.exe.dir ] && rmdir b2us.exe.dir
-              [ -r b2mn.dat.backup ] && {
+              [ -r b2mn.dat.triang_backup ] && {
                 rm b2mn.dat
-                mv b2mn.dat.backup b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
               }
-              [ -r b2fgmtry.backup ] && mv b2fgmtry.backup b2fgmtry
-              [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
-              [ -r b2fgmtry_us ] && rm b2fgmtry_us
-              [ -r b2fstati_us ] && rm b2fstati_us
               check_files $b2usoutlist && {
                   q=s
                   set -A L -- $b2uslnklist
@@ -543,12 +528,10 @@ while true; do {
             } || {
               print -u2 -- "Could not produce the $b2usout file"
               print -u2 -- "    ==> Check b2us.log file or provide separately"
-              [ -r b2mn.dat.backup ] && {
+              [ -r b2mn.dat.triang_backup ] && {
                 rm b2mn.dat
-                mv b2mn.dat.backup b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
               }
-              [ -r b2fgmtry.backup ] && mv b2fgmtry.backup b2fgmtry
-              [ -r b2fstati.backup ] && mv b2fstati.backup b2fstati
               q=u
             }
             break;;
@@ -681,7 +664,7 @@ while true; do {
                 true
               } || {
                 print -u2 -- "Not all the files in $b2usoutlist are present ==> run B2US first?"
-                q=f
+                q=g
               }
               true
               } || {
