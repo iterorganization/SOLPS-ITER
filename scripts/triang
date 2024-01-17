@@ -218,7 +218,7 @@ export PLOT_IT_STEM='tria'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, b2 input Files, Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, triaiNp, Tria, b2us (G), Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
