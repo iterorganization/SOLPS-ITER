@@ -29,7 +29,7 @@ setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 module load flex/2.6.4-GCCcore-6.4.0
 module load Doxygen/1.8.13-GCCcore-6.4.0
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 module load Ghostscript/9.23-GCCcore-6.4.0
 module unload LibTIFF/4.0.9-GCCcore-6.4.0
 module load ParaView/5.5.2-intel-2018a-Python-3.6.4-mpi

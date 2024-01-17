@@ -21,7 +21,13 @@ if ($?SOLPS_PATH) then
   setenv   USE_OPENMP -D_OPENMP
   setenv   SOLPS_OPENMP yes
   setenv   KMP_STACKSIZE 128M
-  setenv   KMP_AFFINITY norespect,compact
+  setenv   KMP_AFFINITY noverbose,respect,compact
+  setenv   OMP_DISPLAY_AFFINITY true
+  setenv   OMP_WAIT_POLICY active
+  setenv   OMP_DISPLAY_ENV true
+  setenv   OMP_PROC_BIND true
+  setenv   OMP_DYNAMIC false
+  setenv   OMP_PLACES cores
   unsetenv OLD_SOLPS_PATH
   rehash
   echo "SOLPS-ITER OpenMP mode turned on"

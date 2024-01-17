@@ -41,7 +41,6 @@ endif
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv KMP_AFFINITY disabled
   set OMP_OPTS = #THREADS#
   set USE_OMP = "-t ${OMP_OPTS}"
 endif
