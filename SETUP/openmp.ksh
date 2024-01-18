@@ -22,12 +22,15 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_OPENMP="yes"
   export   KMP_STACKSIZE="48M"
   export   KMP_AFFINITY="noverbose,respect,compact"
-  export   OMP_DISPLAY_AFFINITY="true"
   export   OMP_WAIT_POLICY="active"
-  export   OMP_DISPLAY_ENV="true"
-  export   OMP_PROC_BIND="true"
   export   OMP_DYNAMIC="false"
-  export   OMP_PLACES="cores"
+  if [[ -n "$SOLPS_DEBUG" ]]; then
+    export OMP_DISPLAY_AFFINITY="true"
+    export OMP_DISPLAY_ENV="true"
+  fi
+# The settings below can be used if KMP_AFFINITY is not set
+#  export   OMP_PROC_BIND="true"
+#  export   OMP_PLACES="cores"
   unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER OpenMP mode turned on"
 else
