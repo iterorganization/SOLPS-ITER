@@ -64,6 +64,8 @@ cp ../ref_run_for_CI/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
+b2fstate_OK
+cat b2fstate
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../ref_run_for_CI/ ./ || exit 3
 
 cd ../..

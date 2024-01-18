@@ -44,7 +44,7 @@ logging.info('LOG FILE: %s',log_file)
 
 logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
-"Length of string in 10 symbols per unit cannot be lower then 4"
+"Length of string in 10 symbols per unit cannot be lower than 4"
 str_len = 7
 
 "Variable list, names legend and actions"
@@ -439,7 +439,7 @@ def WRT_APP(str_len,title,extra_line,val_tot,val_pfr,val_sol,val_names,val_seq,a
         ttl = title.strip()
         ttl_len = len(ttl)
         if (ttl_len > str_len*10 ):
-            logging.warning('title length %s is greater then the limit, title will be cut to %s',ttl_len,str_len*10)
+            logging.warning('title length %s is greater than the limit, title will be cut to %s',ttl_len,str_len*10)
             ttl = ttl[0:str_len*10]
             ttl_len = len(ttl)
         step = int((str_len*10 - ttl_len)/2)
@@ -455,7 +455,7 @@ def WRT_APP(str_len,title,extra_line,val_tot,val_pfr,val_sol,val_names,val_seq,a
 
         if (extra_line != ''):
             if (len(extra_line) > str_len*10):
-                logging.warning('extra_line length %s is greater then the limit, it will be cut to %s',len(extra_line),str_len*10)
+                logging.warning('extra_line length %s is greater than the limit, it will be cut to %s',len(extra_line),str_len*10)
                 prin = extra_line[0:str_len*10] + '\n'
             else:
                 step = int((str_len*10 - len(extra_line))/2)
@@ -489,7 +489,7 @@ def WRT_APP(str_len,title,extra_line,val_tot,val_pfr,val_sol,val_names,val_seq,a
                 tlen = len(name)
                 mlen = str_len*10 - 4 - 3*15
                 if (tlen > mlen):
-                    logging.warning('the output quantity name (%s) lenth %s is longer then the string length %s and will be truncated',name,tlen,mlen)
+                    logging.warning('the output quantity name (%s) length %s is longer than the string length %s and will be truncated',name,tlen,mlen)
                     name = name[0:mlen]
                 else:
                     name = name + ' '*(mlen-tlen)
