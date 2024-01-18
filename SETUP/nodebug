@@ -4,7 +4,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.debug:|:|g'`
   setenv   PATH ${SOLPS_PATH}:${PATH}
   unsetenv OLD_SOLPS_PATH IMAS_AMNS_DEBUG SOLPS_DEBUG I_MPI_DEBUG PMI_DEBUG
-  if (?SOLPS_OPENMP) then
+  if ($?SOLPS_OPENMP) then
     setenv OMP_DISPLAY_AFFINITY false
     setenv OMP_DISPLAY_ENV false
   endif
