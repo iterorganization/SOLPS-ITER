@@ -31,7 +31,7 @@ export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
 
 # Debugger (set environment variable DBX)
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 export DBX="totalview"
 
 # Compilers
