@@ -18,7 +18,7 @@ c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
       integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists,
-     .        ihyb,nhyb
+     .        ihyb,nhyb,nskip
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
      .        pass, found
@@ -399,8 +399,21 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdpr(20,8)=nspcncl
       nmdlr(20,3)=m
       nmdlr(20,8)=m+nhyb
-      nmdpr(25,3)=nlimi+nstsi+1
-      nmdpr(25,8)=nlimi+nstsi+1
+      nskip=0
+      if (grid_mode.eq.2) then !{ vessel mode
+        do k = laddsrfs+1, nlimi !{
+          i=indasrfs(k)
+cnh Surface with nonzero face label is a standard surface
+          if (fclbl(i).ne.0) nskip=nskip+1
+        end do !}
+      end if !}
+      if (grid_mode.ne.2) then !{ standard + target mode
+        nmdpr(25,3)=nlimi-nskip+nstsi+1
+        nmdpr(25,8)=nlimi-nskip+nstsi+1
+      else !{ vessel mode
+        nmdpr(25,3)=nlimi-nskip+ncore+maxval(fclbl)+1
+        nmdpr(25,8)=nlimi-nskip+ncore+maxval(fclbl)+1
+      end if       
       nmdpr(22,3)=nspcmol
       nmdpr(22,8)=nspcmol
       nmdpr(23,3)=nspcion
@@ -1481,16 +1494,35 @@ cxpb Second pass in case the molecules were not sorted in ascending order
 *** Eirene surface data input through B2
 
 *** *** chemical sputtering yield
+      nskip=0
       do k = laddsrfs+1, nlimi !{
         i=indasrfs(k)
-        rniprm(i,1,1,25,3)=rcycca(i)
-        rniprm(i,1,1,25,8)=rcycca(i)
+cnh Surface with nonzero face label is a standard surface
+        if ((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !{ 
+          nskip=nskip+1
+          cycle
+        endif         
+        rniprm(i-nskip,1,1,25,3)=rcycca(i)
+        rniprm(i-nskip,1,1,25,8)=rcycca(i)
       end do !}
-      do k = 1, nstsi !{
-        i=nlim+k
-        rniprm(i,1,1,25,3)=recycc(k)
-        rniprm(i,1,1,25,8)=recycc(k)
-      end do !}
+      if (grid_mode.ne.2) then !{ standard+target mode
+        do k = 1, nstsi !{
+          i=nlim+k
+          rniprm(i,1,1,25,3)=recycc(k)
+          rniprm(i,1,1,25,8)=recycc(k)
+        end do !}
+      else !{ vessel mode
+        i=nlimi-nskip+ncore
+        do k=1,maxval(fclbl)
+          i=i+1
+          do l=laddsrfs+1,nlimi !{ find corresponding surface
+            j=indasrfs(l)
+            if (fclbl(j).eq.k) exit
+          end do
+          rniprm(i,1,1,25,3)=rcycca(j)
+          rniprm(i,1,1,25,8)=rcycca(j)
+        end do
+      end if !}
 
 *** *** surface groups
 

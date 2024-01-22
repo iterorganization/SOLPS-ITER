@@ -438,15 +438,29 @@ c         detect the properties of an element with a certain face label
 c*** 3b.  data for additional surfaces
 
       write(iunoo,700) utxthd(4)
-      write(iunoo,707) nlimi
+      nvess=0
+      if (grid_mode.eq.2) then !nh vessel mode
+        do k=laddsrfs+1,nlimi
+          i=indasrfs(k)
+          if (fclbl(i).ne.0) then
+            nvess=nvess+1
+          endif
+        enddo
+      endif
+      write(iunoo,707) nlimi-nvess
 c***  "ch0-cards"
       call uichwr(iunoo,0,jadch0,nlimi)
       icopy=0
       jsurpr=nsurpr
-      do 360 k=laddsrfs+1,nlimi !{
+      nskip=0
+      do 360 k=laddsrfs+1,nlimi !{ 
         i=indasrfs(k)
         if(i.eq.0) go to 360
-        write(iunoo,714) k,i,txtsfa(k)
+        if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+          nskip=nskip+1
+          go to 360
+        endif
+        write(iunoo,714) k-nskip,i,txtsfa(k)
 
         icopy=icopy-1
         if (icopy.ge.1) goto 360
