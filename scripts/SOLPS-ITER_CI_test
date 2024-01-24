@@ -23,7 +23,7 @@ cp ../test/b2batch.nc.i b2batch.nc
 setup_baserun_eirene_links
 touch b2fstati
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test/ ./ || exit 1
 
 cd ../..
 make AUG_16151_D

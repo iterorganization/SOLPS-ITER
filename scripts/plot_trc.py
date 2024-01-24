@@ -241,7 +241,7 @@ def READ_TRC(trc_file):
                     else:
                         logging.info('variable %s is a vector of dim %s, no rule to handle this data',var,dumdim)
                 else:
-                    logging.info("unforseen dimention %s of variable %s, skipping...",np.ndim(dummy),var)
+                    logging.info("unforeseen dimension %s of variable %s, skipping...",np.ndim(dummy),var)
         trc_data = np.zeros((i,np.size(dummy_data[0,:])), dtype=np.float64)
         trc_data = dummy_data[:i,:]
         file_read = True
@@ -278,7 +278,7 @@ def READ_TRC(trc_file):
                 return file_read, trc_header, trc_data;
         file_read = True
 
-    "Get rid of potential Nan problems when plotting"
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"

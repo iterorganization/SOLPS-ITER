@@ -11,7 +11,7 @@
 #   follow on Mac by exchange with crop top: 6.8 inches, right 2.5 inches
 #   works for gmeta files:
 #   a) produced individually and then combined into one multipage filewith "psb2pl"
-#   b) multipage file produced from gmeta by "ctrans" and then postprocessed by "ps_GV" 
+#   b) multipage file produced from gmeta by "ctrans" and then postprocessed by "ps_GV"
 #     (to give correct page count in ghostview and to permit prduction of eps files)
 #   scales to correct width for word
 #   follow on Mac by exchange with crop top: 6.0 inches, right 2.2 inches
@@ -29,7 +29,7 @@
 #   Name used for eps files is first word on each line, followed by ".eps"
 #   Lines beginning with hash are ignored
 #   File must contain the same number of unique names as the .ps file contains pages
- 
+
 # version : 18.07.2008 20:20
 
 scriptname=`basename $0`
@@ -76,18 +76,18 @@ fi
 
 #make sure that if both macps and eps are selected this is same as -b option
 if [ "${macps}." = "yes." ]; then
-	if [ "${eps}." = "yes." ]; then
-		both=yes
-	fi
+  if [ "${eps}." = "yes." ]; then
+    both=yes
+  fi
 fi
 if [ "${macps}." = "yes." ]; then
-	mode=macps
+  mode=macps
 fi
 if [ "${eps}." = "yes." ]; then
-	mode=eps
+  mode=eps
 fi
 if [ "${both}." = "yes." ]; then
-	mode="eps macps"
+  mode="eps macps"
 fi
 
 
@@ -111,7 +111,7 @@ fi
 startdir=$PWD
 filename=
 
-for f in ${filelist}; do 
+for f in ${filelist}; do
 
     filename=$f
 
@@ -131,7 +131,7 @@ tempps_mac=`basename ${filename}`
 tempps_mac_dir=`dirname ${filename}`
 dirsuffix=_dir
 if [ "${eps}." = "yes." ]; then
-	dirsuffix=_epsdir
+  dirsuffix=_epsdir
 fi
 tempps_mac=${tempps_mac_dir}/${tempps_mac}${dirsuffix}
 
@@ -176,7 +176,7 @@ rm -rf prolog >/dev/null 2>&1
 mv temp0 prolog
 
 #edit prolog for eps file: Change header line, bounding box, and orientation
-#setting bounding box here  to same value for ps file as for eps file ensures that ghostview has the right size 
+#setting bounding box here  to same value for ps file as for eps file ensures that ghostview has the right size
 if [ $gnuplot -eq 0 ]; then
 
 cat prolog | sed \
@@ -206,18 +206,18 @@ mv temp0 prolog
 #for eps file: remove pages comment from both prolog and trailer
 #and remove lines concerned with paper size (otherwise word will print a blank page)
 if [ "${eps}." = "yes." ]; then
-	cat prolog | sed \
-	  -e '/^%%DocumentPaperSizes:/d' \
-      -e '/^%%BeginPaperSize/,/^%%EndPaperSize/d' \
-      -e '/^%%Pages:/d' \
+  cat prolog | sed \
+    -e '/^%%DocumentPaperSizes:/d' \
+    -e '/^%%BeginPaperSize/,/^%%EndPaperSize/d' \
+    -e '/^%%Pages:/d' \
     > temp0
-	rm -rf prolog_eps >/dev/null 2>&1
-	mv temp0 prolog_eps
-	cat trailer | sed \
-	  -e '/^%%Pages:/d' \
-	> temp0
-	rm -rf trailer_eps >/dev/null 2>&1
-	mv temp0 trailer_eps
+  rm -rf prolog_eps >/dev/null 2>&1
+  mv temp0 prolog_eps
+  cat trailer | sed \
+    -e '/^%%Pages:/d' \
+    > temp0
+  rm -rf trailer_eps >/dev/null 2>&1
+  mv temp0 trailer_eps
 fi
 
 
@@ -282,66 +282,66 @@ namelist=${name[*]}
 #echo "namelist=$namelist
 
 if [ "${macps}." = "yes." ]; then
-	> ${fileout}
-	cat prolog >> ${fileout}
-	i=0
-	for ff in $namelist; do
-	  if [ $i -gt 0 ]; then
-	    head -1 $ff >> ${fileout}
-	    cat pagesetup >> ${fileout}
-	    tail -n +$deletelines $ff >> ${fileout}
-	  fi
-	  let "i=i+1"
-	done
-	
-	cat trailer >> ${fileout}
+  > ${fileout}
+  cat prolog >> ${fileout}
+  i=0
+  for ff in $namelist; do
+    if [ $i -gt 0 ]; then
+      head -1 $ff >> ${fileout}
+      cat pagesetup >> ${fileout}
+      tail -n +$deletelines $ff >> ${fileout}
+    fi
+    let "i=i+1"
+  done
+
+  cat trailer >> ${fileout}
 fi
 
 if [ "${eps}." = "yes." ]; then
-	fileout=temp0
-	cat prolog >> ${fileout}
-	i=0
-	for ff in $namelist; do
-	  if [ $i -gt 0 ]; then
-	    cp prolog_eps ${fileout}
-	    cat pagesetup >> ${fileout}
-	    tail -n +$deletelines $ff >> ${fileout}
-   	    cat trailer_eps >> ${fileout}
-        rm -rf ${ff} >/dev/null 2>&1
-        mv ${fileout} ${ff}
-	  fi
-	  let "i=i+1"
-	done
+  fileout=temp0
+  cat prolog >> ${fileout}
+  i=0
+  for ff in $namelist; do
+    if [ $i -gt 0 ]; then
+      cp prolog_eps ${fileout}
+      cat pagesetup >> ${fileout}
+      tail -n +$deletelines $ff >> ${fileout}
+      cat trailer_eps >> ${fileout}
+      rm -rf ${ff} >/dev/null 2>&1
+      mv ${fileout} ${ff}
+    fi
+    let "i=i+1"
+  done
 fi
 
 
 # if pagefile is to be used to name eps files check to see whether it exists and later check to see whether
 # it has the same number of entries as the .ps file
-# also check to see if names are unique 
+# also check to see if names are unique
 if [ "${eps}." = "yes." ]; then
-	if [ "${pagefile}." = "yes." ]; then
-	  pagefilename=../${filename}${pagefilesuffix}
-	  pagefileexist=yes
-	  if [ ! -r "$pagefilename" ]; then
-	    echo "$scriptname: pagefilename=${pagefilename} does not exist" >&2
-	    pagefileexist=no
-	  else
-		rm -rf temp0 temp1 >/dev/null 2>&1
-	    cat ${pagefilename} | grep -v '^#' | cut -f1 > temp0
-	    cat temp0 | sort -u > temp1
-	    pagenames=`cat temp0`
-	    pagenumber=`cat temp0 | wc -l`
-	    pagenumberunique=`cat temp1 | wc -l`
-	    if [ "${pagenumber}." != "${pagenumberunique}." ]; then
-	      echo "$scriptname: pagefilename=${pagefilename} does not have unique names" >&2
-	      pagefileexist=no
-	    fi
-	    if [ ${pagenumber} -ne ${pages} ]; then
-	      echo "$scriptname: pagefilename=${pagefilename} does not have the same number of names as .ps file" >&2
-	      pagefileexist=no
-	    fi
-	  fi
-	fi
+  if [ "${pagefile}." = "yes." ]; then
+    pagefilename=../${filename}${pagefilesuffix}
+    pagefileexist=yes
+    if [ ! -r "$pagefilename" ]; then
+      echo "$scriptname: pagefilename=${pagefilename} does not exist" >&2
+      pagefileexist=no
+    else
+      rm -rf temp0 temp1 >/dev/null 2>&1
+      cat ${pagefilename} | grep -v '^#' | cut -f1 > temp0
+      cat temp0 | sort -u > temp1
+      pagenames=`cat temp0`
+      pagenumber=`cat temp0 | wc -l`
+      pagenumberunique=`cat temp1 | wc -l`
+      if [ "${pagenumber}." != "${pagenumberunique}." ]; then
+        echo "$scriptname: pagefilename=${pagefilename} does not have unique names" >&2
+        pagefileexist=no
+      fi
+      if [ ${pagenumber} -ne ${pages} ]; then
+        echo "$scriptname: pagefilename=${pagefilename} does not have the same number of names as .ps file" >&2
+        pagefileexist=no
+      fi
+    fi
+  fi
 fi
 
 set -A pagename xxx ${pagenames}
@@ -351,24 +351,24 @@ pagenamelist=${pagename[*]}
 #delete all except eps files for eps case and replace pagenames if desired and if file OK
 delfiles=`ls -1 | grep -v '^xx*'`
 if [ "${eps}." = "yes." ]; then
-	rm -f ${delfiles} >/dev/null 2>&1
-	j=0
-	if [ "${pagefileexist}." = "yes." ]; then
-	    echo "$scriptname: file=${pagefilename} is being used for eps file names" >&2
-		for ff in $namelist; do
-		  if [ $j -gt 0 ]; then
-		    mv ${ff} ${pagename[j]}.eps
-		  fi
-		  let "j=j+1"
-		done
-	else
-	    echo "$scriptname: eps file names will be xx01 etc." >&2
-	fi
-	cd ..
+  rm -f ${delfiles} >/dev/null 2>&1
+  j=0
+  if [ "${pagefileexist}." = "yes." ]; then
+    echo "$scriptname: file=${pagefilename} is being used for eps file names" >&2
+    for ff in $namelist; do
+      if [ $j -gt 0 ]; then
+        mv ${ff} ${pagename[j]}.eps
+      fi
+      let "j=j+1"
+    done
+  else
+    echo "$scriptname: eps file names will be xx01 etc." >&2
+  fi
+  cd ..
 fi
 if [ "${macps}." = "yes." ]; then
-	cd ..
-	[ -a ${tempps_mac} ] && rm -rf ${tempps_mac} >/dev/null 2>&1
+  cd ..
+  [ -a ${tempps_mac} ] && rm -rf ${tempps_mac} >/dev/null 2>&1
 fi
 
 cd ${startdir}

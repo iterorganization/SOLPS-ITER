@@ -36,7 +36,7 @@
 #LD_NETCDF  = -L${NCDIR}/lib
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -L${EBROOTZLIB}/lib/ -lz -lgfortran
+LD_GKS     = -L${GLI_HOME} -lgks -L${EBROOTZLIB}/lib -lz -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L${EBROOTCAIRO}/lib -lcairo -L${EBROOTFREETYPE}/lib -lfreetype -L${EBROOTX11}/lib -lX11 -lxcb -lgfortran
 LD_NAG     = -L${EBROOTIMKL}/mkl/lib/intel64/  -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64  -lmkl_intel_thread -lmkl_core -L${EBROOTIMKL}/lib/intel64/ -liomp5 -lpthread
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib64 -lMdsLib_client -lMdsIpShr -lMdsShr -l TreeShr

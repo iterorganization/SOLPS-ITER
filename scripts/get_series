@@ -13,7 +13,7 @@
 #                if absent the default .series file will be used
 #
 # Fetches the data from the raw last_2d_out files of the runs associated
-# with the given series (described in formatted series file).           
+# with the given series (described in formatted series file).
 # Fetching is based on the get_series.cmd file provided
 # by default the get_series.cmd file in the present directory is used
 # if absent will search for it in the baserun directory in the directory
@@ -27,7 +27,7 @@
 #
 # keys ( "add_units" and "scale" for now) are optional
 #     scale     - perfoms the scaling according to .cmd file prescription
-#     add_units - adds units to the quantity names in the output file title 
+#     add_units - adds units to the quantity names in the output file title
 #======================================================================
 
 DGS_FILE=.series
@@ -84,7 +84,7 @@ else
   fi
 fi
 
-[ ! $# -eq 0 ] && { 
+[ ! $# -eq 0 ] && {
 SFILE=$1 && echo "Working with series file: $SFILE "
 } || {
 SFILE=$DGS_FILE && echo "Working with default series file: $SFILE"
@@ -105,8 +105,8 @@ then
   i=1
   while [ $count -ge $i ]; do {
        path=`grep run $GSGOV | head -$((count+1-i)) | tail -1 | cut -d ':' -f 3 | tr -d ' '`
-       ( cd $path && [ ! -f $L2D_RAW ] && echo "$L2D_RAW absent in $path" && echo "running $L2D_SCRIPT in $path" && $L2D_SCRIPT >/dev/null 2>&1 && [ ! -f $L2D_RAW ] && echo "failed to produce $L2D_RAW in $path" ) 
-       let "i=i+1" 
+       ( cd $path && [ ! -f $L2D_RAW ] && echo "$L2D_RAW absent in $path" && echo "running $L2D_SCRIPT in $path" && $L2D_SCRIPT >/dev/null 2>&1 && [ ! -f $L2D_RAW ] && echo "failed to produce $L2D_RAW in $path" )
+       let "i=i+1"
   }; done
 else
   echo "no runs specified in $GSGOV"

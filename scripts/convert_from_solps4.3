@@ -13,7 +13,7 @@ export DEVICEDIR=$DEVICE
 } || {
   export DATABASE=$DEVICE
 }
-export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d . -f 1`
+export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d '.' -f 1`
 export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1

@@ -6,26 +6,26 @@ Created on 26/06/2023
 
 DESCRIPTION
 This script averages the data contained in wrk.tmp, following the .RES file prescriptions
-.RES file contains a number IRES interpreted as follows: 
+.RES file contains a number IRES interpreted as follows:
 IRES - positive   :   data will be averaged over the last "int(IRES) timesteps"
 IRES - negative   :   data will be averaged over the last "float(IRES) ms"
 DEFAULT           :   data will be averaged over the last "1 ms"
 
-TRC_FLE   - tracing files to be averaged 
+TRC_FLE   - tracing files to be averaged
             (at the moment residuals.trc, blnn.trc, blnm.trc and sources.trc are excluded)
-            all of of them are treated in the similar manner, i.e. all the quantities are averaged 
+            all of of them are treated in the similar manner, i.e. all the quantities are averaged
             and put into the resulting file under the original names
 b2time    - handled with the separate routine
             for time-dependent quantities treatment is straightforward and similar to the .trc ones
             for quantities depending on "nc" first two are labeled _l and _u the rest if present - _uX (_u2,_u3 etc)
             the remaining quantities (not "nc" vectors and 2D) are handled separately by last_3d.py (in development)
-b2tallies - handled with separate routine 
+b2tallies - handled with separate routine
             by convention the naming of the averaged quantities in this routine is as follows:
-            XX_reg_ns, where reg is the region number VN for Nth volumetric-region, XN for Nth x-region and 
-            YN for Nth y-region, and ns is the specie index (i.e. Ntot_V04_D1 for example)
+            XX_reg_ns, where reg is the region number VN for Nth volumetric-region, XN for Nth x-region and
+            YN for Nth y-region, and ns is the species index (i.e. Ntot_V04_D1 for example)
 
-The script also reads .VarID file, therefore obtained cut and midplane definitions can in future be used 
-for more detailed handling of b2time vectors and similar multidimentional infomation.
+The script also reads .VarID file, therefore obtained cut and midplane definitions can in future be used
+for more detailed handling of b2time vectors and similar multidimensional infomation.
 
 OUTPUT
 last_2d_out   - raw output file containing "file of origin : averaged quantity name : value "
@@ -33,12 +33,12 @@ last_2d_out   - raw output file containing "file of origin : averaged quantity n
 last_2d_out_f - formated output file, contains are controlled via last_2d.exe.cmd
 
 USAGE
-python plot_trc.py  
+python plot_trc.py
 (intended to be used as a driver for last_2d script)
-with tracing and netcdf files present in wrk.tmp directory 
+with tracing and netcdf files present in wrk.tmp directory
 
-IMPORTANT 
-data should be present in ./wrk.tmp which is 
+IMPORTANT
+data should be present in ./wrk.tmp which is
 usually handled by the governing script last_2d
 
 WHAT CAN BE CHANGED
@@ -78,7 +78,7 @@ res_file = '.RES'
 "if absent RES defaults to 1 ms"
 
 var_file = '.VarID'
-"Hidden file containing the key run parameters, used to obtain specie names as well as OMP, IMP, SEP locations"
+"Hidden file containing the key run parameters, used to obtain species names as well as OMP, IMP, SEP locations"
 
 log_file = 'last_2d.exe.log'
 "Log file produced by the script"
@@ -90,7 +90,7 @@ logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcN
 
 b2time_FLE = 'b2time'
 b2tallies_FLE = 'b2tallies'
-TRC_FLE = ['sepdata', 'blne', 'blnn_SPb', 'integral', 'user_SPb', 'user', 'intshrt'] 
+TRC_FLE = ['sepdata', 'blne', 'blnn_SPb', 'integral', 'user_SPb', 'user', 'intshrt']
 ".trc files that will be averaged"
 
 raw_file = 'last_2d_out'
@@ -104,8 +104,8 @@ fmt_file = 'last_2d_out_f'
 "!!! SUBROUTINES: START !!!"
 
 "==== READ_VarID ==="
-""" 
-Reads supplied .VarID file 
+"""
+Reads supplied .VarID file
 sequential read filling all the quantities up to SUMZ_ALL*
 
 OUTPUT:
@@ -162,10 +162,10 @@ def READ_VarID():
             pass
     nlines = count + 1
     logging.info('Start reading %s file containing %s lines',var_file, nlines)
-    
+
     "Open file and process it line by line"
     with open(var_file,"r") as ff:
-                
+
         line = ff.readline()
         s = line.find('=')
         if ( s == -1):
@@ -216,7 +216,7 @@ def READ_VarID():
             else:
                 logging.error('variable read (%s) does not match expected format (%s)', val, dvar)
                 var_read = False
-        
+
         line = ff.readline()
         s = line.find('=')
         if ( s == -1 ):
@@ -507,12 +507,12 @@ def READ_VarID():
     return var_read, LL, L, NSPEC, NS, SPEC, SUMZ_1, SUMZ_N, NX, NY, NSEP, NMP_I, NMP_O, NNISO, NXC_I, NXC_O, NXT_I, NXT_O, NTP_I, NTP_O;
 
 "==== READ_TRC ==="
-""" 
-Reads supplied *.trc file 
+"""
+Reads supplied *.trc file
 assumes # lines in the beginning to be all comments but the last one
 the last one is read as line of headers, rest as data
 
-INPUT: 
+INPUT:
     trc_file   - name of the *.trc file expected in trc_dir
 
 OUTPUT:
@@ -521,22 +521,22 @@ OUTPUT:
     trc_data   - massive of associated data
 """
 def READ_TRC(trc_file):
-    
+
     file_read = False
     trc_header = []
     trc_data = []
-    
+
     input_file = '{0}{1}{2}'.format(trc_dir, '/', trc_file )
     input_file_trc = '{0}{1}{2}{3}'.format(trc_dir, '/', trc_file,'.trc' )
 
     if ( os.path.isfile(input_file) == False ):
-        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_trc) 
+        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_trc)
         if ( os.path.isfile(input_file_trc) == False ):
-            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_trc) 
+            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_trc)
             return file_read, trc_header, trc_data;
         else:
             input_file = input_file_trc
-    
+
     logging.info("readig data from %s", input_file)
 
     "Try reading standard .trc file"
@@ -548,13 +548,13 @@ def READ_TRC(trc_file):
                 line = ff.readline()
             except:
                 logging.critical("sequential read of file %s have failed...",input_file)
-                return file_read, trc_header, trc_data;                
+                return file_read, trc_header, trc_data;
             else:
                 if ( line == '' ):
-                    logging.critical("no data found in %s",input_file) 
-                    return file_read, trc_header, trc_data;                
+                    logging.critical("no data found in %s",input_file)
+                    return file_read, trc_header, trc_data;
                 elif ( (line[0] != '#') and (trc_header == '') ):
-                    logging.critical("no header found in %s",input_file) 
+                    logging.critical("no header found in %s",input_file)
                     return file_read, trc_header, trc_data;
                 elif ( line[0] == '#' ):
                     trc_header = line[1:].strip().split()
@@ -569,8 +569,8 @@ def READ_TRC(trc_file):
             return file_read, trc_header, trc_data;
     file_read = True
     logging.info('data from %s successfully read',input_file)
-    
-    "Get rid of potential Nan problems when plotting"
+
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"
@@ -586,14 +586,14 @@ def READ_TRC(trc_file):
     else:
         logging.critical('Length of header and dataset do not match! Check file %s for consistency... ::len(header):len(data):%s:%s::',input_file,len(trc_header),np.size(trc_data))
         file_read = False
-    
-    return file_read, trc_header, trc_data;
-                
-"==== READ_B2TIME ==="
-""" 
-Reads supplied b2time_FLE file (assuming netCDF format of current b2time.nc) 
 
-INPUT: 
+    return file_read, trc_header, trc_data;
+
+"==== READ_B2TIME ==="
+"""
+Reads supplied b2time_FLE file (assuming netCDF format of current b2time.nc)
+
+INPUT:
     trc_file   - name of the b2time file expected in trc_dir
 
 OUTPUT:
@@ -602,29 +602,29 @@ OUTPUT:
     trc_data   - massive of associated data
 """
 def READ_B2TIME(trc_file):
-    
+
     file_read = False
     trc_header = []
     trc_data = []
-    
+
     input_file = '{0}{1}{2}'.format(trc_dir, '/', trc_file )
     input_file_nc = '{0}{1}{2}{3}'.format(trc_dir, '/', trc_file,'.nc' )
 
     if ( os.path.isfile(input_file) == False ):
-        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_nc) 
+        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_nc)
         if ( os.path.isfile(input_file_nc) == False ):
-            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_nc) 
+            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_nc)
             return file_read, trc_header, trc_data;
         else:
             input_file = input_file_nc
-    
+
     logging.info("readig data from %s", input_file)
 
 
     "Try reading netCDF4"
     logging.info('trying to read %s assuming netCDF4 format',input_file)
     try:
-        f = nc.Dataset(input_file) 
+        f = nc.Dataset(input_file)
     except:
         logging.critical('file %s could not be handled by netCDF4 reader... skipping...', input_file)
         return file_read, trc_header, trc_data;
@@ -632,7 +632,7 @@ def READ_B2TIME(trc_file):
         logging.info('netCDF4 dataset loaded from %s, searching for time variable', input_file)
         ftmp = f.variables
         fdim = f.dimensions
-        
+
         "Searching for time variable"
         nctimevars = ['timesa','times']
         for nctime in nctimevars:
@@ -696,14 +696,13 @@ def READ_B2TIME(trc_file):
                     else:
                         logging.info('variable %s is a vector of dim %s, no rule to handle this data',var,dumdim)
                 else:
-                    logging.info("unforseen dimention 2 (%s) of variable %s, skipping...",np.ndim(dummy),var)
+                    logging.info("unforeseen dimension 2 (%s) of variable %s, skipping...",np.ndim(dummy),var)
         trc_data = np.zeros((i,np.size(dummy_data[0,:])), dtype=np.float64)
         trc_data = dummy_data[:i,:]
         file_read = True
         logging.info('data from %s successfully read',input_file)
 
-
-    "Get rid of potential Nan problems when plotting"
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"
@@ -714,14 +713,14 @@ def READ_B2TIME(trc_file):
     else:
         logging.critical('Dataset dimension != 2 (probably no output has been written or file only contains one time-point only) Check file %s for consistency... ::ndim(data)::s::',input_file,np.ndim(trc_data))
         file_read = False
-    
-    return file_read, trc_header, trc_data;
-                
-"==== READ_B2TALLIES ==="
-""" 
-Reads supplied b2tallies_FLE file (assuming netCDF format of current b2time.nc) 
 
-INPUT: 
+    return file_read, trc_header, trc_data;
+
+"==== READ_B2TALLIES ==="
+"""
+Reads supplied b2tallies_FLE file (assuming netCDF format of current b2time.nc)
+
+INPUT:
     trc_file   - name of the b2tallies file expected in trc_dir
 
 OUTPUT:
@@ -730,29 +729,29 @@ OUTPUT:
     trc_data   - massive of associated data
 """
 def READ_B2TALLIES(trc_file):
-    
+
     file_read = False
     trc_header = []
     trc_data = []
-    
+
     input_file = '{0}{1}{2}'.format(trc_dir, '/', trc_file )
     input_file_nc = '{0}{1}{2}{3}'.format(trc_dir, '/', trc_file,'.nc' )
 
     if ( os.path.isfile(input_file) == False ):
-        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_nc) 
+        logging.warning("%s is absent... looking for %s instead...",input_file,input_file_nc)
         if ( os.path.isfile(input_file_nc) == False ):
-            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_nc) 
+            logging.critical("neither %s nor %s found... skipping...",input_file,input_file_nc)
             return file_read, trc_header, trc_data;
         else:
             input_file = input_file_nc
-    
+
     logging.info("readig data from %s", input_file)
 
 
     "Try reading netCDF4"
     logging.info('trying to read %s assuming netCDF4 format',input_file)
     try:
-        f = nc.Dataset(input_file) 
+        f = nc.Dataset(input_file)
     except:
         logging.critical('file %s could not be handled by netCDF4 reader... skipping...', input_file)
         return file_read, trc_header, trc_data;
@@ -760,7 +759,7 @@ def READ_B2TALLIES(trc_file):
         logging.info('netCDF4 dataset loaded from %s, searching for time variable', input_file)
         ftmp = f.variables
         fdim = f.dimensions
-        
+
         "Searching for time variable"
         nctimevars = ['timesa','times']
         for nctime in nctimevars:
@@ -880,7 +879,7 @@ def READ_B2TALLIES(trc_file):
                             dummy_data[i,:] = dummy[:,j]
                             i = i + 1
                     else:
-                        logging.info("unforseen dimention 2 (%s) of variable %s, skipping...",dumdim[1],var)
+                        logging.info("unforeseen dimension 2 (%s) of variable %s, skipping...",dumdim[1],var)
                 elif ( np.ndim(dummy) == 3 ):
                     dumdim = ftmp[var].dimensions
                     if ( dumdim[1] == nsdim ):
@@ -904,9 +903,9 @@ def READ_B2TALLIES(trc_file):
                                     dummy_data[i,:] = dummy[:,k,j]
                                     i = i + 1
                             else:
-                                logging.info("unforseen dimention 3 (%s) of variable %s, skipping...",dumdim[2],var)
+                                logging.info("unforeseen dimension 3 (%s) of variable %s, skipping...",dumdim[2],var)
                     else:
-                        logging.info("unforseen dimention 2 (%s) of variable %s, skipping...",dumdim[1],var)
+                        logging.info("unforeseen dimension 2 (%s) of variable %s, skipping...",dumdim[1],var)
                 else:
                     logging.info('variable %s is a vector of dim %s, no rule to handle this data',var,dumdim)
         trc_data = np.zeros((i,np.size(dummy_data[0,:])), dtype=np.float64)
@@ -914,8 +913,7 @@ def READ_B2TALLIES(trc_file):
         file_read = True
         logging.info('data from %s successfully read',input_file)
 
-
-    "Get rid of potential Nan problems when plotting"
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"
@@ -926,14 +924,14 @@ def READ_B2TALLIES(trc_file):
     else:
         logging.critical('Dataset dimension != 2 (probably no output has been written or file only contains one time-point only) Check file %s for consistency... ::ndim(data)::s::',input_file,np.ndim(trc_data))
         file_read = False
-    
+
     return file_read, trc_header, trc_data;
 
 "==== SET_IRES ==="
-""" 
+"""
 Reads res_file if suppled otherwise sets IRES to defult
 
-INPUT: 
+INPUT:
     res_file  - name of the file defining period of the data averageing
 
 OUTPUT:
@@ -961,14 +959,14 @@ def SET_IRES(res_file):
                 logging.error('data from %s could not be loaded... default IRES = %s sec applied', res_file,IRES)
     else:
         logging.info("%s file absent... default IRES = %s sec applied",res_file, IRES)
-    
+
     return IRES;
 
 "==== choose_raw ==="
-""" 
+"""
 Fetches requested keyword in the list of data labels
 
-INPUT: 
+INPUT:
     data_list  - list of labels
     keyword    - label we are searching for
 
@@ -985,17 +983,17 @@ def choose_raw(data_list, keyword):
         if ( keyword == data_list[i] ):
             ind = i
             found = True
-            
+
     if ( ind == -1 ):
         logging.error("Data for: %s was not found in the processed file",keyword)
-    
+
     return found, ind;
 
 "==== match_raw ==="
-""" 
+"""
 Fetches requested combination of keywords in 2 list of data labels
 
-INPUT: 
+INPUT:
     data_list_up  - list of upper labels
     data_list_dw  - list of lower labels
     keyword_up    - label of upper level
@@ -1018,17 +1016,17 @@ def match_raw(datalist_up, keyword_up, datalist_dw, keyword_dw):
         if ( (keyword_up == datalist_up[i]) and (keyword_dw == datalist_dw[i]) ):
             ind = i
             found = True
-            
+
     if ( ind == -1 ):
         logging.error("Data for: (%s + %s) was not found in the data list",keyword_up,keyword_dw)
-    
+
     return found, ind;
 
 "==== TRC_AVG ==="
-""" 
+"""
 Averages provided data
 
-INPUT: 
+INPUT:
     trc_header  -  list of headers for the associated data
     trc_data    -  data to be averaged
     ires        -  the averaging parameter:
@@ -1067,7 +1065,7 @@ def TRC_AVG(trc_header, trc_data, ires):
             else:
                 nres = 0
         else:
-            logging.critical('unforseen value of ires (%s)... averaging cannot be performed',ires)
+            logging.critical('unforeseen value of ires (%s)... averaging cannot be performed',ires)
             return averaged, avg_header, avg_data
         time = time[nres:]
         dtime = time[1:] - time[0:np.size(time)-1]
@@ -1096,10 +1094,10 @@ def TRC_AVG(trc_header, trc_data, ires):
     return averaged, avg_header, avg_data;
 
 "==== WRITE_RAW ==="
-""" 
-Writes the raw output (without filtering, scaling and formating) to the raw_file 
+"""
+Writes the raw output (without filtering, scaling and formating) to the raw_file
 
-INPUT: 
+INPUT:
     out_file    -  file to write data to
     l2d_files   -  list of files with the original the data
     l2d_header  -  list of headers for the original data
@@ -1135,7 +1133,7 @@ def WRITE_RAW(out_file, l2d_files, l2d_header, l2d_data, ires):
         pos = now.find('.')
         if ( pos > 0 ):
             now = now[:pos]
-        line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n' 
+        line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n'
         ff.write(line)
         if ( ires < 0. ):
             resstr = '{0}{1}'.format(str(-ires*1.e+3),' milliseconds')
@@ -1160,10 +1158,10 @@ def WRITE_RAW(out_file, l2d_files, l2d_header, l2d_data, ires):
     return;
 
 "==== WRITE_FMT ==="
-""" 
+"""
 Writes the formated output (governed by the cmd_file)
 
-INPUT: 
+INPUT:
     out_file    -  file to write data to
     cmd_file    -  command file govering the filtration, scaling, naming and formating
     l2d_files   -  list of files with the original the data
@@ -1255,7 +1253,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
             tmp_uni = tmp.strip()
             if ( tmp_uni == '' ):
                 tmp_uni = 'N/A'
-            "Append obtained data to command arrays"    
+            "Append obtained data to command arrays"
             cmd_fle = np.append(cmd_fle,tmp_fle)
             cmd_quan = np.append(cmd_quan,tmp_quan)
             cmd_scl = np.append(cmd_scl,tmp_scl)
@@ -1281,7 +1279,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
         pos = now.find('.')
         if ( pos > 0 ):
             now = now[:pos]
-        line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n' 
+        line ='#' + 2*' ' + 'produced:  ' + str(now) + '\n'
         ff.write(line)
         if ( ires < 0. ):
             resstr = '{0}{1}'.format(str(-ires*1.e+3),' milliseconds')
@@ -1297,7 +1295,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
         "Write data"
         for i in range(0,cmd_size):
             if ( cmd_fle[i] == '' ):
-                line = 24*' ' + (10 + 4 + hlen + ulen + 4)*'-' + ' \n' 
+                line = 24*' ' + (10 + 4 + hlen + ulen + 4)*'-' + ' \n'
                 ff.write(line)
             else:
                 found, ind = match_raw(l2d_files, cmd_fle[i], l2d_header, cmd_quan[i])
@@ -1306,9 +1304,9 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
                     val = np.float(l2d_data[ind])
                     if ( cmd_scl[i] != 0.):
                         val = val * cmd_scl[i]
-                    hlp = '{0}'.format('% 4.3E' % val) 
+                    hlp = '{0}'.format('% 4.3E' % val)
                     tlen = len(cmd_txt[i])
-                    line = 24*' ' + hlp + ' :: ' + cmd_txt[i] + (hlen - tlen)*' ' + '  [' + cmd_uni[i] + '] \n' 
+                    line = 24*' ' + hlp + ' :: ' + cmd_txt[i] + (hlen - tlen)*' ' + '  [' + cmd_uni[i] + '] \n'
                     ff.write(line)
                 else:
                     logging.warning('quantity %s of origin %s was not found and wont be written to the %s',cmd_quan[i],cmd_fle[i],out_file)
@@ -1316,7 +1314,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
     logging.info('Formatted output written')
 
     return;
-    
+
 "!!! SUBROUTINES: END !!!"
 
 "================================================================="
@@ -1326,7 +1324,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
 def main():
 
     var_read, LL, L, NSPEC, NS, SPEC, SUMZ_1, SUMZ_N, NX, NY, NSEP, NMP_I, NMP_O, NNISO, NXC_I, NXC_O, NXT_I, NXT_O, NTP_I, NTP_O = READ_VarID()
-    
+
     logging.info('LL     : %s',LL)
     logging.info('L      : %s',L)
     logging.info('NSPEC  : %s',NSPEC)

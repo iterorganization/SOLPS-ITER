@@ -1,4 +1,4 @@
-# Command file for the plot_trc.py script 
+# Command file for the plot_trc.py script
 # designed to produce default analysis plots from the files tracing/*
 #
 #==============================================================================
@@ -7,7 +7,7 @@
 # @file:XXX     - read XXX, XXX.trc or XXX.nc file
 # @page:XXX     - start next page labeled XXX defaults to the .trc header
 # @log:         - plot in semilogY scale
-# @iter:XX      - plot against last XX iterations, not time, 
+# @iter:XX      - plot against last XX iterations, not time,
 #                  (if XX < 0 or absent will plot for the whole history)
 # @points:      - lines replaced by markers
 # @linepoints:  - lines supplemented by markers
@@ -17,11 +17,11 @@
 # @setxmax:XX   - set X-axis maximum plotting limit to XX
 # @setxmin:XX   - set X-axis minimum plotting limit to XX
 #
-# @setx:quantity:label:XX  - change X-axis from default time to given 
+# @setx:quantity:label:XX  - change X-axis from default time to given
 #                             quantity with provided label and scaling
 #                             factor XX
 #
-# :quantity:label:XX - name of quantity added to the plot 
+# :quantity:label:XX - name of quantity added to the plot
 #                       multiplied by XX (used for unit and sign conversion)
 #                       label can be added to clarify the meaning in plot
 #                       (otherwise default 'quantity' name will be used)
@@ -68,7 +68,7 @@
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :ne:n_{e}:
-@page: T_{i,e} at the target, inner lower divertor, eV 
+@page: T_{i,e} at the target, inner lower divertor, eV
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :Te:T_{e}:
@@ -179,7 +179,7 @@
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :ne:n_{e}:
-@page: T_{e,i} at the target, outer lower divertor, eV 
+@page: T_{e,i} at the target, outer lower divertor, eV
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :Te:T_{e}:
@@ -290,7 +290,7 @@
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :ne:n_{e}:
-@page: T_{e,i} at the target, outer upper upper divertor, eV 
+@page: T_{e,i} at the target, outer upper upper divertor, eV
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :Te:T_{e}:
@@ -401,7 +401,7 @@
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :ne:n_{e}:
-@page: T_{e,i} at the target, outer upper divertor, eV 
+@page: T_{e,i} at the target, outer upper divertor, eV
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :Te:T_{e}:

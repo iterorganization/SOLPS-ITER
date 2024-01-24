@@ -1,8 +1,9 @@
 #! /bin/csh -f
 
-cat ${SOLPSTOP}/modules/B2.5/src/include/git_version_B25.h | head -2 | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "B2.5 version is",$1}'
-cat ${SOLPSTOP}/modules/Eirene/src/git_version_Eirene.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "Eirene version is", $1}'
-cat ${SOLPSTOP}/modules/Carre/src/include/git_version_Carre.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "CARRE version is",$1}'
-cat ${SOLPSTOP}/modules/DivGeo/src/git_version_DG.h | awk '{print $3}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "DG version is",$1}'
-cat ${SOLPSTOP}/modules/B2.5/src/include/git_version_B25.h | head -4 | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "ADAS version is",$1}'
-cat ${SOLPSTOP}/modules/Uinp/src/git_version_Uinp.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "SOLPS-ITER version is",$1}'
+cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$1}' > /tmp/SOLPS_versions
+cd ${SOLPSTOP}/modules/B2.5 ; git describe --tags --always | awk '{print "B2.5 version : ",$1}' >> /tmp/SOLPS_versions
+cd ${SOLPSTOP}/modules/Eirene ; git describe --tags --always | awk '{print "Eirene version : ",$1}' >> /tmp/SOLPS_versions
+cd ${SOLPSTOP}/modules/Carre ; git describe --tags --always | awk '{print "Carre version : ",$1}' >> /tmp/SOLPS_versions
+cd ${SOLPSTOP}/modules/DivGeo ; git describe --tags --always | awk '{print "DivGeo version : ",$1}' >> /tmp/SOLPS_versions
+cat /tmp/SOLPS_versions
+rm /tmp/SOLPS_versions

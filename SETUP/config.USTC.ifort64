@@ -30,7 +30,6 @@
  MDSPLUS_DIR ?= ${SOLPSLIB}/mdsplus
        MPDIR ?= /opt/mpich/3.2/intel/2015.3.187
 
-
 #
 # Variables for linking
 #

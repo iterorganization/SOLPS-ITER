@@ -23,6 +23,7 @@ cp ../ref_run_for_MPI_CI/b2fstati .
 cp ../ref_run_for_MPI_CI/input.dat .
 cp ../ref_run_for_MPI_CI/fort.11.i fort.11
 cp ../ref_run_for_MPI_CI/fort.13.i fort.13
+cp ../ref_run_for_MPI_CI/fort.15.i fort.15
 cp ../ref_run_for_MPI_CI/fort.44.i fort.44
 cp ../ref_run_for_MPI_CI/fort.46.i fort.46
 cp ../ref_run_for_MPI_CI/b2time.nc.i b2time.nc

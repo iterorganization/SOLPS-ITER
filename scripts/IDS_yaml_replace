@@ -13,14 +13,12 @@
   imasdb $DEVICE > /dev/null
 }
 [ "$IMASDIR" = '' ] && {
-  print -u2 -n -- "No IMASDIR defined. Please provide a directory name\n "
-  read u
-  export IMASDIR=$u
+  export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
 } || {
   echo "IMASDIR = " $IMASDIR
 }
-echo "Updating .yaml file for IDS shot number " $1
-echo "New run number "$3" supercedes old run number "$2
+echo "Updating .yaml file for IDS shot number "$1
+echo "New run number "$3" supersedes old run number "$2
 shotnumber=`echo $1`
 typeset -i shot
 shot=`echo $1`

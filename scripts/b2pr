@@ -125,7 +125,7 @@ If no option is given, the gmeta files are created.
       let "ic=ic+1"
       echo "$B
         dab2 0 zsel tab2 0 zsel m* dmb2 0 zsel tmb2 0 zsel m* m+ 1.6e-19 rm*
-        0 ' ' slbl 'Hydrogenic specie neutral presssure [Pa]' glbl
+        0 ' ' slbl 'Hydrogenic species neutral pressure [Pa]' glbl
         0.02 0.05 0.1 0.2 0.5 1.0 2.0 5.0 10.0 20.0 50.0 100.0 200. 13 clvs surf drop" >> color.${LK}
       echo -e "prn_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
 
@@ -451,7 +451,6 @@ If no option is given, the gmeta files are created.
     echo "$B sy
           0.0 fmin 0.0 fmax $k f.x drop" >> mono.${LK}
     echo -e "sy_$k\t$im" >> ${LK}_${L}m.ps.legend
-
 
    true
   }; done && {

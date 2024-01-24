@@ -8,11 +8,11 @@
 #
 # in the desired run directory:
 # plot_trc ires
-#                if suppled ires: sets up the averaging interval, 
-#                if ires > 0 average the data over int(ires) iterations 
+#                if suppled ires: sets up the averaging interval,
+#                if ires > 0 average the data over int(ires) iterations
 #                if ires < 0 average the data over float(-ires) [ms]
 #
-#                alternatively ires can be provied by simply changing 
+#                alternatively ires can be provied by simply changing
 #                the value in the hidden .RES file
 #
 # unformatted raw output is written to last_2d_out
@@ -112,11 +112,11 @@ then
   if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
-      if [ -f "$f" ] 
-      then 
+      if [ -f "$f" ]
+      then
         echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
       else
-        if [ -f "../$f" ] 
+        if [ -f "../$f" ]
 	then
           echo "cp ../$f $WRK_DIR/$f" && cp "../$f" "$WRK_DIR/$f"
 	fi
@@ -141,20 +141,20 @@ else
   regex='^[+-]?[0-9]+([.][0-9]+)?+([eE][+-][0-9]+)?$'
 #  if [ -n "$ires" ] && [ "$ires" -eq "$ires" ] 2>/dev/null
   if [[ $ires  =~ $regex ]]
-  then 
-    if (( $(echo "$ires > 0." | bc -l))) 
+  then
+    if (( $(echo "$ires > 0." | bc -l)))
     then
       echo "positive argument given, averaging will be performed over the last int($ires) iterations"
       echo "echo $ires > $LRES"
       echo "$ires" > "$LRES"
-    fi  
-    if (( $(echo "$ntime < 0." | bc -l))) 
+    fi
+    if (( $(echo "$ntime < 0." | bc -l)))
     then
       echo "negative argument given, averaging will be performed over the last $ires ms"
       echo "echo $ires > $LRES"
       echo "$ires" > "$LRES"
     fi
-    if (( $(echo "$ires == 0." | bc -l))) 
+    if (( $(echo "$ires == 0." | bc -l)))
     then
       echo "0 argument provided, $LRES file will be removed"
       echo "rm -rf $LRES"
@@ -163,10 +163,10 @@ else
   else
     echo "WARNING: argument $ires is not a number, skipping"
   fi
-fi  
+fi
 
 if [ -f "$LRES" ]
-then 
+then
   echo "$LRES file present, containing:"
   cat "$LRES"
 fi
