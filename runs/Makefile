@@ -221,6 +221,9 @@ endif
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
 	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
 endif
+ifdef IMAS_VERSION
+	[ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
+endif
 ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
@@ -283,6 +286,9 @@ endif
 	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
+ifdef IMAS_VERSION
+	-[ -s b2mn.exe.dir/shotnumber.history ] && mv b2mn.exe.dir/shotnumber.history . || echo > /dev/null
+endif
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE
@@ -320,6 +326,9 @@ endif
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
 	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
+endif
+ifdef IMAS_VERSION
+	[ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 	-[ -s ${fort_lc}30 ] || ( [ -s ../baserun/${fort_lc}30 ] || ( [ -s b2mn.exe.dir/${fort_lc}30 ] && mv b2mn.exe.dir/${fort_lc}30 . || ( [ -e b2mn.exe.dir/${fort_lc}30 ] && rm b2mn.exe.dir/${fort_lc}30 || echo > /dev/null ) ) )
@@ -372,6 +381,9 @@ endif
 	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
 	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null
+ifdef IMAS_VERSION
+	-[ -s b2mn.exe.dir/shotnumber.history ] && mv b2mn.exe.dir/shotnumber.history . || echo > /dev/null
+endif
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE

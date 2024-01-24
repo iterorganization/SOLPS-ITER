@@ -627,7 +627,7 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xa
         xmass = xmass[:-ctime]
         ymass = ymass[:-ctime,:]
     elif (np.size(xmass) < ctime):
-        logging.error('desired number of iterations to cut off (%s) is greater then data size (%s)',ctime,np.size(xmass))
+        logging.error('desired number of iterations to cut off (%s) is greater than data size (%s)',ctime,np.size(xmass))
 
     "Deal with gtime (pick every gtime point only)"
     if (gtime != 0):
