@@ -21,6 +21,10 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_DEBUG=yes
   export   I_MPI_DEBUG=5
   export   PMI_DEBUG=1
+  if [[ -n "$SOLPS_OPENMP" ]]; then
+    export OMP_DISPLAY_AFFINITY="true"
+    export OMP_DISPLAY_ENV="true"
+  fi
   unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER debug mode turned on"
 else

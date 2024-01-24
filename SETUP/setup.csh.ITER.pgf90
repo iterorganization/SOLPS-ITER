@@ -12,7 +12,7 @@ module load MDSplus/7.96.17-GCCcore-10.2.0
 module load GGD/1.10.3-NVHPC-21.2-DD-3.38.1
 module load AMNS/1.4.0-NVHPC-21.2-DD-3.38.1
 module load xarray/0.16.2-intel-2020b
-module load Viz/2.6.0-intel-2020b
+module load Viz/2.6.1-intel-2020b
 module load ToFu/1.5.0-intel-2020b-Python-3.8.6
 module load makedepend/1.0.6-GCCcore-10.2.0
 module load MSCL/1.2.3-GCCcore-10.2.0
@@ -40,7 +40,7 @@ setenv QTDIR ${EBROOTQT5}
 setenv GLI_HOME ${EBROOTGLI}
 
 # Debugger (set environment variable DBX)
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 setenv DBX totalview
 
 # Compilers

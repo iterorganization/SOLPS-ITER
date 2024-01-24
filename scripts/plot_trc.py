@@ -278,7 +278,7 @@ def READ_TRC(trc_file):
                 return file_read, trc_header, trc_data;
         file_read = True
 
-    "Get rid of potential Nan problems when plotting"
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"
@@ -363,7 +363,7 @@ def PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymas
         line = 'solid'
     else:
         line = 'None'
-    
+
     if (smark == True):
         line_marker = default_marker
         if (pnum > np.size(default_marker)):
@@ -627,7 +627,7 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xa
         xmass = xmass[:-ctime]
         ymass = ymass[:-ctime,:]
     elif (np.size(xmass) < ctime):
-        logging.error('desired number of iterations to cut off (%s) is greater then data size (%s)',ctime,np.size(xmass))
+        logging.error('desired number of iterations to cut off (%s) is greater than data size (%s)',ctime,np.size(xmass))
 
     "Deal with gtime (pick every gtime point only)"
     if (gtime != 0):

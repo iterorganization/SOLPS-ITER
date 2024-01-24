@@ -12,15 +12,23 @@
 } || {
   imasdb $DEVICE > /dev/null
 }
+[ "$AL_VERSION" = '' ] && {
+  export AL_MAJOR_VERSION=`echo $UAL_VERSION | cut -d '.' -f 1`
+} || {
+  export AL_MAJOR_VERSION=`echo $AL_VERSION | cut -d '.' -f 1`
+}
+export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d '.' -f 1`
 [ "$IMASDIR" = '' ] && {
-  print -u2 -n -- "No IMASDIR defined. Please provide a directory name\n "
-  read u
-  export IMASDIR=$u
+  [ $AL_MAJOR_VERSION = 5 ] && {
+    export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}
+  } || {
+    export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
+  }
 } || {
   echo "IMASDIR = " $IMASDIR
 }
-echo "Updating .yaml file for IDS shot number " $1
-echo "New run number "$3" supercedes old run number "$2
+echo "Updating .yaml file for IDS shot number "$1
+echo "New run number "$3" supersedes old run number "$2
 shotnumber=`echo $1`
 typeset -i shot
 shot=`echo $1`
@@ -42,59 +50,100 @@ typeset -i oldrun
 typeset -i newrun
 oldrun=`echo $2`
 newrun=`echo $3`
+al5yaml=ids_001.yaml
+al5watcher=ids_001.watcher
 [ $oldrun -ge 1000 ] && {
-  oldyaml=ids_${shotnumber}$2.yaml
-  oldwatcher=ids_${shotnumber}$2.watcher
+  al4yaml=ids_${shotnumber}$2.yaml
+  al4watcher=ids_${shotnumber}$2.watcher
 } || {
   [ $oldrun -ge 100 ] && {
-    oldyaml=ids_${shotnumber}0$2.yaml
-    oldwatcher=ids_${shotnumber}0$2.watcher
+    al4yaml=ids_${shotnumber}0$2.yaml
+    al4watcher=ids_${shotnumber}0$2.watcher
   } || {
     [ $oldrun -ge 10 ] && {
-      oldyaml=ids_${shotnumber}00$2.yaml
-      oldwatcher=oldyaml=ids_${shotnumber}00$2.watcher
+      al4yaml=ids_${shotnumber}00$2.yaml
+      al4watcher=oldyaml=ids_${shotnumber}00$2.watcher
     } || {
-      oldyaml=ids_${shotnumber}000$2.yaml
-      oldwatcher=ids_${shotnumber}000$2.watcher
+      al4yaml=ids_${shotnumber}000$2.yaml
+      al4watcher=ids_${shotnumber}000$2.watcher
     }
   }
 }
-[ $newrun -ge 1000 ] && {
-  newyaml=ids_${shotnumber}$3.yaml
-  watcher=ids_${shotnumber}$3.watcher
+export AL5DIR=${IMASDIR}/${shotnumber}/${oldrun}
+[ $AL_MAJOR_VERSION = 5 ] && {
+  export AL4DIR=${IMASDIR}/0
+  export NEWDIR=${IMASDIR}/${shotnumber}/${newrun}
+  newyaml=ids_001.yaml
+  newwatcher=ids_001.watcher
 } || {
-  [ $newrun -ge 100 ] && {
-    newyaml=ids_${shotnumber}0$3.yaml
-    watcher=ids_${shotnumber}0$3.watcher
+  export AL4DIR=${IMASDIR}
+  export NEWDIR=${IMASDIR}
+  [ $newrun -ge 1000 ] && {
+    newyaml=ids_${shotnumber}$3.yaml
+    watcher=ids_${shotnumber}$3.watcher
   } || {
-    [ $newrun -ge 10 ] && {
-      newyaml=ids_${shotnumber}00$3.yaml
-      watcher=ids_${shotnumber}00$3.watcher
+    [ $newrun -ge 100 ] && {
+      newyaml=ids_${shotnumber}0$3.yaml
+      watcher=ids_${shotnumber}0$3.watcher
     } || {
-      newyaml=ids_${shotnumber}000$3.yaml
-      watcher=ids_${shotnumber}000$3.watcher
+      [ $newrun -ge 10 ] && {
+        newyaml=ids_${shotnumber}00$3.yaml
+        watcher=ids_${shotnumber}00$3.watcher
+      } || {
+        newyaml=ids_${shotnumber}000$3.yaml
+        watcher=ids_${shotnumber}000$3.watcher
+      }
     }
   }
 }
+echo "Old YAML directories :"${AL4DIR} ${AL5DIR}
 [ $3 != $2 ] && {
-  [ -r ${IMASDIR}/$oldyaml ] && {
-    [ $PWD != $IMASDIR ] && cp ${IMASDIR}/$oldyaml .
+  echo "Looking for "${AL5DIR}/${al5yaml}
+  [ -r ${AL5DIR}/${al5yaml} ] && {
+    cp ${AL5DIR}/${al5yaml} .
+    oldyaml=${al5yaml}
   } || {
-    [ -r /work/imas/shared/imasdb/ITER/3/0/$oldyaml ] && {
-      cp /work/imas/shared/imasdb/ITER/3/0/$oldyaml .
+    echo "Looking for "${AL4DIR}/${al4yaml}
+    [ -r ${AL4DIR}/${al4yaml} ] && {
+      cp ${AL4DIR}/${al4yaml} .
+      oldyaml=${al4yaml}
     } || {
-      echo $oldyaml "file not found. Exit"
-      exit 1
+      echo "Looking for "/work/imas/shared/imasdb/ITER/3/${shotnumber}/${oldrun}/${al5yaml}
+      [ -r /work/imas/shared/imasdb/ITER/3/${shotnumber}/${oldrun}/${al5yaml} ] && {
+        cp /work/imas/shared/imasdb/ITER/3/${shotnumber}/${oldrun}/${al5yaml} .
+        oldyaml=${al5yaml}
+      } || {
+        echo "Looking for "/work/imas/shared/imasdb/ITER/3/0/${al4yaml}
+        [ -r /work/imas/shared/imasdb/ITER/3/0/${al4yaml} ] && {
+          cp /work/imas/shared/imasdb/ITER/3/0/${al4yaml} .
+          oldyaml=${al4yaml}
+        } || {
+          echo "Old case YAML file not found. Exit"
+          exit 1
+        }
+      }
     }
   }
-  [ -r ${IMASDIR}/$oldwatcher ] && {
-    [ $PWD != $IMASDIR ] && cp ${IMASDIR}/$oldwatcher .
+  [ -r ${AL5DIR}/${al5watcher} ] && {
+    cp ${AL5DIR}/${al5watcher} .
+    oldwatcher=${al5watcher}
   } || {
-    [ -r /work/imas/shared/imasdb/ITER/3/0/$oldwatcher ] && {
-      cp /work/imas/shared/imasdb/ITER/3/0/$oldwatcher .
+    [ -r ${AL4DIR}/${al4watcher} ] && {
+      cp ${AL4DIR}/${al4watcher} .
+    oldwatcher=${al4watcher}
     } || {
-      echo $oldwatcher "file not found. Exit"
-      exit 2
+      [ -r /work/imas/shared/imasdb/ITER/3/${shotnumber}/${oldrun}/${al5watcher} && {
+        cp /work/imas/shared/imasdb/ITER/3/${shotnumber}/${oldrun}/${al5watcher} .
+        oldwatcher=${al5watcher}
+      } || {
+        [ -r /work/imas/shared/imasdb/ITER/3/0/${al4watcher} ] && {
+        cp /work/imas/shared/imasdb/ITER/3/0/${al4watcher} .
+        oldwatcher=${al4watcher}
+        } || {
+          echo "Old case watcher file not found. Exit"
+          exit 2
+        }
+      }
     }
   }
   typeset -i yaml_lines
@@ -141,13 +190,13 @@ newrun=`echo $3`
   } || {
     sed -e 's|workflow: tbd|workflow: SOLPS|' -e 's|type: tbd|type: predictive|' < $newyaml.5 > $newyaml.6
   }
-  mv $oldyaml.3 ${IMASDIR}/$oldyaml
-  mv $newyaml.6 ${IMASDIR}/$newyaml
-  [ $PWD != $IMASDIR ] && {
+  mv $oldyaml.3 ${OLDDIR}/$oldyaml
+  mv $newyaml.6 ${NEWDIR}/$newyaml
+  [ $PWD != $NEWDIR ] && {
     [ -r $watcher ] && {
-      mv $watcher ${IMASDIR}/
+      mv $watcher ${NEWDIR}/
     } || {
-      cp $oldwatcher ${IMASDIR}/$watcher
+      cp $oldwatcher ${NEWDIR}/$watcher
     }
     rm $oldyaml $newyaml
   }

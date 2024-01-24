@@ -6,9 +6,9 @@ module use /work/imas/etc/modules/all
 
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
-module load IMAS/3.39.0-4.11.7-2020b
-module load GGD/1.10.4-iccifort-2020.4.304-DD-3.39.0
-module load AMNS/1.4.0-iccifort-2020.4.304-DD-3.39.0
+module load IMAS/3.39.0-5.0.0-intel-2020b
+module load GGD/1.11.0-iccifort-2020.4.304-DD-3.39.0
+module load AMNS/1.5.0-iccifort-2020.4.304-DD-3.39.0
 module load Viz/2.8.0-intel-2020b
 module load CMake/3.20.1-GCCcore-10.2.0
 module load xarray/0.16.2-intel-2020b
@@ -28,7 +28,7 @@ module load texlive/20210216-GCCcore-10.2.0
 module load libtirpc/1.3.1-GCCcore-10.2.0
 module load SimDB/0.7.1-intel-2020b
 module load Fundamental-Constants/0.1.1
-module load ToFu/1.5.0-intel-2020b-Python-3.8.6
+module load ToFu/1.5.1-intel-2020b
 module load netcdf4-python/1.5.5.1-intel-2020b
 module load json-fortran/8.3.0-iccifort-2020.4.304
 # module load MATLAB/2020b-GCCcore-10.2.0-Java-11
@@ -40,7 +40,7 @@ setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 
 # Debugger (set environment variable DBX)
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 setenv DBX totalview
 
 # Compilers
@@ -75,9 +75,6 @@ if (! $?SOLPS_GUI_PREFIX) then
   end
 endif
 if ($?SOLPS_GUI_PREFIX) then
-  module load PySide6/6.2.3-GCCcore-10.2.0
-  module unload --force matplotlib
-  module load matplotlib/3.5.1-intel-2020b
   setenv QT_API PySide6
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/actors:${PYTHONPATH}"
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/gui:${PYTHONPATH}"

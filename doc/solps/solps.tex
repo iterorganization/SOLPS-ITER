@@ -4360,14 +4360,15 @@ or
 This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
-\begin{sloppypar}
+\begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
   \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
-  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
-  \item {\tt b2mndr\_shot\_number} defines the shot number
-  \item {\tt b2mndr\_run\_number} defines the run number
+  \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_shot\_number} defines the shot number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
 \end{itemize}
 These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is initialized but {\em not} started, so that the final
@@ -4381,16 +4382,21 @@ It is possible to replace (or supplement) the IDS switch settings coming from th
 \end{verbatim}
 which will recognize, within the quotes following the {\tt -o} additional options opener, the switches:
 \begin{itemize}
-  \item {\tt -s}, {\tt --shot} The shot number
-  \item {\tt -r}, {\tt --run} The run number
-  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
+  \item {\tt -p}, {\tt --path} The path to the directory where to save the IMAS data entry (only available with Access Layer 5).
+  \item {\tt -s}, {\tt --shot} The shot number (superseded by {\tt --path}). If used, must be positive.
+  \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
 \end{itemize}
 
-Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
+Concerning the assignment of shot and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
-After the IDS files are created, one should also run the {\tt create\_db\_entry} script, with the syntax:
+\begin{sloppypar}
+With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} is expected to be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. It should be set as part of the local environment variables in a {\tt setup.csh.local} file. Use of the {\tt user}, {\tt database}, or {\tt version} input flags allows to overwrite their values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
+\end{sloppypar}
+
+After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -5239,7 +5245,7 @@ The averaging scheme works in three stages:
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
-It is possible to write the averaged state as part of an IMAS data-entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data-entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
+It is possible to write the averaged state as part of an IMAS data entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
 
 \section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
@@ -20216,6 +20222,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+       AL\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
        AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
@@ -20230,6 +20237,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -20352,8 +20360,13 @@ We list below where the {\tt B2.5} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+AL\_MAJOR\_VERSION & b2plot/b2pawpwr.F \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
@@ -20532,6 +20545,7 @@ HPUX & modules/b2mod\_eirbra.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
+IMAS & b2plot/b2paspwr.F \\
 IMAS & driver/b2mnds.F \\
 IMAS & ids/b2mod\_interp.F90 \\
 IMAS & ids/b2mod\_ual.F90 \\
@@ -20543,6 +20557,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MAJOR\_VERSION & b2plot/b2paspwr.F \\
 IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_interp.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
@@ -20653,6 +20668,7 @@ NO\_CDF & sources/b2stbr.F \\
 NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
+NO\_GETENV & b2plot/b2paspwr.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
@@ -20801,6 +20817,7 @@ USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_OPENMP & driver/b2mod\_driver.F \\
+USE\_PXFGETENV & b2plot/b2paspwr.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
