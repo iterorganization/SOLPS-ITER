@@ -598,7 +598,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
         libtirpc/1.3.1-GCCcore-10.2.0
         SimDB/0.7.1-foss-2020b
         Fundamental-Constants/0.1.1
-        ToFu/1.5.0-foss-2020b-Python-3.8.6
+        ToFu/1.5.1-foss-2020b
         netCDF-Fortran/4.5.3-gompi-2020b
         netcdf4-python/1.5.5.1-foss-2020b
         flex/2.6.4-GCCcore-10.2.0
@@ -624,7 +624,7 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         libtirpc/1.3.1-GCCcore-10.2.0
         SimDB/0.7.1-intel-2020b
         Fundamental-Constants/0.1.1
-        ToFu/1.5.0-intel-2020b-Python-3.8.6
+        ToFu/1.5.1-intel-2020b
         netcdf4-python/1.5.5.1-intel-2020b
         "
   
