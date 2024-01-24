@@ -129,7 +129,7 @@ def READ_FLE(in_file):
             return file_read, header, data;
         file_read = True
 
-    "Get rid of potential Nan problems when plotting"
+    "Get rid of potential NaN problems when plotting"
     np.nan_to_num(data)
 
     "Check if header size is consistent with data size"

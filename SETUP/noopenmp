@@ -4,6 +4,10 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.openmp||g'`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   unsetenv OLD_SOLPS_PATH SOLPS_OPENMP USE_OPENMP
+  setenv   OMP_DISPLAY_AFFINITY false
+  setenv   OMP_DISPLAY_ENV false
+  unsetenv OMP_PROC_BIND
+  unsetenv OMP_PLACES
   rehash
   echo "SOLPS-ITER OpenMP mode turned off"
 else
