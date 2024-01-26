@@ -49,6 +49,7 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext 
 endif
 NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 
+#
 # Preprocessor options
 #
 
