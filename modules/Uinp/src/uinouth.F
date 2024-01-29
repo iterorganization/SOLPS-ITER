@@ -1120,6 +1120,26 @@ c**  same for point-, line-, surface- and volume sources
         write(iunoo,707) nsrfsi(i)
         do j=1,nsrfsi(i) !{
           if (j.ne.1) inum=inum+1
+          nskip=0
+          if ((grid_mode.eq.2).and.nlsrf(i)) then !{ correcting the surface index for vessel mode
+            do k=laddsrfs+1,nlimi !{ 
+              l=indasrfs(k)
+              if(l.eq.0) cycle
+              if(fclbl(l).ne.0) then
+                if (k.eq.insor(j,i)) then
+                  print *, 'Make sure that gas puff surface is not ',
+     ,              'part of the vessel wall '
+                  print *, 'and that it has fclbl = 0'
+                  call xerrab ('Wrong fclbl additional surface')
+                else
+                  nskip=nskip+1
+                  cycle
+                end if
+              elseif (k.eq.insor(j,i)) then
+                exit
+              end if
+            end do
+          end if
           if (insor(j,i).ne.0) k=indasrfs(insor(j,i))
           if (nlsrf(i) .and. insor(j,i).ne.0) then !{
             if (jlplg(k).ne.0) then !{
@@ -1130,9 +1150,9 @@ c**  same for point-, line-, surface- and volume sources
               sorind(j,i)=0
             end if !}
           end if !}
-          write(iunoo,707) inum,indim(j,i),insor(j,i),ingrda(j,i,1),
-     ,      ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),ingrda(j,i,3),
-     ,      ingrde(j,i,3)
+          write(iunoo,707) inum,indim(j,i),insor(j,i)-nskip,
+     ,      ingrda(j,i,1),ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),
+     ,      ingrda(j,i,3),ingrde(j,i,3)
           write(iunoo,703) sorwgt(j,i),sorlim(j,i),
      ,                     sorind(j,i),sorexp(j,i),sorifl(j,i)
           write(iunoo,707) nrsor(j,i),npsor(j,i),ntsor(j,i),
