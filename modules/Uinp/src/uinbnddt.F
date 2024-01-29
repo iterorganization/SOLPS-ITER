@@ -221,6 +221,7 @@ cnh   adapt some variables of block 14 for vessel mode
             nspze(k,1)=ispe
           end do
         end do
+        nstrai = k
        end if
 
 c=======================================================================
