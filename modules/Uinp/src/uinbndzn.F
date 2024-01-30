@@ -379,7 +379,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
       nznbndt(m)=iz
 cnh   replace face labels of targets with carre2 conventions for negative face labels
 cnh   I think it is not correct yet for USN
-      if (carre_mode.ge.2) then
+      if (carre_mode.lt.2) then
         if (nznbndt(m).eq.4) then ! DN
           lc1bnds(1,m)=4
           lc2bnds(1,m)=4
