@@ -977,7 +977,7 @@ c*** accel_ion
 
 c*** lcns, ltns
       do i=1,nznbndt(1) !{
-        if (carre_mode.ne.2) then !{ standard case
+        if (carre_mode.lt.2) then !{ standard case
           iniprm(i,1,1,16,3)=i
           iniprm(i,1,1,16,8)=i
         else ! target or vessel mode
@@ -986,7 +986,7 @@ c*** lcns, ltns
         end if
       end do !}
       do i=1,nznbndt(2) !{
-        if (carre_mode.ne.2) then !{ standard case
+        if (carre_mode.lt.2) then !{ standard case
           iniprm(i,1,1,17,3)=nznbndt(1)+i
           iniprm(i,1,1,17,8)=nznbndt(1)+i
         else ! target or vessel mode

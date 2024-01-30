@@ -259,7 +259,7 @@ c*** divide found
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
 cnh assigning bcstart and bcend for the unstructured format
-            if (carre_mode.eq.2) then
+            if (carre_mode.ge.2) then
               lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
               lzrbndt_us(iz,m,2)=tgfclbl(iz)
             elseif (crgbndt(k,m).eq.'W') then
@@ -325,7 +325,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
 cnh assigning bcstart and bcend for the unstructured format
-          if ((carre_mode.eq.2).and.(tgfclbl(iz).ne.0)) then
+          if ((carre_mode.ge.2).and.(tgfclbl(iz).ne.0)) then
             lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
             lzrbndt_us(iz,m,2)=tgfclbl(iz)
           elseif (crgbndt(k,m).eq.'W') then
@@ -379,7 +379,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
       nznbndt(m)=iz
 cnh   replace face labels of targets with carre2 conventions for negative face labels
 cnh   I think it is not correct yet for USN
-      if (carre_mode.ne.2) then
+      if (carre_mode.ge.2) then
         if (nznbndt(m).eq.4) then ! DN
           lc1bnds(1,m)=4
           lc2bnds(1,m)=4

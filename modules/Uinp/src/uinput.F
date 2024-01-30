@@ -127,7 +127,7 @@ c*** Create the header for the b2ag.dat file
           if (ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_lineardevice'' ''linear.geometry'''
           ! temporary for target/vessel mode grids: disable redef_gmtry
-          if (carre_mode.eq.2) write(2,'(a)')
+          if (carre_mode.ge.2) write(2,'(a)')
      .                   '''b2agdr_redef_gmtry''  ''0'''
           close(2)
           print *,'    ... b2ag.dat created'
