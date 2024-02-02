@@ -8258,7 +8258,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 However, one can also use the formulation given as Eq.~(\ref{eq:mom_old}),
@@ -8270,7 +8270,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 The treatment using Eq.~(\ref{eq:mom_new}) is recommended for cases with a
@@ -9826,7 +9826,6 @@ j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis 
 + \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
-
 \begin{equation}\label{eq:pot_jxan}
 j_x^{(AN)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(AN)}
 \end{equation}
@@ -9969,6 +9968,16 @@ If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used.
 
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
 
+If {\tt 'b2tinnt\_kinetic'} is set to {\tt '1'}, the ion-neutral current is instead computed directly from the perpendicular momentum sources provided by {\tt Eirene}, in which case:
+
+\begin{equation}\label{eq:pot_jxs_eir}
+\widetilde j_x^{(s)} = \sum \limits^{ns-1}_{a = 0} \widetilde j_{ax}^{(s)}
+\end{equation}
+
+\begin{equation}\label{eq:pot_jaxs_eir}
+\widetilde j_{ax}^{(s)} = \frac{b_z S_{EIRENE_{ay}}^m - S_{EIRENE_{a\perp}}^m}{B}
+\end{equation}
+
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
 \subsection{Radial currents}
@@ -10104,6 +10113,16 @@ The radial component of the ion-neutral current is
 \end{equation}
 
 The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
+
+If {\tt 'b2tinnt\_kinetic'} is set to {\tt '1'}, we use the {\tt Eirene} momentum sources instead:
+
+\begin{equation}\label{eq:pot_jys_eir}
+\widetilde j_y^{(s)} = \sum \limits^{ns-1}_{a = 0} \widetilde j_{ay}^{(s)}
+\end{equation}
+
+\begin{equation}\label{eq:pot_jays_eir}
+\widetilde j_{ay}^{(s)} = \frac{S_{EIRENE_{a\perp}}^m}{B}
+\end{equation}
 
 \begin{equation}\label{eq:pot_jyst}
 \begin{matrix}
@@ -11079,7 +11098,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -11088,18 +11107,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11119,7 +11138,7 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -11128,18 +11147,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11912,7 +11931,7 @@ electrons and ions correspondingly. They are
 
 \begin{gather}
  R_{e\parallel} = 0; \\
- R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_a}^m
+ R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_{a\parallel}}^m
 \end{gather}
 
 $Q_e^{\rm ATOMIC}$ and $Q_i^{\rm ATOMIC}$ are electron and ion
@@ -15122,7 +15141,11 @@ $\displaystyle S_{AN_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smoan[XX
 
 $\displaystyle S_{BC_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
 
-$\displaystyle S_{EIRENE_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+$\displaystyle S_{EIRENE_{a\parallel}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+
+$\displaystyle S_{EIRENE_{a\perp}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smd\_eir[XXX].dat} &  (\ref{eq:pot_jaxs_eir}), (\ref{eq:pot_jays_eir}) \\
+
+$\displaystyle S_{EIRENE_{ay}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smr\_eir[XXX].dat} &  (\ref{eq:pot_jaxs_eir})) \\
 
 $\displaystyle \left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smovv001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visres}) \\
 
@@ -15415,6 +15438,10 @@ $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(vis \parallel)}$ & $A$ 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchinx.dat} & (\ref{eq:pot_jx}), (\ref{eq:pot_jxs}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_jys}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchin\_ax.dat} & (\ref{eq:pot_jaxs_eir}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchin\_ay.dat} & (\ref{eq:pot_jays_eir}) \\
 
 $\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x}$ & $S$ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0}) \\
 
@@ -20652,6 +20679,7 @@ NO\_CDF & b2plot/process\_chords.F \\
 NO\_CDF & convert/b2cdf2mds.F \\
 NO\_CDF & convert/b2cdfmovies2mds.F \\
 NO\_CDF & convert/b2cdftallies2mds.F \\
+NO\_CDF & convert/b2co.F \\
 NO\_CDF & convert/b2co\_movies\_cdf.F \\
 NO\_CDF & convert/b2co\_tally\_cdf.F \\
 NO\_CDF & convert/b2co\_time\_cdf.F \\
