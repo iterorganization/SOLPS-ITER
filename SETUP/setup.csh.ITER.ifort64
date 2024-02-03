@@ -76,9 +76,6 @@ if (! $?SOLPS_GUI_PREFIX) then
   end
 endif
 if ($?SOLPS_GUI_PREFIX) then
-  module load PySide6/6.2.3-GCCcore-10.2.0
-  module unload --force matplotlib
-  module load matplotlib/3.5.1-intel-2020b
   setenv QT_API PySide6
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/actors:${PYTHONPATH}"
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/gui:${PYTHONPATH}"
