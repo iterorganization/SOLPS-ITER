@@ -85,6 +85,8 @@ c***   write intermediate arrays for output
    27  continue
 c***   store the sorted chain to construct polygons for void triangulation
        ntriplg=ntriplg+1
+       if (ntriplg.gt.ntriplgmax) 
+     ,   stop 'uinptriang -- increase value of ntriplgmax and recompile'
        nntriplg(ntriplg)=nchain
        nsegtriplg(ntriplg)=nchain_seg
        nnsstriplg(ntriplg)=nn
