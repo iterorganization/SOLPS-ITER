@@ -161,6 +161,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/b2optim* .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_gradient.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp_multi.F .
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

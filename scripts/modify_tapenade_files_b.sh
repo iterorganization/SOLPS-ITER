@@ -274,19 +274,48 @@ sed -i "/stateb3/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb4/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb5/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/cumul = cumul/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call calc_res_fp_diff(nCv, ns, stateb1, stateb0, cumul)" b2mod_driver_diff.F90
+
+## some changes for modification to the fixed point loop
 sed -i -e "s/DO WHILE (cumul .GT. 1.0e-6)/DO WHILE ((cumul .GT. res_quit) .and. (ITERCOUNT.lt.ntim) .and. (.not.quit))/g" b2mod_driver_diff.F90
 sed -i -e "/REAL(kind=r8) :: cumul/i\    INTEGER :: ITERCOUNT" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      ITERCOUNT = ITERCOUNT + 1" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_STARTREPEAT/i\    ITERCOUNT = 0" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call calc_res_fp_diff(nCv, ns, stateb1, stateb0, cumul)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call cpu_time(cpuval)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      elapsedval=epoch_seconds()" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      inquire(file='_quit',exist=quitexist_)" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      inquire(file='.quit',exist=quitexist)" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      quit = quitexist.or.quitexist_" b2mod_driver_diff.F90
-sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      quit = quitexist_.or.quitexist" b2mod_driver_diff.F90
-sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      inquire(file='.quit',exist=quitexist)" b2mod_driver_diff.F90
-sed -i -e "/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/a\      inquire(file='_quit',exist=quitexist_)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      quit = ((quitexist_ .OR. quitexist) .OR. (cpuval - cpuinit .GT. \&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       b2mndr_cpu .AND. b2mndr_cpu .GT. 0.0_R8)) .OR. (elapsedval - \&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       elapsedinit .GT. b2mndr_elapsed .AND. b2mndr_elapsed .GT. 0.0_R8)" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      ITERCOUNT = ITERCOUNT + 1" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      if (b2mndr_cpu.gt.0.0_R8) then\n        write(\*,'(1x,3(a,es11.3))') 'adj-step-cpu =',cpuval-cpustart,' elapsed ',\&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       elapsedval-elapsedstart,' estimated remaining CPU time (s) =',\&\n\&       min((ntim-itim)\*real(cpuval-cpustart,R8),max(0.0_R8,b2mndr_cpu-\&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       real(cpuval-cpuinit,R8)))" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      else if (b2mndr_elapsed.gt.0.0_R8) then\n        write(\*,'(1x,3(a,es11.3))') 'adj-step-cpu =',cpuval-cpustart,' elapsed ',\&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       elapsedval-elapsedstart,' estimated remaining elapsed time (s) =',\&\n\&       min((ntim-itim)\*(elapsedval-elapsedstart),max(0.0_R8,b2mndr_elapsed-\&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       (elapsedval-elapsedinit)))\n      else" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        write(\*,'(1x,3(a,es11.3))') 'adj-step-cpu =',cpuval-cpustart,' elapsed ',\&\n\&       elapsedval-elapsedstart,' estimated remaining elapsed time (s) =',\&" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       (ntim-itim)\*(elapsedval-elapsedstart)\n      end if" b2mod_driver_diff.F90
+sed -i -e '0,/elapsedinit = EPOCH_SECONDS()/s//elapsedinit = EPOCH_SECONDS()\n    call cpu_time(cpuinit)/'  b2mod_driver_diff.F90
+
+## insert an extra call to b2usr_cost_function within the fixed point loop, only for output purposes.
+## This could have been done using $AD DO-NOT-DIFF pragmas but they fail for adjoint AD
+sed -i -e "/\&                  state_ext, ierr)/a\      end do" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\        write(\*, \*) 'Cost function value '//ss//': ', j(icf)" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\        write(ss, '(I1)') icf" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\      do icf=1,ncf" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\&                             state_ext, switch\%boris, j)" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\      call b2usr_cost_function_nodiff(ncv, nfc, nvx, ns, geo, mpg, state,\&" b2mod_driver_diff.F90
+sed -i -e "/\&                  state_ext, ierr)/a\!     manually inserted call to cost function, for output purposes only" b2mod_driver_diff.F90
+
+
+
+
+
+
+
 
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\  REAL(kind=r8), ALLOCATABLE, SAVE :: rtlrab0(:, :, :), rtlsab0(:, :, :),&" b2mod_b2cmrc_diff.F90
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\& rtlqab0(:, :, :), rtlcxb0(:, :, :)" b2mod_b2cmrc_diff.F90

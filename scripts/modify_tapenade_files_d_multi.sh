@@ -1,7 +1,7 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-rm b2uxus_dv.F90 solve_covariance_dv.F90
+rm b2uxus_dv.F90 solve_covariance_dv.F90 calc_res_fp_dv.F90
 collect_nodiff_d_multi.sh
 rm samax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90 my_outi_us_dv.F90 
 mv b2mn_dv.F90 b2mn_d.F90
@@ -20,7 +20,7 @@ sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x6, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x7, 1), SIZE(x7, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diffv.F90
-sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90 calc_res_fp_dv.F90
+sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diffv.F90
 sed -i -e "s/REAL(r8), DIMENSION(:,/REAL(r8), DIMENSION(nbdirsmax,/g" b2news__dv.F90
@@ -242,10 +242,20 @@ sed -i -e "s/state_extdiff/state_extd/g" b2optim_*.F*
 sed -i -e "s/switchdiff/switchd/g" b2optim_*.F*
 sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F*
 sed -i -e "s/state_ext, state_extd)/state_ext, state_extd, npar_opt)/g" b2optim_*.F*
-sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt-nsigma_opt-nmean_opt-nshift_opt)/g" b2optim_*.F*
+sed -i -e "s/state_ext, state_extd, j, jdiff)/state_ext, state_extd, j, jdiff, npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g" b2optim_*.F*
 sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
 sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
 sed -i -e "s/g_v(ipar) = jdiff(1)/g_v(ipar) = jdiff(ipar,1)/g" b2optim_tao.F90
 sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
 
+
+# fixed point loop variables
+sed -i -e "/REAL(kind=r8) :: min_areshe, min_areshi, min_aresco, res_quit, res_max/a\  real (kind=r8), save :: res_maxd" b2mod_driver_diffv.F90
+sed -i -e '0,/REAL(kind=r8) :: EPOCH_SECONDS/s//REAL(kind=r8) :: EPOCH_SECONDS\n    LOGICAL, SAVE :: first_opt_call=.true./'  b2mod_driver_diffv.F90
+sed -i -e '0,/res_max = 10.0_R8\*res_quit/s//res_max = 10.0_R8\*res_quit\n    res_maxd = 10.0_R8\*res_quit/'  b2mod_driver_diffv.F90
+sed -i -e '0,/^! The FIXED_POINT.*/s/^! The FIXED_POINT.*/    first_opt_call = .false.\n    endif\n&/' b2mod_driver_diffv.F90
+sed -i -e '0,/res_max = 0.0_R8/s/      res_max = 0.0_R8/      res_maxd = 0.0_R8\n      call calc_res_fp_multi(nbdirs, nCv, ns, switch%tn_style, \&\n\&       switch%solve_keps, stated%diag, res_maxd)\n&/' b2mod_driver_diffv.F90
+sed -i -e "0,/WRITE(\*, \*) 'MAX RESIDUAL ', res_max/s//WRITE(\*, \*) 'MAX RESIDUAL ', res_max\n      WRITE(\*, \*) 'MAX TGT RESIDUAL ', res_maxd\n      res_max = max(res_max, res_maxd)/"  b2mod_driver_diffv.F90
+
+## sed -i -e '0,/fb_rescaled(nd, :) = 0.D0/{0,/END DO/d;}'  b2mod_driver_diffv.F90 should try something else for inserting "     if (first_opt_call .and. .not.reset_gradient) then" and same for npar_opt when par_opt_physd is allocated
