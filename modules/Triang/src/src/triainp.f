@@ -15,7 +15,7 @@ c======================================================================
 
 c*  data of the wall element polygons
        integer nlim, nplgmax, nsegplgmax
-       parameter (nlim = 1000, nplgmax = 6, nsegplgmax = 10)
+       parameter (nlim = 1000, nplgmax = 20, nsegplgmax = 20)
        integer nplg, nnwllplg(nplgmax), nnsegwllplg(nsegplgmax,nplgmax),
      ,      nsegwllplg(nplgmax), nfclblplg(nplgmax)
        integer plgfclbl(2*nsegplgmax,nplgmax)
@@ -75,11 +75,17 @@ c*** Read the data from the wall polygons from fort.48
       read(48,'(a)') topo
       read(48,'(i4)') nplg
 
+      if (nplg.gt.nplgmax)  stop 'triainp -- increase value of nplgmax'
+
       wllplgcoords=0.0
       do i=1,nplg
         read(48,'(3(i4))') nnwllplg(i), nsegwllplg(i), nfclblplg(i)
-        write(hlp_frm,'(a,i1,a)') '(',nfclblplg(i),'(i4))'
-        read (48,hlp_frm) plgfclbl(1:nfclblplg(i),i)
+        if (nsegwllplg(i).gt.nsegplgmax)  
+     .    stop 'triainp -- increase value of nsegplgmax'
+        if (nfclblplg(i) .gt. 0 ) then
+          write(hlp_frm,'(a,i1,a)') '(',nfclblplg(i),'(i4))'
+          read (48,hlp_frm) plgfclbl(1:nfclblplg(i),i)
+        endif
         do j=1,nsegwllplg(i)
           read(48,'(i12)') n
           nnsegwllplg(j,i)=n
@@ -92,10 +98,17 @@ c*** Read the data from the wall polygons from fort.48
 
       write (*,'(a,i3,a)') 'Read ', nplg, ' polygons from fort.48'
       do i = 1,nplg
-        write (*,'(a,i3,a,i3,a,i3)') 'Plg ', i, ' has ', nsegwllplg(i),
+        write(hlp_frm,'(a,i2,a)') '(a,i3,a,i3,a,',nsegwllplg(i),'(i3))'
+        write (*,hlp_frm) 'Plg ', i, ' has ', nsegwllplg(i),
      ,          ' segments with length ', nnsegwllplg(1:nsegwllplg(i),i)
+        if (nfclblplg(i) .gt. 0) then
         write (*,'(a,i3,a,10(i4))') 'Plasma boundaries to close plg ',i,
      ,          ': ', plgfclbl(1:nfclblplg(i),i)
+        elseif (nsegwllplg(i).ne.1) then
+
+          write(*,'(a,i3,a,i3,a)') 'Problem with polygon ', i,': ',
+     ,      nsegwllplg(i), ' segments but no plasma boundaries defined.'
+        endif
       enddo
 
 
@@ -107,7 +120,10 @@ c*** Assume that NSS parts will be sorted per wall segment, but possibly in reve
       plscoords = 0.0
       nnsegpls = 0
 
+
       do i = 1,nplg
+
+        if (nfclblplg(i).eq.0) cycle
 
         k = 0
 
@@ -239,6 +255,17 @@ c*** triangulation with tria
 
       do i = 1,nplg
 
+        if (nfclblplg(i).eq.0) then
+
+          ! special case of simple closed polygon, no plasma segments
+          coords(1:2,2:nnsegwllplg(1,i),i) =
+     ,      wllplgcoords(1:2,2:nnsegwllplg(1,i),1,i)
+          ! wall segments can be split by tria later on
+          split(2:nnsegwllplg(1,i),i) = 1
+          nnplg(i) = nnsegwllplg(1,i) - 1
+
+        else
+
         do j = 1,nsegwllplg(i)
 
           ! add the next wall polygon segment
@@ -258,6 +285,8 @@ c*** triangulation with tria
           coordsend(1:2) = plscoords(1:2,1,j,i)
 
         end do
+
+        end if
 
         ! set start of polygon equal to end
         nnplg(i) = nnplg(i) + 1

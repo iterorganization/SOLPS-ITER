@@ -31,11 +31,13 @@ cwdk  write additional file with (part of) the polygons for triangulation
       write(iunoo,'(i4)') ntriplg
       do i=1,ntriplg
         write(iunoo,'(3(i4))') nntriplg(i),nsegtriplg(i),nfclbltriplg(i)
-        write(hlp_frm,'(a,i1,a)') '(',nfclbltriplg(i),'(i4))'
-        write (iunoo,hlp_frm) triplgfclbl(1:nfclbltriplg(i),i)
+        if (nfclbltriplg(i) .gt. 0 ) then
+          write(hlp_frm,'(a,i1,a)') '(',nfclbltriplg(i),'(i4))'
+          write (iunoo,hlp_frm) triplgfclbl(1:nfclbltriplg(i),i)
+        endif
         l=1
         do j=1,nsegtriplg(i)
-          n=triplg(l,i)
+          n=abs(triplg(l,i))
           write(iunoo,'(i12)') n+1
           do k=1,n
             write(iunoo,'(2(2X,E13.6))') p1(1:2,triplg(k+l,i))*0.01_R8
