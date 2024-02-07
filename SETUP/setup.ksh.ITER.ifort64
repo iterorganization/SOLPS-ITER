@@ -6,9 +6,9 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 
 nodename=`hostname`
-module load IMAS/3.39.0-5.0.0-intel-2020b
-module load GGD/1.11.0-iccifort-2020.4.304-DD-3.39.0
-module load AMNS/1.5.0-iccifort-2020.4.304-DD-3.39.0
+module load IMAS/3.40.1-5.1.0-intel-2020b
+module load GGD/1.11.0-iccifort-2020.4.304-DD-3.40.1
+module load AMNS/1.5.0-iccifort-2020.4.304-DD-3.40.1
 module load makedepend/1.0.6-GCCcore-10.2.0
 module load MSCL/1.2.2-intel-2020b
 module load Doxygen/1.8.20-GCCcore-10.2.0
