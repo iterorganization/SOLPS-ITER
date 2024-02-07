@@ -215,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.39.0-5.0.0-2020b`
+having toolchain in its name. For example `IMAS/3.40.1-4.11.9-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -230,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.39.0-5.0.0-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.40.1-4.11.9-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -546,8 +546,8 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.39.0}
-TAG_AL=${TAG_AL:-5.0.0}
+TAG_DD=${TAG_DD:-3.40.1}
+TAG_AL=${TAG_AL:-5.1.0}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
