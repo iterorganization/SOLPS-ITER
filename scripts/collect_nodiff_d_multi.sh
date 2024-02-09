@@ -37,8 +37,12 @@ rm tmp
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxgs.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxid.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne_st.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/chord.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isplusorminus.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isadigit.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isaletter.F .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
@@ -76,6 +80,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ranges.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_work.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2plot_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/average.F .
@@ -92,6 +97,7 @@ cp $SOLPSTOP/modules/B2.5/src/user/b2mod_usrtrc.F .
 cp $SOLPSTOP/modules/B2.5/src/user/combfile.F .
 cp $SOLPSTOP/modules/B2.5/src/user/parsehdr.F .
 cp $SOLPSTOP/modules/B2.5/src/user/eirflux_map.F .
+cp $SOLPSTOP/modules/B2.5/src/user/cdfmovie.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_ipmain.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/xer* .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_xerset.F .
@@ -162,6 +168,9 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/set_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_gradient.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp_multi.F .
+cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
+
+
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

@@ -1,7 +1,6 @@
 string=''
 
 cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_exclude.txt > excluded.txt
-cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_ignore.txt >> excluded.txt
 
 to_keep=$SOLPSTOP/modules/B2.5/src/differentiation/files_to_keep.txt
 

@@ -86,7 +86,7 @@ sed -i -e 's/\& read_b2mod_par_opt, read_b2mod_par_opt_d, par_opt_phys, x0/\& re
 sed -i '/& dealloc_b2mod_ysmp_sdrv_d/d' b2mod_driver_diff.F90
 sed -i -e 's/\& write_b2us_feedback_d, init_feedback, init_feedback_d, \&/\& init_feedback, \&/g' b2mod_driver_diff.F90
 sed -i -e 's/\& dealloc_feedback, dealloc_feedback_d/\& dealloc_feedback/g' b2mod_driver_diff.F90
-sed -i -e 's/=> NULL()/= 0.0_R8/g' b2mndt_d.F90 b2sral_dv.F9
+sed -i -e 's/=> NULL()/= 0.0_R8/g' b2mndt_d.F90 b2sral_d.F9
 
 sed -i '/TRIM_D/d' b2mod_main_diff.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_d.F90 

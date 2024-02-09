@@ -11,6 +11,22 @@ sed -i "/USE DIFFSIZES/d" ./*.F90
 sed -i -e "/IMPLICIT NONE/i\  USE B2MOD_DIFFSIZES" ./*.F90
 
 sed -i -e 's/ISIZE1OFfceb/mpg%nFc/g' b2us_geo_diffv.F90
+sed -i -e 's/ISIZE1OFfspsi/mpg%nFs/g' b2us_geo_diffv.F90
+sed -i -e 's/INTEGER, DIMENSION(ISIZE1OFresult1) :: result1/INTEGER :: result1/g' b2us_geo_diffv.F90
+sed -i -e 's/result1 = MAXVAL(arg1(:))/result1 = MAXVAL(gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2))))/g' b2us_geo_diffv.F90
+sed -i -e 's/result2 = MINVAL(arg2(:))/result2 = MINVAL(gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2))))/g' b2us_geo_diffv.F90
+sed -i -e '/REAL(kind=r8), DIMENSION(mpg%cvvxp(icv, 2)) :: arg/d' b2us_geo_diffv.F90
+sed -i -e '/arg.(:) = gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2)))/d' b2us_geo_diffv.F90
+sed -i -e 's/cvpsi(icv) = SUM(arg10)\/mpg%cvvxp(icv, 2)/cvpsi(icv) = SUM(gm%vxfpsi(verts))\/mpg%cvvxp(icv, 2)/g' b2us_geo_diffv.F90
+sed -i -e '/arg10 = gm%vxfpsi(verts)/d' b2us_geo_diffv.F90
+
+sed -i -e 's/REAL(r8), DIMENSION(:, nfc, 0:1), ALLOCATABLE :: fne_he/REAL(r8), DIMENSION(:, :, :), ALLOCATABLE :: fne_he/g' b2us_plasma_diffv.F90
+
+sed -i -e '/REAL(kind=r8), DIMENSION(m%cvvxp(icv, 2)) :: arg1/d' b2ag_ghostcells_dv.F90
+sed -i -e '/arg1(:) = g%vx.(m%cvvx(m%cvvxp(icv, 1):m%cvvxp(icv, 1)+m%cvvxp/d' b2ag_ghostcells_dv.F90
+sed -i -e '/\&       , 2)-1))/d' b2ag_ghostcells_dv.F90
+sed -i -e 's/fcx = 0.5_R8\*SUM(arg1(:))/fcx = 0.5_R8*SUM(g%vxx(m%cvvx(m%cvvxp(icv, 1):m%cvvxp(icv, 1)+m%cvvxp(icv, 2)-1)))/g' b2ag_ghostcells_dv.F90
+sed -i -e 's/fcy = 0.5_R8\*SUM(arg1(:))/fcy = 0.5_R8*SUM(g%vxy(m%cvvx(m%cvvxp(icv, 1):m%cvvxp(icv, 1)+m%cvvxp(icv, 2)-1)))/g' b2ag_ghostcells_dv.F90
 
 sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
@@ -20,7 +36,7 @@ sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x6, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x7, 1), SIZE(x7, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diffv.F90
-sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90
+sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90 b2tfhe__dv.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diffv.F90
 sed -i -e "s/REAL(r8), DIMENSION(:,/REAL(r8), DIMENSION(nbdirsmax,/g" b2news__dv.F90
@@ -45,7 +61,8 @@ sed -i -e 's/ISIZE1OFgeo%vxonedbsq/nVx/g' b2sihs__dv.F90
 sed -i -e 's/ISIZE1OFgeo%cvonedbsq/nCv/g' b2sihs__dv.F90
 sed -i -e "s/REAL(kind=r8), DIMENSION(:,/REAL(kind=r8), DIMENSION(nbdirsmax,/g" b2sihs__dv.F90 b2stbc_dv.F90
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_dv.F90
-sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2stbm_dv.F90 b2tfnb_dv.F90 b2tqna_dv.F90 b2tvspa_dv.F90 b2sikt_dv.F90 b2trno_dv.F90 b2siav_dv.F90 b2trcl_dv.F90 b2tvsq_dv.F90
+sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2stbm_dv.F90 b2tfnb_dv.F90 b2tqna_dv.F90 b2tvspa_dv.F90 b2sikt_dv.F90 b2trno_dv.F90 b2siav_dv.F90 b2trcl_dv.F90 b2tvsq_dv.F90 b2tinnt_dv.F90 
+sed -i -e 's/ISIZE1OFcvbb/mpg%nCv/g' neo_diagnostics_dv.F90
 sed -i -e 's/ISIZE1OFfcbb/nFc/g' b2siav_dv.F90 b2tvskt_dv.F90 b2tvspa_dv.F90 b2tvsq_dv.F90
 sed -i -e 's/ISIZE1OFvxbb/nVx/g' b2siav_dv.F90
 sed -i -e 's/ISIZE1OFcvsahz_eff/nFc/g' b2stbr_phys_dv.F90 b2mod_recycle_diffv.F90
@@ -58,11 +75,16 @@ sed -i -e "s/INTEGER :: dummyzerodiffd6/INTEGER :: dummyzerodiffd6(nbdirsmax)/g"
 sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g" b2tanml_dv.F90
 sed -i -e 's/ISIZE1OFcdpa/nFc/g' b2tfcc_dv.F90 b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__dv.F90 b2tfrn_dv.F90
-sed -i -e 's/ISIZE1OFni/nCv/g' b2tfhi__dv.F90 
+sed -i -e 's/ISIZE1OFne/mpg%nCv/g' b2mod_driver_diffv.F90
+sed -i -e 's/ISIZE1OFni/nCv/g' b2tfhi__dv.F90
+sed -i -e 's/ISIZE1OFfni_he/nFc/g' b2tfhi__dv.F90
+sed -i -e 's/ISIZE2OFfni_he/0:1/g' b2tfhi__dv.F90
 sed -i -e 's/ISIZE1OFcdna/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFfchz/nFc/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFfnapsch/nFc/g' b2tfnb_dv.F90
+sed -i -e 's/ISIZE1OFcvla/nFc/g' b2tfnb_dv.F90
+sed -i -e 's/ISIZE2OFcvla/0:1/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, ISIZE1OFdv%fna_52(:, :, isb), 0:1)/DIMENSION(nbdirsmax, nFc, 0:1)/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, SIZE(st_ext%za, 1), SIZE(st_ext%za, 2))/DIMENSION(nbdirsmax, SIZE(st_ext%za, 1), SIZE(st_ext%za, 2))/g' b2sral_dv.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_dv.F90
@@ -109,16 +131,21 @@ sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv.F90 b2mod_geo2_diffv.F9
 sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diffv.F90
 sed -i '/INTRINSIC MAX/d' b2stbc_fb_dv.F90 b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90
 
+sed -i '/EXTERNAL ALLOC_B2MOD_B2_TO_ASTRA/d' b2mod_driver_diffv.F90 b2mod_main_diffv.F90
+sed -i '/EXTERNAL CDFMOVIE/d' b2mod_driver_diffv.F90
+sed -i '/EXTERNAL DEALLOC_B2MOD_MWTI/d' b2mod_driver_diffv.F90
+sed -i '/EXTERNAL TALLIES/d' b2mod_driver_diffv.F90
+sed -i '/EXTERNAL REPEAT/d' b2mod_geometry_diffv.F90 b2mod_elements_diffv.F90
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
 sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90  
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diffv.F90
-sed -i '/EXTERNAL ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90
-sed -i '/LOGICAL :: ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90
-sed -i '/EXTERNAL ISREALCELL/d' b2us_prep_diffv.F90 b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90
-sed -i '/LOGICAL :: ISREALCELL/d' b2us_prep_diffv.F90 b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90
-sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90
-sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90
+sed -i '/EXTERNAL ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90 b2mod_indirect_diffv.F90
+sed -i '/LOGICAL :: ISGHOSTCELL/d' b2us_prep_diffv.F90 b2mod_geo2_diffv.F90 b2mod_geo_diffv.F90 b2mod_indirect_diffv.F90
+sed -i '/EXTERNAL ISREALCELL/d' b2us_prep_diffv.F90 b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90 b2mod_indirect_diffv.F90
+sed -i '/LOGICAL :: ISREALCELL/d' b2us_prep_diffv.F90 b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90 b2mod_indirect_diffv.F90
+sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90 b2mod_indirect_diffv.F90
+sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diffv.F90 b2mod_geo2_diffv.F90 b2mod_indirect_diffv.F90
 sed -i '/EXTERNAL ISCLASSICALGRID/d' b2mod_geo_diffv.F90
 sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2mod_geo_diffv.F90
 sed -i '/EXTERNAL ISBOUNDARYCELL/d' b2us_prep_diffv.F90
@@ -146,16 +173,22 @@ sed -i '/EXTERNAL B2TRACE/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2TRCI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL B2MWTI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diffv.F90
+sed -i '/EXTERNAL B2FILE./d' b2mndt_dv.F90
 sed -i '/TRIM_DV/d' b2mod_main_diffv.F90
 sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_dv.F90
+sed -i 's/B2XPNE_ST_NODIFF/B2XPNE_ST/g' b2mod_running_average_diffv.F90
+sed -i 's/calc_err/calc_err_nodiff/g' b2wdat.F
+sed -i 's/call species/call species_nodiff/g' tallies.F
 sed -i 's/b2usr_loads/b2usr_loads_nodiff/g' b2mod_usrtrc.F
 sed -i 's/b2xppz_st/b2xppz_st_nodiff/g' b2mod_usrtrc.F
+sed -i 's/b2xppz/b2xppz_nodiff/g' b2mod_blnm.F
 sed -i 's/b2xzef_st/b2xzef_st_nodiff/g' b2mod_wrsep.F
-sed -i 's/fill/fill_nodiff/g' prvrt*.F
+sed -i 's/fill/fill_nodiff/g' prvrt*.F b2xpne_st.F
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_dv,/PUBLIC :: /g' b2us_prep_diffv.F90
 sed -i '/PUBLIC :: alloc_switches_dv/d' b2mod_switches_diffv.F90
 sed -i '/& check_values_switches_dv/d' b2mod_switches_diffv.F90
+sed -i '/& read_switch_afn_dv/d' b2mod_switches_diffv.F90
 sed -i -e 's/alloc_b2mod_balance_dv, dealloc_b2mod_balance/dealloc_b2mod_balance/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_balance_dv, dealloc_b2mod_eirene_sources/dealloc_b2mod_eirene_sources/g' b2mod_driver_diffv.F90
 sed -i -e 's/dealloc_b2mod_eirene_sources_dv, balance_average/balance_average/g' b2mod_driver_diffv.F90
@@ -169,6 +202,10 @@ sed -i -e 's/\& write_b2us_feedback_dv, init_feedback, init_feedback_dv, \&/\& i
 sed -i -e 's/\& dealloc_feedback, dealloc_feedback_dv/\& dealloc_feedback/g' b2mod_driver_diffv.F90
 sed -i -e 's/\& read_b2mod_par_opt, read_b2mod_par_opt_dv, par_opt_phys, par_opt_physd/\& read_b2mod_par_opt, par_opt_phys, par_opt_physd, nsigma_opt/g' b2mod_driver_diffv.F90
 
+sed -i -e 's/\& alloc_b2mod_balance_dv, write_balance, write_balance_dv, \&/\& alloc_b2mod_balance_dv, write_balance, \&/g' b2mod_driver_diffv.F90
+sed -i -e 's/\& dealloc_b2mod_eirene_sources, dealloc_b2mod_eirene_sources_dv, \&/\& dealloc_b2mod_eirene_sources, \&/g' b2mod_driver_diffv.F90
+sed -i -e 's/\& balance_average, update_average_balance, update_average_balance_dv/\& balance_average, update_average_balance/g' b2mod_driver_diffv.F90
+sed -i -e 's/\& alloc_b2mod_b2plot_dv, dealloc_b2mod_b2plot, dealloc_b2mod_b2plot_dv/\& dealloc_b2mod_b2plot/g' b2mod_driver_diffv.F90
 
 sed -i -e 's/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv, &/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv/g' b2us_geo_diffv.F90
 sed -i '/& check_geometry_dv/d' b2us_geo_diffv.F90
