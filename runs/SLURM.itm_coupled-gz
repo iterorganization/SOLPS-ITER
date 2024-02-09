@@ -12,7 +12,6 @@
 #SBATCH -e SLURM-%j.err
 #SBATCH  --no-requeue
 
-
 echo Using SOLPSTOP = #SOLPSTOP#
 
 set USE_MPI=""
