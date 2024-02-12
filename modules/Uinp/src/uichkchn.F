@@ -1,4 +1,4 @@
-      subroutine uichkchn(indelm,nni,nnx,indnss,nno,label)
+      subroutine uichkchn(indelm,nni,nnx,indnss,nno,ind,irt,label)
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
@@ -7,6 +7,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+
 c  version : 31.03.2005 20:05
 
 c=======================================================================
@@ -34,15 +35,17 @@ c***            -5 - original chain ends at inconsistent "target edges"
 c***            -6 - NSS do not close the chain
 c***          -100 - unexpected error
 c***        < -100 - not enough space for NSS (needed nnx >= 100-nno) 
+c***  ind     : sorted list indelm
 c=======================================================================
 
       implicit none
-      integer nni,nnx,nno,label,indelm(max(nni,1)),indnss(max(nnx,1))
 
 #include "uinput.inc"
 
-      integer i,j,k,l,m,n,i1,i2,j1,j2,jj,k1,k2,irt,ntg,
-     ,  ind(max(nni,1)+ntrgts),
+      integer nni,nnx,nno,label,indelm(max(nni,1)),indnss(max(nnx,1)),
+     ,  ind(max(nni,1)+ntrgts),irt
+
+      integer i,j,k,l,m,n,i1,i2,j1,j2,jj,k1,k2,ntg,
      ,  ltge(2*ntrgts),mtge(2*ntrgts),mtgb(2*ntrgts),
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
@@ -361,7 +364,7 @@ c!###}
      ,                           'required to close the chain  '
         write(0,*) 'label,nno,nnx= ',label,nno,nnx
         write(0,*) ' ==> Check the DG model or increase the DEF_NSTS ',
-     ,                 'parameter in $SOLPSTOP/src/include/DIMENSIONS.F'
+     ,   'parameter in $SOLPSTOP/src/modules(.local)/b2mod_dimensions.F'
         flush(0)
         nno=-100-nno
         goto 9999
@@ -382,6 +385,25 @@ c!###}
         nno=-6
         goto 9999
       end if !}
+
+#ifdef DBG
+      write (*,*) 'Chain info'
+      write (*,*) 'nr. of chains = ', irt
+      k=1
+      do j = 1,irt
+        write (*,*) 'Chain ', j, ' has ', ind(k), ' points.'
+        do i = 1, ind(k)
+          l = ind(k+i)
+          write (*,*) 'i, elm, p1(), p2() ',i, l, p1(1:2,l), p2(1:2,l)
+        enddo
+        k = k + ind(k) + 1
+      enddo
+      write (*,*) 'indnss'
+      do i = 1,max(nnx,1)
+        write (*,*) indnss(i)
+      enddo
+#endif
+
       goto 9999
 c=======================================================================
 c*** Error in the segment chains

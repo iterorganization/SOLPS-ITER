@@ -14,7 +14,7 @@ FFLAGS  += -O
 else
 FFLAGS  += -g -C
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp
 MOD      = mod

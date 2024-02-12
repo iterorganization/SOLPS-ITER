@@ -5,7 +5,7 @@ if ( -s run.log ) then
   grep -e 'tao' run.log >> run.info
   grep -e 'ntim' run.log | tail >> run.info
   grep -i 'stopping' run.log | tail >> run.info
-  grep -i -w 'Calculating gradient of' run.log >> run.info 
+  grep -i -w 'Calculating gradient of' run.log >> run.info
   grep -i -w 'OPTIM' run.log >> run.info
   grep -i -w 'IPOPT' run.log >> run.info
   grep -i -w 'TAO' run.log >> run.info

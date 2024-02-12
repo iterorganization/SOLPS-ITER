@@ -8,6 +8,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+
 c  version : 16.03.2005 23:56
 
 c=======================================================================
@@ -134,7 +135,7 @@ c*** Prepare index of valid additional surfaces
             write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
      ,        '  reserved ',laddsrfs
             call xerrab
-     .       ('==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
           end if !}
           indasrfe(i)=k
           indasrfs(k)=i

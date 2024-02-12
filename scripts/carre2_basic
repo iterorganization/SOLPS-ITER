@@ -1,0 +1,53 @@
+#!/bin/sh
+
+wrkdir=`pwd`
+
+inputfiles=`find $wrkdir -name carre.dat`
+
+SOLPSTOP=`determine_SOLPSTOP`
+if [ ! $SOLPS_DEBUG = "" ]; then
+    export EXT_DEBUG=".debug"
+fi
+CARRE2_PATH=${SOLPSTOP}/modules/Carre2/builds/$HOST_NAME.$COMPILER${EXT_DEBUG}
+/bin/echo -e "CARRE2_PATH : $CARRE2_PATH"
+
+#check whether carre2 is available
+if [ ! -e ${CARRE2_PATH}/carre.exe ]; then
+    echo "No carre2 program available"
+    exit
+fi
+if [ ! -e ${CARRE2_PATH}/traduit.exe ]; then
+    echo "No traduit program available"
+    exit
+fi
+
+#run carre2
+for inputfile in $inputfiles; do
+
+    # create run directory
+    dir=`dirname $inputfile`
+    logfile=$dir"/carre.log"
+
+#    echo "Running testcase $dir, logfile is $logfile"
+    rm -f $logfile
+
+    # execute main carre2 program
+    ${CARRE2_PATH}/carre.exe >>$logfile 2>&1
+    if [ $? -ne 0 -o ! -f carre.out ]; then
+        echo "Testcase $dir: CARRE2 failed"
+	continue
+    fi    
+
+    # translate output for b2 with traduit
+    ${SOLPSTOP}/scripts/traduit-carre2-b2 >>$logfile 2>&1
+    if [ $? -ne 0 -o ! traduit.out ]; then
+        echo "Testcase $dir: traduit-b2.sh failed"
+    fi    
+
+done
+
+unset EXT_DEBUG
+
+
+
+

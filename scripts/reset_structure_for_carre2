@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Purpose: Reset the structure.dat.
+# Add and sort the structures, containing the real and fake structures.
+# Tips: Obtaining the fake structures from ../basegrid/structure.dat by default.
+# Email:yanjie.zhang@iter.org
+
+echo -e "Please run 'carre -' first."
+echo -e "The default dir is basegrid, if you want to change it."
+echo -e "Please run 'reset_carre_output_for_carre2 your_dir_name'.\n"
+
+pre_dir=$(dirname "$(pwd)")
+dir_name='basegrid'
+if [ $# -eq 1 ]; then
+	dir_name=${1}
+elif [ $# -gt 1 ]; then
+	echo -e "Too many input arguements."
+	exit 1
+else
+	echo -e "Read the data from ../${dir_name}.\n"
+fi
+
+if [ -e ${pre_dir}/${dir_name}/structure.dat ]; then
+	echo "../${dir_name}/structure.dat exist."
+else
+	echo -e "../${dir_name}/structure.dat don't exist.\n1. Please run 'carre -' first.\n2. Please check your dir name."
+	exit 1
+fi
+
+# Add the real structures to the fake structures
+cp ../basegrid/structure.dat ./structure.dat.reset
+cp structure.dat structure.dat.real
+cat structure.dat >> structure.dat.reset
+
+# Find the total number of structures.
+n_str1=`sed -n '/\$structures/=' structure.dat.reset | sed -n '1p'`
+n_str2=`sed -n '/\$structures/=' structure.dat.reset | sed -n '2p'`
+num_str1=`head -n ${n_str1} structure.dat.reset | head -n 1 `
+num_str2=`head -n $((${n_str2} -1)) structure.dat.reset | tail -n 1 `
+len_str=$(($num_str1 + num_str2))
+
+# Delete the repeat label
+cp structure.dat.reset temp
+
+n_delete_start=$(( ${n_str2}-2 ))
+sed -i "${n_delete_start},${n_str2}d" temp
+
+# Correct the total structures number and structure index.
+total_num_old=`sed -n "1p" temp`
+total_num_new=`printf "%12d" ${len_str}`
+sed -i "1 s/${total_num_old}/${total_num_new}/g" temp
+awk -F " " '{k==0;{if(index($0,"Structure") >0) {k++;$2==k;print $1 "    " k} else {print} }}' temp > structure.dat
+rm structure.dat.reset
+rm temp
+echo -e "The structure.dat have been reranged. "

@@ -1,12 +1,8 @@
 #! /bin/csh -f
 pipe_run.log | \
-  egrep -a 'fna.reg|nnreg' | \
+  egrep -a 'fnareg|nnreg' | \
   awk 'BEGIN{iss=9;ise=11} \
-       /nnreg/{nxreg=$3+1;nyreg=$4+1} \
-       /fnaxreg/{E=0;W=0;for (i=iss;i<=ise;i++) {E+=-$(2+nxreg*i+1);W+=$(5+nxreg*i+1)}} \
-       /fnayreg/{core=0;pflxl=0;pflxr=0;N=0; \
-                 for (i=iss;i<=ise;i++) \
-                   {core+=-($(3+nyreg*i+1));pflxl+=-($(2+nyreg*i+1));pflxr+=-($(4+nyreg*i+1)); \
-                    N+=($(6+nyreg*i+1)+$(7+nyreg*i+1)+$(8+nyreg*i+1))}; \
+       /nnreg/{nfreg=$3+1} \
+       /fnareg/{E=0;W=0;core=0;pflxl=0;pflxr=0;N=0;for (i=iss;i<=ise;i++) {E+=-$(2+nfreg*i+1);W+=$(5+nfreg*i+1);core+=-($(9+nfreg*i+1));pflxl+=-($(8+nfreg*i+1));pflxr+=-($(10+nfreg*i+1));N+=($(12+nfreg*i+1)+$(13+nfreg*i+1)+$(14+nfreg*i+1))}; \
                  cnt++;print cnt,E,W,core,pflxl,pflxr,N}' | \
   plot x$1yplot6 -E W -core -pflxl -pflxr N iteration sum.He `noquote_pwd 3`

@@ -39,7 +39,7 @@ c>>>
           write(0,*) 'Too many strata requested (gas puff ',istr,') : ',
      ,               nstrai
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,      'DEF_NSTRA in DIMENSIONS.F'
+     ,      'DEF_NSTRA in b2mod_dimensions.F'
           call xerrab ('Too many gas puff strata requested')
         end if !}
         if(kgpfstr(istr).gt.nsrfs) then !{
@@ -48,7 +48,7 @@ c>>>
           write(0,*) 'A gas puffing source cannot span over more than ',
      ,               nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,         'DEF_NSRFS in DIMENSIONS.F'
+     ,         'DEF_NSRFS in b2mod_dimensions.F'
           call xerrab ('Too many gas puff segments requested')
         end if !}
         if(kgpfstr(istr).le.0) then !{
@@ -64,8 +64,10 @@ c>>>
         write(txtsou(nstrai),'(a,i2,a,a)')
      ,   'Gas puffing source ',istr,' : ',trim(cgpfstrs(istr))
         npts(nstrai)=npgpfstr(istr)
+        nptsh(nstrai)=npgpfstr(istr)
         nminpts(nstrai)=mpgpfstr(istr)
         if(npts(nstrai).lt.0) npts(nstrai)=10000
+        if(nptsh(nstrai).lt.0) nptsh(nstrai)=10000
         ninitl(nstrai)=nigpfstr(istr)
         if(ninitl(nstrai).eq.0) ninitl(nstrai)=6001
         if(soreni(nstrai).eq.0) soreni(nstrai)=tgpfstr(istr)

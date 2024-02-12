@@ -4,7 +4,7 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-FC       = mpif90
+FC       = mpiifort
 ifdef SOLPS_OPENMP
 FFLAGS   = -fopenmp
 endif
@@ -12,7 +12,7 @@ else
 FC       = ifort
 endif
 
-CPP      = /lib/cpp -C -traditional
+CPP      = /lib/cpp -C -traditional -ffreestanding
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -67,18 +67,19 @@ write_ifield(fid, 'ftReg',gmtry.ftReg);
 write_rfield(fid, 'intcellP',gmtry.intcellP);
 write_rfield(fid, 'intcellR',gmtry.intcellR);
 
-if gmtry.isClassicalGrid == 0
-  gmtry.imapCv = [];
-  gmtry.imapFcx = [];
-  gmtry.imapFcy = [];
-  gmtry.imapVx = [];
-  gmtry.icornVx = [];
+if gmtry.isClassicalGrid == 1
+  write_ifield(fid, 'imapCv', gmtry.imapCv);
+  write_ifield(fid, 'imapFcx', gmtry.imapFcx);
+  write_ifield(fid, 'imapFcy', gmtry.imapFcy);
+  write_ifield(fid, 'imapVx', gmtry.imapVx);
+  write_ifield(fid, 'icornVx', gmtry.icornVx);
+else
+    write_ifield(fid, 'imapCv', []);
+    write_ifield(fid, 'imapFcx', []);
+    write_ifield(fid, 'imapFcy', []);
+    write_ifield(fid, 'imapVx', []);
+    write_ifield(fid, 'icornVx', []);
 end
-write_ifield(fid, 'imapCv', gmtry.imapCv);
-write_ifield(fid, 'imapFcx', gmtry.imapFcx);
-write_ifield(fid, 'imapFcy', gmtry.imapFcy);
-write_ifield(fid, 'imapVx', gmtry.imapVx);
-write_ifield(fid, 'icornVx', gmtry.icornVx);
 
 write_ifield(fid, 'fcLbl',   gmtry.fcLbl );
 write_ifield(fid, 'cvLbl',   gmtry.cvLbl );

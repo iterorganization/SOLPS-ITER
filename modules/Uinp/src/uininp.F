@@ -38,16 +38,25 @@ c
 c
 c*** Read the data from dg output
 c
+      write(*,*) '... opening uinput.dg'
+      open(iunii,file='uinput.dg')
+      call import(uinnam)
       write(*,*) '... opening uinput.trg'
       open(iunii,file='uinput.trg')
       call uintopo(iunii)
       call xertst (.not.(streql(topo,' ')),
      ,  'Old-style DG output. Please produce the new one -'//
      ,  ' or use uinp.1.42')
-      call import(uintrg)
-      write(*,*) '... opening uinput.dg'
-      open(iunii,file='uinput.dg')
-      call import(uinnam)
+      write (*,*) 'carre_mode = ', carre_mode
+      if (carre_mode.lt.2) then
+        ! obtain grid size from *.trg file
+        call import(uintrg)
+      else
+        ! obtain grid size from carre.out file
+        write(*,*) '... opening uinput.crr'
+        open(iunii,file='uinput.crr')
+        call uincrr(iunii)
+      endif
       if(ntrgte.ne.ntrgtm) then !{
         write(0,*) 'Something is wrong with target edge specification'
         write(0,*) '  ==> check the target edges in the DG model'

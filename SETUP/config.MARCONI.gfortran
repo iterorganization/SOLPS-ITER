@@ -21,7 +21,7 @@
 #
 
        NCDIR ?= ${NETCDFF_HOME}
-   MSCL_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/mscl
+   MSCL_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/mscl/1.2.3
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gr
     GLI_HOME ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gks
@@ -35,7 +35,7 @@
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
-LD_MSCL    = -L${MSCL_ROOT} -lmscl
+LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm

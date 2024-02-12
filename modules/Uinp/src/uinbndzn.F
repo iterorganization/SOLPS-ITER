@@ -33,14 +33,14 @@ c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
         write(0,*)
      .   'Current number of requested poloidal grid points: ',nx
          call xerrab
-     .    (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
       end if !}
       if(ny.gt.nyd) then !{
         write(0,*) 'Too many radial grid points: maximum ',nyd
         write(0,*)
      .   'Current number of requested radial grid points: ',ny
         call xerrab
-     .   (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
       end if !}
 
 c*** Find the divides positions for each kind of boundary.
@@ -79,7 +79,7 @@ c*** Radial divides (targets)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k,m,1)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           if(lrpbndt(k,m,2).gt.nxd+1) then !{
             write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
@@ -87,7 +87,7 @@ c*** Radial divides (targets)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k,m,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           if(lrrbndt(k,m,1).gt.nyd+1) then !{
             write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -95,7 +95,7 @@ c*** Radial divides (targets)
      .       'Current number of requested radial grid points: ',
      .        lrrbndt(k,m,1)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
           end if !}
           if(lrrbndt(k,m,2).gt.nyd+1) then !{
             write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -103,7 +103,7 @@ c*** Radial divides (targets)
      .       'Current number of requested radial grid points: ',
      .        lrrbndt(k,m,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
           end if !}
           if(ix.ge.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
      ,       iy.gt.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
@@ -118,7 +118,7 @@ c       print '(1x,100i1)',(i_tg(i,k),i=0,ny+1)
 c      end do !}
 c!###}
 
-c*** Poloidal divides (core and wall)     
+c*** Poloidal divides (core and wall)
       do i=n+1,mdvbndx !{
         k=ldvbndx(i)
         if(k.ge.0) then !{
@@ -138,7 +138,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested poloidal grid points: ',
      .          lrpbndt(k,m,1)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
             end if !}
             if(lrpbndt(k,m,2).gt.nxd+1) then !{
               write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
@@ -146,7 +146,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested poloidal grid points: ',
      .          lrpbndt(k,m,2)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
             end if !}
             if(lrrbndt(k,m,1).gt.nyd+1) then !{
               write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -154,7 +154,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested radial grid points: ',
      .          lrrbndt(k,m,1)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
             end if !}
             if(lrrbndt(k,m,2).gt.nyd+1) then !{
               write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -162,7 +162,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested radial grid points: ',
      .          lrrbndt(k,m,2)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
             end if !}
             if(ix.gt.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
      ,         iy.ge.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
@@ -184,7 +184,7 @@ c        end do !}
 c      end if !}
 c!###}
 c*** Prepare the array which describes correspondence between the B2
-c*** and Eirene numbering in poloidal directions (extra surfaces at the 
+c*** and Eirene numbering in poloidal directions (extra surfaces at the
 c*** cuts)
       m=0
       k=0
@@ -197,7 +197,7 @@ c*** cuts)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k+1,3,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           do i=lrpbndt(k+1,3,1),lrpbndt(k+1,3,2) !{
             i_cr(i)=j
@@ -210,7 +210,7 @@ c*** cuts)
      .     'Current number of requested poloidal grid points: ',
      .      lrpbndt(l,1,2)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
         end if !}
         do i=lrpbndt(l,1,1),lrpbndt(l,1,2) !{
           i_cr(i)=j
@@ -223,7 +223,7 @@ c*** cuts)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k+2,3,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           do i=lrpbndt(k+2,3,1),lrpbndt(k+2,3,2) !{
             i_cr(i)=j
@@ -235,11 +235,11 @@ c*** cuts)
 
 c      print '(8h  i_cr: ,100i1)',(i_cr(i),i=0,nx+1) !###
 
-      
+
 c*** Plan boundary zones between the divides
 
 c*** Targets
-      
+
       m=2
       iz=0
       do k=1,nrgbndt(m) !{
@@ -252,12 +252,27 @@ c*** divide found
               write(0,*) 'Too many boundary zones specified for targets'
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,                   'model and parameter "nbndzon" in uinpcom.inc'
-              call xerrab 
+              call xerrab
      .         ('Too many boundary zones specified for targets')
             end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=iy
             lzrbndt(iz,m,2)=j-1
+cnh assigning bcstart and bcend for the unstructured format
+            if (carre_mode.ge.2) then
+              lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+              lzrbndt_us(iz,m,2)=tgfclbl(iz)
+            elseif (crgbndt(k,m).eq.'W') then
+              lzrbndt_us(iz,m,1)=-10-2*iz-1
+              lzrbndt_us(iz,m,2)=-10-2*iz-1
+            elseif (crgbndt(k,m).eq.'E') then
+              lzrbndt_us(iz,m,1)=-30-2*iz
+              lzrbndt_us(iz,m,2)=-30-2*iz
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,          'code ',crgbndt(k,m),' for target',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
             iy=j
@@ -279,10 +294,10 @@ c*** Specify the position-related data for B2 and Eirene input files
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
-            ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-            ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+            ls1bnds(iz,m)=lc1bnds(iz,m)
+            ls2bnds(iz,m)=lc2bnds(iz,m)
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -309,6 +324,21 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           lzpbndt(iz,m)=lrsbndt(k,m)
           lzrbndt(iz,m,1)=iy
           lzrbndt(iz,m,2)=ny+1
+cnh assigning bcstart and bcend for the unstructured format
+          if ((carre_mode.ge.2).and.(tgfclbl(iz).ne.0)) then
+            lzrbndt_us(iz,m,1)=tgfclbl(iz) ! assigning the face label
+            lzrbndt_us(iz,m,2)=tgfclbl(iz)
+          elseif (crgbndt(k,m).eq.'W') then
+            lzrbndt_us(iz,m,1)=-10-2*iz-1
+            lzrbndt_us(iz,m,2)=-10-2*iz-1
+          elseif (crgbndt(k,m).eq.'E') then
+            lzrbndt_us(iz,m,1)=-30-2*iz
+            lzrbndt_us(iz,m,2)=-30-2*iz
+          else
+            write(0,*) 'Internal error in uinbndzn: wrong boundary ',
+     ,        'code ',crgbndt(k,m),' for target',k,'  zone',iz
+            call xerrab ('Wrong boundary code')
+          endif
           lrfbndt(iz,m)=k
           cznbndt(iz,m)=crgbndt(k,m)
 
@@ -329,10 +359,10 @@ c*** Specify the position-related data for B2 and Eirene input files
           end if !}
           cskbnds(iz,m)=cznbndt(iz,m)
           lcpbnds(iz,m)=lzpbndt(iz,m)
-          lc1bnds(iz,m)=lzrbndt(iz,m,1)
-          lc2bnds(iz,m)=lzrbndt(iz,m,2)
-          ls1bnds(iz,m)=max(1,lc1bnds(iz,m))
-          ls2bnds(iz,m)=min(ny,lc2bnds(iz,m))
+          lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+          lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+          ls1bnds(iz,m)=lc1bnds(iz,m)
+          ls2bnds(iz,m)=lc2bnds(iz,m)
 
           if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -347,8 +377,39 @@ c           print *,'k,iz,iy =',k,iz,iy !###
         end if !}
       end do !}
       nznbndt(m)=iz
+cnh   replace face labels of targets with carre2 conventions for negative face labels
+cnh   I think it is not correct yet for USN
+      if (carre_mode.lt.2) then
+        if (nznbndt(m).eq.4) then ! DN
+          lc1bnds(1,m)=4
+          lc2bnds(1,m)=4
+          lc1bnds(2,m)=2
+          lc2bnds(2,m)=2
+          lc1bnds(3,m)=1
+          lc2bnds(3,m)=1
+          lc1bnds(4,m)=3
+          lc2bnds(4,m)=3
+          ls1bnds(1,m)=4
+          ls2bnds(1,m)=4
+          ls1bnds(2,m)=2
+          ls2bnds(2,m)=2
+          ls1bnds(3,m)=1
+          ls2bnds(3,m)=1
+          ls1bnds(4,m)=3
+          ls2bnds(4,m)=3
+        else ! SN
+          lc1bnds(1,m)=2
+          lc2bnds(1,m)=2
+          lc1bnds(2,m)=1
+          lc2bnds(2,m)=1
+          ls1bnds(1,m)=2
+          ls2bnds(1,m)=2
+          ls1bnds(2,m)=1
+          ls2bnds(2,m)=1
+        end if
+      end if
 
-c*** Sides. 
+c*** Sides.
 
       do l=1,n_hlp !{
         m=l_hlp(l)
@@ -391,6 +452,24 @@ c*** divide found
               lzpbndt(iz,m)=lrsbndt(k,m)
               lzrbndt(iz,m,1)=ix
               lzrbndt(iz,m,2)=j-1
+cnh assigning bcstart and bcend for the unstructured format
+              if (crgbndt(k,m).eq.'S') then
+                if (m.eq.1) then ! core boundaries
+                  lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                  lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+                else ! pf boundaries
+                  lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                  lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)
+                endif
+              elseif (crgbndt(k,m).eq.'N') then
+                lzrbndt_us(iz,m,1)=-40-4*iz
+                lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+              else
+                write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,            'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                          '  region',k,'  zone',iz
+                call xerrab ('Wrong boundary code')
+              endif
               lrfbndt(iz,m)=k
               cznbndt(iz,m)=crgbndt(k,m)
 
@@ -417,19 +496,10 @@ c!###}
               end if !}
               cskbnds(iz,m)=cznbndt(iz,m)
               lcpbnds(iz,m)=lzpbndt(iz,m)
-              lc1bnds(iz,m)=lzrbndt(iz,m,1)
-              lc2bnds(iz,m)=lzrbndt(iz,m,2)
+              lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+              lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
               ls1bnds(iz,m)=lc1bnds(iz,m)
               ls2bnds(iz,m)=lc2bnds(iz,m)
-              if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .           ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-                ls1bnds(iz,m)=ls1bnds(iz,m)+1
-              end if !}
-              if(ls2bnds(iz,m).eq.nx+1 .or.
-     .            (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-                ls2bnds(iz,m)=ls2bnds(iz,m)-1
-              end if !}
 
               if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it
@@ -458,6 +528,24 @@ c     ,                             jc1bnds(iz,m),jc2bnds(iz,m) !###
             lzpbndt(iz,m)=lrsbndt(k,m)
             lzrbndt(iz,m,1)=ix
             lzrbndt(iz,m,2)=lrpbndt(k,m,2)
+cnh assigning bcstart and bcend for the unstructured format
+            if (crgbndt(k,m).eq.'S') then
+              if (m.eq.1) then ! core boundaries
+                lzrbndt_us(iz,m,1)=-20-4*(iz-1)-1
+                lzrbndt_us(iz,m,2)=-20-4*(iz-1)-1
+              else ! pf boundaries
+                lzrbndt_us(iz,m,1)=-20-2*iz-mod(iz,2)
+                lzrbndt_us(iz,m,2)=-20-2*iz-mod(iz,2)
+              endif
+            elseif (crgbndt(k,m).eq.'N') then
+              lzrbndt_us(iz,m,1)=-40-4*iz
+              lzrbndt_us(iz,m,2)=-40-iz*(iz+1)
+            else
+              write(0,*) 'Internal error in uinbndzn: wrong ',
+     ,          'boundary code ',crgbndt(k,m),' for side',m,
+     ,                                        '  region',k,'  zone',iz
+              call xerrab ('Wrong boundary code')
+            endif
             lrfbndt(iz,m)=k
             cznbndt(iz,m)=crgbndt(k,m)
 
@@ -484,19 +572,10 @@ c!###}
             end if !}
             cskbnds(iz,m)=cznbndt(iz,m)
             lcpbnds(iz,m)=lzpbndt(iz,m)
-            lc1bnds(iz,m)=lzrbndt(iz,m,1)
-            lc2bnds(iz,m)=lzrbndt(iz,m,2)
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
             ls1bnds(iz,m)=lc1bnds(iz,m)
             ls2bnds(iz,m)=lc2bnds(iz,m)
-            if(ls1bnds(iz,m).eq.0 .or. (nncut.eq.4 .and.
-     .         ls1bnds(iz,m).eq.nxcut1(2)+nzodv+1+1)) then !{
-              ls1bnds(iz,m)=ls1bnds(iz,m)+1
-            end if !}
-            if(ls2bnds(iz,m).eq.nx+1 .or.
-     .          (nncut.eq.4 .and.
-     .             ls2bnds(iz,m).eq.nxcut1(2)+nzodv+1)) then !{
-              ls2bnds(iz,m)=ls2bnds(iz,m)-1
-            end if !}
 
             if(jc1bnds(iz,m).ge.jc2bnds(iz,m)) then !{
 c*** Boundary zone consists of a single guard cell - reject it

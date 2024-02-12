@@ -7,6 +7,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+
 c  version : 16.03.2005 23:54
 
 c=======================================================================
@@ -17,6 +18,7 @@ c=======================================================================
 #include "uinput.inc"
       integer, save :: nprnli_save, nfile_save
       integer, save :: npts_save(nstra)
+      integer :: jk
 c=======================================================================
       call subini ('uinpavgdg')
       if(lc) then !{
@@ -25,7 +27,9 @@ c=======================================================================
        nprnli_save=nprnli
        nprnli=nprnli/100
        nfile_save=nfile
-       nfile=30000+mod(nfile_save,10000)
+       jk=nfile/1000
+       nfile=jk*1000+800+mod(nfile_save,100)
+       nfile=30000+mod(nfile,10000)
       else !}{
        npts=npts_save
        nprnli=nprnli_save

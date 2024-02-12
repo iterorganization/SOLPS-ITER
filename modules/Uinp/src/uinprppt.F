@@ -16,10 +16,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, get_atomic_number, lnblnk
+      integer find_matching_species, lnblnk
       logical ex,streql
       external streql, xerrab
-      external find_matching_species, get_atomic_number, lnblnk
+      external find_matching_species, lnblnk
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -79,18 +79,27 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of atomic ',
      ,              'species is ',na
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NATM in DIMENSIONS.F'
+     ,              'increase DEF_NATM in b2mod_dimensions.F'
                   call xerrab ('Too many atomic species')
                 end if !}
                 if(.not.l_meta(j+m)) then
                   nspcncl=nspcncl+1
+                  if (streql(c,'H').or.streql(c,'D').or.
+     ,                streql(c,'T')) then
+!nh neutral background species for the hybrid model
+                    nplsh=nplsh+1
+                    textph(nplsh)=c(1:1)//'0'
+                    if (streql(c,'H')) nmassph(nplsh)=1
+                    if (streql(c,'D')) nmassph(nplsh)=2
+                    if (streql(c,'T')) nmassph(nplsh)=3
+                  end if
                   if(nspcpls+nspcncl.gt.nsdb2) then !{
                     write(0,*) 'The total number of B2.5 species must ',
      ,               'not exceed ',nsdb2
                     write(0,*) 'Current requested number of B2.5 ',
      ,               'species is ',nspcpls+nspcncl
                     write(0,*) 'STOP ==> Check the AMDS model - ',
-     ,               'or increase DEF_NSD in DIMENSIONS.F'
+     ,               'or increase DEF_NSD in b2mod_dimensions.F'
                     call xerrab ('Too many B2.5 species')
                   end if !}
                   spcsncl(nspcncl)=c
@@ -153,7 +162,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of molecular ',
      ,              'species is ',nm
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NMOL in DIMENSIONS.F'
+     ,              'increase DEF_NMOL in b2mod_dimensions.F'
                   call xerrab ('Too many molecular species')
                 end if !}
                 spcscmm(nspcncl,nm)=spcdfu(j+m)
@@ -219,7 +228,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of test ion ',
      ,              'species is ',ni
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NION in DIMENSIONS.F'
+     ,              'increase DEF_NION in b2mod_dimensions.F'
                   call xerrab ('Too many test ion species')
                 end if !}
                 spcscmi(nspcncl,ni)=spcdfu(j+m)
@@ -313,7 +322,7 @@ c*** the atoms and nuclei
                   write(0,*) 'Current requested number of plasma ',
      ,              'species is ',np
                   write(0,*) 'STOP ==> Check the AMDS model - or ',
-     ,              'increase DEF_NPLS in DIMENSIONS.F'
+     ,              'increase DEF_NPLS in b2mod_dimensions.F'
                   call xerrab ('Too many plasma species')
                 end if !}
                 spcsrnp(np)=nspcncl
@@ -347,6 +356,7 @@ c*** the atoms and nuclei
                   spcsrsp(np)=-1
                 end if !}
                 dpls(np)=1./mm
+                dplsh(np)=1./mm
               end do  !}
               j=j+mm
 
@@ -390,7 +400,7 @@ c*** Atoms:
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcatm
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NATM in DIMENSIONS.F'
+     ,          'DEF_NATM in b2mod_dimensions.F'
               call xerrab ('Too many atomic species')
             end if !}
             nspcncl=nspcatm
@@ -430,7 +440,7 @@ c*** Molecules:
               write(0,*) 'Current requested number of molecular ',
      ,          'species is ',nspcmol
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NMOL in DIMENSIONS.F'
+     ,          'DEF_NMOL in b2mod_dimensions.F'
               call xerrab ('Too many molecular species')
             end if !}
             n=0
@@ -484,7 +494,7 @@ c*** Test ions:
               write(0,*) 'Current requested number of test ion ',
      ,          'species is ',nspcion
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NION in DIMENSIONS.F'
+     ,          'DEF_NION in b2mod_dimensions.F'
               call xerrab ('Too many test ion species')
             end if !}
             n=0
@@ -537,7 +547,7 @@ c*** Plasma ions:
               write(0,*) 'Current requested number of atomic ',
      ,          'species is ',nspcpls
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NPLS in DIMENSIONS.F'
+     ,          'DEF_NPLS in b2mod_dimensions.F'
               call xerrab ('Too many plasma ion species')
             end if !}
             if(nspcpls+nspcncl.gt.nsdb2) then !{
@@ -546,7 +556,7 @@ c*** Plasma ions:
               write(0,*) 'Current requested number of B2.5 ',
      ,          'species is ',nspcpls+nspcncl
               write(0,*) 'STOP ==> Check the AMDS model - or increase ',
-     ,          'DEF_NSD in DIMENSIONS.F'
+     ,          'DEF_NSD in b2mod_dimensions.F'
               call xerrab ('Too many B2.5 species')
             end if !}
             cc=spcirnp(l)
@@ -570,12 +580,14 @@ c*** Plasma ions:
             spcsfup(nspcpls)=1
             spcsrsp(nspcpls)=spcirsp(l)
             dpls(nspcpls)=spcidsp(l)
+            dplsh(nspcpls)=spcidsp(l)
           else  !}{
             write(*,*) 'A plasma ion species "',c,'" has already been ',
      ,        'added - skipping it'
           end if  !}
         end if  !}
       end do  !}
+
 c!#{
 c      print *
 c      print *,'nspcatm nspcmol nspcion nspcpls'
@@ -757,15 +769,20 @@ cank        isrsi(l)=spcsrsi(l)
         nchrgp(l)=spcscgp(l)
 cank        isrsp(l)=spcsrsp(l)
         bmass(l)=nmassp(l)
+        bmassh(l)=nmassp(l)
         if (l.eq.1) then !{
           lkindp(l)=1
+          lkindph(l)=1
         else if (bmass(l).eq.bmass(l-1) .and. 
      &           ncharp(l).eq.ncharp(l-1)) then !}{
           lkindp(l)=lkindp(l-1)
+          lkindph(l)=lkindph(l-1)
         else
           lkindp(l)=lkindp(l-1)+1
+          lkindph(l)=lkindph(l-1)+1
         endif !}
         iflb(l)=l
+        iflbh(l)=l
 
         k=0
         c=spcsrfp(l)
@@ -807,6 +824,39 @@ cank        isrsp(l)=spcsrsp(l)
           isrtp(l)=0
         end if !}
       end do !}
+
+!nh   species indices for relection of neutral background species
+!nh   and adding the neutral background in block 14
+      do l=1,nplsh !{
+        c=textph(l)(1:1)
+        k=0
+        do i=1,nspcatm !{
+          if(streql(c,spcsatm(i))) k=i
+        end do !}
+        if(k.eq.0) then !{
+          write(0,*) 'Reflected fast particle not found ',
+     ,      'for neutral background species', c
+        end if !}
+        isrfph(l)=k
+        lkindph(nspcpls+l)=k
+        k = 0
+        do i=1,nspcmol !{
+          if(streql(c,spcsmol(i)(1:1))) k=-i
+        end do !{
+        if(k.eq.0) then !{
+          write(0,*) 'Re-emitted thermal particle not found ',
+     ,      'for neutral background species', c
+        end if !}
+        isrtph(l)=k
+        iflbh(nspcpls+l)=nspcpls+l
+        fcteh(nspcpls+l)=1.
+        if (streql(c,'H')) bmassh(nspcpls+l)=1.
+        if (streql(c,'D')) bmassh(nspcpls+l)=2.
+        if (streql(c,'T')) bmassh(nspcpls+l)=3.
+      end do !}
+
+!nh   setting dpls to 1.0 for the fluid neutral background species in the hybrid model
+      dplsh(nplsi+1:nplsi+nplsh)=1.
 
       write(*,*)
       write(*,'(a,4i5)') 'Particle list: natmi,nmoli,nioni,nplsi =',

@@ -14,7 +14,7 @@ ifndef LD_NAG
 endif
 
 #CPP      = -/lib/cpp -C -traditional
-CPP       = /lib/cpp -traditional
+CPP       = /lib/cpp -traditional -ffreestanding
 
 FC        = ifort
 

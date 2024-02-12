@@ -15,8 +15,7 @@ if os.access('b2mn.exe.dir/b2tallies.nc', os.R_OK):
 else:
     f = netCDF4.Dataset('b2tallies.nc','r')
 vreg = f.dimensions['vreg'].size
-xreg = f.dimensions['xreg'].size
-yreg = f.dimensions['yreg'].size
+freg = f.dimensions['freg'].size
 ns = f.dimensions['ns'].size
 time = f.dimensions['time'].size
 times = f.variables['times']
@@ -32,23 +31,29 @@ for i in range(mask.count(True)-1):
     s=e
 bounds+=[[s,len(mask)]]
 
-fnaxreg = f.variables['fnaxreg']
-fnayreg = f.variables['fnayreg']
+fnareg = f.variables['fnareg']
 b2stbr_sna_reg = f.variables['b2stbr_sna_reg']
 b2sext_sna_reg = f.variables['b2sext_sna_reg']
 
-if vreg == 5:
-    FULL_X = numpy.array([0,1,0,0,-1,0,0])
-    FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1])
-elif vreg ==2:
-    FULL_X = numpy.array([0,1,-1])
-    FULL_Y = numpy.array([0,1,-1])
+if vreg == 5: # SN topology
+    FULL_XY = numpy.array([0,1,0,0,-1,0,0,1,1,1,0,-1,-1,-1])
+elif vreg == 3: # Limiter topology
+    FULL_XY = numpy.array([0,1,-1,0,1,0,-1])
+elif vreg == 2: # Linear topology
+    FULL_XY = numpy.array([0,1,-1,1,-1])
+elif vreg == 6: # Stellarator island topology
+    FULL_XY = numpy.array([0,1,0,0,-1,0,0,0,1,1,1,0,0,-1,0,0])
+elif vreg == 8: # LFS Snowflake topology
+    FULL_XY = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0,0,1,1,1,0,-1,-1,-1,1,1,1,-1,-1,-1])
+elif freg == 27 : # CDN topology
+    FULL_XY = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0,1,1,1,0,-1,-1,-1,1,1,1,0,-1,-1,-1])
+elif freg == 28 : # DDN topology
+    FULL_XY = numpy.array([0,1,0,0,-1,1,0,0,-1,0,0,0,0,0,1,1,1,0,-1,-1,-1,1,1,1,0,-1,-1,-1])
 else:
     raise ValueError('Value of vreg=%s not currently coded' % vreg)
 
 for i in range(len(bounds)):
-    fnax = (fnaxreg[:,bounds[i][0]:bounds[i][1],:].sum(axis=1)*FULL_X).sum(axis=1)
-    fnay = (fnayreg[:,bounds[i][0]:bounds[i][1],:].sum(axis=1)*FULL_Y).sum(axis=1)
+    fna = (fnareg[:,bounds[i][0]:bounds[i][1],:].sum(axis=1)*FULL_XY).sum(axis=1)
     b2stbr = b2stbr_sna_reg[:,bounds[i][0]:bounds[i][1],0].copy()
     b2stbr[:,0] = 0 # remove the neutral
     if b2stbr.shape[1] > 2: b2stbr[:,-1] = 0 # remove the fully stripped species for He and up
@@ -57,9 +62,9 @@ for i in range(len(bounds)):
     b2sext = b2sext_sna_reg[:,bounds[i][0]:bounds[i][1],0].copy()
     b2sext = b2sext.sum(axis=1)
 
-    fna_norm = numpy.max([numpy.max(numpy.abs(fnaxreg[:,bounds[i][0]:bounds[i][1],:])),numpy.max(numpy.abs(fnayreg[:,bounds[i][0]:bounds[i][1],:]))])
-    print(elements[bounds[i][0]], fna_norm, (fnax+fnay+b2stbr+b2sext).mean(), ((fnax+fnay+b2stbr+b2sext)/fna_norm).mean())
-    plt.plot(times[:],((fnax+fnay+b2stbr+b2sext)/fna_norm), label=elements[bounds[i][0]])
+    fna_norm = numpy.max(numpy.abs(fnareg[:,bounds[i][0]:bounds[i][1],:]))
+    print(elements[bounds[i][0]], fna_norm, (fna+b2stbr+b2sext).mean(), ((fna+b2stbr+b2sext)/fna_norm).mean())
+    plt.plot(times[:],((fna+b2stbr+b2sext)/fna_norm), label=elements[bounds[i][0]])
 plt.xlabel('time [s]')
 plt.ylabel('normalised particle error')
 plt.title('Normalised particle error')

@@ -101,12 +101,17 @@ c*** Find the corresponding reaction(s)
                   if(nstrai.ge.nstra) then !{
                     write(0,*) 'Too many strata requested: ',nstrai
                     write(0,*) 'STOP ==> check the DG model and the ',
-     ,                         'value of DEF_NSTRA in DIMENSIONS.F'
+     ,               'value of DEF_NSTRA in b2mod_dimensions.F'
                     call xerrab ('Too many strata requested')
                   end if !}
                   n=n+1
                   l_hlp=.false.
                   npts(nstrai)=nrcmstrs(n)
+                  if (ncharp(ipl).eq.1) then
+                    nptsh(nstrai)=0 !nh no vol. rec. for hydrogenic species for hybrid model
+                  else
+                    nptsh(nstrai)=nrcmstrs(n)
+                  end if
                   ninitl(nstrai)=ircmstrs(n)
                   nspez(nstrai)=ipl
                   lsrcmstr(spcsrnp(ipl),n)=spcsrnp(ipl)

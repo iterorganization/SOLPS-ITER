@@ -36,7 +36,7 @@
 LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT} -lgr
-LD_GKS     = -L${GLI_HOME} -lgks
+LD_GKS     = -L/work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib -lGKS -lgfortran -lX11 -lXt
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 ${LD_INTEL_LIBS} # for NCARG v6.x.x
 #LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11                                                                                                    # for NCARG v4.x.x#LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 LD_NAG     = -L${SOLPSLIB} -lblaslapack # -L${NAGDIR} -lnag
@@ -92,14 +92,24 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  UAL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
-  UAL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  ifdef AL_VERSION
+    AL_MAJOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f1 )
+    AL_MINOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f2 )
+    AL_MICRO_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  else
+    AL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+    AL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
+    AL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  endif
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
-  IMAS_PKG_LIST += imas-g95
-  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+  ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
+    IMAS_PKG_LIST += al-fortran
+  else
+    IMAS_PKG_LIST += imas-g95
+  endif
+  ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
       GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
@@ -109,15 +119,35 @@ ifdef IMAS_VERSION
       GGD_MINOR_VERSION = 0
       GGD_MICRO_VERSION = 0
     endif
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      ifdef GGD_VERSION
+        GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
+        GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+      else
+        GGD_MAJOR_VERSION = 0
+        GGD_MINOR_VERSION = 0
+        GGD_MICRO_VERSION = 0
+      endif
+    else
+      GGD_MAJOR_VERSION = 1
+      GGD_MINOR_VERSION = 0
+      GGD_MICRO_VERSION = 0
+    endif
   endif
   ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
-    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
       IMAS_PKG_LIST += ggd
     else
-      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-        LD_GGD = -lggd_g95
+      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+        IMAS_PKG_LIST += ggd
       else
-        IMAS_PKG_LIST += imas-lowlevel
+        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+          LD_GGD = -lggd_g95
+        else
+          IMAS_PKG_LIST += imas-lowlevel
+        endif
       endif
     endif
   endif
@@ -125,16 +155,16 @@ ifdef IMAS_VERSION
     IMAS_PKG_LIST += amns
     SOLPS_CPP += -DAMNS
   endif
-  LD_UAL = `pkg-config ${IMAS_PKG_LIST} --libs`
+  LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
   ifdef LD_GGD
-    LD_UAL += ${LD_GGD}
+    LD_AL += ${LD_GGD}
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
-  export LD_UAL
+  SOLPS_CPP += -DIMAS -DAL_MAJOR_VERSION=${AL_MAJOR_VERSION} -DAL_MINOR_VERSION=${AL_MINOR_VERSION} -DAL_MICRO_VERSION=${AL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
+  export LD_AL
 else
-  UAL_MAJOR_VERSION = 0
-  UAL_MINOR_VERSION = 0
-  UAL_MICRO_VERSION = 0
+  AL_MAJOR_VERSION = 0
+  AL_MINOR_VERSION = 0
+  AL_MICRO_VERSION = 0
   GGD_MAJOR_VERSION = 0
   GGD_MINOR_VERSION = 0
   GGD_MICRO_VERSION = 0
@@ -142,9 +172,9 @@ else
   IMAS_MINOR_VERSION = 0
   IMAS_MICRO_VERSION = 0
 endif
-export UAL_MAJOR_VERSION
-export UAL_MINOR_VERSION
-export UAL_MICRO_VERSION
+export AL_MAJOR_VERSION
+export AL_MINOR_VERSION
+export AL_MICRO_VERSION
 export GGD_MAJOR_VERSION
 export GGD_MINOR_VERSION
 export GGD_MICRO_VERSION

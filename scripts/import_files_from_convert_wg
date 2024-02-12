@@ -6,11 +6,12 @@
   filestem="fort."
 }
   echo "Saving converted geometry and state files in structured format for post-processing"
+  echo "Structured filenames: b2fgmtry_st and b2fstati_st"
   [ -s ./b2fgmtry ] && cp ./b2fgmtry ./b2fgmtry_st
   [ -s ../convert/b2fgmtry ] && cp ../convert/b2fgmtry ./b2fgmtry_st
   [ -s ./b2fstati ] && cp ./b2fstati ./b2fstati_st
   [ -s ../convert/b2fstati ] && cp ../convert/b2fstati ./b2fstati_st
-
+  [ -s ../convert/b2faveri ] && cp ../convert/b2faveri ./b2faveri_st
 
   echo "Copying the files modified by b2us"
   [ -s ../convert/b2fgmtry_us ] && cp -uv ../convert/b2fgmtry_us b2fgmtry
@@ -39,6 +40,7 @@
   [ -s ../convert/b2us.feedback_control.parameters ] && cp -uv ../convert/b2us.feedback_control.parameters b2.feedback_control.parameters
   [ -s ../convert/b2us.user.parameters ] && cp -uv ../convert/b2us.user.parameters b2.user.parameters
   [ -s ../convert/b2fstati_us ] && cp -uv ../convert/b2fstati_us b2fstati
+  [ -s ../convert/b2faveri_us ] && cp -uv ../convert/b2faveri_us b2faveri
   [ -s ../convert/b2.transport.inputfile ] && cp -uv ../convert/b2.transport.inputfile .
   [ -s ../convert/b2.numerics.parameters ] && cp -uv ../convert/b2.numerics.parameters .
   [ -s ../convert/b2.transport.parameters ] && cp -uv ../convert/b2.transport.parameters .

@@ -1,26 +1,28 @@
 # Load modules
-setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module load intel/18.0.5
-module load texlive/2019
+setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
+module load anaconda/3/2023.03
+module load intel/2023.1.0.x
+module load texlive/2021
 # module load subversion  # use built in SVN
-module load arm_ddt
-module load doxygen/1.8.17
+module load arm_ddt/22.1
+module load doxygen/Release_1_9_7-190-g7df783537
 #module load mdsplus
-module load netcdf-serial/4.7.0
-module load hdf5-serial
+module load netcdf-serial/4.8.1
+module load hdf5-serial/1.14.1
 #module load nag_flib/intel/mk24
-module load git
-module load impi
-module load nag_flib/mk24
-module load gnuplot
+module load git/2.39
+module load impi/2021.9
+module load nag_flib/mk26
+module load gnuplot/5.4
 
 module load imas-modules/1.0
-module load IMAS/3.25.0-4.4.0
-module load ggd/1.9.1-INTEL-18.0.5
-module load amns/1.3.3-INTEL-18.0.5
+module load IMAS/3.39.0-4.11.5
+module load GGD/1.10.3-ifort-2021.9.0
+module load Fundamental-Constants/0.1.1
+module load AMNS/1.4.0.1-6dba-ifort-2021.9.0
 
 setenv DBX ddt
-setenv SYSNAME `fs sysname | cut -d "'" -f 2`
+setenv SYSNAME amd64_sles15
 
 # Environment variables
 if (! $?DEVICE) then
@@ -36,9 +38,10 @@ else
   echo "Could not find IPPSOLPSLIBS -- contact dpc@ipp.mpg.de"
 endif
 
+setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME $IPPSOLPSLIBS/gks
 setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
-setenv NCARG_ROOT /afs/.ipp/tok/soft/ncarg/6.6.2
+setenv NCARG_ROOT /tokp/work/software/TOK_2019/software/ncarg/6.6.2
 setenv PATH ${PATH}
 setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin

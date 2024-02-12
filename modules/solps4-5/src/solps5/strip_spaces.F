@@ -1,0 +1,1 @@
+../../../B2.5/src/utility/strip_spaces.F

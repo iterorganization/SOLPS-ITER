@@ -44,7 +44,7 @@ c       print *,'p1: nlimi = ',nlimi !###
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (2)
 c*** p2
@@ -56,7 +56,7 @@ c       print *,'p2: nlimi = ',nlimi !###
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (3)
 c*** vessel
@@ -67,7 +67,7 @@ c       print *,'vessel: nnvsle = ',nnvsle !###
           write(0,*) 'Current number of requested elements: ',
      .     maxval(nmvsle)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (4)
 c*** data_id

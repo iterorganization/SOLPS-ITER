@@ -6,8 +6,9 @@ C---- IFRONT : LIST OF FRONTIER PARTS
 C----          IFRONT(1,*) : START POINT OF FRONTIER PART
 C----          IFRONT(2,*) : END POINT OF FRONTIER PART
 C---- NPARTFR : TOTAL NUMBER OF FRONTIER PARTS
+C---- ISPLIT : INTEGER INDICATING WHETHER FRONTIER PART CAN BE SPLIT
       double precision, allocatable, public, save :: delfro(:)
-      integer, allocatable, public, save :: ifront(:,:)
+      integer, allocatable, public, save :: ifront(:,:), isplit(:)
 
       INTEGER, public, save :: NPARTFR
 
@@ -42,6 +43,18 @@ c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
          allocate(ifront(dim1,dim2+incr))
          ifront = 0
          ifront(1:dim1,1:dim2) = ihelp(1:dim1,1:dim2)
+         deallocate(ihelp)
+      elseif (kennung .eq. 'isplit') then
+         dim1 = size(isplit)
+         dim2 = 1
+c         write(6,*) 'vergroessern von ',kennung,' von (',dim1,
+c     .              ',',dim2,') auf (',dim1,',',dim2+incr,')'
+         allocate(ihelp(dim1,dim2))
+         ihelp(:,1) = isplit
+         deallocate (isplit)
+         allocate(isplit(dim1+incr))
+         isplit = 0
+         isplit(1:dim1) = ihelp(1:dim1,1)
          deallocate(ihelp)
       else
          write(6,*) 'unknown flag in realloc_cfront ', kennung

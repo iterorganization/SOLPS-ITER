@@ -17,25 +17,27 @@ SRCDIR  = ${SRCUIN}/src
 BASEDIR = ${SRCUIN}
 B2DIR   = ${SOLPSTOP}/modules/B2.5
 EIRDIR  = ${SOLPSTOP}/modules/Eirene
+CRRDIR  = ${SOLPSTOP}/modules/Carre2
+B2SRC   = ${B2DIR}/src
 
 MAKES = ${BASEDIR}/Makefile
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  else
+    $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+  endif
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 else
-  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
-endif
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
-else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -44,6 +46,8 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
+
+MAKETAGS ?= ctags -e -f
 
 ifdef SOLPS_MPI
   USE_MPI ?= -DUSE_MPI
@@ -70,7 +74,6 @@ endif
 OBJDIR  = ${SRCUIN}/builds/${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DEBUG}
 EIROBJ  = ${EIRDIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 B2OBJ   = ${B2DIR}/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-B2SRC   = ${B2DIR}/src
 
 ifeq ($(shell [ -e ${B2DIR}/src/include.local ] && echo yes || echo no ),yes)
 B2INC = -I${B2DIR}/src/include.local -I${B2DIR}/src/include -I${B2DIR}/src/common
@@ -85,6 +88,7 @@ ifeq ($(shell [ -e ${EIRDIR}/src/common ] && echo yes || echo no ),yes)
 EIRINC += -I${EIRDIR}/src/common
 endif
 EIRINC += -I${EIROBJ}
+CRRINC += -I${CRRDIR}/src90/include
 
 include ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
 MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}
@@ -110,10 +114,15 @@ endif
 
 DEST = $(OBJS:%.o=$(OBJDIR)/%.o)
 
-DEFINES = 
+DEFINES =
+DIMENSIONS =
+ifeq ($(shell [ -s ${B2SRC}/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DIMENSIONS = ${B2OBJ}/b2mod_dimensions.o
+DEFINES += -DDIMENSIONS_MODULE
+endif
 
 $(OBJDIR)/%.o : %.F
-	${CPP} ${DEFINES} -P ${INCLUDE} ${SOLPS_CPP} ${USE_DEBUG} $< ${OBJDIR}/$*.f
+	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
@@ -129,13 +138,9 @@ ${OBJDIR}/ub2p: ${OBJDIR}/ub2p.o ${OBJDIR}/libui.a ${OBJDIR}/libb25.a ${MAKES}
 ${OBJDIR}/libui.a: ${DEST} ${SRCDIR}/git_version_Uinp.h ${MAKES}
 	@ar rucv $@ ${DEST}
 	ranlib $@
-DIMENSIONS =
-ifeq ($(shell [ -s ${B2SRC}/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
-DIMENSIONS = ${B2OBJ}/b2mod_dimensions.o
-DEFINES += -DDIMENSIONS_MODULE
-endif
-${OBJDIR}/libb25.a: ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
-	@ar rucv $@ ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
+
+${OBJDIR}/libb25.a: ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/b2mod_version.o ${B2OBJ}/cfvers.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o ${SRCDIR}/.new_routines ${MAKES}
+	@ar rucv $@ ${DIMENSIONS} ${B2OBJ}/b2mod_constants.o ${B2OBJ}/b2mod_elements.o ${B2OBJ}/b2mod_types.o ${B2OBJ}/b2mod_layer.o ${B2OBJ}/b2mod_math.o ${B2OBJ}/b2mod_openmp.o ${B2OBJ}/b2mod_solpstop.o ${B2OBJ}/b2mod_version.o ${B2OBJ}/cfvers.o ${B2OBJ}/chcase.o ${B2OBJ}/helper.o ${B2OBJ}/ifill.o ${B2OBJ}/b2mod_ipmain.o ${B2OBJ}/isadigit.o ${B2OBJ}/isplusorminus.o ${B2OBJ}/len_of_digits.o ${B2OBJ}/lnblnk.o ${B2OBJ}/lower_case.o ${B2OBJ}/b2mod_lwimai.o ${B2OBJ}/b2mod_lwmain.o ${B2OBJ}/machsfr.o ${B2OBJ}/nagsubst.o ${B2OBJ}/open_file.o ${B2OBJ}/prgend.o ${B2OBJ}/prgini.o ${B2OBJ}/prvrt.o ${B2OBJ}/prvrti.o ${B2OBJ}/ratio.o ${B2OBJ}/sfill.o ${B2OBJ}/streql.o ${B2OBJ}/strip_spaces.o ${B2OBJ}/b2mod_subsys.o ${B2OBJ}/sysend.o ${B2OBJ}/sysini.o ${B2OBJ}/xerrab.o ${B2OBJ}/b2mod_xerset.o ${B2OBJ}/xertst.o ${B2OBJ}/xxdata_11.o
 	ranlib $@
 
 ${OBJDIR}/uinput.o: ${OBJDIR}/uiblkd.o
@@ -177,15 +182,15 @@ ${OBJDIR}/b2mod_solpstop.${MOD}:
 ${OBJDIR}/b2mod_subsys.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_subsys.${MOD} ${OBJDIR}
 
+${OBJDIR}/b2mod_version.${MOD}:
+	ln -sf ${B2OBJ}/b2mod_version.${MOD} ${OBJDIR}
+
 ${OBJDIR}/b2mod_xerset.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_xerset.${MOD} ${OBJDIR}
 
 ${OBJDIR}/helper.${MOD}:
 	ln -sf ${B2OBJ}/helper.${MOD} ${OBJDIR}
 endif
-
-${OBJDIR}/b2mod_dimensions.o:
-	ln -sf ${B2OBJ}/b2mod_dimensions.o ${OBJDIR}
 
 ${OBJDIR}/libeirene.a:
 	ln -sf ${EIROBJ}/libeirene.a ${OBJDIR}
@@ -195,6 +200,9 @@ ${OBJDIR}/ioflush.o:
 
 ${OBJDIR}/libgr_dummy.a:
 	ln -sf ${EIROBJ}/libgr_dummy.a ${OBJDIR}
+
+${OBJDIR}/b2mod_dimensions.o:
+	ln -sf ${B2OBJ}/b2mod_dimensions.o ${OBJDIR}
 
 ${OBJDIR}/b2mod_types.o:
 	ln -sf ${B2OBJ}/b2mod_types.o ${OBJDIR}
@@ -229,6 +237,9 @@ ${OBJDIR}/b2mod_solpstop.o:
 ${OBJDIR}/b2mod_subsys.o:
 	ln -sf ${B2OBJ}/b2mod_subsys.o ${OBJDIR}
 
+${OBJDIR}/b2mod_version.o:
+	ln -sf ${B2OBJ}/b2mod_version.o ${OBJDIR}
+
 ${OBJDIR}/b2mod_xerset.o:
 	ln -sf ${B2OBJ}/b2mod_xerset.o ${OBJDIR}
 
@@ -252,7 +263,7 @@ listobj:
 	sed -e 's/ub2p\.o//' -e 's/uinput\.o//' -e 's/uiblkd\.o//' -e 's/uiblb2\.o//' > ${OBJDIR}/LISTOBJ
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; ctags -e -f ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
+	rm -f ${BASEDIR}/TAGS ; ${MAKETAGS} ${BASEDIR}/TAGS ${SRCDIR}/*.F ${SRCDIR}/*.h ${SRCDIR}/*.inc || touch ${BASEDIR}/TAGS
 
 ${OBJDIR}/LISTOBJ: listobj
 
@@ -270,3 +281,6 @@ ${OBJDIR}/dependencies.${COMPILER}:
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies.${COMPILER}
+ifeq ($(shell [ -e ${SRCUIN}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${SRCUIN}/config/dependencies.local
+endif

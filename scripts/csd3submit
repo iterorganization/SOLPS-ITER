@@ -50,9 +50,9 @@ Available options are:
   -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
-  -A <<ACCOUNT>>     the account to be used (default $account)
+  -A <<ACCOUNT>>           the account to be used (default $account)
   -M <<MEM_SIZE>>          memory size (default $mem)
-  -N <<NODES>>       number of nodes requested (default $NODES)
+  -N <<NODES>>             number of nodes requested (default $NODES)
 
 EOF
     exit

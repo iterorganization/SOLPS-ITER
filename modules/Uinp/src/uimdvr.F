@@ -92,6 +92,8 @@ c            i=0
 c            c=' '
 c            if(ltrvr(jvrb,jblk)) then !{
 c              c=cniprm(1,l,n,jvrb,jblk)
+c            else if(lt2rvr(jvrb,jblk)) then !}{
+c              c=c2niprm(1,l,n,jvrb,jblk)
 c            else if(lt8rvr(jvrb,jblk)) then !}{
 c              c=c8niprm(1,l,n,jvrb,jblk)
 c            else if(lrrvr(jvrb,jblk)) then !}{
@@ -125,6 +127,17 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
      .           '(',nmdpr(jvrb,jblk),'('' '''''',a1,'''''',''))'
   700           format(a1,i3,a)
                 write(ss(k:mxslen),ufc) (cniprm(i,l,n,jvrb,jblk),i=1,m)
+              else if(lt2rvr(jvrb,jblk)) then !{
+                write(ufc,705)
+     .           '(',nmdpr(jvrb,jblk),'('' '''''',a2,'''''',''))'
+  705           format(a1,i3,a)
+                do i=1,m
+                  len=lnblnk(c2niprm(i,l,n,jvrb,jblk))
+                  if (len.lt.2) then
+                    c2niprm(i,l,n,jvrb,jblk)(2:2)=' '
+                  endif
+                enddo
+                write(ss(k:mxslen),ufc) (c2niprm(i,l,n,jvrb,jblk),i=1,m)
               else if(lt8rvr(jvrb,jblk)) then !}{
                 write(ufc,710)
      .           '(',nmdpr(jvrb,jblk),'(1x,'''''''',a8,'''''',''))'

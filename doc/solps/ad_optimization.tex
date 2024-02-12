@@ -261,6 +261,7 @@ After successful compilation, the user needs to specify with respect to which in
 
 Below is a description of the variables needed in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. Additional variables for optimization are listed in Section~\ref{sec:run_opt}, and an up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
 
+\begin{sloppypar}
 \begin{description}
 	\item[NNVAR]\index{NNVAR} {\tt integer}, number of sensitivity/optimization parameters $\theta$ (radially varying transport coefficients count as 1 as a whole) ({\tt ipar = 1, NNVAR}). Defaults to {\tt 0}.
 	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -2}. Available options are:
@@ -311,7 +312,7 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 	\item[MEAN\_OPT]\index{MEAN\_OPT} {\tt logical array, dimension (NMEAN)}, for each {\tt MEAN}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
 	\item[SHIFT\_OPT]\index{SHIFT\_OPT} {\tt logical array, dimension (NCF)}. For each {\tt SHIFT\_CF\_VALUE}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
 	\item[CORR\_OPT]\index{CORR\_OPT} {\tt logical array, dimension (NCF)}. For each MAP cost function where {\tt CORR\_MODEL}$\neq0$, specifies whether {\tt CORR\_LENGTH} sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
-	\item[SPATIAL\_DEP]\index{SPATIAL\_DEP} {\tt logical array, dimension (NNVAR)}, for each sensitivity/optimization variable {\tt ipar}, specifies if radially varying coefficients are optimized.	Meaningful only for {\tt PARTYPE = 1} to {\tt 9}. Defaults to {\tt .false.}.
+	\item[SPATIAL\_DEP]\index{SPATIAL\_DEP} {\tt logical array, dimension (NNVAR)}, for each sensitivity/optimization variable {\tt ipar}, specifies if radially varying coefficients are optimized. Meaningful only for {\tt PARTYPE = 1} to {\tt 9}. Defaults to {\tt .false.}.
 	\item[SPATIAL\_POINTS]\index{SPATIAL\_POINTS} {\tt integer array, dimension (NNVAR)}, number of spatial points for sensitivity/optimization parameter {\tt ipar} (should be the same as {\tt NDATA} in {\tt b2.transport.inputfile}). The actual number of optimized variables ({\tt NPAR\_OPT}) is then equal to the total number of spatial points + any other additional parameters. Defaults to {\tt 0}.
 	\item[PARIS]\index{PARIS} {\tt integer array, dimension (NNVAR)}, specifies the species of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [1-5,7,12,13,16]}. Defaults to {\tt 0}.
 	\item[PARIB]\index{PARIB} {\tt integer array, dimension (NNVAR)}, specifies the boundary/strata of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [10-16]}. Defaults to {\tt 0}.
@@ -337,6 +338,7 @@ The explanation is as follows: we require sensitivity wrt four parameters, thus 
 	\item $\chi_{\perp,e}$ ({\tt PARM\_HCE}). Thus {\tt PARTYPE(3)=4}. {\tt PARIS(3)} does not matter in this case because {\tt PARM\_HCE} is looked at, which is not species-dependent, while if radially varying coefficients would be optimized (with {\tt TDATA(:,:,4,:)}), then {\tt PARIS(3)} should be set to {\tt 1}. {\tt PARIB(3)} does not matter.
 	\item Continuity BC at the core for $\mathrm{D}^{+}$ ({\tt BCCON(1,1,1)}). Thus {\tt PARTYPE(4) = 12}, for species {\tt 1}, thus {\tt PARIS(4)=1}, and for the core boundary (in this case {\tt 1}), thus {\tt PARIB(4)=1}.
 \end{description}
+\end{sloppypar}
 
 If one is interested in MAP cost function sensitivities or of spatially dependent transport coefficients please see the example setups in Section~\ref{sec:example_optimization}.
 
@@ -375,6 +377,7 @@ Users have other options to monitor the progress of the derived quantities:
 
 {\tt b2mod\_diffsizes.F} acts similarly to {\tt DIMENSIONS.F} and stores the maximum number of directions {\tt nbdirsmax} allowed, i.e. the maximum number of independent variables with respect to which one can calculate the derivative of the cost function. Increase {\tt nbdirsmax} and recompile if needed.
 
+\begin{sloppypar}
 Current parameters for which derivative calculation is possible (default parameters):
 \begin{itemize}
   \item Transport coefficients: {\tt PARM\_DNA}, {\tt PARM\_HCE}, {\tt PARM\_HCI}, {\tt PARM\_VSA}, {\tt PARM\_SIG}, {\tt PARM\_ALF}
@@ -385,6 +388,7 @@ Current parameters for which derivative calculation is possible (default paramet
   \item Reaction rates: {\tt rtlsa}, {\tt rtlra}, {\tt rtlcx}, {\tt rtlqa} (Note: these cannot be specified in {\tt b2.optimization.parameters} and require manual changes to the source file of {\tt b2mn\_d.F90})
   \item Optimization parameters: {\tt sigma}, {\tt par\_opt\_phys}
 \end{itemize}
+\end{sloppypar}
 
 If users require sensitivities/optimization of parameters other than the default ones, then {\tt B2.5} needs to be differentiated anew, see Appendix~\ref{cha:ad_expert}.
 
@@ -664,7 +668,9 @@ Moreover, the starting guess for each of the transport coefficients is {\tt 1.0}
 
 Since the density BC has a quite different order of magnitude, which will considerably hamper the optimization process, it is better to rescale this parameter and the related gradient component such that it falls in the vicinity of the order of magnitude of the other parameters. Therefore, {\tt PAR\_RESCALE(4) = 1.0e19}.
 
+\begin{sloppypar}
 There is no radially dependent transport coefficient in this case, so we set {\tt SPATIAL\_DEP = F,F,F} and {\tt SPATIAL\_POINTS = 0,0,0}.
+\end{sloppypar}
 
 Next, we set as stopping criteria a maximum number of 20 optimization iterations with {\tt MAXITER=20}, a minimum tolerance of $10^{-4}$ with {\tt TOL\_OPT = 1e-4}, and maximum of about 71 hours of cpu time for the optimization with {\tt CPU\_OPT = 255000.0}.
 

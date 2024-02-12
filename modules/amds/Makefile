@@ -39,6 +39,8 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
+MAKETAGS ?= ctags -e -f
+
 # Extensions for object directories when various options are used
 ifdef USE_OPENMP
 EXT_OPENMP = .openmp
@@ -124,7 +126,7 @@ clean:
 TAGS:	tags
 
 tags:
-	rm -f TAGS ; ctags -e -f TAGS src/*.c src/*.h || touch TAGS
+	rm -f TAGS ; ${MAKETAGS} TAGS src/*.c src/*.h || touch TAGS
 
 depend: ${OBJS:.o=.c}
 	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \

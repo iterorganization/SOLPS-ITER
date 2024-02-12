@@ -38,7 +38,6 @@ endif
 
 time b2run ${STANDALONE} ${USE_MPI} b2mn | gzip -9 >! run.log.gz
 
-
 #QSUB.postprocess_coupled
 
 #preserve_scratch_to_work

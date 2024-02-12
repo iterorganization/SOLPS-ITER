@@ -2,67 +2,89 @@
 set nreg=`climb_and_look_for NREG`
 set nnreg=`pipe_run.log | head -100000 | grep -a nreg | head -1`
 if (-s $nreg) then
-  setenv NREG `cat $nreg`
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
+  setenv FREG `cat $nreg | cut -d ' ' -f 2`
   echo Set NREG to $NREG "(based on $nreg)"
+  echo Set FREG to $FREG "(based on $nreg)"
 else
   set NREG=$nnreg[2]
+  set FREG=$nnreg[3]
   echo Set NREG to $NREG "(based on log file)"
+  echo Set FREG to $FREG "(based on log file)"
 endif
 if (! $?NREG) set NREG = 4
+if (! $?FREG) set FREG = 13
 if ("X$nnreg" != "X") then
   if ($NREG != $nnreg[2]) then
     echo "NREG in file ($nnreg[2]) does not match" $NREG
+    exit
+  endif
+  if ($FREG != $nnreg[3]) then
+    echo "FREG in file ($nnreg[3]) does not match" $FREG
     exit
   endif
 endif
 switch ($NREG)
   case "4":
     pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |tallies|nnreg' | \
+      egrep -a '^fh[eipm]reg |tallies|nnreg' | \
       regxy_sum_over_species | \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]xreg/{W+=-$3;w+=-$4;e+=$5;E+=$6}/fh[eipm]yreg/{core+=$4;sep+=$6;mcw+=$8;pfw+=-$3-$5+$7+$9}/End tallies by region/{print W,w,e,E,core,sep,mcw,pfw}' | \
+      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]reg/{W+=-$3;w+=-$4;e+=$5;E+=$6;core+=$10;sep+=$12;mcw+=$14;pfw+=-$9-$11+$13+$15}/End tallies by region/{print W,w,e,E,core,sep,mcw,pfw}' | \
       nl | \
       plot x"$1"yplot8 -W -w e E core sep mcw pfw iterations W $PWD
     breaksw
   case "8":
-    pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |tallies|nnreg'| \
-      regxy_sum_over_species | \
-      awk '/Start tallies by region/{LI=0;li=0;ui=0;UI=0;UO=0;uo=0;lo=0;LO=0;coreI=0;coreO=0;sepI=0;sepO=0;mcwI=0;mcwO=0;pfwL=0;pfwU=0}/fh[eipm]xreg/{LI+=-$3;li+=-$4;ui+=$5;UI+=$6;UO+=-$7;uo+=-$8;lo+=$9;LO+=$10}/fh[eipm]yreg/{coreI+=$4;coreO+=$11;sepI+=$6;sepO+=$13;mcwI+=$8;mcwO+=$15;pfwL+=-$3-$12+$7+$16;pfwU+=-$5-$10+$9+$14}/End tallies by region/{print LI,li,ui,UI,UO,uo,lo,LO,coreI,coreO,coreI+coreO,sepI,sepO,sepI+sepO,mcwI,mcwO,mcwI+mcwO,pfwL,pfwU,pfwL+pfwU}' | \
-      nl | \
-      plot x"$1"yplot20 -LI -li ui UI -UO -uo lo LO coreI coreO core sepI sepO sep mcwI mcwO mcw pfwL pfwU pfw iterations W $PWD
+    switch ($FREG)
+      case "26":
+        pipe_run.log | \
+          egrep -a '^fh[eipm]reg |tallies|nnreg'| \
+          regxy_sum_over_species | \
+          awk '/Start tallies by region/{LI=0;li=0;ui=0;UI=0;UO=0;uo=0;lo=0;LO=0;coreI=0;coreO=0;sepI=0;sepO=0;mcwI=0;mcwO=0;pfwL=0;pfwU=0}/fh[eipm]reg/{LI+=-$3;li+=-$4;ui+=$5;UI+=$6;UO+=-$7;uo+=-$8;lo+=$9;LO+=$10;coreI+=$16;coreO+=$23;sepI+=$18;sepO+=$25;mcwI+=$20;mcwO+=$27;pfwL+=-$15-$24+$19+$28;pfwU+=-$17-$22+$21+$26}/End tallies by region/{print LI,li,ui,UI,UO,uo,lo,LO,coreI,coreO,coreI+coreO,sepI,sepO,sepI+sepO,mcwI,mcwO,mcwI+mcwO,pfwL,pfwU,pfwL+pfwU}' | \
+          nl | \
+          plot x"$1"yplot20 -LI -li ui UI -UO -uo lo LO coreI coreO core sepI sepO sep mcwI mcwO mcw pfwL pfwU pfw iterations W $PWD
+          breaksw
+      case "27":
+        pipe_run.log | \
+          egrep -a '^fh[eipm]reg |tallies|nnreg'| \
+          regxy_sum_over_species | \
+          awk '/Start tallies by region/{LI=0;li=0;ui=0;UI=0;UO=0;uo=0;lo=0;LO=0;coreI=0;coreO=0;sepI=0;sepO=0;mcwI=0;mcwO=0;pfwL=0;pfwU=0}/fh[eipm]reg/{LI+=-$3;li+=-$4;ui+=$5;UI+=$6;UO+=-$7;uo+=-$8;lo+=$9;LO+=$10;coreI+=$17;coreO+=$24;sepI+=$19;sepO+=$26;mcwI+=$21;mcwO+=$28;pfwL+=-$16-$25+$20+$29;pfwU+=-$18-$23+$22+$27}/End tallies by region/{print LI,li,ui,UI,UO,uo,lo,LO,coreI,coreO,coreI+coreO,sepI,sepO,sepI+sepO,mcwI,mcwO,mcwI+mcwO,pfwL,pfwU,pfwL+pfwU}' | \
+          nl | \
+          plot x"$1"yplot20 -LI -li ui UI -UO -uo lo LO coreI coreO core sepI sepO sep mcwI mcwO mcw pfwL pfwU pfw iterations W $PWD
+          breaksw
+       default:
+         echo "Unusual number of regions: Not sure what to do!"
+         echo "FREG = " $FREG
+       endsw
     breaksw
   case "7":
     pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |tallies|nnreg'| \
+      egrep -a '^fh[eipm]reg |tallies|nnreg'| \
       regxy_sum_over_species | \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E1=0;E2=0;e1=0;e3=0;E3=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]xreg/{W+=-$3;w+=-$4;e+=$5;E1+=$6;E2+=-$7;e1+=$8;e3+=$15;E3+=$10}/fh[eipm]yreg/{core+=$4;sep+=$6;mcw+=$7+$8+$9+$13+$14+$15;pfw+=-$3-$5-$10-$11-$12}/End tallies by region/{print W,w,e,e1,E1,E2,e3,E3,core,sep,mcw,pfw}' | \
+      awk '/Start tallies by region/{W=0;w=0;e=0;E1=0;E2=0;e1=0;e3=0;E3=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]reg/{W+=-$3;w+=-$4;e+=$5;E1+=$6;E2+=-$7;e1+=$8;e3+=$15;E3+=$10;core+=$17;sep+=$19;mcw+=$20+$21+$22+$26+$27+$28;pfw+=-$16-$18-$23-$24-$25}/End tallies by region/{print W,w,e,e1,E1,E2,e3,E3,core,sep,mcw,pfw}' | \
       nl | \
       plot x"$1"yplot12 -W -w e e1 E1 -E2 e3 E3 core sep mcw pfw iterations W $PWD
     breaksw
   case "5":
     pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |tallies|nnreg'| \
+      egrep -a '^fh[eipm]reg |tallies|nnreg'| \
       regxy_sum_over_species | \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;island=0;centre=0;pfw=0}/fh[eipm]xreg/{W+=-$3;w+=-$4;e+=$5;E+=$6}/fh[eipm]yreg/{core+=$4;sep+=$6;island+=$10;centre+=$8;pfw+=-$3-$5+$7+$9}/End tallies by region/{print W,w,e,E,core,sep,island,centre,pfw}' | \
+      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;island=0;centre=0;pfw=0}/fh[eipm]reg/{W+=-$3;w+=-$4;e+=$5;E+=$6;core+=$11;sep+=$13;island+=$17;centre+=$15;pfw+=-$10-$12+$14+$16}/End tallies by region/{print W,w,e,E,core,sep,island,centre,pfw}' | \
       nl | \
       plot x"$1"yplot9 -W -w e E core sep island center pfw iterations W $PWD
     breaksw
   case "2":
     pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |tallies|nnreg'| \
+      egrep -a '^fh[eipm]reg |tallies|nnreg'| \
       regxy_sum_over_species | \
-      awk '/Start tallies by region/{W=0;w=0;e=0;E=0;core=0;sep=0;mcw=0;pfw=0}/fh[eipm]xreg/{W+=-$3;E+=$4}/fh[eipm]yreg/{core+=$3;sep+=$4;mcw+=$5}/End tallies by region/{print W,E,core,sep,mcw}' | \
+      awk '/Start tallies by region/{W=0;E=0;core=0;sep=0;mcw=0}/fh[eipm]reg/{W+=-$3;E+=$4;core+=$6;sep+=$7;mcw+=$8}/End tallies by region/{print W,E,core,sep,mcw}' | \
       nl | \
       plot x"$1"yplot5 -W E core sep mcw iterations W $PWD
     breaksw
   case "1":
     pipe_run.log | \
-      egrep -a '^fh[eipm][xy]reg |nnreg'| \
+      egrep -a '^fh[eipm]reg |nnreg'| \
       regxy_sum_over_species | \
-      paste - - | \
-      ave.awk 4 | \
-      awk "$2"'{print NR,4*$3,4*$4,4*$7,4*$8}' | \
+      awk '/Start tallies by region/{W=0;E=0;S=0;N=0}/fh[eipm]reg/{W+=-$3;E+=$4;S+=$5;N+=$6}/End tallies by region/{print W,E,S,N}' | \
       plot x"$1"yplot4 W E S N iterations W $PWD
     breaksw
   default:

@@ -5,6 +5,7 @@ c*** The basic data for uinput
 #include "DIMENSIONS.F"
 #endif
 #include "COUPLE/KOPPLDIM.F"
+#include "CARREDIM.F"
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species
@@ -26,6 +27,11 @@ c***  ntrgts    : maximum number of targets
 c***  nntrian   : maximum number of triangular mesh nodes for input
       integer,parameter::nnpr=6,nnptseg=6,ntrgts=4,namdfs=20,nntrian=1
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
+      integer nppol(nregmx),nprad(nregmx),nnreg,
+     .        cflags(5,npmamx,nrmamx,nregmx),
+     .        fdegen(4,npmamx,nrmamx,nregmx)
+      integer ncells,nicells,nbcells,nfaces,ndfaces
+      integer carre_mode,grid_mode
       character*4 topo
       character*48 amd_file(namdfs)
 
@@ -174,7 +180,7 @@ c***  Maximum numbers of divides, kinds of boundaries (core, target,
 c***     PFR side, outer side), boundary regions of each type,
 c***     boundary zones of each kind, markers for each zone
       integer nbnddvd,nbndknd,nbndrgn,nbndzon,nbndmrk
-      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12, 
+      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12,
      ,  nbndzon=20, nbndmrk=100)
 
 c*** Eirene data: surface type, position, start, end, plotting color,
@@ -193,12 +199,13 @@ c***    flag "recycling surface"; surface material
      ,        jcgbnds(nbndzon,nbndknd), jpsbnds(nbndzon,nbndknd),
      ,        jppbnds(nbndzon,nbndknd), jnpbnds(nbndzon,nbndknd),
      ,        jmpbnds(nbndzon,nbndknd), jnibnds(nbndzon,nbndknd),
-     ,        jnebnds(nbndzon,nbndknd)
+     ,        jnebnds(nbndzon,nbndknd), rfcbnds(nbndzon,nbndknd)
       real(kind=R4)
      ,        etfbnds(nbndzon,nbndknd), etbbnds(nbndzon,nbndknd),
      ,        easbnds(nbndzon,nbndknd), eewbnds(nbndzon,nbndknd),
      ,        efpbnds(nbndzon,nbndknd), efcbnds(nbndzon,nbndknd),
-     ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd)
+     ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd),
+     ,        rfpbnds(nbndzon,nbndknd)
       logical nlrbnds(nbndzon,nbndknd)
       character*8 ewmbnds(nbndzon,nbndknd)
 
@@ -258,12 +265,14 @@ c***                    Below, index "0" corresponds to a group default
      ,        jcgbndx(0:nbndzon,nbndknd), jpsbndx(0:nbndzon,nbndknd),
      ,        jppbndx(0:nbndzon,nbndknd), nlrbndx(0:nbndzon,nbndknd),
      ,        jnpbndx(0:nbndzon,nbndknd), jmpbndx(0:nbndzon,nbndknd),
-     ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd)
+     ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd),
+     ,        rfcbndx(0:nbndzon,nbndknd)
       real(kind=R4)
      ,        etfbndx(0:nbndzon,nbndknd), etbbndx(0:nbndzon,nbndknd),
      ,        easbndx(0:nbndzon,nbndknd), eewbndx(0:nbndzon,nbndknd),
      ,        efpbndx(0:nbndzon,nbndknd), efcbndx(0:nbndzon,nbndknd),
-     ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd)
+     ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd),
+     ,        rfpbndx(0:nbndzon,nbndknd)
       character*2 ewmbndx(0:nbndzon,nbndknd)*8,
      ,  escbndx(natm,0:nbndzon,nbndknd), eswbndx(natm,0:nbndzon,nbndknd)
       logical dfrbndx(nbndknd)
@@ -299,7 +308,8 @@ c***             boundary code (E, W, S, N) for each region and zone;
      ,  lcmbndt(nbndrgn,nbndknd),lrfbndt(nbndzon,nbndknd),
      ,  lrrbndt(nbndrgn,nbndknd,2),lrpbndt(nbndrgn,nbndknd,2),
      ,  lrsbndt(nbndrgn,nbndknd),
-     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd)
+     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd),
+     ,  lzrbndt_us(nbndzon,nbndknd,2)
       logical bxsbndt(nbndzon,nbndknd),rxsbndt(nbndzon,nbndknd)
       character crgbndt(nbndrgn,nbndknd),cznbndt(nbndzon,nbndknd)
 
@@ -316,10 +326,11 @@ c***           material; flag "target data was read"
      ,  ntrgto,ntrgtm
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
-     ,  tgnini(ntrgts)
+     ,  tgnini(ntrgts),trefcell(ntrgts),tgfclbl(ntrgts)
       real(kind=R4)
      ,  tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
-     ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts)
+     ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts),
+     ,  trfpress(ntrgts)
       character*8 made_of(ntrgts)
       logical tgdtinpt
 
@@ -456,13 +467,18 @@ c*** Data for triangular mesh: maximum number of mesh refinment zones;
 c*** temporary arrays for ILPLG parameter;
 c*** mesh size and coordinates of refinment zone (rectangle);
 c*** refinment zone markers from DG, and actual number of zones
-       integer ntrimax
-       parameter (ntrimax=100)
+       integer ntrimax, ntriplgmax, nsegtriplgmax
+       parameter (ntrimax=100, ntriplgmax = 20, nsegtriplgmax = 20)
        integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim)
        real(kind=R4)
      ,      trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
      ,      triymin(ntrimax), triymax(ntrimax)
        integer trirefel(2*nlim),trirefcn(ntrimax),ntriref
+       integer ntriplg, nntriplg(ntriplgmax), nsegtriplg(ntriplgmax),
+     ,      nnsstriplg(ntriplgmax),nfclbltriplg(ntriplgmax)
+       integer triplg(nlim,ntriplgmax),
+     ,      triplgnss(2*nsegtriplgmax,ntriplgmax),
+     ,      triplgfclbl(2*nsegtriplgmax,ntriplgmax)
 
 c-----------------------------------------------------------------------
 c*** Data for pre-defined 'density models' in Eirene:
@@ -471,7 +487,6 @@ c*** names of the models
       integer ndnmdlp,ldnmdlp
       parameter (ndnmdlp=11,ldnmdlp=10)
       character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
-
 
 c-----------------------------------------------------------------------
 c*** Data for postprocessing windows: max. number of them
@@ -499,9 +514,9 @@ c*** Data substitution for the Eirene test run
       real(kind=R4) ttalloc
       logical
      ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
-     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,
+     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,ttcsrc,
      ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
-     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcsrc,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,
      ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
      ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl
 
@@ -546,19 +561,22 @@ c=======================================================================
      ,  spcidsp,spcidsa,spcidsm,spcidsi,spcicrp,spcicrf,
      ,  etfbnds,etbbnds,easbnds,eewbnds,efpbnds,efcbnds,
      ,  esibnds,esebnds,beebnds,bcobnds,beibnds,bmobnds,bpobnds,
+     ,  rfcbnds,rfpbnds,
      ,  etfbndx,etbbndx,easbndx,eewbndx,efpbndx,efcbndx,esibndx,esebndx,
-     ,  wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,
-     ,  dcobndx, dmobndx,
+     ,  wlmbnds,beebndx,bcobndx,beibndx,bmobndx,bpobndx,rfcbndx,rfpbndx,
+     ,  dcobndx,dmobndx,
      ,  pwrcrtte,pwrcrtti,pwrcrfri,
      ,  rctndlte,rctntmin,rctntmax,rctnenr1,rctnenr2,rctnexcf,
      ,  rctddlte,rctdtmin,rctdtmax,rctdenr1,rctdenr2,
      ,  tgpfstr,tgpfstd,fgpfstr,pgpfstr,dgalloc,
      ,  tgsppff,tgspcff,tgewall,tgabsrp,tgtrnsf,tgtrnsb,ttalloc,
-     ,  xlpcntr,zaator,roator,
+     ,  trfpress,xlpcntr,zaator,roator,
      ,  trisize,trixmin,trixmax,triymin,triymax,pwrhepdt,pmphepdt,
      ,  sps_absr,sps_trno,sps_trni,sps_mtri,sps_tmpr,sps_spph,sps_spch,
      i  nstrao,natmo,nmolo,niono,nphto,nplso,
-     ,  mnpr,mnptseg,npr,nptseg,laddsrfs,indasrfe,indasrfs,
+     ,  mnpr,mnptseg,npr,nptseg,nppol,nprad,nnreg,cflags,fdegen,
+     ,  carre_mode,grid_mode,ncells,nicells,nbcells,nfaces,ndfaces,
+     ,  laddsrfs,indasrfe,indasrfs,
      ,  nttrator,jxi,jxa,ntcpub2,nnvsle,nmvsle,ttntcpu,ttnfile,ttnpts,
      ,  ntrgdflt,namdf,nncut,nxcut1,nycut2,
      ,  nniso,nxiso1,nxiso2,nyiso1,nyiso2,nx,ny,
@@ -584,7 +602,7 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  jnpbndx,jmpbndx,jnibndx,jnebndx,
      ,  leebndx,lcobndx,leibndx,lmobndx,lpobndx,kcobndx,kmobndx,
      ,  nrgbndt,nznbndt,lcmbndt,lrfbndt,lrrbndt,lrpbndt,lrsbndt,lzrbndt,
-     ,  lzpbndt,
+     ,  lzpbndt,lzrbndt_us,
      ,  nnrctn,rctngrp,rctnmsp,rctnmst,rctnnmo1,rctnnmo2,rctnnmo3,
      ,  rctnimn,rctniz,rctnimx,nnrctd,rctdgrp,rctdmsp,rctdmst,
      ,  nspcncl,nspcpls,nspcatm,nspcmol,nspcion,spcsmsp,spcsmsa,spcsmsm,
@@ -600,7 +618,10 @@ c     ,  spcifup,spcifua,spcifum,spcifui,
      ,  listaddi,ngwtiesi,nsrfclu,msrfclu,lsrfclu,isrfclu,
      ,  ntrgte,jedgep,jedgec,jedgeo,ntrgto,ntrgtm,
      ,  tgrefsw,tgsppsw,tgspcsw,tgsppsp,tgspcgr,tgnhst,tgmhst,tgnini,
-     ,  ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
+     ,  trefcell,
+     ,  tgfclbl,ilplgu,jlplgu,ilplgdg,trirefel,trirefcn,ntriref,
+     ,  ntriplg,nntriplg,nsegtriplg,nnsstriplg,triplg,triplgnss,
+     ,  nfclbltriplg,triplgfclbl,
      ,  locphep,lpbihep,lpbohep,lptihep,lptohep,
      ,  j_he_at,j_h_at,j_ne_at,l_h_mol,
      ,  lstclhep,nstclhep,lhetrgts,nhetrgts,

@@ -16,7 +16,7 @@ c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
 #include "uinput.inc"
-      integer ibk,isf,iatm,ispe,ispi
+      integer ibk,isf,iatm,ispe,ispi,ndt,i,k
       external xerrab
 c=======================================================================
       call subini ('uinbnddt')
@@ -26,11 +26,12 @@ c=======================================================================
       ntargi=0
 
 c*** Follow the boundary kinds: core, targets, PFR, outer edge
-
+      ndt = 0 !nh initialization of ndt for the wg format
       do ibk=1,nbndknd !{
         do isf=1,nznbndt(ibk) !{
 c*** First, non-default surface...
           nstsi=nstsi+1
+          ndt = ndt-1
           if(nstsi.ge.nsts) then !{
             write(0,*) 'Too many "non-default surfaces" are specified.',
      ,                                 '  ',ctxbnds(ibk),',  zone',isf
@@ -41,8 +42,10 @@ c*** First, non-default surface...
           write(txtsfl(nstsi),'(a10,i4)') ctxbnds(ibk),isf
           bliin(nstsi)=bbliin(isf,ibk)
           inump(nstsi)=jcpbnds(isf,ibk)
-          irpta1(nstsi)=jc1bnds(isf,ibk)
-          irpte1(nstsi)=jc2bnds(isf,ibk)
+!nh          irpta1(nstsi)=jc1bnds(isf,ibk)
+!nh          irpte1(nstsi)=jc2bnds(isf,ibk)
+          ifclbla(nstsi)=lc1bnds(isf,ibk)  !nh face label needed for triangulation
+          ifclble(nstsi)=lc2bnds(isf,ibk)
           iliin(nstsi)=jskbnds(isf,ibk)
           ilcol(nstsi)=jclbnds(isf,ibk)
           if(iliin(nstsi).eq.2) then !{
@@ -55,7 +58,7 @@ c     ,      isf,ibk,nstsi,' ',cskbnds(isf,ibk),' ',                !###
 c     ,      iliin(nstsi),ilside(nstsi)                             !###
           if(cskbnds(isf,ibk).eq.'W' .or.
      ,                                  cskbnds(isf,ibk).eq.'E') then !{
-            idimp(nstsi)=2
+            idimp(nstsi)=1 !nh always 1 for unstructured version
             ilswch(nstsi)=0
           else if(cskbnds(isf,ibk).eq.'S' .or.
      ,                                 cskbnds(isf,ibk).eq.'N') then !}{
@@ -99,6 +102,8 @@ c*** ... set up the material properties
               recyct(nstsi)= 1-easbnds(isf,ibk)
               transp(nstsi,1)= etfbnds(isf,ibk)
               transp(nstsi,2)= etbbnds(isf,ibk)
+              arefcell(nstsi) = rfcbnds(isf,ibk)
+              arfpress(nstsi) = rfpbnds(isf,ibk)
             end if !}
           end if !}
 c*** ... and then the recycling source if specified
@@ -119,7 +124,7 @@ c*** ... and then the recycling source if specified
             if(nstrai.ge.nstra) then !{
               write(0,*) 'Too many strata requested: ',nstrai
               write(0,*) 'STOP ==> check the DG model and the value ',
-     ,                                 'of DEF_NSTRA in DIMENSIONS.F'
+     ,                            'of DEF_NSTRA in b2mod_dimensions.F'
               call xerrab ('Too many strata requested')
             end if !}
 
@@ -139,7 +144,7 @@ c*** ... and then the recycling source if specified
             nspzi(ntargi,1)=ispi
             nspze(ntargi,1)=ispe
             insor(1,nstrai)=jcpbnds(isf,ibk)
-            ndt2(ntargi,1)=insor(1,nstrai)-1
+            ndt2(ntargi,1)=ndt
             ntin2(ntargi,1)=jc1bnds(isf,ibk)
             nten2(ntargi,1)=jc2bnds(isf,ibk)
             npts(nstrai)=jnpbnds(isf,ibk)
@@ -193,6 +198,32 @@ c*** ... and then the recycling source if specified
           end if !}
         end do !}
       end do !}
+
+cnh   adapt some variables of block 14 for vessel mode
+      if (grid_mode.eq.2) then
+        k=0
+        do i=1,maxval(fclbl)
+          ispe=0
+          do iatm=1,natmi
+            if (is_meta(iatm)) cycle
+            k=k+1
+            ndt2(k,1)=-i
+            ispi=ispe+1
+            ispe=ispi
+            do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+              ispe=ispe+1
+              if (ispe.gt.nplsi) then !{
+                ispe=nplsi
+                exit
+              end if !}
+            end do !}
+            nspzi(k,1)=ispi
+            nspze(k,1)=ispe
+          end do
+        end do
+        nstrai = k
+       end if
+
 c=======================================================================
       call subend ()
       return

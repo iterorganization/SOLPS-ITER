@@ -7,7 +7,7 @@ done;
 ls *_dv.F90 | sed -e 's/_dv.F90//g' >> tmp
 
 SRCPATH="equations"
-# grab the files that have been excluded from differentiation but not the MAIN programs 
+# grab the files that have been excluded from differentiation but not the MAIN programs
 # To facilitate things SRCPATH can be extended to other folders to automatically grab files in new differentiation, but will also get files not stritly needed for TGT compilation
 rm -r temp
 mkdir temp
@@ -132,7 +132,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/nancheck.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/strip_spaces.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/is_comment.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/ratio.F . 
+cp $SOLPSTOP/modules/B2.5/src/utility/ratio.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cpeir_* .
 cp $SOLPSTOP/modules/B2.5/src/utility/epoch_seconds.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/bfill.F .
@@ -140,12 +140,12 @@ cp $SOLPSTOP/modules/B2.5/src/utility/len_of_digits.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/prvrt* .
 cp $SOLPSTOP/modules/B2.5/src/utility/chcase.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/trilinear_int.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/lefta.F . 
+cp $SOLPSTOP/modules/B2.5/src/utility/lefta.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/sys* .
 cp $SOLPSTOP/modules/B2.5/src/utility/intersects.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/jobnam.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/cfvers.F . 
+cp $SOLPSTOP/modules/B2.5/src/utility/cfvers.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/daytim.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/usrnam.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/strcopy.F .

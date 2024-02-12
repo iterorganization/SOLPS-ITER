@@ -24,16 +24,23 @@ TRIASTEM_back=$TRIASTEM
 set -A f -- $TRIATRI
 gkseps=gli.eps
 eirinp=triang.eir
-eirhed=triang.hed
+triahed=triang.hed
 [ "$COMPILER" = 'HP' ] && {
-  eirout=ftn78
-  eirlink=ftn1
+  tripuin=ftn48
+  tripbin=ftn30
+  tripout=ftn78
 } || {
-  eirout=fort.78
-  eirlink=fort.1
+  tripuin=fort.48
+  tripbin=fort.30
+  tripout=fort.78
 }
 b2agout=b2fgmtry
-eirlog=eirtria.log
+b2aiout=b2fstati
+b2ahout=b2fpardf
+b2arout=b2frates
+b2usout=triangle.neighbors
+b2usinp=b2us.dat
+triplog=triainp.log
 triain=tria.in
 trialog=tria.log
 trianodes=tria.${f[0]}
@@ -45,6 +52,9 @@ trignodes=triageom.${f[0]}
 trigcells=triageom.${f[1]}
 triglinks=triageom.${f[2]}
 trigeps=triageom.eps
+b2usnodes=triangle.coordinates
+b2uscells=triangle.elements
+b2uslinks=triangle.neighbors
 STRDAT=structures.dat
 FRNDAT=frontier.dat
 TRNDAT=triangles.dat
@@ -63,6 +73,8 @@ triglnklist="ftn33 ftn34 ftn35"
 } || {
 triglnklist="fort.33 fort.34 fort.35"
 }
+b2usoutlist="$b2usnodes $b2uscells $b2uslinks"
+b2uslnklist=$triglnklist
 
 NAME=`basename $0`
 stty erase ^H
@@ -71,10 +83,10 @@ Help="
 Uinp    (u) run uinp to produce the input files for the initial short run of Eirene;
         (U) run uinp -l to make first the necessary links to the DG output (run first the 
             lns command from the DG environment to link the DG output to the standard place);
-B2ag    (b) run b2ag to produce the $b2agout file;
-Eirene  (e) run eirobjx to produce the geometry data for tria;
+B2a*    (b) run b2ag, b2ai, b2ah and b2ar to produce the B2.5 input files;
+triaiNp (n) run triainp to produce the geometry data / contours for tria;
 Tria    (t) run tria to generate the triangular mesh outside the regular B2.5 grid;
-triaGeom(g) run triageom to combine the triangular mesh with the regular B2.5 grid;
+b2us    (g) run b2us to complete plasma Grid triangulation;
 Plot    (p) produce PostScript plots of the structures and triangular mesh using gnuplot;
 View    (v) view the PostScript output from tria (v) or triageom (V);
 Store   (s) store the combined mesh, giving it a serial number and linking to fort.3[345];
@@ -124,10 +136,11 @@ toolchain=${HOST_NAME}.${COMPILER}
 
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
+TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
-griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
+griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
   [ -s $modelname ] && {
@@ -150,6 +163,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
     n=000
   }
   carrename=$carre_stem.v$n.geo
+  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
 } || {
   print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
   while true; do {
@@ -165,6 +179,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
   }; done
   n=000
   carrename=$carre_stem.v$n.geo
+  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
 }
 
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
@@ -182,6 +197,10 @@ e=
   print -u2 -- "$NAME: $TRIAINQ not found. Check run environment settings"
   e=y
 }
+[ -x "$TRIAINP" ] || {
+  print -u2 -- "$NAME: $TRIAINP not found. Check run environment settings"
+  e=y
+}
 [ -x "$EIRENE" ] || {
   print -u2 -- "$NAME: $EIRENE not found. Check run environment settings"
   e=y
@@ -189,7 +208,7 @@ e=
 [ -n "$e" ] && exit 4
 
 q=U
-[ -L uinput.dg ] && [ -L uinput.trg ] && q=u
+[ -L uinput.dg ] && [ -L uinput.trg ] && [ -L uinput.crr ] && q=u
 
 
 export GRSOFT_DEVICE='62'
@@ -199,7 +218,7 @@ export PLOT_IT_STEM='tria'
 N=
 
 while true; do {
-  print -u2 -n -- "Help, Uinp, B2ag, Eirene, Tria, triaGeom, Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
+  print -u2 -n -- "Help, Uinp, B2ag, triaiNp, Tria, b2us (G), Plot, View, Store, Convert, List, Remove, reMap, Inquire, Quit ? ($q)"
   while true; do {
     read u
     extra="${u#*-}"
@@ -210,9 +229,14 @@ while true; do {
       (  u  )                                               # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp
+            [ -r b2.neutrals.parameters_hybrid.stencil ] && {
+              mv b2.neutrals.parameters_hybrid.stencil b2.neutrals.parameters_hybrid.stencil.tmp
+              sed -e 's:NEUTRALS_HYBRID:NEUTRALS:g' < b2.neutrals.parameters_hybrid.stencil.tmp > b2.neutrals.parameters_hybrid.stencil
+              rm b2.neutrals.parameters_hybrid.stencil.tmp
+            }
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
-              [ -r $eirinp ] && q=e || q=q
+              [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
@@ -225,6 +249,11 @@ while true; do {
       (  U  )                                               # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp -l
+            [ -r b2.neutrals.parameters_hybrid.stencil ] && {
+              mv b2.neutrals.parameters_hybrid.stencil b2.neutrals.parameters_hybrid.stencil.tmp
+              sed -e 's:NEUTRALS_HYBRID:NEUTRALS:g' < b2.neutrals.parameters_hybrid.stencil.tmp > b2.neutrals.parameters_hybrid.stencil
+              rm b2.neutrals.parameters_hybrid.stencil.tmp
+            }
             [ -L uinput.dg ] && {
               TRIADIR=$TRIADIR_back
               TRIASTEM=$TRIASTEM_back
@@ -232,7 +261,7 @@ while true; do {
             }
             N=
             [ -r $b2agout ] && [ b2ag.dat -nt structure.dat ] && {
-              [ -r $eirinp ] && q=e || q=q
+              [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
                 ln -sf $griddir/$carre_stem.v$n.geo .
@@ -242,7 +271,7 @@ while true; do {
               [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
-      ( b|B )                                               # run b2ag to produce fort.30 file:
+      ( b|B )                                               # run b2ag/i/h to produce fort.30 file and b2 input files
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
             [ -r b2ag.prt ] && rm b2ag.prt
             [ -r $b2agout ] && rm $b2agout
@@ -250,47 +279,91 @@ while true; do {
             [ -r $b2agout ] && {
               [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
               print -u2 -- "Produced $b2agout file"
-              q=e
             } || {
               print -u2 -- "Could not produce the $b2agout file"
               print -u2 -- "    ==> Check b2ag.log file or provide separately"
               q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log"
+            [ -r b2ai.prt ] && rm b2ai.prt
+            [ -r $b2aiout ] && rm $b2aiout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log
+            [ -r $b2aiout ] && {
+              [ -d b2ai.exe.dir ] && rmdir b2ai.exe.dir
+              print -u2 -- "Produced $b2aiout file"
+            } || {
+              print -u2 -- "Could not produce the $b2aiout file"
+              print -u2 -- "    ==> Check b2ai.log file or provide separately"
+              q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log"
+            [ ! -r b2ah.dat ] && {
+              [ -r b2ah.dat.stencil ] && {
+               ln -sf b2ah.dat.stencil b2ah.dat
+              } || {
+                print -u2 -- "Could not find b2ah.dat(.stencil) file"
+                print -u2 -- "    ==> Check b2ah.log file or provide separately"
+                q=u
+                break
+              }
+            }
+            [ -r b2ah.prt ] && rm b2ah.prt
+            [ -r $b2ahout ] && rm $b2ahout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log
+            [ -r $b2ahout ] && {
+              [ -d b2ah.exe.dir ] && rmdir b2ah.exe.dir
+              print -u2 -- "Produced $b2ahout file"
+            } || {
+              print -u2 -- "Could not produce the $b2ahout file"
+              print -u2 -- "    ==> Check b2ah.log file or provide separately"
+              q=u
+              break
+            }
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log"
+            [ -r b2ar.prt ] && rm b2ar.prt
+            [ -r $b2arout ] && rm $b2arout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log
+            [ -r $b2arout ] && {
+              [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
+              print -u2 -- "Produced $b2arout file"
+              q=n
+            } || {
+              print -u2 -- "Could not produce the $b2arout file"
+              print -u2 -- "    ==> Check b2ar.log file or provide separately"
+              q=u
             }
             break;;
-      ( e|E )                                               # run EIRENE to make input file for TRIA:
-            [ -r AMJUEL ] || {
-              setup_baserun_eirene_links ; rm b2.log b2.log.gz ; rmdir tracing batch_av run_av
-            } 
-            [ -r $b2agout ] && {
-              [ -r $eirinp ] && {
+      ( n|N )                                               # run TRIAINP to make input file for TRIA:
+            [ -r $tripbin ] && {
+              [ -r $tripuin ] && {
                 N=
-                print -u2 -- "Starting Eirene - may take a while..."
-                print -u2 -- "Command line: $EIRENE > $eirlog"
-                [ -r $eirout ] && rm $eirout
-                ln -sf "$eirinp" "$eirlink"
-                $EIRENE > "$eirlog"
-                rm $eirlink fort.85
-                [ -s "$eirout" ] && [ -r "$eirout" ] && {
-                  [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
-                    (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"
+                print -u2 -- "Starting triainp"
+                print -u2 -- "Command line: $TRIAINP > $triplog"
+                [ -r $tripout ] && rm $tripout
+                "$TRIAINP" > "$triplog"
+                [ -s "$tripout" ] && [ -r "$tripout" ] && {
+                  [ -s "$triahed" ] && [ -r "$triahed" ] && {
+                    (cat "$triahed"; tail --lines=+2 "$tripout") > "$triain"
                   } || {
-                    cp "$eirout" "$triain"
-                    print -u2 -- "No $eirhed file found, using default provided by Eirene instead"
+                    cp "$tripout" "$triain"
+                    print -u2 -- "No $triahed file found, using default provided by TRIAINP instead"
                   }
                   q=t
                   true
                 } || {
-                  print -u2 -- "No valid $eirout file created ==> Check $eirlog"
+                  print -u2 -- "No valid $tripout file created ==> Check $triplog"
                   q=u
                 }
               } || {
-                print -u2 -- "No $eirinp - run uinp first"
+                print -u2 -- "No $tripuin - run uinp first"
                 q=u
                 [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
               }
               true
             } || {
-              print -u2 -- "No $b2agout - run b2ag or b2plot first"
+              print -u2 -- "No $tripbin - run b2ag first"
               q=b
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
@@ -308,48 +381,163 @@ while true; do {
               check_files $triaoutlist && q=g || {
                 print -u2 -- "Not all output files, $triaoutlist, are produced"
                 print -u2 -- "    ==> Check $trialog"
+                print -u2 -- "For extended cases without void regions, proceed with (f)"
                 q=p
               }
+              q=g
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
               q=u
             } 
             break;;
-      ( g|G )                                               # run TRIAGEOM to make combined mesh:  
-            [ -r $b2agout ] && [ -s $b2agout ] && {
-              check_files $triaoutlist && {
-                N=
-                print -u2 -- "Starting a TRIAGEOM run"
-                print -u2 -- "Command line: $TRIAGEOM > $triglog"
-                "$TRIAGEOM" > $triglog
-                [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
-                check_files $trigoutlist && {
-                  q=s
-                  set -A L -- $triglnklist
-                  ln -sf $trignodes ${L[0]}
-                  ln -sf $trigcells ${L[1]}
-                  ln -sf $triglinks ${L[2]}
-                } || {
-                  print -u2 -- "Not all output files, $trigoutlist, are produced"
-                  print -u2 -- "    ==> Check $triglog"
-                  q=u
-                }
-                true
-              } || {
-                print -u2 -- "Not all valid input files, $triaoutlist, are present"
-                print -u2 -- "Probably, some of the previous steps forgotten?"
-                q=t 
+      ( g|G )                                               # run b2us to triangulate unstructured plasma Grid and build combined mesh
+            #[ -r $b2agout ] && [ -s $b2agout ] && {
+            #  check_files $triaoutlist && {
+            #    N=
+            #    print -u2 -- "Starting a TRIAGEOM run"
+            #    print -u2 -- "Command line: $TRIAGEOM > $triglog"
+            #    "$TRIAGEOM" > $triglog
+            #    [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
+            #    check_files $trigoutlist && {
+            #      q=g
+            #      set -A L -- $triglnklist
+            #      ln -sf $trignodes ${L[0]}
+            #      ln -sf $trigcells ${L[1]}
+            #      ln -sf $triglinks ${L[2]}
+            #    } || {
+            #      print -u2 -- "Not all output files, $trigoutlist, are produced"
+            #      print -u2 -- "    ==> Check $triglog"
+            #      q=u
+            #    }
+            #    true
+            #  } || {
+            #    print -u2 -- "Not all valid input files, $triaoutlist, are present"
+            #    print -u2 -- "Probably, some of the previous steps forgotten?"
+            #    q=t 
+            #  }
+            #  true
+            #} || {
+            #  print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
+            #  q=b
+            #}
+            print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
+            [ -r $b2usinp ] && {
+              [ -r b2mn.dat ] && {
+                mv b2mn.dat b2mn.dat.triang_backup 
               }
-              true
+              ln -s $b2usinp b2mn.dat
             } || {
-              print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
+              print -u2 -- "Could not find the $b2usinp file"
+              print -u2 -- "    ==> Rerun uinp or provide separately"
+              q=u
+              break
+            }
+            [ ! -r b2.boundary.parameters ] && {
+              [ -r b2.boundary.parameters.stencil ] && {
+               ln -sf b2.boundary.parameters.stencil b2.boundary.parameters
+              } || {
+                print -u2 -- "Could not find b2.boundary.parameters(.stencil) file"
+                print -u2 -- "    ==> Rerun uinp or provide separately"
+                [ -r b2mn.dat.triang_backup ] && {
+                  rm b2mn.dat
+                  mv b2mn.dat.triang_backup b2mn.dat
+                }
+                q=u
+                break
+              }
+            }
+            [ ! -r b2.neutrals.parameters ] && {
+              [ -r b2.neutrals.parameters.stencil ] && {
+               ln -sf b2.neutrals.parameters.stencil b2.neutrals.parameters
+              } || {
+                print -u2 -- "Could not find b2.neutrals.parameters(.stencil) file"
+                print -u2 -- "    ==> Rerun uinp or provide separately"
+                [ -r b2mn.dat.triang_backup ] && {
+                  rm b2mn.dat
+                  mv b2mn.dat.triang_backup b2mn.dat
+                }
+                q=u
+                break
+              }
+            }
+            [ -r b2fgmtry ] || {
+              print -u2 -- "Could not find b2fgmtry file"
+              print -u2 -- "    ==> Rerun B2a* or provide separately"
+              [ -r b2mn.dat.triang_backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
+              }
               q=b
+              break
+            }
+            [ -r b2fstati ]  || {
+              print -u2 -- "Could not find b2fstati file"
+              print -u2 -- "    ==> Rerun B2a* or provide separately"
+              [ -r b2mn.dat.triang_backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
+              }
+              q=b
+              break
+            }
+            check_files $triaoutlist && {
+              ln -sf $trianodes fort.33
+              ln -sf $triacells fort.34
+              ln -sf $trialinks fort.35
+            } || {
+              print -u2 -- "Did not find void triangulation files"
+              print -u2 -- "    ==> only creating triangulation plasma region"
+            }
+            [ -r input.eir ] && {
+              ln -sf input.eir input.dat
+            } || {
+              print -u2 -- "Could not find input.eir file"
+              print -u2 -- "    ==> Rerun Uinp or provide separately"
+              q=u
+              break
+            }
+            [ -r b2us.prt ] && rm b2us.prt
+            [ -r $b2usout ] && rm $b2usout
+            ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log
+            [ -r $b2usout ] && {
+              [ -d b2us.exe.dir ] && rmdir b2us.exe.dir
+              [ -r b2mn.dat.triang_backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
+              }
+              check_files $b2usoutlist && {
+                  q=s
+                  set -A L -- $b2uslnklist
+                  ln -sf $b2usnodes ${L[0]}
+                  ln -sf $b2uscells ${L[1]}
+                  ln -sf $b2uslinks ${L[2]}
+                  [ -r input.dat.us    ] && {
+                    rm input.dat
+                    mv input.dat.us input.dat
+                   }
+                } || {
+                  print -u2 -- "Not all output files, $b2usoutlist, are produced"
+                  print -u2 -- "    ==> Check b2us.log"
+                  q=u
+                  break
+                }
+
+              print -u2 -- "Produced $b2usout file"
+              q=s
+            } || {
+              print -u2 -- "Could not produce the $b2usout file"
+              print -u2 -- "    ==> Check b2us.log file or provide separately"
+              [ -r b2mn.dat.triang_backup ] && {
+                rm b2mn.dat
+                mv b2mn.dat.triang_backup b2mn.dat
+              }
+              q=u
             }
             break;;
       ( s|S )                                             # assign a serial number and store the mesh:
-            check_files $trigoutlist && q=c || {
-              print -u2 -- "Not all output files, $trigoutlist, are produced"
+            check_files $trigoutlist || check_files $b2usoutlist && q=c || {
+              print -u2 -- "Not all output files, $b2usoutlist, are produced"
               print -u2 -- "Probably, some of the previous steps forgotten?"
               q=g
               break
@@ -369,7 +557,7 @@ while true; do {
               }; done
             }
             N=
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               n=`get_serial_number -d "$TRIADIR" -p "$TRIASTEM.*.$x" -s $POS -l $LEN` || {
                 print -u2 -- "$NAME: error $? reported from get_serial_number:"
                 print -u2 -- "get_serial_number -d \"$TRIADIR\" -p \"$TRIASTEM.*.$x\" -s $POS -l $LEN n"
@@ -378,7 +566,7 @@ while true; do {
               }
               [ -z "$N" ] && N=$n || { [ "$N" -lt "$n" ] && N=$n; }
             }; done
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               while [ -e "$TRIADIR/$TRIASTEM.$N.$x" ]; do {
                 ((n+=1))
                 while [ $LEN -gt ${#n} ]; do n="0$n"; done
@@ -388,9 +576,9 @@ while true; do {
             }; done
             print -u2 -- "The serial number selected for the mesh is $N"
             set -A X -- $TRIAFTN
-            set -A f -- $trigoutlist
+            set -A f -- $b2usoutlist
             i=0
-            for x in $TRIAEXT; do {
+            for x in $B2USEXT; do {
               mv ${f[i]} "$TRIADIR/$TRIASTEM.$N.${x}" && ln -sf "$TRIADIR/$TRIASTEM.$N.${x}" fort.${X[i]} || {
                 print -u2 -- "$NAME: error while moving files."
                 print -u2 -- "$f $TRIADIR/$TRIASTEM.$N.${x[i]} fort.${X[i]}"
@@ -400,7 +588,7 @@ while true; do {
               ((i+=1))
             }; done
             unset f X
-            q=c 
+            q=c
             break;;
       (  c  )                                               # convert the TRIA result to template:
             check_files $triaoutlist && {
@@ -467,15 +655,15 @@ while true; do {
             }
             unset f 
             break;;
-      (  C  )                                               # convert the TRIAGEOM result to template:
+      (  C  )                                               # convert the TRIAGEOM / B2US result to template:
             [ X"$extra" = X ] && NN="$N" || set -A NN -- $extra
             [ -z "$NN" ] && {
-              check_files $trigoutlist && {
+              check_files $b2usoutlist && {
                 stem="template.g"
-                set -A f -- $trigoutlist
+                set -A f -- $b2usoutlist
                 true
               } || {
-                print -u2 -- "Not all the files in $trigoutlist are present ==> run TRIAGEOM first?"
+                print -u2 -- "Not all the files in $b2usoutlist are present ==> run B2US first?"
                 q=g
               }
               true
@@ -483,15 +671,15 @@ while true; do {
                 while [ $LEN -gt ${#NN} ]; do NN="0$NN"; done
                 stem="template.g$NN"
                 list=
-                for x in $TRIAEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
+                for x in $B2USEXT; do list="$list $TRIADIR/$TRIASTEM.$NN.$x"; done
                 check_files $list && set -A f -- $list || {
-                  print -u2 -- "Not all the files $TRIASTEM.$NN.{$TRIAEXT} are present in $TRIADIR"
+                  print -u2 -- "Not all the files $TRIASTEM.$NN.{$B2USEXT} are present in $TRIADIR"
                   q=l
                   break
                 }
               }
               i=0
-              for x in $TRIATRI; do {
+              for x in $B2USEXT; do {
                 ln -sf ${f[i]} $stem.$x || {
                   print -u2 -- "Unable to link ${f[i]} to $stem.$x ==> check the file permissions"
                   q=q
@@ -609,7 +797,7 @@ while true; do {
               e="$e $n"
             }; done
             excom=`comma_separate ${e# }`
-            tricom=`comma_separate $TRIAEXT`
+            tricom=`comma_separate $B2USEXT`
             L="${excom:=*}"
             listi=`ls $TRIADIR/$TRIASTEM.$L.$tricom | sed -e '1,$s,^.*/,,' -e '1,$s/\./ /g' | awk '{print $3}' | sort -u`
             listo=
@@ -635,7 +823,7 @@ while true; do {
               e="$e $n"
             }; done
             excom=`comma_separate ${e# }`
-            tricom=`comma_separate $TRIAEXT`
+            tricom=`comma_separate $B2USEXT`
             [ -z "$CNVTRIOUT" ] && { 
               CNVTRIOUT=$SOLPSTOP/modules/DivGeo/device/$DEVICE
             }

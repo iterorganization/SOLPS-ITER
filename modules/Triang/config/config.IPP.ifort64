@@ -23,6 +23,8 @@ GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 #LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
 
+MAKETAGS = etags -o
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:

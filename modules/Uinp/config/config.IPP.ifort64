@@ -14,6 +14,8 @@ endif
 
 CPP      = /lib/cpp -C -traditional -ffreestanding
 
+MAKETAGS = etags -o
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:

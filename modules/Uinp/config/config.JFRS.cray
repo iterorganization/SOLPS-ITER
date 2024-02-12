@@ -9,7 +9,7 @@ ifdef SOLPS_DEBUG
 FFLAGS  += -g -O0 -G0 -Rb -K trap=fp -K trap=divz
 endif
 
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -traditional
 

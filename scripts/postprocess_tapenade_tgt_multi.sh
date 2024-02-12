@@ -50,7 +50,7 @@ sed -i "/\*nkind_coeff/d" b2mn_d.F90
 
 sed -i -e '/enkpard(nd, :, :) = 0.D0/d' b2mod_driver_diffv.F90
 sed -i -e '/parm_dnad(nd, 1) = 0.D0/d' b2tqna_dv.F90
-sed -i -e '/parm_hced(nd) = 0.D0/d' b2tqna_dv.F90 
+sed -i -e '/parm_hced(nd) = 0.D0/d' b2tqna_dv.F90
 sed -i -e '/parm_hcid(nd, 1) = 0.D0/d' b2tqna_dv.F90
 sed -i -e '/tdatad(nd, :, :, :, :) = 0.D0/d' b2mod_input_profile_diffv.F90
 sed -i -e '/fd(nd, i) = 0.D0/d' b2mod_input_profile_diffv.F90

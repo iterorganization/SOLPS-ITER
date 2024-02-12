@@ -63,7 +63,9 @@ c*** Default boundary conditions
      ,  (eewbndx(0,i),i=1,nbndknd), (efpbndx(0,i),i=1,nbndknd) /
      /    nbndknd*-0.1    ,   nbndknd*1.     /,
      ,  (efcbndx(0,i),i=1,nbndknd), (ewmbndx(0,i),i=1,nbndknd) /
-     /    nbndknd*1.    ,    nbndknd*'C'         /,
+     /    nbndknd*1.    ,    nbndknd*'C'     /,
+     ,  (rfcbndx(0,i),i=1,nbndknd), (rfpbndx(0,i),i=1,nbndknd) /
+     /    nbndknd*0     ,    nbndknd*0.      /,
      ,  (nlrbndx(0,i),i=1,nbndknd),  (jnpbndx(0,i),i=1,nbndknd)/
      /      0, 3*1    ,       2000,25000,2*2000    /,
      ,  (jmpbndx(0,i),i=1,nbndknd)/
@@ -71,9 +73,9 @@ c*** Default boundary conditions
      ,  (jnibndx(0,i),i=1,nbndknd),  (jnebndx(0,i),i=1,nbndknd)/
      /      4*10001     ,         6, 7, 6, 6       /,
      ,  (leebndx(0,i),i=1,nbndknd), (leibndx(0,i),i=1,nbndknd) /
-     /         8, 3, 9, 9   ,    8, 3, 9, 9        /,
+     /         8,15, 9, 9   ,    8,15, 9, 9        /,
      ,  (lpobndx(0,i),i=1,nbndknd)/
-     /        12, 3,13,13         /,
+     /        12,11,13,13         /,
      ,  ((lcobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
      /    nsdb2*1, nsdb2*3, nsdb2*9, nsdb2*9        /,
      ,  ((lmobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
@@ -96,12 +98,12 @@ c*** Default boundary conditions
 c*** Default boundary conditions for particular species
 
       data kcobndx /
-     ,  4*1,    7*8, nspdgen*3, nspdgen*9, nspdgen*9,
-     ,  4*1,8,1,5*8, nspdgen*3, nspdgen*9, nspdgen*9 /
-      data kmobndx / nspdgen*2, nspdgen*3, nspdgen*2, nspdgen*2,
-     ,               nspdgen*2, nspdgen*3, nspdgen*2, nspdgen*2 /
+     ,  4*1,    7*8, nspdgen*14, nspdgen*9, nspdgen*9,
+     ,  4*1,8,1,5*8, nspdgen*14, nspdgen*9, nspdgen*9 /
+      data kmobndx / nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2,
+     ,               nspdgen*2, nspdgen*13, nspdgen*2, nspdgen*2 /
       data    ((dcobndx(j,1,i,1),j=1,nspdgen),i=1,nbndknd)   /
-     /      3*3.e19,8*0., nspdgen*0., nspdgen*0.03,
+     /      3*3.e19,8*0., nspdgen*1., nspdgen*0.03,
      ,                                          nspdgen*0.03 /,
      ,        ((dcobndx(j,2,i,1),j=1,nspdgen),i=1,nbndknd) /
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /,
@@ -111,7 +113,7 @@ c*** Default boundary conditions for particular species
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /
       data    ((dcobndx(j,1,i,2),j=1,nspdgen),i=1,nbndknd) /
      /      3*3.e19,2.e18,7*0.,
-     ,                nspdgen*0.,nspdgen*0.03,nspdgen*0.03 /,
+     ,                nspdgen*1.,nspdgen*0.03,nspdgen*0.03 /,
      ,        ((dcobndx(j,2,i,2),j=1,nspdgen),i=1,nbndknd) /
      /      nspdgen*0., nspdgen*0., nspdgen*0., nspdgen*0. /,
      ,        ((dmobndx(j,1,i,2),j=1,nspdgen),i=1,nbndknd) /
@@ -147,8 +149,8 @@ c*** Data for TRIA mesh
 
 c*** 1
 
-      data nmach, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /       2  ,   1   ,  50  , 5306 ,   1   ,   1  ,   0   ,   1   /,
+      data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
+     /      -1  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
      ,   nstoram, ngstal,nrtal1,nreac_add /
@@ -182,9 +184,9 @@ c*** 2
      ,     volcor , voladd  /
      /    nbmax*1., nadd*1. /
       data  nlrad , nlslb , nlcrc , nlell , nltri , nlplg /
-     /      .true.,.false.,.false.,.false.,.false., .true./,
+     /      .true.,.false.,.false.,.false.,.false.,.false./,
      ,      nlfem , nltet , nlgen /
-     /     .false.,.false.,.false./,
+     /     .true. ,.false.,.false./,
      ,      nlpol , nlply , nlpla , nlplp , nltor /
      /      .true.,.false.,.false.,.false.,.false./,
      ,      nltrz , nltra , nltrt , nlmlt , nladd /
@@ -193,19 +195,23 @@ c*** 2
 c*** 3a
 
       data  nstsi , idimp , inump , irpta1, irpte1,  iliin , ilside /
-     /        0   , nsts*2, nsts*1, nsts*1, nsts*0, nsts*-1, nsts*0 /,
+     /        0   , nsts*2, nsts*1, nsts*1, nsts*1, nsts*-1, nsts*0 /,
      ,      ilswch, ilequi, ilcol , irpta2, irpte2, irpta3, irpte3 /
      /      nsts*0, nsts*0, nsts*6, nsts*0, nsts*0, nsts*0, nsts*0 /,
+     ,      ifclbla, ifclble /
+     /      nsts*0 , nsts*0  /,
      ,     iltor  , ilfit , ilplg , ilbox , ilcell/
      /     nsts*0 , nsts*0, nsts*0, nsts*0, nsts*0/,
      ,     ilref  , ilsptp, ilsptc, isrss ,  isrc ,lchspnws, isrsg  /
-     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /
+     /     nsts*1 , nsts*0, nsts*0, nsts*0, nsts*0, nsts*0 , nsts*0 /,
+     ,    arefcell/
+     /     nsts*0 /
       data  xmlim   ,   ewall   ,  ewbin ,    transp     , fsheat /
      /    nsts*1206., nsts*0.087, nsts*0.,nsts*0.,nsts*0.,nsts*-1./,
      ,     recycf , recyct , recprm , recycs ,  exppl ,  expel    /
      /     nsts*1., nsts*1., nsts*0., nsts*0., nsts*1., nsts*0.5  /,
-     ,      expil , recycc , echspts, fchspts, sptprm  /
-     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0. /
+     ,      expil , recycc , echspts, fchspts, sptprm , arfpress  /
+     /     nsts*1.,nsts*0.01,nsts*0., nsts*0., nsts*0.,  nsts*0.  /
       data  ctxbnds / 'Core side','Target','PFR side','Outer side'/
       data tgdtinpt / .false. /
 
@@ -220,8 +226,8 @@ c*** 3b
      ,    nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
      ,     jlref, jlsptp, jlsptc,  jsrss,  jsrc, lchspnwa, jsrsg /
      /    nlim*1, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0, nlim*0 /,
-     ,     itini,  itend /
-     /   nlim*-1, nlim*0 /
+     ,     itini,  itend,refcell,  fclbl /
+     /   nlim*-1, nlim*0, nlim*0, nlim*0 /
       data  rlb  , sarea , rlwmn ,   rlwmx  , a0lm  , a1lm  , a2lm  /
      /    nlim*2.,nlim*1.,nlim*1.,nlim*1.e-5,nlim*0.,nlim*0.,nlim*0./,
      ,     a3lm  , a4lm  , a5lm  , a6lm  , a7lm  , a8lm  , a9lm  /
@@ -245,7 +251,9 @@ c*** 3b
      ,      xlcor ,  ylcor ,  zlcor  /
      /    nlim*0., nlim*0., nlim*0. /,
      ,     xlref , ylref , zlref , xlrot , ylrot , zlrot , alrot /
-     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./
+     /    nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0.,nlim*0./,
+     ,   refpress /
+     /    nlim*0. /
       data txtsfa / nlim*' ' /
 
 c*** 4
@@ -258,14 +266,14 @@ c*** 4
      /    mreac*0.,mreac*0.,mreac*0.,mreac*0.,mreac*0.,lur6*0.,lur6*0./
       data creac / lur9*0. /
       data lconst / mreac*.false. /
-      data filnam ,    h123  ,   reac  ,   crc   , elname   /
-     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /
+      data filnam ,    h123  ,   reac  ,   crc   , elname  , bundling /
+     /    mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ', mreac*' '/
 
       data rctndflt / .true. /,
      ,  rctntyp , rctndbs , rctnchp , rctnrct , rctnptpr, rctnptin /
      / mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ',mreac*' ' /,
-     ,  rctnpto1, rctnpto2, rctnpto3 /
-     / mreac*' ',mreac*' ',mreac*' ' /,
+     ,  rctnpto1, rctnpto2, rctnpto3, rctnbdl /
+     / mreac*' ',mreac*' ',mreac*' ',mreac*' '/,
      ,  rctngrp , rctnmsp , rctnmst , rctnnmo1 /
      /  mreac*0 , mreac*0 , mreac*0 , mreac*0  /,
      ,  rctnnmo2, rctnnmo3 /
@@ -667,6 +675,7 @@ c*** 5
       parameter (lurp=nreac*npls, lurc=nrcdn*npls)
       parameter (lup5=5*npls, lup6=6*npls)
       data nplsi / 0 /
+      data nplsh / 0 / !nh neutral background species for the hybrid model
       data nbgk / 0 /
       data nmassp,ncharp, nprtp,nchrgp, isrfp, isrtp,nmsecp, nrcp  /
      /     npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0,npls*0 /,
@@ -674,9 +683,12 @@ c*** 5
      /     npls*0,npls*0,npls*0,npls*0 /,
      ,     ireacp,ibulkp,iscd1p,iscd2p,iscd3p,iscd4p,iscdep /
      /     lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0,lurp*0 /
+      data nmassph, isrfph, isrtph /
+     /     npls*0 ,npls*0 , npls*0 /
       data eelecp, ebulkp, escd1p, escd2p, freacp /
      /    lurp*0.,lurp*0.,lurp*0.,lurp*0.,lurp*0. /
       data textp / npls*' ' /
+      data textph / npls*' ' /
       data cdnmdlp_sel/
      /   'FORT.13', 'FTN13', 'FORT.10', 'FTN10',
      /   'CONSTANT','PLANCK','MULTIPLY','SAHA','BOLTZMANN','CORONA',
@@ -696,6 +708,7 @@ c*** 5
       data vx0,vx1,vx2,vx3,vx4,vx5 / lup6*0./
       data vy0,vy1,vy2,vy3,vy4,vy5 / lup6*0./
       data vz0,vz1,vz2,vz3,vz4,vz5 / lup6*0./
+      data zi0,zi1,zi2,zi3,zi4,zi5 / lup6*0./
       data b0,b1,b2,b3,b4,b5       / 6*0./
       data vl0,vl1,vl2,vl3,vl4,vl5 / 6*0./
 
@@ -715,8 +728,10 @@ c*** 6
      ,      rprob0 , rinteg  , einteg  , ainteg , achsptg  /
      /        0.1  ,   0.    ,   0.    ,   0.   , lvchsr*0./
       data scard_name /maxsc*' ' /
-      data scilref,scilspt, scisrs, scisrc,sclchspnwl /
-     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1   /
+      data scilref,scilspt, scisrs, scisrc,sclchspnwl,screfcell /
+     /     maxsc*1,maxsc*0,maxsc*0,maxsc*0, maxsc*1  ,maxsc*0   /,
+     ,     screfpress /
+     ,     maxsc*0.   /
       data scxmlim, scewall, scewbin,    sctransp     ,scfsheat /
      /    maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*0.,maxsc*-1. /,
      ,    screcycf,screcyct, scrcprm, scexppl, scexpel ,scexpil /
@@ -725,6 +740,8 @@ c*** 6
      /    maxsc*0., maxsc*0., maxsc*0., maxsc*0.,maxsc*0. /
       data nnchemvar,indchemvar, chvarname , chmspname , chmvar    /
      /      maxsc*0 , maxchsc*0,maxchsc*' ',maxchsc*' ',maxchsc*0. /
+      data dplsh  /
+     /    npls*0 /
 
 c*** 7
 
@@ -740,7 +757,9 @@ c*** 7
       data  nstrai,alloc,indsrc ,  npts  , ninitl, nemods , namods  /
      /         0  , 0.5 ,nstra*6,nstra*-1,nstra*-1, nstra*6, nstra*1 /,
      , nminpts, ivlsf , iscls , isclt , iscl1 , iscl2 , iscl3 , isclb /
-     / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/
+     / nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0,nstra*0/,
+     , nptsh /
+     / nstra*-1 /
       data iscla , nspez  , nsrfsi,  indim ,  insor ,  nrsor  , npsor  /
      /    nstra*0,nstra*-1,nstra*1,lustsr*1,lustsr*1,lustsr*-1,lustsr*0/
       data ntsor ,  nbsor ,  nasor ,  nisor , istor,  ingrda , ingrde /
@@ -920,15 +939,21 @@ c*** 14
       data nclmi,nblcki,nprnvi,nprtvi,nprdvi, nfla , ncutb, lkindp  /
      /        5 , -25  ,  1   , 350  ,  1   ,   0  ,   0  , npls*0  /,
      ,     ncutl, imf  ,ntrfrm, nfull, ibrad, ibpol, ibtor /
-     /       1  ,   0  ,  0   ,   0  ,  1   ,    1 ,   1   /,
-     ,     iflb , ndxa , ndya ,ntargi, ntgprt, ndt2  /
-     /    npls*1,  0   ,  0   ,  0   ,nstep*1,lusg*0 /,
+     /       1  ,   0  ,  1   ,   0  ,  0   ,    1 ,   1   /,
+     ,     iflb , ndxa , ndya , ncvp , ncip , nfcp ,ntargi, ntgprt /
+     /    npls*1,  0   ,  0   ,  0   ,  0   ,  0   ,  0   ,nstep*1 /,
+     ,    ndt2   /
+     /    lusg*0 /,
      ,    ninct2, nixy2, ntin2, nten2, niflg,  nptc , nptcm, nspzi /
      /    lusg*0,lusg*0,lusg*0,lusg*0,lusg*0, lusg*0,lusg*0,lusg*0 /,
      ,     nspze, nemod, nainb, naotb,istramin,istramax,ncopib,ncopeb /
-     /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
+     /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /,
+     ,     iflbh /
+     /    npls*1 /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
-     /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
+     /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /,
+     ,   fcteh  , bmassh  , lkindph /
+     /   npls*1., npls*0. , npls*0  /
       data lsymet,lbalan,lcoarse, lfchgs,lsprcl /
      /    .false.,.true.,.false.,.false.,.true. /
 
@@ -940,12 +965,14 @@ c*** 15
      /        0  ,nnadmod*0,nnadmod*0,  16*0 /
       data xcoor   ,  ycoor   ,  zcoor   ,xpolpos,ypolpos /
      /   nnadmod*0.,nnadmod*0.,nnadmod*0.,  8*0. ,  8*0.  /
+      data nssir /    !nh 07.07.23
+     /   8*0 /
 
 c*** Data for Eirene test run
 
       data
      , ttntcpu,ttnfile, ttnpts, ttalloc,tttest,ttcsrc,ttcsur,ttcint /
-     /    50  , 10100 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
+     /    50  , 10600 , nstra*5,   0.  ,.true.,.true.,.true.,.true. /,
      , ttchst,ttcref,ttcamd,ttcsou,ttcbla,ttcblm,ttcbli,ttcblp,ttcble /
      / .true.,.true.,.true.,.true.,.true.,.true.,.true.,.true.,.true. /,
      , ttcblph,ttctal,ttcoct,ttccen,ttcrnf /
@@ -962,7 +989,7 @@ c*** Data for Eirene test run
 c*** Data for diagnostic run
 
       data lntspcu,lntsptu,nmcsptu,dgntcpu,dgnptsfc,dgnfile,dgalloc /
-     /        1   ,   0   ,   0   ,  1200 ,   10   , 00100 ,  0.5   /
+     /        1   ,   0   ,   0   ,  1200 ,   10   , 10606 ,  0.5   /
 
 c*** Data for b2ah.dat.stencil file
 

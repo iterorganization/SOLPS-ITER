@@ -6,6 +6,8 @@ ifndef COMPILER
 $(error COMPILER not defined)
 endif
 
+MAKETAGS ?= ctags -e -f
+
 MAKES = Makefile
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
@@ -24,7 +26,7 @@ ifndef SOLPS_CPP
     MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
   endif
 else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
   ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
     MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
   endif
@@ -110,9 +112,16 @@ endif
 ifdef NCDIR
 SOLPSINCLUDE += -I${NCDIR}/include
 endif
-SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include -I${SRCDIR}/Eirene_commons
+SOLPSINCLUDE += -I${SRCDIR}/B2.5_include -I${SRCDIR}/B2.5_commons -I${SRCDIR}/B2_include
+ifeq ($(shell [ -d ${SRCDIR}/Eirene_commons ] && echo yes || echo no ),yes)
+SOLPSINCLUDE += -I${SRCDIR}/Eirene_commons
+endif
 TAGSLIST += ${SRCDIR}/*_commons/*.[hH] ${SRCDIR}/*/*.F ${SRCDIR}/*.F
 VPATH += ${SRCDIR}/B2.5_modules:${SRCDIR}:${SRCDIR}/solps4_B2:${SRCDIR}/solps4_Eirene:${SRCDIR}/solps5
+
+ifeq ($(shell [ -s ${SRCDIR}/B2.5_modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DEFINES += -DDIMENSIONS_MODULE
+endif
 
 include ${S45DIR}/config/compile
 MAKES += ${S45DIR}/config/compile ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}
@@ -395,6 +404,9 @@ ${OBJDIR}/eirmod_ctrig.o:
 ${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
 
+${OBJDIR}/eirmod_wneutrals.o:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_mpi.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/eirmod_mpi.F90 ${MAKES}
 	${DBLFC} ${DDBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirmod_mpi.o -c ${SRCDIR}/Eirene_modules/eirmod_mpi.F90
 
@@ -650,6 +662,9 @@ ${OBJDIR}/eirmod_ctrig.${MOD}:
 
 ${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_wneutrals.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_wneutrals.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/parmmod.${MOD}
 	ln -sf ${OBJDIR}/parmmod.${MOD} $@
@@ -994,7 +1009,7 @@ endif
 ${BASEDIR}/TAGS: tags
 
 tags:
-	rm -f ${BASEDIR}/TAGS ; ctags -e -f ${BASEDIR}/TAGS ${TAGSLIST} || touch ${BASEDIR}/TAGS
+	rm -f ${BASEDIR}/TAGS ; ${MAKETAGS} ${BASEDIR}/TAGS ${TAGSLIST} || touch ${BASEDIR}/TAGS
 
 clean:
 	rm -f ${OBJDIR}/*.f ${OBJDIR}/*.f90 ${OBJDIR}/*.o ${OBJDIR}/*.${MOD} ${OBJDIR}/*.a ${OBJDIR}/*.exe
@@ -1064,6 +1079,9 @@ endif
 	${MAKE} depend
 
 include ${OBJDIR}/dependencies
+ifeq ($(shell [ -e ${S45DIR}/config/dependencies.local ] && echo yes || echo no ),yes)
+include ${S45DIR}/config/dependencies.local
+endif
 
 echo:
 	@echo VPATH=${VPATH}

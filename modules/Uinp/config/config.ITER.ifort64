@@ -12,7 +12,7 @@ endif
 
 FFLAGS    = -fPIC -assume no2underscore
 ifndef SOLPS_DEBUG
-FFLAGS   += -O2 -fp-model precise
+FFLAGS   += -O2 -fp-model=precise
 endif
 
 CPP       = /lib/cpp -C -traditional -ffreestanding

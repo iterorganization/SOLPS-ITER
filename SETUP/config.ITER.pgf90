@@ -34,7 +34,7 @@ MDSPLUS_DIR   ?=
 
 LD_NETCDF      = `nf-config --flibs`
 LD_GR          = -L${GR_ROOT}/lib -lgr
-LD_GKS         = -L${GLI_HOME} -lgks -lgfortran -lX11 -lXt
+LD_GKS         = -L/work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib -lGKS -lgfortran -lX11 -lXt
 ifdef NCARG_ROOT
 LD_NCARG       = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 #LD_NCARG      = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x

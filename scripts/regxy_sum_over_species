@@ -1,5 +1,4 @@
 #! /bin/csh -f
-awk '/nnreg/{NV=$2;NX=$3;NY=$4}\
-     /^f..xreg/{printf "%s",$1; for (i=2;i<=NF;i++) sum[(i-2)%(NX+1)]+=$i; for (i=0;i<=NX;i++) {printf " %s",sum[i]; sum[i]=0}; printf "\n"}\
-     /^f..yreg/{printf "%s",$1; for (i=2;i<=NF;i++) sum[(i-2)%(NY+1)]+=$i; for (i=0;i<=NY;i++) {printf " %s",sum[i]; sum[i]=0}; printf "\n"}\
-     \!/^f..[xy]reg/{print $0}'
+awk '/nnreg/{NV=$2;NXY=$3}\
+     /^f..reg/{printf "%s",$1; for (i=2;i<=NF;i++) sum[(i-2)%(NXY+1)]+=$i; for (i=0;i<=NXY;i++) {printf " %s",sum[i]; sum[i]=0}; printf "\n"}\
+     \!/^f..reg/{print $0}'

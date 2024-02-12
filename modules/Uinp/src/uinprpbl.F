@@ -70,11 +70,10 @@ c     helpers for composing filenames
       character SUBDIRpot*4
       character ES*2, EB*2, YEAR*2, Bdescr*8, filename*256
 c     procedures
-      integer get_atomic_number
       real (kind=R8) :: rratio
       logical silent_open, streql
       external silent_open, streql
-      external get_atomic_number, lower_case, xxdata_11, rratio
+      external lower_case, xxdata_11, rratio
       external xertst, xerrab
 c======================================================================
       call subini ('uinprpbl')
@@ -421,11 +420,15 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             spcsfup(i) = spcsfub(i)
             spcsrsp(i) = spcsrsb(i)
             fcte(i) = fctb(i)
+            fcteh(i) = fctb(i)
             dpls(i) = dplsb(i)
+            dplsh(i) = dplsb(i)
             iflb(i) = iflbb(i)
+            iflbh(i) = iflbb(i)
             textp(i) = textb(i)
             nprtp(i) = nprtb(i)
             bmass(i) = bmasb(i)
+            bmassh(i) = bmasb(i)
             isrfp(i) = isrfb(i)
             isrtp(i) = isrtb(i)
             nmsecp(i) = nmsecb(i)
@@ -433,6 +436,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             ncharp(i) = ncharb(i)
             nchrgp(i) = nchrgb(i)
             lkindp(i) = lkindb(i)
+            lkindph(i) = lkindb(i)
             nrcp(i) = nrcb(i)
             nrep(i) = nreb(i)
             idnslmp(i) = idnslmb(i)
@@ -465,11 +469,15 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             spcsfup(j) = spcsfup(i)
             spcsrsp(j) = spcsrsp(i)
             fcte(j) = fcte(i)
+            fcteh(j) = fcteh(i)
             dpls(j) = dpls(i)
+            dplsh(j) = dplsh(i)
             iflb(j) = iflb(i)
+            iflbh(j) = iflbh(i)
             textp(j) = textp(i)
             nprtp(j) = nprtp(i)
             bmass(j) = bmass(i)
+            bmassh(j) = bmassh(i)
             isrfp(j) = isrfp(i)
             isrtp(j) = isrtp(i)
             nmsecp(j) = nmsecp(i)
@@ -477,6 +485,7 @@ cxpb   jend(l) is the number of the last bundled ion of sequence l in the new li
             ncharp(j) = ncharp(i)
             nchrgp(j) = nchrgp(i)
             lkindp(j) = lkindp(i)
+            lkindph(j) = lkindph(i)
             nrcp(j) = nrcp(i)
             nrep(j) = nrep(i)
             idnslmp(j) = idnslmp(i)

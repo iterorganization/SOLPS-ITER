@@ -10,7 +10,7 @@ ifdef SOLPS_DEBUG
 #FFLAGS  = -g -Am -X9 -O0 -fw
 FFLAGS   = -g
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional
 

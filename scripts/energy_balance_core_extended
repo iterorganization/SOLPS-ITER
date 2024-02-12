@@ -1,7 +1,7 @@
 #! /bin/csh -f
 pipe_run.log | \
-  egrep -a 'r..[hn].reg|fh..reg|^pot|nnreg|End tallies|b2divu|b2exb|b2visa|b2joule|b2fraa|b2str|Total profile-source Power' | \
-  awk '/nnreg/{nreg=$2+1;nxreg=$3+1;nyreg=$4+1} \
+  egrep -a 'r..[hn].reg|fh.reg|^pot|nnreg|End tallies|b2divu|b2exb|b2visa|b2joule|b2fraa|b2str|Total profile-source Power' | \
+  awk '/nnreg/{nreg=$2+1;nfreg=$3+1} \
        /pot/{for (i=1;i<=NF-1;i++) pot[i]=$(i+1)*1.602176634e-19;pot[NF]=0} \
        /Total profile-source Power/{ext=$4} \
        /rsahireg/{rsa=0;for (i=3;i<=NF;i+=nreg) rsa+=$i} \
@@ -10,10 +10,10 @@ pipe_run.log | \
        /rcxhireg/{rcx=0;for (i=3;i<=NF;i+=nreg) rcx+=$i} \
        /rsanareg/{rsap=0;for (i=3;i<=NF;i+=nreg) rsap+=$i*pot[int(i/nreg)+2]} \
        /rranareg/{rrap=0;for (i=3;i<=NF;i+=nreg) rrap+=$i*pot[int(i/nreg)+1]} \
-       /fhiyreg/{S=-$4;N=$6} \
-       /fheyreg/{S+=-$4;N+=$6} \
-       /fhpyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+2);N+=$(i+4)}} \
-       /fhmyreg/{for (i=2;i<=NF;i+=nyreg) {S+=-$(i+2);N+=$(i+4)}} \
+       /fhireg/{S=-$10;N=$12} \
+       /fhereg/{S+=-$10;N+=$12} \
+       /fhpreg/{for (i=2;i<=NF;i+=nfreg) {S+=-$(i+8);N+=$(i+10)}} \
+       /fhmreg/{for (i=2;i<=NF;i+=nfreg) {S+=-$(i+8);N+=$(i+10)}} \
        /b2divue/{b2divue=$3}/b2divua/{b2divua=$3}/b2exbe/{b2exbe=$3}/b2exba/{b2exba=$3}/b2visa/{b2visa=$3}/b2joule/{b2joule=$3}/b2fraa/{b2fraa=$3}/b2str/{b2str=$3} \
        BEGIN{print "#cnt rsa rra rqa rcx rsap rrap N S N+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str ext"} \
        END{print "#cnt rsa rra rqa rcx rsap rrap N S N+S+rsa+rra+rqa+rcx-rsap+rrap b2divue b2divua b2exbe b2exba b2visa b2joule b2fraa b2str b2divue+b2divua+b2exbe+b2exba+b2visa+b2joule+b2fraa+b2str ext"} \

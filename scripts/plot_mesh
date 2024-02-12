@@ -13,8 +13,8 @@ else if (-s $SOLPSTOP/data.local/meshes/$1 || -s $SOLPSTOP/data.local/meshes/$1.
   set FILE=$SOLPSTOP/data.local/meshes/$1
 else if (-s $SOLPSTOP/data.local/meshes/$DEVICE/$1 || -s $SOLPSTOP/data.local/meshes/$DEVICE/$1.gz) then
   set FILE=$SOLPSTOP/data.local/meshes/$DEVICE/$1
-else if (-s $SOLPSTOP/modules/Carre/meshes/$DEVICE/$1 || -s $SOLPSTOP/modules/Carre/meshes/$DEVICE/$1.gz) then
-  set FILE=$SOLPSTOP/modules/Carre/meshes/$DEVICE/$1
+else if (-s $SOLPSTOP/modules/Carre2/meshes/$DEVICE/$1 || -s $SOLPSTOP/modules/Carre2/meshes/$DEVICE/$1.gz) then
+  set FILE=$SOLPSTOP/modules/Carre2/meshes/$DEVICE/$1
 else
   echo Cannot find $1
   exit

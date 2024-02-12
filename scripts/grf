@@ -27,8 +27,8 @@ esac; }
   ( */modules/B2.5          ) I="src/include/[a-zA-Z0-9_]*.[FHh] src.local/*.h src/*/*.F src/*/*.F90 src/common/*.h src/common/*.inc src/common/emissivity.* src/common/COUPLE/*.F";;
   ( */modules/Uinp/src      ) I="[a-zA-Z0-9_]*.inc [a-zA-Z0-9_]*.h ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
   ( */modules/Uinp          ) I="src/[a-zA-Z0-9_]*.inc src/[a-zA-Z0-9_]*.h ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
-  ( */modules/Carre/src     ) I="include/[a-zA-Z0-9_]*.inc include/[a-zA-Z0-9_]*.h ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
-  ( */modules/Carre         ) I="src/include/[a-zA-Z0-9_]*.inc src/include/[a-zA-Z0-9_]*.h ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Carre2/src90  ) I="include/[a-zA-Z0-9_]*.inc include/[a-zA-Z0-9_]*.h ../../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
+  ( */modules/Carre2        ) I="src90/include/[a-zA-Z0-9_]*.inc src90/include/[a-zA-Z0-9_]*.h ../B2.5/src/include/[a-zA-Z0-9_]*.[FHh]";;
   (          *              ) I=;;
 esac; }
 

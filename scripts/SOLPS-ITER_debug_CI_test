@@ -48,7 +48,6 @@ cp ../run_AFN_drift/b2time.nc.i b2time.nc
 cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
 touch b2fstati
 setup_baserun_eirene_links
-echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./ || exit 2
 cd ..

@@ -113,6 +113,8 @@ c*** Take the neutral data from the "whole target" specification
               eewbnds(izn,iknd)=tgewall(k)
               efpbnds(izn,iknd)=tgsppff(k)
               efcbnds(izn,iknd)=tgspcff(k)
+              rfcbnds(izn,iknd)=trefcell(k)
+              rfpbnds(izn,iknd)=trfpress(k)
             else !}{
 c*** Take the data from the boundary default
               ewmbnds(izn,iknd)=ewmbndx(0,iknd)
@@ -134,6 +136,8 @@ c*** Take the data from the boundary default
               eewbnds(izn,iknd)=eewbndx(0,iknd)
               efpbnds(izn,iknd)=efpbndx(0,iknd)
               efcbnds(izn,iknd)=efcbndx(0,iknd)
+              rfcbnds(izn,iknd)=rfcbndx(0,iknd)
+              rfpbnds(izn,iknd)=rfpbndx(0,iknd)
             end if !}
             jclbnds(izn,iknd)=jclbndx(0,iknd)
             jnebnds(izn,iknd)=jnebndx(0,iknd)
@@ -186,6 +190,7 @@ c*** Take the default for the generic species
           end if !}
         end do !}
       end do !}
+
 c*** Check for input data for generic species
       iknd=1
       n=nznbndt(iknd)
@@ -354,44 +359,3 @@ c=======================================================================
 
       return
       end function find_matching_reagent
-
-      integer function get_atomic_number(name)
-      use b2mod_elements
-      implicit none
-      character*(*) name
-      character*8 species_name
-      integer i
-      logical skip, openp
-      integer lnblnk
-      logical streql, isadigit, isplusorminus
-      external streql, lnblnk, isadigit, isplusorminus, strip_spaces
-
-      get_atomic_number = 0
-      species_name = repeat(' ',8)
-      openp = .false.
-      do i = 1, lnblnk(name)
-        if (.not.openp) then
-          skip = .false.
-          skip = skip .or. isadigit(name(i:i))
-          skip = skip .or. isplusorminus(name(i:i))
-          skip = skip .or. name(i:i).eq.'*'
-          openp = name(i:i).eq.'('
-        else
-          openp = name(i:i).ne.')'
-          skip = .true.
-        endif
-        skip = skip .or. openp
-        if (.not.skip) species_name(i:i) = name(i:i)
-      end do
-      call strip_spaces(species_name)
-      do i = 1, 92
-        if(streql(species_name(1:2),elements(i))) then
-          get_atomic_number = i
-          return
-        end if
-      end do
-      if (streql(species_name,'D').or.
-     &    streql(species_name,'T')) get_atomic_number=1
-
-      return
-      end function get_atomic_number

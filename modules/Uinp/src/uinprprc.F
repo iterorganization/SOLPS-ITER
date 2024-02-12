@@ -23,7 +23,6 @@ c======================================================================
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
       character*8 c,cc,ccc,cbgk
-      character*1 c0
       character*12 f_hlp
       character*60 hlp_frm, hlp_frf
       logical h_collision, todo, lhelium
@@ -43,15 +42,12 @@ c======================================================================
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
       integer find_matching_reagent, lnblnk, len_of_digits
-      integer get_atomic_number
       logical streql, silent_open
       external xerrab, streql
       external find_matching_reagent, lnblnk, len_of_digits
-      external get_atomic_number
       external silent_open
 c======================================================================
       call subini ('uinprprc')
-      c0=char(0)
       n_ptc=nspcatm+nspcmol+nspcion+nspcpls
 
       nisotopes=0
@@ -84,7 +80,7 @@ c*** Add some explicit elastic neutral-neutral collisions
           if (.not.h_iso_used(i)) cycle
           if (nnrctn+4.gt.mreac) then !{
             write(0,*) 'Too many reaction datasets specified:',nnrctn+4
-            call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+            call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
           end if !}
 cxpb First do self-collisions
           rctntyp(nnrctn+1:nnrctn+4)='EL'
@@ -127,7 +123,7 @@ cxpb Now consider cross-collisions
             if (nnrctn+4.gt.mreac) then !{
               write(0,*)
      .         'Too many reaction datasets specified:',nnrctn+4
-              call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+              call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
             end if !}
             rctntyp(nnrctn+1:nnrctn+4)='EL'
             rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
@@ -168,7 +164,7 @@ cxpb Now consider cross-collisions
       if (lhelium) then !{
         if (nnrctn+1.gt.mreac) then !{
           write(0,*) 'Too many reaction datasets specified:',nnrctn+1
-          call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+          call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
         end if !}
         rctntyp(nnrctn+1)='EL'
         rctndbs(nnrctn+1)='AMMONX'
@@ -196,7 +192,7 @@ cxpb Now consider cross-collisions
           if (.not.h_iso_used(i)) cycle
           if (nnrctn+4.gt.mreac) then !{
             write(0,*) 'Too many reaction datasets specified:',nnrctn+4
-            call xerrab('==> Check DEF_NREAC in DIMENSIONS.F')
+            call xerrab('==> Check DEF_NREAC in b2mod_dimensions.F')
           end if !}
           rctntyp(nnrctn+1:nnrctn+4)='EL'
           rctndbs(nnrctn+1:nnrctn+4)='AMMONX'
@@ -343,7 +339,7 @@ cxpb Find out the number of passes to do
                   write(0,*) 'Too many reaction datasets specified:',
      .                                                           nnrctn
                   call xerrab
-     .     ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
+     . ('==> Check the AMDS model and DEF_NREAC in b2mod_dimensions.F')
                 end if !}
                 ii=rctdgrp(j,l)
                 if(ii.ne.0) then !{
@@ -1718,6 +1714,7 @@ c>>>
                       nmsecp(ipls)=nmseca(kk)
                       nhstp(ipls)=nhsta(kk)
                       lkindp(ipls)=kk
+                      lkindph(nplsh+ipls)=kk
                     else if (ll.eq.2) then !}{
                       nmassp(ipls)=nmassm(kk)
                       ncharp(ipls)=ncharm(kk)
@@ -1728,6 +1725,7 @@ c>>>
                       nmsecp(ipls)=nmsecm(kk)
                       nhstp(ipls)=nhstm(kk)
                       lkindp(ipls)=lkindm(kk)
+                      lkindph(nplsh+ipls)=lkindm(kk)
                     else if (ll.eq.3) then !}{
                       nmassp(ipls)=nmassi(kk)
                       ncharp(ipls)=nchari(kk)
@@ -1738,15 +1736,20 @@ c>>>
                       nmsecp(ipls)=nmseci(kk)
                       nhstp(ipls)=nhsti(kk)
                       lkindp(ipls)=lkindi(kk)
+                      lkindph(nplsh+ipls)=lkindi(kk)
                     end if !}
                     nrcp(ipls)=0
                     idnslmp(ipls)=0
                     cdnmdlp(ipls)=' '
                     nrep(ipls)=0
                     iflb(ipls)=-13
+                    iflbh(nplsh+ipls)=-13
                     fcte(ipls)=0.
+                    fcteh(nplsh+ipls)=0.
                     dpls(ipls)=0.
+                    dplsh(nplsh+ipls)=0.
                     bmass(ipls)=real(nmassp(ipls))
+                    bmassh(nplsh+ipls)=real(nmassp(ipls))
                   end if !}
                   iie=1001
                   iik=100*k+10+l
@@ -1983,7 +1986,7 @@ c>>>
         write(0,'(4x,a2,1x,i5,i8)') 'EI',m,DEF_NREI
         write(0,'(4x,a2,1x,i5,i8)') 'RC',n,DEF_NREC
         write(0,*) '==> Check the AMDS model '//
-     ,   'and NREL, NREI, or NREC in DIMENSIONS.F'
+     ,   'and NREL, NREI, or NREC in b2mod_dimensions.F'
         call xerrab ('Too many reactions')
       end if !}
 c=======================================================================

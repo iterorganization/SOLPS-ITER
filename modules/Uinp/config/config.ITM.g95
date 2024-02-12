@@ -10,7 +10,7 @@ FFLAGS  += -g -fbounds-check -ftrace=full
 else
 FFLAGS  +=
 endif
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 COMPILE  = ${FC} -c ${FFLAGS}
 CPP      = /lib/cpp -C -traditional -ffreestanding
 

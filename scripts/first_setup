@@ -40,17 +40,6 @@ cd $SOLPSTOP/modules/Eirene/config
     echo "No config.default.$COMPILER file available in $PWD: nothing done"
   }
 }
-cd $SOLPSTOP/modules/Carre/config
-[ -s ${filename} ] && {
-  echo "Non-empty ${filename} already present in $PWD: nothing done"
-} || {
-  [ -s config.default.$COMPILER ] && {
-    cp config.default.$COMPILER ${filename}
-    echo "Created ${filename} from config.default.$COMPILER in $PWD: please modify if needed"
-  } || {
-    echo "No config.default.$COMPILER file available in $PWD: nothing done"
-  }
-}
 cd $SOLPSTOP/modules/Carre2/config
 [ -s ${filename} ] && {
   echo "Non-empty ${filename} already present in $PWD: nothing done"

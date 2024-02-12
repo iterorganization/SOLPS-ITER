@@ -4,6 +4,8 @@ CPP = /lib/cpp -C -traditional -ffreestanding
 
 FC = ifort
 
+MAKETAGS = etags -o
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:

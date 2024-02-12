@@ -3,6 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use b2mod_xerset
+      use b2mod_version
       use eirmod_solps
       use helper
 #ifdef DIMENSIONS_MODULE
@@ -25,9 +26,10 @@ c=======================================================================
       character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
-      logical uex, todo
+      logical uex
       integer find_matching_species
-      external find_matching_species
+      logical streql
+      external find_matching_species, streql
       external prgini,prgend
 c=======================================================================
       call prgini('uinput')
@@ -43,6 +45,11 @@ c*** Produce the input file for Eirene
 
       call uinout('input.eir')
       print *,'    ... input.eir created'
+
+c*** Produce the input file for Eirene for the hybrid model
+
+      call uinouth('input_hybrid.eir')
+      print *,'    ... input_hybrid.eir created'
 
 c*** Produce the input file for Eirene test run
 
@@ -119,8 +126,35 @@ c*** Create the header for the b2ag.dat file
      .                   '''b2agfs_periodic_bc''  ''1'''
           if (ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_lineardevice'' ''linear.geometry'''
+          ! temporary for target/vessel mode grids: disable redef_gmtry
+          if (carre_mode.ge.2) write(2,'(a)')
+     .                   '''b2agdr_redef_gmtry''  ''0'''
           close(2)
           print *,'    ... b2ag.dat created'
+      endif !}
+
+c*** Create the b2us.dat file for triangulation
+      inquire(file='b2us.dat', exist=uex)
+      if(uex) then !{
+          print *,'    ... b2us.dat file already present, not created'
+      else !}{
+          open(2,file='b2us.dat')
+          write(2,'(a)')
+     .     '*label          (lblmn: character*60)'
+          write(2,'(a)')
+     .     'Input file for triangulation plasma region with b2us'
+          write(2,'(a)') '*b2cmpa  basic parameters'
+          write(2,'(a)') '*b2cmpb  boundary conditions'
+          write(2,'(a)') '*b2cmpt  transport coefficients'
+          write(2,'(a)') '*endphy'
+          write(2,'(a)') '''b2mndr_eirene''    ''1'''
+          write(2,'(a)') '''b2stbc_boundary_namelist''    ''1'''
+          write(2,'(a)') '''b2stbr_neutrals_namelist''    ''1'''
+          write(2,'(a)') '''b2us_write_b2fgmtry_us''    ''0'''
+          write(2,'(a)') '''b2us_write_b2fstati_us''    ''0'''
+          write(2,'(a)') '''b2us_tria_mode''   ''1'''
+          close(2)
+          print *,'    ... b2us.dat created'
       endif !}
 
 c*** Create a b2ah.dat.stencil file
@@ -174,45 +208,6 @@ c*** Create a b2ah.dat.stencil file
      .       specs(is),'0.0','0.0',nchara(iatm),'.0',
      .                             nmassa(iatm),'.0'
 cxpb Default data for neutrals
-            do ireg = cbirso, cbirso+cbnrso-1
-              if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-                cbsna(1,is,ireg) =-1.0e10
-                cbsmo(3,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 4.0e13
-                cbshi(1,is,ireg) =-1.0e30
-              else ! PFR boundary
-                cbsna(2,is,ireg) =-0.01
-                cbsmo(3,is,ireg) =-1.0e10
-                cbsmo(6,is,ireg) =-1.0
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(2,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-2.5
-              end if
-            end do
-            do ireg = cbirno, cbirno+cbnrno-1
-              cbsna(2,is,ireg) =-0.01
-              cbsmo(3,is,ireg) =-1.0e10
-              cbsmo(6,is,ireg) =-1.0
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(2,is,ireg) =-0.1
-              cbshi(7,is,ireg) =-2.5
-            end do
-            do ireg = cbirwe, cbirwe+cbnrwe-1
-              cbsna(7,is,ireg) =-1.0
-              cbsmo(4,is,ireg) =-1.0e10
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(7,is,ireg) =-1.5
-            end do
-            do ireg = cbirea, cbirea+cbnrea-1
-              cbsna(7,is,ireg) =-1.0
-              cbsmo(4,is,ireg) =-1.0e10
-              cbshi(0,is,ireg) = 1.0e-18
-              cbshi(1,is,ireg) =-100.0
-              cbshi(7,is,ireg) =-1.5
-            end do
             cfdf0(0,is) = 100.0
             cfdf0(2,is) = 1.0
             if (nchara(iatm).eq.1) then
@@ -241,116 +236,12 @@ cxpb Default data for neutrals
      .            specs(is),izamin(is),'.0',izamax(is),'.0',
      .                    nchara(iatm),'.0',nmassa(iatm),'.0'
 cxpb Default data for ions
-              do ireg = cbirso, cbirso+cbnrso-1
-                if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-                  cbsna(1,is,ireg) =-1.0e10
-                  cbsmo(3,is,ireg) =-1.0e10
-                  cbshi(0,is,ireg) = 4.0e13
-                  cbshi(1,is,ireg) =-1.0e30
-                  if (iss.eq.nchara(iatm)) then ! highest charge state ion
-                    if (spcicrk(iatm).ne.3) then ! setting core density
-                      cbsna(0,is,ireg) = spcicrp(iatm)*1.e10
-                    else ! setting core flux
-                      if (cbnrso.eq.6 .and. ireg.eq.2) then ! DN HFS core
-                        cbsna(0,is,ireg) = spcicrp(iatm)*spcicrf(iatm)
-                      else if (cbnrso.eq.6 .and. ireg.eq.5) then ! DN LFS core
-                        cbsna(0,is,ireg) =
-     .                   spcicrp(iatm)*(1.-spcicrf(iatm))
-                      else
-                        cbsna(0,is,ireg) = spcicrp(iatm)
-                      end if
-                      cbsna(1,is,ireg) = 0.0
-                    end if
-                  end if
-                else ! PFR boundary
-                  cbsna(2,is,ireg) =-1.0e-3
-                  cbsmo(6,is,ireg) =-1.0
-                  cbshi(0,is,ireg) = 1.0e-18
-                  cbshi(1,is,ireg) =-100.0
-                  cbshi(2,is,ireg) =-0.01
-                  cbshi(7,is,ireg) =-2.5
-                  if (dscbndx(j).eq.'=') then ! recycling species
-                    cbrec(0,is,ireg) = 1.0
-                    cbrec(1,is,ireg) = 0.3
-                  end if
-                end if
-              end do
-              do ireg = cbirno, cbirno+cbnrno-1
-                cbsmo(6,is,ireg) =-1.0
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(2,is,ireg) =-0.01
-                cbshi(7,is,ireg) =-2.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
-              do ireg = cbirwe, cbirwe+cbnrwe-1
-                cbsna(7,is,ireg) =-1.0
-                cbsmo(2,is,ireg) = 1.0e10
-                cbsmo(4,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(3,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-1.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
-              do ireg = cbirea, cbirea+cbnrea-1
-                cbsna(7,is,ireg) =-1.0
-                cbsmo(2,is,ireg) = 1.0e10
-                cbsmo(4,is,ireg) =-1.0e10
-                cbshi(0,is,ireg) = 1.0e-18
-                cbshi(1,is,ireg) =-100.0
-                cbshi(3,is,ireg) =-0.1
-                cbshi(7,is,ireg) =-1.5
-                if (dscbndx(j).eq.'=') then ! recycling species
-                  cbrec(0,is,ireg) = 1.0
-                  cbrec(1,is,ireg) = 0.3
-                end if
-              end do
               cfdf0(0,is) = 0.5
               cfdna(2,is) = 1.0
               cfvsa(2,is) = 0.4
               cfhci(2,is) = 1.4
               is = is + 1
             end do
-          end do
-          do ireg = cbirso, cbirso+cbnrso-1
-            if (mod(ireg-cbirso+1,3).eq.2) then ! core boundary
-              cbshe(0,ireg) = 4.0e13
-              cbshe(1,ireg) =-1.0e30
-            else ! PFR boundary
-              cbshe(0,ireg) = 1.0e-18
-              cbshe(1,ireg) =-100.0
-              cbshe(2,ireg) =-1.0e-4
-              cbshe(7,ireg) =-2.5
-            end if
-          end do
-          do ireg = cbirno, cbirno+cbnrno-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(2,ireg) =-1.0e-4
-            cbshe(7,ireg) =-2.5
-          end do
-          do ireg = cbirwe, cbirwe+cbnrwe-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(3,ireg) =-0.1
-            cbshe(7,ireg) =-1.5
-            cbsch(6,ireg) = 1.0
-            cbsch(7,ireg) = 0.5
-          end do
-          do ireg = cbirea, cbirea+cbnrea-1
-            cbshe(0,ireg) = 1.0e-18
-            cbshe(1,ireg) =-100.0
-            cbshe(3,ireg) =-0.1
-            cbshe(7,ireg) =-1.5
-            cbsch(6,ireg) = 1.0
-            cbsch(7,ireg) = 0.5
           end do
           cfhce(0) = 0.7
           cfsig(0) = 1.0e-7
@@ -359,65 +250,6 @@ cxpb Default data for ions
           cflim(2) = 0.5
           cflim(3) = 0.5
           cflim(4) = 0.5
-          write(2,'(a)') '*b2cmpb         boundary conditions'
-          write(2,'(a)') '*cbregs'
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrso,'(3x,f7.4))'
-          write(2,hlp_frm) '''south''', cbnrso,
-     .     (cbrbrk(i),i=cbirso,cbirso+cbnrso-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrno,'(3x,f7.4))'
-          write(2,hlp_frm) '''north''', cbnrno,
-     .     (cbrbrk(i),i=cbirno,cbirno+cbnrno-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrwe,'(3x,f7.4))'
-          write(2,hlp_frm) '''west'' ', cbnrwe,
-     .     (cbrbrk(i),i=cbirwe,cbirwe+cbnrwe-1)
-          write(hlp_frm,'(a,i1,a)') '(a,5x,i1,',cbnrea,'(3x,f7.4))'
-          write(2,hlp_frm) '''east'' ', cbnrea,
-     .     (cbrbrk(i),i=cbirea,cbirea+cbnrea-1)
-          nreg = cbnrso + cbnrno + cbnrwe + cbnrea
-          lbreg(cbirso  :cbirso+cbnrso-1:3)='''south, private flux'''
-          lbreg(cbirso+1:cbirso+cbnrso-1:3)='''south, core plasma'' '
-          lbreg(cbirso+2:cbirso+cbnrso-1:3)='''south, private flux'''
-          lbreg(cbirno:cbirno+cbnrno-1)='''north, SOL/DIV outer wall'''
-          lbreg(cbirwe:cbirwe+cbnrwe-1)='''west, target plate'' '
-          lbreg(cbirea:cbirea+cbnrea-1)='''east, target plate'' '
-          do ireg = 0, nreg-1
-            write(2,'(a)') '*region'
-            write(2,'(i2,2x,a)') ireg,lbreg(ireg)
-            write(2,'(a)') '*cbsna'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbsna(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbsmo'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbsmo(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbshi'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbshi(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbshe'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbshe(i,ireg),i=0,7)
-            write(2,'(a)') '*cbsch'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbsch(i,ireg),i=0,7)
-            write(2,'(a)') '*cbrec'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbrec(i,is,ireg),i=0,7)
-            end do
-            write(2,'(a)') '*cbmsa'//column_header
-            write(2,'(1x,a5,1p,8(1x,e9.2))') specs(-1),
-     .       (cbmsa(i,ireg),i=0,7)
-            write(2,'(a)') '*cbmsb'//column_header
-            do is = 0, ns-1
-              write(2,'(1x,a5,1p,8(1x,e9.2))') specs(is),
-     .         (cbmsb(i,is,ireg),i=0,7)
-            end do
-          end do
           write(2,'(a)') '*b2cmpt  transport coefficients'
           write(2,'(a)') '*cfdf0'//column_header
           do is = 0, ns-1
@@ -476,7 +308,7 @@ c*** Create the b2ai.dat file
           open(2,file='b2ai.dat')
           write(2,'(a)') '*dimens         (ns; free format)'
           write(2,'(3x,i4)') natmi-nmeta+nplsi
-          write(2,'(a)') 
+          write(2,'(a)')
      .     '*label          (lblps, character*60; free format)'
           if (texta(1)(2:2).eq.' ') then
             lblps(1:25) = '''Flat initial state for '//texta(1)(1:1)
@@ -535,7 +367,7 @@ c*** Create the b2ai.dat file
           print *,'    ... b2ai.dat created'
           deallocate(na0)
       endif
- 
+
 c*** Create the b2ar.dat file
       inquire(file='b2ar.dat', exist=uex)
       if(uex) then
@@ -559,6 +391,24 @@ c*** Create the b2ar.dat file
           write(2,'(2x,a)') '''adas'''
           write(2,'(a)') '*tailep         (real, free format)'
           write(2,'(2x,f5.2)') 0.08
+cnh       AFN-specific inputs
+c          write(2,'(a)') '''b2ardr_no_smoothing''     ''1'''//
+c     .      '       # Eliminate smoothing for benchmark with EIRENE'
+          write(2,'(a)') '''b2ardr_rtnt''             ''100'''//
+     .      '     # Use finer discretization for AFN (default 40)'
+          write(2,'(a)') '''b2ardr_rtnn''             ''100'''//
+     .      '     # Use finer discretization for AFN (default 32)'
+          write(2,'(a)') '''b2ardr_no_weisheit''      ''1'''//
+     .      '       # No correction for hydrogen neutrals'
+          write(2,'(a)') '''b2ardr_amjhydhel''        ''1'''//
+     .      '       # Take AMJUEL/HYDHEL for hydrogen neutrals'
+          write(2,'(a)') '''b2ardr_t_min''            ''1.0E-01'''//
+     .      ' # Minimum temperature [eV] for which AMJUEL rates '//
+     .      'are evaluated'
+          write(2,'(a)') '''b2ardr_nn_min''           ''1.0E+14'''//
+     .      ' # Minimum density [m^-3] for which AMJUEL rates '//
+     .      'are evaluated'
+          write(2,'(a)') '''b2ardr_fix_recomb''       ''1'''
           close(2)
           print *,'    ... b2ar.dat created'
       endif
@@ -614,6 +464,7 @@ c*** Modify the input file for B2, if possible
           write(*,*) 'No b2.neutrals.parameters found'
           write(*,*) 'Writing b2.neutrals.parameters.stencil'
           open(99,status='SCRATCH')
+          write(99,'(a)') 'VERSION'//newversion
           write(99,*) '&NEUTRALS'
           write(99,*) '/'
           rewind(99)
@@ -627,6 +478,41 @@ c*** Modify the input file for B2, if possible
             print *,
      .      '    Error while creating b2.neutrals.parameters.stencil:'
      .      ,irt
+          end if
+      end if
+cnh b2.neutrals.parameters for the hybrid model
+      inquire(file='b2.neutrals.parameters_hybrid', exist=uex)
+      if(uex) then
+          open(1,file='b2.neutrals.parameters_hybrid',status='old',
+     .      err=22)
+          open(2,file='b2.neutrals.parameters_hybrid.2',err=20)
+          call uicrb2(1,2,irt)
+          if(irt.eq.0) then
+            print *,'    ... b2.neutrals.parameters_hybrid.2 created'
+            close(2,err=22)
+          else
+            print *,
+     .       '    Error while creating ',
+     .       'b2.neutrals.parameters_hybrid.2: ',irt
+          end if
+       else
+          write(*,*) 'No b2.neutrals.parameters_hybrid found'
+          write(*,*) 'Writing b2.neutrals.parameters_hybrid.stencil'
+          open(99,status='SCRATCH')
+          write(99,*) '&NEUTRALS_HYBRID'
+          write(99,*) '/'
+          rewind(99)
+          open(2,file='b2.neutrals.parameters_hybrid.stencil',err=20)
+          call uicrb2(99,2,irt)
+          close(99)
+          if(irt.eq.0) then
+            print *,'    ... b2.neutrals.parameters_hybrid.stencil ',
+     .        'created'
+            close(2,err=22)
+          else
+            print *,
+     .      '    Error while creating ',
+     .      'b2.neutrals.parameters_hybrid.stencil:',irt
           end if
       end if
    20 close(1,err=22)
@@ -648,6 +534,7 @@ c*** Modify the input file for B2, if possible
           write(*,*) 'No b2.boundary.parameters found'
           write(*,*) 'Writing b2.boundary.parameters.stencil'
           open(99,status='SCRATCH')
+          write(99,'(a)') 'VERSION'//newversion
           write(99,*) '&BOUNDARY'
           write(99,*) '/'
           rewind(99)
@@ -735,11 +622,15 @@ c*** Modify the input file for B2, if possible
         write(*,*) 'Writing ../NREG'
         open(unit=2,file='../NREG')
         if (ln_cnfg) then
-          write(2,'(i1)') 1
+          write(2,'(i1,1x,i1)') 1,4
         else if (lm_cnfg) then
-          write(2,'(i1)') 2
-        else
-          write(2,'(i1)') 2*nncut
+          write(2,'(i1,1x,i1)') 2,6
+        else if (nncut.eq.1) then
+          write(2,'(i1,1x,i2)') 4,13
+        else if (nncut.eq.2.and.streql(topo,'DNS')) then
+          write(2,'(i1,1x,i2)') 8,26
+        else if (nncut.eq.2) then
+          write(2,'(i1,1x,i2)') 8,27
         end if
         close(2)
       end if

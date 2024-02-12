@@ -20,7 +20,8 @@ c=======================================================================
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
      ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,
-     ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,trchktim_b,
+     ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,
+     ,  trchktim_b,
      ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
      ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,

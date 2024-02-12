@@ -5,18 +5,45 @@ if ("X$1X" != "XX") set NUM=$1
 echo $NUM
 set nreg=`climb_and_look_for NREG`
 if (-s $nreg) then
-  setenv NREG `cat $nreg`
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
   echo Set NREG to $NREG "(based on $nreg)"
 else
   set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
   set NREG=$nnreg[2]
   echo Set NREG to $NREG "(based on log file)"
 endif
-set usual="fn3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl ne3dl te3dl ti3dl po3dl an3dl mn3dl ne3di te3di ti3di po3di an3di mn3di ne3da te3da ti3da po3da an3da mn3da ne3dr te3dr ti3dr po3dr an3dr mn3dr fn3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr dn3di dn3da dp3di dp3da ke3di ke3da ki3di ki3da vx3di vx3da vy3di vy3da vs3di vs3da tp3dl tp3dr"
+set usual=""
+if (-s dsl) then
+  set usual=`echo ${usual}" fn3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl ne3dl te3dl ti3dl po3dl an3dl tp3dl"`
+  if (-s input.dat) then
+    set usual=`echo ${usual}" mn3dl"`
+  endif
+endif
+if (-s dsi) then
+  set usual=`echo ${usual}" ne3di te3di ti3di po3di an3di dn3di dp3di ke3di ki3di vx3di vy3di vs3di"`
+  if (-s input.dat) then
+    set usual=`echo ${usual}" mn3di"`
+  endif
+endif
+if (-s dsa) then
+  set usual=`echo ${usual}" ne3da te3da ti3da po3da an3da dn3da dp3da ke3da ki3da vx3da vy3da vs3da"`
+  if (-s input.dat) then
+    set usual=`echo ${usual}" mn3da"`
+  endif
+endif
+if (-s dsr) then
+  set usual=`echo ${usual}" ne3dr te3dr ti3dr po3dr an3dr fn3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr tp3dr"`
+  if (-s input.dat) then
+    set usual=`echo ${usual}" mn3dr"`
+  endif
+endif
 set extra=""
 if ($?NREG) then
   if ($NREG == 8 || $NREG == 7) then
-    set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
+    set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
+    if (-s input.dat) then
+      set extra=`echo ${extra}" mn3dtl mn3dtr"`
+    endif
   endif
 endif
 
@@ -35,8 +62,8 @@ endif
 
 if ($no_nc2text == 1) then
   # get array size and set indices
-  set ny = `ncdump $source -f f -v fn3dl | sed -n 's/.*ny[ \t]*=[ \t]*\([0-9]\{1,\}\).*/\1/p'`
-  set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
+  set ny = `ncdump $source -f f -v ne3da | sed -n 's/.*ny[ \t]*=[ \t]*\([0-9]\{1,\}\).*/\1/p'`
+  set nt = `ncdump $source -f f -v ne3da | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
 #  echo "ny $ny"
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
@@ -46,7 +73,7 @@ if ($no_nc2text == 1) then
   @ jend = $nt
 #  echo $jstart $jend
 else
-  set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
+  set nt = `ncdump $source -f f -v ne3da | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
   if ($jstart < 0) then

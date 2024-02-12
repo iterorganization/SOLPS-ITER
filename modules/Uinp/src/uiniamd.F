@@ -54,7 +54,7 @@ c=======================================================================
         if(nnrctn.gt.nreac) then !{
           write(0,*) 'Too many reaction datasets requested:',nnrctn
           call xerrab
-     .     ('==> Check the AMDS model and DEF_NREAC in DIMENSIONS.F')
+     .  ('==> Check the AMDS model and DEF_NREAC in b2mod_dimensions.F')
         end if !}
         nn=nn+1
         do i=nn,nnrctn !{

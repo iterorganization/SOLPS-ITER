@@ -7,6 +7,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+
 c  version : 01.04.2005 00:51
 
 c***  prepares the data for TRIA grid 
@@ -15,8 +16,9 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
 #include "uinput.inc"
     
       logical TriMesh  
-      integer attrib(nlim),nattr,nchain,chain(nlim)
-      integer NSS(nsts),nn,i,j,k,l
+      integer attrib(nlim),nattr,nchain,chain(nlim),
+     ,  chain_sorted(nlim+ntrgts),nchain_seg
+      integer NSS(nsts),nn,i,j,k,l,nnlbl
       logical ex 
       real txmin,txmax,tymin,tymax
     
@@ -47,6 +49,7 @@ c***  and check if they are closed
        write(0,*) 'no TRIA polygons specified'  
        goto 9999
       end if 
+      ntriplg=0
       do 20 i=1,nattr
        write(*,*) 'chain number, attrib', i, attrib(i)
        if(attrib(i).EQ.0) goto 20
@@ -64,7 +67,8 @@ c***  and check if they are closed
          write(*,'(20i5)') (chain(l),l=1,nchain)
        ENDIF
 c***   makes checking and outputs NSS indices if necessary
-       call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
+       call uichkchn(chain,nchain,nsts,NSS,nn,chain_sorted,nchain_seg,
+     ,   attrib(i))
        write(*,*) 'nn ',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
        if(nn.LT.0) then 
@@ -79,6 +83,61 @@ c***   write intermediate arrays for output
        do 27 j=1,nn
         ilplgu(NSS(j))=attrib(i)
    27  continue
+c***   store the sorted chain to construct polygons for void triangulation
+       ntriplg=ntriplg+1
+       if (ntriplg.gt.ntriplgmax) 
+     ,   stop 'uinptriang -- increase value of ntriplgmax and recompile'
+       nntriplg(ntriplg)=nchain
+       nsegtriplg(ntriplg)=nchain_seg
+       nnsstriplg(ntriplg)=nn
+       triplg(1:nchain+nchain_seg,ntriplg)=
+     ,   chain_sorted(1:nchain+nchain_seg)
+       triplgnss(1:nn,ntriplg)=NSS(1:nn)
+       nnlbl = 0
+       do j=1,nn
+         if (index(topo,'SN').gt.0) then
+           if (NSS(j).eq.4) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-23
+           elseif (NSS(j).eq.5) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-24
+           elseif (NSS(j).eq.6) then
+             nnlbl = nnlbl+3
+             triplgfclbl(nnlbl-2:nnlbl,ntriplg)=(/-43,-42,-44/)
+           else
+             write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
+             stop 'Check DG model'
+           endif
+         elseif (index(topo,'DN').gt.0) then
+           if (NSS(j).eq.7) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-23
+           elseif (NSS(j).eq.8) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-24
+           elseif (NSS(j).eq.9) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-27
+           elseif (NSS(j).eq.10) then
+             nnlbl = nnlbl+1
+             triplgfclbl(nnlbl,ntriplg)=-28
+           elseif (NSS(j).eq.11) then
+             nnlbl = nnlbl+3
+             triplgfclbl(nnlbl-2:nnlbl,ntriplg)=(/-43,-42,-44/)
+           elseif (NSS(j).eq.12) then
+             nnlbl = nnlbl+3
+             triplgfclbl(nnlbl-2:nnlbl,ntriplg)=(/-47,-46,-48/)
+           else
+             write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
+             stop 'Check DG model'
+           endif
+         else
+           write (*,*) 'uinptriang -- warning: topology ',topo,
+     ,                 'not yet supported for void triangulation'
+         endif
+         nfclbltriplg(ntriplg)=nnlbl
+       enddo
    20 continue   
 
 c  Prepare data for TRIA input file (header with refinement zones data)

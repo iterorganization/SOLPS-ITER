@@ -12,7 +12,7 @@ c*** routine is normally called from a B2-Eirene working directory
 c*** The names are:
 c***  tria.in       for fort.2  (input file)
 c***  tria.dbg      for fort.3  (trap set file)
-c***  triaplt.dat   for fort.22 
+c***  triaplt.dat   for fort.22
 c***  tria.nodes    for fort.23
 c***  tria.elemente for fort.24
 c***  tria.neighbor for fort.25
@@ -85,6 +85,8 @@ C---- INITIALISATION
       x = 0.
       allocate(y(100))
       y = 0.
+      allocate(isplit_hlp(100))
+      isplit_hlp = 0
       NPARTFR = 0
       NFRONT = 0
       allocate(ikont(100))
@@ -93,6 +95,8 @@ C---- INITIALISATION
       delfro = 0.
       allocate(ifront(2,100))
       ifront = 0
+      allocate(isplit(100))
+      isplit = 0
       allocate(ielm(3,100))
       ielm = 0
 
@@ -111,7 +115,7 @@ cank{
         read (3,*,end=50,err=50) mhlp200
                             ! step after which the code stops
                             ! and the plot data are output for debugging
-        print *,'tria: a trap is set after step ',mhlp200 
+        print *,'tria: a trap is set after step ',mhlp200
         close(3)
         go to 51
  50     print *,'error ',hhlp200,
@@ -194,14 +198,17 @@ C---- INPUT OF X- AND Y-COORDINATES OF ONE BOUNDARY
           IF (NPOIN+I .GT. size(x)) THEN !{
              call realloc_cpoin('xy',100)
           ENDIF !}
-          READ(2,*,END=99) X(NPOIN+I),Y(NPOIN+I)
+          IF (NPOIN+I .GT. size(ISPLIT_HLP)) THEN
+             call realloc_cpoin('isplit_hlp',100)
+          ENDIF
+          READ(2,*,END=99) X(NPOIN+I),Y(NPOIN+I),ISPLIT_HLP(NPOIN+I)
 C---- CHANGES OF MINIMA AND MAXIMA DEPENDING OF INPUT
           IF (X(NPOIN+I) .LT. XMIN) XMIN = X(NPOIN+I)
           IF (X(NPOIN+I) .GT. XMAX) XMAX = X(NPOIN+I)
           IF (Y(NPOIN+I) .LT. YMIN) YMIN = Y(NPOIN+I)
           IF (Y(NPOIN+I) .GT. YMAX) YMAX = Y(NPOIN+I)
         ENDDO !} OF DO I=1,NBOUN
-        
+
         write (6,'(a,1p,4e12.4)') ' xmin,xmax,ymin,ymax=',
      .                              xmin,xmax,ymin,ymax !###
 
@@ -209,10 +216,15 @@ C---- ADD ACTUAL BOUNDARY TO FRONTIER
         IF (NPARTFR+NBOUN-1 .GT. size(ifront,2)) THEN !{
            call realloc_cfront('ifront',
      .                         npartfr+nboun-1-size(ifront,2)+100)
+        ENDIF
+        IF (NPARTFR+NBOUN-1 .GT. size(isplit)) THEN !{
+           call realloc_cfront('isplit',
+     .                         npartfr+nboun-1-size(isplit)+100)
         ENDIF !}
         DO I=1,NBOUN-1 !{
           IFRONT(1,NPARTFR+I) = NPOIN+I
           IFRONT(2,NPARTFR+I) = NPOIN+I+1
+          ISPLIT(NPARTFR+I) = ISPLIT_HLP(NPOIN+I)
         ENDDO !}
         IFRONT(2,NPARTFR+NBOUN-1) = IFRONT(1,NPARTFR+1)
         NFR = NPARTFR
@@ -270,11 +282,22 @@ c          print *,' i,npartfr=',i,npartfr !###
           IF (ABS(DELPOIN) .LT. 1.E-6) DELPOIN = DELTA0
 
 C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
-          IF (DELFRO(I) .GT. DELPOIN) THEN !{
+          IF (DELFRO(I) .GT. DELPOIN .AND. ISPLIT(I).EQ. 1) THEN !{
             NPOIN = NPOIN + 1
             IF (NPOIN .GT. size(x)) THEN !{
                call realloc_cpoin('xy',1)
             ENDIF !}
+            IF (NPOIN .GT. size(isplit_hlp)) THEN !{
+               call realloc_cpoin('isplit_hlp',1)
+            ENDIF !}
+            isplit_hlp(NPOIN) = 1
+            IF (isplit_hlp(IFRONT(1,I)) .NE. 1) THEN
+              WRITE(6,*) 'isplit_hlp(IFRONT(1,I)), I',
+     &          isplit_hlp(IFRONT(1,I)), I
+              WRITE(6,*) 'isplit_hlp(IFRONT(2,I)), I',
+     &          isplit_hlp(IFRONT(2,I)), I
+              STOP 'ERROR'
+            ENDIF
             X(NPOIN) = (X(IFRONT(1,I))+X(IFRONT(2,I)))*0.5
             Y(NPOIN) = (Y(IFRONT(1,I))+Y(IFRONT(2,I)))*0.5
             NPARTFR = NPARTFR + 1
@@ -289,6 +312,10 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
             DELFRO(NPARTFR) = DELFRO(I)*0.5
             IFRONT(2,I) = NPOIN
             DELFRO(I) = DELFRO(I)*0.5
+            IF (NPARTFR .GT. size(isplit)) THEN !{
+               call realloc_cfront('isplit',1)
+            ENDIF !}
+            ISPLIT(NPARTFR) = ISPLIT(I)
           ELSE !}{
             I = I + 1
           ENDIF !}
@@ -306,7 +333,14 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
       if (npartfr .eq. 0) then !{
 c---- empty input
         WRITE(6,*) 'STOP IN MAIN, EMPTY INPUT'
-        STOP 'ERROR'
+        WRITE(6,*) 'WRITING EMPTY OUTPUT FILES'
+        WRITE(23,*) 0
+        WRITE(24,*) 0
+        WRITE(25,*) 0
+        CLOSE(23)
+        CLOSE(24)
+        CLOSE(25)
+        STOP
       endif !}
 !###{
       print *
@@ -350,7 +384,7 @@ c***      kchn_hlp counts the number of segments in the current chain
         print *,' point links'
         do i=1,npoin !{
           if(ichn_hlp(i).ne.2) print '(2i6)',i,ichn_hlp(i)
-        end do !}  
+        end do !}
       end if !}
       print *
       print *,'Point connections'
@@ -444,7 +478,7 @@ c** Output the boundary data for plotting (self-intersections marked)
 
       if(found) stop 'self-intersecting structure'
 
-!##1      
+!##1
 
 98    CONTINUE
 
@@ -575,7 +609,7 @@ C---- TREAT ONE FRONTIER PART
 !###}
 
       CALL CHOICE(FOUND) ! SELECTS THE TRIANGLE POINT UNDER
-C----                      CONSIDERATION OF POINT C AND ALREADY FOUND 
+C----                      CONSIDERATION OF POINT C AND ALREADY FOUND
 C----                      GRID POINTS
 !###{
       if(lhlp200) then !{
@@ -585,8 +619,8 @@ C----                      GRID POINTS
 !###}
 
       IF (.NOT. FOUND) THEN !{
-C---- NO POINT WAS FOUND BY CHOICE 
-C---- THE SEARCH RADIUS IS ENLARGED AND THE MINIMAL INNER ANGLE IS 
+C---- NO POINT WAS FOUND BY CHOICE
+C---- THE SEARCH RADIUS IS ENLARGED AND THE MINIMAL INNER ANGLE IS
 C---- REDUCED
         FRAD = FRAD + 0.5
         IF (EPSANG .GT. 1E-6) THEN !{
@@ -627,13 +661,14 @@ C---- ALL FRONTIER PARTS ARE WORKED OUT
 
       print *,'*300: finished with triangulation.'
       print *,'      npoin,nelm=',npoin,nelm
- 
+
       CALL ADJAC ! CONSTRUCTS THE GRID FROM CALCULATED TRIANGLES
 
 C---- OUTPUT OF COORDINATES
       WRITE(23,*) NPOIN
-      WRITE(23,101) (X(I),I=1,NPOIN)
-      WRITE(23,101) (Y(I),I=1,NPOIN)
+      DO I=1,NPOIN
+        WRITE(23,'(I9,ES24.16,ES24.16)') I, X(I), Y(I)
+      ENDDO
       CLOSE(23)
  101  FORMAT (1P,4E17.9)
 cc??? - debugging output?  !{
@@ -650,12 +685,13 @@ C---- OUTPUT OF ELEMENTS
       WRITE(25,*) NELM
       DO I=1,NELM !{
         WRITE(24,103) I,(IELM(J,I),J=1,3)
-        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3)
+        WRITE(25,104) I,(IADJA(J,I),ISIDE(J,I),IPROP(J,I),J=1,3),
+     .               -1,0,0,0
       ENDDO !}
       CLOSE(24)
       CLOSE(25)
 103   FORMAT(I5,2X,3I7)
-104   FORMAT(I5,2X,3(I6,2I3,2X))
+104   FORMAT(I5,2X,3(I6,2I4,2X),4(I4))
 
 C---- GRAPHIC OUTPUT
       DELTAX = ABS(XMAX-XMIN)

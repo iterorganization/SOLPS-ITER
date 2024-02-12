@@ -62,7 +62,7 @@ stem=$1
 }
 
 [ -s "$stem.$coord" ] && [ -s "$stem.$elem" ] || {
-  set -A f -- $TRIAEXT
+  set -A f -- $B2USEXT
   coord=${f[0]}
   elem=${f[1]}
 }

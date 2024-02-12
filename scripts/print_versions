@@ -2,7 +2,6 @@
 
 cat ${SOLPSTOP}/modules/B2.5/src/include/git_version_B25.h | head -2 | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "B2.5 version is",$1}'
 cat ${SOLPSTOP}/modules/Eirene/src/git_version_Eirene.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "Eirene version is", $1}'
-cat ${SOLPSTOP}/modules/Carre/src/include/git_version_Carre.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "CARRE version is",$1}'
 cat ${SOLPSTOP}/modules/Carre2/src90/include/git_version_Carre.h | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "CARRE2 version is",$1}'
 cat ${SOLPSTOP}/modules/DivGeo/src/git_version_DG.h | awk '{print $3}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "DG version is",$1}'
 cat ${SOLPSTOP}/modules/B2.5/src/include/git_version_B25.h | head -4 | tail -1 | awk '{print $2}' | sed -e "s:^.::" | sed 's/.$//' | awk '{print "ADAS version is",$1}'

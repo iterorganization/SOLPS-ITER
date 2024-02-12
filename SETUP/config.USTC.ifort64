@@ -20,22 +20,21 @@
 # Add -DF2003 to SOLPS_CPP
 #
 
-       NCDIR ?= ${SOLPSLIB}
+       NCDIR ?= /opt/netcdf/4.1.3/intel/2015.3.187
    MSCL_ROOT ?= ${SOLPSLIB}
        H5DIR ?= /opt/hdf5/1.10.0-patch1-linux-centos6-x86_64-gcc447-shared
      GR_ROOT ?= ${SOLPSLIB}
-    GLI_HOME ?= ${SOLPSLIB}
+    GLI_HOME ?= ${SOLPSTOP}/lib/USTC.ifort64
   NCARG_ROOT ?= ${SOLPSLIB}
       NAGDIR ?= ${SOLPSLIB}
  MDSPLUS_DIR ?= ${SOLPSLIB}/mdsplus
        MPDIR ?= /opt/mpich/3.2/intel/2015.3.187
 
-
 #
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
@@ -49,7 +48,7 @@ LD_MPI     = -L${MPDIR}/lib -lmpi -lmpich
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4
+SOLPS_CPP      = -DNCAR4 -DF2003
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

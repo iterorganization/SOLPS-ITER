@@ -7,6 +7,8 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+      implicit none
+
 c  version : 15.03.2001 17:03
 
 c=======================================================================
@@ -151,22 +153,22 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         ntrgdflt=4
         if(topo.eq.'DNS') then  !{
           nrsol1=0
-          nrpfl=npr(5)-1
-          nrsol=npr(1)-1
+          nrpfl=max(npr(5),npr(2),npr(4))-1
+          nrsol=max(npr(1),npr(3))-1
           irsp=nrpfl+1
           irsp2=irsp
           ex=.true.
         else if(topo.eq.'DNL') then !}{
           nrsol1=npr(1)-1
-          nrpfl=npr(6)-1
-          nrsol=npr(2)-1
+          nrpfl=max(npr(6),npr(5),npr(3)-nrsol1)-1
+          nrsol=max(npr(2),npr(4))-1
           irsp=nrpfl+1
           irsp2=irsp+nrsol1
           ex=.true.
         else if(topo.eq.'DNU') then !}{
           nrsol1=npr(1)-1
-          nrpfl=npr(6)-1
-          nrsol=npr(2)-1
+          nrpfl=max(npr(6),npr(3),npr(5)-nrsol1)-1
+          nrsol=max(npr(2),npr(4))-1
           irsp2=nrpfl+1
           irsp=irsp2+nrsol1
           ex=.true.
@@ -211,7 +213,7 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         end if  !}
         if(ex) then !{
           nrsol1=0
-          nrpfl=npr(3)-1
+          nrpfl=max(npr(3),npr(2))-1
           nrsol=npr(1)-1
           nzinn=nptseg(3)-1
           nzidv2=0
@@ -273,6 +275,37 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         cbrbrk(3) = rratio(nxcut1(3),nrplg-npplg)
         cbrbrk(4) = rratio(nxcut1(4),nrplg-npplg)
         cbrbrk(cbirno) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
+      end if
+cnh Grid parameters for unstructured format
+      if (carre_mode.lt.2) then
+        ncvp = (ndxa-npplg+3)*(ndya+2)-2*nncut
+        ncip = (ndxa-npplg-nncut+3)*ndya
+        nfcp = (ndxa-2*nncut+3)*ndya+(ndxa-npplg-nncut+3)*(ndya+1)
+      else
+        ncvp = ncells
+        ncip = nicells
+        nfcp = nfaces
+      end if
+
+      if (npplg.eq.0) then
+        nssir(1) = 1
+        nssir(2) = ndxa+1
+        nssir(3) = (ndxa+1)*ndya+1
+        nssir(4) = (ndxa+1)*(ndya+1)
+      else if (npplg.eq.3) then
+        nssir(1) = 1
+        nssir(2) = (ndxa-1)*ndya
+        nssir(3) = ndxa-1
+        nssir(4) = (ndxa-1)*(ndya+1)-1
+      else if (npplg.eq.6) then
+        nssir(1) = 1
+        nssir(2) = (ndxa-5)*ndya-1
+        nssir(3) = inump(3)-2
+        nssir(4) = (ndxa-5)*ndya-2+inump(3)-2
+        nssir(5) = inump(3)-1
+        nssir(6) = (ndxa-5)*ndya-2+inump(3)-1
+        nssir(7) = ndxa-5
+        nssir(8) = (ndxa-5)*(ndya+1)-2
       end if
 
 c!###{

@@ -37,8 +37,8 @@
        H5DIR ?=
      GR_ROOT ?= ${STGDIR}
     GLI_HOME ?= ${STGDIR}
-  NCARG_ROOT ?= 
-      NAGDIR ?=  
+  NCARG_ROOT ?=
+      NAGDIR ?=
  MDSPLUS_DIR ?=
 
 
@@ -46,7 +46,7 @@
 # Variables of linking, using pkg-config
 #
 
-LD_NETCDF  = `nf-config --flibs` 
+LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = -L${STGDIR} -lmscl
 LD_GR      = -L${STGDIR} -lgr
 LD_GKS     = -L${STGDIR} -lgks -lX11 -lXt
@@ -59,7 +59,7 @@ LD_NAG     = -L${EBROOTIMKL}/mkl/lib  -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmk
 LD_MDSPLUS =
 # LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
-LD_MPI     = 
+LD_MPI     =
 
 
 #
@@ -71,7 +71,7 @@ B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
-MPI_CPP        = 
+MPI_CPP        =
 
 
 #!!!Local Variables:

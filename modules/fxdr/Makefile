@@ -10,6 +10,8 @@ ifndef COMPILER
   $(error COMPILER not defined)
 endif
 
+MAKETAGS ?= ctags -e -f
+
 MAKES = Makefile
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
@@ -71,7 +73,7 @@ listobj:
 	cd src ; echo " " *.F | sed -e 's/ [^ /]*\// /g' -e 's/\.F/.o/g'
 
 tags:
-	rm -f TAGS ; ctags -e -f TAGS src/*.F || touch TAGS
+	rm -f TAGS ; ${MAKETAGS} TAGS src/*.F || touch TAGS
 
 dirs: ${OBJDIR}
 
