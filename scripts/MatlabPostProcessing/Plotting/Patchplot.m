@@ -65,8 +65,12 @@ if isplasmagrid(gmtry)
     S.ZData = f;
     
 elseif isunstructuredgrid(gmtry)
-    
+%     To create one polygon, specify X
+%     and Y as vectors. To create multiple polygons, specify X and Y as
+%     matrices where each column corresponds to a polygon. C determines the
+%     polygon colors.
     S = struct([]);
+    nmax = 1;
     for iCv = 1:length(gmtry.cvVol)
         S(iCv).XData = [];
         S(iCv).YData = [];
@@ -97,6 +101,27 @@ elseif isunstructuredgrid(gmtry)
                 S(iCv).ZData(end-2:end-1) = [S(iCv).ZData(end-1);S(iCv).ZData(end-2)]; 
             end
         end
+        nmax = max(nmax,length(S(iCv).XData));
+    end
+    S0 = S;
+    clear S
+    S = struct;
+    S.XData = [];
+    S.YData = [];
+    S.ZData = [];
+    S.XData = zeros(nmax,length(S0));
+    S.YData = S.XData;
+    S.ZData = zeros(length(S0),1);
+    
+    for ii=1:length(S0)
+        nn = length(S0(ii).XData);
+        S.XData(1:nn,ii) = S0(ii).XData;
+        S.YData(1:nn,ii) = S0(ii).YData;
+        S.ZData(ii) = S0(ii).ZData;
+        if nn<nmax
+            S.XData(nn+1:nmax,ii) = S.XData(nn,ii);
+            S.YData(nn+1:nmax,ii) = S.YData(nn,ii);
+        end
     end
  
 elseif istrianglegrid(gmtry)
@@ -123,7 +148,6 @@ end
 % Check current status of hold
 hs = ishold;
 hold on;
-
 % Create patch plot
 for i = 1:length(S)
     p(i) = patch(S(i).XData,S(i).YData,S(i).ZData);
