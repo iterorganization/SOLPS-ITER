@@ -531,17 +531,17 @@ uinp_nox_openmp_mpi: uinp_openmp_mpi
 
 uinp_nox_mpi_openmp: uinp_openmp_mpi
 
-triang: eirene
+triang: eirene_nox
 	cd modules/Triang; ${MAKE}
 
-triang_mpi: eirene_mpi
+triang_mpi: eirene_nox_mpi
 	cd modules/Triang; ${MAKE} ${MPI_OPTS}
 
-triang_nox:
+triang_nox: eirene_nox
 	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
 	cd modules/Triang; ${MAKE} ${OPT_NOX}
 
-triang_nox_mpi:
+triang_nox_mpi: eirene_nox_mpi
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
 
