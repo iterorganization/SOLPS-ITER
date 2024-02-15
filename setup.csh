@@ -1,4 +1,4 @@
-#!/usr/bin/env tcsh
+#! /bin/tcsh -f
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
@@ -11,7 +11,7 @@ echo The Eirene manual is located at http://www.eirene.de/
 
 if ( "$0" != "tcsh" ) then
   if ( "$0" != "-tcsh" ) then
-    if ( `ps -p $$ | grep -q csh` ) then
+    if ( `ps -p $$ | grep -q tcsh` ) then
       echo "Use tcsh to source setup.csh!"
       exit 1
     endif
