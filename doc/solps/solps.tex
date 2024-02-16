@@ -14889,6 +14889,7 @@ are not met, an error is returned and no action is taken.
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
     fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against poloidal \\
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} magnetic flux ($\Psi$) value \\
+    icse \index{b2plot, icse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:icse}  & Set list of trajectory launch cells from matrix stack \\
     intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along flux tubes \\
     inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
     line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
@@ -14945,9 +14946,10 @@ are not met, an error is returned and no action is taken.
     sumz \index{b2plot, sumz}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
     swap \index{b2plot, swap}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:swap}  & Swap top two matrices on stack \\
     t\_\#p \index{b2plot, t\_\#p}  & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_hashp} & Number of trajectories \\
+    t\_xy \index{b2plot, t\_xy}    & 4 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_xy}  & Range of structured cells from which to launch trajectories \\
     tese \index{b2plot, tese}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto \\
     &  &  &  &  &  &  &  &  & \hspace{1cm} electron temperature \\
-    traj \index{b2plot, traj}      & 7+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
+    traj \index{b2plot, traj}      & 3+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
     uuse \index{b2plot, uuse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
     vvse \index{b2plot, vvse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
     wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto \\
@@ -16072,12 +16074,12 @@ is plotted in the colour associated with its value.
 Produces a "patch" plot of the target domain.
 Note that the side in contact with the plasma is at the bottom of the target computational domain.
 
-\subsubsection{traj}\index{b2plot, traj}\label{sec:traj}\index{b2plot, uuse}\label{sec:uuse}\index{b2plot, vvse}\label{sec:vvse}\index{b2plot, t\_\#p}\label{sec:t_hashp}\index{b2plot, lint}\label{sec:lint}\index{b2plot, logt}\label{sec:logt}
+\subsubsection{traj}\index{b2plot, traj}\label{sec:traj}\index{b2plot, icse}\label{sec:icse}\index{b2plot, uuse}\label{sec:uuse}\index{b2plot, vvse}\label{sec:vvse}\index{b2plot, t\_\#p}\label{sec:t_hashp}\label{sec:t_xy}\index{b2plot, t\_xy}\index{b2plot, lint}\label{sec:lint}\index{b2plot, logt}\label{sec:logt}
 \index{b2plot, trajectories plot}
 
 Plots trajectories.  The following command
 \begin{verbatim}
-echo phys a4p vesl sep outl 70 1 70 36 1000 0 1 1 traj | b2plot
+echo 70 1 70 36 t_xy phys a4p vesl sep outl 1000 0 1 1 traj | b2plot
 \end{verbatim}
 produced the results shown in figure \ref{fig:traj}.
 
@@ -16091,17 +16093,19 @@ produced the results shown in figure \ref{fig:traj}.
     \label{fig:traj}
 \end{figure}
 
-The command takes a variable number of integer arguments, the minimum number being 8.
+The command takes a variable number of integer arguments, the minimum number being 4.
 
-The first 4 numbers specify the bottom left and top right coordinates
-of a rectangle in which the test particles are to be started
-($ix_{start}~iy_{start}~ix_{end}~iy_{end}$) ({\tt 0}'s will be replaced by the
-appropriate limit).  The next number specifies the amount
+The first number specifies the amount
 of test particles to be started (if positive the particles are started
 weighted by volume, if negative then the weighting function is taken
-off the matrix stack).  This is then followed by a flag (1 for a
+off the matrix stack). This is then followed by a flag (1 for a
 movie, otherwise normal trajectories), and then the species indices
-come next.  The last argument specifies the number of species.
+come next. The last argument specifies the number of species.
+The starting points of the trajectories are chosen from the set of active cells
+defined in the {\tt ic\_active} array (default is all real cells).
+The use of {\bf icse} allows to specify which cells are used for starting points
+for the trajectories. The selected cells will be the ones which have a non-zero
+value in the matrix stack.
 The use of {\bf uuse} and {\bf vvse} allows one to replace the particle velocities
 matrices used by default to compute the trajectories with data from the
 matrix stack.
@@ -16120,7 +16124,7 @@ vesl sep outl
 2000 t_#p
 1e-3 t_pt
 na vol m*
-0 0 0 0 -2000 1 2 3 4 5 6 7 6 traj
+-2000 1 2 3 4 5 6 7 6 traj
 drop
 \end{verbatim}
 
@@ -16128,34 +16132,34 @@ From the code documentation:
 \begin{verbatim}
 C     This routine is used to plot trajectories of particles using the
 C     velocity fields uu and vv. To call this routine
-C     one must specify at least 8 parameters: ixmin, iymin, ixmax, iymax,
+C     one must specify at least 4 parameters:
 C     # of particles, 1 or 0 for movie or lines, species indices (at least
 C     one), and last but not least the total number of species indices one
 C     has given in the step before. A valid call could be:
-C     0 0 95 35 100 0 0 1 traj
-C     This should plot the trajectories of 100 particles which start
-C     in any of the cells between cell (0,0) (southwest corner) and
-C     cell (95,35) (northeast corner) as lines for hydrogen (0=H).
-C     Note that the cell and species indices start at zero!
-C     The number of time steps (plots) is given by the 't_#p' command.
-C     The total flight time of the particles is given by the 't_pt' command.
+C     100 0 0 1 traj
+C     This should plot the trajectories of 100 particles as lines
+C     for hydrogen (0=H).
+C     The start locations of the trajectories will be chosen from the set
+C     of set defined in the ic_active array (default is all real cells).
+C     The location (in a structured grid) of the cells from which to launch
+C     particles can be chosen using the "t_xy" command, or from the non-zero
+C     cells from the matrix stack with the "icse" command.
+C     The number of time steps (plots) is given by the "t_#p" command.
+C     The total flight time of the particles is given by the "t_pt" command.
 C     The velocity fields uu and vv can be overwritten using the
-C     'uuse' and 'vvse' commands. Their defaults values are ua and fna/na/sy
+C     "uuse" and "vvse" commands. Their defaults values are ua and fna/na/sy
 C     respectively. If the number of particles is positive, then the
 C     particles are born randomly, with the probability of being born in a
 C     cell being proportional to the cell volume. This probability weighting
-C     can be changed by calling 'traj' with a negative number of particles.
+C     can be changed by calling "traj" with a negative number of particles.
 C     Then the weighting function is whatever field is on top of the matrix
 C     stack. For example, this set of commands does the following:
-C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal
-C                                     !   neutral flow velocity
-C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial
-C                                     !   neutral flow velocity
+C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal neutral flow velocity
+C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial neutral flow velocity
 C     1000 t_#p                       ! 1000 time steps
 C     1e-4 t_pt                       ! followed for a total time of 1.e-4 s.
 C     na 0 zsel                       ! weighted with neutral density
-C     0 0 0 0 -1000 0 0 1 traj        ! over the entire physical domain
-C                                     !   (0 0 0 0)
+C     -1000 0 0 1 traj                ! over all ic_active cells
 C               ! 1000 particles using non-default weighting function (-1000)
 C               ! trajectories plotted (0)
 C               ! for species 0 (=H neutrals) (0)
