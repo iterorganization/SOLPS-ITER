@@ -14437,9 +14437,10 @@ coordinate index.
     bz, btor & \index{b2plot, bz} Toroidal magnetic field $(T)$ \index{b2plot, btor} \\
     cd       & \index{b2plot, cd} Poloidal component of diamagnetic current $(m.s^{-1})$ \\
     ceqp     & \index{b2plot, ceqp} Equipartition term multiplier \\
-    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
     chhichii & \index{b2plot, chhichii} Chang-Hinton $\chi_i$ $(m^2.s^{-1})$ \\
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
+    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
+    clbl     & \index{b2plot, clbl} Cell label number \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
     conn     & \index{b2plot, conn} Connection length $(m)$ \\
     cora     & \index{b2plot, cora} Coronal equilibrium radiation rate (per isonuclear sequence) $(W)$ \\
@@ -14547,6 +14548,7 @@ coordinate index.
     fkty     & \index{b2plot, fkty} Peprendicular ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
     flal     & \index{b2plot, flal} Thermo-electric classical flux limit factor \\
     flalc    & \index{b2plot, flalc} Thermo-electric coefficient limit factor \\
+    flbl     & \index{b2plot, flbl} Face label number \\
     fle      & \index{b2plot, fle} Electron heat flux limit factor \\
     fli      & \index{b2plot, fli} Ion heat flux limit factor \\
     flke     & \index{b2plot, flke} Electron heat diffusivity classical flux limit factor \\
@@ -14586,6 +14588,7 @@ coordinate index.
     fnny32   & \index{b2plot, fnny32} Convective fluid neutral radial particle flux $(s^{-1})$ \\
     fnny52   & \index{b2plot, fnny52} Conductive fluid neutral radial particle flux $(s^{-1})$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
+    freg     & \index{b2plot, freg} Flux region number \\
     fztx     & \index{b2plot, fztx} Poloidal ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
     fzty     & \index{b2plot, fzty} Peprendicular ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
@@ -14601,8 +14604,10 @@ coordinate index.
     icne     & \index{b2plot, icne} Cell index {\em iCv} is not equal to \\
     ifeq     & \index{b2plot, ifeq} Adjoining cells to face index \\
     ift      & \index{b2plot, ift} Flux tube number \\
+    iimp     & \index{b2plot, iimp} Inner midplane cells \\
     iix      & \index{b2plot, iix} Poloidal cell index {\em ix} \\
     iiy      & \index{b2plot, iiy} Radial cell index {\em iy} \\
+    iomp     & \index{b2plot, iomp} Outer midplane cells \\
     ionrad   & \index{b2plot, ionrad} Power loss due to molecular ion radiation $(W)$ \\
     iseq     & \index{b2plot, iseq} Species index {\em is} is equal to \\
     isge     & \index{b2plot, isge} Species index {\em is} is greater than or equal to \\
@@ -14755,6 +14760,7 @@ coordinate index.
     tib2     & \index{b2plot, tib2} Test ion temperature $(eV)$ \\
     tix      & \index{b2plot, tix} Top neighbour poloidal index {\em topix} \\
     tiy      & \index{b2plot, tiy} Top neighbour radial index {\em topiy} \\
+    tlbl     & \index{b2plot, tlbl} Flux tube label number \\
     tmb2     & \index{b2plot, tmb2} Neutral molecule temperature $(eV)$ \\
     tn       & \index{b2plot, tn} Fluid neutral temperature $(eV)$ \\
     tn0      & \index{b2plot, tn0} Fluid neutral temperature {\em tn} at previous time step $(eV)$ \\
@@ -14796,9 +14802,7 @@ coordinate index.
     wci      & \index{b2plot, wci} Ion cyclotron frequency $\omega_{ci}$ $(rad.s^{-1})$ \\
     wpe      & \index{b2plot, wpe} Plasma frequency $\omega_{pe}$ $(rad.s^{-1})$ \\
     ww       & \index{b2plot, ww} Toroidal velocity ({\em ww}) $(m.s{-1})$ \\
-    xreg     & \index{b2plot, xreg} $x$-directed flux region number \\
     xymap    & \index{b2plot, xymap} Index of wall segment {\em xymap} \\
-    yreg     & \index{b2plot, yreg} $y$-directed flux region number \\
     za\_ext  & \index{b2plot, za\_ext} External species charge $(amu)$ \\
     za2\_ext & \index{b2plot, za2\_ext} External species squared charge $(amu)$ \\
     zeff     & \index{b2plot, zeff} $Z$ effective $(amu)$ \\
@@ -14813,9 +14817,9 @@ coordinate index.
   \end{longtable}
 \end{center}
 
-Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands require an integer
-argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region
-number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. If $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
+Note that the {\bf nreg}, {\bf niso}, {\bf freg}, {\bf clbl}, {\bf flbl}, and {\bf tlbl} commands require an integer
+argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region index
+number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. For {\bf nreg} and {\bf niso}, if $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
 
 The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi},
 {\bf shn}, {\bf sch}, {\bf skt}, and {\bf szt} can take an optional integer
@@ -15836,12 +15840,10 @@ in the table \ref{tab:b2plotconstants}.
     c \index{b2plot, c}      & Speed of light $c$ $(m/s)$ \\
     eps0 \index{b2plot, eps0}   & Electric permittivity of vacuum $\epsilon_0$ $(F)$ \\
     ev \index{b2plot, ev}     & Electron-Volt $eV$ $(J)$ \\
+    ifsep \index{b2plot, ifsep}  & Flux surface index of main separatrix \\
     ismain \index{b2plot, ismain} & Index of the main plasma species \\
     ixref \index{b2plot, ixref}    & Index of reference poloidal location \\
     iyref \index{b2plot, iyref}    & Index of reference radial location \\
-    jsep \index{b2plot, jsep}  & Radial index of outermost closed flux surface (just inside the separatrix) \\
-    jxa \index{b2plot, jxa}    & Outer midplane index \\
-    jxi \index{b2plot, jxi}    & Inner midplane index \\
     kbolt \index{b2plot, kbolt}  & Boltzmann's constant $k_B$ $(J.K^{-1})$ \\
     me \index{b2plot, me}     & Electron mass $m_e$ $(kg)$ \\
     mp \index{b2plot, mp}     & Proton mass $m_p$ $(kg)$ \\
@@ -15851,8 +15853,10 @@ in the table \ref{tab:b2plotconstants}.
     nci \index{b2plot, nci}     & Number of internal grid cells \\
     ncv \index{b2plot, ncv}     & Number of grid cells \\
     ndepth \index{b2plot, ndepth} & Size of target arrays in depth direction \\
+    nimp \index{b2plot, nimp}    & Number of inner midplane cells \\
     nion \index{b2plot, nion}   & Number of molecular ion species followed by {\tt Eirene} \\
     nmol \index{b2plot, nmol}   & Number of molecular species followed by {\tt Eirene} \\
+    nomp \index{b2plot, nomp}    & Number of outer midplane cells \\
     ns \index{b2plot, ns}     & Number of species \\
     nspecies \index{b2plot, nspecies}     & Number of isonuclear sequences \\
     nx \index{b2plot, nx}     & Mesh size in poloidal direction \\
