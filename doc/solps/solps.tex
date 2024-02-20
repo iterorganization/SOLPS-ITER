@@ -11344,19 +11344,21 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 \right] \right|_W
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11417,19 +11419,21 @@ If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 \right] \right|_E
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11685,6 +11689,8 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 $p_{h_i,1} = +1.5$
 
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
@@ -11768,6 +11774,8 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 \end{equation*}
 
 $p_{h_i,1} = +1.5$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 

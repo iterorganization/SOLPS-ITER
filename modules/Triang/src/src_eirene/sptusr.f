@@ -1,0 +1,1 @@
+../../../Eirene/src/user-routines/user_iter/sptusr.f
