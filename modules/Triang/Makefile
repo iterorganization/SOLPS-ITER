@@ -74,13 +74,15 @@ INCLUDE += -I${SRCLOCAL}
 endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
-GR_DIR = grsoft-dummy
-PLOT_DIR = plot_dummy
-
 ifeq ($(LOCAL),yes)
-VPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
+TPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
 else
-VPATH = ${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
+TPATH = ${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
+endif
+ifeq ($(strip ${LD_GR}),)
+VPATH = ${TPATH}:${SRCDIR}/gr-dummy
+else
+VPATH = ${TPATH}
 endif
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
@@ -101,6 +103,7 @@ MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o} ${OBJF:%.o=${OBJDIR}/%.o} ${OBJS90:%.o=${OBJDIR}/%.o} ${OBJF90:%.o=${OBJDIR}/%.o}
+EGROBJS = ${GROBJS:%.o=${OBJDIR}/%.o}
 
 MAINLIST = tria.o triageom.o triainq.o
 
@@ -149,13 +152,13 @@ ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.n
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a
 endif
 else
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${EGROBJS} ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${EGROBJS} ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${EGROBJS} ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${EGROBJS} ${LDLIBS} $(LDEXTRA)
 
 ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a
@@ -205,7 +208,7 @@ update:
 
 listobj:
 	@rm -f ${OBJDIR}/LISTOBJ ; touch ${OBJDIR}/LISTOBJ ; l="OBJS =" ; \
-	for d in `echo "$(VPATH)" | tr : \ `; do \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
 	E="-e 's/ \*\.f//g' -e 's/\.f/\.o/g' " ; for f in $(EXCLUDELIST); do \
@@ -213,23 +216,26 @@ listobj:
 	done; \
 	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ; \
 	ll="OBJF =" ; \
-	for d in `echo "$(VPATH)" | tr : \ `; do \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
 		ll="$$ll `(cd $$d > /dev/null; echo *.F)`"; \
 	done; \
 	F="-e 's/ \*\.F//g' -e 's/\.F/\.o/g' "; \
 	echo "$$ll" | eval sed "$$F" >> ${OBJDIR}/LISTOBJ; \
 	lll="OBJS90 =" ; \
-	for d in `echo "$(VPATH)" | tr : \ `; do \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
 		lll="$$lll `(cd $$d > /dev/null; echo *.f90)`"; \
 	done; \
 	G="-e 's/ \*\.f90//g' -e 's/\.f90/\.o/g' " ; \
 	echo "$$lll" | eval sed "$$G" >> ${OBJDIR}/LISTOBJ; \
 	llll="OBJF90 =" ; \
-	for d in `echo "$(VPATH)" | tr : \ `; do \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
 		llll="$$llll `(cd $$d > /dev/null; echo *.F90)`"; \
 	done; \
 	H="-e 's/ \*\.F90//g' -e 's/\.F90/\.o/g' " ; \
-	echo "$$llll" | eval sed "$$H" >> ${OBJDIR}/LISTOBJ
+	echo "$$llll" | eval sed "$$H" >> ${OBJDIR}/LISTOBJ; \
+	lg="GROBJS =" ; \
+	lg="$$lg `(cd src/gr-dummy > /dev/null; echo *.f)`"; \
+	echo "$$lg" | eval sed "$$E" >> ${OBJDIR}/LISTOBJ
 
 tags:
 ifeq ($(LOCAL),yes)
@@ -253,11 +259,15 @@ ${SRCTRI}/TAGS: tags
 echo:
 	@echo CPP=${CPP}
 	@echo LOCAL=${LOCAL}
+	@echo TPATH=${TPATH}
 	@echo VPATH=${VPATH}
 	@echo ALLOBJS=${ALLOBJS}
+	@echo EGROBJS=${EGROBJS}
 	@echo OBJS=${OBJS}
 	@echo OBJF=${OBJF}
+	@echo OBJS90=${OBJS90}
 	@echo OBJF90=${OBJF90}
+	@echo GROBJS=${GROBJS}
 	@echo DEST=${DEST}
 	@echo MODULES=${MODULES}
 #	@echo MODLOCASE=${MODLOCASE}
