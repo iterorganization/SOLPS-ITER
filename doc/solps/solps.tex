@@ -15517,14 +15517,14 @@ cell faces, it is necessary to compute it from the quantities also computed at c
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
-  \frac23 \left(q_{ex}^{ExB} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  \frac23 \left(q_{ex}^{E \times B} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  \frac23 \left(q_{ix}^{E \times B} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
-  \frac23 q_{ey}^{ExB} \\
+  \frac23 q_{ey}^{E \times B} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}
+  \frac23 q_{iy}^{E \times B} + q_{iy}^{conv} + q_{iy}^{j}
 \end{gather}
 
 \begin{gather}
@@ -15546,10 +15546,10 @@ to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
- q_{ex}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
- q_{ey}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
- q_{ix}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+ q_{ex}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
