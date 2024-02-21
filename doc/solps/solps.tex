@@ -9557,7 +9557,6 @@ j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis 
 + \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
-
 \begin{equation}\label{eq:pot_jxan}
 j_x^{(AN)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(AN)}
 \end{equation}
@@ -10812,7 +10811,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -10821,18 +10820,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -10852,7 +10851,7 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -10861,18 +10860,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11056,19 +11055,21 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 \right] \right|_W
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11129,19 +11130,21 @@ If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 \right] \right|_E
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11397,6 +11400,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 $p_{h_i,1} = +1.5$
 
+For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
+
+$p_{h_i,1} = 2 + \nu^2_\tau + \nu^2_\nu + 0.5 \frac{g \left( \nu_\nu \right) - 1}{g \left( \nu_\nu \right)}$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
@@ -11480,6 +11489,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 \end{equation*}
 
 $p_{h_i,1} = +1.5$
+
+For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
+
+$p_{h_i,1} = 2 + \nu^2_\tau + \nu^2_\nu + 0.5 \frac{g \left( \nu_\nu \right) - 1}{g \left( \nu_\nu \right)}$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -18412,13 +18427,12 @@ or
 \begin{verbatim}
   SOLPS_CPP += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list. {\tt ksh} or {\tt bash} users would use something like
 \begin{verbatim}
   export SOLPS_CPP="$SOLPS_CPP -DOPTION"
 \end{verbatim}
 %% $
-).
+
 
 \subsection{Carre2}
 \index{DEFINES, used in compiling Carre2}
@@ -18429,9 +18443,10 @@ We list here additional possible compiler options that can be used when compilin
 
 \begin{description}
 \item[BUILDING\_CARRE] \index{BUILDING\_CARRE} Flags code for extended grids handling routine specific to {\tt Carre2}
-\item[EXTRA\_GRAPHS] \index{EXTRA\_GRAPHS} Turns on additional graphical output of intermediate steps of the {\tt Carre2} grid generation
-\item[MODIF] \index{MODIF} Allows for manual modifications to the grid generation process during the {\tt Carre2} run
+\item[CARRE\_NONINTERACTIVE] \index{CARRE\_NONINTERACTIVE} Flag to turn off the {\tt Carre2} interactive options for changing grid parameters during the run
 \item[READOPT] \index{READOPT} Allows for format-free keyboard input
+\item[USE\_ITMCARRE] \index{USE\_ITMCARRE} Switch for the ITM version of {\tt Carre2}
+\item[USE\_SILO] \index{USE\_SILO} Use SILO-style output for storing grid data
 \end{description}
 
 %%grep #if $SOLPSTOP/modules/Carre2/src90/*/*.F90 | awk '{print $2,$1}' | sort | uniq
@@ -18450,22 +18465,34 @@ We list below where the {\tt Carre2} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-DBG & carre/doubld.F \\
-DBG & carre/saute.F \\
-DBG & fcrr/fcrprp.F \\
-EXTRA\_GRAPHS & carre/carre.F \\
-GFORTRAN & carre/rdfrin.F \\
-GFORTRAN & carre/rdfrre.F \\
-MODIF & carre/maille.F \\
-MODIF & carre/mailrg.F \\
-READOPT & carre/rdfrch.F \\
-READOPT & carre/rdfrin.F \\
-READOPT & carre/rdfrre.F \\
+CARRE\_NONINTERACTIVE & carre/coinci.F90 \\
+CARRE\_NONINTERACTIVE & carre/maille.F90 \\
+CARRE\_NONINTERACTIVE & carre/selptx.F90 \\
+CARRE\_NONINTERACTIVE & carre\_mod/carre\_parameter\_io.F90 \\
+ITM\_ENVIRONMENT\_LOADED & fcrr/fcrr.F90 \\
+ITM\_ENVIRONMENT\_LOADED & trans/tradui.F90 \\
+DBG & fcrr/fcrprp.F90 \\
+READOPT & carre/rdfrch.F90 \\
+READOPT & carre/rdfrin.F90 \\
+READOPT & carre/rdfrre.F90 \\
+READOPT & carre\_mod/carre\_parameter\_io.F90 \\
+USE\_ITMCARRE & fcrr/fcrr.F90 \\
+USE\_ITMCARRE & trans/tradui.F90 \\
+USE\_SILO & carre/mailcn.F90 \\
+USE\_SILO & carre/mailrg.F90 \\
+USE\_SILO & carre\_mod/carre\_equilibrium.F90 \\
+USE\_SILO & carre\_mod/carre\_main.F90 \\
+USE\_SILO & carre\_mod/carre\_niveau.F90 \\
+USE\_SILO & carre\_mod/carre\_postprocess.F90 \\
+USE\_SILO & carre\_mod/carre\_virtualstructures.F90 \\
+USE\_SILO & carre\_mod/carresiloio.F90 \\
+USE\_SILO & trans/tradui.F90 \\
     \hline
     \caption{Defines for Carre2 and where they are used.}
     \label{tab:Carre2defines}
   \end{longtable}
 \end{center}
+
 
 \subsection{DivGeo}
 \index{DEFINES, used in compiling DivGeo}
