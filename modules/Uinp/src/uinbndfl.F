@@ -321,9 +321,8 @@ c=======================================================================
       character*8 name, species_name
       integer i
       integer nplus
-      integer lnblnk
       logical streql, isplusorminus
-      external streql, lnblnk, isplusorminus, strip_spaces
+      external streql, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd
@@ -341,7 +340,7 @@ c=======================================================================
         end do
       else if (index(name,'+').gt.0) then
         species_name=repeat(' ',8)
-        do i = 1, lnblnk(name)
+        do i = 1, len_trim(name)
           if (isplusorminus(name(i:i))) then
             if (nplus.eq.0) species_name(i:i) = ' '
             nplus=nplus+1

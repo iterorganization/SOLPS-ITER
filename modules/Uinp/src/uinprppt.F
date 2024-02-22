@@ -16,10 +16,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, lnblnk
+      integer find_matching_species
       logical ex,streql
-      external streql, xerrab
-      external find_matching_species, lnblnk
+      external streql,xerrab
+      external find_matching_species
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -275,7 +275,7 @@ c*** the atoms and nuclei
                 if (k.le.nspdgen-2) then !{
                   c=spcdspc(j+m)
                 else !}{
-                  if (lnblnk(spcigen(l)).eq.1) then !{
+                  if (streql(spcigen(l),' ')) then !{
                     if (m.eq.1) then !{
                       c=spcigen(l)(1:1)//'+'
                     else if (m.eq.2) then !}{
