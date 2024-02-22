@@ -41,10 +41,10 @@ c======================================================================
       integer ndup
       logical h_iso_used(m_hlp_h)
       logical, allocatable :: ldup(:)
-      integer find_matching_reagent, lnblnk, len_of_digits
+      integer find_matching_reagent, len_of_digits
       logical streql, silent_open
       external xerrab, streql
-      external find_matching_reagent, lnblnk, len_of_digits
+      external find_matching_reagent, len_of_digits
       external silent_open
 c======================================================================
       call subini ('uinprprc')
@@ -377,8 +377,7 @@ cxpb Find out the number of passes to do
                   rctneln(nnrctn)=rctdeln(j,l)
                 else !}{
                   if (l.eq.nsrctd-1) then !{
-                    rctnpto1(nnrctn)=
-     .               elements(nc)(1:lnblnk(elements(nc)))//'+'
+                    rctnpto1(nnrctn)=trim(elements(nc))//'+'
                   else if (l.eq.nsrctd) then !}{
                     rctnpto1(nnrctn)=elements(nc)
                   end if !}
