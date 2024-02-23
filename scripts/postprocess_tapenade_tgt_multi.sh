@@ -16,14 +16,14 @@ sed -i -e 's/\&             nbdirs/\&             npar_opt-nsigma_opt-nmean_opt-
 
 ## insert an extra call to b2usr_cost_function_DV within the fixed point loop, only for output purposes.
 ## This could have been done using $AD DO-NOT-DIFF pragmas but they fail for adjoint AD
-sed -i '/&                         , state, stated, state_ext, switch%boris, j, &/d' b2mod_driver_diffv.F90
-sed -i '/&                         jd, nbdirs)/d' b2mod_driver_diffv.F90
-sed -i -e "/&              nbdirs)/a\      CALL B2USR_COST_FUNCTION_DV(ncv, nfc, nvx, ns, geo, geod, mpg, mpgd\&" b2mod_driver_diffv.F90
-sed -i -e "/&              nbdirs)/a\!     manually inserted call to cost function, for output purposes only" b2mod_driver_diffv.F90
+sed -i '/&                         stated, state_ext, switch%boris, j, jd, nbdirs&/d' b2mod_driver_diffv.F90
+sed -i '/&                        )/d' b2mod_driver_diffv.F90
+sed -i -e "/&              , state_extd, state_avg, state_avgd, ierr, nbdirs)/a\      CALL B2USR_COST_FUNCTION_DV(ncv, nfc, nvx, ns, geo, mpg, state, &" b2mod_driver_diffv.F90
+sed -i -e "/&              , state_extd, state_avg, state_avgd, ierr, nbdirs)/a\!     manually inserted call to cost function, for output purposes only" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\    call print_tgt_gradient(jd)" b2mod_driver_diffv.F90
 sed -i -e "/B2USR_COST_FUNCTION_DV/a\    if (first_time_step) write(*,*) 'nbdirs: ',nbdirs+nsigma_opt+nmean_opt+nshift_opt+ncorr_opt" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                         jd, nbdirs+nsigma_opt+nmean_opt+nshift_opt+ncorr_opt)" b2mod_driver_diffv.F90
-sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                         , state, stated, state_ext, switch%boris, j, &" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                         nbdirs+nsigma_opt+nmean_opt+nshift_opt+ncorr_opt)" b2mod_driver_diffv.F90
+sed -i -e "/B2USR_COST_FUNCTION_DV/a\&                         stated, state_ext, switch%boris, j, jd,&" b2mod_driver_diffv.F90
 sed -i -e "0,/call print_tgt_gradient(jd)/s/call print_tgt_gradient(jd)/call print_tgt_gradient(jd)\n      do icf=1,ncf\n        write(ss, \'(I1)\') icf\n        write(\*, \*) 'Cost function value '\/\/ss\/\/': ', j(icf)\n      end do/" b2mod_driver_diffv.F90
 
 ## insert an extra call to b2usr_cost_function_NODIFF within the fixed point loop, only for output purposes.

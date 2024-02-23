@@ -38,6 +38,7 @@ cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxgs.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxid.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne_st.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xvsg.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/chord.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/isplusorminus.F .
@@ -45,6 +46,7 @@ cp $SOLPSTOP/modules/B2.5/src/b2plot/isadigit.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/isaletter.F .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
+cp $SOLPSTOP/modules/B2.5/src/convert/find_faces.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_constants.F90 .
@@ -56,6 +58,7 @@ cp $SOLPSTOP/modules/B2.5/src/ids/helper.F90 .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_grid_mapping.F90 .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_connectivity.F90 .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_interp.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_geometry.F90 .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rflb.F .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rusr.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_openmp.F .
@@ -63,7 +66,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmfs.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirdiag.F .
-cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_indirect.F .
+#cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_indirect.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_types.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_time.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_residuals.F .
@@ -81,6 +84,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_work.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2plot_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/average.F .
@@ -155,7 +159,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/my_outi_us.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
-#cp $SOLPSTOP/modules/B2.5/src/utility/mass_density.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/calc_err.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
@@ -169,8 +173,6 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_gradient.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp_multi.F .
 cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
-
-
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

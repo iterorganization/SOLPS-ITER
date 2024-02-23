@@ -73,6 +73,10 @@ sed -i -e "s/INTEGER :: dummyzerodiffd0/INTEGER :: dummyzerodiffd0(nbdirsmax)/g"
 sed -i -e "s/INTEGER :: dummyzerodiffd4/INTEGER :: dummyzerodiffd4(nbdirsmax)/g" b2stbr_phys_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd6/INTEGER :: dummyzerodiffd6(nbdirsmax)/g" b2stbr_phys_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g" b2tanml_dv.F90
+sed -i -e "s/DIMENSION(:, SIZE(st%psnc%zt, 1))/DIMENSION(nbdirsmax, SIZE(st%psnc%zt, 1))/g" b2mndt_dv.F90
+sed -i -e "s/DIMENSION(:, SIZE(st%psnc%kt, 1))/DIMENSION(nbdirsmax, SIZE(st%psnc%kt, 1))/g" b2mndt_dv.F90
+sed -i -e "s/DIMENSION(:, ISIZE1OFgeo%cvvol)/DIMENSION(nbdirsmax, nCv)/g" b2mndt_dv.F90 b2news__dv.F90
+sed -i -e "s/DIMENSION(:, SIZE(pl%te, 1)) /DIMENSION(nbdirsmax, SIZE(pl%te, 1)) /g" b2nppo_dv.F90
 sed -i -e 's/ISIZE1OFcdpa/nFc/g' b2tfcc_dv.F90 b2tfnb_dv.F90
 sed -i -e 's/ISIZE1OFne/nCv/g' b2tfhe__dv.F90 b2tfrn_dv.F90
 sed -i -e 's/ISIZE1OFne/mpg%nCv/g' b2mod_driver_diffv.F90
@@ -177,7 +181,6 @@ sed -i '/EXTERNAL B2FILE./d' b2mndt_dv.F90
 sed -i '/TRIM_DV/d' b2mod_main_diffv.F90
 sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_dv.F90
 sed -i 's/B2XPNE_ST_NODIFF/B2XPNE_ST/g' b2mod_running_average_diffv.F90
-sed -i 's/calc_err/calc_err_nodiff/g' b2wdat.F
 sed -i 's/call species/call species_nodiff/g' tallies.F
 sed -i 's/b2usr_loads/b2usr_loads_nodiff/g' b2mod_usrtrc.F
 sed -i 's/b2xppz_st/b2xppz_st_nodiff/g' b2mod_usrtrc.F
