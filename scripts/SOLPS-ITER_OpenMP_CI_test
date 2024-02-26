@@ -2,6 +2,8 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Compile the code with OpenMP options activated
+echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
 make MAKE_OPTIONS=-j8 b25_nox_openmp
 
@@ -10,8 +12,8 @@ make MAKE_OPTIONS=-j8 b25_nox_openmp
 
 # For now, comment out until OpenMP is included again
 #export DEVICE=upgrade
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 12 || exit 1
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 1
 
 #export DEVICE=iter
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 24 || exit 2
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 21 || exit 3
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 6 || exit 2
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 7 || exit 3

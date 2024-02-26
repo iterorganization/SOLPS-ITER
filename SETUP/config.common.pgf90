@@ -1,5 +1,6 @@
 # Autodetected optional features...
 
+FC          = pgf90
 SOLPS_CPP  += -DPGF90 -DNOQUAD
 LD_MPI      = -Mmpi=mpich
 FFLAGSEXTRA = -Mnorpath

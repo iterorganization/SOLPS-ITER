@@ -9557,7 +9557,6 @@ j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis 
 + \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
-
 \begin{equation}\label{eq:pot_jxan}
 j_x^{(AN)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(AN)}
 \end{equation}
@@ -10812,7 +10811,7 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -10821,18 +10820,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -10852,7 +10851,7 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
-\begin{small}\begin{equation*}
+\small\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
@@ -10861,18 +10860,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}\begin{equation*}
+\begin{equation*}
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
-\end{equation*}\end{small}
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11056,19 +11055,21 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 \right] \right|_W
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11129,19 +11130,21 @@ If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 \right] \right|_E
 \end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
 \end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11397,6 +11400,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 $p_{h_i,1} = +1.5$
 
+For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
+
+$p_{h_i,1} = 2 + \nu^2_\tau + \nu^2_\nu + 0.5 \frac{g \left( \nu_\nu \right) - 1}{g \left( \nu_\nu \right)}$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
@@ -11480,6 +11489,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 \end{equation*}
 
 $p_{h_i,1} = +1.5$
+
+For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
+
+$p_{h_i,1} = 2 + \nu^2_\tau + \nu^2_\nu + 0.5 \frac{g \left( \nu_\nu \right) - 1}{g \left( \nu_\nu \right)}$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -14437,9 +14452,10 @@ coordinate index.
     bz, btor & \index{b2plot, bz} Toroidal magnetic field $(T)$ \index{b2plot, btor} \\
     cd       & \index{b2plot, cd} Poloidal component of diamagnetic current $(m.s^{-1})$ \\
     ceqp     & \index{b2plot, ceqp} Equipartition term multiplier \\
-    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
     chhichii & \index{b2plot, chhichii} Chang-Hinton $\chi_i$ $(m^2.s^{-1})$ \\
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
+    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
+    clbl     & \index{b2plot, clbl} Cell label number \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
     conn     & \index{b2plot, conn} Connection length $(m)$ \\
     cora     & \index{b2plot, cora} Coronal equilibrium radiation rate (per isonuclear sequence) $(W)$ \\
@@ -14547,6 +14563,7 @@ coordinate index.
     fkty     & \index{b2plot, fkty} Peprendicular ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
     flal     & \index{b2plot, flal} Thermo-electric classical flux limit factor \\
     flalc    & \index{b2plot, flalc} Thermo-electric coefficient limit factor \\
+    flbl     & \index{b2plot, flbl} Face label number \\
     fle      & \index{b2plot, fle} Electron heat flux limit factor \\
     fli      & \index{b2plot, fli} Ion heat flux limit factor \\
     flke     & \index{b2plot, flke} Electron heat diffusivity classical flux limit factor \\
@@ -14586,15 +14603,26 @@ coordinate index.
     fnny32   & \index{b2plot, fnny32} Convective fluid neutral radial particle flux $(s^{-1})$ \\
     fnny52   & \index{b2plot, fnny52} Conductive fluid neutral radial particle flux $(s^{-1})$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
+    freg     & \index{b2plot, freg} Flux region number \\
     fztx     & \index{b2plot, fztx} Poloidal ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
     fzty     & \index{b2plot, fzty} Peprendicular ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
     hy       & \index{b2plot, hy} Radial cell width $(m)$ \\
     hy1      & \index{b2plot, hy1} Shear-corrected radial cell width $(m)$ \\
+    ic       & \index{b2plot, ic} Cell index \\
+    iceq     & \index{b2plot, iceq} Cell index {\em iCv} is equal to \\
+    icge     & \index{b2plot, icge} Cell index {\em iCv} is greater than or equal to \\
+    icgt     & \index{b2plot, icgt} Cell index {\em iCv} is greater than \\
+    icle     & \index{b2plot, icle} Cell index {\em iCv} is less than or equal to \\
+    iclt     & \index{b2plot, iclt} Cell index {\em iCv} is less than \\
+    icne     & \index{b2plot, icne} Cell index {\em iCv} is not equal to \\
+    ifeq     & \index{b2plot, ifeq} Adjoining cells to face index \\
     ift      & \index{b2plot, ift} Flux tube number \\
+    iimp     & \index{b2plot, iimp} Inner midplane cells \\
     iix      & \index{b2plot, iix} Poloidal cell index {\em ix} \\
     iiy      & \index{b2plot, iiy} Radial cell index {\em iy} \\
+    iomp     & \index{b2plot, iomp} Outer midplane cells \\
     ionrad   & \index{b2plot, ionrad} Power loss due to molecular ion radiation $(W)$ \\
     iseq     & \index{b2plot, iseq} Species index {\em is} is equal to \\
     isge     & \index{b2plot, isge} Species index {\em is} is greater than or equal to \\
@@ -14602,6 +14630,7 @@ coordinate index.
     isle     & \index{b2plot, isle} Species index {\em is} is less than or equal to \\
     islt     & \index{b2plot, islt} Species index {\em is} is less than \\
     isne     & \index{b2plot, isne} Species index {\em is} is not equal to \\
+    iveq     & \index{b2plot, iveq} Adjoining cells to vertex index \\
     ix       & \index{b2plot, ix} Poloidal cell index {\em ix} (normalized) \\
     ixeq     & \index{b2plot, ixeq} Poloidal cell index {\em ix} is equal to \\
     ixge     & \index{b2plot, ixge} Poloidal cell index {\em ix} is greater than or equal to \\
@@ -14746,6 +14775,7 @@ coordinate index.
     tib2     & \index{b2plot, tib2} Test ion temperature $(eV)$ \\
     tix      & \index{b2plot, tix} Top neighbour poloidal index {\em topix} \\
     tiy      & \index{b2plot, tiy} Top neighbour radial index {\em topiy} \\
+    tlbl     & \index{b2plot, tlbl} Flux tube label number \\
     tmb2     & \index{b2plot, tmb2} Neutral molecule temperature $(eV)$ \\
     tn       & \index{b2plot, tn} Fluid neutral temperature $(eV)$ \\
     tn0      & \index{b2plot, tn0} Fluid neutral temperature {\em tn} at previous time step $(eV)$ \\
@@ -14787,9 +14817,7 @@ coordinate index.
     wci      & \index{b2plot, wci} Ion cyclotron frequency $\omega_{ci}$ $(rad.s^{-1})$ \\
     wpe      & \index{b2plot, wpe} Plasma frequency $\omega_{pe}$ $(rad.s^{-1})$ \\
     ww       & \index{b2plot, ww} Toroidal velocity ({\em ww}) $(m.s{-1})$ \\
-    xreg     & \index{b2plot, xreg} $x$-directed flux region number \\
     xymap    & \index{b2plot, xymap} Index of wall segment {\em xymap} \\
-    yreg     & \index{b2plot, yreg} $y$-directed flux region number \\
     za\_ext  & \index{b2plot, za\_ext} External species charge $(amu)$ \\
     za2\_ext & \index{b2plot, za2\_ext} External species squared charge $(amu)$ \\
     zeff     & \index{b2plot, zeff} $Z$ effective $(amu)$ \\
@@ -14804,9 +14832,9 @@ coordinate index.
   \end{longtable}
 \end{center}
 
-Note that the {\bf nreg}, {\bf niso}, {\bf xreg}, and {\bf yreg} commands require an integer
-argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region
-number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. If $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
+Note that the {\bf nreg}, {\bf niso}, {\bf freg}, {\bf clbl}, {\bf flbl}, and {\bf tlbl} commands require an integer
+argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region index
+number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, the cells in region with index $\langle${\tt ireg}$\rangle$ will contain {\tt 1.0}, and the rest will contain zero. For {\bf nreg} and {\bf niso}, if $\langle${\tt ireg}$\rangle$ is less than {\tt 0}, the cells in region with index $-\langle${\tt ireg}$\rangle$ will contain zero, and the rest will contain {\tt 1.0}.
 
 The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi},
 {\bf shn}, {\bf sch}, {\bf skt}, and {\bf szt} can take an optional integer
@@ -14889,6 +14917,7 @@ are not met, an error is returned and no action is taken.
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
     fpsi \index{b2plot, fpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:fpsi}  & Plot data against poloidal \\
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} magnetic flux ($\Psi$) value \\
+    icse \index{b2plot, icse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:icse}  & Set list of trajectory launch cells from matrix stack \\
     intx \index{b2plot, intx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:intx}  & Integrate along flux tubes \\
     inty \index{b2plot, inty}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:inty}  & Integrate along $y$ \\
     line \index{b2plot, line}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:line}  & Choose $x$- or $y$-directed graphs \\
@@ -14945,9 +14974,10 @@ are not met, an error is returned and no action is taken.
     sumz \index{b2plot, sumz}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
     swap \index{b2plot, swap}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:swap}  & Swap top two matrices on stack \\
     t\_\#p \index{b2plot, t\_\#p}  & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_hashp} & Number of trajectories \\
+    t\_xy \index{b2plot, t\_xy}    & 4 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_xy}  & Range of structured cells from which to launch trajectories \\
     tese \index{b2plot, tese}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto \\
     &  &  &  &  &  &  &  &  & \hspace{1cm} electron temperature \\
-    traj \index{b2plot, traj}      & 7+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
+    traj \index{b2plot, traj}      & 3+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
     uuse \index{b2plot, uuse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
     vvse \index{b2plot, vvse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
     wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto \\
@@ -15825,21 +15855,23 @@ in the table \ref{tab:b2plotconstants}.
     c \index{b2plot, c}      & Speed of light $c$ $(m/s)$ \\
     eps0 \index{b2plot, eps0}   & Electric permittivity of vacuum $\epsilon_0$ $(F)$ \\
     ev \index{b2plot, ev}     & Electron-Volt $eV$ $(J)$ \\
+    ifsep \index{b2plot, ifsep}  & Flux surface index of main separatrix \\
     ismain \index{b2plot, ismain} & Index of the main plasma species \\
     ixref \index{b2plot, ixref}    & Index of reference poloidal location \\
     iyref \index{b2plot, iyref}    & Index of reference radial location \\
-    jsep \index{b2plot, jsep}  & Radial index of outermost closed flux surface (just inside the separatrix) \\
-    jxa \index{b2plot, jxa}    & Outer midplane index \\
-    jxi \index{b2plot, jxi}    & Inner midplane index \\
     kbolt \index{b2plot, kbolt}  & Boltzmann's constant $k_B$ $(J.K^{-1})$ \\
     me \index{b2plot, me}     & Electron mass $m_e$ $(kg)$ \\
     mp \index{b2plot, mp}     & Proton mass $m_p$ $(kg)$ \\
     mu0 \index{b2plot, mu0}    & Magnetic permittivity of vacuum $\mu_0$ $(F.m^{-1})$ \\
     natm \index{b2plot, natm}   & Number of atomic species followed by {\tt Eirene} \\
     nbnd \index{b2plot, nbnd}   & Number of boundary cells \\
+    nci \index{b2plot, nci}     & Number of internal grid cells \\
+    ncv \index{b2plot, ncv}     & Number of grid cells \\
     ndepth \index{b2plot, ndepth} & Size of target arrays in depth direction \\
+    nimp \index{b2plot, nimp}    & Number of inner midplane cells \\
     nion \index{b2plot, nion}   & Number of molecular ion species followed by {\tt Eirene} \\
     nmol \index{b2plot, nmol}   & Number of molecular species followed by {\tt Eirene} \\
+    nomp \index{b2plot, nomp}    & Number of outer midplane cells \\
     ns \index{b2plot, ns}     & Number of species \\
     nspecies \index{b2plot, nspecies}     & Number of isonuclear sequences \\
     nx \index{b2plot, nx}     & Mesh size in poloidal direction \\
@@ -16072,12 +16104,12 @@ is plotted in the colour associated with its value.
 Produces a "patch" plot of the target domain.
 Note that the side in contact with the plasma is at the bottom of the target computational domain.
 
-\subsubsection{traj}\index{b2plot, traj}\label{sec:traj}\index{b2plot, uuse}\label{sec:uuse}\index{b2plot, vvse}\label{sec:vvse}\index{b2plot, t\_\#p}\label{sec:t_hashp}\index{b2plot, lint}\label{sec:lint}\index{b2plot, logt}\label{sec:logt}
+\subsubsection{traj}\index{b2plot, traj}\label{sec:traj}\index{b2plot, icse}\label{sec:icse}\index{b2plot, uuse}\label{sec:uuse}\index{b2plot, vvse}\label{sec:vvse}\index{b2plot, t\_\#p}\label{sec:t_hashp}\label{sec:t_xy}\index{b2plot, t\_xy}\index{b2plot, lint}\label{sec:lint}\index{b2plot, logt}\label{sec:logt}
 \index{b2plot, trajectories plot}
 
 Plots trajectories.  The following command
 \begin{verbatim}
-echo phys a4p vesl sep outl 70 1 70 36 1000 0 1 1 traj | b2plot
+echo 70 1 70 36 t_xy phys a4p vesl sep outl 1000 0 1 1 traj | b2plot
 \end{verbatim}
 produced the results shown in figure \ref{fig:traj}.
 
@@ -16091,17 +16123,19 @@ produced the results shown in figure \ref{fig:traj}.
     \label{fig:traj}
 \end{figure}
 
-The command takes a variable number of integer arguments, the minimum number being 8.
+The command takes a variable number of integer arguments, the minimum number being 4.
 
-The first 4 numbers specify the bottom left and top right coordinates
-of a rectangle in which the test particles are to be started
-($ix_{start}~iy_{start}~ix_{end}~iy_{end}$) ({\tt 0}'s will be replaced by the
-appropriate limit).  The next number specifies the amount
+The first number specifies the amount
 of test particles to be started (if positive the particles are started
 weighted by volume, if negative then the weighting function is taken
-off the matrix stack).  This is then followed by a flag (1 for a
+off the matrix stack). This is then followed by a flag (1 for a
 movie, otherwise normal trajectories), and then the species indices
-come next.  The last argument specifies the number of species.
+come next. The last argument specifies the number of species.
+The starting points of the trajectories are chosen from the set of active cells
+defined in the {\tt ic\_active} array (default is all real cells).
+The use of {\bf icse} allows to specify which cells are used for starting points
+for the trajectories. The selected cells will be the ones which have a non-zero
+value in the matrix stack.
 The use of {\bf uuse} and {\bf vvse} allows one to replace the particle velocities
 matrices used by default to compute the trajectories with data from the
 matrix stack.
@@ -16120,7 +16154,7 @@ vesl sep outl
 2000 t_#p
 1e-3 t_pt
 na vol m*
-0 0 0 0 -2000 1 2 3 4 5 6 7 6 traj
+-2000 1 2 3 4 5 6 7 6 traj
 drop
 \end{verbatim}
 
@@ -16128,34 +16162,34 @@ From the code documentation:
 \begin{verbatim}
 C     This routine is used to plot trajectories of particles using the
 C     velocity fields uu and vv. To call this routine
-C     one must specify at least 8 parameters: ixmin, iymin, ixmax, iymax,
+C     one must specify at least 4 parameters:
 C     # of particles, 1 or 0 for movie or lines, species indices (at least
 C     one), and last but not least the total number of species indices one
 C     has given in the step before. A valid call could be:
-C     0 0 95 35 100 0 0 1 traj
-C     This should plot the trajectories of 100 particles which start
-C     in any of the cells between cell (0,0) (southwest corner) and
-C     cell (95,35) (northeast corner) as lines for hydrogen (0=H).
-C     Note that the cell and species indices start at zero!
-C     The number of time steps (plots) is given by the 't_#p' command.
-C     The total flight time of the particles is given by the 't_pt' command.
+C     100 0 0 1 traj
+C     This should plot the trajectories of 100 particles as lines
+C     for hydrogen (0=H).
+C     The start locations of the trajectories will be chosen from the set
+C     of set defined in the ic_active array (default is all real cells).
+C     The location (in a structured grid) of the cells from which to launch
+C     particles can be chosen using the "t_xy" command, or from the non-zero
+C     cells from the matrix stack with the "icse" command.
+C     The number of time steps (plots) is given by the "t_#p" command.
+C     The total flight time of the particles is given by the "t_pt" command.
 C     The velocity fields uu and vv can be overwritten using the
-C     'uuse' and 'vvse' commands. Their defaults values are ua and fna/na/sy
+C     "uuse" and "vvse" commands. Their defaults values are ua and fna/na/sy
 C     respectively. If the number of particles is positive, then the
 C     particles are born randomly, with the probability of being born in a
 C     cell being proportional to the cell volume. This probability weighting
-C     can be changed by calling 'traj' with a negative number of particles.
+C     can be changed by calling "traj" with a negative number of particles.
 C     Then the weighting function is whatever field is on top of the matrix
 C     stack. For example, this set of commands does the following:
-C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal
-C                                     !   neutral flow velocity
-C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial
-C                                     !   neutral flow velocity
+C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal neutral flow velocity
+C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial neutral flow velocity
 C     1000 t_#p                       ! 1000 time steps
 C     1e-4 t_pt                       ! followed for a total time of 1.e-4 s.
 C     na 0 zsel                       ! weighted with neutral density
-C     0 0 0 0 -1000 0 0 1 traj        ! over the entire physical domain
-C                                     !   (0 0 0 0)
+C     -1000 0 0 1 traj                ! over all ic_active cells
 C               ! 1000 particles using non-default weighting function (-1000)
 C               ! trajectories plotted (0)
 C               ! for species 0 (=H neutrals) (0)
@@ -18393,13 +18427,12 @@ or
 \begin{verbatim}
   SOLPS_CPP += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list. {\tt ksh} or {\tt bash} users would use something like
 \begin{verbatim}
   export SOLPS_CPP="$SOLPS_CPP -DOPTION"
 \end{verbatim}
 %% $
-).
+
 
 \subsection{Carre2}
 \index{DEFINES, used in compiling Carre2}
@@ -18410,9 +18443,10 @@ We list here additional possible compiler options that can be used when compilin
 
 \begin{description}
 \item[BUILDING\_CARRE] \index{BUILDING\_CARRE} Flags code for extended grids handling routine specific to {\tt Carre2}
-\item[EXTRA\_GRAPHS] \index{EXTRA\_GRAPHS} Turns on additional graphical output of intermediate steps of the {\tt Carre2} grid generation
-\item[MODIF] \index{MODIF} Allows for manual modifications to the grid generation process during the {\tt Carre2} run
+\item[CARRE\_NONINTERACTIVE] \index{CARRE\_NONINTERACTIVE} Flag to turn off the {\tt Carre2} interactive options for changing grid parameters during the run
 \item[READOPT] \index{READOPT} Allows for format-free keyboard input
+\item[USE\_ITMCARRE] \index{USE\_ITMCARRE} Switch for the ITM version of {\tt Carre2}
+\item[USE\_SILO] \index{USE\_SILO} Use SILO-style output for storing grid data
 \end{description}
 
 %%grep #if $SOLPSTOP/modules/Carre2/src90/*/*.F90 | awk '{print $2,$1}' | sort | uniq
@@ -18431,22 +18465,34 @@ We list below where the {\tt Carre2} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-DBG & carre/doubld.F \\
-DBG & carre/saute.F \\
-DBG & fcrr/fcrprp.F \\
-EXTRA\_GRAPHS & carre/carre.F \\
-GFORTRAN & carre/rdfrin.F \\
-GFORTRAN & carre/rdfrre.F \\
-MODIF & carre/maille.F \\
-MODIF & carre/mailrg.F \\
-READOPT & carre/rdfrch.F \\
-READOPT & carre/rdfrin.F \\
-READOPT & carre/rdfrre.F \\
+CARRE\_NONINTERACTIVE & carre/coinci.F90 \\
+CARRE\_NONINTERACTIVE & carre/maille.F90 \\
+CARRE\_NONINTERACTIVE & carre/selptx.F90 \\
+CARRE\_NONINTERACTIVE & carre\_mod/carre\_parameter\_io.F90 \\
+ITM\_ENVIRONMENT\_LOADED & fcrr/fcrr.F90 \\
+ITM\_ENVIRONMENT\_LOADED & trans/tradui.F90 \\
+DBG & fcrr/fcrprp.F90 \\
+READOPT & carre/rdfrch.F90 \\
+READOPT & carre/rdfrin.F90 \\
+READOPT & carre/rdfrre.F90 \\
+READOPT & carre\_mod/carre\_parameter\_io.F90 \\
+USE\_ITMCARRE & fcrr/fcrr.F90 \\
+USE\_ITMCARRE & trans/tradui.F90 \\
+USE\_SILO & carre/mailcn.F90 \\
+USE\_SILO & carre/mailrg.F90 \\
+USE\_SILO & carre\_mod/carre\_equilibrium.F90 \\
+USE\_SILO & carre\_mod/carre\_main.F90 \\
+USE\_SILO & carre\_mod/carre\_niveau.F90 \\
+USE\_SILO & carre\_mod/carre\_postprocess.F90 \\
+USE\_SILO & carre\_mod/carre\_virtualstructures.F90 \\
+USE\_SILO & carre\_mod/carresiloio.F90 \\
+USE\_SILO & trans/tradui.F90 \\
     \hline
     \caption{Defines for Carre2 and where they are used.}
     \label{tab:Carre2defines}
   \end{longtable}
 \end{center}
+
 
 \subsection{DivGeo}
 \index{DEFINES, used in compiling DivGeo}
@@ -18930,6 +18976,7 @@ NO\_CDF & b2plot/process\_chords.F \\
 NO\_CDF & convert/b2cdf2mds.F \\
 NO\_CDF & convert/b2cdfmovies2mds.F \\
 NO\_CDF & convert/b2cdftallies2mds.F \\
+NO\_CDF & convert/b2co.F \\
 NO\_CDF & convert/b2co\_movies\_cdf.F \\
 NO\_CDF & convert/b2co\_tally\_cdf.F \\
 NO\_CDF & convert/b2co\_time\_cdf.F \\

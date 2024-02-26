@@ -215,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.39.0-4.11.7-2020b`
+having toolchain in its name. For example `IMAS/3.40.1-4.11.9-2020b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -230,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.39.0-4.11.7-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.40.1-4.11.9-2020b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -546,8 +546,8 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.39.0}
-TAG_AL=${TAG_AL:-4.11.7}
+TAG_DD=${TAG_DD:-3.40.1}
+TAG_AL=${TAG_AL:-4.11.9}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -598,7 +598,7 @@ SOLPS_ITER_FOSS_2020b_MODULES="
         libtirpc/1.3.1-GCCcore-10.2.0
         SimDB/0.7.1-foss-2020b
         Fundamental-Constants/0.1.1
-        ToFu/1.5.0-foss-2020b-Python-3.8.6
+        ToFu/1.5.1-foss-2020b
         netCDF-Fortran/4.5.3-gompi-2020b
         netcdf4-python/1.5.5.1-foss-2020b
         flex/2.6.4-GCCcore-10.2.0
@@ -624,7 +624,7 @@ SOLPS_ITER_INTEL_2020b_MODULES="
         libtirpc/1.3.1-GCCcore-10.2.0
         SimDB/0.7.1-intel-2020b
         Fundamental-Constants/0.1.1
-        ToFu/1.5.0-intel-2020b-Python-3.8.6
+        ToFu/1.5.1-intel-2020b
         netcdf4-python/1.5.5.1-intel-2020b
         "
   

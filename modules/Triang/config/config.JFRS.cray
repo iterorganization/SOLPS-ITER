@@ -49,7 +49,7 @@ INCMOD    = -p
 MOD       = mod
 OBJDEST   = -ef -em -J${OBJDIR}
 
-BLD       = ar rcv
+BLD       = ar rucv
 
 LD        = ${FC}
 
