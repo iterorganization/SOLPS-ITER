@@ -7509,6 +7509,8 @@ The radial coordinate $y$ increases as one crosses the separatrix from the core 
 
 Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |B_x|/B_x$.
 
+Note also that, in the code, the magnetic field components are always positive, and their sign is carried by the angle they form with cell faces and/or the associated unit vector fields.
+
 %-------- Equations by S.P. Voskoboynikov ---------
 
 \section{Continuity equations for particle conservation}
@@ -14409,7 +14411,7 @@ coordinate index.
     ahal     & \index{b2plot, ahal} Atomic $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
     alf      & \index{b2plot, alf} Thermo-electric coefficient $(\Omega^{-1}.m^{-1})$ \\
     alph     & \index{b2plot, alph} Ratio of pressure gradient to critical ballooning value \\
-    b        & \index{b2plot, b} Magnetic field components $(T)$ \\
+    b        & \index{b2plot, b} Magnetic field component magnitudes $(T)$ \\
     b2br     & \index{b2plot, b2br} Bremsstrahlung losses $(W)$ \\
     b2eatcr  & \index{b2plot, b2eatcr} {\tt Eirene} atomic species index \\
     b2espcr  & \index{b2plot, b2espcr} Nuclear sequence index \\
