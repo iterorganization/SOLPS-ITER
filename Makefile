@@ -110,7 +110,7 @@ ifdef LIBX11
 DEGLIBS += -DLibX11=${LIBX11}
 endif
 ifdef LIBXT
-DEGLIBS += -DLibXt=${LIBXt}
+DEGLIBS += -DLibXt=${LIBXT}
 endif
 ifdef LIBZ
 DEGLIBS += -DLibz=${LIBZ}
@@ -136,10 +136,11 @@ DEFOPTS += -DCMAKE_BUILD_TYPE=Debug
 endif
 DEFMAKES = -DMAKES="${MAKES}"
 
+CPLOPTS  = -DB25_EIRENE=ON
 DIMENSIONS = 0
 ifeq ($(shell [ -s modules/B2.5/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
 DIMENSIONS = 1
-DEFOPTS += -DDIMENSIONS_MODULE=yes
+CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
@@ -375,7 +376,7 @@ b25_all_mpi_openmp: b25_all_openmp_mpi
 b25eirene:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
 endif
@@ -385,7 +386,7 @@ endif
 b25eirene_all:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 endif
@@ -396,7 +397,7 @@ endif
 b25eirene_nox:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
 endif
@@ -406,7 +407,7 @@ endif
 b25eirene_openmp: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG} ${OPT_OPENMP} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG} ${OPT_OPENMP} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
@@ -416,7 +417,7 @@ endif
 b25eirene_mpi:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
@@ -426,7 +427,7 @@ endif
 b25eirene_openmp_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
@@ -438,7 +439,7 @@ b25eirene_mpi_openmp: b25eirene_openmp_mpi
 b25eirene_nox_openmp: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
 endif
@@ -448,7 +449,7 @@ endif
 b25eirene_nox_mpi:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 endif
@@ -463,7 +464,7 @@ b25eirene_ig:
 b25eirene_all_openmp: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
@@ -474,7 +475,7 @@ endif
 b25eirene_all_mpi:
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
@@ -485,7 +486,7 @@ endif
 b25eirene_all_openmp_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
@@ -498,7 +499,7 @@ b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${OPT_DBG} -DB25_EIRENE=ON; ${MAKEO}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${OPT_DBG} ${CPLOPTS}; ${MAKEO}
 else
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
