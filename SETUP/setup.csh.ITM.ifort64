@@ -15,6 +15,8 @@ setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 
 module load imasenv/3.37.0/intel/2020/rc
+module unload cmake
+module load cmake/3.18.2
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 setenv EBVERSIONMSCL `pkg-config mscl --modversion`
 module load texlive

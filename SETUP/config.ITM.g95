@@ -42,7 +42,9 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
 LIBGKS     = ${GLI_HOME}/libgks.a
 LIBGRS     = ${GR_ROOT}/libgr.a
-LIBX11     = /usr/X11R6/lib64/libX11.so
+LIBX11     = /usr/lib64/libX11.so
+LIBXT      = /usr/lib64/libXt.so
+LIBZ       = /usr/lib64/libz.so
 
 #
 # Provide compiler
@@ -57,7 +59,7 @@ FC         = g95
 SOLPS_CPP      = -DNCAR4 -DITM -DG95
 B25_DEFINES    =
 CARRE_DEFINES  =
-EIRENE_DEFINES =
+EIRENE_DEFINES = -DNO_JSON
 FFLAGSEXTRA    =
 
 # Autodetected optional features
