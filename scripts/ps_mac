@@ -176,7 +176,7 @@ rm -rf prolog >/dev/null 2>&1
 mv temp0 prolog
 
 #edit prolog for eps file: Change header line, bounding box, and orientation
-#setting bounding box here  to same value for ps file as for eps file ensures that ghostview has the right size
+#setting bounding box here to same value for ps file as for eps file ensures that ghostview has the right size
 if [ $gnuplot -eq 0 ]; then
 
 cat prolog | sed \
