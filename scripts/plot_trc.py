@@ -521,8 +521,8 @@ INPUT:
     xquan       - X-axis quantity to be used instead of default time
     xname       - X-axis name to be used in conjunction with xquan
     xscale      - X-axis scaling value applied in conjunction with xquan
-    setprange   - logical vector of dim 4 each defining if stirct limits are
-                   imposed on the minimal and maximal values of X and Y
+    setprange   - logical vector of dim 4 each defining if strict limits are
+                  imposed on the minimal and maximal values of X and Y
     prange      - limit values corresponding to setprange
     ntime       - if positive only data for time > ntime(s) will be plotted
                   if negative only data for last < ntime(s) will be plotted

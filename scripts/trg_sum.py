@@ -261,13 +261,13 @@ INPUT:
     quan         - name of quantity to integrate
     stp_ind      - index of strike point (in this convention the first cell of SOL)
     dsurf        - surface area of the target elements starting from PFR-edge and
-                    moving to SOL-edge
+                   moving to SOL-edge
 
 OUTPUT:
-    found         - logical, True if data was obtained
-    int_all       - integral over the whole target
-    int_pfr       - integral over the PFR part of the target
-    int_sol       - integral over the SOL part of the target
+    found        - logical, True if data was obtained
+    int_all      - integral over the whole target
+    int_pfr      - integral over the PFR part of the target
+    int_sol      - integral over the SOL part of the target
 """
 def INT_QUAN(data_head,data,stp_ind,dsurf,quan):
 
@@ -308,13 +308,13 @@ INPUT:
     quan         - name of quantity to integrate
     stp_ind      - index of strike point (in this convention the first cell of SOL)
     dsurf        - surface area of the target elements starting from PFR-edge and
-                    moving to SOL-edge
+                   moving to SOL-edge
 
 OUTPUT:
-    found         - logical, True if data was obtained
-    avg_all       - average over the whole target
-    avg_pfr       - average over the PFR part of the target
-    avg_sol       - average over the SOL part of the target
+    found        - logical, True if data was obtained
+    avg_all      - average over the whole target
+    avg_pfr      - average over the PFR part of the target
+    avg_sol      - average over the SOL part of the target
 """
 def AVG_QUAN(data_head,data,stp_ind,dsurf,quan):
 
@@ -368,10 +368,10 @@ INPUT:
     stp_ind      - index of strike point (in this convention the first cell of SOL)
 
 OUTPUT:
-    found         - logical, True if data was obtained
-    pkv_all       - peak value over the whole target
-    pkv_pfr       - peak value over the PFR part of the target
-    pkv_sol       - peak value over the SOL part of the target
+    found        - logical, True if data was obtained
+    pkv_all      - peak value over the whole target
+    pkv_pfr      - peak value over the PFR part of the target
+    pkv_sol      - peak value over the SOL part of the target
 """
 def PKV_QUAN(data_head,data,stp_ind,quan):
 
