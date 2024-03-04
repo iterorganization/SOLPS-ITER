@@ -21,6 +21,7 @@
 # and in the one from which the plot_trc script is called
 #=======================================================================
 
+MARK=.TRG
 CMD_FILE=plot_trg.cmd
 PLT_SCRIPT=plot_trc.py
 B2PL_DIR=b2pl.exe.dir
@@ -53,6 +54,15 @@ PEXEC=plot_trc.trg.py
 PCMD=plot_trc.trg.cmd
 PLOG=plot_trc.trg.log
 WRK_DIR=wrk.trg
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
 then
@@ -205,8 +215,8 @@ then
 fi
 
 echo "cleaning..."
-echo "rm -rf $SEXEC $PEXEC $PCMD $WRK_DIR"
-rm -rf "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR"
+echo "rm -rf $SEXEC $PEXEC $PCMD $WRK_DIR $MARK"
+rm -rf "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR" "$MARK"
 
 if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ] && [ -f "$SUM_FILE" ]
 then

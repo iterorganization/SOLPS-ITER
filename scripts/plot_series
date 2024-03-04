@@ -18,6 +18,7 @@
 # the script is invoked
 #=======================================================================
 
+MARK=.TRS
 CMD_FILE=plot_series.cmd
 PLT_SCRIPT=plot_trc.py
 OUTPUT_FILE=series
@@ -38,6 +39,15 @@ PCMD=plot_trc.series.cmd
 PLOG=plot_trc.series.log
 WRK_DIR=wrk.series
 WRK_FILE=series
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
 
 if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
 then
@@ -162,8 +172,8 @@ then
 fi
 
 echo "cleaning..."
-echo "rm -rf $PEXEC $PCMD $WRK_DIR"
-rm -rf "$PEXEC" "$PCMD" "$WRK_DIR"
+echo "rm -rf $PEXEC $PCMD $WRK_DIR $MARK"
+rm -rf "$PEXEC" "$PCMD" "$WRK_DIR" "$MARK"
 
 if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ]
 then
