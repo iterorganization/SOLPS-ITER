@@ -13,7 +13,7 @@
 #          otherwise "echo '100 wlld' | b2plot command is executed
 #          to obtain them. Then two python scripts are executed:
 #          trg_sum.py that produces trg_sum.dat summary file and
-#          plot_trcc.py that produces standard set of plots goverened
+#          plot_trcc.py that produces standard set of plots governed
 #          by the plot_trg.cmd command file
 #
 # by default the plot_trg.cmd file in the present directory is used

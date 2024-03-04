@@ -13,7 +13,7 @@ endif
 
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
-EQUIVS    =
+EQUIVS    = ${SOLPS_CPP} ${EIRENE_DEFINES}
 
 #CPP      = -/lib/cpp -C -traditional
 CPP       = /lib/cpp -C -traditional -ffreestanding
@@ -34,7 +34,7 @@ endif
 NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib
 LDLIBS    =
 LDEXTRA   =
 
@@ -44,7 +44,7 @@ INCMOD    = -I
 MOD       = mod
 OBJDEST   = -fmod=${OBJDIR} -o ${OBJDIR}/$*.o
 
-BLD       = ar rcv
+BLD       = ar rucv
 
 LD        = ${FC}
 

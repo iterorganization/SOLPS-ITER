@@ -27,7 +27,6 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-
 time b2run -s ${USE_MPI} b2mn >& run.log
 
 QSUB.postprocess_coupled

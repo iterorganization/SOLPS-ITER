@@ -452,7 +452,6 @@ If no option is given, the gmeta files are created.
           0.0 fmin 0.0 fmax $k f.x drop" >> mono.${LK}
     echo -e "sy_$k\t$im" >> ${LK}_${L}m.ps.legend
 
-
    true
   }; done && {
 

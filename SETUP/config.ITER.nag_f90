@@ -110,9 +110,16 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    IMAS_PKG_LIST += al-fortran al-identifiers-fortran
   else
     IMAS_PKG_LIST += imas-gfortran
+    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+      IMAS_PKG_LIST += imas-identifiers-gfortran
+    else
+      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-gfortran
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION

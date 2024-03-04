@@ -22,7 +22,7 @@ module load Fundamental-Constants/0.1.1
 module load AMNS/1.4.0.1-6dba-ifort-2021.9.0
 
 setenv DBX ddt
-setenv SYSNAME `fs sysname | cut -d "'" -f 2`
+setenv SYSNAME amd64_sles15
 
 # Environment variables
 if (! $?DEVICE) then
@@ -41,7 +41,7 @@ endif
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME $IPPSOLPSLIBS/gks
 setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
-setenv NCARG_ROOT /afs/.ipp/tok/soft/ncarg/6.6.2
+setenv NCARG_ROOT /tokp/work/software/TOK_2019/software/ncarg/6.6.2
 setenv PATH ${PATH}
 setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin

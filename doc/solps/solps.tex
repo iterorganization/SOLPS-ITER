@@ -789,9 +789,9 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item {\tt SOLPS\_CPP}\index{SOLPS\_CPP}, an environment variable containing the global "defines" to use during compilation of {\tt SOLPS} code components
 \item some aliases to move around the tree ({\tt sbb}, {\tt sei}, {\it etc.})
 \item some aliases for plotting ({\tt xyplot}, etc...)
-\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt set\_nodebug})
-\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt set\_nompi})
-\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt set\_noopenmp})
+\item two aliases to swap between the debug and no\_debug versions of the code ({\tt set\_debug} and {\tt unset\_debug})
+\item two aliases to swap between the MPI and no\_MPI versions of the code ({\tt set\_mpi} and {\tt unset\_mpi})
+\item two aliases to swap between the OpenMP and no\_OpenMP versions of the code ({\tt set\_openmp} and {\tt unset\_openmp})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
@@ -1688,7 +1688,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[SOLPS-ITER\_OpenMP\_CI\_test]\index{SOLPS-ITER\_OpenMP\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with OpenMP options turned on
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
+  \item[solps-iter\_update\_3.0.9\_release]\index{solps-iter\_update\_3.0.9\_release} Script to switch to the \SOLPSITER 3.0.9 release candidate code branch.
   \item[solps-iter\_update\_3.1.0\_release]\index{solps-iter\_update\_3.1.0\_release} Script to switch to the up-to-date \SOLPSITER 9-point-stencil 3.1.0 code branch.
+  \item[solps-iter\_update\_3.1.1\_release]\index{solps-iter\_update\_3.1.1\_release} Script to switch to the \SOLPSITER 9-point-stencil 3.1.1 release candidate code branch.
   \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch.
   \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
@@ -3377,10 +3379,10 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
   \item[ixref\_profile]\index{ixref\_profile} {\tt integer}, the poloidal location along which the sources radial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_ixref} is used.
   \item[iyref\_profile]\index{iyref\_profile} {\tt integer}, the radial location along which the sources axial profile is measured. Defaults to {\tt -2}, in which case the value from {\tt set\_transport\_iyref} is used.
   \item[sources\_filename]\index{sources\_filename} {\tt filename}, the name of a new sources input file that will be read based on a condition determined by $\mod(${\tt tim},{\tt sources\_time\_mod}$)>${\tt sources\_time\_switch}.
-\item[sources\_time\_mod]\index{sources\_time\_mod}  {\tt real},
-  the basic time periodicity used to set time varying sources, in $s$.
-\item[sources\_time\_switch]\index{sources\_time\_switch}
-  {\tt real}, the basic time at which a switch is to be made to a new sources input file, in $s$.
+  \item[sources\_time\_mod]\index{sources\_time\_mod}  {\tt real},
+    the basic time periodicity used to set time varying sources, in $s$.
+  \item[sources\_time\_switch]\index{sources\_time\_switch}
+    {\tt real}, the basic time at which a switch is to be made to a new sources input file, in $s$.
 \end{description}
 
 The results of these imported source profiles can be visualised in
@@ -4364,14 +4366,15 @@ or
 This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
-\begin{sloppypar}
+\begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
   \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
-  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
-  \item {\tt b2mndr\_shot\_number} defines the shot number
-  \item {\tt b2mndr\_run\_number} defines the run number
+  \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_shot\_number} defines the shot number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
 \end{itemize}
 These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is initialized but {\em not} started, so that the final
@@ -4385,16 +4388,21 @@ It is possible to replace (or supplement) the IDS switch settings coming from th
 \end{verbatim}
 which will recognize, within the quotes following the {\tt -o} additional options opener, the switches:
 \begin{itemize}
-  \item {\tt -s}, {\tt --shot} The shot number
-  \item {\tt -r}, {\tt --run} The run number
-  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
+  \item {\tt -p}, {\tt --path} The path to the directory where to save the IMAS data entry (only available with Access Layer 5).
+  \item {\tt -s}, {\tt --shot} The shot number (superseded by {\tt --path}). If used, must be positive.
+  \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
 \end{itemize}
 
-Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
+Concerning the assignment of shot and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
-After the IDS files are created, one should also run the {\tt create\_db\_entry} script, with the syntax:
+\begin{sloppypar}
+With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} is expected to be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. It should be set as part of the local environment variables in a {\tt setup.csh.local} file. Use of the {\tt user}, {\tt database}, or {\tt version} input flags allows to overwrite their values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
+\end{sloppypar}
+
+After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -5243,7 +5251,7 @@ The averaging scheme works in three stages:
   \item{A finalization phase} where the averaged steady-state solution is used for a small number of timesteps, and a larger number of {\tt Eirene} trajectories, to reduce statistical noise. This is done by running the {\tt res\_av} script and uses the {\tt input\_fin.eir Eirene} input file prepared by {\tt Uinp} if available.
 \end{enumerate}
 
-It is possible to write the averaged state as part of an IMAS data-entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data-entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
+It is possible to write the averaged state as part of an IMAS data entry by means of the {\tt b2mndr\_ids\_av} switch. If non-zero, the value of the switch is the frequency, in number of batch averages, at which time-slices are appended to the IMAS data entry. The averaged solution is saved as the second occurrence of the {\tt edge\_profiles} and {\tt edge\_sources} IDSs.
 
 \section{b2ye, statistical error assessment}
 \label{sec:b2ye}\index{b2ye}\index{error assessment}\index{b2time.nc}\index{b2favere}\index{b2run}
@@ -6985,13 +6993,13 @@ where
 \begin{multline}
 \hfill        \tilde{q}_{ex} = \frac{3}{2} n T_e \left(- \frac{b_z}{B h_y}
          \frac{\partial \Phi}{\partial y}
-         + b_x V_{\parallel} - b_x j_{\parallel} / en + b_z V_{\perp}^{(AN)} \right) \hfill \\
+         + b_x V_{\parallel} - b_x j_{\parallel} / en \right) \hfill \\
      \hfill + \frac{5}{2} n T_e b_z \left(
      - \frac{D}{T_e+T_i} \frac{b_z}{h_x} \left(\frac{\partial p}{n \partial x}
      - \frac{3}{2} \frac{\partial T_e}{\partial x} \right)
      - D^{(AN)}_n \frac{1}{h_x n} \frac{\partial n}{\partial x}
-     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x} \right)
-     + n V_{e\perp}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}
+     + V_{e\perp}^{(AN)} \right)
       \hfill \\
       \hfill   - 0.71 b_x j_{\parallel} T_e/e - \kappa_{e \parallel}
          \frac{b_x^2}{h_x} \frac{\partial T_e}{\partial x}
@@ -7004,13 +7012,13 @@ where
 \end{multline}
 \begin{multline}
 \hfill  \tilde{q}_{ey} = \frac{3}{2} n T_e \left( \frac{B_z}{B^2} \frac{1}{h_x}
-        \frac{\partial \Phi}{\partial x} + V_{y}^{(AN)} \right) \hfill \\
+        \frac{\partial \Phi}{\partial x} \right) \hfill \\
      \hfill  + \frac{5}{2} n T_e \left(
      - \frac{D}{T_e+T_i} \frac{1}{h_y} \left( \frac{\partial p}{n \partial y}
      - \frac{3}{2} \frac{\partial T_e}{\partial y} \right)
      - D^{(AN)}_n \frac{1}{h_y n} \frac{\partial n}{\partial y}
-     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y} \right)
-     + n V_{ey}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y}
+     + V_{ey}^{(AN)} \right)
          \hfill \\
          \hfill - \kappa_{e \perp} \frac{1}{h_y} \frac{\partial T_e}{\partial y}
          + \frac{3}{2}\frac{T_e}{e B} \frac{\nu_{ei}}{\omega_{ce}}
@@ -7070,13 +7078,13 @@ where
 \begin{multline} \hfill
         \tilde{q}_{ix} = \frac{3}{2} n T_i \left(- \frac{b_z}{B h_y}
         \frac{\partial \Phi}{\partial y}
-         + b_x V_{\parallel} + b_z V_{\perp}^{(AN)} \right) \hfill \\
-\hfill + \frac{5}{2} n T_i b_z\left(
-     - \frac{D}{T_e+T_i} \frac{b_z}{h_x}\left(\frac{\partial p}{n \partial x}
+         + b_x V_{\parallel} \right) \hfill \\
+\hfill + \frac{5}{2} n T_i b_z \left(
+     - \frac{D}{T_e + T_i} \frac{b_z}{h_x}\left(\frac{\partial p}{n \partial x}
      - \frac{3}{2} \frac{\partial T_e}{\partial x} \right)
      - D^{(AN)}_n \frac{1}{h_x n} \frac{\partial n}{\partial x}
-     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}\right)
-     + n V_{i\perp}^{(AN)}
+     - D^{(AN)}_p \frac{1}{h_x n} \frac{\partial p_i}{\partial x}
+     + V_{i\perp}^{(AN)} \right)
          \hfill \\ \hfill
          + \frac{5}{2} n T_i b_z \tilde{V}_{\perp}^{\left(dia\right)}
          - \kappa_{i \parallel}
@@ -7086,14 +7094,14 @@ where
 \end{multline}
 \begin{multline} \hfill
         \tilde{q}_{iy} = \frac{3}{2} n T_i \left( \frac{B_z}{B^2}
-         \frac{1}{h_x} \frac{\partial \Phi}{\partial x} + V_{y}^{(AN)} \right)
+         \frac{1}{h_x} \frac{\partial \Phi}{\partial x} \right)
         \hfill \\ \hfill
      + \frac{5}{2} n T_i \left(
      - \frac{D}{T_e+T_i} \frac{1}{h_y} \left( \frac{\partial p}{n \partial y}
      - \frac{3}{2} \frac{\partial T_e}{\partial y}\right)
      - D^{(AN)}_n \frac{1}{h_y n} \frac{\partial n}{\partial y}
-     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y} \right)
-     + n V_{iy}^{(AN)} \hfill \\ \hfill
+     - D^{(AN)}_p \frac{1}{h_y n} \frac{\partial p_i}{\partial y}
+     + V_{iy}^{(AN)} \right) \hfill \\ \hfill
          - \kappa_{e \perp} \frac{1}{h_y}
          \frac{\partial T_i}{\partial y}
          + \frac{5}{2} n T_i \tilde{V}_{y}^{\left(dia\right)} ~. \hfill
@@ -8256,7 +8264,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 However, one can also use the formulation given as Eq.~(\ref{eq:mom_old}),
@@ -8268,7 +8276,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 The treatment using Eq.~(\ref{eq:mom_new}) is recommended for cases with a
@@ -9824,7 +9832,6 @@ j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis 
 + \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
 \end{equation}
 
-
 \begin{equation}\label{eq:pot_jxan}
 j_x^{(AN)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}j_{ax}^{(AN)}
 \end{equation}
@@ -9913,6 +9920,8 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(v
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The poloidal component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jxs}
 \widetilde{j}_x^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -9923,6 +9932,22 @@ For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\re
 + \sigma_{aa_0} B_z V_{a_{0}y}
 \right)
 \end{equation}
+
+If {\tt 'b2tinnt\_style'} is set to {\tt '1'} (default), the gradient of $n_a T_i$ is calculated directly.
+If {\tt 'b2tinnt\_style'} is set to {\tt '0'}, the implementation follows from rewriting the equation as
+
+\begin{equation}\label{eq:pot_jxs_old}
+\widetilde{j}_x^{(s)} =
+\sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_{a} = 1~\&~z_{n,a} = 1 }}
+\left(
+- \sigma_{aa_0} b_z^2 \frac{\partial \Phi}{h_x \partial x}
+- \sigma_{aa_0} b_z^2 \frac{1}{z_a e} \left( \frac{\partial T_i}{h_x \partial x} + T_i \frac{\partial log(n_a)}{h_x \partial x} \right)
++ \sigma_{aa_0} B_z V_{a_{0}y}
+\right)
+\end{equation}
+
+The ion-neutral conductivity is given by:
 
 \begin{equation}
 \sigma_{aa_0} =
@@ -9935,6 +9960,8 @@ z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 \right.
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperature hydrogen is used:
+
 \begin{equation}
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
@@ -9943,7 +9970,19 @@ z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 \tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
 \end{equation}
 
+If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used.
+
 $V_{a_{0}y} = \frac{\Gamma_{a_{0}y} }{n_{a_0}}$
+
+If {\tt 'b2tinnt\_kinetic'} is set to {\tt '1'}, the ion-neutral current is instead computed directly from the perpendicular momentum sources provided by {\tt Eirene}, in which case:
+
+\begin{equation}\label{eq:pot_jxs_eir}
+\widetilde j_x^{(s)} = \sum \limits^{ns-1}_{a = 0} \widetilde j_{ax}^{(s)}
+\end{equation}
+
+\begin{equation}\label{eq:pot_jaxs_eir}
+\widetilde j_{ax}^{(s)} = \frac{b_z S_{EIRENE_{ay}}^m - S_{EIRENE_{a\perp}}^m}{B}
+\end{equation}
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
@@ -10066,6 +10105,8 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(v
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
+The radial component of the ion-neutral current is
+
 \begin{equation}\label{eq:pot_jys}
 \widetilde{j}_y^{(s)} =
 \sum \limits^{ns-1}_{\substack{a_0 = 0 \\ z_{a_0} = 0~\&~z_{n,a_0} = 1 }}
@@ -10073,8 +10114,20 @@ For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq
 \left(
 - \sigma_{aa_0} \frac{\partial \Phi}{h_y \partial y}
 - \sigma_{aa_0} \frac{1}{z_a e n_a} \frac{\partial n_a T_i}{h_y \partial y}
-- \sigma_{aa_0} B V_{a_{0}x}
+- \sigma_{aa_0} B V_{a_{0}\perp}
 \right)
+\end{equation}
+
+The {\tt 'b2tinnt\_style'} switch determines the numerical implementation, similarly as for Eq.~(\ref{eq:pot_jxs}) and Eq.~(\ref{eq:pot_jxs_old}).
+
+If {\tt 'b2tinnt\_kinetic'} is set to {\tt '1'}, we use the {\tt Eirene} momentum sources instead:
+
+\begin{equation}\label{eq:pot_jys_eir}
+\widetilde j_y^{(s)} = \sum \limits^{ns-1}_{a = 0} \widetilde j_{ay}^{(s)}
+\end{equation}
+
+\begin{equation}\label{eq:pot_jays_eir}
+\widetilde j_{ay}^{(s)} = \frac{S_{EIRENE_{a\perp}}^m}{B}
 \end{equation}
 
 \begin{equation}\label{eq:pot_jyst}
@@ -10093,7 +10146,7 @@ j_y^{(ST)} = &
 \end{matrix}
 \end{equation}
 
-$V_{a_{0}x}=\frac{\Gamma_{a_{0}x}}{n_{a_0}}$
+$V_{a_{0}\perp}=\frac{\Gamma_{a_{0}\perp}}{n_{a_0}}$
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
@@ -10492,7 +10545,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_W
 \end{equation}
@@ -10505,7 +10558,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_x}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_W
 \end{equation}
@@ -10554,7 +10607,7 @@ $p_{n,a,1} = +1 $
 \left. \left[
 p_{n,a,1} \frac{\sqrt g}{h_y}
 +
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_E
 \end{equation}
@@ -10568,7 +10621,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
 \left. \left[
-\sum \limits_{a=0}^{ns-1} r_{rec,a,0} c_{nsr}
+c_{nsr} \sum \limits_{a=0}^{ns-1} r_{rec,a,0}
 \max \left\{0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \right] \right|_E
 \end{equation}
@@ -10615,11 +10668,13 @@ $S_{m_a} = S_{m_a,0} + S_{m_a,1} V_{\parallel a} + S_{m_a,2} m_a n_a + S_{m_a,3}
 
 {\em Weakly imposing a velocity:} {\tt BCMOM = 4}
 
-$\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
+\begin{equation*}
+\left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_0} =
 \left. \left[
 p_{m,a,1} p_{m,a,2} h_z \frac{\sqrt g}{h_y} -
 p_{m,a,2} h_z \frac{\sqrt g}{h_y} V_{\parallel a}
-\right] \right|_{S_0}$
+\right] \right|_{S_0}
+\end{equation*}
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
@@ -10719,16 +10774,14 @@ $c_{m,a,1} = 0$, $c_{m,a,3} = -10^{10}$
 
 {\em Prescribe the value of the parallel velocity as a function of the poloidal coordinate:} {\tt BCMOM = 15}
 
-$
+\begin{equation*}
 \left. h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_{S_1} =
 \left. v_{big} n_{e0} m_{a} h_z \frac{\sqrt g}{h_y} \left[
         \frac{\langle B \rangle}{B} p_{m,a,1} - V_{\parallel a}
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
-where  $\langle B \rangle =
-\frac{\mathlarger{\oint}_{S_1} B \sqrt{g} \, dx}{\mathlarger{\oint}_{S_1} \sqrt{g} \, dx}
-$, the integration is done over the innermost magnetic surface,
-$v_{big} = 10^{8} \sqrt{\frac{100 \text{eV}}{m_p}}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is the given value of the average parallel velocity, in $m.s^{-1}$.
+where $\langle B \rangle = \frac{\mathlarger{\oint}_{S_1} B \sqrt{g} \, dx}{\mathlarger{\oint}_{S_1} \sqrt{g} \, dx}$, the integration is done over the innermost magnetic surface, $v_{big} = 10^{8} \sqrt{\frac{100 \text{eV}}{m_p}}$, $n_{e0} = 10^{20}$, $p_{m,a,1}$ is the given value of the average parallel velocity, in $m.s^{-1}$.
 
 \subsubsection{North}
 
@@ -10755,8 +10808,7 @@ delete term with {\tt max} !
 
 $c_{m,a,3} = -10^{10}$, we have  $c_{m,a,6} = -1$, but not $c_{m,a,6} = 0$
 
-Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow
-p_{m,a,1} = -1$
+Inserted into {\tt b2stbc\_phys} for {\tt BCMOM=12} as $c_{m,a,3} \rightarrow p_{m,a,2} = -10^{10},\;c_{m,a,6} \rightarrow p_{m,a,1} = -1$
 
 \underline{If $z_a \neq 0$}
 
@@ -10771,13 +10823,15 @@ $ \left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N = \left[
 
 $p_{m,a,1}=0$ is the imposed velocity, in $m.s^{-1}$, and $p_{m,a,2}=10^5$ is the strength with which this velocity is imposed.
 
-$\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
+\begin{equation*}
+\left. -h_z \frac{\sqrt g}{h_y} \Gamma_{ay}^m \right|_N =
 \left. \left[
 c_{m,a,3} h_z \frac{\sqrt g}{h_y} m_a n_a V_{\parallel a} +
 c_{m,a,6} \max \left(
         0, h_z \frac{\sqrt g}{h_y} \frac{\Gamma_{ay}^{Cor}}{n_a}
 \right) m_a n_a V_{\parallel a}
-\right] \right|_N$
+\right] \right|_N
+\end{equation*}
 
 $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
@@ -10791,19 +10845,23 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
-$ \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+\begin{equation*}
+\left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
         p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{West} m_a n_a -
         \frac{u_{big}}{\epsilon^2} h_z \frac{\sqrt g}{h_x} |b_x| m_a n_a V_{\parallel a}
 \right]
-\right|_W$
+\right|_W
+\end{equation*}
 
 with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
 
-$V_{West} =
+\begin{equation*}
+V_{West} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
-{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
 
 \underline{If $z_a = 0$}
 
@@ -10821,33 +10879,47 @@ $p_{m,a,1}=0$ is the imposed velocity in $m.s^{-1}$, $n_{e00} = 10^{20}$.
 
 {\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
 
-If $p_{m,a,2} < 0.5$:
-
-$\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_W$
+\right|_W
+\end{equation*}
 
 %-------- end of 28th page -------------
 
-$p_{m,a,1} = 1$, $p_{m,a,2} = 0$
+If $p_{m,a,2} < 0.5$:
 
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} + \frac{u_a^{(dia)}}{b_x}  \right\}$,
-$u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+$u_{u_{out}} = p_{m,a,1} c_s |b_x|$
+
+$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{|b_x|} + u_a^{(dia)} b_z \right\}$
+
+If $p_{m,a,2} > 0.5$:
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}),
+
+$u_{u_{out}} = \max \left\{ p_{m,a,1} c_{s,a}, u_{extrap} \right\}$
+
+where $u_{extrap}$ is the extrapolated value to the sheath edge of the poloidal velocity $u_a$,
+
+$u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\}$.
 
 \subsubsection{East}
 
 \underline{If $z_a = 0$}, $p_{m,a,1} = 0$
 
-\underline{If $z_a \neq 0$}
+\underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
-
-$p_{m,a,1} = 1$
 
 $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{East} m_a n_a -
@@ -10855,21 +10927,25 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 \right]
 \right|_E$
 
-$V_{East} =
+\begin{equation*}
+V_{East} =
 - h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
-{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
 
 \underline{If $z_a = 0$}
 
 {\em Imposing a specified parallel velocity:} {\tt BCMOM = 1}
 
-$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} p_{m,a,1} -
         u_{big} n_{e00} \frac{m_a}{m_p} \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$
+\right|_E
+\end{equation*}
 
 $p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$.
 
@@ -10877,19 +10953,31 @@ $p_{m,a,1}=0$ is the imposed parallel velocity in $m.s^{-1}$.
 
 {\em Imposing a sheath velocity boundary condition:} {\tt BCMOM = 3}
 
-If $p_{m,a,2} < 0.5$:
-
-$\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} u_{p_{out}}
         -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel a}
 \right]
-\right|_E$
+\right|_E
+\end{equation*}
 
-$p_{m,a,1} = 1$, $p_{m,a,2} = 0$
+If $p_{m,a,2} < 0.5$:
 
-$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{b_x} - \frac{u_a^{(dia)}}{b_x}  \right\}$,
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
 $u_{u_{out}} = p_{m,a,1} c_s |b_x|$,
-$c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+
+$u_{p_{out}} = \max \left\{ 0, \frac{u_{u_{out}}}{|b_x|} - u_a^{(dia)} b_z \right\}$
+
+If $p_{m,a,2} > 0.5$:
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+$u_{u_{out}} = \max \left\{ p_{m,a,1} c_{s,a}, u_{extrap} \right\}$
+
+$u_{p_{out}} = \max \left\{ 0, u_{u_{out}} - u_a^{(dia)} \frac{b_z}{b_x} \right\}$.
 
 %-------- end of 29th page -------------
 
@@ -11016,27 +11104,27 @@ $\left. \frac{\sqrt{g}}{h_y} j_y \right|_{S_0} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 14}.
 
-\begin{small}
-$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\small\begin{equation*}
+\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
                 p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$
-\end{small}
+\right] \right|_W
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}
-$\left. \frac{\sqrt g}{h_x} j_x \right|_W =
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W$
-\end{small}
+\right] \right|_W
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11056,27 +11144,27 @@ $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCCON = 11}.
 
-\begin{small}
-$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\small\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
                 p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$
-\end{small}
+\right] \right|_E
+\end{equation*}\normalsize
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
 
-\begin{small}
-$\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
         \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E$
-\end{small}
+\right] \right|_E
+\end{equation*}
 
 if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
@@ -11100,7 +11188,8 @@ $S_{h_e} = S_{h_e,0} + S_{h_e,1} T_e + S_{h_e,2} n_e + S_{h_e,3} n_e T_e$
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition:} {\tt BCENE = 11}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
         \left(
                 c_{h_e,2} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
         \right) T_e n_e
@@ -11108,7 +11197,8 @@ $\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_0} = \left. \left[
         c_{h_e,7} \max \left(
                 0, -\frac{\sqrt g}{h_y} \widetilde f_{ey}
         \right) T_e - q_{ex}^{P.Sch}
-\right] \right|_{S_0}$
+\right] \right|_{S_0}
+\end{equation*}
 
 $c_{h_e,2} = -10^{-4}$, $c_{h_e,7} = -1$, $c_{h_e,2} \rightarrow p_{h_e,2} = -10^{-4}$, $c_{h_e,7} \rightarrow p_{h_e,1} = -1$
 
@@ -11153,15 +11243,17 @@ $\left. -\frac{\sqrt g}{h_y} \kappa_{ey} \frac{\partial T_e}{h_y \partial y} \ri
 
 {\em In {\tt b2stbc\_spb}:}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_{S_1} = \left. \left[
         \left(
                 c_{h_e,0} \frac{\sqrt g}{h_y}
                 +
                 c_{h_e,1} \frac{\sqrt g}{h_y} T_e
         \right)
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
-$c_{h_e,0} = 4 \cdot 10^{13}$,  $c_{h_e,a,1} = -10^{30}$,
+$c_{h_e,0} = 4 \cdot 10^{13}$, $c_{h_e,a,1} = -10^{30}$
 
 {\em Imposing a total electron energy flux:} {\tt BCENE = 8}
 
@@ -11176,7 +11268,8 @@ $p_{h_e,1}$ is the imposed total electron energy flux, in $W$.
 
 {\em Imposing the {\tt b2stbc\_spb} style boundary condition:} {\tt BCENE = 11}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
         \left(
                 p_{h_e,1} \frac{\sqrt g}{h_y} \sqrt{\frac{T_e}{m_e}}
         \right) T_e n_e
@@ -11184,7 +11277,8 @@ $\left. -\frac{\sqrt g}{h_y} \widetilde q_{ey} \right|_N = \left. \left[
         p_{h_e,2} \max \left(
                 0, \frac{\sqrt g}{h_y} \widetilde f_{ey}
         \right) T_e - q_{ex}^{P.Sch}
-\right] \right|_N$
+\right] \right|_N
+\end{equation*}
 
 %-------- end of 32nd page -------------
 
@@ -11237,7 +11331,8 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
         \right)
@@ -11250,25 +11345,26 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$
+\right] \right|_W
+\end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_W$
+\right] \right|_W
+\end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
-
-If $p_{m,a_{main},2} < 0.5$:
-
-If $p_{h_e,1} > 0$ then
 
 $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
         p_{h_e,1} + \frac{ e \left( \Phi - p_{\Phi,2} \right) }{T_e}
@@ -11280,15 +11376,27 @@ $\left. \frac{\sqrt g}{h_x} q_{ex} \right|_W = \left[ \left(
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
+If $p_{m,a_{main},2} < 0.5$:
+
 %-------- end of 33rd page -------------
 
-$\nu_{e_{out}} = \min \left\{
-        0,-u_{u_{out}} n_e - \frac{j_x}{e}
-\right\}
-,\;\;\;\;\;\;\;\;\;
-u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
-,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+$\nu_{e_{out}} = \min \left\{ 0, -u_{u_{out}} n_e - \frac{j_x}{e} \right\}$,
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$\nu_{e_{out}} = \min \left\{ 0, - \sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} u_{a_{out}} z_a n_a - \frac{j_x}{e} \right\}$
+
+$u_{a_{out}} = \max \left\{ p_{m,a,1} c_{s,a} |b_x|, u_{extrap} \right\}$
+
+where $u_{extrap}$ is the extrapolated value of the plasma poloidal velocity defined as $u = \sum \limits_{a=0}^{ns-1} \frac{\Gamma_{a,x}}{n_a}$.
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}).
 
 \subsubsection{East}
 
@@ -11298,7 +11406,8 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
         \right)
@@ -11311,43 +11420,54 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
-If {\tt 'bcene\_15\_style'} is set to {\tt '1'}:
+If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
                 \left( 1 + \gamma_e \right) T_e +
-                \left( 1 - \gamma_e \right) e \Phi
+                \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
+
+In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
-If $p_{m,a_{main},2} < 0.5$:
-
-If $p_{h_e,1} > 0$ then
-
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = -\left[ \left(
         p_{h_e,1} + \frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e}
 \right)
 \frac{\sqrt g}{h_x} \nu_{e_{out}} T_e
 + \left.
 \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 $p_{h_e,1} = 0.9$, $p_{\Phi,2}$ is the applied electric potential at the target, in $V$.
 
-$\nu_{e_{out}} = max \left\{
-        0,u_{u_{out}} n_e - \frac{j_x}{e}
-\right\}
-,\;\;\;\;\;\;\;\;\;
-u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|
-,\;\;\;\;\;\;\;\;
-c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$
+If $p_{m,a_{main},2} < 0.5$:
+
+$\nu_{e_{out}} = \max \left\{ 0, u_{u_{out}} n_e - \frac{j_x}{e} \right\}$,
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$\nu_{e_{out}} = \min \left\{ 0, \sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} u_{a_{out}} z_a n_a - \frac{j_x}{e} \right\}$
+
+$u_{a_{out}} = \max \left\{ p_{m,a,1} c_{s,a} |b_x|, u_{extrap} \right\}$
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
 
 %-------- end of 34th page -------------
 
@@ -11373,11 +11493,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
     \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
     \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
     \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i + \\
-  + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
-    \left( \frac{3}{2} + BoRiS \right)
+  + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+    \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
     \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
-    \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-    r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+    \left. k_B T_{surf} \right\}
+    r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
   \end{matrix}
   \right] \right|_{S_0} & \text{mdf\_fhi} = 0
 \\
@@ -11389,11 +11509,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
       \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
       - q_{iy}^{P.Sch} +
       \frac{\sqrt g}{h_y} \frac{3}{2} \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i + \\
-    + \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
-      \left( \frac{3}{2} + BoRiS \right)
+    + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+      \sum \limits_{a=0}^{ns-1} \max \left\{ e_{rec,a}
       \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) \right. , \\
-      \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-      r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+      \left. k_B T_{surf} \right\}
+      r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
    \end{matrix}
    \right] \right|_{S_0} & & \text{mdf\_fhi} = 1
   \end{matrix}
@@ -11402,13 +11522,15 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
 {\em Imposing a constant ion temperature:} {\tt BCENI = 21}
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_0}
 = \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         \frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_{S_0} + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_{S_0}$
+\right|_{S_0}
+\end{equation*}
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = -10^{-2}$
 
@@ -11441,12 +11563,14 @@ $c_{h_i,a,2} = -10^{-2}$
 
 %-------- end of 35th page -------------
 
-$\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h_i,1} \frac{
+\begin{equation*}
+\left. \frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_{S_1} = \left. \left[ p_{h_i,1} \frac{
         \frac{\sqrt g}{h_y}}
         {\sum \limits_{core} \left( \frac{\sqrt g}{h_y} \right)}
         - q_{iy}^{P.Sch}
         + \frac{3}{2} \frac{\left( j_y^{(AN)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + \widetilde{j}_y^{(visq)} + j_y^{(vis \perp)} \right)}{e} T_i
-\right] \right|_{S_1}$
+\right] \right|_{S_1}
+\end{equation*}
 
 $p_{h_i,1}$ is the imposed total ion energy flux, in $W$.
 
@@ -11482,11 +11606,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
        \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,0}^{no\_mdf} T_i -
        \frac{\sqrt g}{h_y} \frac{\kappa_i^{(AN)}}{p_{h_i,1}} T_i +
        \frac{5}{2} \sum \limits_{a=0}^{ns-1} S_{n_a,1}^{no\_mdf} n_a T_i \\
-       + \sum \limits_{a=0}^{ns-1} \max \left\{
-         e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
-         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
-         \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+       + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+         \sum \limits_{a=0}^{ns-1} \max \left\{
+         e_{rec,a} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+         \left. k_B T_{surf} \right\}
+       r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
     \end{matrix}
     \right] \right|_{N} & \text{mdf\_fhi} = 0
     \\
@@ -11498,11 +11622,11 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
        - q_{iy}^{P.Sch} +
        \frac{\sqrt g}{h_y} \frac{3}{2}
        \sum \limits_{a=0}^{ns-1} V_{ay}^{(E)} n_a T_i \\
-       + \sum \limits_{a=0}^{ns-1} \max \left\{
-         e_{rec,a} \left( \frac{3}{2} + BoRiS \right)
-         \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
-       \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-       r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
+       + c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+         \sum \limits_{a=0}^{ns-1} \max \left\{
+         e_{rec,a} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right) , \right. \\
+       \left. k_B T_{surf} \right\}
+       r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_y} \Gamma_{ay} \right\}
     \end{matrix}
     \right] \right|_{N} & \text{mdf\_fhi} = 1
   \end{matrix}
@@ -11511,14 +11635,16 @@ $r_{rec,0,0} = 0$ and $r_{rec,1,0} = 1$ are particle recycling coefficients.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 21}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
 p_{h_i,2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         \frac{\sqrt g}{h_y} n_a \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) T_i \right|_N
 + \left.
 p_{h_i,1} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$
+\right|_N
+\end{equation*}
 
 $p_{h_i,1} = -1$, $p_{h_i,2} = 10^{-2}$
 
@@ -11534,14 +11660,16 @@ $p_{h_i,1}$ is the imposed ion temperature decay length, in $m$.
 
 {\em Boundary condition in {\tt b2stbc\_spb}:}
 
-$\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_y} \widetilde q_{iy} \right|_N
 = \left.
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \left(
         c_{h_i,a,2}  \frac{\sqrt g}{h_y} \frac{n_a }{n_i} \sqrt{\frac{z_a T_e + T_i}{m_a}}
 \right) n_i T_i \right|_N
 + \left.
 c_{h_i,a,7} \max \left\{0, -\frac{\sqrt g}{h_y} \widetilde f_{iy} \right\} T_i
-\right|_N$
+\right|_N
+\end{equation*}
 
 %-------- end of 36th page -------------
 
@@ -11553,21 +11681,25 @@ $c_{h_i,a,2} = -10^{-2}$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-$\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_W$
+\right|_W
+\end{equation*}
 
 $p_{h_i,1} = +1.5$
+
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
 \left. \left[
+        \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
         \left(
                 c_{h_i,a,7}
                 \frac{\sqrt g}{h_x} |b_x|
@@ -11580,33 +11712,39 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
 
-If $p_{m,a_{main},2} < 0.5$:
-
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
 \left. \left[
 \begin{matrix}
-  \sum \limits_{z_a \neq 0} \left(
-        \frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
-        \left( u_{p_{out}}^2 + \left( u_{a,x}^{(dia)} \right)^2 \right) T_i -
-        \frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i \right) \\
- + \sum \limits_{a=0}^{ns-1} \max
-     \left\{ r_{rec,a,1} \left( \frac{3}{2} + BoRiS \right)
-                       \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right)
+ - \frac{\sqrt g}{h_x} p_{h_i,1} \sum \limits_{z_a \neq 0} \left(
+        u_{u_{out}} n_a \right) T_i
+ - \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \\
+ + c_{nsr} \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \max
+     \left\{ r_{rec,a,1} \left( T_i + z_a \left( \Phi - p_{\Phi,2} \right) \right)
      \right., \\
-     \left. \left( \frac{3}{2} + BoRiS \right) T_{surf} k_B \right\}
-     r_{rec,a,0} c_{nsr} \max \left\{ 0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
+     \left. k_B T_{surf} \right\}
+     r_{rec,a,0} \max \left\{ 0, -\frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \end{matrix}
 \right] \right|_W
 \end{equation*}
 
-$u_ {a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{xa}^{(dia)}$
+$p_{m,a_{main},1} = 1.0$
 
-$u_{p_{out}} = \max \left\{
-        0, \frac{u_{u_{out}}}{b_x} + \frac{u_{1,x}^{(dia)}}{b_x}
-\right\}$
+If $p_{m,a_{main},2} < 0.5$:
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, \\\\ $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$,
+
+\begin{equation}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}),
+
+$u_{u_{out}} = \max \left\{ p_{m,a_{main},1} c_{s,a}, u_{extrap} \right\}$
 
 \begin{sloppypar}
 If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
@@ -11629,22 +11767,27 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} p_{n,a,1} n_a
 +
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right|_E$
+\right|_E
+\end{equation*}
 
 $p_{h_i,1} = +1.5$
 
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
-$\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
-\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
+\begin{equation*}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 \left. \left[
-        -\left(
+        - \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}
+        \left(
                 c_{h_i,a,7}
                 \frac{\sqrt g}{h_x} |b_x|
                 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}}
@@ -11652,50 +11795,47 @@ $\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
         \right) n_i T_i
         +
         \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-\right] \right|_E$
+\right] \right|_E
+\end{equation*}
 
 {\em Imposing a sheath ion boundary condition:} {\tt BCENI = 3}
-
-If $p_{m,a_{main},2} < 0.5$:
 
 \begin{equation*}
 \begin{matrix}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E =
 & \left. \left[
 \begin{matrix}
-\sum \limits_{z_a \neq 0} \left(
-        -\frac{\sqrt g}{h_x} \frac{p_{h_i,2}}2 u_{u_{out}} m_a n_a
-        \left(
-                u_{p_{out}}^2 + \left(
-                        u_{a,x}^{(dia)}
-                \right)^2
-        \right)
-        -
+- \sum \limits_{z_a \neq 0} \left(
         \frac{\sqrt g}{h_x} p_{h_i,1} u_{u_{out}} n_a T_i
-\right)+ \\
-+ \sum \limits_{a=0}^{ns-1} \max \left\{
+\right)
++ \frac{\sqrt g}{h_x} q_{ix}^{P.Sch} \\
++ c_{nsr} \left( \frac{3}{2} + BoRiS \right)
+  \sum \limits_{a=0}^{ns-1} \max \left\{
         r_{rec,a,1} \left(
-                \frac{3}{2} + BoRiS
-        \right)\left(
                 T_i + z_a \left( \Phi - p_{\Phi,2} \right)
-        \right) \right. , \\ \left. \left(
-                \frac{3}{2} + BoRiS
-        \right) T_{surf} k_B
-\right\}
-r_{rec,a,0} c_{nsr} \max \left\{
-        0, \frac{\sqrt g}{h_x} \Gamma_{ax}
-\right\}
+        \right) \right. , \\ \left. k_B T_{surf} \right\}
+        r_{rec,a,0} \max \left\{ 0, \frac{\sqrt g}{h_x} \Gamma_{ax} \right\}
 \end{matrix} \right] \right|_E ,
 \end{matrix}
 \end{equation*}
 
-$u_{a,x}^{(dia)} = V_{ax}^{(E)} + \widetilde V_{ax}^{(dia)}$
+$p_{m,a_{main},1} = 1.0$
 
-$u_{p_{out}} = \max \left\{
-        0, \frac{u_{u_{out}}}{b_x} - \frac{u_{1,x}^{(dia)}}{b_x}
-\right\}$
+If $p_{m,a_{main},2} < 0.5$:
 
-$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$, $c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}$, $p_{m,a_{main},1} = 1.0$
+$u_{u_{out}} = p_{m,a_{main},1} c_s |b_x|$,
+
+\begin{equation*}
+c_s = \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
+\end{equation*}
+
+If $p_{m,a_{main},2} > 0.5$:
+
+$c_{s,a} = \sqrt{\frac{\gamma_i T_i + z_a^2 \frac{n_a}{n_e} T_e}{m_a}}$
+
+where $\gamma_i$ is the adiabatic ratio of specific heats ({\tt GAMMAI} in {\tt b2.boundary.parameters}),
+
+$u_{u_{out}} = \max \left\{ p_{m,a,1} c_{s,a}, u_{extrap} \right\}$
 
 If {\tt neutrals\_namelist.eq.1.or.use\_eirene.ne.0}
 then $e_{rec,0} = 0$, $e_{rec,1} = 0.3$, $r_{rec,0,0} = 0$, $r_{rec,1,0} = 1$
@@ -11805,7 +11945,7 @@ electrons and ions correspondingly. They are
 
 \begin{gather}
  R_{e\parallel} = 0; \\
- R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_a}^m
+ R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_{a\parallel}}^m
 \end{gather}
 
 $Q_e^{\rm ATOMIC}$ and $Q_i^{\rm ATOMIC}$ are electron and ion
@@ -15015,7 +15155,11 @@ $\displaystyle S_{AN_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smoan[XX
 
 $\displaystyle S_{BC_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
 
-$\displaystyle S_{EIRENE_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+$\displaystyle S_{EIRENE_{a\parallel}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+
+$\displaystyle S_{EIRENE_{a\perp}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smd\_eir[XXX].dat} &  (\ref{eq:pot_jaxs_eir}), (\ref{eq:pot_jays_eir}) \\
+
+$\displaystyle S_{EIRENE_{ay}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smr\_eir[XXX].dat} &  (\ref{eq:pot_jaxs_eir})) \\
 
 $\displaystyle \left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smovv001.dat} & (\ref{eq:mom_viscos}), (\ref{eq:mom_visres}) \\
 
@@ -15309,6 +15453,10 @@ $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(s)}$ & $A$ & \texttt{b2tfh
 
 $\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_y^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchiny.dat} & (\ref{eq:pot_jy}), (\ref{eq:pot_jys}) \\
 
+$\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_{ax}^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchin\_ax.dat} & (\ref{eq:pot_jaxs_eir}) \\
+
+$\displaystyle \frac{\sqrt{g}}{h_y} \widetilde{j}_{ay}^{(s)}$ & $A$ & \texttt{b2tfhe\_\_fchin\_ay.dat} & (\ref{eq:pot_jays_eir}) \\
+
 $\displaystyle \sigma_{aa0} b^2_z \frac{\sqrt{g}}{h^2_x}$ & $S$ & \texttt{b2tral\_csiginx01\_00.dat} & (\ref{eq:pot_sigaa0}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{j}_x^{(AN)}$ & $A$ & \texttt{b2tfch\_\_fchanmlx.dat} & (\ref{eq:pot_jxan}) \\
@@ -15373,14 +15521,14 @@ cell faces, it is necessary to compute it from the quantities also computed at c
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
-  \frac23 \left(q_{ex}^{ExB} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  \frac23 \left(q_{ex}^{E \times B} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{ExB} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  \frac23 \left(q_{ix}^{E \times B} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
-  \frac23 q_{ey}^{ExB} \\
+  \frac23 q_{ey}^{E \times B} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{ExB} + q_{iy}^{conv} + q_{iy}^{j}
+  \frac23 q_{iy}^{E \times B} + q_{iy}^{conv} + q_{iy}^{j}
 \end{gather}
 
 \begin{gather}
@@ -15402,10 +15550,10 @@ to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
- q_{ex}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
- q_{ey}^{ExB} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
- q_{ix}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{ExB} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+ q_{ex}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
@@ -20081,6 +20229,7 @@ DIMENSIONS\_MODULE & trans/b2agfz.F \\
 DIMENSIONS\_MODULE & trans/ecrim5.F \\
 DIMENSIONS\_MODULE & trans/tradui.F \\
 EXTRA\_GRAPHS & carre/carre.F \\
+GFORTRAN & carre/change.F \\
 GFORTRAN & carre/rdfrin.F \\
 GFORTRAN & carre/rdfrre.F \\
 MODIF & carre/maille.F \\
@@ -20115,6 +20264,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+       AL\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
        AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
        AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
@@ -20129,6 +20279,7 @@ We list below where the {\tt DivGeo} compilation switches are used.
        IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+       IMAS\_MICRO\_VERSION & equtrn/src/wrids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
        IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
        IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
@@ -20251,6 +20402,13 @@ We list below where the {\tt B2.5} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+AL\_MAJOR\_VERSION & b2plot/b2pawpwr.F \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
@@ -20265,8 +20423,6 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
-AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
-AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AMNS & preprocessing/b2ardr.F \\
 AMNS & utility/ratadas.F \\
 ASTRA & modules/b2mod\_astra\_to\_b2.F \\
@@ -20414,6 +20570,7 @@ GFORTRAN & utility/ma28.F \\
 GFORTRAN & utility/ma28copy.F \\
 GFORTRAN & utility/ma28copy3.F \\
 GFORTRAN & utility/ma28copy4.F \\
+GFORTRAN & utility/mds\_routines.F \\
 G95 & utility/mds\_routines.F \\
 GGD\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -20430,6 +20587,7 @@ HPUX & modules/b2mod\_eirbra.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
+IMAS & b2plot/b2paspwr.F \\
 IMAS & driver/b2mnds.F \\
 IMAS & ids/b2mod\_interp.F90 \\
 IMAS & ids/b2mod\_ual.F90 \\
@@ -20441,6 +20599,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MAJOR\_VERSION & b2plot/b2paspwr.F \\
 IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_interp.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
@@ -20551,6 +20710,7 @@ NO\_CDF & sources/b2stbr.F \\
 NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
+NO\_GETENV & b2plot/b2paspwr.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
@@ -20698,6 +20858,7 @@ USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_OPENMP & driver/b2mod\_driver.F \\
+USE\_PXFGETENV & b2plot/b2paspwr.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -20858,6 +21019,23 @@ GFORTRAN & photons/eirmod\_photon.f \\
 GFORTRAN & user-routines/user\_iter/broad\_usr.f \\
 GFORTRAN & user-routines/user\_iter/eirmod\_refusr.f \\
 G95 & assistant/exit\_own.f \\
+G95 & file-handling/eirmod\_openfile.f \\
+G95 & interfaces/couple\_SOLPS-ITER/couple\_specific.f \\
+G95 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.f \\
+G95 & main-routines/integrate\_tallies.f \\
+G95 & main-routines/scal\_volav\_tallies.f \\
+G95 & main-routines/scale\_tallies.f \\
+G95 & main-routines/sum\_average.f \\
+G95 & main-routines/sumostra.f \\
+G95 & main-routines/tally\_sanity\_check.f \\
+G95 & particle-tracing/eirmod\_collide.f \\
+G95 & particle-tracing/escape.f \\
+G95 & scoring/getscl4.f \\
+G95 & scoring/update.f \\
+G95 & scoring/update\_surface.f \\
+G95 & scoring/updphot.f \\
+G95 & startup-routines/find\_tet\_dim.f \\
+G95 & startup-routines/find\_triang\_dim.f \\
 HPUX & modules/eirmod\_cinit.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/eirmod\_openfile.f \\
@@ -20866,6 +21044,7 @@ NO\_GETENV & file-handling/get\_solpstop.f \\
 NO\_JSON & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 NO\_JSON & interfaces/couple\_SOLPS-ITER/if0prm\_json.f \\
 NO\_JSON & interfaces/couple\_SOLPS-ITER/wr0\_json.f \\
+NO\_JSON & modules/eirmod\_comusr.f \\
 NO\_JSON & modules/eirmod\_json.f \\
 NO\_JSON & startup-routines/read\_fixform.f \\
 NO\_JSON & startup-routines/read\_json.f \\
@@ -23636,4 +23815,3 @@ introduced a very small effect, seen only as a jump in the residuals.
 \ifpdf
 \else
 \fi
-
