@@ -43,9 +43,6 @@ if (np.size(sys.argv) > 1):
     wlld_dir = sys.argv[1]
 logging.info('WORK DIRECTORY: %s',wlld_dir)
 
-"Length of string in 10 symbols per unit cannot be lower then 4"
-str_len = 7
-
 "Variable list, names legend and actions"
 wlld_quan_int  = ['Wtot',         'Wpls',          'Wneut',          'Wrad']
 wlld_name_int  = ['Q total [MW]', 'Q plasma [MW]', 'Q neutral [MW]', 'Q radiation [MW]']
@@ -61,7 +58,8 @@ fptg_name_avg  = ['H atom pressure [Pa]', 'H2 molecule pressure [Pa]', 'D atom p
 fptg_quan_pkv  = ['H_pres_atm',           'H2_pres_mol',               'D_pres_atm',           'D2_pres_mol',               'T_pres_atm',           'T2_pres_mol' ]
 fptg_name_pkv  = ['H atom pressure [Pa]', 'H2 molecule pressure [Pa]', 'D atom pressure [Pa]', 'D2 molecule pressure [Pa]', 'T atom pressure [Pa]', 'T2 molecule pressure [Pa]' ]
 
-
+"Length of string in 10 symbols per unit cannot be lower then 4"
+str_len = 7
 
 "!!! BASIC SETUP: END !!!"
 
