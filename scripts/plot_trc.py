@@ -65,7 +65,7 @@ ntime_file = '.ntime'
 "Hidden file containing specific time handling if required"
 
 plt_file = '.plt_setup'
-"Hiddent file overwriting default line, marker and label sizes"
+"Hidden file overwriting default line, marker and label sizes"
 
 "Default plotting options"
 default_fig_size=(3.37,2.5275)
@@ -78,7 +78,7 @@ default_size_ticks = 10
 default_size_xlabel = 10
 default_size_title = 10
 default_size_legend = 10
-"Check if setup file is presnt and change defaults accordingly"
+"Check if setup file is present and change defaults accordingly"
 if ( os.path.isfile(plt_file) == True ):
     logging.info('Plot setup file %s found, reading...',plt_file)
     with open(plt_file) as ff:
@@ -534,7 +534,7 @@ INPUT:
                   'g' - green dashes lines (so far the only option)
     ptype       - plot type
                   'd' - default linear
-                  'l' - semilog (Y axis log, X still linear)\
+                  'l' - semilog (Y axis log, X still linear)
     ltype       - line type
                   'l' - lines without markers
                   'm' - markers without lines
