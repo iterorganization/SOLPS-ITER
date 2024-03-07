@@ -22,6 +22,7 @@
 # and in the one from which the last_2d script is called
 #=======================================================================
 
+MARK=.L2D
 CMD_FILE=last_2d.cmd
 L2D_SCRIPT=last_2d.py
 TRC_DIR=tracing
@@ -48,6 +49,15 @@ LCMD=last_2d.l2d.cmd
 LLOG=last_2d.l2d.log
 LRES=.RES
 WRK_DIR=wrk.l2d
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$L2D_SCRIPT" ]

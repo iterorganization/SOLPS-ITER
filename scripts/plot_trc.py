@@ -26,10 +26,6 @@ Generally speaking only the first block "BASIC SETUP" is expected to be changed
 if one does not like the fonts, colour scheme etc.
 """
 
-import logging
-for handler in logging.root.handlers[:]:
-    logging.root.removeHandler(handler)
-
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -38,7 +34,17 @@ import numpy as np
 import sys
 import os
 
+import logging
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+
 "!!! BASIC SETUP: START !!!"
+
+log_file = 'plot_trc.exe.log'
+"Log file produced by the script"
+if (np.size(sys.argv) > 3):
+    log_file = sys.argv[3]
+logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
 cmd_file = 'plot_trc.exe.cmd'
 "Name of the command file"
@@ -52,19 +58,14 @@ if (np.size(sys.argv) > 2):
     trc_dir = sys.argv[2]
 logging.info('WORK DIRECTORY: %s',trc_dir)
 
-log_file = 'plot_trc.exe.log'
-"Log file produced by the script"
-if (np.size(sys.argv) > 3):
-    log_file = sys.argv[3]
-logging.info('LOG FILE: %s',log_file)
-
-logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
-
 pdf_out = trc_dir + '/multipage.pdf'
 "Name of the multipage pdf file produced along with the separate .ps files"
 
 ntime_file = '.ntime'
 "Hidden file containing specific time handling if required"
+
+plt_file = '.plt_setup'
+"Hidden file overwriting default line, marker and label sizes"
 
 "Default plotting options"
 default_fig_size=(3.37,2.5275)
@@ -72,13 +73,35 @@ default_line_color = ['tab:red', 'tab:blue', 'tab:green', 'tab:gray', 'tab:purpl
 default_marker = ['o', 's', '^', 'v', 'p','h', '*', 'D', 'X',  'P' ]
 
 default_line_width = 1.0
+default_markersize = 6
 default_size_ticks = 10
 default_size_xlabel = 10
 default_size_title = 10
 default_size_legend = 10
-default_markersize = 6
+"Check if setup file is present and change defaults accordingly"
+if ( os.path.isfile(plt_file) == True ):
+    logging.info('Plot setup file %s found, reading...',plt_file)
+    with open(plt_file) as ff:
+        try:
+            data = np.loadtxt(ff, comments='#', dtype='float')
+            if ( np.size(data) == 6):
+                    default_line_width = data[0]
+                    logging.info('new linewidth = %s',default_line_width)
+                    default_markersize = int(data[1])
+                    logging.info('new markersize = %s',default_markersize)
+                    default_size_ticks = int(data[2])
+                    logging.info('new ticks size = %s',default_size_ticks)
+                    default_size_xlabel = int(data[3])
+                    logging.info('new x label size = %s',default_size_xlabel)
+                    default_size_title = int(data[4])
+                    logging.info('new title size = %s',default_size_title)
+                    default_size_legend = int(data[5])
+                    logging.info('new legend size = %s',default_size_legend)
+            else:
+                logging.error('inconsistent format of %s, default values will be used',plt_file)
+        except:
+            logging.error('inconsistent format of %s, default values will be used',plt_file)
 
-plt_grid = False
 output_format = 'ps'
 
 eps = 1.e-30
@@ -325,6 +348,7 @@ General plotting engine
 
 INPUT:
     pnum       - number of quantities to be plotted
+    sgrid      - boolean defines if grid should be plotted or not
     slog       - logical, True if xsemilog is required
     sline      - logical, True if points are connected by lines
     smark      - logical, True if points are marked
@@ -340,7 +364,6 @@ INPUT:
                  and quantity wont be plotted
     ftitle     - plot title (can use Latex format if preceded with r'')
     xlabel     - x axis label
-    grid       - boolean defines if grid should be plotted or not
     file_out   - the output file name
     pdf        - multipage pdf file for plots output
 
@@ -348,7 +371,7 @@ OUTPUT:
     produces the output plot file file_out.$output_format
 """
 
-def PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymaskmass,xlabel,ftitle,file_out,pdf):
+def PLT(slog,sgrid,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymaskmass,xlabel,ftitle,file_out,pdf):
 
     logging.info('plotting %s',file_out)
     if (produce_pdf == True):
@@ -470,8 +493,8 @@ def PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmass,ymas
     plt.xlabel(xlabel,fontsize=default_size_xlabel)
     plt.title(ftitle,fontsize=default_size_title)
     plt.axis([mini,maxi,minval,maxval])
-    if (plt_grid == True):
-        plt.grid(plt_grid, color='g', linestyle='-.', linewidth=0.5)
+    if (sgrid == True):
+        plt.grid(sgrid, color='g', linestyle='-.', linewidth=0.5)
     if (pnum == 1):
         if (slog == False):
             plt.plot(xmass, ymass, color=line_color[0], marker=line_marker[0], linestyle=line, markersize=default_markersize, label=labelmass[0])
@@ -506,6 +529,9 @@ INPUT:
     page_number - sequential number of the page
     trc_header  - list of data in current .trc file
     trc_data    - data from current .trc file
+    grid        - grid setting
+                  'd' - default, i.e. no grid
+                  'g' - green dashes lines (so far the only option)
     ptype       - plot type
                   'd' - default linear
                   'l' - semilog (Y axis log, X still linear)
@@ -534,7 +560,7 @@ INPUT:
 OUTPUT:
     prepares data for .ps file production with PLT
 """
-def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf):
+def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,grid,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf):
 
     logging.info('producing page %s with title: %s',page_number,page_title)
 
@@ -673,10 +699,14 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xa
     slog = False
     sline = True
     smark = False
+    sgrid = False
     pnum = np.size(quan_names)
 
     if (ptype == 'l'):
         slog = True
+
+    if (grid == 'g'):
+        sgrid = True
 
     if (ltype == 'm'):
         sline = False
@@ -712,7 +742,7 @@ def PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xa
         else:
             internal_page_number = page_number
         fout = '{0}{1}{2}{3}{4}'.format(trc_dir,'/',internal_page_number,'.',output_format)
-        PLT(slog,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,quan_labels,ymaskmass,xlabel,page_title,fout,pdf)
+        PLT(slog,sgrid,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,quan_labels,ymaskmass,xlabel,page_title,fout,pdf)
 
     return;
 
@@ -725,6 +755,7 @@ INPUT:
 
 OUTPUT:
     page_title   = 'Blank'
+    grid         = 'd'
     ptype        = 'd'
     ltype        = 'l'
     xtype        = 't'
@@ -743,6 +774,7 @@ def RESET_PAGE():
     logging.info('resetting page data to default dummy values')
 
     page_title = 'Blank'
+    grid = 'd'
     ptype = 'd'
     ltype = 'l'
     xtype ='t'
@@ -756,7 +788,7 @@ def RESET_PAGE():
     xname = ''
     xscale = 1.
 
-    return page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale;
+    return page_title, grid, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale;
 
 
 
@@ -810,7 +842,7 @@ def main():
             logging.info('GTIME: every %s point will be plotted',gtime)
 
     "Setting default values for cycling"
-    page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+    page_title, grid, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
 
     trc_read = False
     page_first = False
@@ -852,12 +884,12 @@ def main():
 
                     "Finish previous @page if it was asked for and there is a data to produce it"
                     if ( (page_first == True) and (trc_read == True)):
-                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,grid,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
                         page_first = False
 
                     "read file and reset @page parameters"
                     trc_read, trc_header, trc_data = READ_TRC(cmd_arg)
-                    page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+                    page_title, grid, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
 
                 elif (cmd.lower() =='page'):
 
@@ -869,8 +901,8 @@ def main():
                         logging.info('starting page %s with title: %s', page_number, page_title)
 
                     elif ((page_first == True) and (trc_read == True)):
-                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
-                        page_title, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
+                        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,grid,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+                        page_title, grid, ptype, ltype, xtype, xarg, quan_names, quan_labels, quan_scales, setprange, prange, xquan, xname, xscale = RESET_PAGE()
                         page_title = cmd_arg
                         page_number = page_number + 1
                         logging.info('starting page %s with title: %s', page_number, page_title)
@@ -892,6 +924,11 @@ def main():
 
                     ltype = 'c'
                     logging.info('lines supplemented by markers for page %s with title: %s', page_number, page_title)
+
+                elif (cmd.lower() == 'grid'):
+
+                    grid = 'g'
+                    logging.info('grid lines added for page %s with title: %s', page_number, page_title)
 
                 elif (cmd.lower() == 'setymin'):
 
@@ -1030,7 +1067,7 @@ def main():
 
     "produce the final page if needed"
     if ((page_first == True) and (trc_read == True)):
-        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
+        PRODUCE_PAGE(page_number,page_title,trc_header,trc_data,grid,ptype,ltype,xtype,xarg,quan_names,quan_labels,quan_scales,xquan,xname,xscale,setprange,prange,ntime,ctime,gtime,pdf)
 
 "!!! DRIVER: END !!!"
 

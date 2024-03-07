@@ -11,6 +11,7 @@
 #                  (if XX < 0 or absent will plot for the whole history)
 # @points:      - lines replaced by markers
 # @linepoints:  - lines supplemented by markers
+# @grid:        - add grid lines to the page
 #
 # @setymax:XX   - set Y-axis maximum plotting limit to XX
 # @setymin:XX   - set Y-axis minimum plotting limit to XX

@@ -55,15 +55,15 @@ import os
 
 "!!! BASIC SETUP: START !!!"
 
+log_file = 'get_series.exe.log'
+"Log file produced by the script"
+logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
+
 cmd_file = 'get_series.exe.cmd'
 "Name of the command file"
 
 series_file = 'series.exe'
 "Hidden file containing specific information about the series and composing run"
-
-log_file = 'get_series.exe.log'
-"Log file produced by the script"
-logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcName)s: %(message)s',level=logging.INFO,filemode='w')
 
 raw_file = 'last_2d_out'
 "Name of the files containing raw last_2d output used to get the series data"
