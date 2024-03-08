@@ -1,0 +1,120 @@
+setenv SYSNAME `uname`_`arch`
+alias gmake make
+
+# Define here the paths to the libraries installed on your Mac
+# (e.g. setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0)
+
+# GCC
+setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
+
+# cmake
+setenv CMAKE_HOME /opt/homebrew/Cellar/cmake/3.28.3
+
+# ctags
+setenv CTAGS_HOME /opt/homebrew/Cellar/ctags/5.8_2
+
+# anaconda
+setenv ANACONDA_HOME /Users/antonello/anaconda3
+
+# blitz
+setenv BLITZ_DIR
+
+# doxygen
+setenv DOXYGEN_HOME /opt/homebrew/Cellar/doxygen/1.10.0
+
+# gli
+setenv GLI_HOME /Users/antonello/Work/Libraries/gks
+
+# gnuplot
+setenv GNUPLOT_HOME /opt/homebrew/Cellar/gnuplot/6.0.0
+
+# gr
+setenv GR_HOME /Users/antonello/Work/Libraries/gr
+
+# hdf5
+setenv HDF5_HOME /opt/homebrew/Cellar/hdf5/1.14.3
+
+# json
+setenv JSON_HOME /opt/homebrew/Cellar/json-fortran/8.4.0
+
+# lapack
+setenv LAPACK_DIR /opt/homebrew/Cellar/lapack/3.12.0
+
+# mscl
+setenv MSCL_HOME /Users/antonello/Work/Libraries/mscl
+
+# ncl
+setenv NCARG_ROOT /opt/local
+
+# netcdf
+setenv NETCDF_HOME /opt/homebrew/Cellar/netcdf/4.9.2_1
+
+# netcdf-fortran
+setenv NETCDF_FORTRAN_HOME /opt/homebrew/Cellar/netcdf-fortran/4.6.1
+
+# openmotif
+setenv MOTIF_HOME /opt/homebrew/Cellar/openmotif/2.3.8_2
+
+# open-mpi
+setenv OPENMPI_HOME /opt/homebrew/Cellar/open-mpi/5.0.2
+
+# texlive
+setenv TEXLIVE_HOME /usr/local/texlive/2022
+
+
+
+# Add directories of compiled libraries, include directives, etc.
+
+setenv LD_LIBRARY_PATH
+
+setenv PATH "${PATH}:$GCC_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$GCC_HOME/lib/gcc/current"
+
+setenv PATH "${PATH}:$CMAKE_HOME/bin"
+
+setenv PATH "${PATH}:$CTAGS_HOME/bin"
+
+setenv PATH "${PATH}:$ANACONDA_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$ANACONDA_HOME/lib"
+
+setenv INCLUDE_BLITZ $BLITZ_DIR/include
+setenv PKG_CONFIG_PATH $BLITZ_DIR/lib/pkgconfig
+
+setenv PATH "${PATH}:$DOXYGEN_HOME/bin"
+
+setenv PATH "${PATH}:$GNUPLOT_HOME/bin"
+
+setenv PATH "${PATH}:$HDF5_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$HDF5_HOME/lib"
+
+setenv JSON_LIB_DIR $JSON_HOME/lib
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$JSON_LIB_DIR"
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$JSON_LIB_DIR/pkgconfig"
+
+setenv LAPACK_LIB_DIR $LAPACK_DIR/lib
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LAPACK_LIB_DIR"
+
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/lib"
+
+setenv PATH "${PATH}:$NCARG_ROOT/bin"
+
+setenv PATH "${PATH}:$NETCDF_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$NETCDF_HOME/lib"
+
+setenv PATH "${PATH}:$NETCDF_FORTRAN_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$NETCDF_FORTRAN_HOME/lib"
+
+setenv PATH "${PATH}:$MOTIF_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MOTIF_HOME/lib"
+
+setenv PATH "${PATH}:$OPENMPI_HOME/bin"
+setenv MANPATH "${MANPATH}:$OPENMPI_HOME/share/man"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OPENMPI_HOME/lib"
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$OPENMPI_HOME/lib/pkgconfig"
+
+setenv PATH "${PATH}:$TEXLIVE_HOME/bin/universal-darwin"
+setenv MANPATH "${MANPATH}:$TEXLIVE_HOME/texmf-dist/doc/man"
+setenv INFOPATH "${INFOPATH}:$TEXLIVE_HOME/texmf-dist/doc/info"
+
+setenv DBX ddt
+setenv DBX idb

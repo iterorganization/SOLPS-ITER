@@ -1,23 +1,39 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
+UNAME := $(shell uname)
+ifeq ($(UNAME),Darwin)
+	MACOS := 1
+else
+	MACOS := 0
+endif
+
 # Identify HOST_NAME
 ifndef HOST_NAME
-  ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
-    # Identify host from whereami-script
-    HOST_NAME = $(shell echo `./whereami|tail -1`)
-    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
-      # If no specific host identified, use default settings
-      HOST_NAME = default
-    endif
-  else
-    # If whereami-script not found, use default settings
-    HOST_NAME = default
-  endif
-  export HOST_NAME
-  ifeq (${HOST_NAME},default)
-    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
-  endif
+	ifeq ($(MACOS),false)
+	# Assuming to work on some HPC cluster
+	  ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+	    # Identify host from whereami-script
+	    HOST_NAME = $(shell echo `./whereami|tail -1`)
+	    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
+	      # If no specific host identified, use default settings
+	      HOST_NAME = default
+	    endif
+	  else
+	    # If whereami-script not found, use default settings
+	    HOST_NAME = default
+	  endif
+	  export HOST_NAME
+	  ifeq (${HOST_NAME},default)
+	    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+	  endif
+	else
+	# Using MacOS, so assuming to work on a local device
+	# So far only the compilation of b25, eirene and b25eirene,
+	# in both serial, mpi and openmpi mode, but without graphics,
+	# has been tested as successful on MacOS
+		 HOST_NAME = DARWIN
+	endif
 endif
 
 # Identify compiler
@@ -143,6 +159,13 @@ DIMENSIONS = 1
 CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
+ifeq ($(UNAME),Darwin)
+	ifneq (,$(filter eirene%,$(MAKECMDGOALS)))
+    # Automatically not use cmake only for compiling Eirene standalone (bug?)
+    NO_CMAKE := 1
+	endif
+endif
+
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE
@@ -248,7 +271,9 @@ divgeo_nox:
 	cd modules/DivGeo/equtrn;  ${MAKEO}
 	cd modules/DivGeo/convert; ${MAKEO}
 
+
 ifndef NO_CMAKE
+	
 eirene:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
 	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP}; ${MAKEO}
@@ -282,6 +307,7 @@ eirene_nox_openmp_mpi:
 	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
 
 else
+
 eirene:
 	cd modules/Eirene; ${MAKEE}
 
@@ -305,6 +331,7 @@ eirene_nox_openmp:
 
 eirene_nox_openmp_mpi:
 	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+
 endif
 
 eirene_mpi_openmp: eirene_openmp_mpi
@@ -532,7 +559,7 @@ uinp_nox_openmp_mpi: uinp_openmp_mpi
 
 uinp_nox_mpi_openmp: uinp_openmp_mpi
 
-triang: eirene_nox
+triang: eirene_nox 
 	cd modules/Triang; ${MAKE}
 
 triang_mpi: eirene_nox_mpi
@@ -613,9 +640,12 @@ tags:
 	cd modules/B2.5;           ${MAKE} tags
 	cd modules/Uinp;           ${MAKE} tags
 	cd modules/Triang;         ${MAKE} tags
+ifneq (${MACOS},1)
+	# Automatically exclude DivGeo if we are on MacOS
 	cd modules/DivGeo;         ${MAKE} tags
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
+endif
 #	cd modules/solps4-5;       ${MAKE} tags
 	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
 
@@ -628,7 +658,10 @@ listobj:
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} listobj
+ifneq (${MACOS},1)
+	# Automatically exclude DivGeo if we are on MacOS
 	cd modules/DivGeo;         ${MAKE} listobj
+endif
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
@@ -687,14 +720,20 @@ depend:
 	cd modules/Uinp;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} depend
+ifneq (${MACOS},1)
+	# Automatically exclude DivGeo if we are on MacOS
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
+endif
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 ifndef NO_MOTIF
+ifneq (${MACOS},1)
+	# Automatically exclude DivGeo if we are on MacOS
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/amds;           ${MAKE} depend
+endif
 endif
 ifeq (${MPI_PRESENT},1)
 	cd modules/Eirene;         ${MAKEF} depend ${MPI_OPTS}
@@ -721,7 +760,10 @@ depend_nox:
 	cd modules/Uinp;           ${MAKE} depend
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} depend ${OPT_NOX}
+ifneq (${MACOS},1)
+	# Automatically exclude DivGeo if we are on MacOS
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
+endif
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OPT_NOX}

@@ -1,0 +1,6 @@
+LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lXft -lpthread -lm -L$(MOTIF_HOME)/lib
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

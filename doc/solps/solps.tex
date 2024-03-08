@@ -609,6 +609,32 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also Carre and Uinp can be successfully compiled. DivGeo, Triang, Sonnet-Light and amds, at the moment, are not compatible yet with MacOS instead.
+
+The minimum set of required libraries for using SOLPS on MacOS is:
+
+\begin{description}
+\item[GNU compiler collection]. It can be installed from Homebrew (formula: {\tt brew install gcc}).
+\item[Cross-platform make]. It can be installed from Homebrew (formula: {\tt brew install cmake}).
+\item[ctags]. It can be installed from Homebrew (formula: {\tt brew install ctags}).
+\item[Doxygen]. It can be installed from Homebrew (formula: {\tt brew install doxygen}).
+\item[Graphics Language Interpreter]. It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}.
+\item[GNU plotting library]. It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
+\item[GR framework]. A universal prebuilt binary can be downloaded at (\href{https://gr-framework.org/downloads/gr-latest-Darwin-universal.tar.gz}{https://gr-framework.org/downloads/gr-latest-Darwin-universal.tar.gz}).
+\item[HDF5 data management and storage library]. It can be installed from Homebrew (formula: {\tt brew install hdf5}).
+\item[Fortran JSON API]. It can be installed from Homebrew (formula: {\tt brew install json-fortran}).
+\item[Blas/Lapack linear algebra library]. It can be installed from Homebrew (formula: {\tt brew install lapack}).
+\item[MSCL utility library]. It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse}.
+\item[NCAR plotting library]. It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
+\item[NETCDF data access library]. It can be installed from Homebrew (formula: {\tt brew install netcdf}).
+\item[NETCDF data access library (Fortran version)]. It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
+\item[MPI parallel computing library]. It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
+\item[TeX typesetting system distrubtion TeXLive]. It can be installed from Homebrew (formula: {\tt brew install texlive}).
+\end{description}
+
+After the installation of the libraries, the user must manually indicate the corresponding local home directories in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}. There the home directory of a Python installation (e.g.\ through Anaconda) must be also declared.
+
+
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
 
