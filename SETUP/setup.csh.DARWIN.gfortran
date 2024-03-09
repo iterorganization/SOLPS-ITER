@@ -16,58 +16,102 @@ alias gmake make
 # In any case, the user should carefully check the actual
 # installation folders before linking any library.
 
+# XQuartz
+# The XQuartz package can be installed from
+# https://www.xquartz.org/
+# Usually, the home directory is /opt/X11
+setenv XQUARTZ_HOME /opt/X11
+
 # GCC
+# This library must be installed via Homebrew
+# via "brew install gcc"
 setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
 
 # cmake
+# This library must be installed via Homebrew
+# via "brew install cmake"
 setenv CMAKE_HOME /opt/homebrew/Cellar/cmake/3.28.3
 
 # ctags
+# This library must be installed via Homebrew
+# via "brew install ctags"
 setenv CTAGS_HOME /opt/homebrew/Cellar/ctags/5.8_2
 
 # anaconda
-setenv ANACONDA_HOME 
+# Insert here the local home directory of your python installation
+setenv ANACONDA_HOME
 
 # doxygen
+# This library must be installed via Homebrew
+# via "brew install doxygen"
 setenv DOXYGEN_HOME /opt/homebrew/Cellar/doxygen/1.10.0
 
 # gli
-setenv GLI_HOME 
+# This library must be manually downloaded and built from
+# https://pgi-jcns.fz-juelich.de/portal/pages/gli.html
+setenv GLI_HOME
 
 # gnuplot
+# This library must be installed via Homebrew
+# via "brew install gnuplot"
 setenv GNUPLOT_HOME /opt/homebrew/Cellar/gnuplot/6.0.0
 
 # gr
-setenv GR_HOME 
+# Prebuilt versions for this library can be found at
+# https://gr-framework.org/downloads/
+# Download the version 0.56.0, corresponding
+# to the device architecture (x86-64 or ARM64).
+setenv GR_HOME
 
 # hdf5
+# This library must be installed via Homebrew
+# via "brew install hdf5"
 setenv HDF5_HOME /opt/homebrew/Cellar/hdf5/1.14.3
 
 # json
+# This library must be installed via Homebrew
+# via "brew install json-fortran"
 setenv JSON_HOME /opt/homebrew/Cellar/json-fortran/8.4.0
 
 # lapack
+# This library must be installed via Homebrew
+# via "brew install lapack"
 setenv LAPACK_DIR /opt/homebrew/Cellar/lapack/3.12.0
 
 # libxp
+# This library must be installed via Homebrew
+# via "brew install libxp"
 setenv LIBXP_HOME /opt/homebrew/Cellar/libxp/1.0.4
 
 # mscl
-setenv MSCL_HOME 
+# This library must be manually downloaded and built from
+# https://git.iter.org/projects/LIB/repos/mscl/browse
+# Install the version corresponding to the commit a64eba15137
+setenv MSCL_HOME
 
 # ncl
+# This library must be installed via MacPorts
+# via "sudo port install ncarg"
 setenv NCARG_ROOT /opt/local
 
 # netcdf
+# This library must be installed via Homebrew
+# via "brew install netcdf"
 setenv NETCDF_HOME /opt/homebrew/Cellar/netcdf/4.9.2_1
 
 # netcdf-fortran
+# This library must be installed via Homebrew
+# via "brew install netcdf-fortran"
 setenv NETCDF_FORTRAN_HOME /opt/homebrew/Cellar/netcdf-fortran/4.6.1
 
 # openmotif
+# This library must be installed via MacPorts
+# via "sudo port install openmotif"
 setenv MOTIF_HOME /opt/local
 
 # open-mpi
+# This library must be installed via Homebrew
+# via "brew install open-mpi"
 setenv OPENMPI_HOME /opt/homebrew/Cellar/open-mpi/5.0.2
 
 # texlive
@@ -75,9 +119,16 @@ setenv TEXLIVE_HOME /usr/local/texlive/2022
 
 
 
-# Add directories of compiled libraries, include directives, etc.
+# Initialize the path collections, if they do not exist already
 
-setenv LD_LIBRARY_PATH
+if ( ! $?LD_LIBRARY_PATH ) then
+    setenv LD_LIBRARY_PATH
+endif
+if ( ! $?PKG_CONFIG_PATH ) then
+    setenv PKG_CONFIG_PATH
+endif
+
+# Add directories of compiled libraries, include directives, etc.
 
 setenv PATH "${PATH}:$GCC_HOME/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$GCC_HOME/lib/gcc/current"
@@ -98,7 +149,7 @@ setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$HDF5_HOME/lib"
 
 setenv JSON_LIB_DIR $JSON_HOME/lib
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$JSON_LIB_DIR"
-setenv PKG_CONFIG_PATH $JSON_LIB_DIR/pkgconfig
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$JSON_LIB_DIR/pkgconfig"
 
 setenv LAPACK_LIB_DIR $LAPACK_DIR/lib
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LAPACK_LIB_DIR"
@@ -107,6 +158,7 @@ setenv PATH "${PATH}:$LIBXP_HOME/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBXP_HOME/lib"
 
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/lib"
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$MSCL_HOME/lib/pkgconfig"
 
 setenv PATH "${PATH}:$NCARG_ROOT/bin"
 

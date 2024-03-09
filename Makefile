@@ -164,6 +164,10 @@ ifeq ($(UNAME),Darwin)
     # Automatically not use cmake only for compiling Eirene standalone (bug?)
     NO_CMAKE := 1
 	endif
+	ifneq (,$(filter triang%,$(MAKECMDGOALS)))
+    # Same for triang, which requires eirene_nox
+    NO_CMAKE := 1
+	endif
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}

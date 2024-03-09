@@ -14,7 +14,7 @@ ifdef SOLPS_DEBUG
 FCOPTS    = -debug all -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 endif
 
-GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu -L$(MOTIF_HOME)/lib -L/usr/X11R6/lib
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu -L$(MOTIF_HOME)/lib -L$(XQUARTZ_HOME)/lib
 
 #LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =

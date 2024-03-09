@@ -1,5 +1,5 @@
 LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lXft -lpthread -lm -L$(MOTIF_HOME)/lib
-INCLUDES = -I/${MOTIF_HOME}/include -I/${LIBXP_HOME}/include -I/opt/X11/include
+INCLUDES = -I/${MOTIF_HOME}/include -I/${LIBXP_HOME}/include -I/${XQUARTZ_HOME}/include
 
 #!!!Local Variables:
 #!!! mode: Makefile
