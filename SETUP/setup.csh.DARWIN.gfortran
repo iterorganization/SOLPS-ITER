@@ -2,7 +2,19 @@ setenv SYSNAME `uname`_`arch`
 alias gmake make
 
 # Define here the paths to the libraries installed on your Mac
-# (e.g. setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0)
+# Packages installed via Homebrew are usually located in
+# /opt/homebrew for ARM64 architecture (i.e. devices
+# with Apple Silicon CPU), or in /usr/local for -x86-64
+# architecture (i.e. devices with Intel CPU), with different
+# packages installed in different subfolders. So, the home
+# directories must be declared, e.g., as:
+# setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
+# Packages installed via MacPorts are usually located in
+# /opt/local, with all packages in one same directory.
+# So, the home directories must be declared, e.g., as:
+# setenv NCARG_ROOT /opt/local
+# In any case, the user should carefully check the actual
+# installation folders before linking any library.
 
 # GCC
 setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
@@ -14,22 +26,19 @@ setenv CMAKE_HOME /opt/homebrew/Cellar/cmake/3.28.3
 setenv CTAGS_HOME /opt/homebrew/Cellar/ctags/5.8_2
 
 # anaconda
-setenv ANACONDA_HOME /Users/antonello/anaconda3
-
-# blitz
-setenv BLITZ_DIR
+setenv ANACONDA_HOME 
 
 # doxygen
 setenv DOXYGEN_HOME /opt/homebrew/Cellar/doxygen/1.10.0
 
 # gli
-setenv GLI_HOME /Users/antonello/Work/Libraries/gks
+setenv GLI_HOME 
 
 # gnuplot
 setenv GNUPLOT_HOME /opt/homebrew/Cellar/gnuplot/6.0.0
 
 # gr
-setenv GR_HOME /Users/antonello/Work/Libraries/gr
+setenv GR_HOME 
 
 # hdf5
 setenv HDF5_HOME /opt/homebrew/Cellar/hdf5/1.14.3
@@ -40,8 +49,11 @@ setenv JSON_HOME /opt/homebrew/Cellar/json-fortran/8.4.0
 # lapack
 setenv LAPACK_DIR /opt/homebrew/Cellar/lapack/3.12.0
 
+# libxp
+setenv LIBXP_HOME /opt/homebrew/Cellar/libxp/1.0.4
+
 # mscl
-setenv MSCL_HOME /Users/antonello/Work/Libraries/mscl
+setenv MSCL_HOME 
 
 # ncl
 setenv NCARG_ROOT /opt/local
@@ -53,7 +65,7 @@ setenv NETCDF_HOME /opt/homebrew/Cellar/netcdf/4.9.2_1
 setenv NETCDF_FORTRAN_HOME /opt/homebrew/Cellar/netcdf-fortran/4.6.1
 
 # openmotif
-setenv MOTIF_HOME /opt/homebrew/Cellar/openmotif/2.3.8_2
+setenv MOTIF_HOME /opt/local
 
 # open-mpi
 setenv OPENMPI_HOME /opt/homebrew/Cellar/open-mpi/5.0.2
@@ -77,9 +89,6 @@ setenv PATH "${PATH}:$CTAGS_HOME/bin"
 setenv PATH "${PATH}:$ANACONDA_HOME/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$ANACONDA_HOME/lib"
 
-setenv INCLUDE_BLITZ $BLITZ_DIR/include
-setenv PKG_CONFIG_PATH $BLITZ_DIR/lib/pkgconfig
-
 setenv PATH "${PATH}:$DOXYGEN_HOME/bin"
 
 setenv PATH "${PATH}:$GNUPLOT_HOME/bin"
@@ -89,10 +98,13 @@ setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$HDF5_HOME/lib"
 
 setenv JSON_LIB_DIR $JSON_HOME/lib
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$JSON_LIB_DIR"
-setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$JSON_LIB_DIR/pkgconfig"
+setenv PKG_CONFIG_PATH $JSON_LIB_DIR/pkgconfig
 
 setenv LAPACK_LIB_DIR $LAPACK_DIR/lib
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LAPACK_LIB_DIR"
+
+setenv PATH "${PATH}:$LIBXP_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBXP_HOME/lib"
 
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/lib"
 
