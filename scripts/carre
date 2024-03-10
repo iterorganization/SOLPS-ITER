@@ -152,8 +152,13 @@ do {
             /bin/echo -e "Saved grid settings in carre.dat file"
             q=c; break;;
     ( c|C )                                               # convert:
-            /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
-            /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
+            if [ "$(uname)" = "Darwin" ]; then
+                printf 'carre.out\n4\n' | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+                printf 'carre.out\n2\n' | $CARRE_PATH/traduit.exe 2>traduit.log;
+            else
+                /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+                /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
+            fi
             q=t; break;;
     ( t|T )                                               # store the grid:
             [ -r traduit.out ] && {
@@ -198,7 +203,11 @@ do {
                   /bin/echo -e "`basename $filename` copied to $dgdir" && \
                   /bin/echo -e "`basename $filename` copied to $dgdir" >> CARRE.HISTORY
                 done
-                modelname=`echo $filename | sed -e 's\trg\dg\' `
+                if [ "$(uname)" = "Darwin" ]; then
+                  modelname=$(echo $filename | sed -e 's#trg\\dg##' )
+                else
+                  modelname=`echo $filename | sed -e 's\trg\dg\' `
+                fi
                 cp $modelname $dgdir/`basename $modelname`
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
