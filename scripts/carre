@@ -68,10 +68,31 @@ endings="dgo equ str trg"
 
 [ "$1" = '-' ] && {
     [ -r $indir/dg.str ] && {
-      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
+      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
       q=p
       qqs=c
       grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+      for ext in $endings; do
+        [ -e $indir/dg.$ext ] && {
+          filename=`lln $indir/dg.$ext`
+          [ "$filename" != '' ] || {
+            /bin/echo -e "File dg.$ext is not a symbolic link!"
+            q=q
+          }
+        } || {
+           /bin/echo -e "File dg.$ext is missing!"
+           q=q
+           qqs=q
+        }
+      done
+      [ "$q" = 'q' ] && {
+          [ "$qqs" = 'q' ] && {
+            /bin/echo -e "Run the lns script first."
+          } || {
+            /bin/echo -e "Case storage step will fail."
+            /bin/echo -e "Run the lns script first to assign a stem name to this case"
+          }
+      } ; break;
     } || {
       /bin/echo -e "Linking error - the input files were not found in \"$indir\""
       /bin/echo -e "Use (I)nput command to provide correct input directory"
@@ -187,7 +208,7 @@ do {
                 }
                 touch CARRE.HISTORY
 		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
-		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
+		ls -ls dg.??? | awk '{for (i=6;i<=NF;i++) printf " %s",$i;printf "\n"}' >> CARRE.HISTORY
                 cp traduit.sno $dgdir/$grid_stem.v$m.sno && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY
