@@ -616,24 +616,24 @@ First of all, the XQuartz package, which includes applications necessary for the
 The minimum set of required libraries for using SOLPS on MacOS is the following. Please install the various packages exactly from the sources specified in this list.
 
 \begin{description}
-\item[GNU compiler collection]. It can be installed from Homebrew (formula: {\tt brew install gcc}).
-\item[Cross-platform make]. It can be installed from Homebrew (formula: {\tt brew install cmake}).
-\item[ctags]. It can be installed from Homebrew (formula: {\tt brew install ctags}).
-\item[Doxygen]. It can be installed from Homebrew (formula: {\tt brew install doxygen}).
-\item[Graphics Language Interpreter]. It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}.
-\item[GNU plotting library]. It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
-\item[GR framework]. Prebuilt binaries can be downloaded at (\href{https://gr-framework.org/downloads/}{https://gr-framework.org/downloads/}) Download the version 0.56.0, corresponding to the device architecture (x86-64 or ARM64).
-\item[HDF5 data management and storage library]. It can be installed from Homebrew (formula: {\tt brew install hdf5}).
-\item[Fortran JSON API]. It can be installed from Homebrew (formula: {\tt brew install json-fortran}).
-\item[Blas/Lapack linear algebra library]. It can be installed from Homebrew (formula: {\tt brew install lapack}).
-\item[XPrint client library]. It can be installed from Homebrew (formula: {\tt brew install libxp}).
-\item[MSCL utility library]. It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse}. Install the version corresponding to the commit a64eba15137.
-\item[NCAR plotting library]. It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
-\item[NETCDF data access library]. It can be installed from Homebrew (formula: {\tt brew install netcdf}).
-\item[NETCDF data access library (Fortran version)]. It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
-\item[MPI parallel computing library]. It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
-\item[MOTIF graphical user interface]. It can be installed from MacPorts (formula: {\tt sudo port install openmotif}).
-\item[TeX typesetting system distrubtion TeXLive]. It can be installed from Homebrew (formula: {\tt brew install texlive}).
+\item[GNU compiler collection] It can be installed from Homebrew (formula: {\tt brew install gcc}).
+\item[Cross-platform make] It can be installed from Homebrew (formula: {\tt brew install cmake}).
+\item[ctags] It can be installed from Homebrew (formula: {\tt brew install ctags}).
+\item[Doxygen] It can be installed from Homebrew (formula: {\tt brew install doxygen}).
+\item[Graphics Language Interpreter] It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}.
+\item[GNU plotting library] It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
+\item[GR framework] Prebuilt binaries can be downloaded at (\href{https://gr-framework.org/downloads/}{https://gr-framework.org/downloads/}) Download the version 0.56.0, corresponding to the device architecture (x86-64 or ARM64).
+\item[HDF5 data management and storage library] It can be installed from Homebrew (formula: {\tt brew install hdf5}).
+\item[Fortran JSON API] It can be installed from Homebrew (formula: {\tt brew install json-fortran}).
+\item[Blas/Lapack linear algebra library] It can be installed from Homebrew (formula: {\tt brew install lapack}).
+\item[XPrint client library] It can be installed from Homebrew (formula: {\tt brew install libxp}).
+\item[MSCL utility library] It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}. Install the version corresponding to the commit a64eba15137.
+\item[NCAR plotting library] It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
+\item[NETCDF data access library] It can be installed from Homebrew (formula: {\tt brew install netcdf}).
+\item[NETCDF data access library (Fortran version)] It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
+\item[MPI parallel computing library] It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
+\item[MOTIF graphical user interface] It can be installed from MacPorts (formula: {\tt sudo port install openmotif}).
+\item[TeX typesetting system distrubtion TeXLive] It can be installed from Homebrew (formula: {\tt brew install texlive}).
 \end{description}
 
 After the installation of the libraries, the user must manually indicate the corresponding local home directories in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}. There the home directory of a Python installation (e.g.\ through Anaconda) must be also declared.

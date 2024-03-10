@@ -3,10 +3,10 @@ alias gmake make
 
 # Define here the paths to the libraries installed on your Mac
 # Packages installed via Homebrew are usually located in
-# /opt/homebrew for ARM64 architecture (i.e. devices
-# with Apple Silicon CPU), or in /usr/local for -x86-64
-# architecture (i.e. devices with Intel CPU), with different
-# packages installed in different subfolders. So, the home
+# /opt/homebrew/Cellar/{LIBRARY}/{VERSION} for ARM64 architecture
+# (i.e. devices with Apple Silicon CPU), or in
+# /usr/local/homebrew/Cellar/{LIBRARY}/{VERSION} for x86_64
+# architecture (i.e. devices with Intel CPU). So, the home
 # directories must be declared, e.g., as:
 # setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
 # Packages installed via MacPorts are usually located in
@@ -119,6 +119,9 @@ setenv TEXLIVE_HOME /usr/local/texlive/2022
 
 
 
+###################### DO NOT EDIT BELOW THIS LINE! ######################
+##########################################################################
+
 # Initialize the path collections, if they do not exist already
 
 if ( ! $?LD_LIBRARY_PATH ) then
@@ -182,3 +185,77 @@ setenv INFOPATH "${INFOPATH}:$TEXLIVE_HOME/texmf-dist/doc/info"
 
 setenv DBX ddt
 setenv DBX idb
+
+# Check if the installation directories of the libraries exist
+
+if ( ! -d "$XQUARTZ_HOME" ) then
+    echo "Warning: XQuartz not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$GCC_HOME" ) then
+    echo "Warning: gcc not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$CMAKE_HOME" ) then
+    echo "Warning: cmake not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$CTAGS_HOME" ) then
+    echo "Warning: ctags not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$ANACONDA_HOME" ) then
+    echo "Warning: Anaconda not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$DOXYGEN_HOME" ) then
+    echo "Warning: doxygen not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$GNUPLOT_HOME" ) then
+    echo "Warning: gnuplot not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$HDF5_HOME" ) then
+    echo "Warning: hdf5 not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$JSON_HOME" ) then
+    echo "Warning: json-fortran not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$LAPACK_DIR" ) then
+    echo "Warning: lapack not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$LIBXP_HOME" ) then
+    echo "Warning: libxp not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$MSCL_HOME" ) then
+    echo "Warning: mscl not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$NCARG_ROOT" ) then
+    echo "Warning: ncarg not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$NETCDF_HOME" ) then
+    echo "Warning: netcdf not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$NETCDF_FORTRAN_HOME" ) then
+    echo "Warning: netcdf-fortran not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$MOTIF_HOME" ) then
+    echo "Warning: openmotif not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$OPENMPI_HOME" ) then
+    echo "Warning: open-mpi not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$TEXLIVE_HOME" ) then
+    echo "Warning: texlive not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
