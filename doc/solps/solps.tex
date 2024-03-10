@@ -609,6 +609,36 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also DivGeo, Carre, Triang (only no graphics version), Uinp and amds can be successfully compiled. Sonnet-Light, at the moment, is not compatible yet with MacOS.
+
+First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
+
+The minimum set of required libraries for using SOLPS on MacOS is the following. Please install the various packages exactly from the sources specified in this list.
+
+\begin{description}
+\item[GNU compiler collection] It can be installed from Homebrew (formula: {\tt brew install gcc}).
+\item[Cross-platform make] It can be installed from Homebrew (formula: {\tt brew install cmake}).
+\item[ctags] It can be installed from Homebrew (formula: {\tt brew install ctags}).
+\item[Doxygen] It can be installed from Homebrew (formula: {\tt brew install doxygen}).
+\item[Graphics Language Interpreter] It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}.
+\item[GNU plotting library] It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
+\item[GR framework] Prebuilt binaries can be downloaded at (\href{https://gr-framework.org/downloads/}{https://gr-framework.org/downloads/}) Download the version 0.56.0, corresponding to the device architecture (x86-64 or ARM64).
+\item[HDF5 data management and storage library] It can be installed from Homebrew (formula: {\tt brew install hdf5}).
+\item[Fortran JSON API] It can be installed from Homebrew (formula: {\tt brew install json-fortran}).
+\item[Blas/Lapack linear algebra library] It can be installed from Homebrew (formula: {\tt brew install lapack}).
+\item[XPrint client library] It can be installed from Homebrew (formula: {\tt brew install libxp}).
+\item[MSCL utility library] It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}. Install the version corresponding to the commit a64eba15137.
+\item[NCAR plotting library] It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
+\item[NETCDF data access library] It can be installed from Homebrew (formula: {\tt brew install netcdf}).
+\item[NETCDF data access library (Fortran version)] It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
+\item[MPI parallel computing library] It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
+\item[MOTIF graphical user interface] It can be installed from MacPorts (formula: {\tt sudo port install openmotif}).
+\item[TeX typesetting system distrubtion TeXLive] It can be installed from Homebrew (formula: {\tt brew install texlive}).
+\end{description}
+
+After the installation of the libraries, the user must manually indicate the corresponding local home directories in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}. There the home directory of a Python installation (e.g.\ through Anaconda) must be also declared.
+
+
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
 

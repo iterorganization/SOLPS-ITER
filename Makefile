@@ -1,22 +1,35 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
+UNAME := $(shell uname)
+ifeq ($(UNAME),Darwin)
+	MACOS := 1
+else
+	MACOS := 0
+endif
+
 # Identify HOST_NAME
 ifndef HOST_NAME
-  ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
-    # Identify host from whereami-script
-    HOST_NAME = $(shell echo `./whereami|tail -1`)
-    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
-      # If no specific host identified, use default settings
+  ifeq ($(MACOS),false)
+  # Assuming to work on some HPC cluster
+    ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+      # Identify host from whereami-script
+      HOST_NAME = $(shell echo `./whereami|tail -1`)
+      ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
+        # If no specific host identified, use default settings
+        HOST_NAME = default
+      endif
+    else
+      # If whereami-script not found, use default settings
       HOST_NAME = default
     endif
+    export HOST_NAME
+    ifeq (${HOST_NAME},default)
+      $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+    endif
   else
-    # If whereami-script not found, use default settings
-    HOST_NAME = default
-  endif
-  export HOST_NAME
-  ifeq (${HOST_NAME},default)
-    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+  # Using MacOS, so assuming to work on a local device
+    HOST_NAME = DARWIN
   endif
 endif
 
@@ -143,6 +156,17 @@ DIMENSIONS = 1
 CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
+ifeq ($(UNAME),Darwin)
+  ifneq (,$(filter eirene%,$(MAKECMDGOALS)))
+    # Automatically not use cmake only for compiling Eirene standalone (bug?)
+    NO_CMAKE := 1
+  endif
+  ifneq (,$(filter triang%,$(MAKECMDGOALS)))
+    # Same for triang, which requires eirene_nox
+    NO_CMAKE := 1
+  endif
+endif
+
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE
@@ -249,6 +273,7 @@ divgeo_nox:
 	cd modules/DivGeo/convert; ${MAKEO}
 
 ifndef NO_CMAKE
+
 eirene:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
 	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP}; ${MAKEO}
@@ -282,6 +307,7 @@ eirene_nox_openmp_mpi:
 	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
 
 else
+
 eirene:
 	cd modules/Eirene; ${MAKEE}
 
@@ -305,6 +331,7 @@ eirene_nox_openmp:
 
 eirene_nox_openmp_mpi:
 	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+
 endif
 
 eirene_mpi_openmp: eirene_openmp_mpi

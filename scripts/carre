@@ -68,10 +68,31 @@ endings="dgo equ str trg"
 
 [ "$1" = '-' ] && {
     [ -r $indir/dg.str ] && {
-      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
+      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
       q=p
       qqs=c
       grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+      for ext in $endings; do
+        [ -e $indir/dg.$ext ] && {
+          filename=`lln $indir/dg.$ext`
+          [ "$filename" != '' ] || {
+            /bin/echo -e "File dg.$ext is not a symbolic link!"
+            q=q
+          }
+        } || {
+           /bin/echo -e "File dg.$ext is missing!"
+           q=q
+           qqs=q
+        }
+      done
+      [ "$q" = 'q' ] && {
+          [ "$qqs" = 'q' ] && {
+            /bin/echo -e "Run the lns script first."
+          } || {
+            /bin/echo -e "Case storage step will fail."
+            /bin/echo -e "Run the lns script first to assign a stem name to this case"
+          }
+      } ; break;
     } || {
       /bin/echo -e "Linking error - the input files were not found in \"$indir\""
       /bin/echo -e "Use (I)nput command to provide correct input directory"
@@ -152,8 +173,13 @@ do {
             /bin/echo -e "Saved grid settings in carre.dat file"
             q=c; break;;
     ( c|C )                                               # convert:
-            /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
-            /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
+            if [ "$(uname)" = "Darwin" ]; then
+                printf 'carre.out\n4\n' | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+                printf 'carre.out\n2\n' | $CARRE_PATH/traduit.exe 2>traduit.log;
+            else
+                /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+                /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
+            fi
             q=t; break;;
     ( t|T )                                               # store the grid:
             [ -r traduit.out ] && {
@@ -187,7 +213,7 @@ do {
                 }
                 touch CARRE.HISTORY
 		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
-		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
+		ls -ls dg.??? | awk '{for (i=6;i<=NF;i++) printf " %s",$i;printf "\n"}' >> CARRE.HISTORY
                 cp traduit.sno $dgdir/$grid_stem.v$m.sno && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY
@@ -198,7 +224,11 @@ do {
                   /bin/echo -e "`basename $filename` copied to $dgdir" && \
                   /bin/echo -e "`basename $filename` copied to $dgdir" >> CARRE.HISTORY
                 done
-                modelname=`echo $filename | sed -e 's\trg\dg\' `
+                if [ "$(uname)" = "Darwin" ]; then
+                  modelname=$(echo $filename | sed -e 's#trg\\dg##' )
+                else
+                  modelname=`echo $filename | sed -e 's\trg\dg\' `
+                fi
                 cp $modelname $dgdir/`basename $modelname`
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
                 /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
