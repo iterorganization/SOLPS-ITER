@@ -69,9 +69,9 @@ setenv GR_HOME
 setenv HDF5_HOME /opt/homebrew/Cellar/hdf5/1.14.3
 
 # json
-# This library must be installed via Homebrew
-# via "brew install json-fortran"
-setenv JSON_HOME /opt/homebrew/Cellar/json-fortran/8.4.0
+# This library must be installed via MacPorts
+# via "sudo port install fortran-json"
+setenv JSON_HOME /opt/local
 
 # lapack
 # This library must be installed via Homebrew
