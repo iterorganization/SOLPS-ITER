@@ -161,14 +161,10 @@ else
 endif
 ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPS_CPP += -DCONSTANTS_PROVIDED
-  ifeq ($(shell test ${AMNS_MAJOR_VERSION} -le 1; echo $$?),0)
-    ifeq ($(shell test ${AMNS_MINOR_VERSION} -le 3; echo $$?),0)
-      SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
-      INCMODS = `pkg-config fundamental-constants --cflags`
-      export SOLPSINCLUDE
-      export INCMODS
-    endif
-  endif
+  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
+  INCMODS = `pkg-config fundamental-constants --cflags`
+  export SOLPSINCLUDE
+  export INCMODS
 endif
 
 #
