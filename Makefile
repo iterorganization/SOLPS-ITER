@@ -10,30 +10,27 @@ endif
 
 # Identify HOST_NAME
 ifndef HOST_NAME
-	ifeq ($(MACOS),false)
-	# Assuming to work on some HPC cluster
-	  ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
-	    # Identify host from whereami-script
-	    HOST_NAME = $(shell echo `./whereami|tail -1`)
-	    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
-	      # If no specific host identified, use default settings
-	      HOST_NAME = default
-	    endif
-	  else
-	    # If whereami-script not found, use default settings
-	    HOST_NAME = default
-	  endif
-	  export HOST_NAME
-	  ifeq (${HOST_NAME},default)
-	    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
-	  endif
-	else
-	# Using MacOS, so assuming to work on a local device
-	# So far only the compilation of b25, eirene and b25eirene,
-	# in both serial, mpi and openmpi mode, but without graphics,
-	# has been tested as successful on MacOS
-		 HOST_NAME = DARWIN
-	endif
+  ifeq ($(MACOS),false)
+  # Assuming to work on some HPC cluster
+    ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+      # Identify host from whereami-script
+      HOST_NAME = $(shell echo `./whereami|tail -1`)
+      ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
+        # If no specific host identified, use default settings
+        HOST_NAME = default
+      endif
+    else
+      # If whereami-script not found, use default settings
+      HOST_NAME = default
+    endif
+    export HOST_NAME
+    ifeq (${HOST_NAME},default)
+      $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+    endif
+  else
+  # Using MacOS, so assuming to work on a local device
+    HOST_NAME = DARWIN
+  endif
 endif
 
 # Identify compiler
@@ -160,14 +157,14 @@ CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
 ifeq ($(UNAME),Darwin)
-	ifneq (,$(filter eirene%,$(MAKECMDGOALS)))
+  ifneq (,$(filter eirene%,$(MAKECMDGOALS)))
     # Automatically not use cmake only for compiling Eirene standalone (bug?)
     NO_CMAKE := 1
-	endif
-	ifneq (,$(filter triang%,$(MAKECMDGOALS)))
+  endif
+  ifneq (,$(filter triang%,$(MAKECMDGOALS)))
     # Same for triang, which requires eirene_nox
     NO_CMAKE := 1
-	endif
+  endif
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
@@ -275,9 +272,8 @@ divgeo_nox:
 	cd modules/DivGeo/equtrn;  ${MAKEO}
 	cd modules/DivGeo/convert; ${MAKEO}
 
-
 ifndef NO_CMAKE
-	
+
 eirene:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
 	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_DBG} ${OPT_MPI} ${OPT_OPENMP}; ${MAKEO}
@@ -563,7 +559,7 @@ uinp_nox_openmp_mpi: uinp_openmp_mpi
 
 uinp_nox_mpi_openmp: uinp_openmp_mpi
 
-triang: eirene_nox 
+triang: eirene_nox
 	cd modules/Triang; ${MAKE}
 
 triang_mpi: eirene_nox_mpi

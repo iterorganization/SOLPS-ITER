@@ -487,9 +487,10 @@ then do the following:
   cd src
   mkdir -p modules.local
   cp modules/b2mod_dimensions.F modules.local
+  touch modules/.new_modules
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
-dimensions (mainly used for the namelists in {\tt B2.5}) are
+dimensions (mainly used for the namelists in {\tt B2.5} and the {\tt Uinp} input file build-up program) are
 big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
 \begin{verbatim}
   stop
