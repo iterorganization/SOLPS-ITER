@@ -502,7 +502,14 @@ big enough (see the description of the relevant variables in section \ref{sec:DI
 so that your local file will be used. The last {\tt gmake} command may of
 course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
-{\tt gmake all\_mpi(\_debug)} as needed.
+{\tt gmake all\_mpi(\_debug)}, etc... as needed. Conversely, if you want to revert back to the {\tt b2mod\_dimensions.F} provided with your code distribution, use the commands:
+\begin{verbatim}
+  sb2
+  rm src/modules.local/b2mod_dimensions.F
+  touch src/modules/.new_modules
+  touch src/modules/b2mod_dimensions.F
+\end{verbatim}
+and proceed with the recompilation as above.
 \end{sloppypar}
 
 It is possible to pass down Makefile options with the syntax
