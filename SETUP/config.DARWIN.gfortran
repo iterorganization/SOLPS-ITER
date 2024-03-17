@@ -1,6 +1,3 @@
-# $(error Using default file. Provide paths to libraries first.)
-
-#
 # Specify paths to root-directories of following libraries on your system
 #
 # Special notes:
@@ -21,27 +18,28 @@
 # If your compiler is compatible with Fortran 2003 features, you can:
 # Add -DF2003 to SOLPS_CPP
 
-       NCDIR ?= ${NETCDF_HOME}
-      NCFDIR ?= ${NETCDF_FORTRAN_HOME}
-   MSCL_ROOT ?= ${MSCL_HOME}
-       H5DIR ?= ${HDF5_HOME}
-     GR_ROOT ?= ${GR_HOME}
-    GLI_HOME ?= ${GLI_HOME}
-  NCARG_ROOT ?= ${NCARG_ROOT}
-      NAGDIR ?= ${LAPACK_DIR}
-       MPDIR ?=
+        NCDIR ?= ${NETCDF_HOME}
+       NCFDIR ?= ${NETCDF_FORTRAN_HOME}
+    MSCL_ROOT ?= ${MSCL_HOME}
+        H5DIR ?= ${HDF5_HOME}
+      GR_ROOT ?= ${GR_HOME}
+     GLI_HOME ?= ${GLI_HOME}
+   NCARG_ROOT ?= ${NCARG_ROOT}
+       NAGDIR ?= ${LAPACK_DIR}
+   NCARG_ROOT ?= ${NCARG_ROOT}
+  LIBPNG_HOME ?= ${LIBPNG_HOME}
+FREETYPE_HOME ?= ${FREETYPE_HOME}
 
 #
 # Variables for linking
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L${NCFDIR}/lib -lnetcdff
-LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
+LD_MSCL    = -L${MSCL_ROOT}/darwin.gfortran -lmscl
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME}/lib -lgks
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_HOME}/lib -lfreetype -L${LIBPNG_HOME}/lib -lpng
 LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
-LD_MDSPLUS = 
 LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
 
 #

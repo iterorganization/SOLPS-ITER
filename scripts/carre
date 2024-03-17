@@ -34,14 +34,22 @@ equilibrium file, and the structures file) are saved in a directory
 Error messages and tracing data from carre (\"Grid\") and traduit (\"Convert\") can be found in
 the files carre.log and traduit.log, respectively.
 "
-[ -z "$1" ] && { /bin/echo -e "$Usage"; exit 4; }
+if [ "$(uname)" = "Darwin" ]; then
+  [ -z "$1" ] && { printf '%s\n' "$Usage"; exit 4; }
+else
+  [ -z "$1" ] && { /bin/echo -e "$Usage"; exit 4; }
+fi
 
 SOLPSTOP=`determine_SOLPSTOP`
 [ "$SOLPS_DEBUG" = '' ] || {
   export EXT_DEBUG=".debug"
 }
 CARRE_PATH=$SOLPSTOP/modules/Carre/builds/$HOST_NAME.$COMPILER$EXT_DEBUG
-/bin/echo -e "CARRE_PATH : $CARRE_PATH"
+if [ "$(uname)" = "Darwin" ]; then
+  printf 'CARRE_PATH : %s\n' "$CARRE_PATH"
+else
+  /bin/echo -e "CARRE_PATH : $CARRE_PATH"
+fi
 
 [ "$DEVICE" = '' ] && {
   print -u2 -n -- "No DEVICE selected. Please provide a device name\n "
@@ -62,13 +70,23 @@ stordir=$griddir
 [ -n "$CARRE_STOREDIR" ] && stordir="$CARRE_STOREDIR/${DEVICE-iter}"
 grid_stem=$class.carre
 endings="dgo equ str trg"
-/bin/echo -e "Store directory: $stordir"
-/bin/echo -e "Grid directory: $griddir"
-/bin/echo -e "Input directory: $indir\n"
+if [ "$(uname)" = "Darwin" ]; then
+  printf 'Store directory: %s\n' "$stordir"
+  printf 'Grid directory: %s\n' "$griddir"
+  printf 'Input directory: %s\n' "$indir"
+else
+  /bin/echo -e "Store directory: $stordir"
+  /bin/echo -e "Grid directory: $griddir"
+  /bin/echo -e "Input directory: $indir\n"
+fi
 
 [ "$1" = '-' ] && {
     [ -r $indir/dg.str ] && {
-      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
+      if [ "$(uname)" = "Darwin" ]; then
+        printf 'Standard linking - the input files are assumed to exist in "%s" as symbolic links\n' "$indir"
+      else
+        /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
+      fi
       q=p
       qqs=c
       grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
@@ -76,26 +94,48 @@ endings="dgo equ str trg"
         [ -e $indir/dg.$ext ] && {
           filename=`lln $indir/dg.$ext`
           [ "$filename" != '' ] || {
-            /bin/echo -e "File dg.$ext is not a symbolic link!"
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'File dg.%s is not a symbolic link!\n' "$ext"
+            else
+              /bin/echo -e "File dg.$ext is not a symbolic link!"
+            fi
             q=q
           }
         } || {
-           /bin/echo -e "File dg.$ext is missing!"
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'File dg.%s is missing!\n' "$ext"
+            else
+              /bin/echo -e "File dg.$ext is missing!"
+            fi
            q=q
            qqs=q
         }
       done
       [ "$q" = 'q' ] && {
           [ "$qqs" = 'q' ] && {
-            /bin/echo -e "Run the lns script first."
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Run the lns script first.\n'
+            else
+              /bin/echo -e "Run the lns script first."
+            fi
           } || {
-            /bin/echo -e "Case storage step will fail."
-            /bin/echo -e "Run the lns script first to assign a stem name to this case"
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Case storage step will fail.\n'
+              printf 'Run the lns script first to assign a stem name to this case.\n'
+            else
+              /bin/echo -e "Case storage step will fail."
+              /bin/echo -e "Run the lns script first to assign a stem name to this case"
+            fi
           }
       } ; break;
     } || {
-      /bin/echo -e "Linking error - the input files were not found in \"$indir\""
-      /bin/echo -e "Use (I)nput command to provide correct input directory"
+      if [ "$(uname)" = "Darwin" ]; then
+        printf 'Linking error - the input files were not found in "%s"\n' "$indir"
+        printf 'Use (I)nput command to provide correct input directory\n'
+      else
+        /bin/echo -e "Linking error - the input files were not found in \"$indir\""
+        /bin/echo -e "Use (I)nput command to provide correct input directory"
+      fi
       q=i
       qqs=c
     }
@@ -109,13 +149,21 @@ endings="dgo equ str trg"
         q=g
         qqs=s
     } || {
-        /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+        if [ "$(uname)" = "Darwin" ]; then
+          printf 'Files %s.vrq, %s.str, and %s.fld must be present!\n' "$u" "$u" "$u"
+        else
+          /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+        fi
         exit 8
     }
 }
 while true
 do {
-  /bin/echo -e "Help, Prepare, Grid, Save, Convert, sTore, Next, Remove, Input, Output, Quit ? ($q)\c"
+  if [ "$(uname)" = "Darwin" ]; then
+    printf 'Help, Prepare, Grid, Save, Convert, sTore, Next, Remove, Input, Output, Quit ? (%s)\c' "$q"
+  else
+    /bin/echo -e "Help, Prepare, Grid, Save, Convert, sTore, Next, Remove, Input, Output, Quit ? ($q)\c"
+  fi
   while true; do {
     read u
     { case "${u:-$q}" in
@@ -159,7 +207,11 @@ do {
             griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
             [ -n "$CARRE_STOREDIR" ] && stordir="$CARRE_STOREDIR/$class"
 
-            /bin/echo -e "class = $class\ngriddir = $griddir\nindir = $indir\ngrid_stem = $grid_stem"
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'class = %s\ngriddir = %s\nindir = %s\ngrid_stem = %s\n' "$class" "$griddir" "$indir" "$grid_stem"
+            else
+              /bin/echo -e "class = $class\ngriddir = $griddir\nindir = $indir\ngrid_stem = $grid_stem"
+            fi
             [ -n $class ] && {
               [ -r $class.aux ] && ln -sf $class.aux dg.aux
             }
@@ -170,7 +222,11 @@ do {
             $CARRE_PATH/carre.exe 2>carre.log; q=$qqs; break;;
     ( s|S )                                               # save the control data:
             cp carre.out carre.dat;
-            /bin/echo -e "Saved grid settings in carre.dat file"
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Saved grid settings in carre.dat file\n'
+            else
+              /bin/echo -e "Saved grid settings in carre.dat file"
+            fi
             q=c; break;;
     ( c|C )                                               # convert:
             if [ "$(uname)" = "Darwin" ]; then
@@ -184,7 +240,11 @@ do {
     ( t|T )                                               # store the grid:
             [ -r traduit.out ] && {
                 [ -d "$griddir" ] || {
-                    /bin/echo -e "The directory \"$griddir\" does not exist. Create it (y/n)? \c"
+                    if [ "$(uname)" = "Darwin" ]; then
+                      printf 'The directory "%s" does not exist. Create it (y/n)? \c' "$griddir"
+                    else
+                      /bin/echo -e "The directory \"$griddir\" does not exist. Create it (y/n)? \c"
+                    fi
                     read u; case "$u" in
                       ( y|Y )   /bin/echo -e mkdir "$griddir"
                       mkdir -p "$griddir" || break;;
@@ -192,7 +252,11 @@ do {
                       break;;
                     esac
                 }
-                /bin/echo -e dir OK
+                if [ "$(uname)" = "Darwin" ]; then
+                  printf 'dir OK\n'
+                else
+                  /bin/echo -e dir OK
+                fi
                 typeset -i n
                 n=1
                 set -- $griddir/$grid_stem.v[0-9][0-9][0-9].geo
@@ -201,7 +265,11 @@ do {
 #		    m=`echo $griddir/$grid_stem.v[0-9][0-9][0-9].geo | awk '{print $NF}'`
                     m=${m#*/$grid_stem.v}
                     m=${m%.geo}
-                    /bin/echo -e "Last grid number found is : $m"
+                    if [ "$(uname)" = "Darwin" ]; then
+                      printf 'Last grid number found is : %d\n' "$m"
+                    else
+                      /bin/echo -e "Last grid number found is : $m"
+                    fi
                     n=`echo $m | sed -r -e 's:^0{1,}::'`
                     n=n+1
                     m=$n
@@ -215,14 +283,24 @@ do {
 		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
 		ls -ls dg.??? | awk '{for (i=6;i<=NF;i++) printf " %s",$i;printf "\n"}' >> CARRE.HISTORY
                 cp traduit.sno $dgdir/$grid_stem.v$m.sno && \
-                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
-                  /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf 'The grid in DG format is stored as %s/%s.v%d.sno\n' "$dgdir" "$grid_stem" "$m" && \
+                    printf 'The grid in DG format is stored as %s/%s.v%d.sno\n' "$dgdir" "$grid_stem" "$m" >> CARRE.HISTORY
+                  else
+                    /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
+                    /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY
+                  fi
                 mv -f traduit.sno $grid_stem.v$m.sno
                 for ext in $endings; do
                   filename=`lln dg.$ext`
                   cp $filename $dgdir/`basename $filename`
-                  /bin/echo -e "`basename $filename` copied to $dgdir" && \
-                  /bin/echo -e "`basename $filename` copied to $dgdir" >> CARRE.HISTORY
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf '%s copied to %s\n' "$filename" "$dgdir" && \
+                    printf '%s copied to %s\n' "$filename" "$dgdir" >> CARRE.HISTORY
+                  else
+                    /bin/echo -e "`basename $filename` copied to $dgdir" && \
+                    /bin/echo -e "`basename $filename` copied to $dgdir" >> CARRE.HISTORY
+                  fi
                 done
                 if [ "$(uname)" = "Darwin" ]; then
                   modelname=$(echo $filename | sed -e 's#trg\\dg##' )
@@ -230,24 +308,48 @@ do {
                   modelname=`echo $filename | sed -e 's\trg\dg\' `
                 fi
                 cp $modelname $dgdir/`basename $modelname`
-                /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
-                /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
+                if [ "$(uname)" = "Darwin" ]; then
+                  printf 'DG model %s copied to %s\n' "$modelname" "$dgdir" && \
+                  printf 'DG model %s copied to %s\n' "$modelname" "$dgdir" >> CARRE.HISTORY
+                else
+                  /bin/echo -e "DG model `basename $modelname` copied to $dgdir" && \
+                  /bin/echo -e "DG model `basename $modelname` copied to $dgdir" >> CARRE.HISTORY
+                fi
                 cp traduit.out $griddir/$grid_stem.v$m.geo && \
-                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" && \
-                  /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" >> CARRE.HISTORY
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf 'The grid in B2.5 format is stored as %s/%s.v%d.geo\n' "$griddir" "$grid_stem" "$m" && \
+                    printf 'The grid in B2.5 format is stored as %s/%s.v%d.geo\n' "$griddir" "$grid_stem" "$m" >> CARRE.HISTORY
+                  else
+                    /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" && \
+                    /bin/echo -e "The grid in B2.5 format is stored as $griddir/$grid_stem.v$m.geo" >> CARRE.HISTORY
+                  fi
                 mv -f traduit.out $grid_stem.v$m.geo
                 [ -x ctrans ] && {
                   ctrans -d ps.mono gmeta > $griddir/$grid_stem.v$m.ps && \
-                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" && \
-                  /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" >> CARRE.HISTORY
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf 'You can view the grid in PostScript format as %s/%s.v%d.ps\n' "$griddir" "$grid_stem" "$m" && \
+                    printf 'You can view the grid in PostScript format as %s/%s.v%d.ps\n' "$griddir" "$grid_stem" "$m" >> CARRE.HISTORY
+                  else
+                    /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" && \
+                    /bin/echo -e "You can view the grid in PostScript format as $griddir/$grid_stem.v$m.ps" >> CARRE.HISTORY
+                  fi
                 }
                 [ -n "$stordir" ] && {
                   [ -d "$stordir" ] || {
                     [ -a "$stordir" ] && {
-                      /bin/echo -e "Name collision: there is already a file named $stordir"
-                      /bin/echo -e "  ==> the directory cannot be created"
+                      if [ "$(uname)" = "Darwin" ]; then
+                        printf 'Name collision: there is already a file named %s\n' "$stordir"
+                        printf '  ==> the directory cannot be created\n'
+                      else
+                        /bin/echo -e "Name collision: there is already a file named $stordir"
+                        /bin/echo -e "  ==> the directory cannot be created"
+                      fi
                     } || {
-                      /bin/echo -e "The directory \"$stordir\" does not exist. Create it (y/n)? \c"
+                      if [ "$(uname)" = "Darwin" ]; then
+                        printf 'The directory "%s" does not exist. Create it (y/n)? \c' "$stordir"
+                      else
+                        /bin/echo -e "The directory \"$stordir\" does not exist. Create it (y/n)? \c"
+                      fi
                       read u; case "$u" in
                         ( y|Y )   /bin/echo -e mkdir "$stordir"
                                   mkdir -p "$stordir";;
@@ -259,7 +361,11 @@ do {
                     s="$stordir/$grid_stem.v$m"
                     u=y
                     [ -d "$s" ] && {
-                      /bin/echo -e "The directory \"$s\" already exists. Use it (y/n)? \c"
+                      if [ "$(uname)" = "Darwin" ]; then
+                        printf 'The directory "%s" already exists. Use it (y/n)? \c' "$s"
+                      else
+                        /bin/echo -e "The directory \"$s\" already exists. Use it (y/n)? \c"
+                      fi
                       read u; case "$u" in
                         ( y|Y )   ;;
                         (  *  )   u=;;
@@ -268,8 +374,13 @@ do {
                     [ -n "$u" ] && {
                       [ -d "$s" ] || mkdir -p "$s"
                       cp carre.dat structure.dat rzpsi.dat btor.dat "$s" && \
-                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" && \
-                              /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" >> CARRE.HISTORY
+                              if [ "$(uname)" = "Darwin" ]; then
+                                printf 'carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to %s\n' "$s" && \
+                                printf 'carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to %s\n' "$s" >> CARRE.HISTORY
+                              else
+                                /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" && \
+                                /bin/echo -e "carre.dat, structure.dat, rzpsi.dat, and btor.dat copied to $s" >> CARRE.HISTORY
+                              fi
                     }
                   }
                 }
@@ -278,7 +389,11 @@ do {
                 echo "=======================================================================================" >> CARRE.HISTORY
             break;;
     ( n|N )                                               # next job:
-            /bin/echo -e "Input the new stem: \c"; read u
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Input the new stem: \c'; read u
+            else
+              /bin/echo -e "Input the new stem: \c"; read u
+            fi
             [ -n "$u" ] && {
               [ "$u" = '-' ] && {
                 [ -r $indir/rzpsi.dat ] && [ -r $indir/structure.dat ] && [ -r $indir/btor.dat ] && {
@@ -304,12 +419,20 @@ do {
                   q=g
                   true
                 } || {
-                  /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present in the input directory"
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf 'Files %s.vrq, %s.str, and %s.fld must be present in the input directory\n' "$u" "$u" "$u" 
+                  else
+                    /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present in the input directory"
+                  fi
                 }
               }
             }; break;;
     ( r|R )                                               # remove the grid(s):
-            /bin/echo -e "Input the list of grid numbers to be REMOVED:"; read u
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Input the list of grid numbers to be REMOVED:\n'; read u
+            else
+              /bin/echo -e "Input the list of grid numbers to be REMOVED:"; read u
+            fi
             [ -n "$u" ] && {
                 uu=
                 vv=
@@ -324,7 +447,11 @@ do {
                   ww="$ww $dgdir/$grid_stem.v$m.sno"
                 done
                 ls -l $uu $vv $ww
-                /bin/echo -e "Do you wish to remove this grid(s)? (y/n): \c"; read u
+                if [ "$(uname)" = "Darwin" ]; then
+                  printf 'Do you wish to remove this grid(s)? (y/n): \c'; read u
+                else
+                  /bin/echo -e "Do you wish to remove this grid(s)? (y/n): \c"; read u
+                fi
                 case "$u" in
                   ( y|Y ) rm -f $uu $vv $ww
                           for f in $uu; do {
@@ -336,7 +463,11 @@ do {
                 esac
             }; break;;
     ( i|I )                                               # input files:
-            /bin/echo -e "Specify the new input directory: \c"; read u
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Specify the new input directory: \c'; read u
+            else
+              /bin/echo -e "Specify the new input directory: \c"; read u
+            fi
             [ -n "$u" ] && {
               indir="$u"; /bin/echo -e "$indir"
               [ -d $u ] && {
@@ -356,15 +487,27 @@ do {
                   grid_stem=`ls -ls $u/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
                   q=p
                 } || {
-                  /bin/echo -e "Cannot find dg.str file in $u"
+                  if [ "$(uname)" = "Darwin" ]; then
+                    printf 'Cannot find dg.str file in %s\n' "$u"
+                  else
+                    /bin/echo -e "Cannot find dg.str file in $u"
+                  fi
                   q=i
                 }
               } || {
-                /bin/echo -e "Cannot find directory: $u"; q=i
+                if [ "$(uname)" = "Darwin" ]; then
+                  printf 'Cannot find directory: %s' "$u"; q=i
+                else
+                  /bin/echo -e "Cannot find directory: $u"; q=i
+                fi
               }
             }; break;;
     ( o|O )                                               # output directory:
-            /bin/echo -e "Specify the new grid storage directory: \c"; read u
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Specify the new grid storage directory: \c'; read u
+            else
+              /bin/echo -e "Specify the new grid storage directory: \c"; read u
+            fi
             [ -n "$u" ] && {
               [ -d $u ] && {
                 griddir="$u"; /bin/echo -e "The grid storage directory is now $griddir"; q=t
@@ -376,7 +519,11 @@ do {
                             case "$s" in
                               ( */* ) w="${s%/*}"
                                       [ -z "$w" ] && {
-                                        /bin/echo -e "Wrong directory specification: no $s"
+                                        if [ "$(uname)" = "Darwin" ]; then
+                                          printf 'Wrong directory specification: no %s\n' "$s"
+                                        else
+                                          /bin/echo -e "Wrong directory specification: no $s"
+                                        fi
                                         q=o; break 2
                                       }; s="$w"
                                       [ -d "$s" ] && break
@@ -384,13 +531,26 @@ do {
                               (  *  ) break;;
                             esac
                           done
-                          /bin/echo -e "Creating $ss"
+                          if [ "$(uname)" = "Darwin" ]; then
+                            printf 'Creating %s\n' "$ss"
+                          else
+                            /bin/echo -e "Creating $ss"
+                          fi
                           mkdir -p $ss && {
                             griddir="$u"; q=t
-                            /bin/echo -e "The grid storage directory is now $griddir"
+                            if [ "$(uname)" = "Darwin" ]; then
+                              printf 'The grid storage directory is now %s\n' "$griddir"
+                            else
+                              /bin/echo -e "The grid storage directory is now $griddir"
+                            fi
                           } || {
-                            /bin/echo -e "Unable to create $u"; q=o
-                            /bin/echo -e "The grid storage directory is still $griddir"
+                            if [ "$(uname)" = "Darwin" ]; then
+                              printf 'Unable to create %s\n' "$u"; q=o
+                              printf 'The grid storage directory is still %s\n' "$griddir"
+                            else
+                              /bin/echo -e "Unable to create $u"; q=o
+                              /bin/echo -e "The grid storage directory is still $griddir"
+                            fi
                           };;
                   (  *  ) ;;
                 esac
@@ -399,8 +559,13 @@ do {
     ( q|Q )                                               # quit:
             break 2;;
     (  *  )
-            /bin/echo -e 'Illegal response.'
-            /bin/echo -e 'Please use letters capitalized in the list or press ENTER for default'
+            if [ "$(uname)" = "Darwin" ]; then
+              printf 'Illegal response.\n'
+              printf 'Please use letters capitalized in the list or press ENTER for default\n'
+            else
+              /bin/echo -e 'Illegal response.'
+              /bin/echo -e 'Please use letters capitalized in the list or press ENTER for default'
+            fi
             continue;;
     esac;}
   }; done

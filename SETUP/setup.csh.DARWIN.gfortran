@@ -46,6 +46,16 @@ setenv ANACONDA_HOME
 # via "brew install doxygen"
 setenv DOXYGEN_HOME /opt/homebrew/Cellar/doxygen/1.10.0
 
+# freetype
+# This library must be installed via Homebrew
+# via "brew install freetype"
+setenv FREETYPE_HOME /opt/homebrew/Cellar/freetype/2.13.2
+
+# ghostscript
+# This library must be installed via Homebrew
+# via "brew install ghostscript"
+setenv GS_HOME /opt/homebrew/Cellar/ghostscript/10.02.1
+
 # gli
 # This library must be manually downloaded and built from
 # https://pgi-jcns.fz-juelich.de/portal/pages/gli.html
@@ -59,8 +69,8 @@ setenv GNUPLOT_HOME /opt/homebrew/Cellar/gnuplot/6.0.0
 # gr
 # Prebuilt versions for this library can be found at
 # https://gr-framework.org/downloads/
-# Download the version 0.56.0, corresponding
-# to the device architecture (x86-64 or ARM64).
+# Download a version corresponding to
+# the device architecture (x86-64 or ARM64).
 setenv GR_HOME
 
 # hdf5
@@ -77,6 +87,11 @@ setenv JSON_HOME /opt/local
 # This library must be installed via Homebrew
 # via "brew install lapack"
 setenv LAPACK_DIR /opt/homebrew/Cellar/lapack/3.12.0
+
+# libpng
+# This library must be installed via Homebrew
+# via "brew install libpng"
+setenv LIBPNG_HOME /opt/homebrew/Cellar/libpng/1.6.43
 
 # libxp
 # This library must be installed via Homebrew
@@ -145,6 +160,12 @@ setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$ANACONDA_HOME/lib"
 
 setenv PATH "${PATH}:$DOXYGEN_HOME/bin"
 
+setenv PATH "${PATH}:$FREETYPE_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$FREETYPE_HOME/lib"
+
+setenv PATH "${PATH}:$GS_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$GS_HOME/lib"
+
 setenv PATH "${PATH}:$GNUPLOT_HOME/bin"
 
 setenv PATH "${PATH}:$HDF5_HOME/bin"
@@ -157,11 +178,13 @@ setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$JSON_LIB_DIR/pkgconfig"
 setenv LAPACK_LIB_DIR $LAPACK_DIR/lib
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LAPACK_LIB_DIR"
 
+setenv PATH "${PATH}:$LIBPNG_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBPNG_HOME/lib"
+
 setenv PATH "${PATH}:$LIBXP_HOME/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBXP_HOME/lib"
 
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/lib"
-setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$MSCL_HOME/lib/pkgconfig"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/darwin.gfortran"
 
 setenv PATH "${PATH}:$NCARG_ROOT/bin"
 
@@ -212,6 +235,14 @@ if ( ! -d "$DOXYGEN_HOME" ) then
     echo "Warning: doxygen not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
 endif
 
+if ( ! -d "$FREETYPE_HOME" ) then
+    echo "Warning: freetype not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$GS_HOME" ) then
+    echo "Warning: ghostscript not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
 if ( ! -d "$GNUPLOT_HOME" ) then
     echo "Warning: gnuplot not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
 endif
@@ -226,6 +257,10 @@ endif
 
 if ( ! -d "$LAPACK_DIR" ) then
     echo "Warning: lapack not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( ! -d "$LIBPNG_HOME" ) then
+    echo "Warning: libpng not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
 endif
 
 if ( ! -d "$LIBXP_HOME" ) then
