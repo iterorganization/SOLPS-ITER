@@ -617,7 +617,7 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also DivGeo, Carre, Triang (only no graphics version), Uinp and amds can be successfully compiled. Sonnet-Light, at the moment, is not compatible yet with MacOS instead.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also DivGeo, Carre, Triang (only no graphics version), Uinp and amds can be successfully compiled. Sonnet-Light, at the moment, is not compatible yet with MacOS.
 
 First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
@@ -2619,7 +2619,9 @@ which contains
   {\tt CONPAR(,,1)} specifies the gradient length in $m$
   \item[10] leakage option for density, recommended for cases with drifts,
   {\tt CONPAR(,,1)} specifies the leakage factor,
-  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
+  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$.
+  {\tt CONPAR(,,2)} provides an optional additional stabilization parameter to
+  help with the linearization (must be positive if used).
   \item[11] particle flux feedback boundary condition,
   {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
   The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
