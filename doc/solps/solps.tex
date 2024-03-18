@@ -2618,7 +2618,9 @@ which contains
   {\tt CONPAR(,,1)} specifies the gradient length in $m$
   \item[10] leakage option for density, recommended for cases with drifts,
   {\tt CONPAR(,,1)} specifies the leakage factor,
-  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$
+  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$.
+  {\tt CONPAR(,,2)} provides an optional additional stabilization parameter to
+  help with the linearization (must be positive if used).
   \item[11] particle flux feedback boundary condition,
   {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
   The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
