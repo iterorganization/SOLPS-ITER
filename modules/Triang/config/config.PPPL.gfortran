@@ -1,0 +1,52 @@
+# Test whether necessary variables are defined
+#LD_GR  ?= -L/p/solps/solps_other/grsource -lgr
+#LD_GKS ?= -L/p/solps/solps_other/gligks -lgks
+
+#ifndef LD_GR
+#  $(error LD_GR not defined)
+#endif
+#ifndef LD_GKS
+#  $(error LD_GKS not defined)
+#endif
+
+DEFINES =
+EQUIVS =
+
+CPP = /lib/cpp -traditional
+CPPOPTS = -P -I${srcdir} ${EQUIVS}
+SED =
+LINK_MOD =
+
+FC = gfortran
+ifdef SOLPS_DEBUG
+FCOPTS = -C -g -Wall -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
+else
+FCOPTS = -O3
+endif
+
+DBLFC = ${FC}
+DBLOPTION =
+DBLSED = 
+
+INCMOD = -I
+MOD = mod
+OBJDEST = -o ${OBJDIR}/$*.o
+
+BLD = ar rcv
+
+LD = gfortran
+ifdef SOLPS_DEBUG
+LDOPTS = -g -C -Wall 
+DEFINES += -DDB
+else
+LDOPTS =
+endif
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt
+LDLIBS    =
+LDEXTRA   =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

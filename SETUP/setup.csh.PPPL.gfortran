@@ -1,0 +1,41 @@
+# Load modules
+module purge
+module load gcc/9.3.0
+module load szip
+module load openmpi
+module load mod_nstx
+module load mdsplus
+module load netcdf-c
+module load netcdf-fortran
+module load globus
+module load nag/nll6i2719l
+module load git
+module load globus
+
+# Environment variables
+if (! $?DEVICE) then
+  setenv DEVICE NSTX
+endif
+
+setenv GLI_HOME /u/eemdee/linux_gfortran
+setenv MSCL_ROOT /p/lvb/solps-iter-develop/lib
+
+# Compilers
+setenv CC gcc
+setenv FC gfortran
+setenv CXX g++
+
+
+# Debugger
+setenv DBX totalview
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  set PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
+  setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+  setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+endif
