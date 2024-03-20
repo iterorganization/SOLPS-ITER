@@ -17,7 +17,6 @@
 # Add -DNAG22 to SOLPS_CPP
 #
 
-
        NCDIR ?= /usr/pppl/gcc/9.3-pkgs/netcdf-fortran-4.5.2
    MSCL_ROOT ?= /u/eemdee/linux_gfortran/lib
        H5DIR ?=
@@ -35,163 +34,15 @@ LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks
-LD_NCARG = -L/usr/pppl/gcc/9.3-pkgs/ncl-6.6.2/lib/ -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgcc_s -lfreetype -lcairo -L/usr/pppl/gcc/9.3.0/lib/../lib64 -lgfortran
+LD_NCARG   = -L/usr/pppl/gcc/9.3-pkgs/ncl-6.6.2/lib/ -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgcc_s -lfreetype -lcairo -L/usr/pppl/gcc/9.3.0/lib/../lib64 -lgfortran
 LD_NAG     = -L/usr/pppl/gcc/9.3-pkgs/lapack-3.9.0/lib64 -lXm -llapack -lblas
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
-# Autodetected optional features...
-
-SOLPS_CPP     += -DGFORTRAN
-
-#
-## Preprocessor options
-#
-
-SOLPS_CPP       = -DNCAR4 -DNO_F01AAF -DGFORTRAN -DNO_NAG #-DNO_JSON -DNO_CMAKE #-DNOQUAD
-
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with Fundamental-Constants module if present
-ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
-  SOLPS_CPP += -DCONSTANTS_PROVIDED
-  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
-  IMAS_PKG_LIST = fundamental-constants
-  export SOLPSINCLUDE
-endif
-
-# Build with JSON if present
-ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
-  JSON_INC = `pkg-config json-fortran --cflags`
-  LD_JSON = `pkg-config json-fortran --libs`
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_VERSION
-  ifdef AL_VERSION
-    AL_MAJOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f1 )
-    AL_MINOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f2 )
-    AL_MICRO_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-  else
-    AL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-    AL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
-    AL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-  endif
-  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
-  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
-  IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
-  ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran al-identifiers-fortran
-  else
-    IMAS_PKG_LIST += imas-gfortran
-    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += imas-identifiers-gfortran
-    else
-      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
-        IMAS_PKG_LIST += imas-identifiers-gfortran
-      endif
-    endif
-  endif
-  ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-    ifdef GGD_VERSION
-      GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
-      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-    else
-      GGD_MAJOR_VERSION = 0
-      GGD_MINOR_VERSION = 0
-      GGD_MICRO_VERSION = 0
-    endif
-  else
-    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-      ifdef GGD_VERSION
-        GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
-        GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-      else
-        GGD_MAJOR_VERSION = 0
-        GGD_MINOR_VERSION = 0
-        GGD_MICRO_VERSION = 0
-      endif
-    else
-      GGD_MAJOR_VERSION = 1
-      GGD_MINOR_VERSION = 0
-      GGD_MICRO_VERSION = 0
-    endif
-  endif
-  ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
-    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += ggd
-    else
-      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-        IMAS_PKG_LIST += ggd
-      else
-        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-          LD_GGD = -lggd_fortran
-        else
-          IMAS_PKG_LIST += imas-lowlevel
-        endif
-      endif
-    endif
-  endif
-  ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
-    SOLPS_CPP += -DAMNS
-  endif
-  LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
-  ifdef LD_GGD
-    LD_AL += ${LD_GGD}
-  endif
-  SOLPS_CPP += -DIMAS -DAL_MAJOR_VERSION=${AL_MAJOR_VERSION} -DAL_MINOR_VERSION=${AL_MINOR_VERSION} -DAL_MICRO_VERSION=${AL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
-  export LD_AL
-else
-  AL_MAJOR_VERSION = 0
-  AL_MINOR_VERSION = 0
-  AL_MICRO_VERSION = 0
-  GGD_MAJOR_VERSION = 0
-  GGD_MINOR_VERSION = 0
-  GGD_MICRO_VERSION = 0
-  IMAS_MAJOR_VERSION = 0
-  IMAS_MINOR_VERSION = 0
-  IMAS_MICRO_VERSION = 0
-endif
-export AL_MAJOR_VERSION
-export AL_MINOR_VERSION
-export AL_MICRO_VERSION
-export GGD_MAJOR_VERSION
-export GGD_MINOR_VERSION
-export GGD_MICRO_VERSION
-export IMAS_MAJOR_VERSION
-export IMAS_MINOR_VERSION
-export IMAS_MICRO_VERSION
-export IMAS_PKG_LIST
-
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
-# Assume MPI is present
-MPI_PRESENT = 1
-
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
 
 #
-### Provide compiler
+# Provide compiler
 #
 
 ifdef SOLPS_MPI
@@ -201,44 +52,15 @@ FC         = gfortran
 endif
 MPI_FC     = mpif90
 
-
-
 #
-# Export for use in sub-makefiles
+# Preprocessor options
 #
 
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-export LD_JSON
-
-export LIBGKS
-export LIBGRS
-export LIBX11
-export LIBXT
-export LIBZ
-export ADDLIBS
-
-export SOLPS_CPP
-export FFLAGSEXTRA
-export B25_DEFINES
-export CARRE_DEFINES
-export EIRENE_DEFINES
-export JSON_INC
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DNO_NAG #-DNO_JSON -DNO_CMAKE #-DNOQUAD
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
 
 #!!!Local Variables:
 #!!! mode: Makefile
