@@ -687,8 +687,8 @@ c***        lstrascl
             end do !}
 
 c***        lsns, ksns
-            iniprm(k,1,1,13,3)=i
-            iniprm(k+ihyb,1,1,13,8)=i
+            iniprm(k,1,1,13,3)=i+ncore
+            iniprm(k+ihyb,1,1,13,8)=i+ncore
             iniprm(k,1,1,15,3)=1
             iniprm(k+ihyb,1,1,15,8)=1
 
@@ -762,7 +762,7 @@ cnh         values for additional hybrid strata
               do l=1,nspcncl !{
                 if (l.eq.iatm) iniprm(k+ihyb,l,1,12,8)=lscbnds(l,1,2)
               end do !}
-              iniprm(k+ihyb,1,1,13,8)=i
+              iniprm(k+ihyb,1,1,13,8)=i+ncore
               iniprm(k+ihyb,1,1,15,8)=1
               rniprm(k+ihyb,1,1,19,8)=0.
               do l=1,nspcncl !{
@@ -977,22 +977,12 @@ c*** accel_ion
 
 c*** lcns, ltns
       do i=1,nznbndt(1) !{
-        if (carre_mode.lt.2) then !{ standard case
-          iniprm(i,1,1,16,3)=i
-          iniprm(i,1,1,16,8)=i
-        else ! target or vessel mode
-          iniprm(i,1,1,16,3)=nbc-ncore+i
-          iniprm(i,1,1,16,8)=nbc-ncore+i
-        end if
+        iniprm(i,1,1,16,3)=i
+        iniprm(i,1,1,16,8)=i
       end do !}
       do i=1,nznbndt(2) !{
-        if (carre_mode.lt.2) then !{ standard case
-          iniprm(i,1,1,17,3)=nznbndt(1)+i
-          iniprm(i,1,1,17,8)=nznbndt(1)+i
-        else ! target or vessel mode
-          iniprm(i,1,1,17,3)=i
-          iniprm(i,1,1,17,8)=i
-        end if !}
+        iniprm(i,1,1,17,3)=nznbndt(1)+i
+        iniprm(i,1,1,17,8)=nznbndt(1)+i
       end do !}
 
 c*** recyc
