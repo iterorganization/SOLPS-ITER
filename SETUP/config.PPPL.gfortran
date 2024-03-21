@@ -1,0 +1,68 @@
+#
+# Specify paths to root-directories of following libraries on your system
+#
+# Special notes:
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Use LD_NAG to link to the BLASLAPACK library instead
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 17 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+
+       NCDIR ?= /usr/pppl/gcc/9.3-pkgs/netcdf-fortran-4.5.2
+   MSCL_ROOT ?= /u/eemdee/linux_gfortran/lib
+       H5DIR ?=
+     GR_ROOT ?= /u/eemdee/linux_gfortran
+    GLI_HOME ?= /u/eemdee/linux_gfortran
+  NCARG_ROOT ?= /usr/lib64/ncarg
+      NAGDIR ?= /usr/pppl/gcc/9.3-pkgs/lapack-3.9.0/lib
+ MDSPLUS_DIR ?=
+
+#
+## Variables for linking
+#
+
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
+LD_MSCL    = -L${MSCL_ROOT} -lmscl
+LD_GR      = -L${GR_ROOT} -lgr
+LD_GKS     = -L${GLI_HOME} -lgks
+LD_NCARG   = -L/usr/pppl/gcc/9.3-pkgs/ncl-6.6.2/lib/ -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgcc_s -lfreetype -lcairo -L/usr/pppl/gcc/9.3.0/lib/../lib64 -lgfortran
+LD_NAG     = -L/usr/pppl/gcc/9.3-pkgs/lapack-3.9.0/lib64 -lXm -llapack -lblas
+LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
+#
+# Provide compiler
+#
+
+ifdef SOLPS_MPI
+FC         = mpif90
+else
+FC         = gfortran
+endif
+MPI_FC     = mpif90
+
+#
+# Preprocessor options
+#
+
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DNO_NAG #-DNO_JSON -DNO_CMAKE #-DNOQUAD
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
