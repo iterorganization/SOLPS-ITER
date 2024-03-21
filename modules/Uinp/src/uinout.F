@@ -1322,7 +1322,7 @@ cnh        write(iunoo,707) ndxa,ndya
           end do !}
         else ! vessel mode
           do i=1,nvess !{
-            write(iunoo,707) i,ndt2(i,1),nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
      ,                                  nspzi(i,1),nspze(i,1),7
           end do !}
         end if

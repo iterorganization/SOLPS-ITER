@@ -1538,14 +1538,14 @@ cnh        write(iunoo,707) ndxa,ndya
           end do !}
         else ! vessel mode
           do i=1,maxval(fclbl)*(natmi-nmeta) !{
-            write(iunoo,707) i+ihyb,ndt2(i,1),nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
-     ,                                  nspzi(i,1),nspze(i,1),7
+            write(iunoo,707) i+ihyb,ndt2(i,1)-ncore,nptc(1,1),    ! for now using the number of histories specified for the first target
+     ,                               nptcm(1,1),nspzi(i,1),nspze(i,1),7
             if (ncharp(nspzi(i,j)).eq.1) then !nh duplicate line for hybrid model
               ihyb=ihyb+1
               do ispz=nfla+1,nfla+nplsh
                 if (bmassh(ispz).eq.bmassh(nspzi(i,1))) exit
               enddo
-              write(iunoo,707) i+ihyb,ndt2(i,1),
+              write(iunoo,707) i+ihyb,ndt2(i,1)-ncore,
      ,            nptc(1,1),nptcm(1,1),ispz,ispz,6 !nh for now, no plasma-void interfaces
             end if
           end do !}
