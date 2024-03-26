@@ -18,7 +18,7 @@ c=======================================================================
 #include "uinput.inc"
 #include "uib2pprm.inc"
       integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists,
-     .        ihyb,nhyb,nskip
+     .        ihyb,nhyb,nskip,nskip2,nskip3,isrf
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)
       logical ex,hlp_el,hlp_mol(nmol),hlp_ion(nion),
      .        pass, found
@@ -1520,6 +1520,7 @@ cnh Surface with nonzero face label is a standard surface
         iniprm(1,1,1,26,3)=n_spcsrf
         iniprm(1,1,1,26,8)=n_spcsrf
         k=0
+        nskip3=0
         do i=1,n_spcsrf !{
           i_spcsrf(i)=k+1
           k=k+k_spcsrf(i)
@@ -1535,7 +1536,31 @@ cnh Surface with nonzero face label is a standard surface
               end do !}
             end do !}
             if(n.gt.0) then !{
-              l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)
+              if (grid_mode.ne.2) then !nh standard and target mode
+                l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)
+              elseif (fclbl(n).eq.0) then !nh vessel mode ==> 3b surface
+                nskip2=0
+                do isrf=laddsrfs+1,nlimi !{
+                  if (indasrfe(isrf).eq.indasrfe(n)) exit
+                  if (fclbl(indasrfe(isrf)).ne.0) nskip2=nskip2+1
+                enddo
+                l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)-nskip2
+              else !nh vessel mode ==> 3a surface
+                found=.false.
+                do isrf=i_spcsrf(i),i_spcsrf(i)+j-2
+                  if (nlimi-nskip+ncore+fclbl(n).eq.l_spcsrf(isrf)) then ! check if 3a surface is already written out
+                    k=k-1
+                    j_spcsrf(i)=k
+                    nskip3=nskip3+1
+                    found=.true.
+                    exit
+                  endif
+                enddo
+                if (.not.found) then
+                  l_spcsrf(i_spcsrf(i)+j-1-nskip3)=nlimi-nskip+ncore+
+     ,              fclbl(n)
+                endif
+              end if
             else !}{
               l_spcsrf(i_spcsrf(i)+j-1)=0
             end if !}
