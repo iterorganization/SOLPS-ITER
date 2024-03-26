@@ -457,6 +457,10 @@ c***  "ch0-cards"
         i=indasrfs(k)
         if(i.eq.0) go to 360
         if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+          if(jliin(i).lt.0) then
+            jsurpr=jsurpr+1
+            nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
+          endif
           nskip=nskip+1
           go to 360
         endif
@@ -480,7 +484,7 @@ c*** "ch2-cards" here !
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
         if(jliin(i).lt.0) then
           jsurpr=jsurpr+1
-          nsrf(jsurpr)=k
+          nsrf(jsurpr)=k-nskip
         end if
 
 c**  Surface coefficients
