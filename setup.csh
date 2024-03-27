@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
 
-[ -z "$tcsh" ] && echo "\e[31mERROR Use tcsh to source setup.csh for SOLPS-ITER!\e[m" && return
+test -z "`set | grep '^tcsh'`" && echo "\e[31mERROR Use tcsh to source setup.csh for SOLPS-ITER!\e[m" && exit 1
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
