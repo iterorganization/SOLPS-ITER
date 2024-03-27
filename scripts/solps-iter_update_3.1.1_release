@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout rc/3.1.1 && echo "Checked out Eirene 3.1.1 release candidate branch" || goto branch
+  git checkout release/3.1.1 && echo "Checked out Eirene 3.1.1 release branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
