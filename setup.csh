@@ -1,5 +1,7 @@
 #! /bin/tcsh -f
 
+[ -z "$tcsh" ] && echo "\e[31mERROR Use tcsh to source setup.csh for SOLPS-ITER!\e[m" && return
+
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
@@ -10,11 +12,6 @@ echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo or online at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentation/solps-doc/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
-
-if ( ! $?tcsh ) then
-  echo "\e[31mUse tcsh to source setup.csh!\e[m"
-  exit 1
-endif
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP,
 # or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
