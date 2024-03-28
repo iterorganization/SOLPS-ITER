@@ -83,8 +83,8 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS_REQ=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    if ($PROCS_REQ!="") then
-       set PROCS=$PROCS_REQ
+    if ($PROCS_REQ != "") then
+      set PROCS=$PROCS_REQ
     endif
     echo Asking for MPI run with a total of $PROCS processors
     shift
@@ -216,8 +216,6 @@ sed \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
   < $QSUB > $NAME
 
-echo $PROCS
-echo $PROCS_REQ
 if ($chain != "unset") then
   set b2run_line=`grep -n "b2run" $NAME | cut -d ':' -f 1`
   @ before_line = $b2run_line - 1
