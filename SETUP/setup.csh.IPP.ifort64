@@ -20,6 +20,7 @@ module load IMAS/3.39.0-4.11.5
 module load GGD/1.10.3-ifort-2021.9.0
 module load Fundamental-Constants/0.1.1
 module load AMNS/1.4.0.1-6dba-ifort-2021.9.0
+module load json-fortran/jsonfortran-intel-8.4.0
 
 setenv DBX ddt
 setenv SYSNAME amd64_sles15
