@@ -87,6 +87,7 @@ LIBGKS    = ${SOLPSLIB}/libgks.a
 ifdef GR_ROOT
 LIBGRS    = ${GR_ROOT}/libgr.a
 endif
+ADDLIBS   = -L/opt/intel/lib/intel64 -lifcore -limf -lsvml -lintlc -lifport
 
 #
 # Provide compiler
@@ -231,6 +232,12 @@ export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
+
+#
+#  Assume MPI is present
+#
+
+MPI_PRESENT = 1
 
 #
 # Export for use in sub-makefiles

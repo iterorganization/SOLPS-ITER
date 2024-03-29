@@ -1,1 +1,0 @@
-../../../Eirene/src/modules/eirmod_balanced_strategy.f90

@@ -1,0 +1,1 @@
+../../../Eirene/src/assistant/exit_own.F

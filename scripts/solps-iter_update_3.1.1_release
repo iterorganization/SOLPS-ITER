@@ -4,7 +4,7 @@ cd $SOLPSTOP
 echo "Switching to SOLPS-ITER rc/3.1.1 branch"
 set repo="SOLPS-ITER"
 git fetch --prune
-git checkout rc/3.1.1 && echo "Checked out SOLPS-ITER 3.1.1 release candidate branch" || goto branch
+git checkout release/3.1.1 && echo "Checked out SOLPS-ITER 3.1.1 release branch" || goto branch
 git pull && goto b25 || goto local
 
 b25:
@@ -13,7 +13,7 @@ b25:
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
   git fetch --prune
-  git checkout rc/3.1.1 && echo "Checked out B2.5 3.1.1 release candidate branch" || goto branch
+  git checkout release/3.1.1 && echo "Checked out B2.5 3.1.1 release branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout rc/3.1.1 && echo "Checked out Eirene 3.1.1 release candidate branch" || goto branch
+  git checkout release/3.1.1 && echo "Checked out Eirene 3.1.1 release branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -37,7 +37,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout rc/3.1.1 && echo "Checked out DivGeo 3.1.1 release candidate branch" || goto branch
+  git checkout release/3.1.1 && echo "Checked out DivGeo 3.1.1 release branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
