@@ -1077,6 +1077,7 @@ c*** 7.  data for primary source
         end do
         write(iunoo,707) nvess+j
         write(iunoo,707) (6,i=1,nvess),(indsrc7(i),i=1,j)
+        nstraih=nvess
       end if
       write(iunoo,703) alloc
       inum=nvess
