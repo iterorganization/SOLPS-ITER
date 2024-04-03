@@ -276,7 +276,7 @@ while true; do {
             [ -r b2ag.prt ] && rm b2ag.prt
             [ -r $b2agout ] && rm $b2agout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-            [ -r $b2agout ] && {
+            [ -s $b2agout ] && {
               [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
               print -u2 -- "Produced $b2agout file"
             } || {
@@ -289,7 +289,7 @@ while true; do {
             [ -r b2ai.prt ] && rm b2ai.prt
             [ -r $b2aiout ] && rm $b2aiout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log
-            [ -r $b2aiout ] && {
+            [ -s $b2aiout ] && {
               [ -d b2ai.exe.dir ] && rmdir b2ai.exe.dir
               print -u2 -- "Produced $b2aiout file"
             } || {
@@ -312,7 +312,7 @@ while true; do {
             [ -r b2ah.prt ] && rm b2ah.prt
             [ -r $b2ahout ] && rm $b2ahout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log
-            [ -r $b2ahout ] && {
+            [ -s $b2ahout ] && {
               [ -d b2ah.exe.dir ] && rmdir b2ah.exe.dir
               print -u2 -- "Produced $b2ahout file"
             } || {
@@ -325,7 +325,7 @@ while true; do {
             [ -r b2ar.prt ] && rm b2ar.prt
             [ -r $b2arout ] && rm $b2arout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log
-            [ -r $b2arout ] && {
+            [ -s $b2arout ] && {
               [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
               print -u2 -- "Produced $b2arout file"
               q=n

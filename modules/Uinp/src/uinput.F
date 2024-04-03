@@ -17,19 +17,17 @@ c=======================================================================
 #include "uinput.inc"
 #include "impcon.inc"
       integer irt, is, iss, iatm, iloc
-      integer ns, i, j, ireg, nreg, len
+      integer ns, i, len
       real(kind=R8), allocatable :: na0(:)
       character tab
       character*5, allocatable :: specs(:)
       character*8, allocatable :: species_name(:)
       character*22 hlp_frm
-      character*27 lbreg(0:cbnrmx-1)
       character*120 lblps
       character*80 column_header
       logical uex
-      integer find_matching_species
       logical streql
-      external find_matching_species, streql
+      external streql
       external prgini,prgend
 c=======================================================================
       call prgini('uinput')
@@ -203,7 +201,6 @@ c*** Create a b2ah.dat.stencil file
           is=0
           do iatm = 1, natmi
             if (is_meta(iatm)) cycle
-            j=find_matching_species(spcsncl(iatm))
             write(2,'(1x,a5,5x,a3,6x,a3,4x,i3,a2,4x,i3,a2)')
      .       specs(is),'0.0','0.0',nchara(iatm),'.0',
      .                             nmassa(iatm),'.0'

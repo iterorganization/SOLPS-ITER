@@ -38,7 +38,7 @@ c***   lbv : the variable is to be edited (jvrb>0)
 c
       character utb, uff*16, ufs*16, ukw*(mxkwln),
      ,          ss*(mxslen), sw*(mxslen), hh*(mxslen),
-     ,           s(mxslen),  ssw(mxslen),  h(mxslen)
+     ,            s(mxslen), ssw(mxslen),  h(mxslen)
       equivalence (s,ss),(h,hh),(sw,ssw)
       character hlp_frm*14
       integer len_of_digits
@@ -166,6 +166,11 @@ c            print *,'&&&  ==> check it' !###
           end if !}
         end do !}
  20     call uisswr(lout,s,ss,mxslen,ufs)
+        go to 10  ! -> read the next line
+      end if !}
+
+c*** Version header?
+      if(sw(1:7).eq.'version') then !{
         go to 10  ! -> read the next line
       end if !}
 
