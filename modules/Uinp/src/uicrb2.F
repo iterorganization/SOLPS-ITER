@@ -171,6 +171,7 @@ c            print *,'&&&  ==> check it' !###
 
 c*** Version header?
       if(sw(1:7).eq.'version') then !{
+        call uisswr(lout,s,ss,mxslen,ufs)
         go to 10  ! -> read the next line
       end if !}
 
