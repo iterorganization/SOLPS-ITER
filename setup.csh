@@ -9,7 +9,8 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo or online at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentation/solps-doc/solps.pdf
-echo The Eirene manual is located at http://www.eirene.de/
+echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
+echo or online at http://www.eirene.de/
 
 if ( "$0" != "tcsh" ) then
   if ( "$0" != "-tcsh" ) then
