@@ -37,7 +37,7 @@ cd ${SOLPSTOP}/modules/B2.5
 cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
 touch src/modules/.new_modules
 cd ${SOLPSTOP}
-make b25eirene_nox
+make listobj_nox b25eirene_nox
 cd ${SOLPSTOP}/runs/examples/COMPASS_16515_1150ms_D_drift_AFN
 mkdir run_CI_test_20
 cd run_CI_test_20
