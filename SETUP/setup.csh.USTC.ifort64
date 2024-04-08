@@ -14,7 +14,6 @@ if (! $?DEVICE) then
    setenv DEVICE CFETR5.7
 endif
 
-
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
@@ -38,5 +37,5 @@ else
   endif
 endif
 
-
 # Debugger (set environment variable DBX)
+setenv DBX gdb
