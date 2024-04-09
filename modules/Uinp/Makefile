@@ -183,6 +183,9 @@ ${OBJDIR}/b2mod_subsys.${MOD}:
 ${OBJDIR}/b2mod_xerset.${MOD}:
 	ln -sf ${B2OBJ}/b2mod_xerset.${MOD} ${OBJDIR}
 
+${OBJDIR}/eirmod_solps.${MOD}:
+	ln -sf ${EIROBJ}/eirmod_solps.${MOD} ${OBJDIR}
+
 ${OBJDIR}/helper.${MOD}:
 	ln -sf ${B2OBJ}/helper.${MOD} ${OBJDIR}
 endif
@@ -245,6 +248,8 @@ depend: ${OBJS:.o=.F} uiblkd.F uinput.F uiblb2.F ub2p.F ${SRCDIR}/git_version_Ui
 	@`which makedepend` -p'$${OBJDIR}/' ${SOLPS_CPP} ${USE_DEBUG} ${DEFINES} -f- ${INCLUDE} $^ | \
 	sed 's,^$${OBJDIR}/[^ ][^ ]*/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
+	@echo '# 1' >> ${OBJDIR}/dependencies.${COMPILER}
+	@egrep -aiH '^ {6,}use ' $^ | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies.${COMPILER}
 
 listobj:
 	@cd ${SRCDIR} ; rm -f ${OBJDIR}/LISTOBJ; touch ${OBJDIR}/LISTOBJ; \
