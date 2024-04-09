@@ -21,7 +21,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, find_matching_species
+      external streql, xertst, xerrab, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -152,6 +152,15 @@ c*** Take the data from the boundary default
             beebnds(izn,2,iknd)=beebndx(0,2,iknd)
             beibnds(izn,2,iknd)=beibndx(0,2,iknd)
             bpobnds(izn,2,iknd)=bpobndx(0,2,iknd)
+            if (nspcpls.gt.size(lcobnds,1)) then
+              write(*,*) ' Problem requires ',nspcpls,' ion species.'
+              write(*,*) ' But only ',DEF_NSD,' are declared!'
+#ifdef DIMENSIONS_MODULE
+              call xerrab('Increase DEF_NSD in b2mod_dimensions !')
+#else
+              call xerrab('Increase DEF_NSD in DIMENSIONS.F !')
+#endif
+            end if
             do isp=1,nspcpls !{
               l=spcsrnp(isp)
               ex=.true.
