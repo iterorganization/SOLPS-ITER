@@ -1,7 +1,25 @@
-# Load modules 
+# Load modules
+# module load lapack
+# module load gnuplot
+# module load blas
+# module load globus
+# module load hdf5
+# module load MUMPS
+# module load netcdf
+# module load ncl
+# module load mdsplus
+# module load scalapack
+module load mathlib/netcdf/intel/4.4.1
+module load mathlib/hdf5/intel/1.8.20
 
+# Environment variables
+if (! $?DEVICE) then
+  setenv DEVICE east
+endif
+setenv NO_MANUAL true
 
-# Set environment variables
+# Debugger
+# setenv DBX totalview
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -26,7 +44,4 @@ else
   endif
 endif
 
-# Debugger (set environment variable DBX)
-
-
-# Compilers
+setenv NCARG_ROOT ${SOLPSLIB}/linux.ifort64
