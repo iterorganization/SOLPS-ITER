@@ -483,7 +483,7 @@ array dimensions provided fit your problem size. These are stored in the file
 then do the following:
 \index{b2mod\_dimensions.F}
 \begin{verbatim}
-  sb2
+  sbb
   cd src
   mkdir -p modules.local
   cp modules/b2mod_dimensions.F modules.local
@@ -504,7 +504,7 @@ course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
 {\tt gmake all\_mpi(\_debug)}, etc... as needed. Conversely, if you want to revert back to the {\tt b2mod\_dimensions.F} provided with your code distribution, use the commands:
 \begin{verbatim}
-  sb2
+  sbb
   rm src/modules.local/b2mod_dimensions.F
   touch src/modules/.new_modules
   touch src/modules/b2mod_dimensions.F
