@@ -26,8 +26,16 @@
       end do
       if(.not.lfound) stop 'Problem with carre.out file'
       read (uline,'(a7, i5)') dum0, nnreg
-      mnptseg = nnreg
       mnpr = nnreg
+      select case (mnpr)
+      case (3)
+        mnptseg = 3
+      case (5, 6)
+        mnptseg = 6
+      case default
+        write(0,*) 'Unexpected number of radal regions : mnpr = ', mnpr
+        call xerrab ('Unknown number of radial regions !')
+      end select
       ! read nptseg and npr per region
       rewind (lun)
       do ireg=1,nnreg
