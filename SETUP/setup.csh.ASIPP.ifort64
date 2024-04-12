@@ -9,7 +9,8 @@
 # module load ncl
 # module load mdsplus
 # module load scalapack
-module load netcdf/4.1.3
+module load mathlib/netcdf/intel/4.4.1
+module load mathlib/hdf5/intel/1.8.20
 
 # Environment variables
 if (! $?DEVICE) then
@@ -41,3 +42,5 @@ else
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
 endif
+
+setenv NCARG_ROOT ${SOLPSLIB}/linux.ifort64
