@@ -27,7 +27,7 @@
        MPDIR = /public/software/mpi/intelmpi/2017.4.239/intel64
 
 #
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff
