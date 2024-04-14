@@ -3,9 +3,9 @@
 
 UNAME := $(shell uname)
 ifeq ($(UNAME),Darwin)
-	MACOS := 1
+  MACOS := 1
 else
-	MACOS := 0
+  MACOS := 0
 endif
 
 # Identify HOST_NAME

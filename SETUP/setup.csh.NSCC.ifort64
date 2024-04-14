@@ -1,18 +1,25 @@
 # Load modules
-#module load intel/2013.2.146
-#module load mvapich2/2.2rc1/intel/2015.3.187
-#module load mvapich2/2.3.1/intel/2013.2.146
-#module unload intel/2015.3.187
-#module load intel/2013.2.146
-#module load netcdf/4.1.3/intel/2016.3.210
-#module load hdf5/1.10.0
-module load mpich/3.2/intel/2015.3.187
-module load matlab/2017b
+# module load lapack
+# module load gnuplot
+# module load blas
+# module load globus
+# module load hdf5
+# module load MUMPS
+# module load netcdf
+# module load ncl
+# module load mdsplus
+# module load scalapack
+module load mathlib/netcdf/intel/4.4.1
+module load mathlib/hdf5/intel/1.8.20
 
 # Environment variables
 if (! $?DEVICE) then
-   setenv DEVICE CFETR5.7
+  setenv DEVICE east
 endif
+setenv NO_MANUAL true
+
+# Debugger
+# setenv DBX totalview
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -37,5 +44,4 @@ else
   endif
 endif
 
-# Debugger (set environment variable DBX)
-setenv DBX gdb
+setenv NCARG_ROOT ${SOLPSLIB}/linux.ifort64
