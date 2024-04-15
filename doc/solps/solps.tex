@@ -20970,6 +20970,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[LEGACYCOMP] \index{LEGACYCOMP} For use with legacy compilers
 \item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
@@ -21136,6 +21137,9 @@ G95 & scoring/updphot.F \\
 G95 & startup-routines/find\_tet\_dim.F \\
 G95 & startup-routines/find\_triang\_dim.F \\
 HPUX & modules/eirmod\_cinit.F \\
+LEGACYCOMP & modules/eirmod\_comusr.F \\
+LEGACYCOMP & modules/eirmod\_json.F \\
+LEGACYCOMP & startup-routines/eirmod\_openfile.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/eirmod\_openfile.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
