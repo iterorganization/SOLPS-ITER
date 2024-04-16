@@ -73,6 +73,7 @@ ifeq ($(shell [ -e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes 
 endif
 
 MAKETAGS ?= ctags -e -f
+BASENAME ?= basename -a
 
 # Setup debug flag
 EXT_DBG =
