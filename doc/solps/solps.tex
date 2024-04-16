@@ -20162,7 +20162,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
-\item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
 \item[GGD\_MAJOR\_VERSION] \index{GGD\_MAJOR\_VERSION} Major version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
@@ -20177,6 +20176,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
+\item[LEGACYCOMP] \index{LEGACYCOMP} For use with legacy compilers which do not support Fortran 2003 features
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -20529,6 +20529,7 @@ B25\_EIRENE & driver/b2mod\_main.F \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
+B25\_EIRENE & modules/b2mod\_running\_average.F \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
 B25\_EIRENE & output/b2wdat.F \\
 B25\_EIRENE & postprocessing/b2ytdr.F \\
@@ -20609,11 +20610,6 @@ DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
-F2003 & convert/b2cdftallies2mds.F \\
-F2003 & postprocessing/b2ye.F \\
-F2003 & test/check\_b2\_output.F90 \\
-F2003 & user/b2mod\_batch.F \\
-F2003 & user/b2mod\_running\_average.F \\
 F77 & user/b2file.F \\
 GFORTRAN & equations/b2news.F \\
 GFORTRAN & equations/b2news\_.F \\
@@ -20697,6 +20693,15 @@ JET & ids/b2\_ual\_write.F90 \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
+LEGACYCOMP & convert/b2cdftallies2mds.F \\
+LEGACYCOMP & modules/b2mod\_mdsplus.F \\
+LEGACYCOMP & modules/b2mod\_running\_average.F \\
+LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & sources/b2sifrtf.F \\
+LEGACYCOMP & test/check\_b2\_output.F90 \\
+LEGACYCOMP & user/b2mod\_batch.F \\
+LEGACYCOMP & utility/cfopen.F \\
+LEGACYCOMP & utility/mds\_routines.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
@@ -20893,6 +20898,7 @@ SOLPS4\_3 & modules/b2mod\_b2\_to\_astra.F \\
 SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
+SOLPS4\_3 & modules/b2mod\_running\_average.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
@@ -20969,7 +20975,6 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
-\item[LEGACYCOMP] \index{LEGACYCOMP} For use with legacy compilers
 \item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
@@ -21073,8 +21078,6 @@ CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-F2003 & assistant/subtit.f \\
-F2003 & file-handling/eirmod\_openfile.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.F \\
 GFORTRAN & broadcast/broad\_iestr.F \\
@@ -21136,9 +21139,13 @@ G95 & scoring/updphot.F \\
 G95 & startup-routines/find\_tet\_dim.F \\
 G95 & startup-routines/find\_triang\_dim.F \\
 HPUX & modules/eirmod\_cinit.F \\
+LEGACYCOMP & assistant/eirmod\_algebra.F \\
+LEGACYCOMP & file-handling/eirmod\_openfile.F \\
+LEGACYCOMP & file-handling/wrplam\_shrt.F \\
 LEGACYCOMP & modules/eirmod\_comusr.F \\
 LEGACYCOMP & modules/eirmod\_json.F \\
-LEGACYCOMP & startup-routines/eirmod\_openfile.F \\
+LEGACYCOMP & modules/eirmod\_samsrf.F \\
+LEGACYCOMP & startup-routines/read\_fixform.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & file-handling/eirmod\_openfile.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
