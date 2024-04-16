@@ -38,7 +38,7 @@
       end select
       ! read nptseg and npr per region
       rewind (lun)
-      do ireg=1,nnreg
+      do ireg=1,mnptseg
         lfound=.false.
         do while (.not.lfound)
           read (lun,'(a)') uline
@@ -47,7 +47,7 @@
         if(.not.lfound) stop 'Problem with carre.out file'
         read (uline,'(a11, i3)') dum0, nptseg(ireg)
       end do
-      do ireg=1,nnreg
+      do ireg=1,mnpr
         lfound=.false.
         do while (.not.lfound)
           read (lun,'(a)') uline
@@ -115,8 +115,10 @@
       nbcells = nbcells - ndfaces
       ncells = nicells + nbcells
       nfaces = (4*(nicells - ndfaces) + 3*ndfaces - nbcells)/2 + nbcells
-!      write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ',
-!     .  ncells, nicells, nbcells, nfaces
+#ifdef DBG
+      write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ',
+     .  ncells, nicells, nbcells, nfaces
+#endif
       return
 !======================================================================
       end subroutine uincrr

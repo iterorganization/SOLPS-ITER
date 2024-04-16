@@ -488,7 +488,6 @@ c*** Recycling sources
                   call xerrab (' == Internal error in Uinp !!')
                 end if !}
 
-
 c***            crcstra, rcpos, rcstart, rcend
                 cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
                 cniprm(k+ihyb,1,1,2,8)='A'
@@ -653,7 +652,6 @@ c***        crcstra, rcstart, rcend
             iniprm(k+ihyb,1,1,4,8)=i
             iniprm(k+ihyb,1,1,5,8)=i
 
-
 c***        species_start, species_end
             iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
             iniprm(k+ihyb,1,1,6,8)=ispi-1+(iatm-1)
@@ -662,9 +660,9 @@ c***        species_start, species_end
 
 c***        strasclfl for hybrid stencil file
             if (nchara(iatm).eq.1) then !{
-               rniprm(k+ihyb,1,1,43,8)=1.
+              rniprm(k+ihyb,1,1,43,8)=1.
             else
-               rniprm(k+ihyb,1,1,43,8)=1.e-10
+              rniprm(k+ihyb,1,1,43,8)=1.e-10
             end if !}
 
 c***        lstrascl
@@ -674,8 +672,8 @@ c***        lstrascl
             end do !}
 
 c***        lsns, ksns
-            iniprm(k,1,1,13,3)=i
-            iniprm(k+ihyb,1,1,13,8)=i
+            iniprm(k,1,1,13,3)=nznbndt(1)+i
+            iniprm(k+ihyb,1,1,13,8)=nznbndt(1)+i
             iniprm(k,1,1,15,3)=1
             iniprm(k+ihyb,1,1,15,8)=1
 
@@ -964,22 +962,12 @@ c*** accel_ion
 
 c*** lcns, ltns
       do i=1,nznbndt(1) !{
-        if (carre_mode.ne.2) then !{ standard case
-          iniprm(i,1,1,16,3)=i
-          iniprm(i,1,1,16,8)=i
-        else ! target or vessel mode
-          iniprm(i,1,1,16,3)=nbc-ncore+i
-          iniprm(i,1,1,16,8)=nbc-ncore+i
-        end if
+        iniprm(i,1,1,16,3)=i
+        iniprm(i,1,1,16,8)=i
       end do !}
       do i=1,nznbndt(2) !{
-        if (carre_mode.ne.2) then !{ standard case
-          iniprm(i,1,1,17,3)=nznbndt(1)+i
-          iniprm(i,1,1,17,8)=nznbndt(1)+i
-        else ! target or vessel mode
-          iniprm(i,1,1,17,3)=i
-          iniprm(i,1,1,17,8)=i
-        end if !}
+        iniprm(i,1,1,17,3)=nznbndt(1)+i
+        iniprm(i,1,1,17,8)=nznbndt(1)+i
       end do !}
 
 c*** recyc
@@ -1658,7 +1646,6 @@ c*** User
 
       ex=.true.
 
-
 c*** rzomp and rzimp
       lrrvr(18,7)=.true.
       lrrvr(19,7)=.true.
@@ -1666,14 +1653,22 @@ c*** rzomp and rzimp
       nmdlr(18,7)=2
       nmdpr(19,7)=2
       nmdlr(19,7)=2
-      rniprm(1,1,1,18,7)=p1(1,omp_elm)*0.01
-      rniprm(1,2,1,18,7)=p2(1,omp_elm)*0.01
-      rniprm(2,1,1,18,7)=p1(2,omp_elm)*0.01
-      rniprm(2,2,1,18,7)=p2(2,omp_elm)*0.01
-      rniprm(1,1,1,19,7)=p1(1,imp_elm)*0.01
-      rniprm(1,2,1,19,7)=p2(1,imp_elm)*0.01
-      rniprm(2,1,1,19,7)=p1(2,imp_elm)*0.01
-      rniprm(2,2,1,19,7)=p2(2,imp_elm)*0.01
+      if (omp_elm.gt.0) then
+        rniprm(1,1,1,18,7)=p1(1,omp_elm)*0.01
+        rniprm(1,2,1,18,7)=p2(1,omp_elm)*0.01
+        rniprm(2,1,1,18,7)=p1(2,omp_elm)*0.01
+        rniprm(2,2,1,18,7)=p2(2,omp_elm)*0.01
+      else
+        call xerrab('OMP specification missing! Check your DG model.')
+      end if
+      if (imp_elm.gt.0) then
+        rniprm(1,1,1,19,7)=p1(1,imp_elm)*0.01
+        rniprm(1,2,1,19,7)=p2(1,imp_elm)*0.01
+        rniprm(2,1,1,19,7)=p1(2,imp_elm)*0.01
+        rniprm(2,2,1,19,7)=p2(2,imp_elm)*0.01
+      else
+        call xerrab('IMP specification missing! Check your DG model.')
+      end if
 
       if(do_hepdt) then !{
 c*** Helium pumping data
