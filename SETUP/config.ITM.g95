@@ -56,7 +56,7 @@ FC         = g95
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DITM -DG95
+SOLPS_CPP      = -DNCAR4 -DITM -DG95 -DLEGACYCOMP
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES = -DNO_JSON

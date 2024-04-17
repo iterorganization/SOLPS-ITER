@@ -53,7 +53,7 @@ ADDLIBS    = -lgfortran
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_NAG
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DLEGACYCOMP
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mvapich2 --cflags`
