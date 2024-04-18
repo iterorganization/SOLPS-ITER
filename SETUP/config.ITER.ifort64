@@ -29,7 +29,7 @@
 #    NAGDIR ?=
 MDSPLUS_DIR ?=
 
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 
 LD_NETCDF  = `nf-config --flibs`

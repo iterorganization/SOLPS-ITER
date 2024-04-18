@@ -39,7 +39,7 @@
        MPDIR ?=
 
 #
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 

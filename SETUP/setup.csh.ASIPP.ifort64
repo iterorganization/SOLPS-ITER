@@ -41,3 +41,5 @@ else
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
 endif
+
+setenv NCARG_ROOT ${SOLPSLIB}/linux.ifort64

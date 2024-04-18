@@ -287,7 +287,7 @@ cnh Grid parameters for unstructured format
         nfcp = nfaces
       end if
 
-      if (npplg.eq.0) then
+      if (npplg.eq.1) then
         nssir(1) = 1
         nssir(2) = ndxa+1
         nssir(3) = (ndxa+1)*ndya+1
