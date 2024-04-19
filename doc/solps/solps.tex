@@ -4492,11 +4492,16 @@ This program rewrites an existing IDS in case a correction needs to be made (bec
 \chapter{Running the standalone version of Eirene}
 \label{cha:standaloneeirene}\index{Eirene}
 
-{\tt Eirene} is documented at
-\href{http://www.eirene.de/}{http://www.eirene.de/}.
+The complete {\tt Eirene} manual is provided as part of the \SOLPSITER
+distribution as the {\tt \$SOLPSTOP/modules/\allowbreak Eirene/Manual/eirene.pdf} file,
+automatically built with the code compilation.
+If not present, it can also be found at \href{http://www.eirene.de/}{http://www.eirene.de/}.
 The user is strongly encouraged to check out that very complete manual.
 Reference \cite{Reiter2005} also provides a useful description.
 
+The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI and/or OpenMP parallelization and debugging options can be requested by adding {\tt \_mpi}, {\tt \_openmp} and {\tt \_debug} (last) to the compilation target name. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
+
+{\tt Eirene} can also be compiled from its submodule directory with:
 \begin{verbatim}
   sei
   gmake depend
