@@ -144,10 +144,24 @@ do {
               [ -r $class.aux ] && ln -sf $class.aux dg.aux
             }
             rm -f selptx.inf carre.dat structure.dat rzpsi.dat btor.dat 2>/dev/null
-            $CARRE2_PATH/fcrr.exe; q=g; break;;
+            $CARRE2_PATH/fcrr.exe
+            [ -s carre.dat ] && {
+              q=g
+            } || {
+              printf 'Carre input was not produced. Check the DG model\n'
+              q=q
+            }
+            break;;
     ( g|G )                                               # create the grid:
 #            carre.exe; q=s; break;;
-            $CARRE2_PATH/carre.exe 2>carre.log; q=$qqs; break;;
+            $CARRE2_PATH/carre.exe 2>carre.log
+            [ -s carre.out ] && {
+              q=$qqs
+            } || {
+              /bin/echo -e "Carre output was not produced. Check the carre.log file"
+              q=q
+            }
+            break;;
     ( s|S )                                               # save the control data:
             cp carre.out carre.dat;
             /bin/echo -e "Saved grid settings in carre.dat file"
