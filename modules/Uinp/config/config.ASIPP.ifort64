@@ -4,16 +4,17 @@ ifndef LD_MSCL
 endif
 
 ifdef USE_MPI
-#FC      = mpiifort
-FC       = mpif90
+#FC            = mpiifort
+FC             = mpif90
+COMPILER_REDEF = yes
 ifdef SOLPS_OPENMP
-FFLAGS   = -fopenmp
+FFLAGS         = -fopenmp
 endif
 else
-FC       = ifort
+FC             = ifort
 endif
 
-CPP      = /lib/cpp -C -traditional
+CPP            = /lib/cpp -C -traditional
 
 #!!!Local Variables:
 #!!! mode: Makefile
