@@ -60,6 +60,7 @@ c
           nprmul=(nprnli/nprnl)+1
           nprnli=nprnli/nprmul
         end if
+        usetmstr=usetmstr.or.nprnli.gt.0
       case (4)
         call resimi(ntimv)
       case (5)
