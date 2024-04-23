@@ -552,6 +552,7 @@ c=======================================================================
           nprmul=(nprnli/nprnl)+1
           nprnli=nprnli/nprmul
         end if
+        usetmstr=usetmstr.or.nprnli.gt.0
       case (76)
         call resime(dtimv)
       case (77)
@@ -975,7 +976,7 @@ c***  input elements indices for current rectangle
         pwrcrfri=max(0.,min(1.,pwrcrfri))
       case (157)
         call resimi(i)
-        usetmstr=i.ne.0
+        usetmstr=usetmstr.or.i.ne.0
       case (158)
         if(nspigen.le.0 .or. hlp_spc) then !{
           write(0,*) 'uinnam: species index undefined'
