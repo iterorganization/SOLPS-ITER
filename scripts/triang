@@ -163,7 +163,15 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
     n=000
   }
   carrename=$carre_stem.v$n.geo
-  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  [ -s $griddir/$carre_stem.v$n/carre.out ] && {
+    ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  } || {
+    [ -s carre.out ] && {
+      ln -sf carre.out uinput.crr
+    } || {
+      print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+    }
+  }
 } || {
   print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
   while true; do {
@@ -179,7 +187,15 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
   }; done
   n=000
   carrename=$carre_stem.v$n.geo
-  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  [ -s $griddir/$carre_stem.v$n/carre.out ] && {
+    ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  } || {
+    [ -s carre.out ] && {
+      ln -sf carre.out uinput.crr
+    } || {
+      print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+    }
+  }
 }
 
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
