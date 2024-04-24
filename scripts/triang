@@ -140,6 +140,7 @@ TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
+q=U
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
@@ -170,6 +171,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
       ln -sf carre.out uinput.crr
     } || {
       print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+      q=q
     }
   }
 } || {
@@ -194,6 +196,7 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
       ln -sf carre.out uinput.crr
     } || {
       print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+      q=q
     }
   }
 }
@@ -223,9 +226,7 @@ e=
 }
 [ -n "$e" ] && exit 4
 
-q=U
 [ -L uinput.dg ] && [ -L uinput.trg ] && [ -L uinput.crr ] && q=u
-
 
 export GRSOFT_DEVICE='62'
 export PLOT_IT_STEM='tria'
