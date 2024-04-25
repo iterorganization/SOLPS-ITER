@@ -777,10 +777,14 @@ VERSION:
 
 ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
 	@mkdir -p ${SOLPSTOP}/modules/Eirene/builds/binRelease
+ifeq (${MPI_PRESENT},1)
 	printf "use mpi\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
 	( ${MPI_FC} ${FCOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
 	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
 	( ${MPI_FC} ${FCOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || ( echo MPI_VERSION=0 ) ) ) ) > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
+else
+	echo 'MPI_VERSION=0' > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
+endif
 
 
 # Debug targets
