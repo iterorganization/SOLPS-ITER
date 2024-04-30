@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
 NODENAME      ?= $(shell echo `hostname`)
@@ -29,7 +29,8 @@ NAGDIR        ?= ${EBROOTNAG}
 H5DIR         ?= ${EBROOTHDF5}
 MDSPLUS_DIR   ?=
 
-# Variables of linking, using pkg-config
+#
+# Variables for linking, using pkg-config
 #
 
 LD_NETCDF      = `nf-config --flibs`
@@ -51,7 +52,7 @@ ADDLIBS        = -lgfortran
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DF2003
+SOLPS_CPP      = -DNO_NAG
 B25_DEFINES    = -DNO_21
 CARRE_DEFINES  =
 EIRENE_DEFINES =

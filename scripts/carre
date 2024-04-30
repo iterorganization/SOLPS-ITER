@@ -216,10 +216,32 @@ do {
               [ -r $class.aux ] && ln -sf $class.aux dg.aux
             }
             rm -f selptx.inf carre.dat structure.dat rzpsi.dat btor.dat 2>/dev/null
-            $CARRE_PATH/fcrr.exe; q=g; break;;
+            $CARRE_PATH/fcrr.exe
+            [ -s carre.dat ] && {
+              q=g
+            } || {
+              if [ "$(uname)" = "Darwin" ]; then
+                printf 'Carre input was not produced. Check the DG model\n'
+              else
+                /bin/echo -e "Carre input was not produced. Check the DG model"
+              fi
+              q=q
+            }
+            break;;
     ( g|G )                                               # create the grid:
 #            carre.exe; q=s; break;;
-            $CARRE_PATH/carre.exe 2>carre.log; q=$qqs; break;;
+            $CARRE_PATH/carre.exe 2>carre.log
+            [ -s carre.out ] && {
+              q=$qqs
+            } || {
+              if [ "$(uname)" = "Darwin" ]; then
+                printf 'Carre output was not produced. Check the carre.log file\n'
+              else
+                /bin/echo -e "Carre output was not produced. Check the carre.log file"
+              fi
+              q=q
+            }
+            break;;
     ( s|S )                                               # save the control data:
             cp carre.out carre.dat;
             if [ "$(uname)" = "Darwin" ]; then
@@ -230,11 +252,11 @@ do {
             q=c; break;;
     ( c|C )                                               # convert:
             if [ "$(uname)" = "Darwin" ]; then
-                printf 'carre.out\n4\n' | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
-                printf 'carre.out\n2\n' | $CARRE_PATH/traduit.exe 2>traduit.log;
+              printf 'carre.out\n4\n' | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+              printf 'carre.out\n2\n' | $CARRE_PATH/traduit.exe 2>traduit.log;
             else
-                /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
-                /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
+              /bin/echo -e "carre.out\n4" | $CARRE_PATH/traduit.exe 2>traduit.log; mv traduit.out traduit.sno ;
+              /bin/echo -e "carre.out\n2" | $CARRE_PATH/traduit.exe 2>traduit.log;
             fi
             q=t; break;;
     ( t|T )                                               # store the grid:

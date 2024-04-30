@@ -1,5 +1,3 @@
-# $(error Using default file. Provide paths to libraries first.)
-
 #
 # Specify paths to root-directories of following libraries on your system
 #
@@ -18,37 +16,34 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler does not support Fortran 2003 features:
-# Add -DLEGACYCOMP to SOLPS_CPP
-#
 
-       NCDIR ?= ${SOLPSLIB}
-   MSCL_ROOT ?= ${SOLPSLIB}
-       H5DIR ?= ${SOLPSLIB}
-     GR_ROOT ?= ${SOLPSLIB}
-    GLI_HOME ?= ${SOLPSLIB}
-  NCARG_ROOT ?= ${SOLPSLIB}
-      NAGDIR ?= ${SOLPSLIB}
- MDSPLUS_DIR ?= ${SOLPSLIB}
-       MPDIR ?=
+       NCDIR = /public/software/mathlib/netcdf/intel/4.4.1
+   MSCL_ROOT = ${SOLPSLIB}
+       H5DIR = /public/software/mathlib/hdf5/intel/1.8.20
+     GR_ROOT = ${SOLPSLIB}
+    GLI_HOME = ${SOLPSLIB}
+  NCARG_ROOT = ${SOLPSLIB}/linux.ifort64
+      NAGDIR = ${SOLPSLIB}
+       MPDIR = /public/software/mpi/intelmpi/2017.4.239/intel64
 
 #
-# Variables for linking
+# Variables for linking, using pkg-config
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME}/lib -lgks -lgfortran
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
+#LD_NCARG  = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpthread -lXrender -lbz2
 LD_NAG     = -L${NAGDIR}/lib -lnag
-LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
-LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
+#LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
+LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
-LIBGKS     = ${GLI_HOME}/lib/libgks.a
+LIBGKS     = ${GLI_HOME}/libgks.a
 LIBGRS     = ${GR_ROOT}/lib/libgr.a
-LIBX11     = /usr/X11R6/lib64/libX11.so
 ADDLIBS    = -lgfortran
 
 #
@@ -61,12 +56,11 @@ else
 FC         = ifort
 endif
 MPI_FC     = mpif90
-
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG # -DNCAR4
+SOLPS_CPP      = -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
