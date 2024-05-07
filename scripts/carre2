@@ -68,30 +68,30 @@ endings="dgo equ str trg"
 /bin/echo -e "Input directory: $indir\n"
 
 [ "$1" = '-' ] && {
-    [ -r $indir/dg.str ] && {
-      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
-      q=p
-      qqs=c
-      grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
-    } || {
-      /bin/echo -e "Linking error - the input files were not found in \"$indir\""
-      /bin/echo -e "Use (I)nput command to provide correct input directory"
-      q=i
-      qqs=c
-    }
-} || { \
-    u="$indir/$1"
-    [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & { \
-        ln -sf $u.vrq rzpsi.dat
-        ln -sf $u.str structure.dat
-        ln -sf $u.fld btor.dat
-        ln -sf $u.inp carre.dat
-        q=g
-        qqs=s
-    } || {
-        /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
-        exit 8
-    }
+  [ -r $indir/dg.str ] && {
+    /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
+    q=p
+    qqs=c
+    grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+  } || {
+    /bin/echo -e "Linking error - the input files were not found in \"$indir\""
+    /bin/echo -e "Use (I)nput command to provide correct input directory"
+    q=i
+    qqs=c
+  }
+} || {
+  u="$indir/$1"
+  [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & {
+    ln -sf $u.vrq rzpsi.dat
+    ln -sf $u.str structure.dat
+    ln -sf $u.fld btor.dat
+    ln -sf $u.inp carre.dat
+    q=g
+    qqs=s
+  } || {
+    /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+    exit 8
+  }
 }
 while true
 do {
