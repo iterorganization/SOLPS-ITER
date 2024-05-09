@@ -74,14 +74,14 @@ endif
 
 MAKETAGS ?= ctags -e -f
 
-# Setup debug flag
+# Setup debug flags
 EXT_DBG =
 ifdef SOLPS_DEBUG
 EXT_DBG = .debug
 OPT_DBG = -DTRACE=ON
 endif
 
-# Setup MPI flag
+# Setup MPI flags
 EXT_MPI =
 MPI_OPTS = USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 ifdef SOLPS_MPI
@@ -181,7 +181,7 @@ ifdef NO_CMAKE
 MAKEC = ${MAKEE}
 MAKEX = ${MAKEE} ${OPT_NOX}
 else
-ifeq ($(MPI_PRESENT),1)
+ifndef NO_MPI
 include ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 endif
 ifdef SOLPS_MPI
@@ -662,7 +662,7 @@ listobj:
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEF} listobj ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS}
@@ -691,7 +691,7 @@ listobj_nox:
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEF} listobj ${MPI_OPTS} ${OPT_NOX}
 	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS} ${OPT_NOX}
@@ -725,7 +725,7 @@ ifndef NO_MOTIF
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/amds;           ${MAKE} depend
 endif
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEF} depend ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS}
@@ -755,7 +755,7 @@ depend_nox:
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEF} depend ${MPI_OPTS} ${OPT_NOX}
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS} ${OPT_NOX}
@@ -779,7 +779,7 @@ VERSION:
 
 ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
 	@mkdir -p ${SOLPSTOP}/modules/Eirene/builds/binRelease
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	printf "use mpi\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
 	( ${MPI_FC} ${FCOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
 	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
