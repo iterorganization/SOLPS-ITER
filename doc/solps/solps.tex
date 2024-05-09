@@ -484,13 +484,14 @@ array dimensions provided fit your problem size. These are stored in the file
 then do the following:
 \index{b2mod\_dimensions.F}
 \begin{verbatim}
-  sb2
+  sbb
   cd src
   mkdir -p modules.local
   cp modules/b2mod_dimensions.F modules.local
+  touch modules/.new_modules
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
-dimensions (mainly used for the namelists in {\tt B2.5}) are
+dimensions (mainly used for the namelists in {\tt B2.5} and the {\tt Uinp} input file build-up program) are
 big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
 \begin{verbatim}
   stop
@@ -502,7 +503,14 @@ big enough (see the description of the relevant variables in section \ref{sec:DI
 so that your local file will be used. The last {\tt gmake} command may of
 course be replaced by {\tt gmake solps(\_debug)},
 {\tt gmake solps\_mpi(\_debug)}, {\tt gmake all(\_debug)} or
-{\tt gmake all\_mpi(\_debug)} as needed.
+{\tt gmake all\_mpi(\_debug)}, etc... as needed. Conversely, if you want to revert back to the {\tt b2mod\_dimensions.F} provided with your code distribution, use the commands:
+\begin{verbatim}
+  sbb
+  rm src/modules.local/b2mod_dimensions.F
+  touch src/modules/.new_modules
+  touch src/modules/b2mod_dimensions.F
+\end{verbatim}
+and proceed with the recompilation as above.
 \end{sloppypar}
 
 It is possible to pass down Makefile options with the syntax
@@ -582,6 +590,7 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[tags] Builds {\tt etags} files for easy source code searched using {\tt emacs}
   \item[VERSION] Updates the GIT version number included in the source code and output
   \item[clean] Alias to {\bf clean\_solps}
+  \item[solps\_nox] Alias to {\bf nox}
 \end{description}
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
@@ -684,7 +693,7 @@ After the cases have been downloaded to your system, make sure that the timestam
 \label{Using a central installation}
 \index{add\_central\_device}\index{setup.csh}
 
-For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a {\tt \$\{SOLPSWORK\}} directory that is different from the default {\tt \$\{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, {\tt \$SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for {\tt \$\{SOLPSTOP\}}. Using an example where each user has their runs in {\tt \$\{HOME\}/solps-runs} then the central installation could have a {\tt setup.csh.local} with the following lines:
+For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a {\tt \$\{SOLPSWORK\}} directory that is different from the default {\tt \$\{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, {\tt \$SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for {\tt \$\{SOLPSTOP\}}. Using an example where each user has their runs in {\tt \$\{HOME\}/solps-runs} then the central installation could have a {\tt SETUP/setup.csh.local} with the following lines:
 \begin{verbatim}
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
@@ -1861,7 +1870,7 @@ for itself by climbing up the tree. You can add options to the {\tt b2run} comma
   \item[-n] Will run the {\tt Makefile} in dry-run mode. This is useful to check that all the needed files for the runs are in the right order of precedence. If they are not, the {\tt correct\_baserun\_timestamps} script can be used to re-order the pre-requisite files found in the associated {\tt baserun} directory
   \item[-m $\backslash$"MPI-launcher + options$\backslash$"] Allows to launch {\tt b2XX} in MPI
     mode with the provided options (example: [the syntax is important, both
-      the slashes and the quotes are needed] {\tt b2run -m \"mpiexec -np 2\" b2mn})
+      the slashes and the quotes are needed] {\tt b2run -m $\backslash$"mpiexec -np 2$\backslash$" b2mn})
   \item[-s] Specifies that one wishes to run {\tt B2.5} in standalone mode, i.e. without any coupling to {\tt Eirene}.
   \item[-o "run options"] Allows to launch {\tt b2XX} with additional run options. The options can be grouped together inside quotes or given individually with multiple {\tt -o} instances.
   \item[-t \#] Requests an OpenMP run using \# threads.
@@ -4308,6 +4317,9 @@ This program rewrites an existing IDS in case a correction needs to be made (bec
 The user is strongly encouraged to check out that very complete manual.
 Reference \cite{Reiter2005} also provides a useful description.
 
+The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI parallelization and debugging options can be requested by adding {\tt \_mpi} and {\tt \_debug} (last) to the compilation target name. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
+
+{\tt Eirene} can also be compiled from its submodule directory with:
 \begin{verbatim}
   sei
   gmake depend
@@ -16175,20 +16187,22 @@ C     for hydrogen (0=H).
 C     The start locations of the trajectories will be chosen from the set
 C     of set defined in the ic_active array (default is all real cells).
 C     The location (in a structured grid) of the cells from which to launch
-C     particles can be chosen using the "t_xy" command, or from the non-zero
-C     cells from the matrix stack with the "icse" command.
-C     The number of time steps (plots) is given by the "t_#p" command.
-C     The total flight time of the particles is given by the "t_pt" command.
+C     particles can be chosen using the 't_xy' command, or from the non-zero
+C     cells from the matrix stack with the 'icse' command.
+C     The number of time steps (plots) is given by the 't_#p' command.
+C     The total flight time of the particles is given by the 't_pt' command.
 C     The velocity fields uu and vv can be overwritten using the
-C     "uuse" and "vvse" commands. Their defaults values are ua and fna/na/sy
+C     'uuse' and 'vvse' commands. Their defaults values are ua and fna/na/sy
 C     respectively. If the number of particles is positive, then the
 C     particles are born randomly, with the probability of being born in a
 C     cell being proportional to the cell volume. This probability weighting
-C     can be changed by calling "traj" with a negative number of particles.
+C     can be changed by calling 'traj' with a negative number of particles.
 C     Then the weighting function is whatever field is on top of the matrix
 C     stack. For example, this set of commands does the following:
-C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal neutral flow velocity
-C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial neutral flow velocity
+C     fnax na m/ psxperp 0 zsel uuse  ! uutraj set to poloidal
+C                                     !   neutral flow velocity
+C     fnay na m/ psy 0 zsel vvse      ! vvtraj set to radial
+C                                     !   neutral flow velocity
 C     1000 t_#p                       ! 1000 time steps
 C     1e-4 t_pt                       ! followed for a total time of 1.e-4 s.
 C     na 0 zsel                       ! weighted with neutral density
@@ -18496,7 +18510,6 @@ USE\_SILO & trans/tradui.F90 \\
     \label{tab:Carre2defines}
   \end{longtable}
 \end{center}
-
 
 \subsection{DivGeo}
 \index{DEFINES, used in compiling DivGeo}

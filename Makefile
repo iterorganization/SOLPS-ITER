@@ -61,13 +61,13 @@ endif
 
 MAKETAGS ?= ctags -e -f
 
-# Setup debug flag
+# Setup debug flags
 EXT_DBG =
 ifdef SOLPS_DEBUG
 EXT_DBG = .debug
 endif
 
-# Setup MPI flag
+# Setup MPI flags
 EXT_MPI =
 MPI_OPTS = USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 ifdef SOLPS_MPI
@@ -107,7 +107,7 @@ unexport SOLPS_OPENMP
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj
+.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj
 
 DEFAULT: solps
 
@@ -117,6 +117,8 @@ DEFAULT: solps
 
 
 solps: divgeo b25eirene carre uinp triang amds sonnet-light manual
+
+solps_nox: nox
 
 solps_openmp: divgeo b25eirene_openmp carre uinp_openmp triang amds_openmp sonnet-light manual
 
@@ -336,18 +338,18 @@ b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
 
 b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 
-uinp:
+uinp: b25eirene
 	cd modules/Uinp; ${MAKEO}
 
 uinp_nox: uinp
 
-uinp_openmp:
+uinp_openmp: b25eirene_openmp
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
-uinp_mpi:
+uinp_mpi: b25eirene_mpi
 	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
-uinp_openmp_mpi:
+uinp_openmp_mpi: b25eirene_openmp_mpi
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 uinp_mpi_openmp: uinp_openmp_mpi
@@ -460,7 +462,7 @@ listobj:
 	cd modules/Eirene;         ${MAKEE} listobj USE_B25=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEE} listobj ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
@@ -485,7 +487,7 @@ listobj_nox:
 	cd modules/Eirene;         ${MAKEE} listobj USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEE} listobj ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
@@ -515,7 +517,7 @@ ifndef NO_MOTIF
 	cd modules/DivGeo;         ${MAKE} depend
 	cd modules/amds;           ${MAKE} depend
 endif
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKE} depend ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS}
 	cd modules/B2.5;	   ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
@@ -549,7 +551,7 @@ depend_nox:
 	cd modules/Eirene;         ${MAKEE} depend USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
-ifeq (${MPI_PRESENT},1)
+ifndef NO_MPI
 	cd modules/Eirene;         ${MAKEE} depend ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
@@ -600,6 +602,8 @@ nox_build_mpi_openmp: nox_build_openmp_mpi
 clean: clean_solps
 
 clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
+
+clean_solps_nox: clean_nox
 
 clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_sonnet-light clean_manual clean_amds
 

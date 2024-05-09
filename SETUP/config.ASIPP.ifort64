@@ -53,8 +53,6 @@ CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
-
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
