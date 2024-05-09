@@ -234,12 +234,6 @@ export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
 #
-#  Assume MPI is present
-#
-
-MPI_PRESENT = 1
-
-#
 # Export for use in sub-makefiles
 #
 
