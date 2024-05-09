@@ -51,6 +51,7 @@ LIBZ       = /usr/lib64/libz.so
 #
 
 FC         = g95
+NO_MPI     = true
 
 #
 # Preprocessor options
