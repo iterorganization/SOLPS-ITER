@@ -13296,15 +13296,15 @@ where:
 Heat viscosity:
 
 \begin{multline}
- \left( \nabla \cdot\overset\leftrightarrow\pi _a^{h_i} \right)_{\parallel} = -B^{3/2} b_x \frac{\partial}{h_x \partial x} \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}\frac{1}{b_x B^{2}}\frac{h_x}{h_z \sqrt g} \frac{\partial}{h_x \partial x}\left(\sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\beta x}}}{b_x} \right) \right) \right] + \\
+ \left( \nabla \cdot\overset\leftrightarrow\pi _a^{h_i} \right)_{\parallel} = -B^{3/2} b_x \frac{\partial}{h_x \partial x} \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}\frac{1}{b_x B^{2}}\frac{h_x}{h_z \sqrt g} \frac{\partial}{h_x \partial x}\left(\sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right] + \\
 zhcscorr \cdot zhcscorr\_vq \cdot \\
-\left( -B^{3/2} b_x \frac{\partial}{h_x\partial x} \left[ \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{1}{b_x B^{2}} \frac{h_x}{h_z \sqrt g} \left( \frac{1}{I_a} \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\alpha x}}}{b_x} \right) \right) \right] \right)
+\left( -B^{3/2} b_x \frac{\partial}{h_x\partial x} \left[ \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{1}{b_x B^{2}} \frac{h_x}{h_z \sqrt g} \left( \frac{1}{I_a} \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right] \right)
 \end{multline}
 
 where the heat fluxes are given by:
 
 \begin{align}
-\frac{\widetilde{\overline{h}^{(0)}_{\beta x}}}{b_x} = \overline{h}^{(1)}_{\beta} \arctan{\left( \frac{1}{\overline{h}^{(1)}_{\beta}} \frac{\overline{h}^{(0)}_{\beta x}}{b_x} \right)},\ \ \ \overline{h}^{(1)}_{\beta} = c_{q1} \overline{n}_\beta T_i \sqrt{\frac{T_i + T_e}{m_\beta}}
+\frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} = \overline{h}^{(1)}_{\beta} \arctan{\left( \frac{1}{\overline{h}^{(1)}_{\beta}} \frac{\overline{h}^{\ast(0)}_{\beta x}}{b_x} \right)},\ \ \ \overline{h}^{(1)}_{\beta} = c_{q1} \overline{n}_\beta T_i \sqrt{\frac{T_i + T_e}{m_\beta}}
 \end{align}
 
 \begin{align}
@@ -13315,12 +13315,12 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
 \begin{equation}
 \begin{matrix}
-\frac{\overline h^{(0)}_{\beta x}}{b_x} =
-\frac{\overline {\tilde h^{(dia)}_{\beta x}}}{b_x} & =
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\frac{\overline {\tilde h}^{\ast(dia)}_{\beta x}}{b_x} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{\overline{(Z^{-1})}_\beta\overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+-\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{\overline{(Z^{-1})}^\ast_\beta\overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -13342,12 +13342,12 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 \begin{equation}
 \begin{matrix}
-\frac{\overline h^{(0)}_{\beta x}}{b_x} =
-\overline h_{\beta\parallel} + \frac{\overline {h^{(dia)}_{\beta x}}}{b_x} & =
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\overline h^\ast_{\beta\parallel} + \frac{\overline {h}^{\ast(dia)}_{\beta x}}{b_x} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{\overline{\tilde{\tilde{\kappa}}^{CL}_{\beta x}}}{b_x} \frac{\partial T_i}{h_x \partial x} - \frac{5}{2} \frac{B_z B}{B_x B^2} \frac{\overline{(Z^{-1})}_\beta \overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+-\frac{\overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}}{b_x} \frac{\partial T_i}{h_x \partial x} - \frac{5}{2} \frac{B_z B}{B_x B^2} \frac{\overline{(Z^{-1})}^\ast_\beta \overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -13367,7 +13367,7 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 \end{equation}
 
 \begin{align}
-\overline{(Z^{-1})}_\beta = \sum_\zeta \frac{I_{b(\beta,\zeta)}}{\zeta}
+\overline{(Z^{-1})}^\ast_\beta = \frac{1}{\overline{n}_{\beta}}\sum_\zeta \frac{n_{b(\beta,\zeta)}}{\zeta},\ \ \ \  \overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}=\sum_\zeta\tilde{\tilde{\kappa}}^{CL}_{\beta \zeta x}
 \end{align}
 
 And the viscosity coefficients are:
@@ -13817,14 +13817,14 @@ If {\tt Zhdanov\_vish.eq.1}, then:
   \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}
                            \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}
                            \frac{\partial}{h_x\partial x}
-                                \left( \sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\beta x}}}{b_x} \right) \right) \right. + \\
+                                \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. + \\
          \left. zhcscorr \cdot zhcscorr\_vq \cdot
          \frac{n_{a}}{\overline n_{\alpha}}
          \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha}
          \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x}
                 \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right)
               - \frac{\partial}{h_x\partial x}
-                     \left( \sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\alpha x}}}{b_x} \right)
+                     \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right)
                \right) \right], &\ z_a \neq 0 \\
 0, &\ z_a = 0
 \end{aligned} \right.\\
@@ -13842,9 +13842,9 @@ If {\tt Zhdanov\_vish.eq.1}, then:
 \begin{aligned}
 \frac{2}{5} \frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_x \partial x}
-\left( \frac{1}{B^2} \right) \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\partial}{h_x\partial x} \left(\sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\beta x}}}{b_x} \right) \right) \right. +\\
+\left( \frac{1}{B^2} \right) \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\partial}{h_x\partial x} \left(\sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. +\\
  \left. zhcscorr \cdot zhcscorr\_vq \cdot
- \frac{n_{a}}{\overline{n}_{\alpha}} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\alpha x}}}{b_x} \right) \right) \right], &\ z_a \neq 0 \\
+ \frac{n_{a}}{\overline{n}_{\alpha}} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right], &\ z_a \neq 0 \\
 0, &\ z_a = 0
 \end{aligned} \right.\\
 \left( \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha},\ \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \text{already contain a factor of } b_x^2 \right)
