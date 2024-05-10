@@ -96,7 +96,7 @@ This is the combined work of many authors. Started by D.P.~Coster, it includes c
 \item M.~Stanojevic, Appendix~\ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
-\item S.~Makarov, for the Grad-Zhdanov closure description
+\item S.~Makarov, for the Zhdanov-Grad closure description
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -7775,13 +7775,13 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \vspace*{1cm}
 \end{figure}
 
-\section{Classical ion transport: Grad's-Zhdanov module}
-\label{sec:gradszhdanov}
+\section{Classical ion transport: Zhdanov-Grad module}
+\label{sec:zhdanovgrad}
 
 {\em This code feature is still experimental.}
 
 \begin{sloppypar}
-Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Grad-Zhdanov module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Grad-Zhdanov closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
+Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Zhdanov-Grad module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Zhdanov-Grad closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
 \end{sloppypar}
 
 \chapter{Model equations for B2.5}
@@ -8074,7 +8074,7 @@ V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{
 
 The ion densities $n_i$ and $\widetilde{n}_i$ are stored in the {\tt ni(:,:,0)} and {\tt ni(:,:,1)} array components respectively.
 
-Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Grad-Zhdanov closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
+Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Zhdanov-Grad closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
 
 \subsection{Source terms in density equations}
 
@@ -12343,7 +12343,7 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 }
 \end{equation}
 
-\section{Grad-Zhdanov closure}\label{sec:Zhdanov}
+\section{Zhdanov-Grad closure}\label{sec:Zhdanov}
 
 \subsection{Introduction}
 
