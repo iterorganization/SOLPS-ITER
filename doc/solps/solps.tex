@@ -8771,6 +8771,27 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 For the plateau and banana transport regimes, the correction, with {\tt 'b2trcl\_lluciani'} set to {\tt '3'} (default), is given by:
 
 %-------- end of 7th page -------------
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '1'}(default):
+
+$
+\begin{matrix}
+c_{\eta_{ax}^{(CL)}}^{Luciani} & =
+& \left\{
+\begin{matrix}
+\frac{1}{1 +
+\frac{1}
+{\varepsilon^{3/2}\nu_{\ast}}}
+\cdot
+\frac{1}{1 +
+\frac{1}
+{\nu_{\ast}}}
+, & \text{for ions on inner flux surfaces} \\
+1, & \text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '0'}:
 
 $
 \begin{matrix}
@@ -8790,7 +8811,17 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \  $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}{\mathlarger{\oint} \sqrt g / h_y dx}$
+$\nu_{\ast} = \frac{c \left( y \right)}
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
+$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
+$\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
+{\mathlarger{\oint} \sqrt g /h_y dx}$,\ \ \ \ $
+\tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
+\frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
+\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
+$
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -8893,7 +8924,7 @@ $\alpha^{NEO} = \frac{8}{15}
 the temperature gradient in the neoclassical electric field in the plateau and banana regime
 
 $\nu_{\ast} = \frac{c \left( y \right)}
-{2 \pi \varepsilon^{3/2} \tau_a^{(Br)} \sqrt{T_i/m_a}}$,\ \ \ \
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
 $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g /h_y dx}$
@@ -12395,7 +12426,7 @@ K_2 = \frac{0.66+1.88 \cdot \sqrt{\varepsilon} - 1.54 \cdot \varepsilon}
            {1 + 0.74 \cdot \varepsilon^{3/2} \cdot \nu_*}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:nu_zh}
 \nu_* = \frac{c(y)}{2 \pi \left( \tau_{ii} V_{th} \right)^{eff}}
 ,\quad
 \left( \tau_{ii} V_{th} \right)^{eff} = \sum_{a} \frac{n_a}{n_i} \tau^{(Zh)}_{a} \sqrt{\frac{T_i}{m_{a}}}
