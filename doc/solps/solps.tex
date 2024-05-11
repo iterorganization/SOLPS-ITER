@@ -8791,7 +8791,7 @@ c_{\eta^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '0'}:
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '0'} (only valid for hydrogen-majority plasmas):
 
 $
 \begin{matrix}
@@ -8811,7 +8811,8 @@ c_{\eta^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-$\nu_{\ast} = \frac{c \left( y \right)}
+$
+\nu_{\ast} = \frac{c \left( y \right)}
 {2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
 $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
@@ -12372,7 +12373,7 @@ The relevant switches for the Zhdanov closure are:
   \item[b2tral\_zh\_vis\_type] If {\tt '0'} (default), the Braginskii-like velocity-dependent stress-viscosity is used.  If {\tt '1'}, the Zhdanov-like velocity-dependent stress-viscosity is used. If {\tt '2'} the Makarov-like velocity-dependent stress-viscosity is used \cite{MakarovPhD}.
   \item[b2npmo\_smbvi\_factor] This switch defines the fraction of the cross-ion part of the stress-viscosity term (Eq.~(\ref{eq:mom_zh_visai})) which is applied. The cross-ion part of the stress-viscosity term can lead to numerical problems. If so, it is recommended to start from {\tt '0.0'} and increase it step by step. Default is {\tt '1.0'}.
    \item[b2tral\_amfact\_on] If {\tt '1'}, the mass correction for the thermal and friction force calculation is applied (for details see \cite{Makarov2023}). Default is {\tt '0'}.
-   \item[b2tral\_amfact\_***] If {\tt b2tral\_amfact\_on.eq.1}, this multiplier applied for the mass of the species that is defined by {\tt '***'}. The numeration is performed for the isonuclear sequece (e.g. {\tt b2tral\_amfact\_000}, {\tt b2tral\_amfact\_001}, ...). Default is {\tt '1.0'}.   
+   \item[b2tral\_amfact\_***] If {\tt b2tral\_amfact\_on.eq.1}, this multiplier is applied for the mass of the isonuclear sequence with number {\tt '***'}. Recall the numbering of the isonuclear sequences starts at zero (e.g. {\tt b2tral\_amfact\_000}, {\tt b2tral\_amfact\_001}, ...). Default is {\tt '1.0'}.
 \end{description}
 
 \begin{sloppypar}
@@ -12595,10 +12596,10 @@ Therefore:
 
 \begin{multline}
 q_{ix} = \left[
-	\frac{3}{2} \Gamma_{ix} +
-	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde{V}_{ax}^{(dia)} +
-	V_{ix}^{(str)} n_i + b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right) \right. \\
-        + \left. \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right)
+\frac{3}{2} \Gamma_{ix} +
+\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde{V}_{ax}^{(dia)} +
+V_{ix}^{(str)} n_i + b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right) \right. \\
++ \left. \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
@@ -12997,7 +12998,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 & \left\{
 \begin{matrix}
 - \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
-	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
 & \ z_a \neq 0 \\
 \\
 0, & z_a = 0 \\
@@ -13088,7 +13089,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 & \left\{
 \begin{matrix}
 - \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
-	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
 & \ z_a \neq 0 \\
 \\
 0, & z_a = 0 \\
@@ -13099,9 +13100,9 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 \ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
 
 \begin{multline}
-\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = 
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} =
  -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\widetilde{\widetilde{\eta}}^{(CL)}_{a x}\frac{1}{B^{2}b_x}\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel a}\bigg)\Bigg]\\
--\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[ 
+-\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
 \sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
  \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
 \bigg]\Bigg]
@@ -13120,7 +13121,7 @@ B^{\frac{1}{2}} V_{\parallel a}
 \end{align}
 
 \begin{multline}\label{eq:mom_zh_visai_2}
-\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[ 
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
 \sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
  \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
 \bigg]\Bigg]
@@ -13161,7 +13162,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 & \left\{
 \begin{matrix}
 - \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
-	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
 & \ z_a \neq 0 \\
 \\
 0, & z_a = 0 \\
@@ -13281,7 +13282,7 @@ zhcscorr\cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\left(\frac{1}{I_{a}}-1\ri
 \end{align}
 
 \begin{align}
-\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta};\ \ \ 
+\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta};\ \ \
 \frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_u^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha},
 \end{align}
 
@@ -13624,12 +13625,12 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 
 \begin{equation}
 Q_{vis} = \sum \limits_{fluid~species} \left(
-	  \eta_{ax} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta^{(AN)}_{a} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
 \right)
 \end{equation}
 
@@ -13637,42 +13638,42 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 
 \begin{multline}
 Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
-	  \eta^{(AN)}_{a} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta_{ay} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2 +\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+          \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2 +\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
  \left(
-		\frac{\partial V_{\parallel}}{h_x \partial x}
-	\right)^2
+                \frac{\partial V_{\parallel}}{h_x \partial x}
+        \right)^2
 \right) +\\
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a= 0\\ fluid}} \left(
-	  \eta_{ax} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta_{ay} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
 \right)
 \end{multline}
 
 \ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
 
 \begin{multline}
-Q_{vis} = \sum \limits_{fluid~species}\Bigg[ 
-	  \eta_{ax} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta^{(AN)}_{a} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2+\\
-\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[ 
+Q_{vis} = \sum \limits_{fluid~species}\Bigg[
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
 \sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\beta \zeta)}\bigg)+\\
  \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\alpha \zeta)}\bigg)
 \bigg] \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)\Bigg]
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)\Bigg]
 \end{multline}
 
 \ \ \textbf{\textit{end}}
@@ -13731,7 +13732,7 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \frac{1}{B^2} \right)\Bigg[
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
-\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[ 
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
 \sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
  \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
 \bigg]\Bigg], &\ z_a \neq 0 \\
@@ -13789,7 +13790,7 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \frac{1}{B^2} \right)\Bigg[
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
 \frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
-\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[ 
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
 \sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
  \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
 \bigg]\Bigg], &\ z_a \neq 0 \\
@@ -18152,9 +18153,9 @@ of a rectangle in which the test particles are to be started
 appropriate limit).  The next number specifies the amount
 of test particles to be started (if positive the particles are started
 weighted by volume, if negative then the weighting function is taken
-off the matrix stack).  This is then followed by a flag (1 for a
+off the matrix stack). This is then followed by a flag (1 for a
 movie, otherwise normal trajectories), and then the species indices
-come next.  The last argument specifies the number of species.
+come next. The last argument specifies the number of species.
 The use of {\bf uuse} and {\bf vvse} allows one to replace the particle velocities
 matrices used by default to compute the trajectories with data from the
 matrix stack.
@@ -20439,13 +20440,11 @@ or
 \begin{verbatim}
   SOLPS_CPP += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list. {\tt ksh} or {\tt bash} users would use something like
 \begin{verbatim}
   export SOLPS_CPP="$SOLPS_CPP -DOPTION"
 \end{verbatim}
 %% $
-).
 
 \subsection{Carre}
 \index{DEFINES, used in compiling Carre}
