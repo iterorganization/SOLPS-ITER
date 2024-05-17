@@ -87,6 +87,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .
+cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/average.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/setwrk0.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/integrate.F .
@@ -102,6 +103,7 @@ cp $SOLPSTOP/modules/B2.5/src/user/combfile.F .
 cp $SOLPSTOP/modules/B2.5/src/user/parsehdr.F .
 cp $SOLPSTOP/modules/B2.5/src/user/eirflux_map.F .
 cp $SOLPSTOP/modules/B2.5/src/user/cdfmovie.F .
+cp $SOLPSTOP/modules/B2.5/src/user/map_and_interpolate_cf.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_ipmain.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/xer* .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_xerset.F .
@@ -109,7 +111,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_subsys.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_lw* .
 cp $SOLPSTOP/modules/B2.5/src/utility/smin.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/smax.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/samax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/damax.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/open_file.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/lnblnk.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ipget* .

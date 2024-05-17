@@ -113,7 +113,9 @@ The user can select one of these cost functions through the input file {\tt b2.o
       \item[9] Weighted least squares, on the desired CVs, of calculated ion temperature radial gradient and values read from file, normalized with average experimental value (units must be $eV/m$).
       \item[10] Weighted least squares, on the desired CVs, of calculated ion saturation current ($n_ec_seV$) and values read from file, normalized with average experimental value (units must be $kA/m^2$).
       \item[11] Heat flux peakedness on the desired FCs as $1/2\int_\Omega(q_\perp^2)d\Omega$ (output in $W^2/m^2$).
+      \item[12] Weighted least squares, on the desired FCs, of calculated perpendicular or parallel heat flux and values read from file, normalized with average experimental value (units must be $MW^2/m^2$). Use {\tt PARALLEL_HF} to specify whehter the parallel or perpendicular heat flux is used.
     \end{description}
+  \item[PARALLEL_HF]\index{PARALLEL_HF} {\tt logical}, Indicates for cost function 12 if the heat flux considered is the one parallel to the magnetic field (TRUE) or perpendicular to the surface (FALSE). Defaults to {\tt .true.}.
   \item[CFDEF]\index{CFDEF} {\tt integer array, dimension (NCF)}, indicates how the domain of cost function {\tt icf} is specified. Defaults to {\tt 0}. Valid options are:
     \begin{description}
       \item[1] The cost function is defined on the OMP, using the {\tt RZOMP} array. In this case {\tt CFSTART}, {\tt CFEND} are not necessary and ignored.
