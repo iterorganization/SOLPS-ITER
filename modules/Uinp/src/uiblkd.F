@@ -38,7 +38,7 @@ c*** General information
      , nwllmrk, nedgmrk  , ntrgmrk  ,   bliin    ,    bbliin      /
      /    0   ,nwllmrkd*0,nwllmrkd*0,nsts*.false.,luznknd*.false. /,
      , glb2read,usetmstr,pwrcrtte,pwrcrtti,pwrcrfri /
-     /  .false., .true. ,  50.   ,    50. ,   0.25  /,
+     /  .false., .false.,  50.   ,    50. ,   0.25  /,
      , spcscrk,spcicrk,spcsscn,spciscn /
      /  natm*0, natm*0, natm*1, natm*1 /,
      , nstrao,natmo,nmolo,niono,nphto,nplso /

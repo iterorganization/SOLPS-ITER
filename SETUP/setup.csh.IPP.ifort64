@@ -49,6 +49,7 @@ setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 [ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

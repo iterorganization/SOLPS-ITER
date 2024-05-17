@@ -1,5 +1,6 @@
 # Autodetected optional features...
 
+FC          = pgf90
 SOLPS_CPP  += -DPGF90 -DNOQUAD
 LD_MPI      = -Mmpi=mpich
 FFLAGSEXTRA = -Mnorpath
@@ -136,9 +137,6 @@ export IMAS_PKG_LIST
 ifdef SOLPS_OPENMP
   B25_DEFINES += -D_OPENMP
 endif
-
-# Assume MPI is present
-MPI_PRESENT = 1
 
 #
 # Export for use in sub-makefiles

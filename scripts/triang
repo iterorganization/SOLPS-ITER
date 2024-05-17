@@ -140,6 +140,7 @@ TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
+q=U
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
@@ -153,9 +154,9 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
   print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
 }
 [ -d $griddir ] && {
-  n=1
+  n=`ls -1 $griddir | grep -E "$carre_stem.v[0-9][0-9][0-9].geo" | wc -l`
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
-  [ -e $griddir/$carre_stem.v[0-9][0-9][0-9].geo ] && {
+  [ n -gt 0 ] && {
     n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
     n=${n#*/$carre_stem.v}
     n=${n%.geo}
@@ -163,7 +164,16 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
     n=000
   }
   carrename=$carre_stem.v$n.geo
-  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  [ -s $griddir/$carre_stem.v$n/carre.out ] && {
+    ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  } || {
+    [ -s carre.out ] && {
+      ln -sf carre.out uinput.crr
+    } || {
+      print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+      q=q
+    }
+  }
 } || {
   print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
   while true; do {
@@ -179,7 +189,16 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
   }; done
   n=000
   carrename=$carre_stem.v$n.geo
-  ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  [ -s $griddir/$carre_stem.v$n/carre.out ] && {
+    ln -sf $griddir/$carre_stem.v$n/carre.out uinput.crr
+  } || {
+    [ -s carre.out ] && {
+      ln -sf carre.out uinput.crr
+    } || {
+      print -u2 -- "No valid carre.out file found. Did you run Carre first?"
+      q=q
+    }
+  }
 }
 
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
@@ -207,9 +226,7 @@ e=
 }
 [ -n "$e" ] && exit 4
 
-q=U
 [ -L uinput.dg ] && [ -L uinput.trg ] && [ -L uinput.crr ] && q=u
-
 
 export GRSOFT_DEVICE='62'
 export PLOT_IT_STEM='tria'
@@ -276,7 +293,7 @@ while true; do {
             [ -r b2ag.prt ] && rm b2ag.prt
             [ -r $b2agout ] && rm $b2agout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log
-            [ -r $b2agout ] && {
+            [ -s $b2agout ] && {
               [ -d b2ag.exe.dir ] && rmdir b2ag.exe.dir
               print -u2 -- "Produced $b2agout file"
             } || {
@@ -289,7 +306,7 @@ while true; do {
             [ -r b2ai.prt ] && rm b2ai.prt
             [ -r $b2aiout ] && rm $b2aiout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ai.prt > b2ai.log
-            [ -r $b2aiout ] && {
+            [ -s $b2aiout ] && {
               [ -d b2ai.exe.dir ] && rmdir b2ai.exe.dir
               print -u2 -- "Produced $b2aiout file"
             } || {
@@ -312,7 +329,7 @@ while true; do {
             [ -r b2ah.prt ] && rm b2ah.prt
             [ -r $b2ahout ] && rm $b2ahout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ah.prt > b2ah.log
-            [ -r $b2ahout ] && {
+            [ -s $b2ahout ] && {
               [ -d b2ah.exe.dir ] && rmdir b2ah.exe.dir
               print -u2 -- "Produced $b2ahout file"
             } || {
@@ -325,7 +342,7 @@ while true; do {
             [ -r b2ar.prt ] && rm b2ar.prt
             [ -r $b2arout ] && rm $b2arout
             ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ar.prt > b2ar.log
-            [ -r $b2arout ] && {
+            [ -s $b2arout ] && {
               [ -d b2ar.exe.dir ] && rmdir b2ar.exe.dir
               print -u2 -- "Produced $b2arout file"
               q=n

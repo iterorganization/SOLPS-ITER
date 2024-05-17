@@ -44,7 +44,7 @@ INCMOD    = -M
 MOD       = mod
 OBJDEST   = -o ${OBJDIR}/$*.o
 
-BLD       = ar rcv
+BLD       = ar rucv
 
 LD        = ${FC}
 

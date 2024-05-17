@@ -6,9 +6,9 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 
 nodename=`hostname`
-module load IMAS/3.39.0-4.11.7-2020b
-module load GGD/1.10.4-iccifort-2020.4.304-DD-3.39.0
-module load AMNS/1.4.0-iccifort-2020.4.304-DD-3.39.0
+module load IMAS/3.40.1-4.11.9-2020b
+module load GGD/1.10.4-iccifort-2020.4.304-DD-3.40.1
+module load AMNS/1.4.0-iccifort-2020.4.304-DD-3.40.1
 module load makedepend/1.0.6-GCCcore-10.2.0
 module load MSCL/1.2.2-intel-2020b
 module load Doxygen/1.8.20-GCCcore-10.2.0
@@ -18,7 +18,6 @@ module load SimDB/0.7.1-intel-2020b
 module load netCDF-Fortran/4.5.3-iimpi-2020b
 module load NAG/26-intel-2020b
 module load Fundamental-Constants/0.1.1
-module load Doxygen/1.8.20-GCCcore-10.2.0
 module load CMake/3.20.1-GCCcore-10.2.0
 module load netcdf4-python/1.5.5.1-intel-2020b
 
@@ -31,7 +30,7 @@ export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
 
 # Debugger (set environment variable DBX)
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 export DBX="totalview"
 
 # Compilers

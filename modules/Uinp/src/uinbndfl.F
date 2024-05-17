@@ -152,6 +152,15 @@ c*** Take the data from the boundary default
             beebnds(izn,2,iknd)=beebndx(0,2,iknd)
             beibnds(izn,2,iknd)=beibndx(0,2,iknd)
             bpobnds(izn,2,iknd)=bpobndx(0,2,iknd)
+            if (nspcpls.gt.size(lcobnds,1)) then
+              write(*,*) ' Problem requires ',nspcpls,' ion species.'
+              write(*,*) ' But only ',DEF_NSD,' are declared!'
+#ifdef DIMENSIONS_MODULE
+              call xerrab('Increase DEF_NSD in b2mod_dimensions !')
+#else
+              call xerrab('Increase DEF_NSD in DIMENSIONS.F !')
+#endif
+            end if
             do isp=1,nspcpls !{
               l=spcsrnp(isp)
               ex=.true.
@@ -321,9 +330,8 @@ c=======================================================================
       character*8 name, species_name
       integer i
       integer nplus
-      integer lnblnk
       logical streql, isplusorminus
-      external streql, lnblnk, isplusorminus, strip_spaces
+      external streql, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd
@@ -341,7 +349,7 @@ c=======================================================================
         end do
       else if (index(name,'+').gt.0) then
         species_name=repeat(' ',8)
-        do i = 1, lnblnk(name)
+        do i = 1, len_trim(name)
           if (isplusorminus(name(i:i))) then
             if (nplus.eq.0) species_name(i:i) = ' '
             nplus=nplus+1

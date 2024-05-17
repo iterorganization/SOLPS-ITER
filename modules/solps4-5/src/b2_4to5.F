@@ -691,7 +691,8 @@ cxpb
       integer, allocatable :: zone(:)
 
       external xertst
-      external b2xpne_st, b2xpni, b2xppb, b2xpfe_st, b2xpfi_st, b2agmt
+      external b2xpne_st, b2xpfe_st, b2xpfi_st, b2agmt_st
+      external b2xpni, b2xppb
       real (kind=R8) :: rratio
       external rratio
 
@@ -960,7 +961,7 @@ c Fill out b2mod_indirect arrays
       call alloc_b2mod_elements(ns, zn, am)
 
 c Compute geometrical quantities
-      call b2agmt(nx, ny, 1, crx, cry,
+      call b2agmt_st(nx, ny, 1, crx, cry,
      & fpsi, bb, vol, hx, hy, hz, hc, ht, qz, qc, qs, qac, qas, ebc,
      & gs, cell_width, cell_height,
      & leftix, leftiy, bottomix, bottomiy, cflags)

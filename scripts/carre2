@@ -68,30 +68,30 @@ endings="dgo equ str trg"
 /bin/echo -e "Input directory: $indir\n"
 
 [ "$1" = '-' ] && {
-    [ -r $indir/dg.str ] && {
-      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
-      q=p
-      qqs=c
-      grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
-    } || {
-      /bin/echo -e "Linking error - the input files were not found in \"$indir\""
-      /bin/echo -e "Use (I)nput command to provide correct input directory"
-      q=i
-      qqs=c
-    }
-} || { \
-    u="$indir/$1"
-    [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & { \
-        ln -sf $u.vrq rzpsi.dat
-        ln -sf $u.str structure.dat
-        ln -sf $u.fld btor.dat
-        ln -sf $u.inp carre.dat
-        q=g
-        qqs=s
-    } || {
-        /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
-        exit 8
-    }
+  [ -r $indir/dg.str ] && {
+    /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\""
+    q=p
+    qqs=c
+    grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+  } || {
+    /bin/echo -e "Linking error - the input files were not found in \"$indir\""
+    /bin/echo -e "Use (I)nput command to provide correct input directory"
+    q=i
+    qqs=c
+  }
+} || {
+  u="$indir/$1"
+  [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & {
+    ln -sf $u.vrq rzpsi.dat
+    ln -sf $u.str structure.dat
+    ln -sf $u.fld btor.dat
+    ln -sf $u.inp carre.dat
+    q=g
+    qqs=s
+  } || {
+    /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+    exit 8
+  }
 }
 while true
 do {
@@ -144,10 +144,24 @@ do {
               [ -r $class.aux ] && ln -sf $class.aux dg.aux
             }
             rm -f selptx.inf carre.dat structure.dat rzpsi.dat btor.dat 2>/dev/null
-            $CARRE2_PATH/fcrr.exe; q=g; break;;
+            $CARRE2_PATH/fcrr.exe
+            [ -s carre.dat ] && {
+              q=g
+            } || {
+              printf 'Carre input was not produced. Check the DG model\n'
+              q=q
+            }
+            break;;
     ( g|G )                                               # create the grid:
 #            carre.exe; q=s; break;;
-            $CARRE2_PATH/carre.exe 2>carre.log; q=$qqs; break;;
+            $CARRE2_PATH/carre.exe 2>carre.log
+            [ -s carre.out ] && {
+              q=$qqs
+            } || {
+              /bin/echo -e "Carre output was not produced. Check the carre.log file"
+              q=q
+            }
+            break;;
     ( s|S )                                               # save the control data:
             cp carre.out carre.dat;
             /bin/echo -e "Saved grid settings in carre.dat file"

@@ -16,10 +16,10 @@ c*** Prepare the particle lists
 c======================================================================
 #include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
-      integer find_matching_species, lnblnk
+      integer find_matching_species
       logical ex,streql
-      external streql, xerrab
-      external find_matching_species, lnblnk
+      external streql,xerrab
+      external find_matching_species
       character*8 c,cc,c0*1
       character*20 hlp_frm
 c======================================================================
@@ -284,15 +284,15 @@ c*** the atoms and nuclei
                 if (k.le.nspdgen-2) then !{
                   c=spcdspc(j+m)
                 else !}{
-                  if (lnblnk(spcigen(l)).eq.1) then !{
+                  if (spcigen(l)(2:2).eq.' ') then !{
                     if (m.eq.1) then !{
                       c=spcigen(l)(1:1)//'+'
                     else if (m.eq.2) then !}{
                       c=spcigen(l)(1:1)//'++'
                     else if (m.le.9) then !}{
-                      write(c,'(a1,i1,a1)') spcigen(l),m,'+'
+                      write(c,'(a1,a1,i1)') spcigen(l),'+',m
                     else !}{
-                      write(c,'(a1,i2,a1)') spcigen(l),m,'+'
+                      write(c,'(a1,a1,i2)') spcigen(l),'+',m
                     end if !}
                   else !}{
                     if (m.eq.1) then !{
@@ -300,9 +300,9 @@ c*** the atoms and nuclei
                     else if (m.eq.2) then !}{
                       c=spcigen(l)(1:2)//'++'
                     else if (m.le.9) then !}{
-                      write(c,'(a2,i1,a1)') spcigen(l),m,'+'
+                      write(c,'(a2,a1,i1)') spcigen(l),'+',m
                     else !}{
-                      write(c,'(a2,i2,a1)') spcigen(l),m,'+'
+                      write(c,'(a2,a1,i2)') spcigen(l),'+',m
                     end if !}
                   endif !}
                 end if !}

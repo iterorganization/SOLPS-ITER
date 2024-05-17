@@ -53,6 +53,7 @@ c=======================================================================
       external xerrab
 c*** mtge(i): target edge connected to the target edge i 
       data mtge / 7, 4, 5, 2, 3, 8, 1, 6 /
+c*** mtgb(i): boundary connected to the target edge i
       data mtgb / 1, 2, 3, 2, 4, 5, 6, 5 /
       data kbnd / 3, 4, 3, 3, 4, 3 /  ! kind of boundary (PFR vs. SOL)
       data lbnd / 6, 0, 4, 3, 0, 1 /  ! adjacent zone

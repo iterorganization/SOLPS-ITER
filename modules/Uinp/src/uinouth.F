@@ -460,6 +460,10 @@ c***  "ch0-cards"
         i=indasrfs(k)
         if(i.eq.0) go to 360
         if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+          if(jliin(i).lt.0) then
+            jsurpr=jsurpr+1
+            nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
+          endif
           nskip=nskip+1
           go to 360
         endif
@@ -483,7 +487,7 @@ c*** "ch2-cards" here !
      ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
         if(jliin(i).lt.0) then
           jsurpr=jsurpr+1
-          nsrf(jsurpr)=k
+          nsrf(jsurpr)=k-nskip
         end if
 
 c**  Surface coefficients
@@ -1091,6 +1095,7 @@ c*** 7.  data for primary source
         end do
         write(iunoo,707) nvess+j
         write(iunoo,707) (6,i=1,nvess),(indsrc7(i),i=1,j)
+        nstraih=nvess
       end if
       write(iunoo,703) alloc
       inum=nvess
@@ -1538,14 +1543,14 @@ cnh        write(iunoo,707) ndxa,ndya
           end do !}
         else ! vessel mode
           do i=1,maxval(fclbl)*(natmi-nmeta) !{
-            write(iunoo,707) i+ihyb,ndt2(i,1),nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
-     ,                                  nspzi(i,1),nspze(i,1),7
+            write(iunoo,707) i+ihyb,ndt2(i,1)-ncore,nptc(1,1),    ! for now using the number of histories specified for the first target
+     ,                               nptcm(1,1),nspzi(i,1),nspze(i,1),7
             if (ncharp(nspzi(i,j)).eq.1) then !nh duplicate line for hybrid model
               ihyb=ihyb+1
               do ispz=nfla+1,nfla+nplsh
                 if (bmassh(ispz).eq.bmassh(nspzi(i,1))) exit
               enddo
-              write(iunoo,707) i+ihyb,ndt2(i,1),
+              write(iunoo,707) i+ihyb,ndt2(i,1)-ncore,
      ,            nptc(1,1),nptcm(1,1),ispz,ispz,6 !nh for now, no plasma-void interfaces
             end if
           end do !}
