@@ -146,9 +146,9 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
   print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
 }
 [ -d $griddir ] && {
-  n=1
+  n=`ls -1 $griddir | grep -E "$carre_stem.v[0-9][0-9][0-9].geo" | wc -l`
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
-  [ -e $griddir/$carre_stem.v[0-9][0-9][0-9].geo ] && {
+  [ n -gt 0 ] && {
     n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
     n=${n#*/$carre_stem.v}
     n=${n%.geo}
