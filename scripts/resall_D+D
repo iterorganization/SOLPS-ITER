@@ -18,5 +18,5 @@ setenv PLOT_FROM_FILE "gnuplot.temp"
 $ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
-  awk '{print $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14}'  >! ${tmpdir}PLOT_FROM_FILE
-  plot xlyplot12 `count -p conD1. 0 1` `count -p conD2. 0 1` `count -p momD1. 0 1` `count -p momD2. 0 1` totmom ee ei phi iteration 'norm of residuals' $PWD
+  awk '{print $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17}'  >! ${tmpdir}PLOT_FROM_FILE
+  plot xlyplot12 `count -p conD1. 0 1` `count -p conD2. 0 1` `count -p momD1. 0 1` `count -p momD2. 0 1` totmom ee ei en phi kt zt iteration 'norm of residuals' $PWD
