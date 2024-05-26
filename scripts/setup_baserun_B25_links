@@ -1,5 +1,5 @@
 #! /bin/tcsh -f
-set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
+set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP/||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
 if (${COMPILER} == "HP") then
   set filestem="ftn"
 else
