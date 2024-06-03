@@ -183,7 +183,8 @@ argloop:
   endif
   echo "argument = "$b2ex
   set CMD=`echo $b2ex" " | sed -e 's: :.prt :g'`
-  ${MAKE} $debug TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" OMP_NUM_THREADS=$OMP_NUM_THREADS -f $RUNS/Makefile $CMD
+  set B2EX=`echo $b2ex | cut -d ' ' -f 1`
+  ${MAKE} $debug B2EX="$B2EX" TIME="$TIME" RUN_OPTIONS="$RUN_OPTIONS" OMP_NUM_THREADS=$OMP_NUM_THREADS -f $RUNS/Makefile $CMD
   unsetenv STAND_ALONE
   unsetenv B2FSTATE_ONLY
   if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi

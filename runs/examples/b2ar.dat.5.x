@@ -1,3 +1,2 @@
-'b2ardr_no_smoothing'      '1'
 'adas_extrap'              '0'
 

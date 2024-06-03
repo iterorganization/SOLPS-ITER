@@ -70,10 +70,8 @@ cp ../ref_run_for_CI/b2.feedback_save.parameters.i b2.feedback_save.parameters
 cp ../ref_run_for_CI/b2mn.dat .
 cp ../ref_run_for_CI/b2fstati .
 cp ../ref_run_for_CI/input.dat .
-cp ../ref_run_for_CI/fort.10.i fort.10
 cp ../ref_run_for_CI/fort.11.i fort.11
 cp ../ref_run_for_CI/fort.13.i fort.13
-cp ../ref_run_for_CI/fort.14.i fort.14
 cp ../ref_run_for_CI/fort.15.i fort.15
 cp ../ref_run_for_CI/fort.44.i fort.44
 cp ../ref_run_for_CI/fort.46.i fort.46
@@ -110,7 +108,6 @@ correct_baserun_timestamps
 mkdir run_CI_test
 cd run_CI_test
 cp ../run_for_CI/b2.*.parameters .
-cp ../run_for_CI/b2.wall_save.parameters.i b2.wall_save.parameters
 cp ../run_for_CI/b2mn.dat .
 cp ../run_for_CI/b2fstati .
 cp ../run_for_CI/input.dat .
@@ -131,7 +128,6 @@ cd ..
 mkdir run_CI_test_9-pt
 cd run_CI_test_9-pt
 cp ../run_for_CI_9-pt/b2.*.parameters .
-cp ../run_for_CI_9-pt/b2.wall_save.parameters.i b2.wall_save.parameters
 cp ../run_for_CI_9-pt/b2mn.dat .
 cp ../run_for_CI_9-pt/b2fstati .
 cp ../run_for_CI_9-pt/input.dat .

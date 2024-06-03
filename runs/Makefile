@@ -46,7 +46,7 @@ else
 fort_lc = ftn
 endif
 
-prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt \
+prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
@@ -58,6 +58,7 @@ target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma
 ifdef USE_IMPGYRO
 target_mn += restart_ext
 endif
+target_astra = b2mnastra.prt
 target_uf = b2uf.prt
 target_fu = b2fu.prt
 target_co = b2co.prt b2co.files
@@ -185,15 +186,17 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2ar.exe.dir
 
+$(target_astra) : b2mn.prt
+
 ifndef STAND_ALONE
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ${fort_lc}30 AMJUEL
 else
 $(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
 endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	-rm -f $(target_mn) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
+	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
-	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null ; [ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
@@ -225,7 +228,7 @@ ifdef IMAS_VERSION
 	[ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
-	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/b2mn.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
+	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/${B2EX}.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
 	mpiexec -verbose -config b2ig.conf ; \
 	move_optional_files ; \
@@ -234,7 +237,7 @@ ifdef USE_IMPGYRO
 	mv .*.?* ${WD_EXT}/. ; mv ${fort_lc}150 ${WD_EXT}/. ; \
 	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
 else
-	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
+	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${B2EX}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 	-[ -s ${fort_lc}30 ] || ( [ -s ../baserun/${fort_lc}30 ] || ( [ -s b2mn.exe.dir/${fort_lc}30 ] && mv b2mn.exe.dir/${fort_lc}30 . || ( [ -e b2mn.exe.dir/${fort_lc}30 ] && rm b2mn.exe.dir/${fort_lc}30 || echo > /dev/null ) ) )
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
@@ -276,6 +279,7 @@ endif
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
+	-[ -s b2mn.exe.dir/astra_to_b2.dat ] && mv b2mn.exe.dir/astra_to_b2.dat . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
