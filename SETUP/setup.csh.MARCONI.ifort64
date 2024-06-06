@@ -22,6 +22,7 @@ module load zlib/1.2.8--gnu--6.1.0
 module load hdf5/1.10.4--intel--pe-xe-2018--binary
 module load netcdf/4.6.1--intel--pe-xe-2018--binary
 module load netcdff/4.4.4--intel--pe-xe-2018--binary
+module load cmake/3.18.2
 #module load texlive
 
 #module load imas
