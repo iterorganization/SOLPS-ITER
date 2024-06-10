@@ -81,81 +81,81 @@ else
 fi
 
 [ "$1" = '-' ] && {
-    [ -r $indir/dg.str ] && {
-      if [ "$(uname)" = "Darwin" ]; then
-        printf 'Standard linking - the input files are assumed to exist in "%s" as symbolic links\n' "$indir"
-      else
-        /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
-      fi
-      q=p
-      qqs=c
-      grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
-      for ext in $endings; do
-        [ -e $indir/dg.$ext ] && {
-          filename=`lln $indir/dg.$ext`
-          [ "$filename" != '' ] || {
-            if [ "$(uname)" = "Darwin" ]; then
-              printf 'File dg.%s is not a symbolic link!\n' "$ext"
-            else
-              /bin/echo -e "File dg.$ext is not a symbolic link!"
-            fi
-            q=q
-          }
-        } || {
-            if [ "$(uname)" = "Darwin" ]; then
-              printf 'File dg.%s is missing!\n' "$ext"
-            else
-              /bin/echo -e "File dg.$ext is missing!"
-            fi
-           q=q
-           qqs=q
+  [ -r $indir/dg.str ] && {
+    if [ "$(uname)" = "Darwin" ]; then
+      printf 'Standard linking - the input files are assumed to exist in "%s" as symbolic links\n' "$indir"
+    else
+      /bin/echo -e "Standard linking - the input files are assumed to exist in \"$indir\" as symbolic links"
+    fi
+    q=p
+    qqs=c
+    grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+    for ext in $endings; do
+      [ -e $indir/dg.$ext ] && {
+        filename=`lln $indir/dg.$ext`
+        [ "$filename" != '' ] || {
+          if [ "$(uname)" = "Darwin" ]; then
+            printf 'File dg.%s is not a symbolic link!\n' "$ext"
+          else
+            /bin/echo -e "File dg.$ext is not a symbolic link!"
+          fi
+          q=q
         }
-      done
-      [ "$q" = 'q' ] && {
-          [ "$qqs" = 'q' ] && {
-            if [ "$(uname)" = "Darwin" ]; then
-              printf 'Run the lns script first.\n'
-            else
-              /bin/echo -e "Run the lns script first."
-            fi
-          } || {
-            if [ "$(uname)" = "Darwin" ]; then
-              printf 'Case storage step will fail.\n'
-              printf 'Run the lns script first to assign a stem name to this case.\n'
-            else
-              /bin/echo -e "Case storage step will fail."
-              /bin/echo -e "Run the lns script first to assign a stem name to this case"
-            fi
-          }
-      } ; break;
-    } || {
-      if [ "$(uname)" = "Darwin" ]; then
-        printf 'Linking error - the input files were not found in "%s"\n' "$indir"
-        printf 'Use (I)nput command to provide correct input directory\n'
-      else
-        /bin/echo -e "Linking error - the input files were not found in \"$indir\""
-        /bin/echo -e "Use (I)nput command to provide correct input directory"
-      fi
-      q=i
-      qqs=c
-    }
-} || { \
-    u="$indir/$1"
-    [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & { \
-        ln -sf $u.vrq rzpsi.dat
-        ln -sf $u.str structure.dat
-        ln -sf $u.fld btor.dat
-        ln -sf $u.inp carre.dat
-        q=g
-        qqs=s
-    } || {
+      } || {
         if [ "$(uname)" = "Darwin" ]; then
-          printf 'Files %s.vrq, %s.str, and %s.fld must be present!\n' "$u" "$u" "$u"
+          printf 'File dg.%s is missing!\n' "$ext"
         else
-          /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+          /bin/echo -e "File dg.$ext is missing!"
         fi
-        exit 8
+        q=q
+        qqs=q
+      }
+    done
+    [ "$q" != 'q' ] || {
+      [ "$qqs" = 'q' ] && {
+        if [ "$(uname)" = "Darwin" ]; then
+          printf 'Run the lns script first.\n'
+        else
+          /bin/echo -e "Run the lns script first."
+        fi
+      } || {
+        if [ "$(uname)" = "Darwin" ]; then
+          printf 'Case storage step will fail.\n'
+          printf 'Run the lns script first to assign a stem name to this case.\n'
+        else
+          /bin/echo -e "Case storage step will fail."
+          /bin/echo -e "Run the lns script first to assign a stem name to this case"
+        fi
+      }
     }
+  } || {
+    if [ "$(uname)" = "Darwin" ]; then
+      printf 'Linking error - the input files were not found in "%s"\n' "$indir"
+      printf 'Use (I)nput command to provide correct input directory\n'
+    else
+      /bin/echo -e "Linking error - the input files were not found in \"$indir\""
+      /bin/echo -e "Use (I)nput command to provide correct input directory"
+    fi
+    q=i
+    qqs=c
+  }
+} || {
+  u="$indir/$1"
+  [ -r $u.vrq ] && [ -r $u.str ] && [ -r $u.fld ] & {
+    ln -sf $u.vrq rzpsi.dat
+    ln -sf $u.str structure.dat
+    ln -sf $u.fld btor.dat
+    ln -sf $u.inp carre.dat
+    q=g
+    qqs=s
+  } || {
+    if [ "$(uname)" = "Darwin" ]; then
+      printf 'Files %s.vrq, %s.str, and %s.fld must be present!\n' "$u" "$u" "$u"
+    else
+      /bin/echo -e "Files $u.vrq, $u.str, and $u.fld must be present!"
+    fi
+    exit 8
+  }
 }
 while true
 do {

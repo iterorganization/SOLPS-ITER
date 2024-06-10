@@ -1,0 +1,36 @@
+#! /bin/tcsh -f
+set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP/||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
+if (${COMPILER} == "HP") then
+  set filestem="ftn"
+else
+  set filestem="fort."
+endif
+if ("X$1X" == "X-rX") then
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
+else
+  ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
+endif
+
+if (! -s mesh.extra) then
+  if (-s ../baserun/mesh.extra) then
+    ln -s ../baserun/mesh.extra .
+  else
+    set meshxtra=`climb_and_look_for mesh.extra`
+    if (-s $meshxtra) then
+      ln -s $meshxtra .
+    endif
+  endif
+endif
+if (! -s param.dg) then
+  if (-s ../baserun/param.dg) then
+    ln -s ../baserun/param.dg .
+  else
+    set paramdg=`climb_and_look_for param.dg`
+    if (-s $paramdg) then
+      ln -s $paramdg .
+    endif
+  endif
+endif
+if (! -s b2.log) ln -sf run.log b2.log
+if (! -s b2.log.gz) ln -sf run.log.gz b2.log.gz
+if (! -d tracing) mkdir tracing

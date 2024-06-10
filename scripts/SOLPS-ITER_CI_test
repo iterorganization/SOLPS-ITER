@@ -86,7 +86,6 @@ cp ../run_for_CI/fort.14.i fort.14
 cp ../run_for_CI/fort.44.i fort.44
 cp ../run_for_CI/fort.46.i fort.46
 cp ../run_for_CI/b2time.nc.i b2time.nc
-cp ../run_for_CI/b2batch.nc.i b2batch.nc
 cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
@@ -113,7 +112,6 @@ cp ../run_for_CI/fort.14.i fort.14
 cp ../run_for_CI/fort.44.i fort.44
 cp ../run_for_CI/fort.46.i fort.46
 cp ../run_for_CI/b2time.nc.i b2time.nc
-cp ../run_for_CI/b2batch.nc.i b2batch.nc
 cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
@@ -133,7 +131,6 @@ cp ../run_for_CI/fort.14.i fort.14
 cp ../run_for_CI/fort.44.i fort.44
 cp ../run_for_CI/fort.46.i fort.46
 cp ../run_for_CI/b2time.nc.i b2time.nc
-cp ../run_for_CI/b2batch.nc.i b2batch.nc
 cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links

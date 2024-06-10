@@ -96,7 +96,7 @@ This is the combined work of many authors. Started by D.P.~Coster, it includes c
 \item M.~Stanojevic, Appendix~\ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
-\item S.~Makarov, for the Grad-Zhdanov closure description
+\item S.~Makarov, for the Zhdanov-Grad closure description
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -189,7 +189,7 @@ The next section discusses obtaining and updating the code.
 To obtain the code a request should be sent to Xavier Bonnin
 ({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
 
-The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, or requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Collaboration Agreement between the IO and the requesting user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Collaboration Agreement.
+The first formality will then be for prospective users to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
 
 The next step, after the IDM account has been obtained, is for the user to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
 \begin{description}
@@ -1736,7 +1736,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} run by settings up links to the proper data files.
+  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by settings up links to the proper data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by settings up links to the proper data files.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
@@ -7775,13 +7776,13 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \vspace*{1cm}
 \end{figure}
 
-\section{Classical ion transport: Grad's-Zhdanov module}
-\label{sec:gradszhdanov}
+\section{Classical ion transport: Zhdanov-Grad module}
+\label{sec:zhdanovgrad}
 
 {\em This code feature is still experimental.}
 
 \begin{sloppypar}
-Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Grad-Zhdanov module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Grad-Zhdanov closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
+Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Zhdanov-Grad module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Zhdanov-Grad closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
 \end{sloppypar}
 
 \chapter{Model equations for B2.5}
@@ -8074,7 +8075,7 @@ V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{
 
 The ion densities $n_i$ and $\widetilde{n}_i$ are stored in the {\tt ni(:,:,0)} and {\tt ni(:,:,1)} array components respectively.
 
-Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Grad-Zhdanov closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
+Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Zhdanov-Grad closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
 
 \subsection{Source terms in density equations}
 
@@ -8690,7 +8691,7 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}
 \end{equation}
 
-\subsection{Parallel momentum transport coefficients}
+\subsection{Parallel momentum transport coefficients}\label{subsec:par_mom_transp_coef}
 
 \begin{equation}\label{eq:eta_ax}
 \eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
@@ -12312,7 +12313,7 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 }
 \end{equation}
 
-\section{Grad-Zhdanov closure}\label{sec:Zhdanov}
+\section{Zhdanov-Grad closure}\label{sec:Zhdanov}
 
 \subsection{Introduction}
 
@@ -12393,7 +12394,7 @@ K_2 = \frac{0.66+1.88 \cdot \sqrt{\varepsilon} - 1.54 \cdot \varepsilon}
            {1 + 0.74 \cdot \varepsilon^{3/2} \cdot \nu_*}
 \end{align}
 
-\begin{align}
+\begin{align}\label{eq:nu_zh}
 \nu_* = \frac{c(y)}{2 \pi \left( \tau_{ii} V_{th} \right)^{eff}}
 ,\quad
 \left( \tau_{ii} V_{th} \right)^{eff} = \sum_{a} \frac{n_a}{n_i} \tau^{(Zh)}_{a} \sqrt{\frac{T_i}{m_{a}}}
@@ -12562,10 +12563,10 @@ Therefore:
 
 \begin{multline}
 q_{ix} = \left[
-	\frac{3}{2} \Gamma_{ix} +
-	\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde{V}_{ax}^{(dia)} +
-	V_{ix}^{(str)} n_i + b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right) \right. \\
-        + \left. \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right)
+\frac{3}{2} \Gamma_{ix} +
+\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde{V}_{ax}^{(dia)} +
+V_{ix}^{(str)} n_i + b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right) \right. \\
++ \left. \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
@@ -12964,7 +12965,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 & \left\{
 \begin{matrix}
 - \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
-	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
 & \ z_a \neq 0 \\
 \\
 0, & z_a = 0 \\
@@ -13055,7 +13056,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 & \left\{
 \begin{matrix}
 - \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
-	\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
 & \ z_a \neq 0 \\
 \\
 0, & z_a = 0 \\
@@ -13063,7 +13064,7 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 \end{matrix}
 \end{equation}
 
-\textbf{\textit{end}}
+\ \ \textbf{\textit{end}}
 
 Where the viscous stress coefficient is:
 
@@ -13469,12 +13470,12 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 
 \begin{equation}
 Q_{vis} = \sum \limits_{fluid~species} \left(
-	  \eta_{ax} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta^{(AN)}_{a} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
 \right)
 \end{equation}
 
@@ -13482,27 +13483,27 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 
 \begin{multline}
 Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
-	  \eta^{(AN)}_{a} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta_{ay} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2 +\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+          \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2 +\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
  \left(
-		\frac{\partial V_{\parallel}}{h_x \partial x}
-	\right)^2
+                \frac{\partial V_{\parallel}}{h_x \partial x}
+        \right)^2
 \right) +\\
 \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a= 0\\ fluid}} \left(
-	  \eta_{ax} \left(
-		\frac{\partial V_{a \parallel}}{h_x \partial x}
-	\right)^2
-	+ \eta_{ay} \left(
-		\frac{\partial V_{a \parallel}}{h_y \partial y}
-	\right)^2
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
 \right)
 \end{multline}
 
-\textbf{\textit{end}}
+\ \ \textbf{\textit{end}}
 
 \subsection{Currents}
 
@@ -13547,7 +13548,7 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
 
-\textbf{\textit{end}}
+\ \ \textbf{\textit{end}}
 
 \begin{equation}
 \widetilde{j}_y^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde{j}_{ay}^{(vis \parallel)}
@@ -13585,7 +13586,7 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
 
-\textbf{\textit{end}}
+\ \ \textbf{\textit{end}}
 
 If {\tt Zhdanov\_vish.eq.1}, then:
 
@@ -17939,9 +17940,9 @@ of a rectangle in which the test particles are to be started
 appropriate limit).  The next number specifies the amount
 of test particles to be started (if positive the particles are started
 weighted by volume, if negative then the weighting function is taken
-off the matrix stack).  This is then followed by a flag (1 for a
+off the matrix stack). This is then followed by a flag (1 for a
 movie, otherwise normal trajectories), and then the species indices
-come next.  The last argument specifies the number of species.
+come next. The last argument specifies the number of species.
 The use of {\bf uuse} and {\bf vvse} allows one to replace the particle velocities
 matrices used by default to compute the trajectories with data from the
 matrix stack.
@@ -20226,13 +20227,11 @@ or
 \begin{verbatim}
   SOLPS_CPP += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list. {\tt ksh} or {\tt bash} users would use something like
 \begin{verbatim}
   export SOLPS_CPP="$SOLPS_CPP -DOPTION"
 \end{verbatim}
 %% $
-).
 
 \subsection{Carre}
 \index{DEFINES, used in compiling Carre}
