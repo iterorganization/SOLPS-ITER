@@ -24,6 +24,7 @@ cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
 touch b2fstati
+setup_baserun_B25_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone ./
