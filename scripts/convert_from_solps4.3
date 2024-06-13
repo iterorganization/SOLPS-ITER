@@ -71,22 +71,26 @@ shotnumber=`echo $1`
   [ $h_mass = 3 ] && shotnumber=shotnumber+30000
   [ $h_mass = 4 ] && shotnumber=shotnumber+10000
 }
-echo "IDS shot number will be: " $shotnumber
 oldyaml=ids_${oldshotnumber}0001.yaml
 [ $AL_MAJOR_VERSION = 5 ] && {
+  echo "IDS pulse number will be: " $shotnumber
   export CASEDIR=${IMASDIR}/${shotnumber}/1
+  [ -e ${CASEDIR}/${oldyaml} ] && echo "We are replacing IDS pulse " $oldshotnumber
+  echo "'b2mndr_pulse_number' '${shotnumber}'" >> b2mn.dat.4
+  echo "'b2mndr_pulse_number' '${shotnumber}'" >> b2mn.dat.5
 } || {
+  echo "IDS shot number will be: " $shotnumber
   export CASEDIR=${IMASDIR}
+  [ -e ${CASEDIR}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
+  echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.4
+  echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.5
 }
-[ -e ${CASEDIR}/${oldyaml} ] && echo "We are replacing IDS shot " $oldshotnumber
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.4
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.4
 echo "'b2mndr_database'    '${DATABASE}'" >> b2mn.dat.4
-echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.4
 echo "'b2mndr_run_number'  '1'" >> b2mn.dat.5
 echo "'b2mndr_user'        '${USER}'" >> b2mn.dat.5
 echo "'b2mndr_database'    '${DATABASE}'" >> b2mn.dat.5
-echo "'b2mndr_shot_number' '${shotnumber}'" >> b2mn.dat.5
 cp b2.boundary.parameters.5 b2.boundary.parameters
 cp b2.transport.parameters.5 b2.transport.parameters
 cp b2mn.dat.5 b2mn.dat
@@ -146,15 +150,32 @@ touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
 [ "$DEVICE" = 'iter' ] && {
-  idscp --setDatasetVersion -si 116000 -ri 1 -so ${shotnumber} -ro 1 -u public -d ITER_MD -do ${DATABASE} wall
+  [ $AL_MAJOR_VERSION = 5 ] && {
+    uri_destination='imas:mdsplus?shot=${shotnumber};run=1;user=${USER};database=${DATABASE};version=3'
+    uri_source='imas:mdsplus?shot=116000;run=1;user=public;database=ITER_MD;version=3'
+    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} wall
 # For full-field cases, use:
-  idscp --setDatasetVersion -si 131035 -ri 124 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+    uri_source='imas:mdsplus?shot=131035;run=124;user=bonninx;database=iter;version=3'
 # For half-field cases, use:
-# idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+#   uri_source='imas:mdsplus?shot=131035;run=125;user=bonninx;database=iter;version=3'
 # For third-field cases, use:
-# idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+#   uri_source='imas:mdsplus?shot=131035;run=126;user=bonninx;database=iter;version=3'
+    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} equilibrium
+  } || {
+    idscp --setDatasetVersion -si 116000 -ri 1 -so ${shotnumber} -ro 1 -u public -d ITER_MD -do ${DATABASE} wall
+# For full-field cases, use:
+    idscp --setDatasetVersion -si 131035 -ri 124 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+# For half-field cases, use:
+#   idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+# For third-field cases, use:
+#   idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+  }
 }
-create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
+[ $AL_MAJOR_VERSION = 5 ] && {
+  create_db_entry -u ${USER} -d ${DATABASE} -p ${shotnumber} -r 1
+} || {
+  create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
+}
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`

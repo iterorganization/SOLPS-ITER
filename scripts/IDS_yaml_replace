@@ -27,7 +27,11 @@ export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d '.' -f 1`
 } || {
   echo "IMASDIR = " $IMASDIR
 }
-echo "Updating .yaml file for IDS shot number "$1
+[ $AL_MAJOR_VERSION = 5 ] && {
+  echo "Updating .yaml file for IDS pulse number "$1
+} || {
+  echo "Updating .yaml file for IDS shot number "$1
+}
 echo "New run number "$3" supersedes old run number "$2
 shotnumber=`echo $1`
 typeset -i shot
