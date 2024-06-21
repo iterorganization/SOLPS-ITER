@@ -361,6 +361,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IN-DA] ITER-India: *.iter-india.org
   \item[IPP] IPP-Garching: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald: *.ipp-hgw.mpg.de
+  \item[IPPCR] Institute for Plasma Physics - Czech Republic: *.tok.ipp.cas.cz
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
   \item[ITM, MARCONI] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it
@@ -2036,7 +2037,7 @@ The partition on which the job will be run can be specified by means of the {\tt
 \begin{verbatim}
 itersubmit -Q gen10_ib
 \end{verbatim}
-chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster.
+chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster CentOS nodes. If running on a RedHat node, the default partition name is {\tt gen11}.
 
 When using the SLURM job submission engine, it is also possible to submit a chain of jobs simultaneously (or at least in very quick succession), in which jobs only start after the previous one has completed successfully. Chains can be of arbitrary length and each job in the chain will be added individually to the queue. On oversubscribed clusters, this chain submission option tends to launch the next job in the chain earlier than if resubmitted only after the preceding job has finished. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
 \begin{verbatim}
@@ -20505,7 +20506,7 @@ DIMENSIONS\_MODULE & cntour/trace2.F \\
 DIMENSIONS\_MODULE & cntour/trace3.F \\
 DIMENSIONS\_MODULE & cntour/trace.F \\
 DIMENSIONS\_MODULE & dummy/bidon.F \\
-DIMENSIONS\_MODULE & include/CARREDIM.F \\
+DIMENSIONS\_MODULE & include/carre\_dimensions.F \\
 DIMENSIONS\_MODULE & trans/b2agfz.F \\
 DIMENSIONS\_MODULE & trans/ecrim5.F \\
 DIMENSIONS\_MODULE & trans/tradui.F \\
@@ -20519,7 +20520,7 @@ MODIF & carre/mailrg.F \\
 READOPT & carre/rdfrch.F \\
 READOPT & carre/rdfrin.F \\
 READOPT & carre/rdfrre.F \\
-SOLPS\_CPP & include/CARREDIM.F \\
+SOLPS\_CPP & include/carre\_dimensions.F \\
 SOLPS\_CPP & trans\b2agfz.F \\
     \hline
     \caption{Defines for Carre and where they are used.}
@@ -20923,11 +20924,15 @@ LEGACYCOMP & convert/b2cdftallies2mds.F \\
 LEGACYCOMP & modules/b2mod\_mdsplus.F \\
 LEGACYCOMP & modules/b2mod\_running\_average.F \\
 LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & sources/b2sifr\_.F \\
 LEGACYCOMP & sources/b2sifrtf.F \\
+LEGACYCOMP & sources/b2stbr\_phys.F \\
 LEGACYCOMP & test/check\_b2\_output.F90 \\
 LEGACYCOMP & user/b2mod\_batch.F \\
 LEGACYCOMP & utility/cfopen.F \\
 LEGACYCOMP & utility/mds\_routines.F \\
+LEGACYCOMP & utility/smax.F \\
+LEGACYCOMP & utility/smin.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
