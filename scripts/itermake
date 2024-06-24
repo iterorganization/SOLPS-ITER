@@ -23,7 +23,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the ITER HPC cluster.
+This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the ITER SDCC cluster.
 
 Usage:
 
