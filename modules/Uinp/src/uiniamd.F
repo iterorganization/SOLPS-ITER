@@ -3,6 +3,7 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use b2mod_subsys
+      use b2mod_impcon
       use eirmod_solps
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
@@ -16,7 +17,6 @@ c=======================================================================
       implicit none
       character unn*8
 #include "uinpcom.inc"
-#include "impcon.inc"
       integer lunm,luns
       parameter (lunm=26, luns=72)
       integer i,j,k,l,m,iv,nn

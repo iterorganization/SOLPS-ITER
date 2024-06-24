@@ -128,6 +128,9 @@ case "*.mephi.ru":
 case "*.uni-lj.si":
   echo UL
   breaksw
+case "*.tok.ipp.cas.cz":
+  echo "IPPCR"
+  breaksw
 case "*.cn":
 case "*.hk":
 case "*.mo":
