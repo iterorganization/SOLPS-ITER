@@ -362,6 +362,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IN-DA] ITER-India: *.iter-india.org
   \item[IPP] IPP-Garching: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald: *.ipp-hgw.mpg.de
+  \item[IPPCR] Institute for Plasma Physics - Czech Republic: *.tok.ipp.cas.cz
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
   \item[ITM, MARCONI] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it
@@ -1708,7 +1709,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[SOLPS-ITER\_OpenMP\_CI\_test]\index{SOLPS-ITER\_OpenMP\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with OpenMP options turned on
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
+  \item[solps-iter\_update\_3.0.9\_release]\index{solps-iter\_update\_3.0.9\_release} Script to switch to the \SOLPSITER 3.0.9 release candidate code branch.
   \item[solps-iter\_update\_3.1.0\_release]\index{solps-iter\_update\_3.1.0\_release} Script to switch to the up-to-date \SOLPSITER 9-point-stencil 3.1.0 code branch.
+  \item[solps-iter\_update\_3.1.1\_release]\index{solps-iter\_update\_3.1.1\_release} Script to switch to the \SOLPSITER 9-point-stencil 3.1.1 release candidate code branch.
   \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch.
   \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
@@ -1996,7 +1999,7 @@ The partition on which the job will be run can be specified by means of the {\tt
 \begin{verbatim}
 itersubmit -Q gen10_ib
 \end{verbatim}
-chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster.
+chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster CentOS nodes. If running on a RedHat node, the default partition name is {\tt gen11}.
 
 When using the SLURM job submission engine, it is also possible to submit a chain of jobs simultaneously (or at least in very quick succession), in which jobs only start after the previous one has completed successfully. Chains can be of arbitrary length and each job in the chain will be added individually to the queue. On oversubscribed clusters, this chain submission option tends to launch the next job in the chain earlier than if resubmitted only after the preceding job has finished. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
 \begin{verbatim}
@@ -8377,7 +8380,7 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 \eta_{ay} \frac{\partial V_{\parallel a}}{h_y \partial y}
 \end{equation}
 
-\subsection{Parallel momentum transport coefficients}
+\subsection{Parallel momentum transport coefficients}\label{subsec:par_mom_transp_coef}
 
 \begin{equation}\label{eq:eta_ax}
 \eta_{ax} = \eta^{(AN)}_{a} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}

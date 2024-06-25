@@ -1,11 +1,16 @@
 #! /usr/bin/env tcsh
 
+set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
 set hours=2
 set mem=4GB
-set part="centos8.2"
+if ($os == "CentOS") then
+  set part="centos8.2"
+else
+  set part="gen11"
+endif
 set objects=""
 set options=""
 set chain="unset"
@@ -18,17 +23,20 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the ITER HPC cluster.
+This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the ITER SDCC cluster.
 
 Usage:
 
 Available options are:
+  -h                 prints this message
   -j <<JOB NAME>>    set the job name (default $JOB_NAME)
   -c <<JOB_ID>>      job ID of the previous job in a chain submission
   -o <<OPTIONS>>     options to be passed to the Makefile (within quotes)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
-  -Q <<PARTITION>>   partition on which to submit the job (default centos8.2)
+  -Q <<PARTITION>>   partition on which to submit the job (default $part)
+
+The list of compile targets (default "solps") is to be provided after these options.
 
 EOF
     exit
