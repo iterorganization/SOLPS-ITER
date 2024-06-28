@@ -43,6 +43,7 @@ case "SWIP":
   echo ifort64
   breaksw
 case "DARWIN":
+case "IPPCR":
 case "JFRS":
 case "MARCONI":
 case "MEPHI":

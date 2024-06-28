@@ -3,6 +3,7 @@
       use b2mod_constants
       use b2mod_layer
      , , only: ntrack, nalloys
+      use b2mod_impcon
       use b2mod_subsys
       use eirmod_solps
 #ifdef DIMENSIONS_MODULE
@@ -17,7 +18,6 @@ c=======================================================================
       implicit none
       character*8 unn
 #include "uinput.inc"
-#include "impcon.inc"
       integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
       integer, save :: lupfr,luskel,luswch,lurefls,
      .  lchrdgrp,lchrdlint,lchrdlprf

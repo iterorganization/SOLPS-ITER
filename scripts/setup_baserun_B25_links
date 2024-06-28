@@ -6,7 +6,7 @@ else
   set filestem="fort."
 endif
 if ("X$1X" == "X-rX") then
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL
 else
   ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
 endif

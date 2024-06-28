@@ -1,5 +1,6 @@
 #! /usr/bin/env tcsh
 
+set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
@@ -28,7 +29,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ITER HPC cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the ITER SDCC cluster.
 
 Usage:
 
@@ -46,7 +47,8 @@ Available options are:
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
-  -Q <<PARTITION>>   partition on which to submit the job (default gen10_ib)
+  -Q <<PARTITION>>   partition on which to submit the job
+                     (default gen10_ib on CentOS nodes, gen11 on RedHat nodes)
 
 EOF
     exit
@@ -161,7 +163,11 @@ EOF
 set nodename=`hostname`
 set job_prefix="SLURM"
 if ($part == "unset") then
-  set part=gen10_ib
+  if ($os == "CentOS") then
+    set part=gen10_ib
+  else
+    set part=gen11
+  endif
 endif
 unsetenv LD_PRELOAD
 setenv LD_PRELOAD "/usr/lib64/libpmi2.so"

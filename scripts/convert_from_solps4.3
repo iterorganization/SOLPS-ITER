@@ -171,11 +171,7 @@ b2run b2mn > run.log
 #   idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
   }
 }
-[ $AL_MAJOR_VERSION = 5 ] && {
-  create_db_entry -u ${USER} -d ${DATABASE} -p ${shotnumber} -r 1
-} || {
-  create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
-}
+create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`
