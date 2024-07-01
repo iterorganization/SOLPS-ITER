@@ -180,13 +180,17 @@ sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diffv.F90
 sed -i '/EXTERNAL B2FILE./d' b2mndt_dv.F90
 sed -i '/TRIM_DV/d' b2mod_main_diffv.F90
 sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_dv.F90
-sed -i 's/B2XPNE_ST_NODIFF/B2XPNE_ST/g' b2mod_running_average_diffv.F90
+sed -i 's/B2XPNE_ST_NODIFF/B2XPNE_ST/g' b2mod_running_average_diffv.F90 b2rups_dv.F90 profile_average_dv.F90
 sed -i 's/call species/call species_nodiff/g' tallies.F
 sed -i 's/b2usr_loads/b2usr_loads_nodiff/g' b2mod_usrtrc.F
 sed -i 's/b2xppz_st/b2xppz_st_nodiff/g' b2mod_usrtrc.F
 sed -i 's/b2xppz/b2xppz_nodiff/g' b2mod_blnm.F
 sed -i 's/b2xzef_st/b2xzef_st_nodiff/g' b2mod_wrsep.F
 sed -i 's/fill/fill_nodiff/g' prvrt*.F b2xpne_st.F
+sed -i 's/B2XVFX_NODIFF/B2XVFX/g' b2stbc_spb_dv.F90 b2stbr_bas_dv.F90 b2xtvx_dv.F90
+sed -i 's/B2XVFF_NODIFF/B2XVFF/g' b2npp7_dv.F90 b2sihs_dv.F90 b2stbc_bas_dv.F90 b2stbc_spb_dv.F90 b2stbr_bas_dv.F90 b2tr21_dv.F90 b2usp7_dv.F90
+sed -i 'd/PRGINI_DV/' b2mod_main_diffv.F90
+sed -i 's/b2xvfy/b2xvfy_nodiff/g' b2xvff.F
 
 sed -i -e 's/PUBLIC :: to_struct_plasma_dv,/PUBLIC :: /g' b2us_prep_diffv.F90
 sed -i '/PUBLIC :: alloc_switches_dv/d' b2mod_switches_diffv.F90

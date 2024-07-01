@@ -28,7 +28,7 @@ if grep -q -w "$filename" excluded.txt
 then
 string+=""
 else
-string+="  $dir/"$filename".f90"
+string+=" $dir/"$filename".f90"
 fi
 fi
 done

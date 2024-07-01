@@ -2,7 +2,7 @@
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
 rm b2uxus_b.F90 solve_covariance_b.F90
-collect_nodiff_b.newtape.sh
+collect_nodiff_b.sh
 rm dmax_b.F90 smax_b.F90poi samax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90 eirflux_map_b.F90 chord_dv.F90
 
 sed -i '/DIFFSIZES/d' ./*.F90 

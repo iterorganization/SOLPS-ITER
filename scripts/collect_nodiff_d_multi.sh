@@ -39,6 +39,8 @@ cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxid.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne_st.F .
 cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xvsg.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xvfx.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xvff.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/chord.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/isplusorminus.F .
@@ -162,6 +164,7 @@ cp $SOLPSTOP/modules/B2.5/src/utility/cond_coef.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/my_outi_us.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/calc_err.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/interp2d.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .

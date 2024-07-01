@@ -1,6 +1,6 @@
 #! /usr/bin/env tcsh
 
-modify_tapenade_files_b.newtape.sh
+modify_tapenade_files_b.sh
 
 sed -i -e "/CALL B2MN_STEP_B/i\  call xertst(switch%b2optim_namelist.eq.1, &" b2mn_b.F90
 sed -i -e "/CALL B2MN_STEP_B/i\&   'Sensitivity calculation needs b2optim_namelist=1!')" b2mn_b.F90
