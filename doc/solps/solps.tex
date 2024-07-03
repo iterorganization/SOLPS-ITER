@@ -1774,7 +1774,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_series.py]\index{get\_series.py} Driver for the {\tt get\_series} script.
   \item[last\_2d.py]\index{last\_2d.py} Driver for the {\tt last\_2d} script.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
-  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion densities for region \#1 summed over charge states for each species.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py} Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
   \item[plot\_trc.py]\index{plot\_trc.py} Driver for the {\tt plot\_trc}, {\tt plot\_trg} and {\tt plot\_series} scripts.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
@@ -8201,7 +8201,7 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
+-c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8210,19 +8210,35 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 $V_{ax}^{(AN)}=0$
 
 \begin{equation}\label{eq:V_ayAN}
-V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|}
+V_{ay}^{(AN)} = \left( c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|} \right) f_{V_a^{(AN)}}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{V_a^{(AN)},x}$ coefficients correspond to the {\tt cfvla} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typically, no pinch velocity is applied:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
 
 $a=1, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+
+The $f_{V_a^{(AN)}}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{V_a^{(AN)},7} \ne 0$, then $f_{V_a^{(AN)}}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three pinch velocities scalings according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the pinch velocity in the core is given according to \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 5}, a pinch velocity for ions is applied between the top of the machine and the X-point on the low-field side. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vl\_alfa[1-4]}. Blobby transport in the SOL can also be added. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 9}, a blobby transport model is applied in the SOL. See code for details.
 
 \subsection{Particle transport coefficients}
 
 $
 \left\{
 \begin{matrix}
-D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle}   \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{axy}=0, & z_a=0
 \end{matrix}
 \right.
@@ -8232,7 +8248,7 @@ $, where $\left \langle B^2 \right \rangle = \frac{\mathlarger{\iint \limits_{co
 \left\{
 \begin{matrix}
 \label{eq:D_axy}
-D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{ayx} = 0, & z_a=0
 \end{matrix}
 \right.
@@ -8242,30 +8258,21 @@ D_{ayx} = 0, & z_a=0
 D_{n,a} = D^{(AN)}_{n,a}
 \end{equation}
 
-
 \begin{equation}
-D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y)
+D^{(AN)}_{n,a} = \left( c_{D_{n,a},0} + c_{D_{n,a},1} \frac{10^{20}}{n_e} + c_{D_{n,a},2} D_{f,a} + c_{D_{n,a},3} \frac{T_e}{16 e|B|} \right) f_{D_n,a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_D(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,D}, & \ -\delta_{1,D} \le y \le 0, x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,D}, & \ 0 \le y \le \delta_{2,D}, x \in \text{Core} \\
-\alpha_{3,D}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{D_{n,a},x}$ coefficients correspond to the {\tt cfdna} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
-$a=0,\;\;\;c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=0,\;\;\;c_{D_{n,a},3}=0$
+$ a=0,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=0,\;\;\; c_{D_{n,a},3}=0$
 
-$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=1,\;\;\;c_{D_{n,a},3}=0$
+$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=1,\;\;\; c_{D_{n,a},3}=0$
 
-$D_{f,a}=c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i}
-+ \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
+$D_{f,a}$ is a diffusivity used to scale the various transport coefficients together and its coefficients $c_{D_{f,a},x}$ correspond to the {\tt cfdf0} array provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. Typical values are:\index{b2ah}\index{b2mn}
+
+$D_{f,a} = c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i} + \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
 
 \begin{table}[ht]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -8275,7 +8282,47 @@ $0$ & $10^2$ & $0$ & $1$ & $5 \cdot 10^{-20}$ & $1.5 \cdot 10^{-18}$ & $0$ & $0$
 $1$ & $0.3$ & $0$ & $0$ & -- & -- & $0$ & $0$ & $0$ \\ \hline
 \end{tabular}
 \end{table}
+
+If {\tt 'b2tqna\_new\_df0'} is set to {\tt '1'} (default is {\tt '0'}), then, the diffusivity for neutral species is computed as:
+
+$D_{f,a} = \frac{\sqrt{\frac{T_i}{m_a}}}{ {\left\langle \sigma v \right\rangle}_{ion} n_e + \sum \limits_{b} {\left\langle \sigma v \right\rangle}_{CX} n_{b}} + \frac{1}{\frac{n_a}{2 \times 10^{19}}}, \; \; \; z_a = 0$
+
+The $f_{D_n,a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{D_{n,a},7} \ne 0$, then $f_{D_n,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $D^{(AN)}_{n,a}$ coefficient is scaled by the same amount as $\chi_e^{(AN)}$ necessary to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the diffusion coefficient is modified in the main SOL to reproduce the model from \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_alfa[1-4]} are used to modify $f_{D_n,a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $D_{n,a}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
+
 %-------- end of 3rd page -------------
+
+\begin{equation}\label{eq:D_pa}
+D_{p,a} = D^{(AN)}_{p,a}
+\end{equation}
+
+\begin{equation*}
+D^{(AN)}_{p,a} = \frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|} \right) f_{D_p,a}(x,y)
+\end{equation*}
+
+Typical values are:
+
+\begin{equation*}
+a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
+\end{equation*}
+\begin{equation*}
+a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
+\end{equation*}
+
+If $c_{D_{p,a},7} \ne 0$, then $f_{D_p,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
+
+The flux limits for $D_{p,a}$ are applied as:
 
 \begin{equation}\label{eq:D_pax}
 \begin{matrix}
@@ -8302,21 +8349,6 @@ D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-
-\begin{equation}\label{eq:D_pa}
-D_{p,a} = D^{(AN)}_{p,a}
-\end{equation}
-
-\begin{equation*}
-D^{(AN)}_{p,a}=\frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right)
-\end{equation*}
-
-\begin{equation*}
-a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
-\end{equation*}
-\begin{equation*}
-a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
-\end{equation*}
 
 \section{Parallel momentum conservation equations}
 
@@ -8698,36 +8730,23 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 %-------- end of 6th page -------------
 
 \begin{equation}\label{eq:mom_etana}
-\begin{matrix}
-\eta^{(AN)}_{a} & = m_an_a\nu_a^{visc} =
-& \left\{
-\begin{matrix}
+\eta^{(AN)}_{a} = m_a n_a \nu_a^{visc} =
 \left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a f_{\eta_a}(x,y), & z_a\neq 0 \\
-\left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a , & z_a = 0
-\end{matrix} \right.
-\end{matrix}
+c_{\eta_a,3} \frac{T_e}{16 e|B|} \right)
+m_a n_a f_{\eta_a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_{\eta_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,\eta_a}, & \ -\delta_{1,\eta_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,\eta_a}, & \ 0 \le y \le \delta_{2,\eta_a}, & x \in \text{Core} \\
-\alpha_{3,\eta_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{\eta_a,x}$ coefficients correspond to the {\tt cfvsa} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typical values are:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
+
+The $f_{\eta_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{\eta_a,7} \ne 0$, then $f_{\eta_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vs\_alfa[1-4]} are used to modify $f_{\eta_a}$. See code for details.
 
 \begin{align}\label{eq:mom_dveta}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \widetilde{\eta}^{(CL)}_{ax}
@@ -8818,7 +8837,7 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g /h_y dx}$,\ \ \ \ $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
-\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
@@ -8892,7 +8911,7 @@ $
 q_{a \parallel}^{(0)} = - \frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
 $
 
-Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).
+Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).%$
 
 $
 q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{\widetilde{n}_i T_i}{e} \frac{\partial T_i}{h_y \partial y}
@@ -8908,11 +8927,13 @@ $
 \cdot
 \frac{1}{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
-{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
+{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+$, \ \ \ \
+
 $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
-\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $
 
 This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
@@ -9126,24 +9147,30 @@ value at $z_{eff} = 1$ of 0.71 otherwise.
 \begin{equation}\label{eq:ene_chie}
 \chi_e^{(AN)} = \left(
         c_{h_e,0} + c_{h_e,1} \frac{10^{20}}{n_e} + c_{h_e,3} \frac{T_e}{16 e|B|}
-\right) f_{h_e} (x,y)
+\right) f_{h_e}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{h_e,x}$ coefficients correspond to the {\tt cfhce} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 %-------- end of 10th page -------------
 
-$c_{h_e,0} = 1.2 , \;\; c_{h_e,1}=0, \;\;\; c_{h_e,3}=0$
+$c_{h_e,0} = 1.2 , \;\; c_{h_e,1} = 0, \;\;\; c_{h_e,3} = 0$
 
-$
-\begin{matrix}
-f_{h_e}(x,y) & =
-& \left\{
-\begin{matrix}
-\alpha_{1,h_e}, & \ -\delta_{1,h_e} \le y \le 0, & x \in \text{Core} \\
-\alpha_{2,h_e}, & \ 0 \le y \le \delta_{2,h_e}, & x \in \text{Core} \\
-\alpha_{3,h_e}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_e}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_e,7} \ne 0$, then $f_{h_e}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $\chi_e^{(AN)}$ coefficient is scaled so as to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 3}, use parameters from the {\tt b2.transport\_models\_save.parameters} namelist to maintain a constant $\frac{\grad T_e}{\grad n_e}$ ratio at the reference location via feedback.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_te\_alfa[1-4]} are used to modify $f_{h_e}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \frac{n_{e,ref}}{n_e} \left( \frac{T_e}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_e^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:ene_dmkapexcl}
 \widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(F \lim)} \widetilde{\kappa}_{ex}^{(CL)}
@@ -9445,10 +9472,16 @@ $\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$
 \alpha^{(AN)}_{y} = \left(
         c_{\alpha,0} + c_{\alpha,1} \frac{10^{20}}{n_e} +
         c_{\alpha,3} \frac{T_e}{16 e |B|}
-\right) n_e \sqrt{\frac{e}{T_e}}
+\right) n_e \sqrt{\frac{e}{T_e}} f_\alpha(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{\alpha,x}$ coefficients correspond to the {\tt cfalf} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
 $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
+
+If $c_{\alpha,7} \ne 0$, then $f_\alpha$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\alpha^{(CL)}_{y} = 0$
 
@@ -9560,7 +9593,6 @@ r_{I_a} n_e n_a \left( \frac{m_a + m_{a+1}}4 \right)
 Atom heat source due to recombination
 
 %-------- end of 14th page -------------
-
 
 \begin{equation}
 \label{eq:eni_QRi}
@@ -9686,26 +9718,26 @@ V_{h_a} = \sqrt{\frac{2 T_i}{m_a}}
 \begin{equation}\label{eq:eni_chiAN}
 \chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_{f,a} + c_{h_a,3}\frac{T_e}{16 e|B|}
-\right) f_{h_a} (x,y)
+\right) f_{h_a}(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{h_a,x}$ coefficients correspond to the {\tt cfhci} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.4,  \;\;\;  c_{h_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.2,  \;\;\;  c_{h_a,3} = 0$
 
-$
-\begin{matrix}
-f_{h_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,h_a}, & \ -\delta_{1,h_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,h_a}, & \ 0 \le y \le \delta_{2,h_a}, & x \in \text{Core} \\
-\alpha_{3,h_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_a,7} \ne 0$, then $f_{h_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_ti\_alfa[1-4]} are used to modify $f_{h_a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \frac{n_{a,ref}}{n_a} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_a^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:eni_dtkapixCL}
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
@@ -10270,20 +10302,20 @@ $\sigma^{(AN)}$  depends on {\tt 'b2tqna\_model\_sig'}.
 If {\tt 'b2tqna\_model\_sig'} is {\tt '0'}, then:
 \begin{equation}\label{eq:pot_sigan0}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e n_e,
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e n_e f_\sigma(x,y),
 \end{equation}
 
 otherwise:
 
 \begin{equation}\label{eq:pot_sigan}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e \widetilde n_e
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e \widetilde n_e f_\sigma(x,y)
 \end{equation}
 
 where $\widetilde n_e$ is the electron density at the location where the innermost flux surface crosses the outer midplane.
@@ -10292,7 +10324,13 @@ where $\widetilde n_e$ is the electron density at the location where the innermo
 L\left( x \right) = \int \limits_0^{y_{out}} h_y \left( x,y \right) ~ dy
 \end{equation*}
 
-$c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$, $c_{\sigma_a,1}=0$, $c_{\sigma_a,3}=0$
+\begin{sloppypar}
+The $c_{\sigma^{(AN)},x}$ coefficients correspond to the {\tt cfsig} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
+$c_{\sigma^{(AN)},0} = 10^{-6} \div 10^{-3}$, $c_{\sigma^{(AN)},1} = 0$, $c_{\sigma^{(AN)},3} = 0$
+
+If $c_{\sigma^{(AN)},7} \ne 0$, then $f_\sigma$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\sigma^{(CL)}_{y} = 0$
 
