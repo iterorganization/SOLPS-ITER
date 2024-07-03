@@ -99,6 +99,12 @@ case "*.cm.cluster":
 case "*.ipp.cas.cn":
   echo ASIPP
   breaksw
+case "*.nscc-hf.cn":
+  echo NSCC
+  breaksw
+case "sms.hlsm.local":
+  echo DLUT
+  breaksw
 case "*.swip.ac.cn":
 case "mgmt":
   echo SWIP

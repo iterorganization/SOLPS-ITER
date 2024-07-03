@@ -170,7 +170,9 @@ if ($part == "unset") then
   endif
 endif
 unsetenv LD_PRELOAD
-setenv LD_PRELOAD "/usr/lib64/libpmi2.so"
+if (-f /usr/lib64/libpmi2.so) then
+  setenv LD_PRELOAD "/usr/lib64/libpmi2.so"
+endif
 unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
