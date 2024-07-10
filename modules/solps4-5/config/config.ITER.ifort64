@@ -11,10 +11,10 @@ CPP = /lib/cpp -traditional
 FC = ifort
 
 ifdef SOLPS_DEBUG
-FCOPTS    += -traceback
+FCOPTS += -traceback
 endif
 
-SOLPSINCLUDE   += `pkg-config libtirpc --cflags`
+SOLPSINCLUDE += `pkg-config libtirpc --cflags`
 LD_SONNET += `pkg-config libtirpc --libs`
 
 #!!!Local Variables:

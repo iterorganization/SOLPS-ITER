@@ -190,11 +190,11 @@ endif
 CMAKE_STEM = cmake ../../src -DEIRENE_INTERFACE=SOLPS-ITER -DEIRENE_USER-ROUTINES=iter ${DEFLIBS} ${DEFOPTS} ${DEFMAKES}
 CMAKX_STEM = ${CMAKE_STEM} -DGRAPHICS=OFF -DLibGRS="" -DLibGKS=""
 MAKEC = FC=${FC} ${CMAKE_STEM} ${DEGLIBS}
-MAKEM = FC=${MPI_FC} ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
+MAKEM = FC="${MPI_FC}" ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
 MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
 MAKEP = ${MAKEM} -DOPENMP=ON
 MAKEX = FC=${FC} ${CMAKX_STEM}
-MAKEY = FC=${MPI_FC} ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
+MAKEY = FC="${MPI_FC}" ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
 MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
 MAKEA = ${MAKEY} -DOPENMP=ON
 endif
@@ -246,6 +246,8 @@ all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi a
 
 all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox_openmp b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
+all_openmp_nox: all_nox_openmp
+
 all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
 
 all_mpi_nox: all_nox_mpi
@@ -257,6 +259,10 @@ all_mpi_openmp: all_openmp_mpi
 all_nox_openmp_mpi: carre_nox divgeo_nox b25_nox_openmp_mpi eirene_nox_openmp_mpi b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
 
 all_nox_mpi_openmp: all_nox_openmp_mpi
+
+all_openmp_mpi_nox: all_nox_openmp_mpi
+
+all_mpi_openmp_nox: all_nox_openmp_mpi
 
 carre:
 	cd modules/Carre; ${MAKE}
@@ -785,10 +791,10 @@ ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
 ifdef NO_MPI
 	echo 'MPI_VERSION=0' > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 else
-	printf "use mpi\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
-	( ${MPI_FC} ${FCOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
-	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
-	( ${MPI_FC} ${FCOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || ( echo MPI_VERSION=0 ) ) ) ) > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
+	printf "use mpi\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
+	( ${MPI_FC} ${FCOPTS} -check nouninit ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
+	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
+	( ${MPI_FC} ${FCOPTS} -check nouninit ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || ( echo MPI_VERSION=0 ) ) ) ) > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 endif
 
 
@@ -869,9 +875,13 @@ clean_all_mpi: clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25
 
 clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
 
+clean_all_mpi_nox: clean_all_nox_mpi
+
 clean_all_openmp: clean_carre clean_divgeo clean_b25_openmp clean_eirene_openmp clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
 
 clean_all_nox_openmp: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp clean_eirene_nox_openmp clean_b25eirene_nox_openmp clean_uinp_openmp clean_triang_nox clean_manual
+
+clean_all_openmp_nox: clean_all_nox_openmp
 
 clean_all_openmp_mpi: clean_carre clean_divgeo clean_b25_openmp_mpi clean_eirene_openmp_mpi clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
 
@@ -880,6 +890,10 @@ clean_all_nox_openmp_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp_
 clean_all_mpi_openmp: clean_all_openmp_mpi
 
 clean_all_nox_mpi_openmp: clean_all_nox_openmp_mpi
+
+clean_all_openmp_mpi_nox: clean_all_nox_openmp_mpi
+
+clean_all_mpi_openmp_nox: clean_all_nox_openmp_mpi
 
 clean_carre:
 	cd modules/Carre; ${MAKE} clean
