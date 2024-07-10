@@ -148,6 +148,8 @@ all_mpi: divgeo b25_mpi eirene_mpi b25eirene_mpi carre uinp_mpi triang_mpi amds_
 
 all_nox_openmp: divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp carre_nox uinp_nox_openmp triang_nox manual
 
+all_openmp_nox: all_nox_openmp
+
 all_nox_mpi: divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi carre_nox uinp_nox_mpi triang_nox_mpi manual
 
 all_mpi_nox: all_nox_mpi
@@ -159,6 +161,10 @@ all_mpi_openmp: all_openmp_mpi
 all_nox_openmp_mpi: divgeo_nox b25_nox_openmp_mpi eirene_nox_mpi b25eirene_nox_openmp_mpi carre_nox uinp_nox_openmp_mpi triang_nox_mpi manual
 
 all_nox_mpi_openmp: all_nox_openmp_mpi
+
+all_openmp_mpi_nox: all_nox_openmp_mpi
+
+all_mpi_openmp_nox: all_nox_openmp_mpi
 
 carre:
 	cd modules/Carre2; ${MAKE}
@@ -651,9 +657,13 @@ clean_all_mpi: clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25
 
 clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
 
+clean_all_mpi_nox: clean_all_nox_mpi
+
 clean_all_openmp: clean_carre clean_divgeo clean_b25_openmp clean_eirene clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
 
 clean_all_nox_openmp: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp clean_eirene_nox clean_b25eirene_nox_openmp clean_uinp_openmp clean_triang_nox clean_manual
+
+clean_all_openmp_nox: clean_all_nox_openmp
 
 clean_all_openmp_mpi: clean_carre clean_divgeo clean_b25_openmp_mpi clean_eirene_mpi clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
 
@@ -662,6 +672,10 @@ clean_all_nox_openmp_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp_
 clean_all_mpi_openmp: clean_all_openmp_mpi
 
 clean_all_nox_mpi_openmp: clean_all_nox_openmp_mpi
+
+clean_all_openmp_mpi_nox: clean_all_nox_openmp_mpi
+
+clean_all_mpi_openmp_nox: clean_all_nox_openmp_mpi
 
 clean_carre:
 	cd modules/Carre2; ${MAKE} clean

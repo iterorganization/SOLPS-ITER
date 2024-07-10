@@ -10,13 +10,11 @@ else
 FC       = gfortran
 endif
 
-
 ifdef SOLPS_DEBUG
 FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else
 FFLAGS   = -O
 endif
-
 
 #ifdef SOLPS_DEBUG
 #FFLAGS	 = -g -tp=k8
