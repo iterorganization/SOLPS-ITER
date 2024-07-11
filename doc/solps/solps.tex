@@ -4889,7 +4889,7 @@ The data blocks are:
   \item[pefluxm] Poloidal energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[emiss] $H_\alpha$ emissivity due to atoms ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
   \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
-  \item[srcml] Molecule particle source (if the header is older than {\tt 20240627}, then $A.cm^{-3}$, otherwise $particles.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[srcml] Molecule particle source (if the header is older than {\tt 20240627}, then $A.cm^{-3}$, otherwise $molecules.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[edissml] Energy spent for dissociating hydrogenic molecules (if the header is older than {\tt 20240627}, then $W.cm^{-3}$, otherwise $W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[wldnek] Net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
@@ -15491,15 +15491,15 @@ $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^
 
 $\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
 
-$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_fllim\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai}) \\
+$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai}) \\
 
-$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_applied\_cvsahzx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_clx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
 
-$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
 
-$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_flx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
 
-$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
+$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahzx0\_noflx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
 
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
@@ -15507,21 +15507,21 @@ $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg \cdot m/s$ & \tex
 
 $\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsa\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
 $\displaystyle \tau_a$ & $s$ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua}) \\
 
@@ -15717,17 +15717,17 @@ $\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $ s^{-1}
 
 $\displaystyle \kappa_{ix}^{(CL)} \frac{\sqrt g}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_applied\_chcix.dat} & (applied in \ref{eq:eni_kapix}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0x.dat} & (applied in \ref{eq:eni_kapix}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_luciani\_fllim\_chcix.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_lucx.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
 
-$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chcix.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
+$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_flx.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
 
-$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_chcix.dat} & (\ref{eq:eni_zh_kapixCL}) \\
+$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_noflx.dat} & (\ref{eq:eni_zh_kapixCL}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_chci\_ax.dat}} & (\ref{eq:eni_zh_ddkapaxCL}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \footnotesize{\texttt{b2tral\_chci\_a\_lucx.dat}} & (\ref{eq:eni_zh_ddkapaxCL}) \\
 
-$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chci\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
+$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
 
 $\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
@@ -15814,17 +15814,17 @@ residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
 \multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
 \hline
 
-$\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle w_{\parallel a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_w[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle w_{\parallel a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_w\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hTdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hTdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hwdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hwdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rTdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rTdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rwdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rwdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
 \hline
 \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
