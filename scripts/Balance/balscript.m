@@ -31,7 +31,7 @@
 %                 each stratum (in a new figure).                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-BALFILE = '/tmp/balance2317.nc';
+BALFILE = '../../runs/workshop_yokohama/standard/run/balance.nc';
 BAL_QUANT = 'momentum';
 SPECIES_INDEX = 7:16;
 DEFAULT_REGION = 'user';

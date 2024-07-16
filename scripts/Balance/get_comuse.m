@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function comuse = get_comuse(filename)
 
-% Obtain dimensions from netcdf file
+% Obtain dimensions from netcdf file:
 finfo = ncinfo(filename);
 dimNames = {finfo.Dimensions.Name};
 dimMatch = strcmp(dimNames,'nCv');
@@ -17,6 +17,12 @@ dimMatch = strcmp(dimNames,'nCi');
 comuse.nCi = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'nFc');
 comuse.nFc = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nVx');
+comuse.nVx = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCmxFc');
+comuse.nCmxFc = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCmxVx');
+comuse.nCmxVx = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'ns');
 comuse.ns = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'nstra');
@@ -27,10 +33,19 @@ dimMatch = strcmp(dimNames,'nimp');
 comuse.nimp = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'nomp');
 comuse.nomp = finfo.Dimensions(dimMatch).Length;
-% Regions, flux tubes, imp and omp
+% Get grid information:
+comuse.vxX = ncread(filename,'vxX');
+comuse.vxY = ncread(filename,'vxY');
+comuse.cvFc = ncread(filename,'cvFc');
+comuse.cvFcP = ncread(filename,'cvFcP');
+comuse.cvVx = ncread(filename,'cvVx');
+comuse.cvVxP = ncread(filename,'cvVxP');
+comuse.fcVx = ncread(filename,'fcVx');
+% Regions, flux tubes, imp and omp:
 comuse.cvReg = ncread(filename,'cvReg');
 comuse.cvFt = ncread(filename,'cvFt');
 comuse.ftCv = ncread(filename,'ftCv');
+comuse.ftCvP = ncread(filename,'ftCvP');
 comuse.imp = ncread(filename,'imp');
 comuse.omp = ncread(filename,'omp');
 % Species string:
