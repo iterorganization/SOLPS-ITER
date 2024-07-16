@@ -40,7 +40,13 @@ comuse.cvFc = ncread(filename,'cvFc');
 comuse.cvFcP = ncread(filename,'cvFcP');
 comuse.cvVx = ncread(filename,'cvVx');
 comuse.cvVxP = ncread(filename,'cvVxP');
+comuse.fcCv = ncread(filename,'fcCv');
 comuse.fcVx = ncread(filename,'fcVx');
+% Face areas and angles
+comuse.fcS = ncread(filename,'fcS');
+comuse.fcQalf = ncread(filename,'fcQalf');
+% Magnetic field
+comuse.fcBb = ncread(filename,'fcBb');
 % Regions, flux tubes, imp and omp:
 comuse.cvReg = ncread(filename,'cvReg');
 comuse.cvFt = ncread(filename,'cvFt');
