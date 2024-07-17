@@ -1,6 +1,5 @@
       program ub2p
       use b2mod_types
-      use b2mod_impcon
       use b2mod_xerset
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
@@ -21,6 +20,7 @@ c======================================================================
 c  version : 25.08.97 15:04
 c
 #include "ubpcom.h"
+#include "impcon.inc"
       external prgini,prgend,ubpnam
 c======================================================================
 c*** set up the input routine

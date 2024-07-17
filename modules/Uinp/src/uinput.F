@@ -2,7 +2,6 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use b2mod_impcon
       use b2mod_xerset
       use eirmod_solps
       use helper
@@ -15,6 +14,7 @@ c  version : 28.01.2003 18:08
 c=======================================================================
       implicit none
 #include "uinput.inc"
+#include "impcon.inc"
       integer irt, is, iss, iatm, iloc, imin, imax
       integer ns, i, j, ireg, nreg, len
       real(kind=R8), allocatable :: na0(:)

@@ -2,7 +2,6 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use b2mod_impcon
       use b2mod_subsys
       use b2mod_solpstop
       use eirmod_solps
@@ -15,6 +14,7 @@ c
 c======================================================================
       implicit none
 #include "uinput.inc"
+#include "impcon.inc"
       integer i,j,iamd,ifile,imat,nmat,isp
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
