@@ -5,7 +5,7 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indrad,indpol,reverse] = user_set_region(comuse)
+function [indrad,indpol,facesup,facesdown] = user_set_region(comuse)
 
 indrad = false(comuse.nCv,1);
 indpol = false(comuse.nCv,1);
@@ -98,4 +98,20 @@ indpol(comuse.ftCv(iFt1:iFt2)) = true;
 % Set guard cells to zero
 indpol(comuse.nCi+1:end) = false;
 
-reverse = false;
+% Determine the faces of the upstream and downstream boundary
+facesup = []; % list of faces at the upstream boundary
+facesdown = []; % list of faces at the downstream boundary
+for iFc = 1:comuse.nFc
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if (indrad(iCv1) && ~indrad(iCv2)) || (~indrad(iCv1) && indrad(iCv2))
+        if comuse.fcLbl(iFc) == 1
+            facesup = [facesup,iFc];
+        elseif comuse.fcLbl(iFc) == 2
+            facesdown = [facesdown,iFc];
+        end
+    end
+end
+
+end
+

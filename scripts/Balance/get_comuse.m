@@ -45,6 +45,8 @@ comuse.fcVx = ncread(filename,'fcVx');
 % Face areas and angles
 comuse.fcS = ncread(filename,'fcS');
 comuse.fcQalf = ncread(filename,'fcQalf');
+% Face labels
+comuse.fcLbl = ncread(filename,'fcLbl');
 % Magnetic field
 comuse.fcBb = ncread(filename,'fcBb');
 % Regions, flux tubes, imp and omp:

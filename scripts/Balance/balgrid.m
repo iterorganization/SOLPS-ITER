@@ -6,7 +6,7 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function balgrid(comuse,indrad,indpol,axgrid,reverse)
+function balgrid(comuse,indrad,indpol,axgrid,facesup,facesdown)
 
 axis(axgrid,'image');
 xlabel(axgrid,'R (m)');
@@ -75,11 +75,47 @@ for iCv = 1:comuse.nCv
         S2(iCv).YData = S(iCv).YData;
     end
 end
+first = true;
 for i = 1:length(S2)
-    patch(S2(i).XData,S2(i).YData,'m','parent',axgrid);
+    if ~isempty(S2(i).XData)
+        if first
+            patch(S2(i).XData,S2(i).YData,'m','parent',axgrid);
+            first = false;
+        else
+            patch(S2(i).XData,S2(i).YData,'m','parent',axgrid,...
+                'handlevisibility','off');
+        end
+    end
+end
+
+% Plot the upstream and downstream boundary
+cmap = comuse.cmap;
+for i = 1:length(facesup)
+    iFc = facesup(i);
+    iVx1 = comuse.fcVx(iFc,1);
+    iVx2 = comuse.fcVx(iFc,2);
+    if i == 1
+        line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+            [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(1,:),...
+            'parent',axgrid);
+    else
+        line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+            [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(1,:),...
+            'parent',axgrid,'handlevisibility','off');
+    end
+end
+for i = 1:length(facesdown)
+    iFc = facesdown(i);
+    iVx1 = comuse.fcVx(iFc,1);
+    iVx2 = comuse.fcVx(iFc,2);
+    line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+        [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(2,:),...
+        'parent',axgrid);
 end
     
 hl = legend(axgrid, 'radial balance volume',...
-                   'poloidal balance volume');
+                   'poloidal balance volume',...
+                   'upstream face',...
+                   'downstream face');
 
 end
