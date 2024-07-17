@@ -2,7 +2,6 @@
       use b2mod_types
       use b2mod_layer
      , , only: ntrack, nalloys
-      use b2mod_impcon
       use b2mod_subsys
       use eirmod_solps
 #ifdef DIMENSIONS_MODULE
@@ -22,6 +21,7 @@ c   produce "input.eir" file with input data for eirene
 
 c=======================================================================
 #include "uinput.inc"
+#include "impcon.inc"
 #include "git_version_Uinp.h"
 
       integer i,ii,ih,j,k,l,m,n,nm,icont,istep,jsurpr,ists
