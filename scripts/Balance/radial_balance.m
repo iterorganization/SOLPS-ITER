@@ -69,7 +69,10 @@ end
 srcint = zeros(comuse.nFt,size(src,2));
 resint = zeros(comuse.nFt,1);
 for iFt = 1:comuse.nFt % integration in flux tube
-    for iCv = 1:comuse.ftCv(iFt)
+    iCv1 = comuse.ftCvP(iFt,1);
+    iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
+    for i = iCv1:iCv2
+        iCv = comuse.ftCv(i);
         if indrad(iCv)
             srcint(iFt,:) = srcint(iFt,:) + src(iCv,:);
             resint(iFt) = resint(iFt) + res(iCv);
@@ -78,7 +81,7 @@ for iFt = 1:comuse.nFt % integration in flux tube
 end
 
 % Concatenate the radial divergences to the sources
-srcint = cat(2,srcint,divrad);
+srcint = cat(2,divrad,srcint);
 
 % Account for reversal (normally inner-to-outer fluxes are positive but if
 % reverse==true then outer-to-inner fluxes become positive):
@@ -148,9 +151,7 @@ for i = 1:length(comuse.omp)
     end
 end
 ysep = 0.5*(yomp(i-1) + yomp(i));
-psisep = 0.5*(psiomp(i-1) + psiomp(i));
 yomp = yomp - ysep;
-psiomp = psiomp - psisep;
 psidown = zeros(comuse.nFt,1);
 ytot = zeros(comuse.nFt,1);
 for i = 1:length(facesdown)
@@ -169,8 +170,6 @@ for i = 1:length(facesdown)
     ytot(iFt) = ytot(iFt) + abs(comuse.vxX(iVx2) - comuse.vxX(iVx1));
 end
 psidown = psidown./(ytot + 1.0e-30);
-psidown = psidown - 0.5*(psidown(comuse.ftSeppf(1)) + ...
-    psidown(comuse.ftSep(1)));
 
 % Target distances mapped to OMP:
 ymysep = 100*interp1(psiomp,yomp,psidown,'linear','extrap');
