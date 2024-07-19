@@ -5,7 +5,7 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indrad,indpol,facesup,facesdown] = user_set_region(comuse)
+function [indrad,indpol,reverse,facesup,facesdown] = user_set_region(comuse)
 
 indrad = false(comuse.nCv,1);
 indpol = false(comuse.nCv,1);
@@ -45,7 +45,7 @@ for iCv = 1:comuse.nCi
                     iCv2 = comuse.fcCv(iFc,2);
                 end
                 iFt2 = comuse.cvFt(iCv2);
-                if iFt2 == comuse.ftSep
+                if iFt2 == comuse.ftSep(1)
                     found = true;
                     break;
                 end
@@ -113,5 +113,6 @@ for iFc = 1:comuse.nFc
     end
 end
 
-end
+reverse = false;
 
+end

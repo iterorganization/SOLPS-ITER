@@ -6,15 +6,15 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function balgrid(comuse,indrad,indpol,axgrid,facesup,facesdown)
+function balgrid(comuse,indrad,indpol,facesup,facesdown,axgrid)
 
 axis(axgrid,'image');
 xlabel(axgrid,'R (m)');
 ylabel(axgrid,'Z (m)');
 
-% Plot the grid (excluding ghost cells):
+% Plot the grid (excluding guard cells):
 S = struct([]);
-for iCv = 1:comuse.nCv
+for iCv = 1:comuse.nCi
     iVx1 = comuse.cvVx(comuse.cvVxP(iCv,1));
     S(iCv).XData = comuse.vxX(iVx1);
     S(iCv).YData = comuse.vxY(iVx1);

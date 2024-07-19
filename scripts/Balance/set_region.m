@@ -1,10 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % set_region sets the inrad and indpol logical grids for default region names. %
+% facesup and facesdown contain the face indices of the upstream and           %
+% downstream boundaries of indrad, respectively.                               %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indrad,indpol,facesup,facesdown] = set_region(region_name,comuse)
+function [indrad,indpol,reverse,facesup,facesdown] = set_region(region_name,comuse)
 
 indrad = false(comuse.nCv,1);
 indpol = false(comuse.nCv,1);
@@ -16,7 +18,7 @@ if comuse.nXpt==1
     switch region_name(1:2)
         case {'li','ui'}
             for iCv = 1:comuse.nCi
-                if (comuse.cvReg(iCv) == 3)
+                if (comuse.cvReg(iCv) == 3) || (comuse.cvReg(iCv) == 7)
                     if (region_name(3)=='s')
                         iFt = comuse.cvFt(iCv);
                         iFt1 = comuse.ftCvP(iFt,1);
@@ -33,6 +35,7 @@ if comuse.nXpt==1
                     end
                 end
             end
+            reverse = true;
         case {'uo','lo'}
             for iCv = 1:comuse.nCi
                 if ((comuse.cvReg(iCv) == 4) || (comuse.cvReg(iCv) == 8))
@@ -52,6 +55,7 @@ if comuse.nXpt==1
                     end
                 end
             end
+            reverse = false;
         otherwise
             error('Region name ''%s'' not supported.',region_name);
     end
@@ -77,6 +81,7 @@ elseif comuse.nXpt==2
                     end
                 end
             end
+            reverse = true;
         case 'ui'
             for iCv = 1:comuse.nCi
                 if (comuse.cvReg(iCv) == 4)
@@ -95,6 +100,7 @@ elseif comuse.nXpt==2
                     end
                 end
             end
+            reverse = false;
         case 'uo'
             for iCv = 1:comuse.nCi
                 if (comuse.cvReg(iCv) == 7)
@@ -113,6 +119,7 @@ elseif comuse.nXpt==2
                     end
                 end
             end
+            reverse = true;
         case 'lo'
             for iCv = 1:comuse.nCi
                 if (comuse.cvReg(iCv) == 8)
@@ -131,6 +138,7 @@ elseif comuse.nXpt==2
                     end
                 end
             end
+            reverse = false;
         otherwise
             error('Region name ''%s'' not supported.',region_name);
     end
@@ -143,6 +151,7 @@ elseif comuse.nXpt == 0
                 indrad(gmtry.cvReg == 1) = false;
             end
             indpol(comuse.cvFt == comuse.ftSep) = true;
+            reverse = false;
         otherwise
             error('Region name ''%s'' not supported.',region_name);
     end
@@ -170,3 +179,4 @@ for iFc = 1:comuse.nFc
     end
 end
 
+end
