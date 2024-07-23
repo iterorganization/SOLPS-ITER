@@ -43,6 +43,13 @@ LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
 LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
 
 #
+# Provide compiler
+#
+
+FC         = gfortran
+MPI_FC     = mpif90
+
+#
 # Preprocessor options
 #
 
