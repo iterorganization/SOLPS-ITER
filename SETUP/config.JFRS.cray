@@ -17,8 +17,8 @@
 # If using the Cray compiler:
 # Add -DCRAY to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 # If you have NCAR version 3 (or no NCAR at all) on your system:
 # Remove -DNCAR4 from SOLPS_CPP
@@ -87,7 +87,7 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DF2003 -DCRAY -DNCAR4
+SOLPS_CPP      = -DNO_NAG -DCRAY -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

@@ -18432,7 +18432,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
-\item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
 \item[GGD\_MAJOR\_VERSION] \index{GGD\_MAJOR\_VERSION} Major version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
@@ -18447,6 +18446,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
+\item[LEGACYCOMP] \index{LEGACYCOMP} To be used for legacy compilers not compatible with {\tt Fortran 2003}
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -18851,26 +18851,6 @@ DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
-F2003 & convert/b2cdftallies2mds.F \\
-F2003 & convert/conv\_surface\_models.F \\
-F2003 & convert/conv\_triangles.F \\
-F2003 & convert/write\_triangles.F \\
-F2003 & modules/b2mod\_boundary\_namelist.F \\
-F2003 & modules/b2mod\_mdsplus.F \\
-F2003 & modules/b2mod\_neutrals\_namelist.F \\
-F2003 & modules/b2mod\_running\_average.F \\
-F2003 & modules/b2mod\_user\_namelist.F \\
-F2003 & modules/b2us\_feedback.F \\
-F2003 & modules/b2us\_plasma.F \\
-F2003 & modules/b2us\_prep.F \\
-F2003 & postprocessing/b2ye.F \\
-F2003 & preprocessing/b2agdr.F \\
-F2003 & preprocessing/b2aidr.F \\
-F2003 & test/check\_b2\_output.F90 \\
-F2003 & user/out\_for\_plot.F \\
-F2003 & utility/calc\_err.F \\
-F2003 & utility/cfopen.F \\
-F2003 & utility/mds\_routines.F \\
 F77 & user/b2file.F \\
 FIXED\_POINT & driver/b2mod\_driver.F \\
 G95 & utility/mds\_routines.F \\
@@ -18950,6 +18930,25 @@ JET & ids/b2\_ual\_write.F90 \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
+LEGACYCOMP & convert/b2cdftallies2mds.F \\
+LEGACYCOMP & convert/conv\_surface\_models.F \\
+LEGACYCOMP & convert/conv\_triangles.F \\
+LEGACYCOMP & convert/write\_triangles.F \\
+LEGACYCOMP & modules/b2mod\_batch\_average.F \\
+LEGACYCOMP & modules/b2mod\_boundary\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_mdsplus.F \\
+LEGACYCOMP & modules/b2mod\_neutrals\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_par\_opt.F \\
+LEGACYCOMP & modules/b2mod\_running\_average.F \\
+LEGACYCOMP & modules/b2us\_feedback.F \\
+LEGACYCOMP & modules/b2us\_plasma.F \\
+LEGACYCOMP & modules/b2us\_prep.F \\
+LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & test/check\_b2\_output.F90 \\
+LEGACYCOMP & user/out\_for\_plot.F \\
+LEGACYCOMP & utility/calc\_err.F \\
+LEGACYCOMP & utility/cfopen.F \\
+LEGACYCOMP & utility/mds\_routines.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
@@ -19279,13 +19278,16 @@ B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/wneutral\_fluxes.F \\
-F2003 & output/outidlgeo.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
+LEGACYCOMP & assistant/eirmod\_algebra.f \\
+LEGACYCOMP & file-handling/wrplam\_shrt.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.f \\
+LEGACYCOMP & output/outildsrf.f \\
+LEGACYCOMP & particle-tracing/eirmod\_samsrf.f \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & main-routines/eirene.f \\
