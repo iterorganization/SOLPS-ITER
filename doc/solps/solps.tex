@@ -20634,9 +20634,9 @@ which is defined in the
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
-\item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow
+\item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow (Cannot be used in conjunction with {\tt USE\_OPENMP})
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
-\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to {\tt Eirene} parallelization
+\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to internal {\tt Eirene} parallelization (Cannot be used in conjunction with {\tt USE\_EXT\_OPENMP})
 \end{description}
 
 \subsection{B2.5}
@@ -20833,9 +20833,6 @@ CRAY & driver/b2mod\_driver.F \\
 CRAY & driver/b2obeq.F \\
 CRAY & driver/b2obfn.F \\
 CRAY & driver/b2oblm.F \\
-CRAY & equations/b2news.F \\
-CRAY & equations/b2news\_.F \\
-CRAY & equations/b2npmo.F \\
 CRAY & modules/b2mod\_openmp.F \\
 CRAY & postprocessing/b2ytdr.F \\
 CRAY & solvers/b2ux11p.F \\
@@ -20875,9 +20872,6 @@ DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
 F77 & user/b2file.F \\
-GFORTRAN & equations/b2news.F \\
-GFORTRAN & equations/b2news\_.F \\
-GFORTRAN & equations/b2npmo.F \\
 GFORTRAN & modules/b2mod\_openmp.F \\
 GFORTRAN & utility/b2mod\_ilutern\_7.F \\
 GFORTRAN & utility/b2mod\_ilutern\_9.F \\
@@ -21104,6 +21098,8 @@ NO\_SAVE & include/EIRDIAG.H \\
 \_OPENMP & driver/b2obeq.F \\
 \_OPENMP & driver/b2obfn.F \\
 \_OPENMP & driver/b2oblm.F \\
+\_OPENMP & equations/b2news.F \\
+\_OPENMP & equations/b2news\_.F \\
 \_OPENMP & equations/b2news\_m.F \\
 \_OPENMP & equations/b2npmo.F \\
 \_OPENMP & modules/b2mod\_openmp.F \\
@@ -21111,6 +21107,7 @@ NO\_SAVE & include/EIRDIAG.H \\
 \_OPENMP & solvers/b2ux5p.F \\
 \_OPENMP & solvers/b2ux7p.F \\
 \_OPENMP & solvers/b2ux9p.F \\
+\_OPENMP & sources/b2sifrtf.F \\
 \_OPENMP & sources/b2stbr.F \\
 \_OPENMP & sources/b2stbr\_phys.F \\
 \_OPENMP & sources/b2stcx.F \\
@@ -21120,15 +21117,13 @@ NO\_SAVE & include/EIRDIAG.H \\
 \_OPENMP & utility/b2mod\_ilutern\_7.F \\
 \_OPENMP & utility/b2mod\_ilutern\_9.F \\
 \_OPENMP & utility/b2opd\_subsys.F \\
+\_OPENMP & utility/myblas.F \\
 \_OPENMP & utility/sfill.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
-PGF90 & equations/b2news.F \\
-PGF90 & equations/b2news\_.F \\
-PGF90 & equations/b2npmo.F \\
 PGF90 & modules/b2mod\_openmp.F \\
 PGF90 & modules/b2mod\_types.F \\
 PLPLOT & b2plot/b2plot.F \\
@@ -21460,7 +21455,7 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
-USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.F \\
 USE\_EXT\_OPENMP & main-routines/eirmod\_mcarlo.F \\
 USE\_MPI & assistant/eirmod\_second\_own.F \\
 USE\_MPI & assistant/exit\_own.F \\
@@ -21510,7 +21505,7 @@ USE\_MPI & startup-routines/input.F \\
 USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 USE\_OPENMP & assistant/eirmod\_second\_own.F \\
-USE\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_OPENMP & main-routines/eirmod\_eirene.F \\
 USE\_OPENMP & main-routines/eirmod\_mcarlo.F \\
 USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & main-routines/eirmod\_eirene.f \\
