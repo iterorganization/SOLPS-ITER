@@ -4675,7 +4675,7 @@ The default strategy depends on the version of the MPI library with which {\tt E
 This type of boundary condition modifies the recycling probability {\tt RECYCT} by means of a proportional-integral loop so that the pressure in a given cell matches a given reference value. It is activated by setting {\tt ILREF = 4} in the desired reflection model in block 6a of the Eirene input file. Two new values, related with the reference cell and pressure, have to be provided. The first one in the line:
 
 \begin{verbatim}
-ILREF ILSPT ISRS ISRC REFCELL
+ILREF ILSPT ISRS ISRC ILCHSPNWL REFCELL
 \end{verbatim}
 
 in which {\tt REFCELL} is an integer referencing the cell in the Eirene mesh in which the pressure will be computed. This value can be easily obtained with {\tt triang} by means of the {\tt (I)nquire} function. The second value is provided in the line:
@@ -21064,9 +21064,13 @@ NO\_OPENMP\_B2NEWS\_LOOP2 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_LOOP3 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_LOOP4 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP1 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP1 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP2 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP2 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NPMO & equations/b2npmo.F \\
 NO\_OPENMP\_B2SIFRTF\_LOOP1 & sources/b2sifrtf.F \\
 NO\_OPENMP\_B2SIFRTF\_LOOP2 & sources/b2sifrtf.F \\
