@@ -1,0 +1,17 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+
+ifdef USE_MPI
+FC       = mpif90
+else
+FC       = gfortran
+endif
+
+CPP      = /lib/cpp -traditional
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

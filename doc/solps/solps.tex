@@ -223,7 +223,7 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol.
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol. Please also note that the SSH key needs to be 1024 bits.
 
 It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
@@ -284,9 +284,9 @@ which will also update the files contained in the various submodules \SOLPSITER 
 \begin{verbatim}
 > solps-iter_update
 \end{verbatim}
-which will fetch and pull the main development branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
+which will fetch and pull the master branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
 
-\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
+\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone. In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
 
 The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual standalone modules, the main pieces of the SOLPS suite, i.e. {\tt DivGeo}, {\tt Carre}, {\tt Eirene} and {\tt B2.5}, although this is not recommended.
 
@@ -361,6 +361,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IN-DA] ITER-India: *.iter-india.org
   \item[IPP] IPP-Garching: *.ipp.mpg.de, *.ipp-garching.mpg.de, *.rzg.mpg.de
   \item[IPP-HGW] IPP-Greifswald: *.ipp-hgw.mpg.de
+  \item[IPPCR] Institute for Plasma Physics - Czech Republic: *.tok.ipp.cas.cz
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
   \item[ITM, MARCONI] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it
@@ -1773,7 +1774,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_series.py]\index{get\_series.py} Driver for the {\tt get\_series} script.
   \item[last\_2d.py]\index{last\_2d.py} Driver for the {\tt last\_2d} script.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
-  \item[nareg\_species.py \#1]\index{nareg\_species.py}  Average ion densities for region \#1 summed over charge states for each species.
+  \item[nareg\_species.py \#1]\index{nareg\_species.py} Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
   \item[plot\_trc.py]\index{plot\_trc.py} Driver for the {\tt plot\_trc}, {\tt plot\_trg} and {\tt plot\_series} scripts.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
@@ -2036,7 +2037,7 @@ The partition on which the job will be run can be specified by means of the {\tt
 \begin{verbatim}
 itersubmit -Q gen10_ib
 \end{verbatim}
-chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster.
+chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster CentOS nodes. If running on a RedHat node, the default partition name is {\tt gen11}.
 
 When using the SLURM job submission engine, it is also possible to submit a chain of jobs simultaneously (or at least in very quick succession), in which jobs only start after the previous one has completed successfully. Chains can be of arbitrary length and each job in the chain will be added individually to the queue. On oversubscribed clusters, this chain submission option tends to launch the next job in the chain earlier than if resubmitted only after the preceding job has finished. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
 \begin{verbatim}
@@ -4677,7 +4678,7 @@ The default strategy depends on the version of the MPI library with which {\tt E
 This type of boundary condition modifies the recycling probability {\tt RECYCT} by means of a proportional-integral loop so that the pressure in a given cell matches a given reference value. It is activated by setting {\tt ILREF = 4} in the desired reflection model in block 6a of the Eirene input file. Two new values, related with the reference cell and pressure, have to be provided. The first one in the line:
 
 \begin{verbatim}
-ILREF ILSPT ISRS ISRC REFCELL
+ILREF ILSPT ISRS ISRC ILCHSPNWL REFCELL
 \end{verbatim}
 
 in which {\tt REFCELL} is an integer referencing the cell in the Eirene mesh in which the pressure will be computed. This value can be easily obtained with {\tt triang} by means of the {\tt (I)nquire} function. The second value is provided in the line:
@@ -4887,8 +4888,8 @@ The data blocks are:
   \item[pefluxm] Poloidal energy flux density carried by molecules ($W.m^{-2}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[emiss] $H_\alpha$ emissivity due to atoms ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
   \item[emissmol] $H_\alpha$ emissivity due to molecules and molecular ions ($photons.m^{-3}.s^{-1}$), dimension ({\tt NDX},{\tt NDY})
-  \item[srcml] Molecule particle source ($A$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
-  \item[edissml] Energy spent for dissociating hydrogenic molecules ($W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[srcml] Molecule particle source (if the header is older than {\tt 20240627}, then $A.cm^{-3}$, otherwise $molecules.s^{-1}$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
+  \item[edissml] Energy spent for dissociating hydrogenic molecules (if the header is older than {\tt 20240627}, then $W.cm^{-3}$, otherwise $W$), dimension ({\tt NDX},{\tt NDY},{\tt NMOL})
   \item[wldnek] Net kinetic energy deposited by neutrals ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldnep] Energy released by recombination of neutrals and ions into molecules ($W$), total over strata, dimension ({\tt NLIM}+{\tt NSTS})
   \item[wldna] Flux of atoms impinging on surface ($particles.s^{-1}$), total over strata, dimension ({\tt NLIM}+{\tt NSTS},{\tt NATM})
@@ -8203,7 +8204,7 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
+-c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8212,19 +8213,35 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 $V_{ax}^{(AN)}=0$
 
 \begin{equation}\label{eq:V_ayAN}
-V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|}
+V_{ay}^{(AN)} = \left( c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|} \right) f_{V_a^{(AN)}}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{V_a^{(AN)},x}$ coefficients correspond to the {\tt cfvla} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typically, no pinch velocity is applied:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
 
 $a=1, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+
+The $f_{V_a^{(AN)}}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{V_a^{(AN)},7} \ne 0$, then $f_{V_a^{(AN)}}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three pinch velocities scalings according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the pinch velocity in the core is given according to \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 5}, a pinch velocity for ions is applied between the top of the machine and the X-point on the low-field side. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vl\_alfa[1-4]}. Blobby transport in the SOL can also be added. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 9}, a blobby transport model is applied in the SOL. See code for details.
 
 \subsection{Particle transport coefficients}
 
 $
 \left\{
 \begin{matrix}
-D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle}   \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{axy}=0, & z_a=0
 \end{matrix}
 \right.
@@ -8234,7 +8251,7 @@ $, where $\left \langle B^2 \right \rangle = \frac{\mathlarger{\iint \limits_{co
 \left\{
 \begin{matrix}
 \label{eq:D_axy}
-D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{ayx} = 0, & z_a=0
 \end{matrix}
 \right.
@@ -8244,30 +8261,21 @@ D_{ayx} = 0, & z_a=0
 D_{n,a} = D^{(AN)}_{n,a}
 \end{equation}
 
-
 \begin{equation}
-D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y)
+D^{(AN)}_{n,a} = \left( c_{D_{n,a},0} + c_{D_{n,a},1} \frac{10^{20}}{n_e} + c_{D_{n,a},2} D_{f,a} + c_{D_{n,a},3} \frac{T_e}{16 e|B|} \right) f_{D_n,a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_D(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,D}, & \ -\delta_{1,D} \le y \le 0, x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,D}, & \ 0 \le y \le \delta_{2,D}, x \in \text{Core} \\
-\alpha_{3,D}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{D_{n,a},x}$ coefficients correspond to the {\tt cfdna} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
-$a=0,\;\;\;c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=0,\;\;\;c_{D_{n,a},3}=0$
+$ a=0,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=0,\;\;\; c_{D_{n,a},3}=0$
 
-$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=1,\;\;\;c_{D_{n,a},3}=0$
+$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=1,\;\;\; c_{D_{n,a},3}=0$
 
-$D_{f,a}=c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i}
-+ \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
+$D_{f,a}$ is a diffusivity used to scale the various transport coefficients together and its coefficients $c_{D_{f,a},x}$ correspond to the {\tt cfdf0} array provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. Typical values are:\index{b2ah}\index{b2mn}
+
+$D_{f,a} = c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i} + \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
 
 \begin{table}[ht]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -8277,7 +8285,47 @@ $0$ & $10^2$ & $0$ & $1$ & $5 \cdot 10^{-20}$ & $1.5 \cdot 10^{-18}$ & $0$ & $0$
 $1$ & $0.3$ & $0$ & $0$ & -- & -- & $0$ & $0$ & $0$ \\ \hline
 \end{tabular}
 \end{table}
+
+If {\tt 'b2tqna\_new\_df0'} is set to {\tt '1'} (default is {\tt '0'}), then, the diffusivity for neutral species is computed as:
+
+$D_{f,a} = \frac{\sqrt{\frac{T_i}{m_a}}}{ {\left\langle \sigma v \right\rangle}_{ion} n_e + \sum \limits_{b} {\left\langle \sigma v \right\rangle}_{CX} n_{b}} + \frac{1}{\frac{n_a}{2 \times 10^{19}}}, \; \; \; z_a = 0$
+
+The $f_{D_n,a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{D_{n,a},7} \ne 0$, then $f_{D_n,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $D^{(AN)}_{n,a}$ coefficient is scaled by the same amount as $\chi_e^{(AN)}$ necessary to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the diffusion coefficient is modified in the main SOL to reproduce the model from \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_alfa[1-4]} are used to modify $f_{D_n,a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $D_{n,a}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
+
 %-------- end of 3rd page -------------
+
+\begin{equation}\label{eq:D_pa}
+D_{p,a} = D^{(AN)}_{p,a}
+\end{equation}
+
+\begin{equation*}
+D^{(AN)}_{p,a} = \frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|} \right) f_{D_p,a}(x,y)
+\end{equation*}
+
+Typical values are:
+
+\begin{equation*}
+a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
+\end{equation*}
+\begin{equation*}
+a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
+\end{equation*}
+
+If $c_{D_{p,a},7} \ne 0$, then $f_{D_p,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
+
+The flux limits for $D_{p,a}$ are applied as:
 
 \begin{equation}\label{eq:D_pax}
 \begin{matrix}
@@ -8304,21 +8352,6 @@ D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-
-\begin{equation}\label{eq:D_pa}
-D_{p,a} = D^{(AN)}_{p,a}
-\end{equation}
-
-\begin{equation*}
-D^{(AN)}_{p,a}=\frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right)
-\end{equation*}
-
-\begin{equation*}
-a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
-\end{equation*}
-\begin{equation*}
-a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
-\end{equation*}
 
 \section{Parallel momentum conservation equations}
 
@@ -8700,36 +8733,23 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 %-------- end of 6th page -------------
 
 \begin{equation}\label{eq:mom_etana}
-\begin{matrix}
-\eta^{(AN)}_{a} & = m_an_a\nu_a^{visc} =
-& \left\{
-\begin{matrix}
+\eta^{(AN)}_{a} = m_a n_a \nu_a^{visc} =
 \left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a f_{\eta_a}(x,y), & z_a\neq 0 \\
-\left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a , & z_a = 0
-\end{matrix} \right.
-\end{matrix}
+c_{\eta_a,3} \frac{T_e}{16 e|B|} \right)
+m_a n_a f_{\eta_a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_{\eta_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,\eta_a}, & \ -\delta_{1,\eta_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,\eta_a}, & \ 0 \le y \le \delta_{2,\eta_a}, & x \in \text{Core} \\
-\alpha_{3,\eta_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{\eta_a,x}$ coefficients correspond to the {\tt cfvsa} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typical values are:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
+
+The $f_{\eta_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{\eta_a,7} \ne 0$, then $f_{\eta_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vs\_alfa[1-4]} are used to modify $f_{\eta_a}$. See code for details.
 
 \begin{align}\label{eq:mom_dveta}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \widetilde{\eta}^{(CL)}_{ax}
@@ -8878,11 +8898,13 @@ $
 \cdot
 \frac{1}{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
-{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
+{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+$, \ \ \ \
+
 $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
-\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $
 
 This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
@@ -9096,24 +9118,30 @@ value at $z_{eff} = 1$ of 0.71 otherwise.
 \begin{equation}\label{eq:ene_chie}
 \chi_e^{(AN)} = \left(
         c_{h_e,0} + c_{h_e,1} \frac{10^{20}}{n_e} + c_{h_e,3} \frac{T_e}{16 e|B|}
-\right) f_{h_e} (x,y)
+\right) f_{h_e}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{h_e,x}$ coefficients correspond to the {\tt cfhce} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 %-------- end of 10th page -------------
 
-$c_{h_e,0} = 1.2 , \;\; c_{h_e,1}=0, \;\;\; c_{h_e,3}=0$
+$c_{h_e,0} = 1.2 , \;\; c_{h_e,1} = 0, \;\;\; c_{h_e,3} = 0$
 
-$
-\begin{matrix}
-f_{h_e}(x,y) & =
-& \left\{
-\begin{matrix}
-\alpha_{1,h_e}, & \ -\delta_{1,h_e} \le y \le 0, & x \in \text{Core} \\
-\alpha_{2,h_e}, & \ 0 \le y \le \delta_{2,h_e}, & x \in \text{Core} \\
-\alpha_{3,h_e}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_e}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_e,7} \ne 0$, then $f_{h_e}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $\chi_e^{(AN)}$ coefficient is scaled so as to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 3}, use parameters from the {\tt b2.transport\_models\_save.parameters} namelist to maintain a constant $\frac{\grad T_e}{\grad n_e}$ ratio at the reference location via feedback.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_te\_alfa[1-4]} are used to modify $f_{h_e}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \frac{n_{e,ref}}{n_e} \left( \frac{T_e}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_e^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:ene_dmkapexcl}
 \widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(F \lim)} \widetilde{\kappa}_{ex}^{(CL)}
@@ -9415,10 +9443,16 @@ $\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$
 \alpha^{(AN)}_{y} = \left(
         c_{\alpha,0} + c_{\alpha,1} \frac{10^{20}}{n_e} +
         c_{\alpha,3} \frac{T_e}{16 e |B|}
-\right) n_e \sqrt{\frac{e}{T_e}}
+\right) n_e \sqrt{\frac{e}{T_e}} f_\alpha(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{\alpha,x}$ coefficients correspond to the {\tt cfalf} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
 $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
+
+If $c_{\alpha,7} \ne 0$, then $f_\alpha$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\alpha^{(CL)}_{y} = 0$
 
@@ -9530,7 +9564,6 @@ r_{I_a} n_e n_a \left( \frac{m_a + m_{a+1}}4 \right)
 Atom heat source due to recombination
 
 %-------- end of 14th page -------------
-
 
 \begin{equation}
 \label{eq:eni_QRi}
@@ -9656,26 +9689,26 @@ V_{h_a} = \sqrt{\frac{2 T_i}{m_a}}
 \begin{equation}\label{eq:eni_chiAN}
 \chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_{f,a} + c_{h_a,3}\frac{T_e}{16 e|B|}
-\right) f_{h_a} (x,y)
+\right) f_{h_a}(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{h_a,x}$ coefficients correspond to the {\tt cfhci} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.4,  \;\;\;  c_{h_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.2,  \;\;\;  c_{h_a,3} = 0$
 
-$
-\begin{matrix}
-f_{h_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,h_a}, & \ -\delta_{1,h_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,h_a}, & \ 0 \le y \le \delta_{2,h_a}, & x \in \text{Core} \\
-\alpha_{3,h_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_a,7} \ne 0$, then $f_{h_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_ti\_alfa[1-4]} are used to modify $f_{h_a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \frac{n_{a,ref}}{n_a} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_a^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:eni_dtkapixCL}
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
@@ -10240,20 +10273,20 @@ $\sigma^{(AN)}$  depends on {\tt 'b2tqna\_model\_sig'}.
 If {\tt 'b2tqna\_model\_sig'} is {\tt '0'}, then:
 \begin{equation}\label{eq:pot_sigan0}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e n_e,
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e n_e f_\sigma(x,y),
 \end{equation}
 
 otherwise:
 
 \begin{equation}\label{eq:pot_sigan}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e \widetilde n_e
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e \widetilde n_e f_\sigma(x,y)
 \end{equation}
 
 where $\widetilde n_e$ is the electron density at the location where the innermost flux surface crosses the outer midplane.
@@ -10262,7 +10295,13 @@ where $\widetilde n_e$ is the electron density at the location where the innermo
 L\left( x \right) = \int \limits_0^{y_{out}} h_y \left( x,y \right) ~ dy
 \end{equation*}
 
-$c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$, $c_{\sigma_a,1}=0$, $c_{\sigma_a,3}=0$
+\begin{sloppypar}
+The $c_{\sigma^{(AN)},x}$ coefficients correspond to the {\tt cfsig} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
+$c_{\sigma^{(AN)},0} = 10^{-6} \div 10^{-3}$, $c_{\sigma^{(AN)},1} = 0$, $c_{\sigma^{(AN)},3} = 0$
+
+If $c_{\sigma^{(AN)},7} \ne 0$, then $f_\sigma$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\sigma^{(CL)}_{y} = 0$
 
@@ -15237,15 +15276,15 @@ $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^
 
 $\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
 
-$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_fllim\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai}) \\
+$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai}) \\
 
-$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_applied\_cvsahzx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_clx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
 
-$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
 
-$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_flx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
 
-$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahzx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
+$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahzx0\_noflx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
 
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
@@ -15253,21 +15292,21 @@ $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg \cdot m/s$ & \tex
 
 $\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2trzh\_luciani\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsa\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_luciani\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsahz\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
-$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2trzh\_cvsa\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
 $\displaystyle \tau_a$ & $s$ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua}) \\
 
@@ -15463,17 +15502,17 @@ $\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $ s^{-1}
 
 $\displaystyle \kappa_{ix}^{(CL)} \frac{\sqrt g}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_applied\_chcix.dat} & (applied in \ref{eq:eni_kapix}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0x.dat} & (applied in \ref{eq:eni_kapix}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_luciani\_fllim\_chcix.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_lucx.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
 
-$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chcix.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
+$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_flx.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
 
-$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_chcix.dat} & (\ref{eq:eni_zh_kapixCL}) \\
+$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_noflx.dat} & (\ref{eq:eni_zh_kapixCL}) \\
 
-$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \footnotesize{\texttt{b2trzh\_luciani\_fllim\_chci\_ax.dat}} & (\ref{eq:eni_zh_ddkapaxCL}) \\
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \footnotesize{\texttt{b2tral\_chci\_a\_lucx.dat}} & (\ref{eq:eni_zh_ddkapaxCL}) \\
 
-$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2trzh\_fllim\_chci\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
+$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
 
 $\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
@@ -15560,17 +15599,17 @@ residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
 \multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
 \hline
 
-$\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle w_{\parallel a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_w[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle w_{\parallel a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_w\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hTdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hTdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_hwdp[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hwdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rTdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rTdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2trzh\_rwdpgamma[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rwdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
 \hline
 \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
@@ -20382,7 +20421,7 @@ which is defined in the
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
 \item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
-\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to {\tt Eirene} parallelization
+\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to internal {\tt Eirene} parallelization
 \end{description}
 
 \subsection{B2.5}
@@ -20570,7 +20609,6 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
-COMPILER\_MAJOR\_VERSION & sources/b2stbr\_phys.F \\
 COMPLICATED & sources/b2stbc\_fb.F \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
@@ -20580,9 +20618,6 @@ CRAY & driver/b2mod\_driver.F \\
 CRAY & driver/b2obeq.F \\
 CRAY & driver/b2obfn.F \\
 CRAY & driver/b2oblm.F \\
-CRAY & equations/b2news.F \\
-CRAY & equations/b2news\_.F \\
-CRAY & equations/b2npmo.F \\
 CRAY & modules/b2mod\_openmp.F \\
 CRAY & postprocessing/b2ytdr.F \\
 CRAY & solvers/b2ux11p.F \\
@@ -20622,11 +20657,7 @@ DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
 F77 & user/b2file.F \\
-GFORTRAN & equations/b2news.F \\
-GFORTRAN & equations/b2news\_.F \\
-GFORTRAN & equations/b2npmo.F \\
 GFORTRAN & modules/b2mod\_openmp.F \\
-GFORTRAN & sources/b2stbr\_phys.F \\
 GFORTRAN & utility/b2mod\_ilutern\_7.F \\
 GFORTRAN & utility/b2mod\_ilutern\_9.F \\
 GFORTRAN & utility/b2mod\_ilutern\_11.F \\
@@ -20708,11 +20739,14 @@ LEGACYCOMP & convert/b2cdftallies2mds.F \\
 LEGACYCOMP & modules/b2mod\_mdsplus.F \\
 LEGACYCOMP & modules/b2mod\_running\_average.F \\
 LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & sources/b2sifr\_.F \\
 LEGACYCOMP & sources/b2sifrtf.F \\
 LEGACYCOMP & test/check\_b2\_output.F90 \\
 LEGACYCOMP & user/b2mod\_batch.F \\
 LEGACYCOMP & utility/cfopen.F \\
 LEGACYCOMP & utility/mds\_routines.F \\
+LEGACYCOMP & utility/smax.F \\
+LEGACYCOMP & utility/smin.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
@@ -20814,9 +20848,13 @@ NO\_OPENMP\_B2NEWS\_LOOP2 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_LOOP3 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_LOOP4 & equations/b2news.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP1 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP1 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP2 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP2 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_.F \\
+NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NPMO & equations/b2npmo.F \\
 NO\_OPENMP\_B2SIFRTF & sources/b2sifrtf.F \\
 NO\_OPENMP\_B2SIHS & sources/b2sihs.F \\
@@ -20826,6 +20864,7 @@ NO\_OPENMP\_B2SQCX & sources/b2sqcx.F \\
 NO\_OPENMP\_B2SQEL & sources/b2sqel.F \\
 NO\_OPENMP\_B2SRDT & sources/b2srdt.F \\
 NO\_OPENMP\_B2SRST & sources/b2srst.F \\
+NO\_OPENMP\_B2STBR & sources/b2stbr\_phys.F \\
 NO\_OPENMP\_B2STCX & sources/b2stcx.F \\
 NO\_OPENMP\_B2STEL & sources/b2stel.F \\
 NO\_OPENMP\_B2XPFE & b2aux/b2xpfe.F \\
@@ -20837,33 +20876,96 @@ NO\_OPT & postprocessing/b2ytdr.F \\
 NO\_SAVE & include/BRAEIR.H \\
 NO\_SAVE & include/EIRBRA.H \\
 NO\_SAVE & include/EIRDIAG.H \\
-\_OPENMP & src/catalyst/fortranAdaptor.F90 \\
-\_OPENMP & src/driver/b2mn\_opt.F \\
-\_OPENMP & src/driver/b2mnastra.F \\
-\_OPENMP & src/driver/b2mod\_driver.F \\
-\_OPENMP & src/driver/b2obeq.F \\
-\_OPENMP & src/driver/b2obfn.F \\
-\_OPENMP & src/driver/b2oblm.F \\
-\_OPENMP & src/equations/b2npmo.F \\
-\_OPENMP & src/modules/b2mod\_openmp.F \\
-\_OPENMP & src/solvers/b2ux11p.F \\
-\_OPENMP & src/solvers/b2ux5p.F \\
-\_OPENMP & src/solvers/b2ux7p.F \\
-\_OPENMP & src/solvers/b2ux9p.F \\
-\_OPENMP & src/sources/b2stbr.F \\
-\_OPENMP & src/utility/b2mod\_illtern\_7.F \\
-\_OPENMP & src/utility/b2mod\_ilutern\_11.F \\
-\_OPENMP & src/utility/b2mod\_ilutern\_7.F \\
-\_OPENMP & src/utility/b2mod\_ilutern\_9.F \\
-\_OPENMP & src/utility/b2opd\_subsys.F \\
+\_OPENMP & catalyst/fortranAdaptor.F90 \\
+\_OPENMP & driver/b2mn\_opt.F \\
+\_OPENMP & driver/b2mnastra.F \\
+\_OPENMP & driver/b2mod\_driver.F \\
+\_OPENMP & driver/b2obeq.F \\
+\_OPENMP & driver/b2obfn.F \\
+\_OPENMP & driver/b2oblm.F \\
+\_OPENMP & equations/b2xpfe.F \\
+\_OPENMP & equations/b2news.F \\
+\_OPENMP & equations/b2news\_.F \\
+\_OPENMP & equations/b2news\_m.F \\
+\_OPENMP & equations/b2npc11.F \\
+\_OPENMP & equations/b2npc7.F \\
+\_OPENMP & equations/b2npc9.F \\
+\_OPENMP & equations/b2npco.F \\
+\_OPENMP & equations/b2npmo.F \\
+\_OPENMP & equations/b2nxdv.F \\
+\_OPENMP & equations/b2nxfc.F \\
+\_OPENMP & equations/b2nxfv.F \\
+\_OPENMP & equations/b2nxfv\_zh.F \\
+\_OPENMP & equations/b2nxst.F \\
+\_OPENMP & modules/b2mod\_heatdiff\_common.F \\
+\_OPENMP & modules/b2mod\_ma28\_for\_11diag.F \\
+\_OPENMP & modules/b2mod\_ma28\_for\_7diag.F \\
+\_OPENMP & modules/b2mod\_ma28\_for\_9diag.F \\
+\_OPENMP & modules/b2mod\_openmp.F \\
+\_OPENMP & modules/b2mod\_sputter.F \\
+\_OPENMP & modules/b2mod\_ysmp\_sdrv.F \\
+\_OPENMP & solvers/b2unavspr7a.F \\
+\_OPENMP & solvers/b2upco.F \\
+\_OPENMP & solvers/b2urmo.F \\
+\_OPENMP & solvers/b2ursc.F \\
+\_OPENMP & solvers/b2usc11.F \\
+\_OPENMP & solvers/b2usc7.F \\
+\_OPENMP & solvers/b2usc9.F \\
+\_OPENMP & solvers/b2usco.F \\
+\_OPENMP & solvers/b2ush9.F \\
+\_OPENMP & solvers/b2usht.F \\
+\_OPENMP & solvers/b2usmo.F \\
+\_OPENMP & solvers/b2uspo.F \\
+\_OPENMP & solvers/b2ux11p.F \\
+\_OPENMP & solvers/b2ux5p.F \\
+\_OPENMP & solvers/b2ux7p.F \\
+\_OPENMP & solvers/b2ux9p.F \\
+\_OPENMP & solvers/b2uxm11.F \\
+\_OPENMP & solvers/b2uxm9.F \\
+\_OPENMP & sources/b2scdt.F \\
+\_OPENMP & sources/b2shdt.F \\
+\_OPENMP & sources/b2sian.F \\
+\_OPENMP & sources/b2siav.F \\
+\_OPENMP & sources/b2siav\_zh.F \\
+\_OPENMP & sources/b2sifr.F \\
+\_OPENMP & sources/b2sifr\_.F \\
+\_OPENMP & sources/b2sifrtf.F \\
+\_OPENMP & sources/b2sigp.F \\
+\_OPENMP & sources/b2smdt.F \\
+\_OPENMP & sources/b2spcx.F \\
+\_OPENMP & sources/b2spel.F \\
+\_OPENMP & sources/b2sqcx.F \\
+\_OPENMP & sources/b2sqel.F \\
+\_OPENMP & sources/b2srdt.F \\
+\_OPENMP & sources/b2srst.F \\
+\_OPENMP & sources/b2stbr.F \\
+\_OPENMP & sources/b2stbr\_phys.F \\
+\_OPENMP & sources/b2stcx.F \\
+\_OPENMP & sources/b2stel.F \\
+\_OPENMP & sources/heatdiff1D.F \\
+\_OPENMP & transport/b2tbfl.F \\
+\_OPENMP & transport/b2tfnb.F \\
+\_OPENMP & transport/b2tlnl.F \\
+\_OPENMP & transport/b2txvsprco.F \\
+\_OPENMP & utility/b2mod\_illtern\_7.F \\
+\_OPENMP & utility/b2mod\_ilutern\_11.F \\
+\_OPENMP & utility/b2mod\_ilutern\_7.F \\
+\_OPENMP & utility/b2mod\_ilutern\_9.F \\
+\_OPENMP & utility/b2mod\_ipmain.F \\
+\_OPENMP & utility/b2opd\_subsys.F \\
+\_OPENMP & utility/ilutern\_solps.F \\
+\_OPENMP & utility/ma28.F \\
+\_OPENMP & utility/ma28copy.F \\
+\_OPENMP & utility/ma28copy3.F \\
+\_OPENMP & utility/ma28copy4.F \\
+\_OPENMP & utility/myblas.F \\
+\_OPENMP & utility/my\_out.F \\
+\_OPENMP & utility/sfill.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
-PGF90 & equations/b2news.F \\
-PGF90 & equations/b2news\_.F \\
-PGF90 & equations/b2npmo.F \\
 PGF90 & modules/b2mod\_openmp.F \\
 PGF90 & modules/b2mod\_types.F \\
 PLPLOT & b2plot/b2plot.F \\
@@ -21195,7 +21297,7 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
-USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.F \\
 USE\_EXT\_OPENMP & main-routines/eirmod\_mcarlo.F \\
 USE\_MPI & assistant/eirmod\_second\_own.F \\
 USE\_MPI & assistant/exit\_own.F \\
@@ -21245,7 +21347,7 @@ USE\_MPI & startup-routines/input.F \\
 USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 USE\_OPENMP & assistant/eirmod\_second\_own.F \\
-USE\_OPENMP & main-routines/eirmod\_eirene.f \\
+USE\_OPENMP & main-routines/eirmod\_eirene.F \\
 USE\_OPENMP & main-routines/eirmod\_mcarlo.F \\
 USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & main-routines/eirmod\_eirene.f \\

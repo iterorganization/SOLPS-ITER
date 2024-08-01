@@ -1553,7 +1553,7 @@ c Fill out b2mod_neutrals_namelist data
       end do
 
 c Fill out some b2mod_ma28 data
-      nltrsol = nltrsol_4
+      nltrsol_5p = nltrsol_4
 
 c Fill out b2mod_numerics_namelist data
       call alloc_b2mod_numerics(nx,ny,ns)
@@ -2250,9 +2250,9 @@ c
      .   '''b2tfhe_no_current'''//tab//tab//'''1'''
       endif
       write(99,'(a,i1,a)')
-     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol,''''
+     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol_5p,''''
       write(98,'(a,i1,a)')
-     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol,''''
+     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol_5p,''''
       write(99,'(a)')
      . '''b2ux5p_style'''//tab//tab//tab//'''2'''
       write(98,'(a)')

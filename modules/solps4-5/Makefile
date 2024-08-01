@@ -57,7 +57,7 @@ TOOL_CHAIN = ${HOST_NAME}.${COMPILER}${EXT_DEBUG}
 
 SRCDIR = ${SOLPSTOP}/modules/solps4-5/src
 S45DIR = ${SOLPSTOP}/modules/solps4-5
-EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+EIRDIR = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 B2BDIR = ${SOLPSTOP}/modules/B2.5/builds/couple_Eirene.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 OBJDIR = ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}
 BASEDIR = ${SOLPSTOP}/modules/solps4-5

@@ -20,7 +20,7 @@ cp ../test/b2mn.dat .
 cp ../test/b2fstati .
 cp ../test/b2time.nc.i b2time.nc
 cp ../test/b2batch.nc.i b2batch.nc
-setup_baserun_eirene_links
+setup_baserun_B25_links
 touch b2fstati
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../test/ ./ || exit 1

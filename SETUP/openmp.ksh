@@ -20,7 +20,10 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
   export   USE_OPENMP="-D_OPENMP -DUSE_OPENMP"
   export   SOLPS_OPENMP="yes"
-  export   KMP_STACKSIZE="48M"
+  if [ "$COMPILER" != "ifort64" ]; then
+    export OMP_STACKSIZE="128M"
+  fi
+  export   KMP_STACKSIZE="128M"
   export   KMP_AFFINITY="noverbose,respect,compact"
   export   OMP_WAIT_POLICY="active"
   export   OMP_DYNAMIC="false"
