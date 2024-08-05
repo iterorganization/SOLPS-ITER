@@ -8,6 +8,9 @@
 # Debugger (set environment variable DBX)
 # DBX =
 
+# Compiler
+setenv FC gfortran
+
 
 # Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
 setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}

@@ -21,7 +21,7 @@ endif
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC        = ftn
+FC       ?= ftn
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fbounds-check -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans

@@ -44,6 +44,18 @@ LD_NAG     = -L${NAGDIR} -lnag
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?= mpif90
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?= ifort
+endif
+CC         = /usr/bin/gcc
+
+#
 # Preprocessor options
 #
 

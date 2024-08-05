@@ -74,6 +74,18 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?=
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?=
+endif
+CC        ?=
+
+#
 # Preprocessor options
 #
 

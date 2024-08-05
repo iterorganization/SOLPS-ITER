@@ -24,6 +24,9 @@ setenv _JAVA_OPTIONS "-Xss20m -Xms1g -Xmx4g"
 # work around a problem at JET where the modules are reloaded in a sub-shell
 setenv LOADL_ACTIVE 1
 
+# Compiler
+setenv FC ifort
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

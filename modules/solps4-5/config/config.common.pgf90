@@ -7,7 +7,7 @@ CPP5OPTS = -P -I${SRCDIR} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
-FC = pgf90
+FC ?= pgf90
 ifdef SOLPS_DEBUG
 FCOPTS += -g
 else

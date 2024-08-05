@@ -33,3 +33,6 @@ setenv LD_LIBRARY_PATH ${GLI_HOME}:${LD_LIBRARY_PATH}
 # Debugger
 setenv DBX totalview
 setenv LATEX pdflatex
+
+# Compiler
+setenv FC ifort

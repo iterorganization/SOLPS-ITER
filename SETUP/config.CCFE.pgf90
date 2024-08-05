@@ -50,6 +50,17 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?= pgf90
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?= pgf90
+endif
+
+#
 # Preprocessor options
 #
 

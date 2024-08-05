@@ -9,7 +9,7 @@ endif
 CPP = /lib/cpp -traditional
 SED = sed s:\#PREC\#:d:g
 
-FC = pgf90
+FC ?= pgf90
 
 DBLSED = sed -e s:\#PREC\#:d:g
 

@@ -14,7 +14,6 @@ make COMPASS_16515_1150ms_D_drift_AFN
 cd COMPASS_16515_1150ms_D_drift_AFN
 export DEVICE=compass
 correct_baserun_timestamps
-
 mkdir run_kin_test
 cd run_kin_test
 cp ../run_kin_CI/b2.*.parameters .

@@ -8,7 +8,7 @@ LD_NAG   ?= -L${NAGDIR} -lnag -lstdc++
 
 CPP       = /lib/cpp -traditional
 
-FC        = gfortran
+FC       ?= gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace

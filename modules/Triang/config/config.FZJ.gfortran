@@ -16,7 +16,7 @@ endif
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional -ffreestanding
 
-FC        = gfortran
+FC       ?= gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -debug all -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
