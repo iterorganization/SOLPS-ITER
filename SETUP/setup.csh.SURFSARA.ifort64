@@ -21,6 +21,9 @@ endif
 
 # module load itm-paraview
 
+# Compiler
+setenv FC ifort
+
 #for SURFsara (Snellius 2021)
 source /usr/share/lmod/lmod/init/tcsh
 module load 2021

@@ -56,6 +56,17 @@ endif
 ADDLIBS    = -lgfortran
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?= pgf90
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?= pgf90
+endif
+
+#
 # Preprocessor options
 #
 

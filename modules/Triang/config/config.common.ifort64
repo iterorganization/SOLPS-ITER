@@ -10,6 +10,9 @@ COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut 
 
 ifdef SOLPS_DEBUG
 FCOPTS   += -g -C -debug all
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FCOPTS   += -diag-disable:10440 -check nouninit
+endif
 else
 FCOPTS   += -O3
 endif

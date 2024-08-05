@@ -17,7 +17,7 @@ CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED =
 LINK_MOD =
 
-FC = gfortran
+FC ?= gfortran
 ifdef SOLPS_DEBUG
 FCOPTS = -C -g -Wall -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else
@@ -34,7 +34,7 @@ OBJDEST = -o ${OBJDIR}/$*.o
 
 BLD = ar rcv
 
-LD = gfortran
+LD = ${FC}
 ifdef SOLPS_DEBUG
 LDOPTS = -g -C -Wall 
 DEFINES += -DDB

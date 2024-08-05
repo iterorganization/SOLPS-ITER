@@ -72,6 +72,7 @@ ADDLIBS    = -L/opt/intel/lib/intel64 -lifcore -lgfortran -limf -lsvml -lintlc -
 #
 
 FC         = ftn
+CC         = cc
 
 #
 # Preprocessor options

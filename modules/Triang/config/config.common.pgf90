@@ -4,7 +4,7 @@ EQUIVS =
 CPPOPTS = -P -I${srcdir} ${EQUIVS}
 LINK_MOD =
 
-FC = pgf90
+FC ?= pgf90
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V | grep "pgf90" | awk 'match($$0,/[0-9]+\.[0-9]+\-[0-9]+/){print substr($$0, RSTART, RLENGTH)}' | cut -d '.' -f 1 )
 
 FCOPTS += -Mbackslash

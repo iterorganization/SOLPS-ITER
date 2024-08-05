@@ -15,7 +15,7 @@ endif
 
 CPP      = -/lib/cpp -traditional
 
-FC       = ifort
+FC      ?= ifort
 
 GKS      = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 

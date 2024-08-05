@@ -84,8 +84,13 @@ ADDLIBS    = -lgfortran
 # Provide compiler
 #
 
-FC         =
-MPI_FC     =
+MPI_FC    ?=
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?=
+endif
+CC        ?=
 
 #
 # Preprocessor options

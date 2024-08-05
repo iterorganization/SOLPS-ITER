@@ -21,6 +21,9 @@
 # mpi-library
 #module load mpich2/3.1.3-intel
 
+# Compiler
+setenv FC ifort
+
 if (! $?DEVICE) then
   setenv DEVICE KSTAR
 endif

@@ -29,6 +29,7 @@ LIBGRS     = ${GR_ROOT}/libgr.a
 #
 
 FC         = ftn
+CC         = cc
 
 #
 # Preprocessor options
