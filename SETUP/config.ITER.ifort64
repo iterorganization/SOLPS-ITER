@@ -76,9 +76,9 @@ LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
 endif
 else
 ifeq (,$(findstring CentOS,$(OS)))
-FC        ?= ifort
-else
 FC        ?= ifx
+else
+FC        ?= ifort
 endif
 endif
 
