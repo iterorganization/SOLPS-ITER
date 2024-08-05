@@ -32,6 +32,10 @@ ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
 endif
+ifdef DIFF_DD
+EXT_DIFF = .diff_dd
+DIFF=_hess
+endif
 ifdef TGT
 EXT_DIFF = .tgt
 DIFF=_d
@@ -39,6 +43,10 @@ endif
 ifdef ADJ
 EXT_DIFF = .adj
 DIFF=_b
+endif
+ifdef HESS_TGT
+EXT_DIFF = .hess_tgt
+DIFF=_hess
 endif
 MNEXE=b2mn${DIFF}
 ifdef OPT_D

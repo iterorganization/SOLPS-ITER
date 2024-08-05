@@ -164,6 +164,18 @@ argloop:
     setenv OPT_ADJ yes
     goto argloop
   endif
+  if ("X${1}X" == "X-diff_ddX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv DIFF_DD yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-hess_tgtX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv HESS_TGT yes
+    goto argloop
+  endif
   if ("X${1}X" == "X-mX") then
     shift
     if (! $?SOLPS_MPI) then

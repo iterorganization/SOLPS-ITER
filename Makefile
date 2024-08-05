@@ -107,7 +107,7 @@ unexport SOLPS_OPENMP
 unexport SOLPS_DEBUG
 unexport SOLPS_MPI
 
-.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj
+.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj b25_hess_tgt b25_diff_dd
 
 DEFAULT: solps
 
@@ -199,11 +199,17 @@ b25_diff_d:
 b25_diff_b:
 	cd modules/B2.5; ${MAKE} DIFF_B
 
+b25_diff_dd:
+	cd modules/B2.5; ${MAKE} DIFF_DD
+
 b25_tgt:
 	cd modules/B2.5; ${MAKE} TANGENT TGT=yes
 
 b25_adj:
 	cd modules/B2.5; ${MAKE} ADJOINT ADJ=yes
+
+b25_hess_tgt:
+	cd modules/B2.5; ${MAKE} HESS_TGT HESS_TGT=yes
 
 b25_all:
 	cd modules/solps4-5; ${MAKE} links
@@ -455,6 +461,7 @@ listobj:
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/B2.5;           ${MAKE} listobj TGT=yes
 	cd modules/B2.5;           ${MAKE} listobj ADJ=yes
+	cd modules/B2.5;           ${MAKE} listobj HESS_TGT=yes
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} listobj
@@ -537,6 +544,7 @@ ifeq (${TAO_PRESENT},1)
 else
 	cd modules/B2.5;           ${MAKE} depend TGT=yes
 	cd modules/B2.5;           ${MAKE} depend ADJ=yes
+	cd modules/B2.5;           ${MAKE} depend HESS_TGT=yes
 endif
 
 depend_nox:
@@ -696,6 +704,9 @@ clean_b25_adj:
 
 clean_b25_tgt:
 	cd modules/B2.5; ${MAKE} clean TGT=yes
+
+clean_b25_hess_tgt:
+	cd modules/B2.5; ${MAKE} clean HESS_TGT=yes
 
 clean_b25_openmp:
 	cd modules/B2.5; ${MAKE} clean ${OMP_OPTB}

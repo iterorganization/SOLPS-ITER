@@ -22,6 +22,7 @@ if ( -s run.log ) then
   grep -i -w 'cost function' run.log | tail -n $NNN >> run.info
   grep -i -w 'cost function value' run.log | tail -n $NNN >> run.info
   grep -i 'gradient' -A1 run.log | grep -i -v tao | tail -n 200 >> run.info
+  grep -i 'hessian' run.log | grep -i -v tao | tail -n 400 >> run.info
 else
   echo "No run.log file present"
 endif

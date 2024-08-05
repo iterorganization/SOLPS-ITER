@@ -1,0 +1,183 @@
+MODLIST=`ls b2mod*_diffv_dv.F90 b2us_*_diffv_dv.F90 | sed -e 's/_dv.F90//g'`
+cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_exclude.txt > tmp
+ls b2mod*_dv.F90 b2us_*_dv.F90 | sed -e 's/_dv.F90//g' >> tmp
+for d in $MODLIST; do
+mv $d"_dv.F90" $d"_diffv.F90"
+done;
+ls *_dv.F90 | sed -e 's/_dv.F90//g' >> tmp
+
+rm -r temp
+mkdir temp
+cd temp
+mv ../tmp .
+
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xvsg.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxgs.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xzmf.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xxid.F .
+cp $SOLPSTOP/modules/B2.5/src/b2aux/b2xpne_st.F .
+
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isplusorminus.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isadigit.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/isaletter.F .
+
+cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
+
+cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
+cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .
+
+cp $SOLPSTOP/modules/B2.5/src/input/b2rflb.F .
+cp $SOLPSTOP/modules/B2.5/src/input/b2rusr.F .
+
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_constants.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/carre_constants.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_cellhelper.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/tradui_constants.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/logging.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/helper.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_grid_mapping.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_connectivity.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_interp.F90 .
+cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_geometry.F90 .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_types.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_time.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_residuals.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirene_globals.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmfs.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirdiag.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_mwti.F90 .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_cdf.F90 .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ma28_for_us.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirbra.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_openmp.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2_to_astr* .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_astra_to_b2.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmgs.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
+
+cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
+
+cp $SOLPSTOP/modules/B2.5/src/sources/average.F .
+cp $SOLPSTOP/modules/B2.5/src/sources/setwrk0.F .
+cp $SOLPSTOP/modules/B2.5/src/sources/integrate.F .
+cp $SOLPSTOP/modules/B2.5/src/sources/ggfill.F .
+
+cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .
+cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
+
+
+cp $SOLPSTOP/modules/B2.5/src/user/b2mod_bln* .
+cp $SOLPSTOP/modules/B2.5/src/user/b2mod_wr* .
+cp $SOLPSTOP/modules/B2.5/src/user/b2mod_usrtrc.F .
+cp $SOLPSTOP/modules/B2.5/src/user/b2mod_trace.F .
+cp $SOLPSTOP/modules/B2.5/src/user/b2mod_file.F .
+cp $SOLPSTOP/modules/B2.5/src/user/batch_average.F .
+cp $SOLPSTOP/modules/B2.5/src/user/combfile.F .
+cp $SOLPSTOP/modules/B2.5/src/user/cdfmovie.F .
+cp $SOLPSTOP/modules/B2.5/src/user/map_and_interpolate_cf.F .
+cp $SOLPSTOP/modules/B2.5/src/user/eirflux_map.F .
+cp $SOLPSTOP/modules/B2.5/src/user/parsehdr.F .
+
+cp $SOLPSTOP/modules/B2.5/src/utility/chcase.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_subsys.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_lwmain.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_lwimai.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_ipmain.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_xerset.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/xer* .
+cp $SOLPSTOP/modules/B2.5/src/utility/hybr.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/upwind.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/intface.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/ilutern_us_solps.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/smin.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/smax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/damax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/harm.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/ipget* .
+cp $SOLPSTOP/modules/B2.5/src/utility/damax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cfru* .
+cp $SOLPSTOP/modules/B2.5/src/utility/cfwuch.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cfwuin.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/nancheck.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/streql.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cdf_routines.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/is_comment.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/strip_spaces.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/uxcm.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/ratio.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/prvrt* .
+cp $SOLPSTOP/modules/B2.5/src/utility/bfill.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/interp1d.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/calc_err.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/jobnam.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/nagsubst.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cfvers.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/daytim.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/usrnam.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/strcopy.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/machsfr.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cfopen.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/get_jsep.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/prg* .
+cp $SOLPSTOP/modules/B2.5/src/utility/*fill.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dfmin.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dseval.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/dspline.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/intp_* .
+cp $SOLPSTOP/modules/B2.5/src/utility/my_outi_us.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/epoch_seconds.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/len_of_digits.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/intersects.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/trilinear_int.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/cpeir_* .
+cp $SOLPSTOP/modules/B2.5/src/utility/sys* .
+cp $SOLPSTOP/modules/B2.5/src/utility/lefta.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/damax.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/open_file.F .
+
+cp $SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_hessian.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_tgt_perturbation.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/intp_2dtable_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/intp_3dtable_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/cpeir_bilinear_int_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2xzmf_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2nxcm_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2nxst_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2uppo_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/intface_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/upwind_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/hybr_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/trilinear_int_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/interp1d_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/nagsubst_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/map_and_interpolate_cf_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/uxcm_dv.F90 .
+
+# and now modify the 'use modules' which have been differentiated
+files=`ls *.F*`
+for d in $MODLIST; do
+f=$d"_diffv"
+echo "Now modifying the use of "$d" into "$f
+sed -i -e "s/\<use $d\>/use $f/g" $files
+done;
+
+echo "Files that have been excluded from differentiation have been copied to differentiation directory for compiling"
+
+mv ./*.F ../
+mv ./*.F90 ../
+cd ../
+rm -r temp
+
+
