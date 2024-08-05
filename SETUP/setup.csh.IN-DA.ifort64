@@ -10,6 +10,9 @@ if (! $?DEVICE) then
   setenv DEVICE iter
 endif
 
+# Compiler
+setenv FC ifort
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

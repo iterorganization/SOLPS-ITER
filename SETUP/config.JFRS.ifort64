@@ -58,6 +58,7 @@ LIBGRS     = ${GR_ROOT}/libgr.a
 #
 
 FC         = ftn
+CC         = cc
 MPI_FC     = ${FC}
 
 #

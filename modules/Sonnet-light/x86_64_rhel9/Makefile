@@ -28,7 +28,7 @@ all: libsonnet.a
 	rm -f $@.$$$$
 
 libsonnet.a: $(sources:.cpp=.o) Makefile
-	ar clq libsonnet.a $(sources:.cpp=.o)
+	ar cq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
 	${INSTALL} libsonnet.a ${INSTALL_USERAREA}
 

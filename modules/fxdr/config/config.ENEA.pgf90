@@ -9,7 +9,7 @@ ifndef SOLPSLIB
   $(error SOLPSLIB not defined)
 endif
 
-FC       = pgf90
+FC      ?= pgf90
 
 ifdef SOLPS_DEBUG
 FFLAGS   = -g -C

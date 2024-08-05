@@ -3,11 +3,21 @@ NODENAME ?= $(shell echo `hostname`)
 LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
 LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+ifeq (,$(findstring CentOS,$(OS)))
+MPI_FC   ?= mpiifort
+else
+MPI_FC   ?= mpiifort -fc=mpiifx
+endif
 ifdef USE_MPI
-FC        = mpiifort
+FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
 else
-FC        = ifort
+ifeq (,$(findstring CentOS,$(OS)))
+FC       ?= ifort
+else
+FC       ?= ifx
+endif
 endif
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )

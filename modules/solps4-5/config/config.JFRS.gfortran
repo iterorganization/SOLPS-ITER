@@ -1,6 +1,6 @@
 CPP = /lib/cpp
 
-FC = ftn
+FC ?= ftn
 ifdef SOLPS_DEBUG
 FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else

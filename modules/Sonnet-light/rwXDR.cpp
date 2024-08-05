@@ -138,7 +138,7 @@ void xdr_character (
     int response;
     if (Action == readXDR) {
         response = xdr_int(&xdrHandle, &returnLength);
-        if (response == FALSE) printf("xdr_int() failed for reading string lenght.");
+        if (response == FALSE) printf("xdr_int() failed for reading string length.");
         if (returnLength > local_length) 
            printf("Returned length greater input length.");
     } else if (Action == writeXDR) {

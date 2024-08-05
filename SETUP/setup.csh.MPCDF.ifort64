@@ -23,6 +23,9 @@ module load paraview/5.9
 setenv DBX ddt
 setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 
+# Compiler
+setenv FC ifort
+
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE upgrade

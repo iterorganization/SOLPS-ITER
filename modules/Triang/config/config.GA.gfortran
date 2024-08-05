@@ -14,7 +14,7 @@ LD_NAG   ?= -L${NAGDIR} -llapack -lblas
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC        = gfortran
+FC       ?= gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans

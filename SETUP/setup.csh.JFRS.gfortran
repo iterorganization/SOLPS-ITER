@@ -19,6 +19,9 @@ setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
 setenv SYSNAME amd64_sles15
 setenv NO_MANUAL true
 
+# Compiler
+setenv FC ftn
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

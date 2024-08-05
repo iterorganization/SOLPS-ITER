@@ -53,12 +53,13 @@ LIBX11     = /usr/lib64/libX11.so
 # Provide compiler
 #
 
+MPI_FC ?= mpiifort
 ifdef SOLPS_MPI
-FC      = mpiifort
+FC      = ${MPI_FC}
 else
-FC      = ifort
+FC     ?= ifort
 endif
-MPI_FC  = mpiifort
+CC     ?= /usr/bin/gcc
 
 #
 # Preprocessor options

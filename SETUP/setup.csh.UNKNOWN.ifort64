@@ -42,6 +42,9 @@ unsetenv NCARG_ROOT
 # Debugger (set environment variable DBX)
 setenv DBX idb
 
+# Compiler
+setenv FC ifort
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

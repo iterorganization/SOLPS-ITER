@@ -23,8 +23,7 @@ BLD = ar rcv
 GRLIBES = $(LD_NCARG)
 LDLIBES = $(LD_NAG) $(LD_MSCL)
 
-LD = f90 -lapp
-LD = pghpf -Mf90
+LD = ${FC} -Mf90
 
 LDOPTS = -l /usr/local/pat/libpat.a /usr/local/pat/pat.cld
 LDOPTS = 

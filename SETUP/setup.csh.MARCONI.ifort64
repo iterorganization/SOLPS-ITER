@@ -27,6 +27,9 @@ module load cmake/3.18.2
 
 #module load imas
 
+# Compiler
+setenv FC ifort
+
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
     setenv DEVICE $TOKAMAKNAME

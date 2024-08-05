@@ -14,7 +14,7 @@ CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
-FC = nagfor
+FC ?= nagfor
 FCOPTS = -compatible
 ifdef SOLPS_DEBUG
 FCOPTS += -Mbackslash -C -g -Mchkfpstk -Mchkptr -Mchkstk -Mpgicoff
