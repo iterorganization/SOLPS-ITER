@@ -557,7 +557,8 @@ b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 uinp: b25eirene
 	cd modules/Uinp; ${MAKEO}
 
-uinp_nox: uinp
+uinp_nox: b25eirene_nox
+	cd modules/Uinp; ${MAKEO}
 
 uinp_openmp: b25eirene_openmp
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
@@ -570,13 +571,24 @@ uinp_openmp_mpi: b25eirene_openmp_mpi
 
 uinp_mpi_openmp: uinp_openmp_mpi
 
-uinp_nox_openmp: uinp_openmp
+uinp_nox_openmp: b25eirene_nox_openmp
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
-uinp_nox_mpi: uinp_mpi
+uinp_openmp_nox: uinp_nox_openmp
 
-uinp_nox_openmp_mpi: uinp_openmp_mpi
+uinp_nox_mpi: b25eirene_nox_mpi
+	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
-uinp_nox_mpi_openmp: uinp_openmp_mpi
+uinp_mpi_nox: uinp_nox_mpi
+
+uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+
+uinp_nox_mpi_openmp: uinp_nox_openmp_mpi
+
+uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
+
+uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
 triang: eirene_nox
 	cd modules/Triang; ${MAKE}
