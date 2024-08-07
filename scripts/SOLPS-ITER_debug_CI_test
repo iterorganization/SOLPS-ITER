@@ -4,7 +4,7 @@
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox_debug depend_nox_debug
-make nc2text_simple
+make nc2text_simple nc_reduce
 make MAKE_OPTIONS=-j8 nox_build_debug b25_nox_debug
 
 # Run test case
