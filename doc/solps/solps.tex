@@ -97,6 +97,7 @@ This is the combined work of many authors. Started by D.P.~Coster, it includes c
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
 \item S.~Carli, for the Algorithmic Differentiation chapters (Chapter~\ref{cha:ad_optim} and Appendix~\ref{cha:ad_expert})
+\item W.~Van~Uytven, for updates regarding the switch to the unstructured grid format and additional documentation on the advanced fluid neutral models.
 \end{itemize}
 All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.org}.
 
@@ -117,6 +118,7 @@ chapter \ref{cha:standaloneeirene} and then of the coupled {\tt B2.5-Eirene}
 in chapter \ref{cha:coupledb2eirene}.  Then follow chapters on {\tt DivGeo}
 (\ref{cha:divgeo}), {\tt Carre} (\ref{cha:carre}) and {\tt agg} (\ref{cha:agg}).
 A discussion of the Algorithmic Differentation and optimization code options is found in Chapter~\ref{cha:ad_optim}.
+Chapter~\ref{cha:unstructured} explains the new wide grid (WG) structure of {\tt B2.5}.
 Appendix \ref{cha:intb2doc} contains copies of the {\tt B2.5} internal
 documentation files, \ref{cha:b2physics} describes the physics in {\tt B2.5},
 \ref{cha:equations} gives the full model equations used in {\tt B2.5},
@@ -182,6 +184,10 @@ Martine_Baelmans_-_Juelich_Report_1994.pdf .
 When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI2014,BONNINPET15} and references therein. You will also find these references in the {\tt \$\{SOLPSTOP\}/doc} directory.
 
 Several of the {\bf SOLPS4.2} features are detailed in {\tt Kotov\_SOLPS42\_Report.pdf}.
+
+{\tt B2} and {\tt B2.5} originally used structured finite-volume meshes with a rectangular topology. Since 2017, an effort is ongoing to transform the code to an unstructured mesh format,
+making it possible to model up to the real vessels walls, and having more control over local refinement. This new version is typically called the wide-grids version or WG. Chapter \ref{cha:unstructured} explains the
+WG discretization.
 
 The next section discusses obtaining and updating the code.
 
@@ -4403,7 +4409,7 @@ We only include here the variables or aspects thereof not already described in t
   \item[DUM7-10] Dummy parameters, not in use in the wide grids code. Present to avoid issues when starting from a converted structured case (with additional inputs).
   \item[NCOND] Number of atoms that is allowed to ``condense" from the {\tt Eirene} kinetic to the {\tt B2.5} fluid population in the hybrid model.
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
-  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt -10000/(NGENA+1)} (see EIRENE manual). The format of {\tt NGENA} is I3, which means that the range of transition Knudsen number is limited. However, the probability of kinetic-fluid condensation can be decreased by decreasing {\tt L\_macro\_AFN}. 
+  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt -10000/(NGENA+1)} (see EIRENE manual). The format of {\tt NGENA} is I3, which means that the range of transition Knudsen number is limited. However, the probability of kinetic-fluid condensation can be decreased by decreasing {\tt L\_macro\_AFN}.
   \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background.
   \item[NCVP] Total number of cells in the {\tt B2.5} mesh
   \item[NCIP] Total number of internal cells in the {\tt B2.5} mesh
@@ -6170,6 +6176,10 @@ But mesh-generation is valid !
 \chapter{Sensitivity calculation and optimization in B2.5}
 \label{cha:ad_optim}
 \input{ad_optimization.tex}
+
+\chapter{Unstructured / Wide Grids format of B2.5}
+\label{cha:unstructured}
+\input{unstructured.tex}
 
 \appendix
 
