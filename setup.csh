@@ -15,8 +15,10 @@ echo or online at http://www.eirene.de/
 if ( "$0" != "tcsh" ) then
   if ( "$0" != "-tcsh" ) then
     if ( "$0" != "/entrypoint.csh" ) then
-      echo "\e[31mUse tcsh to source setup.csh!\e[m"
-      exit 1
+      if ( "$SHELL" != "/bin/tcsh" ) then
+        echo "\e[31mUse tcsh to source setup.csh!\e[m"
+        exit 1
+      endif
     endif
   endif
 endif
