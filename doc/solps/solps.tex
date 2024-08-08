@@ -11984,27 +11984,27 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Continuity equation residual for species } a \mbox{:}
 \frac{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{n_a,i,j} \right|
+        \sum \limits_{i=1}^{nCi}  \left| r_{n_a,i} \right|
 }{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \sqrt{g_{i,j}} n_{a,i,j}
+        \sum \limits_{i=1}^{nCi}  \sqrt{g_{i}} n_{a,i}
 }
 \end{equation}
 
 \begin{equation}
 \mbox{Parallel momentum equation residual for species } a \mbox{:}
 \frac{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{u_a,i,j} \right|
+        \sum  \limits_{i=1}^{nCi} \left| r_{u_a,i} \right|
 }{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \sqrt{g_{i,j}} n_{a,i,j} \sqrt{m_a T_i}
+        \sum  \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i} \sqrt{m_a T_i}
 }
 \end{equation}
 
 \begin{equation}
 \mbox{Electron energy equation residual:}
 \frac{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{h_e,i,j} \right|
+        \sum  \limits_{i=1}^{nCi} \left| r_{h_e,i} \right|
 }{
-        \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \sqrt{g_{i,j}} n_{a,i,j}
+        \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i}
         \left( z_a T_e + T_i \right)
 }
 \end{equation}
@@ -12012,9 +12012,9 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Ion energy equation residual:}
 \frac{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{h_i,i,j} \right|
+        \sum  \limits_{i=1}^{nCi} \left| r_{h_i,i} \right|
 }{
-        \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \sqrt{g_{i,j}} n_{a,i,j}
+        \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i}
         \left( z_a T_e + T_i \right)
 }
 \end{equation}
@@ -12022,9 +12022,9 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Electric potential equation residual:}
 \frac{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \left| r_{po,i,j} \right|
+        \sum  \limits_{i=1}^{nCi} \left| r_{po,i} \right|
 }{
-        \sum \limits_{i=0}^{n_x-1} \sum \limits_{j=0}^{n_y-1} \sqrt{g_{i,j}} e n_{e,i,j}
+        \sum  \limits_{i=1}^{nCi} \sqrt{g_{i}} e n_{e,i}
 }
 \end{equation}
 
