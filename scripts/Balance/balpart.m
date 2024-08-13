@@ -5,8 +5,10 @@
 %              balance should be performed                                     %
 % indpol:      Logical matrix of size nCv that is true for cells where         %
 %              poloidal balance should be performed                            %
-% facesup:     List of faces of the upstream boundary                          %
-% facesdown:   List of faces of the downstream boundary                        %
+% facesup:     List of faces of the upstream boundary of indrad                %
+% facesdown:   List of faces of the downstream boundary of indrad              %
+% facesup_pol: List of faces of the upstream boundary of indpol                %
+% facesdown_pol: List of faces of the downstream boundary of indpol            %
 % isplot:      Species index to be plotted                                     %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % axbal:       Array of axes into which balance plots will be placed           %
@@ -28,7 +30,7 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function btn = balpart(balfile,indrad,indpol,facesup,facesdown,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
+function btn = balpart(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
 nCv = comuse.nCv;
@@ -162,6 +164,14 @@ switch areatype
         fnb_pinch = fnbx_pinch;
         fnb_ch = fnbx_ch;
         fnb_pschused = fnbx_pschused;
+        % flux needed for radial balance of indpol
+        fnb2_pll = fnby_pll;
+        fnb2_drift = fnby_drift;
+        fnb2_nanom = fnby_nanom;
+        fnb2_panom = fnby_panom;
+        fnb2_pinch = fnby_pinch;
+        fnb2_ch = fnby_ch;
+        fnb2_pschused = fnby_pschused;
     otherwise % Poloidal + radial component
         fnb_pll = fnbx_pll + fnby_pll;
         fnb_drift = fnbx_drift + fnby_drift;
@@ -170,7 +180,39 @@ switch areatype
         fnb_pinch = fnbx_pinch + fnby_pinch;
         fnb_ch = fnbx_ch + fnby_ch;
         fnb_pschused = fnbx_pschused + fnby_pschused;
+
+        fnb2_pll = zeros(size(fnby_pll));
+        fnb2_drift = zeros(size(fnby_drift));
+        fnb2_nanom = zeros(size(fnby_nanom));
+        fnb2_panom = zeros(size(fnby_panom));
+        fnb2_pinch = zeros(size(fnby_pinch));
+        fnb2_ch = zeros(size(fnby_ch));
+        fnb2_pschused = zeros(size(fnby_pschused));
 end
+
+%% Fluxes at boundary of indpol
+for iCv = 1:nCv
+    if indpol(iCv)
+        iFc1 = comuse.cvFcP(iCv,1);
+        iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
+        for i = iFc1:iFc2
+            iFc = comuse.cvFc(i);
+            if ~any(facesup_pol == iFc) && ~any(facesdown_pol == iFc)
+                if (indpol(comuse.fcCv(iFc,1)) && ~indpol(comuse.fcCv(iFc,2))) || ...
+                    (~indpol(comuse.fcCv(iFc,1)) && indpol(comuse.fcCv(iFc,2))) % face at radial boundary of indpol
+                        fnb2_pll(iFc) = fnb2_pll(iFc) + fnbx_pll(iFc) + fnby_pll(iFc);
+                        fnb2_drift(iFc) = fnb2_drift(iFc) + fnbx_drift(iFc) + fnby_drift(iFc);
+                        fnb2_nanom(iFc) = fnb2_nanom(iFc) + fnbx_nanom(iFc) + fnby_nanom(iFc);
+                        fnb2_panom(iFc) = fnb2_panom(iFc) + fnbx_panom(iFc) + fnby_panom(iFc);
+                        fnb2_pinch(iFc) = fnb2_pinch(iFc) + fnbx_pinch(iFc) + fnby_pinch(iFc);
+                        fnb2_ch(iFc) = fnb2_ch(iFc) + fnbx_ch(iFc) + fnby_ch(iFc);
+                        fnb2_pschused(iFc) = fnb2_pschused(iFc) + fnbx_pschused(iFc) + fnby_pschused(iFc);
+                end
+            end
+        end
+    end
+end
+
 
 %% Calculate the radial divergences...
 raddiv_pll = raddiv(fnbx_pll,fnby_pll,comuse,indrad,facesup,facesdown,areatype);
@@ -203,9 +245,9 @@ if ~makeplot
 end
 
 areadividepol = poloidal_balance(...
- cat(3,fnbx_pll,fnbx_drift,fnbx_nanom,fnbx_panom,fnbx_pinch,fnbx_ch,fnbx_pschused),...
- cat(3,raddiv_drift,raddiv_pll,raddiv_nanom,raddiv_panom,raddiv_pinch,raddiv_ch,raddiv_pschused,...
-       sum(eirene_mc_papl_sna,4),sum(eirene_mc_pmpl_sna,4),sum(eirene_mc_pipl_sna,4),sum(eirene_mc_pppl_sna,4),eirene_mc_core_sna,...
+ cat(2,fnb_pll,fnb_drift,fnb_nanom,fnb_panom,fnb_pinch,fnb_ch,fnb_pschused),...
+ cat(2,fnb2_pll,fnb2_drift,fnb2_nanom,fnb2_panom,fnb2_pinch,fnb2_ch,fnb2_pschused),...
+ cat(2,sum(eirene_mc_papl_sna,3),sum(eirene_mc_pmpl_sna,3),sum(eirene_mc_pipl_sna,3),sum(eirene_mc_pppl_sna,3),eirene_mc_core_sna,...
        b2stel_sna_ion_prev,b2stel_sna_ion_next,b2stel_sna_rec_prev,b2stel_sna_rec_next,b2stbc_sna,b2stbm_sna,b2stcx_sna,ext_sna,b2srdt_sna,b2srsm_sna,b2srst_sna,b2stbr_phys_sna,b2stbr_bas_sna,b2stbr_first_flight_sna),...
  rescb,...
  {'total radially-integrated flux',...
@@ -215,7 +257,7 @@ areadividepol = poloidal_balance(...
  {'rad. drift diverg.','rad. diverg. nv_{||}','rad. density diffusion diverg.','rad. pressure diffusion diverg.','rad. pinch diverg.','rad. diverg. fnby\_ch','rad. P-S diverg.',...
   'eirene\_mc atm.-plasma','eirene\_mc mol.-plasma','eirene\_mc t.ion-plasma','eirene\_mc recomb.','eirene\_mc core',...
   'b2stel ion prev.','b2stel ion next','b2stel rec prev.','b2stel rec next','b2stbc','b2stbm','b2stcx','source\_input','b2srdt','b2srsm','b2srst','b2stbr\_phys','b2stbr\_bas','b2stbr\_first\_flight'},...
- comuse,indpol,area_divide,reverse,false,axbal(5:7),units,areaend,polbaldist);
+ comuse,indpol,facesup_pol,facesdown_pol,area_divide,reverse,false,axbal(5:7),units,areaend,polbaldist);
 
 if strata_plot
     make_strata_plots({squeeze(eirene_mc_papl_sna)},{squeeze(eirene_mc_pmpl_sna)},{squeeze(eirene_mc_pipl_sna)},{squeeze(eirene_mc_pppl_sna)},...

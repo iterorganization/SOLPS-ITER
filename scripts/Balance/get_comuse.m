@@ -41,6 +41,7 @@ comuse.nomp = finfo.Dimensions(dimMatch).Length;
 % Get grid information:
 comuse.cvX = ncread(filename,'cvX');
 comuse.cvY = ncread(filename,'cvY');
+comuse.cvHx = ncread(filename,'cvHx');
 comuse.vxX = ncread(filename,'vxX');
 comuse.vxY = ncread(filename,'vxY');
 comuse.cvFc = ncread(filename,'cvFc');
@@ -55,6 +56,7 @@ comuse.fcQalf = ncread(filename,'fcQalf');
 % Face labels
 comuse.fcLbl = ncread(filename,'fcLbl');
 % Magnetic field
+comuse.cvBb = ncread(filename,'cvBb');
 comuse.fcBb = ncread(filename,'fcBb');
 % Magnetic psi
 comuse.vxFpsi = ncread(filename,'vxFpsi');

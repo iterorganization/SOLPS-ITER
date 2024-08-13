@@ -2,11 +2,13 @@
 % set_region sets the inrad and indpol logical grids for default region names. %
 % facesup and facesdown contain the face indices of the upstream and           %
 % downstream boundaries of indrad, respectively.                               %
+% facesup_pol and facesdown_pol contain the face indices of the upstream and   %
+% downstream boundaries of indpol, respectively.                               %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indrad,indpol,reverse,facesup,facesdown] = set_region(region_name,comuse)
+function [indrad,indpol,reverse,facesup,facesdown,facesup_pol,facesdown_pol] = set_region(region_name,comuse)
 
 indrad = false(comuse.nCv,1);
 indpol = false(comuse.nCv,1);
@@ -157,7 +159,7 @@ elseif comuse.nXpt == 0
     end
 end
 
-% Determine the faces of the upstream and downstream boundary
+% Determine the faces of the upstream and downstream boundary of indrad
 facesup = []; % list of faces at the upstream boundary
 facesdown = []; % list of faces at the downstream boundary
 for iFc = 1:comuse.nFc
@@ -181,5 +183,22 @@ for iFc = 1:comuse.nFc
         end
     end
 end
+
+% Determine the faces of the upstream and downstream boundary of indpol
+facesup_pol = [];
+for i = 1:length(facesup)
+    iFc = facesup(i);
+    if indpol(comuse.fcCv(iFc,1)) || indpol(comuse.fcCv(iFc,2))
+        facesup_pol = [facesup_pol,iFc];
+    end
+end
+facesdown_pol = [];
+for i = 1:length(facesdown)
+    iFc = facesdown(i);
+    if indpol(comuse.fcCv(iFc,1)) || indpol(comuse.fcCv(iFc,2))
+        facesdown_pol = [facesdown_pol,iFc];
+    end
+end
+
 
 end
