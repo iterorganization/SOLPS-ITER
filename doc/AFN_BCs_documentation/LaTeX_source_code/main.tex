@@ -1,0 +1,63 @@
+\documentclass{report}
+\usepackage{fullpage}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{tabularx}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{lineno,hyperref}
+\usepackage{gensymb,textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm}
+\usepackage{subfig}
+\usepackage{dsfont}
+\usepackage{amsmath}
+\usepackage{textcomp} % nice greek alphabet
+\usepackage{pifont}   % Dingbats
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage[version=4]{mhchem}
+\usepackage{epstopdf}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{stackengine}
+%\usepackage{color.sty}
+\addbibresource{mybib.bib}
+
+
+
+
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+
+\title{Advanced Fluid Neutral boundary conditions: theory and implementation in SOLPS-ITER}
+\author{W. Van Uytven, N. Horsten, W. Dekeyser}
+\date{June 2024}
+
+\begin{document}
+
+\include{defs}
+
+\maketitle
+
+\tableofcontents
+
+\input{nomenclaturechapter}
+
+\input{intro}
+
+\input{cite}
+
+\input{theory}
+
+\input{implementation}
+
+\input{guide}
+
+\input{future}
+
+\printbibliography
+
+\end{document}

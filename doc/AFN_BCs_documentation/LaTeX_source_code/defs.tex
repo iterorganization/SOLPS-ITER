@@ -1,0 +1,1096 @@
+
+
+% Some nice colors
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\magenta}[1]{\textcolor{magenta}{#1}}
+\newcommand{\yellow}[1]{\textcolor{yellow}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\darkgray}[1]{\textcolor{darkgray}{#1}}
+\newcommand{\lightgray}[1]{\textcolor{lightgray}{#1}}
+\newcommand{\bred}[1]{\textbf{\textcolor{red}{#1}}}
+
+
+
+
+% DEFINE SOME COMMANDS...
+%========================
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% General
+
+\newcommand{\abs}[1]{\left| #1 \right|}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Opimization problem
+\newcommand{\J}{J}           % Cost functional
+\newcommand{\La}{L}           % Lagrangian
+\newcommand{\Jr}{\hat{J}}    % Reduced cost functional
+
+\newcommand{\OmJ}[1][]{\Omega_{#1}}              % Control variable: domain
+\newcommand{\SJ}[1][]{_{#1}}                    % Control variable: boundary
+\newcommand{\q}[1][]{{\bf q}_{#1}}               % State variables
+\newcommand{\qf}{{\bf q}_{\mathrm{f}}}           % Fluid state variables
+\newcommand{\qfmin}{{\bf q}_{\mathrm{f,min}}}
+\newcommand{\qfmax}{{\bf q}_{\mathrm{f,max}}}
+\newcommand{\qk}{{\bf q}_{\mathrm{k}}}           % Kinetic state variables
+\newcommand{\qL}{\delta \q}            % Linearized state variables
+\newcommand{\qA}[1][]{{\bf q}_{#1}^{*}}               % Costate variables
+\newcommand{\qAS}{{\bf p}^{*}}          % Costate variables for boundary conditions
+\newcommand{\qASb}[1]{{\bf p}_{#1}^{*}}          % Costate variables for boundary conditions
+
+
+
+\newcommand{\OmJad}{\mathcal{O}} % Admissible set of domains
+
+\newcommand{\JL}{\J_{\q}} 
+
+
+\newcommand{\B}{\boldsymbol{\mathcal{B}}}                       % State equations
+\newcommand{\BS}{\boldsymbol{\mathcal{C}}}                  % Boundary conditions
+\newcommand{\BL}{\boldsymbol{\mathcal{B}}_{\q}}                 % Linearized state equations
+\newcommand{\BLphi}{\boldsymbol{\mathcal{B}}_{\phi}}                 % Linearized state equations
+\newcommand{\BSL}{\boldsymbol{\mathcal{C}}_{\q}}              % Linearized boundary conditions
+\newcommand{\BSLp}{\boldsymbol{\mathcal{C}}_{\nabla_{\theta}\q}}
+\newcommand{\BSLr}{\boldsymbol{\mathcal{C}}_{\nabla_{r}\q}}
+\newcommand{\BSb}[1]{\boldsymbol{\mathcal{C}}_{\mathrm{#1}}}  % Boundary conditions along boundary [1]
+\newcommand{\BSLb}[1]{\boldsymbol{\mathcal{C}}_{\mathrm{#1},\q}}              % Linearized boundary conditions
+\newcommand{\BSLpb}[1]{\boldsymbol{\mathcal{C}}_{\mathrm{#1},\nabla_{\theta}\q}}
+\newcommand{\BSLrb}[1]{\boldsymbol{\mathcal{C}}_{\mathrm{#1},\nabla_{r}\q}}
+
+\newcommand{\lagrange}{\boldsymbol{\lambda}} % Vector of Lagrange multipliers
+\newcommand{\muproj}{\boldsymbol{\mu}}       % Moments for projection step
+
+
+% Discretized optimization problem
+\newcommand{\Jh}{J_h}
+\newcommand{\Lah}{L_h}
+\newcommand{\Jrh}{\hat{J}_h}
+
+\newcommand{\phih}{\phi_h} 
+\newcommand{\phihad}{\phi_{h,\mathrm{ad}}} % Admissible set of domains
+\newcommand{\qh}{ q_h}
+\newcommand{\qAh}{q_h^*}
+\newcommand{\Bh}{B_h}
+
+
+\newcommand{\OmJh}{\Omega_{h}}
+
+\newcommand{\phihL}{\phih'}
+\newcommand{\qhL}{\qh'}
+\newcommand{\JhL}{\Jh'}
+\newcommand{\JrhL}{\Jrh'}
+\newcommand{\BhL}{B_{h,\qh}}                 % Linearized state equations
+\newcommand{\BhLphi}{B_{h,\phih}}                 % Linearized state equations
+
+
+\newcommand{\Cp}{C^{\theta}}             % Generalized poloidal convective flux
+\newcommand{\Cr}{C^{r}}                  % Generalized radial convective flux
+\newcommand{\Dp}{D^{\theta}}             % Generalized poloidal conduction coeff
+\newcommand{\Dr}{D^{r}}                  % Generalized radial conduction coeff
+
+\newcommand{\CpL}{C_{\q}^{\theta}}             % Linearized Generalized poloidal convective flux
+\newcommand{\CrL}{C_{\q}^{r}}                  % Linearized Generalized radial convective flux
+\newcommand{\DpL}{D_{\q}^{\theta}}             % Linearized Generalized poloidal conduction coeff
+\newcommand{\DrL}{D_{\q}^{r}}                  % Linearized Generalized radial conduction coeff
+
+\newcommand{\Sc}{S_{\mathrm{c}}}        % Constant part of source
+\newcommand{\Sv}{S_{\mathrm{v}}}        % Variable part of source
+\newcommand{\Sb}{S_{\mathrm{b}}}        % Boundary source
+\newcommand{\Scx}{S_{\mathrm{cx}}}       % Charge exchange source
+
+\newcommand{\Sn}{S_{\mathrm{n}}}
+\newcommand{\Sz}{S_{z}}
+\newcommand{\Sp}{S_{p}}
+
+\newcommand{\BA}{\boldsymbol{\mathcal{B}}_{\q}^{*}}      % Costate equations
+\newcommand{\BSA}{\boldsymbol{\mathcal{C}}_{\q}^{*}}      % Costate equations
+\newcommand{\BAphi}{\boldsymbol{\mathcal{B}}_{\phi}^{*}}                 % Linearized state equations
+
+
+\newcommand{\nablaq} {\nabla_{\q}}
+\newcommand{\nablaqA}{\nabla_{\qA}}
+
+
+\newcommand{\V}{\boldsymbol{\mathcal{V}}} % Design velocity
+\newcommand{\TT}[1][]{{\bf T}_{#1}}
+\newcommand{\om}[1][]{{\boldsymbol\omega}_{#1}}              % a point in the domain
+\newcommand{\dJ}{\dot{\J}}
+
+\newcommand{\dualp}[2]{\langle #1,#2 \rangle}
+\newcommand{\innerp}[3]{\left( #1,#2 \right)_{#3}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Metric coefficients
+\newcommand{\g}{\sqrt{g}}          % volume
+\newcommand{\hp}{h_{\theta}}       % length in poloidal direction
+\newcommand{\hr}{h_r}              % length in radial direction
+\newcommand{\htor}{h_{\phi}}         % length in toroidal direction
+\newcommand{\ghp}{\frac{\g}{\hp}}
+\newcommand{\ghpp}{\frac{\g}{\hp^2}}
+\newcommand{\ghr}{\frac{\g}{\hr}}
+\newcommand{\ghrr}{\frac{\g}{\hr^2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Geometry
+
+\newcommand{\Nu}[1][]{{\boldsymbol \nu}_{#1}}        % Surface normal (outward pointing)
+\newcommand{\Nup}{\nu_{\theta}}    % Surface normal (outward pointing), poloidal component
+\newcommand{\Nur}{\nu_{r}}         % Surface normal (outward pointing), radial component
+
+\newcommand{\Tau}{{\boldsymbol \tau}}      % Unit vector tangential to surface
+\newcommand{\Rho}{{\boldsymbol \rho}}  
+
+\newcommand{\ep}{{\bf e}_{\theta}} % Unit vector in poloidal direction
+\newcommand{\er}{{\bf e}_{r}}      % Unit vector in radial direction
+\newcommand{\epp}{{\bf e}_{||}}    % Unit vector in parallel direction
+\newcommand{\et}{{\bf e}_{\phi}}   % Unit vector in toroidal direction
+\newcommand{\ed}{{\bf e}_{\perp}}  % Unit vector in diamagnetic direction
+
+\newcommand{\ab}{a_{\mathrm{b}}}
+
+\newcommand{\VNu}{\V_{\Nu}}
+
+\newcommand{\Dpol}{D_{\mathrm{p}}} % Area in the poloidal plane
+\newcommand{\ND}{N_{\mathrm{D}}}   % Number of grid cells
+\newcommand{\Nb}{N_{\mathrm{b}}}   % Number of boundary faces
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Derivatives
+\newcommand{\dd}{\mathrm{d}}                                % differential (for integrals,...)
+\newcommand{\ddt}[1][]{\frac{\partial #1}{\partial t}}      % partial derivative w.r.t. time
+\newcommand{\ddr}[1][]{\frac{\partial #1}{\partial r}}      % partial derivative in radial direction
+\newcommand{\ddp}[1][]{\frac{\partial #1}{\partial \theta}} % partial derivative in poloidal direction
+\newcommand{\ddtor}[1][]{\frac{\partial #1}{\partial \phi}} % partial derivative in poloidal direction
+
+\newcommand{\ddx}[2]{\frac{\partial #1}{\partial #2}}       % partial derivative of quantity 1 w.r.t. quantity 2
+\newcommand{\ddxx}[2]{\frac{\partial^{2} #1}{\partial #2^{2}}}  % Second order derivative of quantity 1 w.r.t. quantity 2
+\newcommand{\ddxs}[2]{\partial_{#2} #1}                     % partial derivative of quantity 1 w.r.t. quantity 2
+
+\newcommand{\gradp}[1][]{\frac{1}{\hp}\ddp[#1]}             % component of gradient in poloidal direction
+\newcommand{\gradpp}[1][]{\frac{\pit}{\hp}\ddp[#1]}         % component of gradient in parallel direction
+\newcommand{\gradr}[1][]{\frac{1}{\hr}\ddr[#1]}             % component of gradient in radial direction
+\newcommand{\gradd}[1][]{\frac{\pitt}{\hp}\ddp[#1]}         % component of gradient in diamagnetic direction
+\newcommand{\gradt}[1][]{\frac{1}{h_\phi}\frac{\partial #1}{\partial \phi}}         % component of gradient in toroidal direction
+
+\newcommand{\nablap}{\nabla_{\theta}}                       % poloidal gradient
+\newcommand{\nablapp}{\nabla_{||}}                          % parallel gradient
+\newcommand{\nablad}{\nabla_{\perp}}                        % diamagnetic gradient
+\newcommand{\nablar}{\nabla_{r}}                            % radial gradient
+\newcommand{\nablat}{\nabla_{\phi}}                         % toroidal gradient
+
+\newcommand{\divp}[1]{\frac{1}{\g}\ddp \left(\ghp #1 \right)}   % component of divergence in poloidal direction
+\newcommand{\divr}[1]{\frac{1}{\g}\ddr \left(\ghr #1 \right)}   % component of divergence in radial direction
+\newcommand{\divt}[1]{\frac{1}{\g} \frac{\partial}{\partial \phi} \left(\frac{\g}{h_\phi} #1 \right)}   % component of divergence in toroidal direction
+\newcommand{\divcdp}[3]{\frac{1}{\g}\ddp \left(\ghp #1 - \ghpp #2 \ddp[#3] \right)}   % component of divergence in poloidal direction (convection-diffusion terms)
+\newcommand{\divcdr}[3]{\frac{1}{\g}\ddr \left(\ghr #1 - \ghrr #2 \ddr[#3] \right)}   % component of divergence in radial direction (convection-diffusion terms)
+
+\newcommand{\divcdpL}[5]{\frac{1}{\g}\ddp \left(\ghp #1 - \ghpp \left( #2 \ddp[#3] + #4 \ddp[#5] \right) \right)} % component of divergence in poloidal direction (convection-diffusion terms)
+\newcommand{\divcdrL}[5]{\frac{1}{\g}\ddr \left(\ghr #1 - \ghrr \left( #2 \ddr[#3] + #4 \ddr[#5] \right) \right)} % component of divergence in radial direction (convection-diffusion terms)
+
+\newcommand{\divcdpA}[3]{\frac{1}{\g}\ddp \left(\ghp #1 + \ghpp #2 \ddp[#3] \right)} % component of divergence in poloidal direction (convection-diffusion terms)
+\newcommand{\divcdrA}[3]{\frac{1}{\g}\ddr \left(\ghr #1 + \ghrr #2 \ddr[#3] \right)} % component of divergence in radial direction (convection-diffusion terms)
+
+
+\newcommand{\lapp}[2]{\frac{1}{\g}\ddp \left(\ghpp #1 \ddp[#2] \right)}   % component of laplacian in poloidal direction (convection-diffusion terms)
+\newcommand{\lapr}[2]{\frac{1}{\g}\ddr \left(\ghrr #1 \ddr[#2] \right)}   % component of laplacian in radial direction (convection-diffusion terms)
+
+\newcommand{\lappL}[4]{\frac{1}{\g}\ddp \left(\ghpp \left( #1 \ddp[#2] + #3 \ddp[#4]\right)\right)}   % component of laplacian in poloidal direction (convection-diffusion terms)
+\newcommand{\laprL}[4]{\frac{1}{\g}\ddr \left(\ghrr \left( #1 \ddr[#2] + #3 \ddr[#4]\right)\right)}   % component of laplacian in radial direction (convection-diffusion terms)
+
+\newcommand{\nablaS}{\nabla_{\Sigma}}                      % Tangential derivative operator
+\newcommand{\nablaN}{\nabla_{\Nu}}                         % Normal derivative operator
+
+\newcommand{\md}[1]{\dot{#1}}
+\newcommand{\sd}[1]{#1'}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Integrals
+
+\newcommand{\ddO}{\dd {\boldsymbol \omega}}
+\newcommand{\ddS}{\dd \sigma}
+\newcommand{\ddSp}{\dd \sigma_{\theta}}
+\newcommand{\ddSr}{\dd \sigma_{r}}
+\newcommand{\ddSv}{\dd {\boldsymbol \sigma}}
+
+
+\newcommand{\intv}[1]{\int_{\Omega} #1 \,\ddO}
+\newcommand{\intvt}[1]{\int_{\Omega_{t}} #1 \,\dd {\boldsymbol \omega}_{t}}
+\newcommand{\ints}[1]{\int_{\Sigma} #1 \,\ddS}
+\newcommand{\intst}[1]{\int_{\Sigma_{t}} #1 \,\ddS_{t}}
+\newcommand{\intsp}[1]{\int_{\Sigma} #1 \,\ddSp}
+\newcommand{\intsr}[1]{\int_{\Sigma} #1 \,\ddSr}
+\newcommand{\intsv}[1]{\int_{\Sigma} #1 \cdot\ddSv}
+
+\newcommand{\intsb}[2]{\int_{\mathrm{#1}} #2 \,\ddS}
+
+
+%\newcommand{\intks}[1]{\int_{\Omega} #1 \,\ddO}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% State variables
+\newcommand{\mi}{m}                % Ion mass
+\newcommand{\matm}{m_{\mathrm{a}}} % Atom mass
+\newcommand{\me}{m_{\mathrm{e}}}   % Electron mass
+\newcommand{\mn}{m_{\mathrm{n}}}   % neutral mass
+\newcommand{\ma}{m_a}              % Mass of species a
+\newcommand{\zi}{Z_{\mathrm{i}}}   % Charge state
+
+
+\newcommand{\BB}{B}                % Magnetic field
+\newcommand{\Bp}{B_{\theta}}       % Poloidal magnetic field
+\newcommand{\Bt}{B_{\phi}}         % Toroidal magnetic field
+\newcommand{\pit}{b_{\theta}}      % Pitch of magnetic field
+\newcommand{\piti}[1]{b_{\theta,#1}}
+\newcommand{\pitt}{b_{\phi}}       % 'Toroidal pitch' of magnetic field
+
+\newcommand{\n}{n}                 % Plasma density
+\newcommand{\nni}{n_{\mathrm{i}}}  % Ion density
+\newcommand{\nnib}[1]{n_{\mathrm{i},\mathrm{#1}}}
+\newcommand{\nnii}[1]{n_{\mathrm{i},#1}}
+\newcommand{\nne}{n_{\mathrm{e}}}  % Electron density
+\newcommand{\nsepm}{n_{\mathrm{e,sep,m}}} % Electron density at the outer midplane
+\newcommand{\nnei}[1]{n_{\mathrm{e},#1}}
+\newcommand{\nn}{n_{\mathrm{n}}}   % Neutral density
+\newcommand{\nnn}[1]{n_{\mathrm{n},#1}}
+\newcommand{\nna}{n_{a}}           % Density of species a
+\newcommand{\natm}{n_{\mathrm{a}}}  % Atom density
+\newcommand{\nmol}{n_{\mathrm{m}}}  % Molecule density
+\newcommand{\nneq}{n_{\mathrm{n,eq}}}                            % Convective coefficient in neutral diffusion equation
+\newcommand{\nneqi}[1]{n_{\mathrm{n},\mathrm{eq},#1}} 
+\newcommand{\jsat}{j_{\mathrm{sat}}} % Saturation current
+
+\newcommand{\nnk}{n_{\mathrm{n,k}}}
+\newcommand{\nnkplus}{n_{\mathrm{n,k}}^{+}}
+\newcommand{\nnkmin}{n_{\mathrm{n,k}}^{-}}
+\newcommand{\nnf}{n_{\mathrm{n,f}}}
+\newcommand{\nneqf}{n_{\mathrm{n,eq,f}}}                            % Convective coefficient in neutral diffusion equation
+\newcommand{\nneqk}{n_{\mathrm{n,eq,k}}}                            % Convective coefficient in neutral diffusion equation
+
+
+
+
+\newcommand{\up}{u_{||}}           % Parallel velocity
+\newcommand{\upb}[1]{u_{||,\mathrm{#1}}}
+\newcommand{\uu}{u_{\theta}}       % Poloidal velocity
+\newcommand{\uui}[1]{u_{\theta,#1}}
+\newcommand{\vv}{u_{r}}            % Radial velocity
+\newcommand{\ww}{u_{\phi}}         % Toroidal velocity
+\newcommand{\ud}{u_{\perp}}        % Diamagnetic velocity
+\newcommand{\ut}{u_{\phi}}         % Toroidal velocity
+
+\newcommand{\upn}{u_{\mathrm{n}||}}     % Parallel neutral velocity
+\newcommand{\upa}{u_{\mathrm{a}||}}     % Parallel atom velocity
+\newcommand{\uun}{u_{\mathrm{n}\theta}} % Poloidal neutral velocity
+\newcommand{\uunb}[1]{u_{\mathrm{n}\theta,\mathrm{#1}}}
+\newcommand{\uuni}[1]{u_{\mathrm{n}\theta,#1}}
+\newcommand{\vvn}{u_{\mathrm{n}r}}      % Radial neutral velocity
+\newcommand{\wwn}{u_{\mathrm{n}\phi}}   % Toroidal drift velocity
+\newcommand{\udn}{u_{\mathrm{n}\perp}}  % Diamagnetic neutral velocity
+\newcommand{\utn}{u_{\mathrm{n}\phi}}         % Toroidal velocity
+
+\newcommand{\uunf}{u_{\mathrm{n,f}\theta}} % Poloidal neutral velocity
+\newcommand{\uunk}{u_{\mathrm{n,k}\theta}} % Poloidal neutral velocity
+
+\newcommand{\uua}{u_{a\theta}}          % Poloidal velocity of species a
+\newcommand{\vva}{u_{ar}}               % Radial velocity of species a
+
+
+\newcommand{\Vi}{{\bf V}_{\mathrm{i}}}    % Ion velocity vector
+\newcommand{\Vatm}{{\bf V}_{\mathrm{a}}}  % Atom velocity vector
+\newcommand{\Vp}{{\bf V}}                 % Plasma velocity vector
+\newcommand{\Vn}{{\bf V}_{\mathrm{n}}}    % Neutral velocity vector
+\newcommand{\Vnf}{{\bf V}_{\mathrm{n,f}}} % Neutral fluid velocity vector
+\newcommand{\Ve}{{\bf V}_{\mathrm{e}}}    % Electron velocity vector
+\newcommand{\Va}{{\bf V}_{a}}             % Velocity vector species a
+
+\newcommand{\T}{T}                 % Temperature
+\newcommand{\Ti}{T_{\mathrm{i}}}   % Ion temperature
+\newcommand{\Tib}[1]{T_{\mathrm{i},\mathrm{#1}}}
+\newcommand{\Te}{T_{\mathrm{e}}}   % Electron temperature
+\newcommand{\Teb}[1]{T_{\mathrm{e},\mathrm{#1}}}
+\newcommand{\Tn}{T_{\mathrm{n}}}   % Neutral temperature
+\newcommand{\Tni}[1]{T_{\mathrm{n},#1}} % Neutral temperature in cell i
+\newcommand{\Ta}{T_{a}}            % Temperature of species a
+
+\newcommand{\Tnf}{T_{\mathrm{n,f}}}   % Neutral temperature
+\newcommand{\Tnk}{T_{\mathrm{n,k}}}   % Neutral temperature
+
+\newcommand{\p}{p}                 % Plasma pressure
+\newcommand{\pn}{p_{\mathrm{n}}}   % Neutral pressure
+\newcommand{\pni}[1]{p_{\mathrm{n},#1}} % Neutral pressure in cell i
+\newcommand{\pa}{p_{a}}            % Pressure species a
+\newcommand{\pe}{p_{\mathrm{e}}}   % Electron pressure
+\newcommand{\pii}{p_{\mathrm{i}}}  % Ion pressure
+\newcommand{\ptot}{p_{\mathrm{tot}}} % Total plasma pressure
+
+\newcommand{\pnf}{p_{\mathrm{n,f}}}   % Neutral pressure, fluid part of distribution
+\newcommand{\pnk}{p_{\mathrm{n,k}}}   % Neutral pressure, kinetic part of distribution
+\newcommand{\pnsk}{p_{\mathrm{n,s,k}}} % Kinetic static pressure
+
+\newcommand{\Ekin}{E_{\mathrm{kin}}}  % Kinetic energy
+\newcommand{\Ekinn}{E_{\mathrm{k},\mathrm{n}}} % Neutral kinetic energy
+\newcommand{\Ekini}[1]{E_{\mathrm{kin},#1}}
+
+\newcommand{\qn}{q_{\mathrm{n}}}             % Neutral conductive heat flux
+\newcommand{\qnf}{q_{\mathrm{n},\mathrm{f}}} % Neutral conductive heat flux (fluid part)
+\newcommand{\qnfvec}{{\bf q}_{\mathrm{n},\mathrm{f}}} % Neutral conductive heat flux (fluid part)
+\newcommand{\qnk}{q_{\mathrm{n},\mathrm{k}}} % Neutral conductive heat flux (kinetic part)
+\newcommand{\qnkvec}{{\bf q}_{\mathrm{n},\mathrm{k}}} % Neutral conductive heat flux (kinetic part)
+\newcommand{\qi}{{\bf q}_{\mathrm{i}}}       % Ion conductive heat flux
+\newcommand{\Qei}{Q_{\mathrm{ei}}}
+
+\newcommand{\Sni}{S_{\nni}}    
+\newcommand{\Snib}[1]{S_{\nni,\mathrm{#1}}}   
+\newcommand{\Snn}{S_{\nn}}
+\newcommand{\Snni}[1]{S_{\nn,#1}}
+\newcommand{\Sna}{S_{\nna}}
+\newcommand{\Smo}{S_{\mi \up}}
+\newcommand{\Smob}[1]{S_{\mi \up,\mathrm{#1}}}
+\newcommand{\Smon}{{\bf S}_{\mi \Vn}}
+\newcommand{\Smonb}[1]{{\bf S}_{\mi \Vn, \mathrm{#1}}}
+\newcommand{\Smouu}{S_{m\uu}}       % Poloidal momentum source for the plasma
+\newcommand{\Smouub}[1]{S_{m\uu,\mathrm{#1}}}
+\newcommand{\Smouun}{S_{m\uun}}       % Poloidal momentum source for the neutrals
+\newcommand{\Smouunb}[1]{S_{m\uun,\mathrm{#1}}} 
+\newcommand{\Smoa}{{\bf S}_{\ma\Va}}
+\newcommand{\Sen}{S_{E}}
+\newcommand{\Seni}{S_{E_{\mathrm{i}}}}   % Ion energy source
+\newcommand{\Senipol}{S_{E_{\mathrm{i}},\theta}}
+\newcommand{\Senb}[1]{S_{E,\mathrm{#1}}}
+\newcommand{\Sena}{S_{E,a}}
+\newcommand{\Sene}{S_{E_{\mathrm{e}}}}
+\newcommand{\Senn}{S_{E_{\mathrm{n}}}}
+\newcommand{\Sennb}[1]{S_{E,\mathrm{n},\mathrm{#1}}}
+\newcommand{\Senni}[1]{S_{E,\mathrm{n},i}}
+\newcommand{\Senc}{S_{E_\mathrm{c}}}
+\newcommand{\Sent}{S_{E_\mathrm{t}}}
+\newcommand{\Senat}{{S_{E_\mathrm{t},a}}}
+\newcommand{\Senak}{{S_{E_\mathrm{k},a}}}
+\newcommand{\Senet}{{S_{E_\mathrm{t,e}}}}
+\newcommand{\Senek}{{S_{E_\mathrm{k,e}}}}
+\newcommand{\Senit}{{S_{E_\mathrm{t,i}}}}
+\newcommand{\Senik}{{S_{E_\mathrm{k,i}}}}
+\newcommand{\Sennt}{{S_{E_\mathrm{t,n}}}}
+\newcommand{\Sennk}{{S_{E_\mathrm{k,n}}}}
+
+\newcommand{\Sfk}{S_\mathrm{f\rightarrow k}}
+\newcommand{\Skf}{S_\mathrm{k\rightarrow f}}
+
+
+\newcommand{\Eion}{E_{\mathrm{i}}}                        % ionization energy
+\newcommand{\Eionrad}{E_{\mathrm{i,r}}}                   % energy radiated during ionization
+\newcommand{\Erecrad}{E_{\mathrm{r,r}}}                   % energy radiated during recombination
+\newcommand{\Epot}{E_{\mathrm{p}}}
+\newcommand{\rion}{K_{\mathrm{i}}} % rate coefficient ionization
+\newcommand{\Rion}{R_{\mathrm{i}}} % ionization rate
+\newcommand{\rioni}[1]{K_{\mathrm{i},#1}}
+\newcommand{\rcx}{K_{\mathrm{cx}}}   % rate coefficient charge exchange
+\newcommand{\rcxm}{K_{\mathrm{cx,m}}}   % momentum-linearized rate coefficient charge exchange
+\newcommand{\rcxmom}{K_{\mathrm{cx},m}} % Momentum averaged rate coefficient
+\newcommand{\rcxE}{K_{\mathrm{cx},E}}   % Energy averaged rate coefficient
+\newcommand{\Rcx}{R_{\mathrm{cx}}}   % charge exchange rate
+\newcommand{\Rtot}{R_{\mathrm{tot}}} % Total absorption rate
+\newcommand{\Ra}{R_{\mathrm{a}}} % Absorption rate
+\newcommand{\rcxb}[1]{K_{\mathrm{cx},\mathrm{#1}}}
+\newcommand{\Rcxb}[1]{R_{\mathrm{cx},\mathrm{#1}}}
+\newcommand{\rcxi}[1]{K_{\mathrm{cx},#1}}
+\newcommand{\rrec}{K_{\mathrm{r}}} % rate coefficient recombination
+\newcommand{\rs}{K_{\mathrm{s}}} % rate coefficient of a certain source from which we sample
+%\newcommand{\rion}{\langle \sigma v \rangle_{\mathrm{ion}}} % rate coefficient ionization
+%\newcommand{\rcx}{\langle \sigma v \rangle_{\mathrm{cx}}}   % rate coefficient ionization
+%\newcommand{\rrec}{\langle \sigma v \rangle_{\mathrm{rec}}} % rate coefficient ionization
+\newcommand{\cz}{c_{z}}                                     % impurity concentration
+\newcommand{\Lz}{L_{z}}                                     % radiative loss function
+
+\newcommand{\Rfk}{R_{\mathrm{f\rightarrow k}}} % Rate for fluid -> kinetic transition
+\newcommand{\Rkf}{R_{\mathrm{k\rightarrow f}}} % Rate for kinetic -> fluid transition
+\newcommand{\Rf}{R_{\mathrm{f}}} % Fast reflection coefficient
+
+\newcommand{\Gammapi}{\Gamma_{\theta}^{\mathrm{i}}}                    % Poloidal ion flux
+\newcommand{\Gammatm}{{\bf \Gamma}_{\mathrm{a}}}   
+\newcommand{\Gammaib}[1]{\Gamma_{\mathrm{#1}}^{\mathrm{i}}}            % Ion particle flux density
+\newcommand{\Gammapib}[1]{\Gamma_{\theta,\mathrm{#1}}^{\mathrm{i}}}
+\newcommand{\Gammari}{\Gamma_{r}^{\mathrm{i}}}                         % Radial ion flux
+\newcommand{\Gammape}{\Gamma_{\theta}^{\mathrm{e}}}                    % Poloidal electron flux
+\newcommand{\Gammare}{\Gamma_{r}^{\mathrm{e}}}                         % Radial electron flux
+\newcommand{\Gammapn}{\Gamma_{\theta}^{\mathrm{n}}}                    % Poloidal neutral flux
+\newcommand{\Gammapnplus}{\Gamma_{\theta +}^{\mathrm{n}}}                  % Poloidal neutral flux in positive direction
+\newcommand{\Gammapnplust}{\Gamma_{\theta +,\mathrm{t}}^{\mathrm{n}}}  
+\newcommand{\Gammapnmin}{\Gamma_{\theta-}^{\mathrm{n}}}                   % Poloidal neutral flux in the negative direction
+\newcommand{\Gammapnminc}{\Gamma_{\theta-,0}^{\mathrm{n}}}
+\newcommand{\Gammapnmint}{\Gamma_{\theta-,\mathrm{t}}^{\mathrm{n}}}
+\newcommand{\Gammarn}{\Gamma_{r}^{\mathrm{n}}}                         % Radial neutral flux
+\newcommand{\Gammanmom}{\boldsymbol{\Gamma_{\mathrm{m}}^{\mathrm{n}}}} % Neutral momentum flux
+\newcommand{\Gammapnmom}{\Gamma_{\mathrm{m},\theta}^{\mathrm{n}}}    % Poloidal neutral momentum flux
+\newcommand{\Gammapnmomb}[1]{\Gamma_{\mathrm{m},\theta,\mathrm{#1}}^{\mathrm{n}}}
+\newcommand{\Gammarnmomb}[1]{\Gamma_{\mathrm{m},r,\mathrm{#1}}^{\mathrm{n}}}
+\newcommand{\Gammatnmomb}[1]{\Gamma_{\mathrm{m},\phi,\mathrm{#1}}^{\mathrm{n}}}
+\newcommand{\Gammapa}{\Gamma_{\theta}^{a}}                             % Poloidal particle flux of species a
+\newcommand{\Gammara}{\Gamma_{r}^{a}}                                  % Radial particle flux of species a
+
+\newcommand{\Gammai}{{\boldsymbol \Gamma}^{\mathrm{i}}}          % Ion flux vector
+\newcommand{\Gammaion}{{\boldsymbol \Gamma}_{\mathrm{i}}}          % Ion flux vector
+\newcommand{\Gammae}{{\boldsymbol \Gamma}^{\mathrm{e}}}          % Electron flux vector
+\newcommand{\Gamman}{{\boldsymbol \Gamma}^{\mathrm{n}}}          % Neutral flux vector
+\newcommand{\Gammannorm}{\Gamma^{\mathrm{n}}}
+\newcommand{\Gammanb}[1]{\Gamma_{\mathrm{#1}}^{\mathrm{n}}}
+\newcommand{\Gammanplus}{\Gamma_{\nu +}^{\mathrm{n}}}
+\newcommand{\Gammanmin}{\Gamma_{\nu -}^{\mathrm{n}}}
+\newcommand{\Gammaimin}{\Gamma_{\nu -}^{\mathrm{i}}}
+\newcommand{\Gammaa}{{\boldsymbol \Gamma}^{a}}                   % Flux vector species a
+\newcommand{\Gammav}{{\boldsymbol \Gamma}}                       % Flux vector
+
+\newcommand{\Q}{Q}                                       % Norm of energy flux vector
+\newcommand{\Qp}{\Q_{\theta}}                             % Energy flux vector, poloidal component
+\newcommand{\Qpi}{Q_{\theta}^{\mathrm{i}}}                % Ion energy flux fector
+\newcommand{\Qpe}{Q_{\theta}^{\mathrm{e}}}                % Electron energy flux
+\newcommand{\Qpn}{Q_{\theta}^{\mathrm{n}}}               % Neutral energy flux vector, poloidal component
+\newcommand{\Qr}{\Q_{r}}                                  % Energy flux vector, radial component
+\newcommand{\Qv}{{\bf \Q}}                                % Energy flux vector
+\newcommand{\Qn}{Q^{\mathrm{n}}}                          % Neutral energy flux
+
+  
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Transport coefficients
+
+
+\newcommand{\Dni}{D^{\mathrm{i}}}                           % Anomalous ion diffusion coefficient
+\newcommand{\Dnn}{D^{\mathrm{n}}}                           % Neutral (density) diffusion coefficient
+\newcommand{\Dpn}{D_{p}^{\mathrm{n}}}                       % Neutral pressure diffusion coefficient
+\newcommand{\Dpnperp}{D_{p,\perp}^{\mathrm{n}}}
+\newcommand{\Dpni}[1]{D_{p,#1}^{\mathrm{n}}}
+\newcommand{\Dpnfi}[1]{D_{p,\mathrm{f},#1}^{\mathrm{n}}}
+
+\newcommand{\Dpnf}{D_{p}^{\mathrm{n,f}}}                       % Neutral pressure diffusion coefficient
+
+
+\newcommand{\etai}{\eta^{\mathrm{i}}}
+\newcommand{\visci}{\Pi_{\mathrm{i}}}                       % Ion viscosity tensor
+\newcommand{\viscn}{\Pi_{\mathrm{n}}}                       % Neutral viscosity tensor
+\newcommand{\viscnf}{\Pi_{\mathrm{n,f}}}                    % Fluid neutral viscosity tensor
+\newcommand{\viscnk}{\Pi_{\mathrm{n,k}}}                    % Kinetic neutral viscosity tensor
+\newcommand{\etapi}{\eta_\theta^{\mathrm{i}}}               % Poloidal ion viscosity
+\newcommand{\etappi}{\eta_{||}^{\mathrm{i}}}                % Parallel ion viscosity
+\newcommand{\etari}{\eta_{r}^{\mathrm{i}}}                  % Radial ion viscosity (anomalous)
+\newcommand{\etati}{\eta_{\phi}^{\mathrm{i}}}               % Toroidal ion viscosity
+\newcommand{\nui}{\nu^{\mathrm{i}}}                         % Kinematic ion viscosity (anomalous)
+\newcommand{\etan}{\eta^{\mathrm{n}}}                       % Neutral viscosity
+\newcommand{\nucx}{\nu_{\mathrm{cx}}}                       % Charge-exchange collision frequency
+
+\newcommand{\kappai}{\kappa^{\mathrm{i}}}                   % Ion heat conduction tensor
+\newcommand{\kappae}{\kappa^{\mathrm{e}}}                   % Electron heat conduction tensor
+\newcommand{\kappaei}{\kappa^{\mathrm{ei}}}           
+\newcommand{\kappap}{\kappa_{\theta}}                       % Poloidal heat conductivity (total)
+\newcommand{\kappape}{\kappa_{\theta}^{\mathrm{e}}}         % Poloidal heat conductivity (electrons)
+\newcommand{\kappapi}{\kappa_{\theta}^{\mathrm{i}}}         % Poloidal heat conductivity (ions)
+\newcommand{\kappappe}{\kappa_{||}^{\mathrm{e}}}            % Parallel heat conductivity (electrons)
+\newcommand{\kappappi}{\kappa_{||}^{\mathrm{i}}}            % Parallel heat conductivity (ions)
+
+\newcommand{\kappar}{\kappa_{r}}                            % Radial heat conductivity (total)
+\newcommand{\kappare}{\kappa_{r}^{\mathrm{e}}}              % Radial heat conductivity (electrons)
+\newcommand{\kappari}{\kappa_{r}^{\mathrm{i}}}              % Radial heat conductivity (ions)
+\newcommand{\chii}{\chi^{\mathrm{i}}}                       % Radial heat conductivity coeff (ions)
+\newcommand{\chie}{\chi^{\mathrm{e}}}                       % Radial heat conductivity coeff (electrons)
+
+
+\newcommand{\kappan}{\kappa^{\mathrm{n}}}                   % Heat conductivity (neutrals - isotropic!)
+\newcommand{\kappani}[1]{\kappa_{#1}^{\mathrm{n}}}
+\newcommand{\kappanfi}[1]{\kappa_{\mathrm{f},#1}^{\mathrm{n}}}
+\newcommand{\chin}{\chi^{\mathrm{n}}}                       % Heat conductivity coeff (neutrals - isotropic!)
+
+\newcommand{\taui}{\tau_{\mathrm{i}}}
+\newcommand{\taue}{\tau_{\mathrm{e}}}
+\newcommand{\taucx}{\tau_{\mathrm{cx}}}
+
+\newcommand{\CEi}{C_{E_{\mathrm{i}}}}                      % Loss of total ion energy by means of radial transport
+\newcommand{\CEe}{C_{E_{\mathrm{e}}}}                      % Loss of total electron energy by means of radial transport
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boundary conditions
+
+\newcommand{\cs}{c_{\mathrm{s}}}                            % Isothermal plasma sound speed
+\newcommand{\ci}{c_{\mathrm{i}}}                            % Isothermal ion sound speed
+\newcommand{\cn}{c_{\mathrm{n}}}                            % Isothermal neutral sound speed
+\newcommand{\ca}{c_a}                            % Isothermal sound speed of species a
+%\newcommand{\csi}[1]{c_{\mathrm{s},#1}}
+%\newcommand{\cn}{c_{\mathrm{n}}}                            % %Neutral thermal speed
+\newcommand{\dsh}{\delta_{\mathrm{sh}}}                     % Sheath transmission coefficient
+\newcommand{\dshi}{\delta_{\mathrm{sh}}^{\mathrm{i}}}         % Sheath transmission coefficient ion
+\newcommand{\dshe}{\delta_{\mathrm{sh}}^{\mathrm{e}}}         % Sheath transmission coefficient electron
+\newcommand{\dshpot}{\delta_{\mathrm{sh}}^{\mathrm{pot}}}         % Sheath transmission coefficient potential energy
+\newcommand{\dshpotj}{\bar{\delta}_{\mathrm{sh}}^{\mathrm{pot}}}         % Sheath transmission coefficient potential energy
+\newcommand{\phish}{\Delta \phi_{\mathrm{sh}}}                     % Sheath potential
+\newcommand{\fR}{R_{\mathrm{R}}}                            % Fraction of recycled neutrals with a distribution according to the ion distribution
+\newcommand{\fT}{R_{\mathrm{T}}}                            % Fraction of recycled neutrals because of thermal release of molecules
+\newcommand{\fL}{f_{\mathrm{L}}}                            % Fraction of lost neutrals due to radial transport
+\newcommand{\vT}{v_{\mathrm{T}}}                            % Velocity of thermally released fraction of neutrals
+\newcommand{\vTi}{v_{\Ti}}
+\newcommand{\nb}[1]{\n_{\mathrm{#1}}}                       % Density along boundary [1]
+\newcommand{\Tb}[1]{\T_{\mathrm{#1}}}                       % Temperature along boundary [1]
+\newcommand{\Qb}[1]{\Q_{\mathrm{#1}}}                       % Norm of heat flux vector at boundary [1]
+\newcommand{\Qvb}[1]{\Qv_{\mathrm{#1}}}                     % Heat flux vector at boundary [1]
+\newcommand{\Qrb}[1]{Q_{r,\mathrm{#1}}}                     % Radial heat flux at boundary [1]
+\newcommand{\Qpb}[1]{Q_{\theta,\mathrm{#1}}}                % Poloidal heat flux at boundary [1]
+\newcommand{\Qpib}[1]{Q_{\theta,\mathrm{#1}}^{\mathrm{i}}}
+\newcommand{\Qpeb}[1]{Q_{\theta,\mathrm{#1}}^{\mathrm{e}}}
+\newcommand{\Qpbn}[1]{Q_{\theta,\mathrm{#1}}^{\mathrm{n}}}             % Poloidal neutral heat flux at boundary [1]
+\newcommand{\Gammab}[1]{\Gamma_{\mathrm{#1}}}                   % Target ion flux
+\newcommand{\Gammavb}[1]{\Gammav_{\mathrm{#1}}}             % Target ion flux,vector
+\newcommand{\Gammapnc}{\Gamma_{\theta,0}^{\mathrm{n}}} % Poloidal neutral flux density at the core
+\newcommand{\Gammapnt}{\Gamma_{\theta,\mathrm{t}}^{\mathrm{n}}} % Poloidal neutral flux density at the target
+\newcommand{\Gammapnb}[1]{\Gamma_{\theta,\mathrm{#1}}^{\mathrm{n}}}
+\newcommand{\Gammanmomb}[1]{{\boldsymbol \Gamma}^{\mathrm{n}}_{\mathrm{m},||,\mathrm{#1}}} % Neutral momentum flux vector at a certain location   
+\newcommand{\Qnb}[1]{{\bf Q}^{\mathrm{n}}_{\mathrm{#1}}} % Neutral momentum flux vector at a certain location   
+\newcommand{\fnb}[1]{f_{\mathrm{n},\mathrm{#1}}}            % Neutral distribution at the boundary
+\newcommand{\fnnormb}[1]{\widetilde{f}_{\mathrm{n},\mathrm{#1}}}
+\newcommand{\fib}[1]{f_{\mathrm{i},\mathrm{#1}}}            % Ion distribution at the boundary
+\newcommand{\finorm}{\widetilde{f}_{\mathrm{i}}}            % Ion distribution at the boundary
+\newcommand{\fanorm}{\widetilde{f}_{a}}            % I
+% normalized distribution of species a
+\newcommand{\finormpol}{\widetilde{f}_{\mathrm{i},\theta}}  % Normalized poloidal ion distribution
+\newcommand{\fnnorm}{\widetilde{f}_{\mathrm{n}}}            % Normalized neutral distribution
+\newcommand{\finormb}[1]{\widetilde{f}_{\mathrm{i},\mathrm{#1}}} 
+\newcommand{\fe}{f_{\mathrm{e}}}                            % Electron distribution
+\newcommand{\fenorm}{\widetilde{f_{\mathrm{e}}}}            % Normalized electron distribution
+\newcommand{\nnb}[1]{n_{\mathrm{n},\mathrm{#1}}}            % Neutral density at the boundary
+\newcommand{\dl}[1]{\lambda_{#1}}                           % Decay length
+\newcommand{\Rc}{R}                                         % Recycling coefficient
+\newcommand{\Rnx}{R^{\mathrm{n}}}
+\newcommand{\Ri}{R^{\mathrm{i}}}
+% Fluid recycling coefficient
+\newcommand{\Rnxfl}{R^{\mathrm{n}}_\mathrm{fl}}
+\newcommand{\Rifl}{R^{\mathrm{i}}_\mathrm{fl}}
+\newcommand{\Rnt}{R_{\mathrm{t}}^{\mathrm{n}}}              % Reflection coefficient of neutreals reaching the target
+%\newcommand{\Rnu}_{R_{0}}
+\newcommand{\Rit}{R_{\mathrm{t}}^{\mathrm{i}}}              % Recycling coefficient
+%\newcommand{\Riu}{R_{0}}
+\newcommand{\alphaP}{\alpha_{\mathrm{P}}}                   % Fraction of non-reflected neutrals that is permanently removed
+\newcommand{\Ei}{E_{\mathrm{i}}}                            % Energy of incident particles
+\newcommand{\varthetai}{\vartheta_{\mathrm{i}}} 
+\newcommand{\varthetaR}{\vartheta_{\mathrm{R}}}
+\newcommand{\varphii}{\varphi_{\mathrm{i}}}
+\newcommand{\varphiR}{\varphi_{\mathrm{R}}}
+\newcommand{\Thetai}{\Theta_{\mathrm{i}}}                   % Polar angle of incident particles
+\newcommand{\ER}{E_{\mathrm{R}}}                            % Energy of reflected particles
+\newcommand{\ERi}[1]{E_{\mathrm{R},#1}}
+\newcommand{\ERexp}{\overline{\ER}}                         % Average of reflected energies
+\newcommand{\ThetaR}{\Theta_{\mathrm{R}}}                   % Polar angle of reflected particles against the surface normal
+\newcommand{\PhiR}{\Phi_{\mathrm{R}}}                       % Azimutal angle of reflected particles
+\newcommand{\OmegaR}{\Omega_{\mathrm{R}}}                   % Solid angle of reflected particles
+\newcommand{\Rnc}{R_{0}^{\mathrm{n}}}              % Reflection coefficient of neutreals reaching the core
+\newcommand{\alphanc}{\alpha_{\mathrm{c}}^{\mathrm{n}}}     % Absorption coefficient of neutrals reaching the core
+\newcommand{\vR}{v_{\mathrm{R}}}                            % Velocity of recycled neutrals
+\newcommand{\vi}{v_{\mathrm{i}}}                            % Ion particle velocity
+\newcommand{\vib}[1]{v_{\mathrm{i},\mathrm{#1}}}            % Ion particle velocity
+\newcommand{\nnR}{n_{\mathrm{n,R}}}                         % Neutral density of distribution function for recycled neutrals
+\newcommand{\ap}{\alpha_{\mathrm{p}}}                       % Pumping coefficient
+\newcommand{\PNA}{P_{\mathrm{NA}}}                          % The probability of non-absorption
+\newcommand{\PNAp}{P_{\mathrm{NA,p}}}                          % The probability of non-absorption
+
+\newcommand{\Qd}{Q_{\mathrm{d}}}
+\newcommand{\Qo}{Q_{\mathrm{o}}}
+\newcommand{\Qov}{{\bf Q}_{\mathrm{o}}}
+
+% TRIM code database
+\newcommand{\Rsp}{R_{\mathrm{sp}}}                         % Fraction of specular reflection
+\newcommand{\fsp}{f_{\mathrm{sp}}}                         % Distribution of specular reflected neutrals
+\newcommand{\fd}{f_{\mathrm{d}}}                           % Distribution of diffuse reflected neutrals
+\newcommand{\alphasp}{\alpha_{\mathrm{sp}}}                % Fraction of energy of the reflected particle (specular reflection)
+\newcommand{\alphad}{\alpha_{\mathrm{d}}}                  % Fraction of energy of the reflected particle (diffuse reflection)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Linearized variables
+\newcommand{\nL}{\delta n}               % Variation density
+\newcommand{\nniL}{\delta \nni}          % Variation ion density
+\newcommand{\nneL}{\delta \nne}          % Variation electron density
+\newcommand{\nnL}{\delta \nn}            % Variation neutral density
+\newcommand{\nnaL}{\delta \nna}          % Variation density of species a
+\newcommand{\nneqL}{\delta \nneq}                            % Convective coefficient in neutral diffusion equation
+
+
+\newcommand{\upL}{\delta \up}            % Variation parallel velocity
+\newcommand{\uuL}{\delta \uu}            % Variation poloidal velocity
+\newcommand{\vvL}{\delta \vv}            % Variation radial velocity
+\newcommand{\udL}{\delta \ud}            % Variation diamagnetic velocity
+
+\newcommand{\upnL}{\delta \upn}        % Variation neutral parallel velocity
+\newcommand{\uunL}{\delta \uun}        % Variation neutral poloidal velocity
+\newcommand{\vvnL}{\delta \vvn}        % Variation neutral radial velocity
+\newcommand{\udnL}{\delta \udn}        % Variation neutral diamagnetic velocity
+
+\newcommand{\uuaL}{\delta \uua}        % Variation poloidal velocity of species a
+\newcommand{\vvaL}{\delta \vva}        % Variation radial velocity of species a
+
+\newcommand{\TL}{\delta \T}     % Variation temperature
+\newcommand{\TiL}{\delta \Ti}   % Variation ion temperature
+\newcommand{\TeL}{\delta \Te}   % Variation electron temperature
+\newcommand{\TnL}{\delta \Tn}   % Variation neutral temperature
+
+\newcommand{\pL}{\delta \p}     % Variation pressure
+\newcommand{\pnL}{\delta \pn}   % Variation neutral pressure
+
+\newcommand{\SniL}{\delta \Sni}        
+\newcommand{\SnnL}{\delta \Snn}
+\newcommand{\SmoL}{\delta \Smo}
+\newcommand{\SenL}{\delta \Sen}
+\newcommand{\SencL}{\delta \Senc}
+
+\newcommand{\GammapiL}{\delta \Gammapi}                    % Poloidal ion flux
+\newcommand{\GammariL}{\delta \Gammari}                         % Radial ion flux
+\newcommand{\GammapeL}{\delta \Gammape}                    % Poloidal electron flux
+\newcommand{\GammareL}{\delta \Gammare}                         % Radial electron flux
+\newcommand{\GammapnL}{\delta \Gammapn}                    % Poloidal neutral flux
+\newcommand{\GammarnL}{\delta \Gammarn}                         % Radial neutral flux
+\newcommand{\GammapaL}{\delta \Gammapa}                             % Poloidal particle flux of species a
+\newcommand{\GammaraL}{\delta \Gammara}                                  % Radial particle flux of species a
+
+\newcommand{\GammaiL}{\delta \Gammai}          % Ion flux vector
+\newcommand{\GammaeL}{\delta \Gammae}          % Electron flux vector
+\newcommand{\GammanL}{\delta \Gamman}          % Neutral flux vector
+\newcommand{\GammaaL}{\delta \Gammaa}                   % Flux vector species a
+\newcommand{\GammavL}{\delta \Gammav}                       % Flux vector
+
+\newcommand{\QpL}{\delta \Qp}                             % Energy flux vector
+\newcommand{\QrL}{\delta \Qr}                                  % Energy flux vector
+\newcommand{\QvL}{\delta \Qv}                                 % Energy flux vector
+\newcommand{\Qnt}{\Q^{\mathrm{n}}_{\mathrm{t}}}              % Neutral energy flux at the target
+
+\newcommand{\Tt}{T_{\mathrm{t}}}                     % Target temperature
+
+\newcommand{\DniL}{\delta \Dni}                      % Variation neutral pressure diffusion coefficient
+\newcommand{\DpnL}{\delta \Dpn}                      % Variation neutral pressure diffusion coefficient
+
+\newcommand{\etapiL}{\delta \etapi}                  % Variation poloidal ion viscosity
+\newcommand{\etappiL}{\delta \etappi}                % Variation parallel ion viscosity
+\newcommand{\etariL}{\delta \etari}                  % Variation radial ion viscosity (anomalous)
+
+\newcommand{\kappapL}{\delta \kappap}                % Variation poloidal heat conductivity (total)
+\newcommand{\kappapeL}{\delta \kappape}              % Variation poloidal heat conductivity (electrons)
+\newcommand{\kappapiL}{\delta \kappapi}              % Variation poloidal heat conductivity (ions)
+\newcommand{\kappappeL}{\delta \kappappe}            % Variation parallel heat conductivity (electrons)
+\newcommand{\kappappiL}{\delta \kappappi}            % Variation parallel heat conductivity (ions)
+
+\newcommand{\kapparL}{\delta \kappar}                % Variation radial heat conductivity (total)
+\newcommand{\kappareL}{\delta \kappare}              % Variation radial heat conductivity (electrons)
+\newcommand{\kappariL}{\delta \kappari}              % Variation radial heat conductivity (ions)
+
+\newcommand{\kappanL}{\delta \kappan}                % Variation heat conductivity (neutrals - isotropic!)
+
+\newcommand{\rionL}{\delta\rion} % Variation rate coefficient ionization
+\newcommand{\rcxL}{\delta\rcx}   % Variation rate coefficient ionization
+\newcommand{\rrecL}{\delta\rrec} % Variation rate coefficient ionization
+%\newcommand{\rionL}{\delta\left(\rion\right)} % Variation rate coefficient ionization
+%\newcommand{\rcxL}{\delta\left(\rcx\right)}   % Variation rate coefficient ionization
+%newcommand{\rrecL}{\delta\left(\rrec\right)} % Variation rate coefficient ionization
+\newcommand{\LzL}{\delta \Lz}
+
+
+\newcommand{\csL}{\delta \cs}                            % Isothermal plasma sound speed
+\newcommand{\cnL}{\delta \cn}                            % Neutral thermal speed
+
+\newcommand{\QbL}[1]{\delta \Qb{#1}}                           % Target heat flux
+\newcommand{\QvbL}[1]{\delta \Qvb{#1}}                     % Target heat flux, vector
+\newcommand{\GammabL}[1]{\delta \Gammab{#1}}                           % Target heat flux
+\newcommand{\GammavbL}[1]{\delta \Gammavb{#1}}                     % Target heat flux, vector
+
+\newcommand{\QoL}{\delta \Qo}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Adjoint variables
+\newcommand{\nA}{\n^{*}}                          % Adjoint density
+\newcommand{\upA}{\up^{*}}                        % Adjoint parallel velocity
+\newcommand{\TA}{\T^{*}}                          % Adjoint temperature
+\newcommand{\nnA}{\nn^{*}}                        % Adjoint neutral density
+\newcommand{\pnA}{\pn^{*}}                        % Adjoint neutral pressure
+\newcommand{\nneqA}{\nneq^{*}}                            % Convective coefficient in neutral diffusion equation
+
+\newcommand{\nAS}{\n_{S}^{*}}                     % Adjoint density
+\newcommand{\upAS}{u_{||,S}^{*}}                  % Adjoint parallel velocity
+\newcommand{\pnAS}{p_{\mathrm{n},S}^{*}}
+\newcommand{\TAS}{\T_{S}^{*}}
+\newcommand{\PhiAS}{\Phi_{S}^{*}}
+
+\newcommand{\SniA}{\Sni^{*}}        
+\newcommand{\SpnA}{S_{\pn}^{*}}
+\newcommand{\SmoA}{\Smo^{*}}
+\newcommand{\SenA}{\Sen^{*}}
+\newcommand{\SencA}{\Senc^{*}}
+
+\newcommand{\SniAt}{S_{\nni,t}^{*}}        
+\newcommand{\SpnAt}{S_{\pn,t}^{*}}
+\newcommand{\SmoAt}{S_{\mi \upn,t}^{*}}
+\newcommand{\SenAt}{S_{E,t}^{*}}
+
+\newcommand{\SniAn}{S_{\nni,n}^{*}}        
+\newcommand{\SpnAn}{S_{\pn,n}^{*}}
+\newcommand{\SmoAn}{S_{\mi \upn,n}^{*}}
+\newcommand{\SenAn}{S_{E,n}^{*}}
+
+%newcommand{\SniAz}{S_{\nni,z}^{*}}        
+\newcommand{\SpnAz}{S_{\pn,z}^{*}}
+\newcommand{\SmoAz}{S_{\mi \upn,z}^{*}}
+\newcommand{\SenAz}{S_{E,z}^{*}}
+
+\newcommand{\SR}{S_{\mathrm{R}}}                  % Source due to recycled neutrals
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Kinetic neutrals
+
+\newcommand{\Lp}{L_{\theta}}           % Length of 1D domain
+\newcommand{\nx}{n_{\theta}}           % Number of cells in the poloidal direction
+\newcommand{\nv}{n_{v}}                % Number of discrete velocities
+\newcommand{\dxi}[1]{\Delta \theta_{#1}}
+
+
+\newcommand{\fn}{f_{\mathrm{n}}}        % Distribution neutrals
+\newcommand{\fion}{f_{\mathrm{i}}}         % Distribution ions
+\newcommand{\fatm}{f_{\mathrm{a}}}        % Distribution atoms
+\newcommand{\fnpol}{f_{\mathrm{n},\theta}} 
+\newcommand{\fnpolb}[1]{f_{\mathrm{n},\theta,\mathrm{#1}}}
+\newcommand{\fntor}{f_{\mathrm{n},\phi}} 
+\newcommand{\fnt}{f_{\mathrm{n},\mathrm{t}}} % Distribution neutrals at the target
+\newcommand{\fntrefl}{f_{\mathrm{n},\mathrm{t},\mathrm{refl}}} % Distribution neutrals target due to reflection
+\newcommand{\fntrec}{f_{\mathrm{n},\mathrm{t},\mathrm{rec}}}
+\newcommand{\fr}{\widetilde{f}_{\mathrm{r}}}        % Distribution recombination
+\newcommand{\frp}{f_{\mathrm{r},\theta}} 
+\newcommand{\frt}{f_{\mathrm{r},\phi}}
+\newcommand{\frf}{f_\mathrm{r,f}}       % Distribution recombination fluid part  
+\newcommand{\frk}{f_\mathrm{r,k}}       % Distribution recombination kinetic part     
+\newcommand{\fcx}{\widetilde{f}_{\mathrm{cx}}}      % Distribution charge exchange
+\newcommand{\fcxi}[1]{f_{\mathrm{cx},#1}}
+\newcommand{\fcxp}{f_{\mathrm{cx},\theta}} 
+\newcommand{\fcxt}{f_{\mathrm{cx},\phi}}
+\newcommand{\fnexp}{f_{\mathrm{n},+}}   % Spatial distribution neutrals with velocity along e_x
+\newcommand{\fnexm}{f_{\mathrm{n},-}}   % Spatial distribution neutrals with velocity along -e_x
+\newcommand{\phii}{\Phi_{\mathrm{i}}}   % Ion flux
+\newcommand{\phiinorm}{\widetilde{\Phi}_{\mathrm{i}}} % Normalized ion flux
+\newcommand{\phin}{\Phi_{\mathrm{n}}}   % Neutral flux
+\newcommand{\phinb}[1]{\Phi_{\mathrm{n},\mathrm{#1}}}
+\newcommand{\phinexp}{\Phi_{\mathrm{n},+}} % Neutral flux in direction e_x
+\newcommand{\phinexm}{\Phi_{\mathrm{n},-}}% Neutral flux in direction -e_x
+\newcommand{\psin}{\Psi_{\mathrm{n}}}   % Neutral collision density
+\newcommand{\vnth}{v_{\nn,\mathrm{th}}} % Neutral thermal speed
+\newcommand{\vel}{{\bf v}}                % phase space velocity
+\newcommand{\vpol}{v_{\mathrm{p}}}         % Particle velocity in the poloidal plane
+\newcommand{\uvel}{{\bf u}}                % phase space velocity
+\newcommand{\cvel}{{\bf c}}
+\newcommand{\xvel}{{\bf x}}
+\newcommand{\diffvel}{\Delta \widetilde{{\bf V}}}
+\newcommand{\velb}[1]{\vel_{\mathrm{T}}}
+\newcommand{\vp}{v_{\theta}}              % Poloidal particle velocity
+\newcommand{\vpar}{v_{||}}                % Parallel particle velocity
+\newcommand{\vpb}[1]{v_{\theta,\mathrm{#1}}}
+\newcommand{\vr}{v_{r}}                   % Radial particle velocity
+\newcommand{\vt}{v_{\phi}}                % Toroidal particle velocity
+\newcommand{\vtb}[1]{v_{\phi,\mathrm{#1}}}
+\newcommand{\vdiag}{v_{\perp}}            % Diamagnetic particle velocity
+
+
+\newcommand{\fnk}{f_{\mathrm{n,k}}}        % Distribution neutrals
+\newcommand{\psink}{\psi_{\mathrm{n,k}}}   % Spatial derivative of the distribution
+\newcommand{\fnkplus}{f_{\mathrm{n,k}}^{+}} % Positive part of kinetic distribution
+\newcommand{\fnkmin}{f_{\mathrm{n,k}}^{-}} % Negative part of kinetic distribution
+\newcommand{\fnf}{f_{\mathrm{n,f}}}        % Distribution neutrals
+
+\newcommand{\phins}{\Phi_{\mathrm{n,s}}}   % boundary condition t flux
+
+\newcommand{\srec}{\Sigma_{\mathrm{r}}}                   % macroscopic cross section recombination
+\newcommand{\Srec}{S_{\mathrm{r}}}                        % recombination source
+\newcommand{\sion}{\Sigma_{\mathrm{i}}}                   % macroscopic cross section ionization
+\newcommand{\scx}{\Sigma_{\mathrm{cx}}}                     % macroscopic cross section charge exchange
+\newcommand{\sigmacx}{\sigma_{\mathrm{cx}}}                     % microscopic cross section charge exchange
+\newcommand{\sigmai}{\sigma_{\mathrm{i}}}                     % microscopic cross section ionization
+\newcommand{\St}{\Sigma_{\mathrm{t}}}                       % total macroscopic cross section
+\newcommand{\sigmab}[1]{\sigma_{\mathrm{#1}}}
+\newcommand{\strn}{\Sigma_{\mathrm{tr}}^{\mathrm{n}}}       % neutral transport macroscopic cross section
+\newcommand{\sk}{\Sigma_{k}}                                % macroscopic cross section interaction k
+\newcommand{\gfion}{g_{\fn,\mathrm{ion}}}                        % detector function ionization
+\newcommand{\gpion}{g_{\phin,\mathrm{ion}}}                        % detector function ionization
+\newcommand{\gftot}{g_{\fn,\mathrm{t}}}                        % detector function collision
+\newcommand{\gptot}{g_{\phin,\mathrm{t}}}                        % detector function collision
+\newcommand{\gfcx}{g_{\fn,\mathrm{cx}}}                        % detector function charge exchange
+\newcommand{\gpcx}{g_{\phin,\mathrm{cx}}}                        % detector function charge exchange
+
+\newcommand{\Heav}{\mathcal{H}}   % Heaviside function
+\newcommand{\Nui}{\nu_\mathrm{i}} % inward pointing unit normal
+
+
+\newcommand{\fnL}{\delta f_{\mathrm{n}}}        % Distribution neutrals
+\newcommand{\fnexpL}{\delta f_{\mathrm{n},+}} % Spatial distribution neutrals with velocity along e_x
+\newcommand{\fnexmL}{\delta f_{\mathrm{n},-}}% Spatial distribution neutrals with velocity along -e_x
+\newcommand{\phinL}{\delta\Phi_{\mathrm{n}}}   % Neutral flux
+\newcommand{\phinexpL}{\delta \Phi_{\mathrm{n},+}} % Neutral flux in direction e_x
+\newcommand{\phinexmL}{\delta \Phi_{\mathrm{n},-}}% Neutral flux in direction -e_x
+\newcommand{\psinL}{\delta\Psi_{\mathrm{n}}}   % Neutral collision density
+
+
+\newcommand{\sionL}{\delta \Sigma_{\mathrm{ion}}}                   % macroscopic cross section ionization
+\newcommand{\scxL}{\delta \Sigma_{\mathrm{cx}}}                     % macroscopic cross section charge exchange
+\newcommand{\stL}{\delta \Sigma_{\mathrm{t}}}                       % total macroscopic cross section
+\newcommand{\skL}{\delta \Sigma_{k}}                                % macroscopic cross section interaction k
+\newcommand{\gfionL}{\delta g_{\fn,\mathrm{ion}}}                        % detector function ionization
+\newcommand{\gpionL}{\delta g_{\phin,\mathrm{ion}}}                        % detector function ionization
+\newcommand{\gftotL}{\delta g_{\fn,\mathrm{t}}}                        % detector function collision
+\newcommand{\gptotL}{\delta g_{\phin,\mathrm{t}}}                        % detector function collision
+\newcommand{\gfcxL}{\delta g_{\fn,\mathrm{cx}}}                        % detector function charge exchange
+\newcommand{\gpcxL}{\delta g_{\phin,\mathrm{cx}}}                        % detector function charge exchange
+
+
+\newcommand{\fnA}{\fn^{*}}             % Adjoint neutral distribution
+\newcommand{\phinA}{\phin^{*}}         % Adjoint neutral transport flux
+\newcommand{\thetanA}{\Theta_{\mathrm{n}}^{*}}
+\newcommand{\psinA}{\Psi_{\mathrm{n}}^{*}}         % Adjoint neutral transport flux
+\newcommand{\fnAS}{{\fn}_{,S}^{*}}             % Adjoint neutral distribution (BC)
+\newcommand{\phinAS}{{\phin}_{,S}^{*}}         % Adjoint neutral transport flux (BC)
+\newcommand{\psinAS}{{\psin}_{,S}^{*}}         % Adjoint neutral transport flux (BC)
+
+\newcommand{\phinexpA}{\Phi_{\mathrm{n},+}^{*}} % Neutral flux in direction e_x
+\newcommand{\phinexmA}{\Phi_{\mathrm{n},-}^{*}}% Neutral flux in direction -e_x
+\newcommand{\psinexpA}{\Psi_{\mathrm{n},+}^{*}} % Neutral flux in direction e_x
+\newcommand{\psinexmA}{\Psi_{\mathrm{n},-}^{*}}% Neutral flux in direction -e_x
+
+\newcommand{\phinexpAS}{\Phi_{\mathrm{n},+,S}^{*}} % Neutral flux in direction e_x
+\newcommand{\phinexmAS}{\Phi_{\mathrm{n},-,S}^{*}}% Neutral flux in direction -e_x
+
+\newcommand{\psinexpAS}{\Psi_{\mathrm{n},+,S}^{*}} % Neutral flux in direction e_x
+\newcommand{\psinexmAS}{\Psi_{\mathrm{n},-,S}^{*}}% Neutral flux in direction -e_x
+
+\newcommand{\Gd}{\Gamma_{\mathrm{d}}} % desired target flux
+\newcommand{\Gn}{\Gamma} % real target flux
+\newcommand{\Gt}{\Gamma_{\mathrm{t}}} % real target flux
+
+
+\newcommand{\ddv}{\dd \vel}
+
+\newcommand{\kintv}[2]{\int_{#1} #2 \,\ddv}       % 'kinetic' integral
+\newcommand{\kintvp}[2]{\int_{#1} #2 \,\ddv'}     % 'kinetic' integral over s'
+
+\newcommand{\kavg}[2]{\left\langle #1 \,,\, #2 \right\rangle}                           % 'kinetic aveage'
+
+\newcommand{\nt}{n_{\mathrm{t}}}      % number of trajectories
+\newcommand{\ea}[1]{\langle #1 \rangle}
+
+\newcommand{\mfptrn}{\lambda_{\mathrm{tr}}^{\mathrm{n}}} % Transport mean free path of the neutrals
+
+\newcommand{\Er}{E_{\mathrm{r}}} % Ion-neutral relative energy difference
+\newcommand{\Ec}{E_{\mathrm{c}}} % Center-of-mass kinetic energy
+\newcommand{\Ecmax}{E_{\mathrm{c,max}}} % Maximum center-of-mass kinetic energy
+\newcommand{\En}{E_{\mathrm{n}}} % Neutral kinetic energy
+\newcommand{\Enk}{E_{\mathrm{n},k}} % Kinetic energy of particle k
+
+\newcommand{\Omegabf}{{\bf \Omega}}   % Direction of motion of a particle
+\newcommand{\Omegahat}{{\bf \Omega}}
+
+\newcommand{\Kpp}{K_{\mathrm{p} \rightarrow \mathrm{p}}} 
+\newcommand{\Kpb}{K_{\mathrm{p} \rightarrow \mathrm{b}}} 
+\newcommand{\Kbp}{K_{\mathrm{b} \rightarrow \mathrm{p}}} 
+\newcommand{\Kbb}{K_{\mathrm{b} \rightarrow \mathrm{b}}} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Radiation transport
+
+
+\newcommand{\I}{I}           % radiance
+\newcommand{\x}{{\bf r}}     % position vector
+\newcommand{\xb}{{\bf r}_{\mathrm{b}}}     % position vector to boundary
+\newcommand{\rb}{r_{\mathrm{b}}}     % distance to boundary
+\newcommand{\rp}{r_{\mathrm{p}}}     % projection of the distance in the poloidal plane
+\newcommand{\rpb}{r_{\mathrm{b,p}}}  
+\newcommand{\s}{{\bf s}}     % direction
+
+\newcommand{\Ii}{\I_{\mathrm{i}}}  % incident
+\newcommand{\Ir}{\I_{\mathrm{r}}}  % reflected
+
+\newcommand{\Is}{\I_{\mathrm{s}}}  % specular
+\newcommand{\Id}{\I_{\mathrm{d}}}  % diffuse
+
+
+
+\newcommand{\si}{\s_{\mathrm{i}}}
+\newcommand{\sr}{\s_{\mathrm{r}}}
+
+\newcommand{\REr}{R_{\mathrm{E}}}    % Energy reflection coefficient for radiation
+\newcommand{\alphar}{\alpha}
+
+\newcommand{\dds}{\dd \s}
+
+\newcommand{\kints}[2]{\int_{#1} #2 \,\dds}       % 'kinetic' integral
+\newcommand{\kintsp}[2]{\int_{#1} #2 \,\dds'}     % 'kinetic' integral over s'
+
+
+\newcommand{\IL}{\delta \I}          % Linearized variable
+\newcommand{\IdL}{\delta \Id}        % Linearized variable
+\newcommand{\IsL}{\delta \Is}        % Linearized variable
+
+\newcommand{\IA}{\I^{*}}  % Adjoint variable
+\newcommand{\FA}{F^{*}}
+\newcommand{\IAS}{\I_{\mathrm{S}}^{*}}  % Adjoint variable
+\newcommand{\FAS}{F_{\mathrm{S}}^{*}}  % Adjoint variable
+
+\newcommand{\IAs}{\I_{\mathrm{s}}^{*}}  % specular
+\newcommand{\IAd}{\I_{\mathrm{d}}^{*}}  % diffuse
+
+\newcommand{\FAs}{F_{\mathrm{s}}^{*}}  % specular
+\newcommand{\FAd}{F_{\mathrm{d}}^{*}}  % diffuse
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Proportionality coefficients
+\newcommand{\Cse}{C_{\mathrm{se}}}
+\newcommand{\Ct}{C_{\mathrm{t}}}
+\newcommand{\CR}{C_{\mathrm{R}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Error assessment
+\newcommand{\Phiex}{\Phi^{\mathrm{ex}}}
+\newcommand{\avg}[1]{\left < #1 \right >}
+\newcommand{\std}[1]{\sigma_{#1}}
+\newcommand{\epsb}[2]{\epsilon_{\mathrm{#1},{#2}}} % Error
+\newcommand{\epssb}[1]{\epsilon_{\mathrm{s},{#1}}} % Statistical error
+\newcommand{\sigmaSNIj}{\sigma_{S,i}^{NI}} % Statisticla error for the hybrid simulation on source S
+\newcommand{\Sexj}{S_{\mathrm{ex},i}} % Exact source in cell i
+\newcommand{\Ab}[1]{A_{\mathrm{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hybrid neutral approach
+\newcommand{\Knp}{Kn^{\mathrm{p}}}
+\newcommand{\Knt}{Kn^{\mathrm{t}}}
+\newcommand{\lambdap}{\lambda_{\mathrm{cx}}^{\mathrm{p}}}
+\newcommand{\Lmacro}{L_{\mathrm{macro}}}
+\newcommand{\nneav}{<\nne>_{\mathrm{edge}}}
+\newcommand{\nesepm}{n_{\mathrm{e,sep,m}}}
+\newcommand{\Teot}{T_{\mathrm{e,ot}}}
+
+% New symbols for this manual
+\newcommand{\isign}{I_\mathrm{s}}
+\newcommand{\cosa}{\cos \alpha_{\nu}}
+\newcommand{\sina}{\sin \alpha_{\nu}}
+\newcommand{\vcx}{n_\mathrm{i} K_\mathrm{cx,m}}
+\newcommand{\vion}{n_\mathrm{e} K_\mathrm{i}}
+\newcommand{\vtot}{n_\mathrm{i} K_\mathrm{cx,m} + n_\mathrm{e} K_\mathrm{i}}
+\newcommand{\ux}{u_\phi}
+\newcommand{\uy}{u_\tau}
+\newcommand{\uz}{u_{\nu-}}
+\newcommand{\uxn}{u_{\mathrm{n} \phi}}
+\newcommand{\uyn}{u_{\mathrm{n} \tau}}
+\newcommand{\uzn}{u_{\mathrm{n}\nu-}}
+\newcommand{\dnndy}{\frac{\partial n_\mathrm{n}}{\partial \tau}}
+\newcommand{\dnndz}{\frac{\partial n_\mathrm{n}}{\partial \nu}}
+\newcommand{\nnwwni}{n'_\mathrm{n}u'_{\mathrm{n \phi}}}
+\newcommand{\nnip}{n'_\mathrm{n}}
+%\newcommand{\fmox}{\Gamma^\mathrm{n}_\mathrm{m,\phi}}
+%\newcommand{\fmoy}{\Gamma^\mathrm{n}_\mathrm{m,\tau}}
+%\newcommand{\fmoz}{\Gamma^\mathrm{n}_\mathrm{m,\nu-}}
+\newcommand{\fmoxrec}{\Gamma^\mathrm{n}_{\mathrm{m,\phi,rec}}}
+\newcommand{\fmoyrec}{\Gamma^\mathrm{n}_{\mathrm{m,\tau,rec}}}
+\newcommand{\fmozrec}{\Gamma^\mathrm{n}_{\mathrm{m,\nu+,rec}}}
+\newcommand{\fmoxrefld}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\phi,refl}}}
+\newcommand{\fmoyrefld}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\tau,refl}}}
+\newcommand{\fmozrefld}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\nu+,refl}}}
+\newcommand{\fmoxreflm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\phi,refl}}}
+\newcommand{\fmoyreflm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\tau,refl}}}
+\newcommand{\fmozreflm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\nu+,refl}}}
+\newcommand{\fmoxrect}{\Gamma^\mathrm{n}_{\mathrm{m,\phi,T,rec}}}
+\newcommand{\fmoyrect}{\Gamma^\mathrm{n}_{\mathrm{m,\tau,T,rec}}}
+\newcommand{\fmozrect}{\Gamma^\mathrm{n}_{\mathrm{m,\nu+,T,rec}}}
+\newcommand{\fmoxrefldt}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\phi,T,refl}}}
+\newcommand{\fmoyrefldt}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\tau,T,refl}}}
+\newcommand{\fmozrefldt}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\nu+,T,refl}}}
+\newcommand{\fmoxreflmt}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\phi,T,refl}}}
+\newcommand{\fmoyreflmt}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\tau,T,refl}}}
+\newcommand{\fmozreflmt}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\nu+,T,refl}}}
+\newcommand{\fmoxincd}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\phi,inc}}}
+\newcommand{\fmoyincd}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\tau,inc}}}
+\newcommand{\fmozincd}{\Gamma^\mathrm{n,diff}_{\mathrm{m,\nu-,inc}}}
+\newcommand{\fmoxincm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\phi,inc}}}
+\newcommand{\fmoyincm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\tau,inc}}}
+\newcommand{\fmozincm}{\Gamma^\mathrm{n,maxw}_{\mathrm{m,\nu-,inc}}}
+
+\newcommand{\fnni}{\Gamma^\mathrm{n}_{\nu-}}
+\newcommand{\fnnid}{\Gamma^\mathrm{n,diff}_{\nu-}}
+\newcommand{\fnnim}{\Gamma^\mathrm{n,maxw}_{\nu-}}
+
+
+\newcommand{\izerol}{M}
+\newcommand{\ionel}{M_\nu}
+\newcommand{\itwol}{M_{\nu \nu}}
+\newcommand{\ithreel}{M_{\nu \nu \nu}}
+\newcommand{\ifourl}{M_{\nu \nu \nu \nu}}
+
+\newcommand{\fmomnip}{\Gamma^\mathrm{n}_{\mathrm{m},||,\theta-}}
+\newcommand{\fmomnit}{\Gamma^\mathrm{n}_{\mathrm{m},||,\phi-}}
+\newcommand{\fdni}{\Gamma^\mathrm{i}_{\nu-}}
+
+\newcommand{\tzero}{-n_\mathrm{i} (\mathbf{V}_\mathrm{i} \cdot \mathbf{\nu})}
+
+\newcommand{\pfi}{p_\mathrm{rec,F}}
+\newcommand{\pfn}{p_\mathrm{refl,F}}
+\newcommand{\pfnd}{p_\mathrm{refl,F}^\mathrm{diff}}
+\newcommand{\pfnm}{p_\mathrm{refl,F}^\mathrm{maxw}}
+\newcommand{\pf}{p_\mathrm{fast}}
+\newcommand{\pcorfi}{p_\mathrm{rec,F}^\mathrm{corr}}
+\newcommand{\pcorfn}{p_\mathrm{refl,F}^\mathrm{corr}}
+\newcommand{\pcorfnd}{p_\mathrm{refl,F}^\mathrm{corr,diff}}
+\newcommand{\pcorfnm}{p_\mathrm{refl,F}^\mathrm{corr,maxw}}
+\newcommand{\recyczero}{R_\mathrm{T,fl}}
+\newcommand{\rconei}{\mathrm{RC}_n}
+\newcommand{\rctwoi}{\mathrm{RC}_n^{\dnndz}}
+\newcommand{\rmxonei}{\mathrm{RC}_{\mathrm{m},\phi}}
+\newcommand{\rmxtwoi}{\mathrm{RC}_{\mathrm{m},\phi}^{\dnndz}}
+\newcommand{\rmzonei}{\mathrm{RC}_{\mathrm{m},\nu}}
+\newcommand{\rmztwoi}{\mathrm{RC}_{\mathrm{m},\nu}^{\dnndz}}
+\newcommand{\rmytwoi}{\mathrm{RC}_{\mathrm{m},\tau}^{\dnndy}}
+\newcommand{\rponeonei}{\mathrm{RC}_{p}}
+\newcommand{\rponetwoi}{\mathrm{RC}_{p}^{\dnndz}}
+\newcommand{\rptwoonei}{\mathrm{RC}_{n_\mathrm{n}}}
+\newcommand{\rptwotwoi}{\mathrm{RC}_{n_\mathrm{n}}^{\dnndz}}
+\newcommand{\rpthreeonei}{\mathrm{RC}_{u_{\mathrm{n},\phi}}}
+\newcommand{\rpthreetwoi}{\mathrm{RC}_{u_{\mathrm{n},\phi}}^{\dnndz}}
+\newcommand{\reonei}{\mathrm{RC}_{E}}
+\newcommand{\retwoi}{\mathrm{RC}_{E}^{\dnndz}}
+\newcommand{\recycm}{R_\mathrm{m}}
+%\newcommand{\fnamolrec}{fnamolrec}
+%\newcommand{\fnamolrefl}{fnamolrefl}
+\newcommand{\fluidfrachyb}{R_{fl}}
+\newcommand{\efc}{E_{FC}}
+\newcommand{\pti}{p_\mathrm{rec,T}}
+\newcommand{\ptn}{p_\mathrm{refl,T}}
+\newcommand{\ptnd}{p_\mathrm{refl,T}^\mathrm{diff}}
+\newcommand{\ptnm}{p_\mathrm{refl,T}^\mathrm{maxw}}
+\newcommand{\pnc}{p_\mathrm{n}^{\mathrm{rec}}}
+%\newcommand{\fmomrecp}{ \Gamma^\mathrm{n}_\mathrm{m,||,rec,\theta}}
+%\newcommand{\fmomrect}{\Gamma^\mathrm{n}_\mathrm{m,||,rec,\phi}}
+%\newcommand{\feneni}{Q^{\mathrm{n}}_{\nu-}}
+%\newcommand{\fmomni}{\Gamma^\mathrm{n}_{m,||,||-}}
+\newcommand{\Rv}{R_\mathrm{N}(v',\vartheta')}
+\newcommand{\Rmomparv}{R_\mathrm{m,||}(v',\vartheta')}
+\newcommand{\Rmomperpv}{R_\mathrm{m,\perp}(v',\vartheta')}
+\newcommand{\Rpvone}{R_p(v',\vartheta')}
+\newcommand{\Rpvtwo}{R_{n_\mathrm{n}}(v',\vartheta')}
+\newcommand{\Rpvthree}{R_{u_{\mathrm{n}\phi}}(v',\vartheta')}
+\newcommand{\Rev}{R_E(v',\vartheta')}
+
+

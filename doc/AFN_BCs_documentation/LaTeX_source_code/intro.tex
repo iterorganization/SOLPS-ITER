@@ -1,0 +1,14 @@
+\chapter{Introduction}
+
+
+The aim of the Advanced Fluid Neutral (AFN) boundary conditions (BCs) is to provide macroscopic boundary conditions for fluid neutral models in plasma boundary simulations, based on the same reflection and recycling databases that are used by kinetic neutral solvers such as EIRENE. This is in contrast to earlier fluid neutral boundary conditions, which usually employed simple expressions, such as zero parallel velocity, or fixed scalar recycling factors for momentum and energy.
+
+The AFN BCs were primarily developed in the PhD thesis of N. Horsten \cite{phd_niels} in an in-house code. Subsequently, the models have been integrated and tested in SOLP-ITER by M. Blommaert et al. \cite{pet_maarten} (structured version) and W. Van Uytven et al. \cite{wim2022} (unstructured version).
+
+The first goal of this document is to centralize all information on the AFN boundary conditions, using unified symbol conventions, as the complete description of the model is now spread out over multiple references \cite{nf_niels,phd_niels,phd_wim,nf_wim,pet_maarten,psi_niels}.
+The second goal is to provide users with instructions on how to use the AFN boundary conditions, how to create new AFN databases for different wall materials, and to explain detailed options for advanced users. 
+The third goal is to clarify the link between the equations and code implementation, making life easier for researchers that wish to improve the models in the future.
+
+The models have been tested thoroughly for deuterium (D) on carbon (C), tungsten (W) and beryllium (Be). The code can currently handle any combination of H, D or T on any wall material, but these other combinations have not yet been benchmarked as thoroughly.
+
+In case of bugs, questions, or possible mistakes in this document, contact \texttt{wim.vanuytven@kuleuven.be}, \texttt{niels.horsten@kuleuven.be}, or \texttt{wouter.dekeyser@kuleuven.be}.

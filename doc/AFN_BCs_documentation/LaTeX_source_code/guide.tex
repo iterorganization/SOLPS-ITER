@@ -1,0 +1,125 @@
+\chapter{User guide}
+
+\section{Running with AFN boundary conditions in B2.5}
+
+ \subsection{Switches in b2mn.dat}
+
+The switches to control the behavior of the AFN model in B2.5 are listed here. The default values are given after the name of the switch. \newline\\
+ \texttt{`b2stbr\_recycle\_afn' (default =`0')}  \newline
+ Main switch to enable the use of the AFN boundary conditions. \newline
+ \\
+\texttt{`diffusion\_bc\_safeguard' (default =`1')}  \newline
+When this switch is active, the code will automatically switch to using the Maxwellian approach instead of the diffusion approach, when the diffusion approach gives rise to negative incident fluxes. \newline
+ \\
+\texttt{`remove\_FC\_el' (default =`0')}  \newline
+When this switch is active, the 2-3 eV Franck-Condon energy given to the atoms originating from dissociating molecules is subtracted from the electrons. This switch should be active to guarantee global energy conservation. However, turning it on causes a strong localized electron heat sink, typically causing the electron temperature to drop to zero at the guard cells (see Ref. \cite{phd_wim} Section 4.4). In all published AFN works, \texttt{`remove\_FC\_el' = 0}. \newline
+This is an important remaining shortcoming of the AFN model. An approximate fluid model for the molecules would solve this issue. \newline
+\\
+\texttt{`afn\_bcs\_use\_coarse' (default =`1')}  \newline
+When \texttt{`afn\_bcs\_use\_coarse' = 0} the code will use AFN database such as \texttt{dw.fnn} with 100 discretization points for the toroidal Mach number, 134 points for the temperature, and 28 points for the sheath potential drop. When \texttt{`afn\_bcs\_use\_coarse' = 1} the code will use AFN database such as \texttt{dw.fnn.coarse} with 11 discretization points for the toroidal Mach number, 134 points for the temperature, and 28 points for the sheath potential drop.  \newline
+\\
+\texttt{`b2stbr\_Kn\_b1' (default =`0.01')}  \newline
+When using \texttt{maxw(istra) = 2}, \texttt{b2stbr\_Kn\_b1} determines the Knudsen number below which the diffusion approximation is used. \newline
+ \\
+ \texttt{`b2stbr\_Kn\_b2' (default =`0.1')}  \newline
+When using \texttt{maxw(istra) = 2}, \texttt{b2stbr\_Kn\_b2} determines the Knudsen number above which the Maxwellian approximation is used. \newline
+ \\
+ \texttt{`use\_uy\_uz\_0' (default =`0')}  \newline
+ This switch controls the contribution from the tangential and normal bulk velocity of the ions or neutrals in the calculation of the incident fluxes. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number. \newline
+ \\
+\texttt{`use\_uy\_uz\_1' (default =`0')} \newline
+ This switch controls the contribution from the tangential and normal bulk velocity of the ions or neutrals in the calculation of the incident and recycled/reflected fluxes. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number.
+
+ \subsection{Inputs in b2.neutrals.paramters}
+
+\texttt{maxw(istra) (default =1)}  \newline
+When \texttt{`maxw(istra)' = 0}, the diffusion approximation for the incident velocity distribution of the neutrals is chosen. When \texttt{`maxw(istra)' = 1}, the Maxwellian approximation for the incident velocity distribution of the neutrals is chosen (recommended). When \texttt{`maxw(istra)' = 2}, the choice between diffusion or Maxwellian approximation is based on the local Knudsen number, depending on \texttt{b2stbr\_Kn\_b1} and \texttt{b2stbr\_Kn\_b2}. \newline
+ \\
+\texttt{maxw\_eff(istra) (default =1)}  \newline
+Relates to the option \texttt{CalcIncidentFluxesMinKn}, where the choice between diffusion and Maxwellian option is the same for each cell of the same stratum, but automatically selected based on the lowest Knudsen number along the boundary faces of that stratum. This option is depreciated and was never published. Not recommended. \newline
+\\
+\texttt{e\_fc (default =3.0)}  \newline
+Franck-Condon eneregy (in eV) given to each atom resulting from a dissociating molecule.\newline
+\\
+\texttt{surf\_mat(istra) (default =`C')}  \newline
+Surface material used to select the appropriate AFN database.  \newline
+\\
+\texttt{accel\_ion(istra) (default =0)}  \newline
+Determines whether the ions undergo sheath acceleration or not. For standard cases, \texttt{`accel\_ion' = 1} for the targets and \texttt{`accel\_ion' = 0} for PFR and main chamber wall boundaries.  \newline
+\\
+\texttt{b2recyc(is,istra) (default =1.0)}  \newline
+Determines for each stratum and each species the fraction of incident particles that return to the domain (=1-pumped fraction). When  \texttt{b2recyc} is not specified, \texttt{b2recyc = recyc}.
+The distinction between \texttt{b2recyc} and \texttt{recyc} is only relevant for spatially hybrid cases. \newline
+\\
+ 
+\subsection{Default databases}
+
+Several AFN databases are available by default in \texttt{B2.5/Database/trim.data/refl.data/}. The original higher-resolution databases are \texttt{dc.fnn}, \texttt{dbe.fnn}, and \texttt{dw.fnn}. Next, all combinations of H, D, and T, with C, Be, Fe, Mo and W are available with a reduced resolution for the toroidal Mach number: \texttt{hc.fnn.coarse}, \texttt{hbe.fnn.coarse}, \texttt{hfe.fnn.coarse}, \texttt{hmo.fnn.coarse}, \texttt{hw.fnn.coarse}, \texttt{dc.fnn.coarse}, \texttt{dbe.fnn.coarse}, \texttt{dfe.fnn.coarse}, \texttt{dmo.fnn.coarse}, \texttt{dw.fnn.coarse}, \texttt{tc.fnn.coarse}, \texttt{tbe.fnn.coarse}, \texttt{tfe.fnn.coarse}, \texttt{tmo.fnn.coarse}, and \texttt{tw.fnn.coarse}.
+
+
+\section{Creating new AFN databases with pre-processor b2ab}
+
+\subsection{Running \texttt{b2ab}}
+
+Running \texttt{b2run (-s) b2ab} will create a new AFN database file based on the inputs in \texttt{b2ab.dat}, and place it in \texttt{b2ab.exe.dir}. The \texttt{b2ab.dat} file consists of a fixed-format header followed by optional arguments. The fixed-format header is: \newline
+\\
+*incident \\
+\hspace{2cm} `X' \\ 
+*material \\ 
+\hspace{2cm} `Y' \\
+
+\noindent where `X' is the incident particle (currently H, D, or T) and `Y' is the name of the wall material (C, Be, Cr, Li, W, ...). The code will then look for the TRIM file \texttt{X\_on\_Y}. It will first look in \newline \texttt{modules/Eirene/Database/Surfacedata/TRIM/}. A user that does not have access to the EIRENE repository should request the specific TRIM file from an EIRENE developer (respecting the EIRENE license requirements), and place it in \texttt{modules/B2.5/Database/trim.data/refl.data.local/}. \newline
+\\
+The optional inputs are: \newline
+\\
+\texttt{`b2abdr\_ntp' (default =`1e5')}  \newline
+ Number of Monte Carlo particles used to calculate the reflection coefficients that can not be evaluated analytically (see Section \ref{sec:trim_moment_reflection_coeff}). \newline
+ \\
+\texttt{`b2abdr\_nv' (default =`100')}  \newline
+ Number of discretization points to evaluate the $ \int_{v'=0}^{\infty} \dd v'$ the integrals from Section \ref{sec:final_expressions_RC}. \newline
+ \\
+ \texttt{`b2abdr\_ntheta' (default =`100')}  \newline
+Number of discretization points to evaluate the $ \int_{\vartheta'=0}^{\pi/2} \dd \vartheta'$ the integrals from Section \ref{sec:final_expressions_RC}. \newline
+ \\
+\texttt{`b2abdr\_nphi' (default =`180')}  \newline
+Number of discretization points to evaluate the $ \int_{\varphi'=0}^{2 \pi} \dd \varphi'$ the integrals from Section \ref{sec:final_expressions_RC}. \newline
+\\
+\texttt{`b2abdr\_nT' (default =`0')}  \newline
+Number of values for $T_a$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_nM' (default =`0')}  \newline
+Number of values for $M_{a,\phi}$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_nSh' (default =`0')}  \newline
+Number of values for $\dshpot$ in the AFN database.  \newline
+\\
+\texttt{`b2abdr\_Tmin' (default =`0.1')}  \newline
+Minimum value for $T_a$ in the AFN database, expressed in eV. \newline
+\\
+\texttt{`b2abdr\_Tmax' (default =`1000')}  \newline
+Maximum value for $T_a$ in the AFN database, expressed in eV. \newline
+\\
+\texttt{`b2abdr\_Mmin' (default =`0.0')}  \newline
+Minimum value for $M_{a,\phi}$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_Mmax' (default =`1.1')}  \newline
+Maximum value for $M_{a,\phi}$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_Shmin' (default =`0.0')}  \newline
+Minimum value for $\dshpot$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_Shmax' (default =`6.0')}  \newline
+Maximum value for $\dshpot$ in the AFN database. \newline
+\\
+\texttt{`b2abdr\_Eomin' (default =`1e-6')}  \newline
+Minimum incident particle energy (in eV) used throughout all calculations. \newline
+\\
+
+\subsection{Allowed dimensions}
+
+In the current implementation, all databases used in a single run must have the same dimension. For example, it is possible to use \texttt{dw.fnn}, \texttt{dbe.fnn}, \texttt{tc.fnn}, and \texttt{tbe.fnn} in a single run. Likewise, \texttt{dw.fnn.coarse}, \texttt{dbe.fnn.coarse}, \texttt{tc.fnn.coarse}, and \texttt{tbe.fnn.coarse} can be used together. Mixing \texttt{tc.fnn.coarse}, and \texttt{tbe.fnn}, or another format with different dimensions, is not allowed. Therefore, it is recommended to stick to the standard formats when creating new databases.
+
+\subsection{Running with newly created databases}
+
+At runtime, the code will create target names based on the B2.5 atomic species, the \texttt{surf\_mat} variables, and the \texttt{afn\_bcs\_use\_coarse} switch. It will then first look for these names in \texttt{B2.5/Database/trim.data/refl.data.local/}, and then in \texttt{B2.5/Database/trim.data/refl.data/}. When a user has created a new database, for example D on Li, the file \texttt{dli.fnn.coarse} will be created in b2ab.exe.dir. The user then has to move this file to \texttt{B2.5/Database/trim.data/refl.data.local/}. Alternatively, new files that are expected to be needed by many users can be added to \texttt{B2.5/Database/trim.data/refl.data/} and pushed to the repository. 
+

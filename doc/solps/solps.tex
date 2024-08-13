@@ -7300,6 +7300,23 @@ important.
 The impact of the fluid model and associated flux limits, in comparison with
 the {\tt Eirene} Monte Carlo model, is covered in detail with examples in~\cite{CosterHinM2003}.
 
+\subsection{Advanced fluid neutrals}
+\index{neutrals, advanced fluid neutral model}
+
+The advanced fluid neutral (AFN) models developed by the KU Leuven group provide a description for the fluid neutrals
+that is more consistent with EIRENE than the fluid neutral model historically available in B2.5.
+The models have been developed and tested for single-species hydrogenic cases. More research is needed to generalize for H/D/T mixtures. A fluid description for the molecules is also still missing. The transport model is derived assuming dominant CX between ions and atoms.
+The ionization, recombination and CX rates are derived from the same databases as EIRENE. The advanced fluid neutral boundary conditions provide macroscopic BCs based on integration of EIRENE's TRIM
+database over the known velocity distribution of incident ions and an assumed velocity distribution of the incident atoms. The model equations and benchmarks with EIRENE are discussed in full in the following references:
+~\cite{HorstenNF,BlommaertCtPP,VanUytven_Tn,VanUytvenPSI2022,VanUytven_AFN_assessment}.
+The AFN BCs at runtime make use of pre-computed databases. For certain combinations of incident particles and wall materials, these are stored in {\tt B2.5/Database/trim.data/refl.data}.
+The pre-processor to create new databases for new combinations of incident particles and wall materials is now available in the source code as {\tt b2ab}.
+A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under  {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
+The LaTeX source files for this pdf are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code/}. An example {\tt b2ab.dat} file is available under
+{\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab/}.
+
+
+
 \subsection{First-flight model}
 \index{neutrals, first-flight model}
 

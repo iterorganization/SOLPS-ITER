@@ -1,0 +1,740 @@
+\chapter{Implementation in SOLPS-ITER}
+
+\section{Final expressions for macroscopic AFN database coefficients}\label{sec:final_expressions_RC}
+
+The final expressions for the pre-computed integrals, as calculated in \texttt{CalcReflectionCoefficientsFluidTRIM}, are given here. In general, there are four coefficients per TRIM reflection coefficient.
+There is a contribution due to the recycled neutrals and three contributions of the reflected neutrals, respectively scaling with $\nn$, $\dnndy$ and $\dnndz$ (see Eq. \eqref{eq:Gammanmin}). However, the reflection term scaling with $\nn$ leads to the same integral as the recycling term scaling with $\nni$. These coefficients are called $\rconei, \rmxonei, \rmzonei, \rponeonei, \rptwoonei, \rpthreeonei$, and $\reonei$. The terms scaling with $\dnndy$ are often zero because $\int_{\varphi'=0}^{2 \pi} \mathrm{A} \sin(\varphi') \mathrm{exp}\big(\mathrm{B} + \mathrm{C} \cos(\varphi') \big) \dd \mathrm{\varphi'}$ = 0. The exception is the tangential momentum components, where both the terms scaling with $\nn$ and $\dnndz$ are zero and only the $\dnndy$ term remains. The non-zero coefficients scaling with a neutral density gradient are $\rctwoi, \rmxtwoi, \rmytwoi, \rmztwoi, \rponetwoi, \rptwotwoi, \rpthreetwoi,$ and $\retwoi$. The coefficients which are zero and hence not tabulated are $\mathrm{RC}_n^{\dnndy}, \mathrm{RC}_{\mathrm{m},\phi}^{\dnndy}, \mathrm{RC}_{\mathrm{m},\nu}^{\dnndy}, \mathrm{R}_{\mathrm{m},\tau}, \mathrm{RC}_{\mathrm{m},\tau}^{\dnndz}, \mathrm{RC}_{p}^{\dnndy}, \mathrm{RC}_{n_\mathrm{n}}^{\dnndy}, \mathrm{RC}_{u_{\mathrm{n},\phi}}^{\dnndy},$ and $\mathrm{RC}_{E}^{\dnndz}$.
+
+%, where $\mathrm{A}, \mathrm{B}$ and $\mathrm{C}$ are coefficients that may depend on $v'$ and $\vartheta'$ but not on $\varphi'$.
+
+The coefficients below are written as a function of $u_{a,\phi}$ and $T_a$. When evaluating the coefficients in  \texttt{CalcRecycledFluxes} and \texttt{CalcReflectedFluxesDiffusion}, $a = \mathrm{i}$. When evaluating the coefficients in \texttt{CalcReflectedFluxesMaxwellian}, $a = \mathrm{n}$. Only for the recycling contributions $\dshpot$ is nonzero.
+
+The term $\Big( \frac{m}{2 \pi T_a}\Big)^{\frac{3}{2}}$ in front of the exponential in the (sheath-accelerated) Maxwellian is rewritten as $\pi^{-\frac{3}{2}} \ca^{-3}$, where $\ca$ is the isothermal sound speed of species $a$. The coefficients are further divided by powers of $\ca$ to make them dimensionless, i.e. of the form 
+\begin{equation}
+\mathrm{RC} = \frac{1}{\pi^{\frac{3}{2}}} \frac{1}{\ca^{k} }\int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} R \ (v')^{k-1} F(\vartheta') G(\varphi') \dd v' \dd \vartheta' \dd \varphi'.
+\end{equation}
+
+The sheath acceleration is determined by $\Delta \phi_{\mathrm{sh}} = \dshpot \Te e^{-1}$, while the macroscopic reflection coefficients are tabulated as a function of $T_\mathrm{i/n}$. This is solved by evaluating the database for 
+\begin{equation}
+\dshpotj = \dshpot \frac{T_\mathrm{e}}{T_\mathrm{i/n}} = \frac{\Delta \phi_{\mathrm{sh}} e}{T_\mathrm{i/n}}.
+\end{equation}
+
+A final point is that the reflection coefficients scaling with $\dnndz$ or $\dnndy$ will always be evaluated for $\dshpot = \dshpotj = 0$. However, they are currently also tabulated as a function of $\dshpot$ such that all coefficients have the same dimension. 
+
+\subsection{Macroscopic particle reflection coefficients}
+
+\noindent Equations  \eqref{eq:Gammarefl}, \eqref{eq:Gammarec}, \eqref{eq:finorm}, and \eqref{eq:Gammanmin} lead to the definition of the macroscopic particle reflection coefficient scaling with density
+\begin{align}
+   \rconei & (u_{a,\phi},T_a,\dshpot) = \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rv (v')^3  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rconei_def}
+\end{align}
+
+\noindent and the macroscopic particle reflection coefficient scaling with the normal gradient of the neutral density
+
+\begin{align}
+    \rctwoi & (u_{a,\phi},T_a,\dshpot) = 
+     \frac{1}{\pi^{\frac{3}{2}}} \frac{1}{\ca^{5}} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^2 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'.  \label{eq:rctwoi_def}
+\end{align}
+
+\noindent The macroscopic particle reflection coefficient scaling with the tangential gradient of the neutral density is zero and hence not tabulated:
+
+\begin{align}
+    \mathrm{RC}_n^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+     \frac{1}{\pi^{\frac{3}{2}}} \frac{1}{\ca^{5} }\int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^2 \sin(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\subsection{Macroscopic momentum reflection coefficients}
+
+Equations \eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq. \eqref{eq:Gammanmomp} that scales with $\pitt$ lead to the definition of the macroscopic toroidal momentum reflection coefficient scaling with density:
+
+\begin{align}
+    \rmxonei & (u_{a,\phi},T_a,\dshpot) = 
+         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rmxonei_def}
+\end{align}
+
+\noindent and the macroscopic toroidal momentum reflection coefficient scaling with the normal gradient of neutral density
+\begin{align}
+    \rmxtwoi & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) (\cos (\vartheta') \sin (\vartheta'))^2 \cos (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmxtwoi_def}
+\end{align}
+
+\noindent The macroscopic toroidal momentum reflection coefficient scaling with the tangential gradient of neutral density is zero and hence not tabulated:
+
+\begin{align}
+     \mathrm{RC}_{m,\phi}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^3 \cos(\varphi') \sin(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\noindent Equations \eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq. \eqref{eq:Gammanmomp} that scales with $\pit \sina$ lead to the definition of the macroscopic tangential momentum reflection coefficients. Now, the part scaling with density is zero:
+
+\begin{align}
+    \mathrm{R}_{\mathrm{m},\tau} & (u_{a,\phi},T_a,\dshpot) = 
+         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\noindent Also the part scaling with the normal gradient of neutral density is zero:
+
+\begin{align}
+    \mathrm{R}_{\mathrm{m},\tau} & (u_{a,\phi},T_a,\dshpot) = 
+         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi') \cos(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\noindent The macroscopic tangential momentum reflection coefficients scaling with the tangential gradient of neutral density is 
+
+\begin{align}
+    \rmytwoi & (u_{a,\phi},T_a,\dshpot) = 
+      \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomparv (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')^2
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmytwo_def}
+\end{align}
+
+\noindent Equations \eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq. \eqref{eq:Gammanmomp} that scales with $\pit \cosa$ lead to the definition of the macroscopic normal momentum reflection coefficient scaling with density
+
+\begin{align}
+    \rmzonei & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomperpv (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^2 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rmzonei_def}
+\end{align}
+
+\noindent and the macroscopic normal momentum reflection coefficient scaling with the normal gradient of neutral density
+
+\begin{align}
+    \rmztwoi & (u_{a,\phi},T_a,\dshpot) = 
+        \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomperpv (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^3 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmztwoi_def}
+\end{align}
+
+\noindent The macroscopic normal momentum reflection coefficient scaling with the tangential gradient of neutral density is zero and hence not tabulated:
+
+\begin{align}
+    \mathrm{RC}_{\mathrm{m},\nu}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+        \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rmomperpv (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^2 \sin (\vartheta')^2 \sin(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\subsection{Pressure contributions}
+
+Equations \eqref{eq:Gammamompf}, \eqref{eq:pnboundary} and \eqref{eq:pnboundary2} introduce the need for additional coefficients to calculate the pressure of the fast reflected and recycled neutrals. 
+
+Equations \eqref{eq:v2fn}, \eqref{eq:Gammanmin} and \eqref{eq:finorm} lead to the definition of the part of the macroscopic pressure reflection coefficient scaling with density
+
+\begin{align}
+    \rponeonei & (u_{a,\phi},T_a,\dshpot) = 
+        \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvone (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rponeonei_def}
+\end{align}
+
+\noindent and the part of the macroscopic pressure reflection coefficient scaling with the normal gradient of the neutral density 
+
+\begin{align}
+    \rponetwoi & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvone (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \cos (\vartheta') \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rponetwoi_def}
+\end{align}
+
+\noindent The part of the macroscopic pressure reflection coefficient scaling with the tangential gradient of the neutral density is again zero:
+
+\begin{align}
+    \mathrm{RC}_{p}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^3} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvone (v')^2  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \sin (\vartheta')^2 \sin(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\noindent Equations \eqref{eq:nnboundary}, \eqref{eq:Gammanmin} and \eqref{eq:finorm} lead to the definition of the part of the macroscopic density reflection coefficient scaling with density
+
+\begin{align}
+    \rptwoonei & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvtwo (v')^3  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rptwoonei_def}
+\end{align}
+
+\noindent and the part of the macroscopic density reflection coefficient scaling with the normal gradient of the neutral density:
+
+\begin{align}
+    \rptwotwoi & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvtwo (v')^3  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \cos(\vartheta') \sin(\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rptwotwo_def}
+\end{align}
+
+\noindent The part of the macroscopic density reflection coefficient scaling with the tangential gradient of the neutral density is again zero:
+
+\begin{align}
+    \mathrm{RC}_{n_\mathrm{n}}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvtwo (v')^3  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \sin(\vartheta')^2 \sin (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+
+\noindent Equations \eqref{eq:wwnboundary}, \eqref{eq:Gammanmin} and \eqref{eq:finorm} lead to the definition of part of the macroscopic toroidal velocity reflection coefficient scaling with density
+
+\begin{align}
+    \rpthreeonei & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvthree (v')^3  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \sin (\vartheta')^2 \cos (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:rpthreeonei_def}
+\end{align}
+
+\noindent and the part of the macroscopic toroidal velocity reflection coefficient scaling with the normal gradient of neutral density:
+
+\begin{align}
+    \rpthreetwoi & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvthree (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rpthreetwo_def}
+\end{align}
+
+\noindent The part of the macroscopic toroidal velocity reflection coefficient scaling with the tangential gradient of neutral density is again zero:
+
+\begin{align}
+    \mathrm{RC}_{u_{\mathrm{n},\phi}}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rpvthree (v')^4  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big)  \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+\subsection{Macroscopic neutral energy reflection coefficients}
+
+Equations \eqref{eq:Qnboundary}, \eqref{eq:Gammanmin} and \eqref{eq:finorm} lead to the definition of the macroscopic energy reflection coefficient scaling with density
+
+\begin{align}
+    \reonei & (u_{a,\phi},T_a,\dshpot) = 
+            \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rev (v')^5  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^2 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi', \label{eq:reonei_def}
+\end{align}
+
+and the macroscopic energy reflection coefficient scaling with the normal gradient of the neutral density
+
+\begin{align}
+    \retwoi & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^7} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rev (v')^6  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta')^2 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:retwoi_def}
+\end{align}
+
+The macroscopic energy reflection coefficient scaling with the tangential gradient of the neutral density is zero:
+
+\begin{align}
+    \mathrm{RC}_{E}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) = 
+    \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^7} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi} 
+    \Rev (v')^6  \nonumber \\ 
+    & \mathrm{exp}\Big( - \frac{m}{2 T_a} \big( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \big) \Big) \cos (\vartheta') \sin (\vartheta')^2 \sin(\varphi')
+    \dd v' \dd \vartheta' \dd \varphi' = 0.
+\end{align}
+
+
+
+
+
+\section{Final expressions for net boundary fluxes}
+
+Here, we re-write the expressions from the previous chapter in a form that closest resembles how they are implemented in the code. Recurring steps are:
+
+\begin{itemize}
+    \item The moments of the thermally released part $\Gamma_{\mu,\mathrm{T}}^\mathrm{n,diff/maxw}$ is split into $\Gamma_{\mathrm{\mu,T,refl}}^\mathrm{n,diff/maxw} + \Gamma_{\mathrm{\mu,T,rec}}^\mathrm{n,diff/maxw}$, where $\Gamma_{\mathrm{\mu,T,refl}}^\mathrm{n,diff/maxw}$ corresponds to the thermally released atoms originating from incident atoms, and $\Gamma_{\mathrm{\mu,T,rec}}^\mathrm{n,diff/maxw}$ corresponds to the thermally released atoms originating from incident ions. 
+    \item The recycled parts are multiplied with $\frac{\fdni}{-\ionel}$. This is related to the factor $C^\mathrm{i}$ introduced in Equation \eqref{eq:truncMaxw}, It compensates for the fact that integrating the assumed ion velocity distribution (that was used to determine the macroscopic fast recycling coefficients) can lead to a slightly different result than the macroscopic target ion flux in the fluid plasma solver. 
+    \item $\Ri$ and $\Rnx$ are replaced by $\pcorfi$ and $\pcorfn$, respectively, as explained in Section \ref{sec:pumped_fraction}. 
+\end{itemize}
+
+\subsection{Net neutral particle flux density} 
+
+\noindent The net neutral particle flux density  $\Gamma^{\mathrm{n}} = \nn \Vn \cdot \Nu$ is written as 
+
+\begin{equation}
+\Gamma^{\mathrm{n}} =  \Gamma_{\mathrm{refl},\mathrm{F}}^{\mathrm{n,diff/maxw}} + \Gamma_{\mathrm{rec},\mathrm{F}}^{\mathrm{n}} + \Gamma_{\mathrm{T,refl}}^\mathrm{n,diff/maxw} + 
+\Gamma_{\mathrm{T,rec}}^\mathrm{n,diff/maxw} - \Gamma_{\nu-}^{\mathrm{n,maxw/diff}}.
+\end{equation}\label{eq:net_particle_flux}
+
+
+Here, $\Gamma_{\nu-}^{\mathrm{n,diff}}$ and $\Gamma_{\nu-}^{\mathrm{n,maxw}}$ were already given as Eqs. \eqref{eq:Gammanin2} and \eqref{eq:Gammanin2_maxw}. They are implemented in \texttt{CalcIncidentFluxesDiffusion} and \texttt{CalcIncidentFluxesMaxwellian}, respectively. For the recycled flux we have
+\begin{equation}
+\Gamma_{\mathrm{rec},\mathrm{f}} + \Gamma_{\mathrm{T,rec}}^\mathrm{n} = \Rifl (\Vi \cdot \boldsymbol{\nu}),
+\end{equation}
+as calculated in \texttt{CalcRecycledFluxes}. For the reflected fluxes we have
+\begin{equation}
+    \Gamma_{\mathrm{refl},\mathrm{f}}^{\mathrm{n,diff}} + \Gamma_\mathrm{T}^\mathrm{n,diff} = \Rnxfl \Gamma_{\nu-}^{\mathrm{n,diff}} 
+\end{equation}
+as implemented \texttt{CalcReflectedFluxesDiffusion} or 
+\begin{equation}
+        \Gamma_{\mathrm{refl},\mathrm{f}}^{\mathrm{n,maxw}} + 
+        \Gamma_\mathrm{T}^\mathrm{n,maxw}=
+        \Rnxfl \Gamma_{\nu-}^{\mathrm{n,maxw}} 
+\end{equation}
+
+\noindent as implemented in \texttt{CalcReflectedFluxesMaxwellian}.
+
+\subsection{Net neutral parallel momentum flux density}
+
+The net neutral parallel momentum flux given by Equations \eqref{eq:Gammamompf}, \eqref{eq:Gammanmomp}, and \eqref{eq:par_momentum_T} is finally implemented as 
+
+\begin{align}
+    \Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,f} = & \ \Gamma^\mathrm{n}_\mathrm{m,||,rec} + \Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,refl} + 
+\Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,T,rec} + 
+\Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,T,refl} - 
+\Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,inc}  \nonumber \\ 
+& -
+\pit \cosa (p^\mathrm{n,diff/maxw}_\mathrm{1,rec} + p^\mathrm{n,diff/maxw}_\mathrm{1,refl} + p^\mathrm{n}_\mathrm{1,T,rec} + 
+p^\mathrm{n,diff/maxw}_\mathrm{1,T,refl} -
+p^\mathrm{n,diff/maxw}_\mathrm{1,T,inc} + p_2)  \label{eq:par_mom_final}
+\end{align}
+
+The $p_1$ terms correspond to term (1) in Equation \eqref{eq:pnboundary2}. The $p_2$ term correspond to term (2) in Equation \eqref{eq:pnboundary2} and is further elaborated below.
+
+\subsubsection{Flux contributions}
+
+Using the definition of $\rmzonei$ (Eq. \eqref{eq:rmzonei_def} and $\rmxonei$ (Eq. \eqref{eq:rmxonei_def}, the fast recycled part of Eq. \eqref{eq:Gammanmomp} is written as
+\begin{equation}
+    \Gamma^\mathrm{n}_\mathrm{m,||,rec} = \pit (\fmozrec \cosa - \fmoyrec \sina) - \pitt \fmoxrec
+\end{equation}
+with
+\begin{align}
+    \fmozrec & = \pcorfi \ m \rmzonei \ci^2 \frac{\fdni}{-\ionel}, \\
+    \fmoyrec & = 0, \\
+    \fmoxrec & = \pcorfi \ m \rmxonei \ci^2 \frac{\fdni}{-\ionel} ,
+\end{align}
+
+where $ \pcorfi = \frac{\mathrm{min}(\pfi,\Rifl)}{\pfi}$ with
+
+\begin{equation}
+    \pfi = \frac{\rconei \ci}{-\ionel}.
+\end{equation}
+
+Using the definition of $\rmzonei$ (Eq. \eqref{eq:rmzonei_def}), $\rmztwoi$ (Eq. \eqref{eq:rmztwoi_def}), $\rmytwoi$ (Eq. \eqref{eq:rmytwo_def}), $\rmxonei$ (Eq. \eqref{eq:rmxonei_def}), and $\rmxtwoi$ (Eq. \eqref{eq:rmxtwoi_def}), the fast reflected part of Eq. \eqref{eq:Gammanmomp} according to the diffusion approximation is written as 
+\begin{equation}
+    \Gamma^\mathrm{n,diff}_\mathrm{m,||,refl} = \pit (\fmozrefld \cosa - \fmoyrefld \sina) - \pitt \fmoxrefld
+\end{equation}
+with
+\begin{align}
+    \fmozrefld & = \pcorfnd m \frac{\vcx}{\vtot} \big( \nn \rmzonei \ci^2 + \frac{1}{\vtot} \dnndz \rmztwoi \ci^3 \big),\\
+    \fmoyrefld & = \pcorfnd m \frac{\vcx}{(\vtot)^2} \dnndy \rmytwoi \ci^3, \\
+    \fmoxrefld & = \pcorfnd m \frac{\vcx}{\vtot} \big( \nn \rmxonei \ci^2 + \frac{1}{\vtot} \dnndz \rmxtwoi \ci^3 \big),
+\end{align}
+
+where $ \pcorfnd = \frac{\mathrm{min}(\pfnd,\Rnxfl)}{\pfnd}$ with
+
+\begin{equation}
+    \pfnd = \frac{\vcx}{\vtot} ( \nn \rconei \ci + \frac{1}{\vtot}\dnndz \rctwoi \ci^2) \frac{1}{\fnnid}.
+\end{equation}
+
+When using the drifting Maxwellian approximation, the fast reflected parallel momentum flux becomes
+\begin{equation}
+    \Gamma^\mathrm{n,maxw}_\mathrm{m,||,refl} = \pit (\fmozreflm \cosa - \fmoyreflm \sina) - \pitt \fmoxreflm
+\end{equation}
+
+with
+\begin{align}
+    \fmozreflm & = \pcorfnm m \nn \rmzonei \cn^2, \\
+    \fmoyreflm & = 0, \\
+    \fmoxreflm & = \pcorfnm m \nn \rmxonei \cn^2.
+\end{align}
+
+where $ \pcorfnm = \frac{\mathrm{min}(\pfnm,\Rnxfl)}{\pfnm}$ with
+
+\begin{equation}
+    \pfnm = \frac{ \nn \rconei \cn}{\fnnim} .
+\end{equation}
+
+The thermally recycled contribution to the parallel momentum flux from Eq. \eqref{eq:par_momentum_T} is written as
+
+\begin{equation}
+    \Gamma^\mathrm{n}_\mathrm{m,||,T,rec} = \pit \fmozrect \cosa 
+\end{equation}
+
+%    \Gamma^\mathrm{n}_\mathrm{m,||,T,rec} = \pit (\fmozrect \cosa + \fmoyrect \sina) + \pitt \fmoxrect
+    
+with
+\begin{align}
+    \fmozrect & = \pti \frac{2}{3} m \fdni \vT, 
+%    \fmoyrect & = 0, \\
+%    \fmoxrect & = 0.
+\end{align}
+
+where $\pti = \mathrm{max}(\Rifl-\pfi,0)$.
+
+The thermally reflected contribution to the parallel momentum flux from Eq. \eqref{eq:par_momentum_T} is written as 
+
+\begin{equation}
+    \Gamma^\mathrm{n,diff}_\mathrm{m,||,T,refl} = \pit \fmozrefldt \cosa 
+\end{equation}
+with
+\begin{align}
+    \fmozrefldt & = \ptnd \frac{2}{3} m \fnnid \vT
+%    \fmoyrefldt & = 0, \\
+%    \fmoxrefldt & = 0.
+\end{align}
+
+where $\ptnd = \mathrm{max}(\Rnxfl-\pfnd,0)$. When using the drifting Maxwellian assumption, this becomes
+
+\begin{equation}
+    \Gamma^\mathrm{n,maxw}_\mathrm{m,||,T,refl} = \pit \fmozreflmt \cosa 
+\end{equation}
+
+with
+\begin{align}
+    \fmozreflmt & = \ptnm \frac{2}{3} m \fnnim \vT. 
+%    \fmoyreflmt & = 0, \\
+%    \fmoxreflmt & = 0.
+\end{align}
+
+The incident flux of parallel momentum according to the diffusion approximation (Eq. \eqref{eq:Gammamompin}) is written as 
+\begin{equation}
+    \Gamma^\mathrm{n,diff}_\mathrm{m,||,inc} = \pit (\fmozincd \cosa - \fmoyincd \sina) - \pitt \fmoxincd
+\end{equation}
+
+with
+\begin{align}
+    \fmozincd & = m \frac{\vcx}{\vtot} \big( - \nn \itwol + \frac{1}{\vtot} ( \dnndy \uy \itwol + \dnndz \ithreel ) \big), \\
+    \fmoyincd & =  m \frac{\vcx}{\vtot} \Big(-\nn \uy \ionel + \frac{1}{\vtot} \big( \dnndy (\frac{\Ti}{m} + \uy^2) \ionel + \dnndz \uy \itwol \big) \Big),\\
+    \fmoxincd & =  m \frac{\vcx}{\vtot} \big( - \nn \ux \ionel + \frac{1}{\vtot} ( \dnndy \ux \uy \ionel + \dnndz \ux \itwol) \big).
+\end{align}
+
+When using the drifting Maxwellian approximation, this becomes
+\begin{equation}
+    \Gamma^\mathrm{n,maxw}_\mathrm{m,||,inc} =  -\pit (\fmozincm \cosa + \fmoyincm \sina) - \pitt \fmoxincm
+\end{equation}
+
+with
+\begin{align}
+    \fmozincm & = - m \nn \itwol, \\
+    \fmoyincm & = - m \nn \uyn \ionel, \\
+    \fmoxincm & = - m \nn \uxn \ionel.
+\end{align}
+
+\subsubsection{Term (1) pressure contributions}
+Using the definition of $\rponeonei$ (Eq. \eqref{eq:rponeonei_def}) and $\rponetwoi$ (Eq. \eqref{eq:rponetwoi_def}, the term (1) pressure contributions from  equation \eqref{eq:v2fn} as written in Eq. \eqref{eq:par_mom_final} become
+\begin{equation}
+     p^\mathrm{n}_\mathrm{1,rec} = \pcorfi \frac{m}{3} \rponeonei \ci^2 \frac{\fdni}{-\ionel},
+\end{equation}
+
+\begin{equation}
+    p^\mathrm{n,diff}_\mathrm{1,refl} = \pcorfnd \frac{m}{3} \frac{\vcx}{\vtot} \big( \nn + \rponeonei \ci^2 + \frac{1}{\vtot} \dnndz \rponetwoi \ci^3 \big),
+\end{equation}
+
+\begin{equation}
+    p^\mathrm{n,maxw}_\mathrm{1,refl} = \pcorfnm \frac{m}{3} \nn \rponeonei \cn^2,
+\end{equation}
+
+\begin{equation}
+    p^\mathrm{n}_\mathrm{1,T,rec} = \pti \frac{2}{3} \ m \ \fdni \vT ,
+\end{equation}
+
+\begin{equation}
+    p^\mathrm{n,diff}_\mathrm{1,T,refl} = \ptnd \frac{2}{3} \ m \ \fnnid \vT ,
+\end{equation}
+
+\begin{equation}
+    p^\mathrm{n,maxw}_\mathrm{1,T,refl} = \ptnm \frac{2}{3} \ m \ \fnnim \vT ,
+\end{equation}
+
+\begin{align}
+    p^\mathrm{n,diff}_\mathrm{1,inc} & =  
+    \frac{m}{3} \frac{\vcx}{\vtot} \Bigg( \nn \bigg( \big( \frac{2 \Ti}{m} + \ux^2 + \uy^2 \big) \izerol + \itwol \bigg)  \\ & - \frac{1}{\vtot} \bigg( \dnndy \big( ( \frac{4 \Ti}{m} \uy  + \ux^2 \uy + \uy^3) \izerol + \uy \itwol \big) + \dnndz \big( (  \frac{2 \Ti}{m} + \ux^2 + \uy^2)  \ionel + \ithreel \big) \bigg) \Bigg),
+\end{align}
+
+\begin{equation}
+    p^\mathrm{n,maxw}_\mathrm{1,inc} =   
+    \frac{m}{3} \bigg(\nn  \big( (\frac{2 T_\mathrm{n}}{m} + \uxn^2 + \uyn^2) \izerol + \itwol \big) \bigg). 
+\end{equation}
+
+\subsubsection{Term (2) pressure contributions}
+
+The contribution from Equation \eqref{eq:pnboundary_term2} is implemented in the code as 
+
+\begin{align} \label{eq:p2_final}
+    p_2 & = \frac{m}{3} \nn' \wwn'^{2} =  \frac{m}{3} \frac{(\nn' \wwn')^2}{\nn'} \nonumber \\ 
+    & = \frac{m}{3} \frac{\Big((\nn' \wwn')_\mathrm{rec} + (\nn' \wwn')_\mathrm{refl}^\mathrm{diff/maxw} +  (\nn' \wwn')_\mathrm{T,rec} + (\nn' \wwn')_\mathrm{T,refl}^\mathrm{diff/maxw} + (\nn' \wwn')_\mathrm{inc}^\mathrm{diff/maxw}\Big)^2}{\Big( (\nn')_\mathrm{rec} +  (\nn')_\mathrm{refl}^\mathrm{diff/maxw} + (\nn')_\mathrm{T,rec} + (\nn')_\mathrm{T,refl}^\mathrm{diff/maxw} +  (\nn')_\mathrm{inc}^\mathrm{diff/maxw}\Big)}.
+\end{align}
+
+Using the definition of $\rptwoonei$ (Eq. \eqref{eq:rptwoonei_def}) and $\rptwotwoi$ (Eq. \eqref{eq:rptwotwo_def}), the density contributions from Eq. \eqref{eq:nnboundary} as written in Eq. \eqref{eq:p2_final} are given by
+
+\begin{align}
+    (\nn')_\mathrm{rec} & = \pcorfi \rptwoonei \frac{\fdni}{-\ionel}, \\ 
+    %-------
+    (\nn')_\mathrm{refl}^\mathrm{diff} & = \pcorfnd \frac{\vcx}{\vtot} \big( \nn \rptwoonei + \frac{1}{\vtot} \dnndz \rptwotwoi \ci\big), \\  
+    %-------
+    (\nn')_\mathrm{refl}^\mathrm{maxw} & = \pcorfnm \nn \rptwoonei, \\
+    %-------
+     (\nn')_\mathrm{T,rec} & =  \pti \fdni \frac{2}{\vT}, \\
+    %-------
+    (\nn')_\mathrm{T,refl}^\mathrm{diff} & = \ptn \fnnid \frac{2}{\vT}, \\ 
+    %-------
+    (\nn')_\mathrm{T,refl}^\mathrm{maxw} & = \ptn \fnnim \frac{2}{\vT}, \\ 
+    %-------
+    (\nn')_\mathrm{inc}^\mathrm{diff} & = \frac{\vcx}{\vtot} \big( \nn \izerol - \frac{1}{\vtot} (\dnndy \uy \izerol + \dnndz \ionel) \big), \\ 
+    %-------
+    (\nn')_\mathrm{inc}^\mathrm{maxw} & = \nn \izerol. \\ 
+    %-------
+\end{align}
+
+Using the definition of $\rpthreeonei$ (Eq. \eqref{eq:rpthreeonei_def}) and $\rpthreetwoi$ (Eq. \eqref{eq:rpthreetwo_def}), the $(\nn' \wwn')$ terms from Eq. \eqref{eq:wwnboundary} as written in Eq. \eqref{eq:p2_final} are written as  
+\begin{align}
+    (\nn' \wwn')_\mathrm{rec} & = \pcorfi \rpthreeonei \ci  \frac{\fdni}{-\ionel}, \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{refl}^\mathrm{diff} & = \pcorfnd \frac{\vcx}{\vtot} \big( \nn \rpthreeonei \ci + \frac{1}{\vtot} \dnndz \rpthreetwoi \ci^2 \big), \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{refl}^\mathrm{maxw} & = \pcorfnm \nn \rpthreeonei \cn, \\
+    %-------
+    (\nn' \wwn')_\mathrm{T,rec} & = 0, \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{T,refl}^\mathrm{diff} & = 0, \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{T,refl}^\mathrm{maxw} & = 0, \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{inc}^\mathrm{diff} & = (\nn')_\mathrm{inc}^\mathrm{diff} \ux, \\ 
+    %-------
+    (\nn' \wwn')_\mathrm{inc}^\mathrm{maxw}  & =  (\nn')_\mathrm{inc}^\mathrm{maxw} \uxn.
+\end{align}
+
+\subsection{Net neutral energy flux density}
+
+Similar to the particle and parallel momentum flux, we write the net neutral energy flux density given by Eqs. \eqref{eq:Qnboundary} and \eqref{eq:Qnboundary_efc} as follows:
+
+\begin{equation}
+    Q^\mathrm{n,diff/maxw} =  Q^\mathrm{n}_\mathrm{rec} + Q^\mathrm{n,diff/maxw}_\mathrm{refl} +  Q^\mathrm{n}_{T,\mathrm{rec}} +  Q^\mathrm{n,diff/maxw}_{\mathrm{T,refl}} - Q^\mathrm{n,diff/maxw}_{\mathrm{T,inc}}
+\end{equation}
+
+Using the definitions of $\reonei$ (Eq. \eqref{eq:reonei_def}) and $\retwoi$ (Eq. \eqref{eq:retwoi_def}), the components are written as  
+
+\begin{align}
+    Q^\mathrm{n}_\mathrm{rec} & = \frac{1}{2} \pcorfi m \reonei \ci^3 \frac{\fdni}{-\ionel}, \\
+    Q^\mathrm{n,diff}_\mathrm{refl} & = \frac{1}{2} \pcorfnd m \frac{\vcx}{\vtot} \big(-\nn \reonei \ci^3 + \frac{1}{\vtot} \dnndz \retwoi \ci^4\big), \\ 
+    Q^\mathrm{n,maxw}_\mathrm{refl} & = \pcorfnm m \nn \reonei \cn^3, \\ 
+    Q^\mathrm{n}_{\mathrm{T,rec}} & =  \pti \fdni \efc, \\
+    Q^\mathrm{n,diff}_{\mathrm{T,refl}} & = \ptn \fnnid \efc, \\
+    Q^\mathrm{n,maxw}_{\mathrm{T,refl}} & =  \ptn \fnnim \efc,\\
+    Q^\mathrm{n,diff}_{\mathrm{inc}} & = \frac{\vcx}{\vtot} \Bigg( -\nn \bigg( \Big(\Ti + \frac{m}{2} \big(\ux^2 + \uy^2 \big) \Big) \ionel + \frac{m}{2} \ithreel \bigg) + \nonumber \\ & \frac{1}{\vtot} \bigg(\dnndy \Big( \big(2 \Ti + \frac{m}{2}(\ux^2 + \uy^2) \big) \uy \ionel + \frac{m}{2} \uy \ithreel \Big) + \nonumber \\
+    & \dnndz \Big( \big(\Ti + \frac{m}{2} (\ux^2 + \uy^2) \big) \itwol + \frac{m}{2} \ifourl \Big) \bigg) \Bigg), \\
+    Q^\mathrm{n,maxw}_{\mathrm{inc}} & = -\nn \Big( \big( \Tn + \frac{m}{2} ( \uxn^2 + \uyn^2) \big) \ionel + \frac{m}{2} \ithreel \Big). 
+\end{align}
+
+\section{Link between symbols and code variables}
+
+This section is specifically aimed at expert users of the AFN boundary conditions and future researchers that wish to improve them. It links the symbolic notation used in this document to the variable names in the code.
+
+
+\subsection{Pre-processor b2ab}
+
+\begin{tabular}{L{3cm} L{4cm}}
+\underline{Symbol} & \underline{Code} \\
+$m$ & \texttt{const.m}\\
+$\mathbf{v}'$ & \texttt{vi}\\
+$\mathbf{v}$ & \texttt{vo}\\
+$\varphi$ & \texttt{phiR}\\
+$\varphi'$ & \texttt{phi} \\
+$\vartheta$ & \texttt{thetaR}\\
+$\vartheta'$ & \texttt{thetai}\\
+$c_a$ & \texttt{cs}\\
+$\delta^\mathrm{pot}_\mathrm{sh}$ & \texttt{deltaP}\\
+$T_\mathrm{e}$ & \texttt{te}\\
+$T_\mathrm{i}$ & \texttt{ti}\\
+$v_\mathrm{min}$ & \texttt{vmin}\\
+$\vartheta_\mathrm{max}$ & \texttt{thetamax}\\
+$\Rv$ & \texttt{TRIMRv} \\
+$\Rmomparv$ & \texttt{TRIMRmomparv}\\
+$\Rmomperpv$ & \texttt{TRIMRmomperpv}\\
+$\Rpvone$ & \texttt{TRIMRpv1}\\
+$\Rpvtwo$ & \texttt{TRIMRpv2}\\
+$\Rpvthree$ & \texttt{TRIMRpv3}\\
+$\Rev$ & \texttt{TRIMREv}\\
+\end{tabular}
+
+
+
+\subsection{Macroscopic reflection coefficients}
+
+\begin{tabular}{L{2cm} L{6cm} L{4cm}}
+\underline{Symbol} & \underline{in \texttt{b2mod\_create\_afn\_bc\_tables}} & \underline{in \texttt{b2mod\_recycle}} \\
+$\rconei$ & \texttt{R1} & \texttt{rc1i} \\
+$\rctwoi$ & \texttt{R2} & \texttt{rc2i} \\
+$\rmxonei$ & \texttt{Rmx1} &  \texttt{rmx1i} \\
+$\rmxtwoi$ & \texttt{Rmx2} & \texttt{rmx2i} \\
+$\rmytwoi$ & \texttt{Rmy2} & \texttt{rmy2i} \\
+$\rmzonei$ & \texttt{Rmz1} &  \texttt{rmz1i} \\
+$\rmztwoi$ & \texttt{Rmz2} &  \texttt{rmz2i} \\
+$\reonei$ & \texttt{RE1} & \texttt{re1i} \\
+$\retwoi$ & \texttt{RE2} & \texttt{re2i} \\
+$\rponeonei$ & \texttt{Rp11} & \texttt{rp11i} \\
+$\rponetwoi$ & \texttt{Rp12} &  \texttt{rp12i} \\
+$\rptwoonei$ & \texttt{Rp21} &  \texttt{rp21i} \\
+$\rptwotwoi$ & \texttt{Rp22} & \texttt{rp22i} \\
+$\rpthreeonei$ & \texttt{Rp31} & \texttt{rp31i} \\
+$\rpthreetwoi$ & \texttt{Rp32} & \texttt{rp32i} \\
+\end{tabular}
+
+
+\subsection{Runtime}
+
+\subsubsection{General}
+
+\begin{tabular}{L{3cm} L{8cm}}
+\underline{Symbol} & \underline{Code} \\
+$e$ & \texttt{qe} \\
+$\nn$ & \texttt{nnf} / \texttt{nn} \\
+$\pit$ & \texttt{pit} \\
+$\pitt$ & \texttt{pit2} \\
+$\pfi / \pfn$ &  \texttt{pf}\\
+$\pcorfi / \pcorfn$ &  \texttt{pcorf}\\
+$\pti / \ptn $ &  \texttt{pt}\\
+$\Rnxfl / \Rifl$ &  \texttt{recyc0} / \texttt{b2recyc} \\
+$\recycm$ & \texttt{recycm}\\
+$\cosa$ & \texttt{cosa} \\
+$\sina$ & \texttt{sina} \\
+$\phi$ & \texttt{x} \\
+$\tau$ & \texttt{y} \\
+$\nu$ & \texttt{z} \\
+$u_{||} / u_{\mathrm{n}||}$ & \texttt{upf} \\
+$ \ux / \uxn $ & \texttt{ux} \\
+$ \uy / \uyn$ & \texttt{uy} \\
+$ \uz / \uzn $ & \texttt{uz} \\
+$\mathcal{M}_\phi$ & \texttt{Mj}\\
+$A_f$ & \texttt{area} \\
+$\vcx$ & \texttt{vcx} \\
+$\vion$ & \texttt{vion} \\
+$\vtot$ & \texttt{vtot} \\
+$v_\mathrm{T}$ & \texttt{vt}\\
+$\Gamma^\mathrm{n}_H - Q^\mathrm{n}$ & \texttt{q\_conv}\\
+$\Tn$ & \texttt{tf}\\
+$\Ti$ & \texttt{tif}\\
+$\vT$ & \texttt{vt}\\
+$\efc$ & \texttt{E\_fc}\\
+$\mathrm{Kn}$ & \texttt{Kn} \\
+$L$ & \texttt{L} / \texttt{L\_macro\_AFN}  \\
+$\mathrm{Kn^{bd}}$ & \texttt{Kn\_b1} \\
+$\mathrm{Kn^{bm}}$ & \texttt{Kn\_b2} \\
+$c_{\mathrm{n},th}$ & \texttt{c\_th} \\
+$\ci / \cn $ & \texttt{cs} \\
+$\lambda_\mathrm{cx}$ & \texttt{mfp} \\
+$\dshpotj$ & \texttt{shpottauj}
+\end{tabular}
+
+\subsubsection{Moments of Maxwellian}
+\begin{tabular}{L{3cm} L{8cm}}
+\underline{Symbol} & \underline{Code} \\
+$\izerol$ & \texttt{i0l} \\
+$\ionel$ & \texttt{i1l} \\
+$\itwol$ & \texttt{i2l} \\
+$M_{\tau \nu}$ &  \texttt{uy i1l} \\
+$M_{\phi \nu}$ & \texttt{ux i1l} \\
+$M_{\tau \tau \nu}$ & \texttt{(ti/mn + uy**2) i1l} \\
+$M_{\tau \nu \nu}$ &  \texttt{uy i2l}\\
+$M_{\phi \tau \nu}$ &  \texttt{ux uy i1l}\\
+$\ithreel$ &  \texttt{i3l}\\
+$M_{\phi \nu \nu}$ &  \texttt{ux i2l}\\
+$M_{\phi \phi \nu}$ &  \texttt{(ti/mn + ux**2) i1l}\\
+$M_{\phi \phi \tau \nu}$ &  \texttt{(ti/mn + ux**2) uy i1l}\\
+$M_{\tau \tau \tau \nu}$ &  \texttt{(ti/mn + uy**2) uy i1l}\\
+$M_{\tau \nu \nu \nu}$ &  \texttt{uy i3l}\\
+$M_{\phi \phi \nu \nu}$ &  \texttt{(ti/mn + ux**2) i2l}\\
+$M_{\tau \tau \nu \nu}$ &  \texttt{(ti/mn + uy**2) i2l} \\
+$M_{\nu \nu \nu \nu}$ &  \texttt{i4l}\\
+\end{tabular}
+
+\subsubsection{CalcIncidentFluxesDiffusion/Maxwellian}
+
+\begin{tabular}{L{4cm} L{6cm}}
+\underline{Symbol} & \underline{Code} \\
+$\fmoxincd / \fmoxincm$ &  \texttt{fmox} \\
+$\fmoyincd / \fmoyincm$ &  \texttt{fmoy} \\
+$\fmozincd / \fmozincm$ &  \texttt{fmoz} \\
+$ \Gamma^\mathrm{n,diff}_\mathrm{m,||,inc} /  \Gamma^\mathrm{n,maxw}_\mathrm{m,||,inc} $ &  \texttt{fmomni} \\
+$Q^\mathrm{n,diff}_{\mathrm{inc}} / Q^\mathrm{n,maxw}_{\mathrm{inc}}$ &  \texttt{feneni} \\
+$(\nn')_\mathrm{inc}^\mathrm{diff} / (\nn')_\mathrm{inc}^\mathrm{maxw}$ &  \texttt{nni} \\
+$ (\nn' \wwn')_\mathrm{inc}^\mathrm{diff}$ &  \texttt{nnwwni} \\
+$p^\mathrm{n,diff}_\mathrm{1,inc} / p^\mathrm{n,maxw}_\mathrm{1,inc}$&  \texttt{pn} \\
+\end{tabular}
+
+
+
+\subsubsection{CalcRecycledFluxes}
+
+\begin{tabular}{L{5cm} L{8cm}}
+\underline{Symbol} & \underline{Code} \\
+$\fmoxrec$ &  \texttt{fmox} \\
+$\fmoyrec$  &  \texttt{fmoy} \\
+$\fmozrec + \fmozrect $ &  \texttt{fmoz} \\
+$p^\mathrm{n}_\mathrm{1,rec} + p^\mathrm{n}_\mathrm{1,T,rec} $ &  \texttt{pnc} \\
+$(\nn')_\mathrm{rec} + (\nn')_\mathrm{T,rec}$ &  \texttt{nnrec} \\
+$(\nn' \wwn')_\mathrm{rec}$ &  \texttt{nnwwnrec} \\
+$Q^\mathrm{n}_{\mathrm{rec}} + Q^\mathrm{n}_{\mathrm{T,rec}}$ &  \texttt{fenec} \\
+$\Gamma^\mathrm{n}_\mathrm{m,||,rec} + \Gamma^\mathrm{n}_\mathrm{m,||,T,rec}$ &  \texttt{fmomrec} \\
+\end{tabular}
+
+\subsubsection{CalcReflectedFluxesDiffusion/Maxwellian}
+
+\begin{tabular}{L{8cm} L{3cm}}
+\underline{Symbol} & \underline{Code} \\ 
+$\fmoxrefld / \fmoxreflm$ &  \texttt{fmox} \\ 
+$\fmoyrefld / \fmoyreflm$ &  \texttt{fmoy} \\ 
+$ \fmozrefld / \fmozreflm + \fmozrefldt / \fmozreflmt$ &  \texttt{fmoz} \\ 
+$ (\nn')_\mathrm{refl}^\mathrm{diff/maxw} + (\nn')_\mathrm{T,refl}^\mathrm{diff/maxw} $&  \texttt{nnrefl} \\ 
+$(\nn' \wwn')_\mathrm{refl}^\mathrm{diff/maxw}$&  \texttt{nnwwnrefl} \\
+$Q^\mathrm{n,diff/maxw}_{\mathrm{refl}} + Q^\mathrm{n,diff/maxw}_{\mathrm{T,refl}}$&  \texttt{fene} \\
+$\Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,refl} + \Gamma^\mathrm{n,diff/maxw}_\mathrm{m,||,T,refl}$ &  \texttt{fmomrefl} \\ 
+$ p^\mathrm{n,diff/maxw}_\mathrm{1,refl} +  p^\mathrm{n,diff/maxw}_\mathrm{1,T,refl}$&  \texttt{pn} \\
+\end{tabular}
+
+
+
+
+\subsection{Other variables}
+
+In the final code implementation, certain terms are multiplied with additional factors that are not included in the equations as described here. These additional factors mostly relate to spatially hybrid options \cite{wim2022,psi_niels,psi_maarten} and the SOLPS-ITER specific sign conventions:
+
+\begin{itemize}
+    \item $\isign$ = \texttt{mpg\%rcFcOr} is a multiplier to indicate whether the outward normal coincides with the face normal (1.0) or not (-1.0).
+    \item $\recycm$ = \texttt{recycm} determines whether the thermal molecules are immediately dissociated at the target as fluid atoms (standard AFN), or launched kinetically as part of a spatially hybrid approach \cite{wim2022,psi_niels}.
+    \item $\fluidfrachyb$ = \texttt{fluid\_frac\_hyb} determines whether the recycled and reflected atoms come back as fluid (\texttt{fluid\_frac\_hyb}=1) or kinetic (\texttt{fluid\_frac\_hyb}=0). Used for spatially hybrid models. Values between 0 and 1 are allowed as well, to guarantee a smooth transition. 
+    \item $\mathrm{sign}(\ux)$ makes sure that the momentum fluxes have the correct sign, regardless of the direction of the toroidal magnetic field.
+    \item $A_f$ = \texttt{area} is the surface area of the boundary face in the finite volume mesh. It is used to transform the flux densities to the correct source strengths in the guard cells.
+\end{itemize}
+
+
+
+
