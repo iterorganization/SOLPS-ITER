@@ -52,11 +52,13 @@ comuse.fcCv = ncread(filename,'fcCv');
 comuse.fcVx = ncread(filename,'fcVx');
 % Face areas and angles
 comuse.fcS = ncread(filename,'fcS');
+comuse.fcHz = ncread(filename,'fcHz');
 comuse.fcQalf = ncread(filename,'fcQalf');
 % Face labels
 comuse.fcLbl = ncread(filename,'fcLbl');
 % Magnetic field
 comuse.cvBb = ncread(filename,'cvBb');
+comuse.cvEb = ncread(filename,'cvEb');
 comuse.fcBb = ncread(filename,'fcBb');
 % Magnetic psi
 comuse.vxFpsi = ncread(filename,'vxFpsi');

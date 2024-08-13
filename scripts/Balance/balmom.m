@@ -1,8 +1,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % balmom plots the momentum balance for a given SOLPS simulation.              %
 % balfile:     Full path to balance.nc file                                    %
-% indbal:      Logical matrix of size nx*ny that is true for cells where       %
-%              balance should be performed                                     %
+% indrad:      Logical matrix of size nCv that is true for cells where         %
+%              radial balance should be performed                              %
+% indpol:      Logical matrix of size nCv that is true for cells where         %
+%              poloidal balance should be performed                            %
+% facesup:     List of faces of the upstream boundary of indrad                %
+% facesdown:   List of faces of the downstream boundary of indrad              %
+% facesup_pol: List of faces of the upstream boundary of indpol                %
+% facesdown_pol: List of faces of the downstream boundary of indpol            %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
 % isplot:      Species index to be plotted                                     %
@@ -22,45 +28,42 @@
 % area_divide: The area that poloidal fluxes and sources are divided by        %
 % areatype:    The type of area that poloidal fluxes are divided by            %
 % polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
-%              on the x-axis of the poloidal balance plots. Distances are      %
-%              mapped to the first SOL ring.                                   %
+%              on the x-axis of the poloidal balance plots.                    %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) August 2024 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function balmom(balfile,indrad,indpol,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
+function balmom(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,isplot,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
-nx = comuse.nx;
-ny = comuse.ny;
+nCv = comuse.nCv;
 nstra = comuse.nstra;
-topix = comuse.topix+1;
-topiy = comuse.topiy+1;
 
 %% Obtain required arrays from the simulation...
 % Fluxes:
 tmp = ncread(balfile,'fmo_flua');
-fmox_flua = sum(tmp(:,:,1,isplot),4);
-fmoy_flua = sum(tmp(:,:,2,isplot),4);
+fmox_flua = sum(tmp(:,1,isplot),3);
+fmoy_flua = sum(tmp(:,2,isplot),3);
 tmp = ncread(balfile,'fmo_cvsa');
-fmox_cvsa = sum(tmp(:,:,1,isplot),4);
-fmoy_cvsa = sum(tmp(:,:,2,isplot),4);
+fmox_cvsa = sum(tmp(:,1,isplot),3);
+fmoy_cvsa = sum(tmp(:,2,isplot),3);
 tmp = ncread(balfile,'fmo_hybr');
-fmox_hybr = sum(tmp(:,:,1,isplot),4);
-fmoy_hybr = sum(tmp(:,:,2,isplot),4);
+fmox_hybr = sum(tmp(:,1,isplot),3);
+fmoy_hybr = sum(tmp(:,2,isplot),3);
 % Sources:
 tmp = ncread(balfile,'b2stbr_phys_smo_bal');
-b2stbr_phys_smo = sum(tmp(:,:,isplot),3);
+b2stbr_phys_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2stbr_bas_smo_bal');
-b2stbr_bas_smo = sum(tmp(:,:,isplot),3);
+b2stbr_bas_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2stbc_smo_bal');
-b2stbc_smo = sum(tmp(:,:,isplot),3);
+b2stbc_smo = sum(tmp(:,isplot),2);
 if (comuse.b2mndr_eirene~=0)
     tmp = ncread(balfile,'eirene_mc_mapl_smo_bal');
-    eirene_mc_mapl_smo = sum(tmp(:,:,isplot,:),3);
+    eirene_mc_mapl_smo = sum(tmp(:,isplot,:),2);
     tmp = ncread(balfile,'eirene_mc_mmpl_smo_bal');
-    eirene_mc_mmpl_smo = sum(tmp(:,:,isplot,:),3);
+    eirene_mc_mmpl_smo = sum(tmp(:,isplot,:),2);
     tmp = ncread(balfile,'eirene_mc_mipl_smo_bal');
-    eirene_mc_mipl_smo = sum(tmp(:,:,isplot,:),3);
+    eirene_mc_mipl_smo = sum(tmp(:,isplot,:),2);
     try
         tmp = ncread(balfile,'eirene_mc_mppl_smo_bal');
     catch exception
@@ -76,70 +79,70 @@ if (comuse.b2mndr_eirene~=0)
             error(exception.message);
         end
     end
-    eirene_mc_mppl_smo = sum(tmp(:,:,isplot,:),3);
+    eirene_mc_mppl_smo = sum(tmp(:,isplot,:),2);
 else
-    eirene_mc_mapl_smo = zeros(nx,ny,1,nstra);
-    eirene_mc_mmpl_smo = zeros(nx,ny,1,nstra);
-    eirene_mc_mipl_smo = zeros(nx,ny,1,nstra);
-    eirene_mc_mppl_smo = zeros(nx,ny,1,nstra);
+    eirene_mc_mapl_smo = zeros(nCv,1,nstra);
+    eirene_mc_mmpl_smo = zeros(nCv,1,nstra);
+    eirene_mc_mipl_smo = zeros(nCv,1,nstra);
+    eirene_mc_mppl_smo = zeros(nCv,1,nstra);
 end
 tmp = ncread(balfile,'b2stbm_smo_bal');
-b2stbm_smo = sum(tmp(:,:,isplot),3);
+b2stbm_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'ext_smo_bal');
-ext_smo = sum(tmp(:,:,isplot),3);
+ext_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2stel_smq_ion_bal');
-b2stel_smq_ion = sum(tmp(:,:,isplot),3);
+b2stel_smq_ion = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2stel_smq_rec_bal');
-b2stel_smq_rec = sum(tmp(:,:,isplot),3);
+b2stel_smq_rec = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2stcx_smq_bal');
-b2stcx_smq = sum(tmp(:,:,isplot),3);
+b2stcx_smq = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2srsm_smo_bal');
-b2srsm_smo = sum(tmp(:,:,isplot),3);
+b2srsm_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2srdt_smo_bal');
-b2srdt_smo = sum(tmp(:,:,isplot),3);
+b2srdt_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2srst_smo_bal');
-b2srst_smo = sum(tmp(:,:,isplot),3);
+b2srst_smo = sum(tmp(:,isplot),2);
 
 % b2sigp_style=='1':
 tmp = ncread(balfile,'b2sifr_smoch_bal');
-b2sifr_smoch = sum(tmp(:,:,isplot),3);
+b2sifr_smoch = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smotf_ehxp_bal');
-b2sifr_smotf_ehxb = sum(tmp(:,:,isplot),3);
+b2sifr_smotf_ehxb = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smotf_cthe_bal');
-b2sifr_smotf_cthe = sum(tmp(:,:,isplot),3);
+b2sifr_smotf_cthe = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smotf_cthi_bal');
-b2sifr_smotf_cthi = sum(tmp(:,:,isplot),3);
+b2sifr_smotf_cthi = sum(tmp(:,isplot),2);
 % b2sigp_style=='2':
 tmp = ncread(balfile,'b2sifr_smofrea_bal');
-b2sifr_smofrea = sum(tmp(:,:,isplot),3);
+b2sifr_smofrea = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smofria_bal');
-b2sifr_smofria = sum(tmp(:,:,isplot),3);
+b2sifr_smofria = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smotfea_bal');
-b2sifr_smotfea = sum(tmp(:,:,isplot),3);
+b2sifr_smotfea = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sifr_smotfia_bal');
-b2sifr_smotfia = sum(tmp(:,:,isplot),3);
+b2sifr_smotfia = sum(tmp(:,isplot),2);
 
 tmp = ncread(balfile,'b2siav_smovh_bal');
-b2siav_smovh = sum(tmp(:,:,isplot),3);
+b2siav_smovh = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2siav_smovv_bal');
-b2siav_smovv = sum(tmp(:,:,isplot),3);
+b2siav_smovv = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sicf_smo_bal');
-b2sicf_smo = sum(tmp(:,:,isplot),3);
+b2sicf_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sian_smo_bal');
-b2sian_smo = sum(tmp(:,:,isplot),3);
+b2sian_smo = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2nxdv_smo_bal');
-b2nxdv_smo = sum(tmp(:,:,isplot),3);
+b2nxdv_smo = sum(tmp(:,isplot),2);
 
 tmp = ncread(balfile,'b2sigp_smogpi_bal');
-b2sigp_smogpi = sum(tmp(:,:,isplot),3);
+b2sigp_smogpi = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sigp_smogpe_bal');
-b2sigp_smogpe = sum(tmp(:,:,isplot),3);
+b2sigp_smogpe = sum(tmp(:,isplot),2);
 tmp = ncread(balfile,'b2sigp_smogpgr_bal');
-b2sigp_smogpgr = sum(tmp(:,:,isplot),3);
+b2sigp_smogpgr = sum(tmp(:,isplot),2);
 
 % Residual:
 tmp = ncread(balfile,'resmo');
-resmo = sum(tmp(:,:,isplot),3);
+resmo = sum(tmp(:,isplot),2);
 %%
 
 %% Create the units string
@@ -156,23 +159,53 @@ end
 %%
 
 %% Account for hz
-hz = (1-comuse.b2mndr_hz)+comuse.b2mndr_hz*(comuse.dv./comuse.gs(:,:,3));
+hz = (1-comuse.b2mndr_hz)+comuse.b2mndr_hz*comuse.fcHz;
 area_divide = area_divide.*hz;
 
-%% Calculate the radial divergence...
-raddiv_flua = zeros(nx,ny);
-raddiv_visc = zeros(nx,ny);
-raddiv_hybr = zeros(nx,ny);
-for iy=1:ny
-    for ix=1:nx
-        if topiy(ix,iy)>ny
-            continue;
+%% Calculate the total flux depending on areatype
+switch areatype
+    case 'parallel' % Retain only the poloidal component
+        fmo_flua = fmox_flua;
+        fmo_cvsa = fmox_cvsa;
+        fmo_hybr = fmox_hybr;
+        % flux needed for radial balance of indpol
+        fmo2_flua = fmoy_flua;
+        fmo2_cvsa = fmoy_cvsa;
+        fmo2_hybr = fmoy_hybr;
+    otherwise % Poloidal + radial component
+        fmo_flua = fmox_flua + fmoy_flua;
+        fmo_cvsa = fmox_cvsa + fmoy_cvsa;
+        fmo_hybr = fmox_hybr + fmoy_hybr;
+
+        fmo2_flua = zeros(size(fmoy_flua));
+        fmo2_cvsa = zeros(size(fmoy_cvsa));
+        fmo2_hybr = zeros(size(fmoy_hybr));
+end
+
+%% Fluxes at boundary of indpol
+for iCv = 1:nCv
+    if indpol(iCv)
+        iFc1 = comuse.cvFcP(iCv,1);
+        iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
+        for i = iFc1:iFc2
+            iFc = comuse.cvFc(i);
+            if ~any(facesup_pol == iFc) && ~any(facesdown_pol == iFc)
+                if (indpol(comuse.fcCv(iFc,1)) && ~indpol(comuse.fcCv(iFc,2))) || ...
+                    (~indpol(comuse.fcCv(iFc,1)) && indpol(comuse.fcCv(iFc,2))) % face at radial boundary of indpol
+                        fmo2_flua(iFc) = fmo2_flua(iFc) + fmox_flua(iFc) + fmoy_flua(iFc);
+                        fmo2_cvsa(iFc) = fmo2_cvsa(iFc) + fmox_cvsa(iFc) + fmoy_cvsa(iFc);
+                        fmo2_hybr(iFc) = fmo2_hybr(iFc) + fmox_hybr(iFc) + fmoy_hybr(iFc);
+                end
+            end
         end
-        raddiv_flua(ix,iy) = fmoy_flua(ix,iy)-fmoy_flua(topix(ix,iy),topiy(ix,iy));
-        raddiv_visc(ix,iy) = fmoy_cvsa(ix,iy)-fmoy_cvsa(topix(ix,iy),topiy(ix,iy));
-        raddiv_hybr(ix,iy) = fmoy_hybr(ix,iy)-fmoy_hybr(topix(ix,iy),topiy(ix,iy));
     end
 end
+
+%% Calculate the radial divergence...
+raddiv_flua = raddiv(fmox_flua,fmoy_flua,comuse,indrad,facesup,facesdown,areatype);
+raddiv_visc = raddiv(fmox_cvsa,fmoy_cvsa,comuse,indrad,facesup,facesdown,areatype);
+raddiv_hybr = raddiv(fmox_hybr,fmoy_hybr,comuse,indrad,facesup,facesdown,areatype);
+
 %%
 
 %% Calculate the poloidal divergence of the viscous, hybrid correction and new ion viscosity form parts...
@@ -191,9 +224,8 @@ end
 
 %% Make plots...
 bm = radial_balance(...
- cat(3,fmox_flua,fmox_cvsa,fmox_hybr),...
- cat(3,raddiv_flua,raddiv_visc,raddiv_hybr,...
-       sum(eirene_mc_mapl_smo,4),sum(eirene_mc_mmpl_smo,4),sum(eirene_mc_mipl_smo,4),sum(eirene_mc_mppl_smo,4),...
+ cat(2,fmo_flua,fmo_cvsa,fmo_hybr),...
+ cat(2,sum(eirene_mc_mapl_smo,3),sum(eirene_mc_mmpl_smo,3),sum(eirene_mc_mipl_smo,3),sum(eirene_mc_mppl_smo,3),...
        b2stel_smq_ion,b2stel_smq_rec,b2stcx_smq,...
        b2sifr_smoch,b2sifr_smotf_ehxb,b2sifr_smotf_cthe,b2sifr_smotf_cthi,...
        b2sifr_smofrea,b2sifr_smofria,b2sifr_smotfea,b2sifr_smotfia,...
@@ -202,6 +234,7 @@ bm = radial_balance(...
        b2stbr_phys_smo,b2stbr_bas_smo,...
        b2stbm_smo,ext_smo,...
        b2srsm_smo,b2srdt_smo,b2srst_smo,b2stbc_smo),...
+ cat(2,raddiv_flua,raddiv_visc,raddiv_hybr),...
  resmo,...
  {'total upstream flux',...
   'total downstream flux',...
@@ -218,16 +251,16 @@ bm = radial_balance(...
   'b2stbr\_phys','b2stbr\_bas',...
   'b2stbm','external source',...
   'b2srsm','b2srdt','b2srst','b2stbc'},...
- comuse,indrad,area_divide,reverse,true,axbal(1:4),units,makeplot,areaend);
+ comuse,indrad,facesup,facesdown,area_divide,reverse,true,axbal(1:4),units,makeplot,areaend);
 
 if ~makeplot
     return
 end
 
 areadownpol = poloidal_balance(...
- cat(3,fmox_flua,fmox_cvsa,fmox_hybr),...
- cat(3,raddiv_flua,raddiv_visc,raddiv_hybr,...
-       sum(eirene_mc_mapl_smo,4),sum(eirene_mc_mmpl_smo,4),sum(eirene_mc_mipl_smo,4),sum(eirene_mc_mppl_smo,4),...
+ cat(2,fmo_flua,fmo_cvsa,fmo_hybr),...
+ cat(2,fmo2_flua,fmo2_cvsa,fmo2_hybr),...
+ cat(2,sum(eirene_mc_mapl_smo,3),sum(eirene_mc_mmpl_smo,3),sum(eirene_mc_mipl_smo,3),sum(eirene_mc_mppl_smo,3),...
        b2stel_smq_ion,b2stel_smq_rec,b2stcx_smq,...
        b2sifr_smoch,b2sifr_smotf_ehxb,b2sifr_smotf_cthe,b2sifr_smotf_cthi,...
        b2sifr_smofrea,b2sifr_smofria,b2sifr_smotfea,b2sifr_smotfia,...
@@ -251,7 +284,7 @@ areadownpol = poloidal_balance(...
   'b2stbr\_phys','b2stbr\_bas',...
   'b2stbm','external source',...
   'b2srsm','b2srdt','b2srst','b2stbc'},...
- comuse,indpol,area_divide,reverse,true,axbal(5:7),units,areaend,polbaldist);
+ comuse,indpol,facesup_pol,facesdown_pol,area_divide,reverse,true,axbal(5:7),units,areaend,polbaldist);
 
 if strata_plot
     make_strata_plots({squeeze(eirene_mc_mapl_smo)},{squeeze(eirene_mc_mmpl_smo)},{squeeze(eirene_mc_mipl_smo)},{squeeze(eirene_mc_mppl_smo)},...

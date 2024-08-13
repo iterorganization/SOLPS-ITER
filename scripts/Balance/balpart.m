@@ -24,8 +24,7 @@
 % area_divide: The area that poloidal fluxes and sources are divided by        %
 % areatype:    The type of area that poloidal fluxes are divided by            %
 % polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
-%              on the x-axis of the poloidal balance plots. Distances are      %
-%              mapped to the first SOL ring.                                   %
+%              on the x-axis of the poloidal balance plots.                    %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
@@ -212,7 +211,6 @@ for iCv = 1:nCv
         end
     end
 end
-
 
 %% Calculate the radial divergences...
 raddiv_pll = raddiv(fnbx_pll,fnby_pll,comuse,indrad,facesup,facesdown,areatype);
