@@ -99,15 +99,16 @@ indpol(comuse.ftCv(iFt1:iFt2)) = true;
 indpol(comuse.nCi+1:end) = false;
 
 % Determine the faces of the upstream and downstream boundary of indrad
+display('Assuming that face labels of targets are 1, 2, -13 or -34');
 facesup = []; % list of faces at the upstream boundary
 facesdown = []; % list of faces at the downstream boundary
 for iFc = 1:comuse.nFc
     iCv1 = comuse.fcCv(iFc,1);
     iCv2 = comuse.fcCv(iFc,2);
     if (indrad(iCv1) && ~indrad(iCv2)) || (~indrad(iCv1) && indrad(iCv2))
-        if comuse.fcLbl(iFc) == 1
+        if comuse.fcLbl(iFc) == 1 || comuse.fcLbl(iFc) == -13
             facesup = [facesup,iFc];
-        elseif comuse.fcLbl(iFc) == 2
+        elseif comuse.fcLbl(iFc) == 2 || comuse.fcLbl(iFc) == -34
             facesdown = [facesdown,iFc];
         end
     end
@@ -115,17 +116,16 @@ end
 
 % Determine the faces of the upstream and downstream boundary of indpol
 facesup_pol = [];
-for i = 1:length(facesup)
-    iFc = facesup(i);
-    if indpol(comuse.fcCv(iFc,1)) || indpol(comuse.fcCv(iFc,2))
-        facesup_pol = [facesup_pol,iFc];
-    end
-end
 facesdown_pol = [];
-for i = 1:length(facesdown)
-    iFc = facesdown(i);
-    if indpol(comuse.fcCv(iFc,1)) || indpol(comuse.fcCv(iFc,2))
-        facesdown_pol = [facesdown_pol,iFc];
+for iFc = 1:comuse.nFc
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if (indpol(iCv1) && ~indpol(iCv2)) || (~indpol(iCv1) && indpol(iCv2))
+        if comuse.fcLbl(iFc) == 1 || comuse.fcLbl(iFc) == -13
+            facesup_pol = [facesup_pol,iFc];
+        elseif comuse.fcLbl(iFc) == 2 || comuse.fcLbl(iFc) == -34
+            facesdown_pol = [facesdown_pol,iFc];
+        end
     end
 end
 
