@@ -1,0 +1,38 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  MSCL_ROOT ?= /u/eemdee/linux_gfortran
+  LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
+endif
+
+MPI_FC  ?= mpif90
+ifdef USE_MPI
+FC       = ${MPI_FC}
+else
+FC      ?= gfortran
+endif
+
+ifdef SOLPS_DEBUG
+FFLAGS   = -g -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
+else
+FFLAGS   = -O
+endif
+
+#ifdef SOLPS_DEBUG
+#FFLAGS	 = -g -tp=k8
+#else
+#FFLAGS	 = -O -tp=k8
+#endif
+
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
+COMPILE  = ${FC} -c ${FFLAGS}
+CPP      = /lib/cpp -traditional
+MOD      = mod
+
+LDLIBS 	 = ${LD_MSCL}
+#LDLIBS   = ${LD_MSCL} -L${EIROBJ} -leirene
+LDEXTRA  = 
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

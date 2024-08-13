@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
         NCDIR ?= /usr/lib64
@@ -61,6 +61,18 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 #LD_NAG     = -L${NAGDIR}/lib -lnag
 #LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 #LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpiifort
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+else
+FC        ?= ifort
+endif
+CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

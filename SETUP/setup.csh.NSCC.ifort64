@@ -12,6 +12,9 @@
 module load mathlib/netcdf/intel/4.4.1
 module load mathlib/hdf5/intel/1.8.20
 
+# Compiler
+setenv FC ifort
+
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE east

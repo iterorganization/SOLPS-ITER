@@ -42,6 +42,8 @@ module load gnuplot/5.4.2-GCCcore-10.3.0
 # Debugger (set environment variable DBX)
 module load ArmForge/22.1.2
 setenv DBX ddt
+# Compiler
+setenv FC gfortran
 module load MATLAB/2020a
 ###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
 # Other environment variables

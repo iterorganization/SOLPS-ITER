@@ -18,7 +18,7 @@ DEFINES   =
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC        = gfortran
+FC       ?= gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace

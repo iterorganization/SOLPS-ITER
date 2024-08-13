@@ -1,7 +1,7 @@
 # Test whether necessary variables are defined
 LD_MSCL ?= -L${SOLPSLIB} -lmscl
 
-FC       = ftn
+FC      ?= ftn
 FFLAGS   = -fno-align-commons
 ifdef SOLPS_DEBUG
 FFLAGS  += -fbounds-check

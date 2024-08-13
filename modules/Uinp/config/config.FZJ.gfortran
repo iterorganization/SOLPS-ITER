@@ -3,7 +3,7 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
-FC       = gfortran
+FC      ?= gfortran
 
 CPP      = /lib/cpp -traditional -ffreestanding
 
