@@ -83,12 +83,13 @@ endif
 
 prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
- b2yr.prt b2yt.prt b2yi_gnuplot.prt
+ b2yr.prt b2yt.prt b2yi_gnuplot.prt b2ab.prt
 
 target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
+target_ab = b2ab.prt b2_afn_bcs
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
 target_opt = target_mn
 ifdef USE_IMPGYRO
@@ -218,6 +219,12 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
 	rm -f $(target_ar)
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2ar.exe.dir
+
+$(target_ab) : b2ab.dat
+	rm -rf b2ab.exe.dir >& /dev/null ; mkdir b2ab.exe.dir ; cp $^ b2ab.exe.dir
+	rm -f $(target_ab)
+	cd b2ab.exe.dir ; ${TIME} ${B2OBJ}/b2ab.exe ${RUN_OPTIONS} ; mv $(target_ab) .. ; rm -f $(notdir $^) >& /dev/null
+	-rmdir b2ab.exe.dir
 
 $(target_astra) : b2mn.prt
 
@@ -718,6 +725,8 @@ help help.prt:
 	@echo "     produce the initial plasma state"
 	@echo "  ${target_ar} : "
 	@echo "     produce the atomic physics rate information"
+	@echo "  ${target_ab} : "
+	@echo "     produce tables for advanced fluid neutral boundary conditions"
 	@echo "  ${target_mn} : "
 	@echo "     run the main code"
 	@echo "  ${target_co} : "
