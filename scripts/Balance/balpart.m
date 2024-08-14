@@ -163,14 +163,6 @@ switch areatype
         fnb_pinch = fnbx_pinch;
         fnb_ch = fnbx_ch;
         fnb_pschused = fnbx_pschused;
-        % flux needed for radial balance of indpol
-        fnb2_pll = fnby_pll;
-        fnb2_drift = fnby_drift;
-        fnb2_nanom = fnby_nanom;
-        fnb2_panom = fnby_panom;
-        fnb2_pinch = fnby_pinch;
-        fnb2_ch = fnby_ch;
-        fnb2_pschused = fnby_pschused;
     otherwise % Poloidal + radial component
         fnb_pll = fnbx_pll + fnby_pll;
         fnb_drift = fnbx_drift + fnby_drift;
@@ -179,37 +171,6 @@ switch areatype
         fnb_pinch = fnbx_pinch + fnby_pinch;
         fnb_ch = fnbx_ch + fnby_ch;
         fnb_pschused = fnbx_pschused + fnby_pschused;
-
-        fnb2_pll = zeros(size(fnby_pll));
-        fnb2_drift = zeros(size(fnby_drift));
-        fnb2_nanom = zeros(size(fnby_nanom));
-        fnb2_panom = zeros(size(fnby_panom));
-        fnb2_pinch = zeros(size(fnby_pinch));
-        fnb2_ch = zeros(size(fnby_ch));
-        fnb2_pschused = zeros(size(fnby_pschused));
-end
-
-%% Fluxes at boundary of indpol
-for iCv = 1:nCv
-    if indpol(iCv)
-        iFc1 = comuse.cvFcP(iCv,1);
-        iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
-        for i = iFc1:iFc2
-            iFc = comuse.cvFc(i);
-            if ~any(facesup_pol == iFc) && ~any(facesdown_pol == iFc)
-                if (indpol(comuse.fcCv(iFc,1)) && ~indpol(comuse.fcCv(iFc,2))) || ...
-                    (~indpol(comuse.fcCv(iFc,1)) && indpol(comuse.fcCv(iFc,2))) % face at radial boundary of indpol
-                        fnb2_pll(iFc) = fnb2_pll(iFc) + fnbx_pll(iFc) + fnby_pll(iFc);
-                        fnb2_drift(iFc) = fnb2_drift(iFc) + fnbx_drift(iFc) + fnby_drift(iFc);
-                        fnb2_nanom(iFc) = fnb2_nanom(iFc) + fnbx_nanom(iFc) + fnby_nanom(iFc);
-                        fnb2_panom(iFc) = fnb2_panom(iFc) + fnbx_panom(iFc) + fnby_panom(iFc);
-                        fnb2_pinch(iFc) = fnb2_pinch(iFc) + fnbx_pinch(iFc) + fnby_pinch(iFc);
-                        fnb2_ch(iFc) = fnb2_ch(iFc) + fnbx_ch(iFc) + fnby_ch(iFc);
-                        fnb2_pschused(iFc) = fnb2_pschused(iFc) + fnbx_pschused(iFc) + fnby_pschused(iFc);
-                end
-            end
-        end
-    end
 end
 
 %% Calculate the radial divergences...
@@ -220,6 +181,15 @@ raddiv_panom = raddiv(fnbx_panom,fnby_panom,comuse,indrad,facesup,facesdown,area
 raddiv_pinch = raddiv(fnbx_pinch,fnby_pinch,comuse,indrad,facesup,facesdown,areatype);
 raddiv_ch = raddiv(fnbx_ch,fnby_ch,comuse,indrad,facesup,facesdown,areatype);
 raddiv_pschused = raddiv(fnbx_pschused,fnby_pschused,comuse,indrad,facesup,facesdown,areatype);
+
+%% Fluxes required to calculate the divergence of the fluxes in indpol
+fnb2_pll = raddiv_pol(fnbx_pll,fnby_pll,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_drift = raddiv_pol(fnbx_drift,fnby_drift,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_nanom = raddiv_pol(fnbx_nanom,fnby_nanom,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_panom = raddiv_pol(fnbx_panom,fnby_panom,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_pinch = raddiv_pol(fnbx_pinch,fnby_pinch,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_ch = raddiv_pol(fnbx_ch,fnby_ch,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fnb2_pschused = raddiv_pol(fnbx_pschused,fnby_pschused,comuse,indpol,facesup_pol,facesdown_pol,areatype);
 
 %% Make plots...
 btn = radial_balance(...
@@ -232,7 +202,7 @@ btn = radial_balance(...
   'total downstream flux',...
   'total poloidally-integrated source',...
   'poloidally-integrated residual'},...
- {'parallel convection','dia.+ExB drifts','anomalous density diffusion','anomalous pressure diffusion','anomalous pinch','fnbx\_ch','PS'},...
+ {'parallel convection','dia.+ExB drifts','anomalous density diffusion','anomalous pressure diffusion','anomalous pinch','fnb\_ch','PS'},...
  {'rad. drift diverg.','rad. diverg. nv_{||}','rad. density diffusion diverg.','rad. pressure diffusion diverg.','rad. pinch diverg.','rad. diverg. fnby\_ch','rad. P-S diverg.',...
   'eirene\_mc atm.-plasma','eirene\_mc mol.-plasma','eirene\_mc t.ion-plasma','eirene\_mc recomb.','eirene\_mc core',...
   'b2stel ion prev.','b2stel ion next','b2stel rec prev.','b2stel rec next','b2stbc','b2stbm','b2stcx','source\_input','b2srdt','b2srsm','b2srst','b2stbr\_phys','b2stbr\_bas','b2stbr\_first\_flight'},...
@@ -251,7 +221,7 @@ areadividepol = poloidal_balance(...
  {'total radially-integrated flux',...
   'total radially-integrated source',...
   'radially-integrated residual'},...
- {'parallel convection','dia.+ExB drifts','anomalous density diffusion','anomalous pressure diffusion','anomalous pinch','fnbx\_ch','PS'},...
+ {'parallel convection','dia.+ExB drifts','anomalous density diffusion','anomalous pressure diffusion','anomalous pinch','fnb\_ch','PS'},...
  {'rad. drift diverg.','rad. diverg. nv_{||}','rad. density diffusion diverg.','rad. pressure diffusion diverg.','rad. pinch diverg.','rad. diverg. fnby\_ch','rad. P-S diverg.',...
   'eirene\_mc atm.-plasma','eirene\_mc mol.-plasma','eirene\_mc t.ion-plasma','eirene\_mc recomb.','eirene\_mc core',...
   'b2stel ion prev.','b2stel ion next','b2stel rec prev.','b2stel rec next','b2stbc','b2stbm','b2stcx','source\_input','b2srdt','b2srsm','b2srst','b2stbr\_phys','b2stbr\_bas','b2stbr\_first\_flight'},...
