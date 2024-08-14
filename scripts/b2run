@@ -98,6 +98,7 @@ argloop:
     echo ' b2mn_b: Main SOLPS-ITER run program differentiated in adjoint mode'
     echo ' b2optim_tao: Parameter optimization with PETSc/TAO solver'
     echo ' b2optim_ipopt: Parameter optimization with Ipopt solver'
+    echo ' b2ab: Build tables for advanced fluid neutral (AFN) boundary conditions'
     echo ' '
     exit
   endif
@@ -228,7 +229,7 @@ argloop:
         endif
       endif
     endif
-    goto argloop 
+    goto argloop
   endif
   if ("X${1}X" == "X-oX") then
     shift
@@ -252,4 +253,3 @@ argloop:
   if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi
   if ($?DEBUG_SET)  source $SOLPSTOP/SETUP/nodebug
   if ($?OPENMP_SET) source $SOLPSTOP/SETUP/noopenmp
-  
