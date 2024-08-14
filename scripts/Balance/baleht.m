@@ -37,6 +37,7 @@
 function baleht(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
+nCv = comuse.nCv;
 nstra = comuse.nstra;
 
 %% Obtain required arrays from the simulation...
@@ -76,10 +77,10 @@ if (comuse.b2mndr_eirene~=0)
     eirene_mc_eiel_she = ncread(balfile,'eirene_mc_eiel_she_bal');
     eirene_mc_epel_she = ncread(balfile,'eirene_mc_epel_she_bal');
 else
-    eirene_mc_eael_she = zeros(nx,ny,nstra);
-    eirene_mc_emel_she = zeros(nx,ny,nstra);
-    eirene_mc_eiel_she = zeros(nx,ny,nstra);
-    eirene_mc_epel_she = zeros(nx,ny,nstra);
+    eirene_mc_eael_she = zeros(nCv,nstra);
+    eirene_mc_emel_she = zeros(nCv,nstra);
+    eirene_mc_eiel_she = zeros(nCv,nstra);
+    eirene_mc_epel_she = zeros(nCv,nstra);
 end
 b2stbm_she = ncread(balfile,'b2stbm_she_bal');
 ext_she = ncread(balfile,'ext_she_bal');

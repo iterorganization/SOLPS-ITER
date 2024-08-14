@@ -36,6 +36,7 @@
 function baliht(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
+nCv = comuse.nCv;
 nstra = comuse.nstra;
 
 %% Obtain required arrays from the simulation...
@@ -84,10 +85,10 @@ if (comuse.b2mndr_eirene~=0)
     eirene_mc_eipl_shi = ncread(balfile,'eirene_mc_eipl_shi_bal');
     eirene_mc_eppl_shi = ncread(balfile,'eirene_mc_eppl_shi_bal');
 else
-    eirene_mc_eapl_shi = zeros(nx,ny,nstra);
-    eirene_mc_empl_shi = zeros(nx,ny,nstra);
-    eirene_mc_eipl_shi = zeros(nx,ny,nstra);
-    eirene_mc_eppl_shi = zeros(nx,ny,nstra);
+    eirene_mc_eapl_shi = zeros(nCv,nstra);
+    eirene_mc_empl_shi = zeros(nCv,nstra);
+    eirene_mc_eipl_shi = zeros(nCv,nstra);
+    eirene_mc_eppl_shi = zeros(nCv,nstra);
 end
 b2stbm_shi = ncread(balfile,'b2stbm_shi_bal');
 ext_shi = ncread(balfile,'ext_shi_bal');

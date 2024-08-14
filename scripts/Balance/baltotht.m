@@ -2,8 +2,14 @@
 % baltotht plots the total internal energy balance for a given SOLPS           %
 % simulation.                                                                  %
 % balfile:     Full path to balance.nc file                                    %
-% indbal:      Logical matrix of size nx*ny that is true for cells where       %
+% indrad:      Logical matrix of size nCv that is true for cells where radial  %
 %              balance should be performed                                     %
+% indpol:      Logical matrix of size nCv that is true for cells where         %
+%              poloidal balance should be performed                            %
+% facesup:     List of faces of the upstream boundary of indrad                %
+% facesdown:   List of faces of the downstream boundary of indrad              %
+% facesup_pol: List of faces of the upstream boundary of indpol                %
+% facesdown_pol: List of faces of the downstream boundary of indpol            %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
@@ -26,76 +32,74 @@
 %              mapped to the first SOL ring.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) August 2024 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function bth = baltotht(balfile,indrad,indpol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
+function bth = baltotht(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
-nx = comuse.nx;
-ny = comuse.ny;
+nCv = comuse.nCv;
 nstra = comuse.nstra;
-topix = comuse.topix+1;
-topiy = comuse.topiy+1;
 
 %% Obtain required arrays from the simulation...
 % Fluxes (electrons):
 tmp = ncread(balfile,'fhe_32');
-fhex_32 = tmp(:,:,1);
-fhey_32 = tmp(:,:,2);
+fhex_32 = tmp(:,1);
+fhey_32 = tmp(:,2);
 tmp = ncread(balfile,'fhe_52');
-fhex_52 = tmp(:,:,1);
-fhey_52 = tmp(:,:,2);
+fhex_52 = tmp(:,1);
+fhey_52 = tmp(:,2);
 tmp = ncread(balfile,'fhe_thermj');
-fhex_thermj = tmp(:,:,1);
-fhey_thermj = tmp(:,:,2);
+fhex_thermj = tmp(:,1);
+fhey_thermj = tmp(:,2);
 tmp = ncread(balfile,'fhe_cond');
-fhex_cond = tmp(:,:,1);
-fhey_cond = tmp(:,:,2);
+fhex_cond = tmp(:,1);
+fhey_cond = tmp(:,2);
 tmp = ncread(balfile,'fhe_dia');
-fhex_dia = tmp(:,:,1);
-fhey_dia = tmp(:,:,2);
+fhex_dia = tmp(:,1);
+fhey_dia = tmp(:,2);
 tmp = ncread(balfile,'fhe_ecrb');
-fhex_ecrb = tmp(:,:,1);
-fhey_ecrb = tmp(:,:,2);
+fhex_ecrb = tmp(:,1);
+fhey_ecrb = tmp(:,2);
 tmp = ncread(balfile,'fhe_strange');
-fhex_strange = tmp(:,:,1);
-fhey_strange = tmp(:,:,2);
+fhex_strange = tmp(:,1);
+fhey_strange = tmp(:,2);
 tmp = ncread(balfile,'fhe_pschused');
-fhex_pschused = tmp(:,:,1);
-fhey_pschused = tmp(:,:,2);
+fhex_pschused = tmp(:,1);
+fhey_pschused = tmp(:,2);
 % Fluxes (ions):
 tmp = ncread(balfile,'fhi_32');
-fhix_32 = tmp(:,:,1);
-fhiy_32 = tmp(:,:,2);
+fhix_32 = tmp(:,1);
+fhiy_32 = tmp(:,2);
 tmp = ncread(balfile,'fhi_52');
-fhix_52 = tmp(:,:,1);
-fhiy_52 = tmp(:,:,2);
+fhix_52 = tmp(:,1);
+fhiy_52 = tmp(:,2);
 tmp = ncread(balfile,'fhi_cond');
-fhix_cond = tmp(:,:,1);
-fhiy_cond = tmp(:,:,2);
+fhix_cond = tmp(:,1);
+fhiy_cond = tmp(:,2);
 tmp = ncread(balfile,'fhi_dia');
-fhix_dia = tmp(:,:,1);
-fhiy_dia = tmp(:,:,2);
+fhix_dia = tmp(:,1);
+fhiy_dia = tmp(:,2);
 tmp = ncread(balfile,'fhi_ecrb');
-fhix_ecrb = tmp(:,:,1);
-fhiy_ecrb = tmp(:,:,2);
+fhix_ecrb = tmp(:,1);
+fhiy_ecrb = tmp(:,2);
 tmp = ncread(balfile,'fhi_strange');
-fhix_strange = tmp(:,:,1);
-fhiy_strange = tmp(:,:,2);
+fhix_strange = tmp(:,1);
+fhiy_strange = tmp(:,2);
 tmp = ncread(balfile,'fhi_pschused');
-fhix_pschused = tmp(:,:,1);
-fhiy_pschused = tmp(:,:,2);
+fhix_pschused = tmp(:,1);
+fhiy_pschused = tmp(:,2);
 tmp = ncread(balfile,'fhi_inert');
-fhix_inert = tmp(:,:,1);
-fhiy_inert = tmp(:,:,2);
+fhix_inert = tmp(:,1);
+fhiy_inert = tmp(:,2);
 tmp = ncread(balfile,'fhi_vispar');
-fhix_vispar = tmp(:,:,1);
-fhiy_vispar = tmp(:,:,2);
+fhix_vispar = tmp(:,1);
+fhiy_vispar = tmp(:,2);
 tmp = ncread(balfile,'fhi_anml');
-fhix_anml = tmp(:,:,1);
-fhiy_anml = tmp(:,:,2);
+fhix_anml = tmp(:,1);
+fhiy_anml = tmp(:,2);
 tmp = ncread(balfile,'fhi_kevis');
-fhix_kevis = tmp(:,:,1);
-fhiy_kevis = tmp(:,:,2);
+fhix_kevis = tmp(:,1);
+fhiy_kevis = tmp(:,2);
 % Sources (electrons):
 b2stbr_phys_she = ncread(balfile,'b2stbr_phys_she_bal');
 b2stbr_bas_she = ncread(balfile,'b2stbr_bas_she_bal');
@@ -133,10 +137,10 @@ if (comuse.b2mndr_eirene~=0)
     eirene_mc_eipl_shi = ncread(balfile,'eirene_mc_eipl_shi_bal');
     eirene_mc_eppl_shi = ncread(balfile,'eirene_mc_eppl_shi_bal');
 else
-    eirene_mc_eapl_shi = zeros(nx,ny,nstra);
-    eirene_mc_empl_shi = zeros(nx,ny,nstra);
-    eirene_mc_eipl_shi = zeros(nx,ny,nstra);
-    eirene_mc_eppl_shi = zeros(nx,ny,nstra);
+    eirene_mc_eapl_shi = zeros(nCv,nstra);
+    eirene_mc_empl_shi = zeros(nCv,nstra);
+    eirene_mc_eipl_shi = zeros(nCv,nstra);
+    eirene_mc_eppl_shi = zeros(nCv,nstra);
 end
 b2stbm_shi = ncread(balfile,'b2stbm_shi_bal');
 ext_shi = ncread(balfile,'ext_shi_bal');
@@ -159,97 +163,128 @@ reshi = ncread(balfile,'reshi');
 %% Create the units string
 switch areatype
     case 'parallel'
-        units = 'Wm^{-2}';
+        units = 'MWm^{-2}';
     case 'contact'
-        units = 'Wm^{-2}';
+        units = 'MWm^{-2}';
     case 'none'
-        units = 'W';
+        units = 'MW';
     otherwise
         error('Area type ''%s'' not supported.',areatype);
 end
 %%
 
-%% Radial divergences...
-raddive_32 = zeros(nx,ny);
-raddive_52 = zeros(nx,ny);
-raddive_thermj = zeros(nx,ny);
-raddive_cond = zeros(nx,ny);
-raddive_dia = zeros(nx,ny);
-raddive_ecrb = zeros(nx,ny);
-raddive_strange = zeros(nx,ny);
-raddive_pschused = zeros(nx,ny);
-for iy=1:ny
-    for ix=1:nx
-        if topiy(ix,iy)>ny
-            continue;
-        end
-        raddive_32(ix,iy) = fhey_32(ix,iy)-fhey_32(topix(ix,iy),topiy(ix,iy));
-        raddive_52(ix,iy) = fhey_52(ix,iy)-fhey_52(topix(ix,iy),topiy(ix,iy));
-        raddive_thermj(ix,iy) = fhey_thermj(ix,iy)-fhey_thermj(topix(ix,iy),topiy(ix,iy));
-        raddive_cond(ix,iy) = fhey_cond(ix,iy)-fhey_cond(topix(ix,iy),topiy(ix,iy));
-        raddive_dia(ix,iy) = fhey_dia(ix,iy)-fhey_dia(topix(ix,iy),topiy(ix,iy));
-        raddive_ecrb(ix,iy) = fhey_ecrb(ix,iy)-fhey_ecrb(topix(ix,iy),topiy(ix,iy));
-        raddive_strange(ix,iy) = fhey_strange(ix,iy)-fhey_strange(topix(ix,iy),topiy(ix,iy));
-        raddive_pschused(ix,iy) = fhey_pschused(ix,iy)-fhey_pschused(topix(ix,iy),topiy(ix,iy));
-    end
+%% Calculate the total flux depending on areatype
+switch areatype
+    case 'parallel' % Retain only the poloidal component
+        fhe_32 = fhex_32;
+        fhe_52 = fhex_52;
+        fhe_thermj = fhex_thermj;
+        fhe_cond = fhex_cond;
+        fhe_dia = fhex_dia;
+        fhe_ecrb = fhex_ecrb;
+        fhe_strange = fhex_strange;
+        fhe_pschused = fhex_pschused;
+        fhi_32 = fhix_32;
+        fhi_52 = fhix_52;
+        fhi_cond = fhix_cond;
+        fhi_dia = fhix_dia;
+        fhi_ecrb = fhix_ecrb;
+        fhi_strange = fhix_strange;
+        fhi_pschused = fhix_pschused;
+        fhi_inert = fhix_inert;
+        fhi_vispar = fhix_vispar;
+        fhi_anml = fhix_anml;
+        fhi_kevis = fhix_kevis;
+    otherwise % Poloidal + radial component
+        fhe_32 = fhex_32 + fhey_32;
+        fhe_52 = fhex_52 + fhey_52;
+        fhe_thermj = fhex_thermj + fhey_thermj;
+        fhe_cond = fhex_cond + fhey_cond;
+        fhe_dia = fhex_dia + fhey_dia;
+        fhe_ecrb = fhex_ecrb + fhey_ecrb;
+        fhe_strange = fhex_strange + fhey_strange;
+        fhe_pschused = fhex_pschused + fhey_pschused;
+        fhi_32 = fhix_32 + fhiy_32;
+        fhi_52 = fhix_52 + fhiy_52;
+        fhi_cond = fhix_cond + fhiy_cond;
+        fhi_dia = fhix_dia + fhiy_dia;
+        fhi_ecrb = fhix_ecrb + fhiy_ecrb;
+        fhi_strange = fhix_strange + fhiy_strange;
+        fhi_pschused = fhix_pschused + fhiy_pschused;
+        fhi_inert = fhix_inert + fhiy_inert;
+        fhi_vispar = fhix_vispar + fhiy_vispar;
+        fhi_anml = fhix_anml + fhiy_anml;
+        fhi_kevis = fhix_kevis + fhiy_kevis;
 end
-raddivi_32 = zeros(nx,ny);
-raddivi_52 = zeros(nx,ny);
-raddivi_cond = zeros(nx,ny);
-raddivi_dia = zeros(nx,ny);
-raddivi_ecrb = zeros(nx,ny);
-raddivi_strange = zeros(nx,ny);
-raddivi_pschused = zeros(nx,ny);
-raddivi_inert = zeros(nx,ny);
-raddivi_vispar = zeros(nx,ny);
-raddivi_anml = zeros(nx,ny);
-raddivi_kevis = zeros(nx,ny);
-for iy=1:ny
-    for ix=1:nx
-        if topiy(ix,iy)>ny
-            continue;
-        end
-        raddivi_32(ix,iy) = fhiy_32(ix,iy)-fhiy_32(topix(ix,iy),topiy(ix,iy));
-        raddivi_52(ix,iy) = fhiy_52(ix,iy)-fhiy_52(topix(ix,iy),topiy(ix,iy));
-        raddivi_cond(ix,iy) = fhiy_cond(ix,iy)-fhiy_cond(topix(ix,iy),topiy(ix,iy));
-        raddivi_dia(ix,iy) = fhiy_dia(ix,iy)-fhiy_dia(topix(ix,iy),topiy(ix,iy));
-        raddivi_ecrb(ix,iy) = fhiy_ecrb(ix,iy)-fhiy_ecrb(topix(ix,iy),topiy(ix,iy));
-        raddivi_strange(ix,iy) = fhiy_strange(ix,iy)-fhiy_strange(topix(ix,iy),topiy(ix,iy));
-        raddivi_pschused(ix,iy) = fhiy_pschused(ix,iy)-fhiy_pschused(topix(ix,iy),topiy(ix,iy));
-        raddivi_inert(ix,iy) = fhiy_inert(ix,iy)-fhiy_inert(topix(ix,iy),topiy(ix,iy));
-        raddivi_vispar(ix,iy) = fhiy_vispar(ix,iy)-fhiy_vispar(topix(ix,iy),topiy(ix,iy));
-        raddivi_anml(ix,iy) = fhiy_anml(ix,iy)-fhiy_anml(topix(ix,iy),topiy(ix,iy));
-        raddivi_kevis(ix,iy) = fhiy_kevis(ix,iy)-fhiy_kevis(topix(ix,iy),topiy(ix,iy));
-    end
-end
-%%
+
+%% Calculate the radial divergences...
+raddive_32 = raddiv(fhex_32,fhey_32,comuse,indrad,facesup,facesdown,areatype);
+raddive_52 = raddiv(fhex_52,fhey_52,comuse,indrad,facesup,facesdown,areatype);
+raddive_thermj = raddiv(fhex_thermj,fhey_thermj,comuse,indrad,facesup,facesdown,areatype);
+raddive_cond = raddiv(fhex_cond,fhey_cond,comuse,indrad,facesup,facesdown,areatype);
+raddive_dia = raddiv(fhex_dia,fhey_dia,comuse,indrad,facesup,facesdown,areatype);
+raddive_ecrb = raddiv(fhex_ecrb,fhey_ecrb,comuse,indrad,facesup,facesdown,areatype);
+raddive_strange = raddiv(fhex_strange,fhey_strange,comuse,indrad,facesup,facesdown,areatype);
+raddive_pschused = raddiv(fhex_pschused,fhey_pschused,comuse,indrad,facesup,facesdown,areatype);
+raddivi_32 = raddiv(fhix_32,fhiy_32,comuse,indrad,facesup,facesdown,areatype);
+raddivi_52 = raddiv(fhix_52,fhiy_52,comuse,indrad,facesup,facesdown,areatype);
+raddivi_cond = raddiv(fhix_cond,fhiy_cond,comuse,indrad,facesup,facesdown,areatype);
+raddivi_dia = raddiv(fhix_dia,fhiy_dia,comuse,indrad,facesup,facesdown,areatype);
+raddivi_ecrb = raddiv(fhix_ecrb,fhiy_ecrb,comuse,indrad,facesup,facesdown,areatype);
+raddivi_strange = raddiv(fhix_strange,fhiy_strange,comuse,indrad,facesup,facesdown,areatype);
+raddivi_pschused = raddiv(fhix_pschused,fhiy_pschused,comuse,indrad,facesup,facesdown,areatype);
+raddivi_inert = raddiv(fhix_inert,fhiy_inert,comuse,indrad,facesup,facesdown,areatype);
+raddivi_vispar = raddiv(fhix_vispar,fhiy_vispar,comuse,indrad,facesup,facesdown,areatype);
+raddivi_anml = raddiv(fhix_anml,fhiy_anml,comuse,indrad,facesup,facesdown,areatype);
+raddivi_kevis = raddiv(fhix_kevis,fhiy_kevis,comuse,indrad,facesup,facesdown,areatype);
+
+%% Fluxes required to calculate the divergence of the fluxes in indpol
+fhe2_32 = raddiv_pol(fhex_32,fhey_32,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_52 = raddiv_pol(fhex_52,fhey_52,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_thermj = raddiv_pol(fhex_thermj,fhey_thermj,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_cond = raddiv_pol(fhex_cond,fhey_cond,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_dia = raddiv_pol(fhex_dia,fhey_dia,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_ecrb = raddiv_pol(fhex_ecrb,fhey_ecrb,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_strange = raddiv_pol(fhex_strange,fhey_strange,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhe2_pschused = raddiv_pol(fhex_pschused,fhey_pschused,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_32 = raddiv_pol(fhix_32,fhiy_32,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_52 = raddiv_pol(fhix_52,fhiy_52,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_cond = raddiv_pol(fhix_cond,fhiy_cond,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_dia = raddiv_pol(fhix_dia,fhiy_dia,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_ecrb = raddiv_pol(fhix_ecrb,fhiy_ecrb,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_strange = raddiv_pol(fhix_strange,fhiy_strange,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_pschused = raddiv_pol(fhix_pschused,fhiy_pschused,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_inert = raddiv_pol(fhix_inert,fhiy_inert,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_vispar = raddiv_pol(fhix_vispar,fhiy_vispar,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_anml = raddiv_pol(fhix_anml,fhiy_anml,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fhi2_kevis = raddiv_pol(fhix_kevis,fhiy_kevis,comuse,indpol,facesup_pol,facesdown_pol,areatype);
 
 %% Make plots...
 bth = radial_balance(...
- cat(3,fhex_32,fhix_32,fhex_52,fhix_52,fhex_cond,fhix_cond,fhex_thermj,fhex_dia,fhix_dia,fhex_ecrb,fhix_ecrb,fhex_strange,...
-       fhix_strange,fhex_pschused,fhix_pschused,fhix_inert,fhix_vispar,fhix_anml,fhix_kevis)/1E6,...
- cat(3,raddive_32,raddive_52,raddive_cond,raddive_thermj,raddive_dia,raddive_ecrb,raddive_strange,raddive_pschused,...
-       raddivi_32,raddivi_52,raddivi_cond,raddivi_dia,raddivi_ecrb,raddivi_strange,raddivi_pschused,...
-       raddivi_inert,raddivi_vispar,raddivi_anml,raddivi_kevis,...
-       b2stbc_she,b2stbc_shi,...
-       sum(eirene_mc_eael_she,3),sum(eirene_mc_emel_she,3),sum(eirene_mc_eiel_she,3),sum(eirene_mc_epel_she,3),...
-       sum(eirene_mc_eapl_shi,3),sum(eirene_mc_empl_shi,3),sum(eirene_mc_eipl_shi,3),sum(eirene_mc_eppl_shi,3),...
+ cat(2,fhe_32,fhi_32,fhe_52,fhi_52,fhe_cond,fhi_cond,fhe_thermj,fhe_dia,fhi_dia,fhe_ecrb,fhi_ecrb,fhe_strange,...
+       fhi_strange,fhe_pschused,fhi_pschused,fhi_inert,fhi_vispar,fhi_anml,fhi_kevis)/1E6,...
+ cat(2,b2stbc_she,b2stbc_shi,...
+       sum(eirene_mc_eael_she,2),sum(eirene_mc_emel_she,2),sum(eirene_mc_eiel_she,2),sum(eirene_mc_epel_she,2),...
+       sum(eirene_mc_eapl_shi,2),sum(eirene_mc_empl_shi,2),sum(eirene_mc_eipl_shi,2),sum(eirene_mc_eppl_shi,2),...
        b2stbm_she,b2stbm_shi,ext_she,ext_shi,...
        b2stel_shi_ion,b2stel_shi_rec,b2stcx_shi,b2srsm_she,b2srsm_shi,b2srdt_she,b2srdt_shi,b2srst_she,b2srst_shi,...
        b2sihs_diae,b2sihs_diaa,b2sihs_divue,b2sihs_divua,b2sihs_exbe,b2sihs_exba,b2sihs_visa,b2sihs_joule,b2sihs_fraa,...
        b2stbr_phys_she,b2stbr_bas_she,b2stbr_first_flight_she,b2stbr_phys_shi,b2stbr_bas_shi,b2stbr_first_flight_shi,b2stel_she)/1E6,...
+ cat(2,raddive_32,raddive_52,raddive_cond,raddive_thermj,raddive_dia,raddive_ecrb,raddive_strange,raddive_pschused,...
+       raddivi_32,raddivi_52,raddivi_cond,raddivi_dia,raddivi_ecrb,raddivi_strange,raddivi_pschused,...
+       raddivi_inert,raddivi_vispar,raddivi_anml,raddivi_kevis)/1E6,...
  (reshe+reshi)/1E6,...
  {'total upstream flux',...
   'total downstream flux',...
   'total poloidally-integrated source',...
   'poloidally-integrated residual'},...
- {'fhex\_32','fhix\_32','fhex\_52','fhix\_52','fhex\_cond','fhix\_cond','fhex\_thermj','fhex\_dia','fhix\_dia','fhex\_ecrb','fhix\_ecrb','fhex\_strange',...
-  'fhix\_strange','fhex\_pschused','fhix\_pschused','fhix\_inert','fhix\_vispar','fhix\_anml','fhix\_kevis'},...
- [{'rad. diverg. fhey\_32','rad. diverg. fhey\_52','rad. diverg. fhey\_cond','rad. diverg. fhey\_thermj',...
-  'rad. diverg. fhey\_dia','rad. diverg. fhey\_ecrb','rad. diverg. fhey\_strange','rad. diverg. fhey\_psch',...
-  'rad. diverg. fhiy\_32','rad. diverg. fhiy\_52','rad. diverg. fhiy\_cond',...
-  'rad. diverg. fhiy\_dia','rad. diverg. fhiy\_ecrb','rad. diverg. fhiy\_strange','rad. diverg. fhiy\_psch',...
-  'rad. diverg. fhiy\_inert','rad. diverg. fhiy\_vispar','rad. diverg. fhiy\_anml','rad. diverg. fhiy\_kevis',...
+ {'fhe\_32','fhi\_32','fhe\_52','fhi\_52','fhe\_cond','fhi\_cond','fhe\_thermj','fhe\_dia','fhi\_dia','fhe\_ecrb','fhi\_ecrb','fhe\_strange',...
+  'fhi\_strange','fhe\_pschused','fhi\_pschused','fhi\_inert','fhi\_vispar','fhi\_anml','fhi\_kevis'},...
+ [{'rad. diverg. fhe\_32','rad. diverg. fhe\_52','rad. diverg. fhe\_cond','rad. diverg. fhe\_thermj',...
+  'rad. diverg. fhe\_dia','rad. diverg. fhe\_ecrb','rad. diverg. fhe\_strange','rad. diverg. fhe\_psch',...
+  'rad. diverg. fhi\_32','rad. diverg. fhi\_52','rad. diverg. fhi\_cond',...
+  'rad. diverg. fhi\_dia','rad. diverg. fhi\_ecrb','rad. diverg. fhi\_strange','rad. diverg. fhi\_psch',...
+  'rad. diverg. fhi\_inert','rad. diverg. fhi\_vispar','rad. diverg. fhi\_anml','rad. diverg. fhi\_kevis',...
   'b2stbc\_she','b2stbc\_shi',...
   'eirene\_mc atm.-plasma el.','eirene\_mc mol.-plasma el.','eirene\_mc t.ion-plasma el.','eirene\_mc recomb. el.',...
   'eirene\_mc atm.-plasma ion','eirene\_mc mol.-plasma ion','eirene\_mc t.ion-plasma ion','eirene\_mc recomb. ion',...
@@ -257,21 +292,20 @@ bth = radial_balance(...
   'b2stel\_shi\_ion','b2stel\_shi\_rec','b2stcx\_shi','b2srsm\_she','b2srsm\_shi','b2srdt\_she','b2srdt\_shi','b2srst\_she','b2srst\_shi',...
   'b2sihs\_diae','b2sihs\_diaa','b2sihs\_divue','b2sihs\_divua','b2sihs\_exbe','b2sihs\_exba','b2sihs\_visa','b2sihs\_joule','b2sihs\_fraa',...
   'b2stbr\_phys el.','b2stbr\_bas el.','b2stbr\_first\_flight el.','b2stbr\_phys ion','b2stbr\_bas ion','b2stbr\_first\_flight ion'},strcat('b2stel\_she\_',comuse.species)],...
- comuse,indrad,area_divide,reverse,false,axbal(1:4),units,makeplot,areaend);
+ comuse,indrad,facesup,facesdown,area_divide,reverse,false,axbal(1:4),units,makeplot,areaend);
 
 if ~makeplot
     return
 end
 
 areadownpol = poloidal_balance(...
- cat(3,fhex_32,fhix_32,fhex_52,fhix_52,fhex_cond,fhix_cond,fhex_thermj,fhex_dia,fhix_dia,fhex_ecrb,fhix_ecrb,fhex_strange,...
-       fhix_strange,fhex_pschused,fhix_pschused,fhix_inert,fhix_vispar,fhix_anml,fhix_kevis)/1E6,...
- cat(3,raddive_32,raddive_52,raddive_cond,raddive_thermj,raddive_dia,raddive_ecrb,raddive_strange,raddive_pschused,...
-       raddivi_32,raddivi_52,raddivi_cond,raddivi_dia,raddivi_ecrb,raddivi_strange,raddivi_pschused,...
-       raddivi_inert,raddivi_vispar,raddivi_anml,raddivi_kevis,...
-       b2stbc_she,b2stbc_shi,...
-       sum(eirene_mc_eael_she,3),sum(eirene_mc_emel_she,3),sum(eirene_mc_eiel_she,3),sum(eirene_mc_epel_she,3),...
-       sum(eirene_mc_eapl_shi,3),sum(eirene_mc_empl_shi,3),sum(eirene_mc_eipl_shi,3),sum(eirene_mc_eppl_shi,3),...
+ cat(2,fhe_32,fhi_32,fhe_52,fhi_52,fhe_cond,fhi_cond,fhe_thermj,fhe_dia,fhi_dia,fhe_ecrb,fhi_ecrb,fhe_strange,...
+       fhi_strange,fhe_pschused,fhi_pschused,fhi_inert,fhi_vispar,fhi_anml,fhi_kevis)/1E6,...
+ cat(2,fhe2_32,fhi2_32,fhe2_52,fhi2_52,fhe2_cond,fhi2_cond,fhe2_thermj,fhe2_dia,fhi2_dia,fhe2_ecrb,fhi2_ecrb,fhe2_strange,...
+       fhi2_strange,fhe2_pschused,fhi2_pschused,fhi2_inert,fhi2_vispar,fhi2_anml,fhi2_kevis)/1E6,...
+ cat(2,b2stbc_she,b2stbc_shi,...
+       sum(eirene_mc_eael_she,2),sum(eirene_mc_emel_she,2),sum(eirene_mc_eiel_she,2),sum(eirene_mc_epel_she,2),...
+       sum(eirene_mc_eapl_shi,2),sum(eirene_mc_empl_shi,2),sum(eirene_mc_eipl_shi,2),sum(eirene_mc_eppl_shi,2),...
        b2stbm_she,b2stbm_shi,ext_she,ext_shi,...
        b2stel_shi_ion,b2stel_shi_rec,b2stcx_shi,b2srsm_she,b2srsm_shi,b2srdt_she,b2srdt_shi,b2srst_she,b2srst_shi,...
        b2sihs_diae,b2sihs_diaa,b2sihs_divue,b2sihs_divua,b2sihs_exbe,b2sihs_exba,b2sihs_visa,b2sihs_joule,b2sihs_fraa,...
@@ -280,13 +314,13 @@ areadownpol = poloidal_balance(...
  {'total radially-integrated flux',...
   'total radially-integrated source',...
   'radially-integrated residual'},...
- {'fhex\_32','fhix\_32','fhex\_52','fhix\_52','fhex\_cond','fhix\_cond','fhex\_thermj','fhex\_dia','fhix\_dia','fhex\_ecrb','fhix\_ecrb','fhex\_strange',...
-  'fhix\_strange','fhex\_pschused','fhix\_pschused','fhix\_inert','fhix\_vispar','fhix\_anml','fhix\_kevis'},...
- [{'rad. diverg. fhey\_32','rad. diverg. fhey\_52','rad. diverg. fhey\_cond','rad. diverg. fhey\_thermj',...
-  'rad. diverg. fhey\_dia','rad. diverg. fhey\_ecrb','rad. diverg. fhey\_strange','rad. diverg. fhey\_psch',...
-  'rad. diverg. fhiy\_32','rad. diverg. fhiy\_52','rad. diverg. fhiy\_cond',...
-  'rad. diverg. fhiy\_dia','rad. diverg. fhiy\_ecrb','rad. diverg. fhiy\_strange','rad. diverg. fhiy\_psch',...
-  'rad. diverg. fhiy\_inert','rad. diverg. fhiy\_vispar','rad. diverg. fhiy\_anml','rad. diverg. fhiy\_kevis',...
+ {'fhe\_32','fhi\_32','fhe\_52','fhi\_52','fhe\_cond','fhi\_cond','fhe\_thermj','fhe\_dia','fhi\_dia','fhe\_ecrb','fhi\_ecrb','fhe\_strange',...
+  'fhi\_strange','fhe\_pschused','fhi\_pschused','fhi\_inert','fhi\_vispar','fhi\_anml','fhi\_kevis'},...
+ [{'rad. diverg. fhe\_32','rad. diverg. fhe\_52','rad. diverg. fhe\_cond','rad. diverg. fhe\_thermj',...
+  'rad. diverg. fhe\_dia','rad. diverg. fhe\_ecrb','rad. diverg. fhe\_strange','rad. diverg. fhe\_psch',...
+  'rad. diverg. fhi\_32','rad. diverg. fhi\_52','rad. diverg. fhi\_cond',...
+  'rad. diverg. fhi\_dia','rad. diverg. fhi\_ecrb','rad. diverg. fhi\_strange','rad. diverg. fhi\_psch',...
+  'rad. diverg. fhi\_inert','rad. diverg. fhi\_vispar','rad. diverg. fhi\_anml','rad. diverg. fhi\_kevis',...
   'b2stbc\_she','b2stbc\_shi',...
   'eirene\_mc atm.-plasma el.','eirene\_mc mol.-plasma el.','eirene\_mc t.ion-plasma el.','eirene\_mc recomb. el.',...
   'eirene\_mc atm.-plasma ion','eirene\_mc mol.-plasma ion','eirene\_mc t.ion-plasma ion','eirene\_mc recomb. ion',...
@@ -294,7 +328,7 @@ areadownpol = poloidal_balance(...
   'b2stel\_shi\_ion','b2stel\_shi\_rec','b2stcx\_shi','b2srsm\_she','b2srsm\_shi','b2srdt\_she','b2srdt\_shi','b2srst\_she','b2srst\_shi',...
   'b2sihs\_diae','b2sihs\_diaa','b2sihs\_divue','b2sihs\_divua','b2sihs\_exbe','b2sihs\_exba','b2sihs\_visa','b2sihs\_joule','b2sihs\_fraa',...
   'b2stbr\_phys el.','b2stbr\_bas el.','b2stbr\_first\_flight el.','b2stbr\_phys ion','b2stbr\_bas ion','b2stbr\_first\_flight ion'},strcat('b2stel\_she\_',comuse.species)],...
- comuse,indpol,area_divide,reverse,false,axbal(5:7),units,areaend,polbaldist);
+ comuse,indpol,facesup_pol,facesdown_pol,area_divide,reverse,false,axbal(5:7),units,areaend,polbaldist);
 
 if strata_plot
     make_strata_plots({eirene_mc_eael_she/1E6,eirene_mc_eapl_shi/1E6},{eirene_mc_emel_she/1E6,eirene_mc_empl_shi/1E6},...
