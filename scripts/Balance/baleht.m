@@ -37,7 +37,6 @@
 function baleht(balfile,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,strata_plot,axstrat,makeplot,areaend,area_divide,areatype,polbaldist)
 
 % Shorthand for geometry variables:
-nCv = comuse.nCv;
 nstra = comuse.nstra;
 
 %% Obtain required arrays from the simulation...
