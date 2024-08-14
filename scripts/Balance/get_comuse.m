@@ -69,6 +69,8 @@ comuse.ftCv = ncread(filename,'ftCv');
 comuse.ftCvP = ncread(filename,'ftCvP');
 comuse.imp = ncread(filename,'imp');
 comuse.omp = ncread(filename,'omp');
+% Cell volumes
+comuse.cvVol = ncread(filename,'cvVol');
 % Species string:
 tmp = ncread(filename,'species');
 comuse.species = {};
