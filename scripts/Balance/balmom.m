@@ -168,37 +168,10 @@ switch areatype
         fmo_flua = fmox_flua;
         fmo_cvsa = fmox_cvsa;
         fmo_hybr = fmox_hybr;
-        % flux needed for radial balance of indpol
-        fmo2_flua = fmoy_flua;
-        fmo2_cvsa = fmoy_cvsa;
-        fmo2_hybr = fmoy_hybr;
     otherwise % Poloidal + radial component
         fmo_flua = fmox_flua + fmoy_flua;
         fmo_cvsa = fmox_cvsa + fmoy_cvsa;
         fmo_hybr = fmox_hybr + fmoy_hybr;
-
-        fmo2_flua = zeros(size(fmoy_flua));
-        fmo2_cvsa = zeros(size(fmoy_cvsa));
-        fmo2_hybr = zeros(size(fmoy_hybr));
-end
-
-%% Fluxes at boundary of indpol
-for iCv = 1:nCv
-    if indpol(iCv)
-        iFc1 = comuse.cvFcP(iCv,1);
-        iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
-        for i = iFc1:iFc2
-            iFc = comuse.cvFc(i);
-            if ~any(facesup_pol == iFc) && ~any(facesdown_pol == iFc)
-                if (indpol(comuse.fcCv(iFc,1)) && ~indpol(comuse.fcCv(iFc,2))) || ...
-                    (~indpol(comuse.fcCv(iFc,1)) && indpol(comuse.fcCv(iFc,2))) % face at radial boundary of indpol
-                        fmo2_flua(iFc) = fmo2_flua(iFc) + fmox_flua(iFc) + fmoy_flua(iFc);
-                        fmo2_cvsa(iFc) = fmo2_cvsa(iFc) + fmox_cvsa(iFc) + fmoy_cvsa(iFc);
-                        fmo2_hybr(iFc) = fmo2_hybr(iFc) + fmox_hybr(iFc) + fmoy_hybr(iFc);
-                end
-            end
-        end
-    end
 end
 
 %% Calculate the radial divergence...
@@ -206,7 +179,10 @@ raddiv_flua = raddiv(fmox_flua,fmoy_flua,comuse,indrad,facesup,facesdown,areatyp
 raddiv_visc = raddiv(fmox_cvsa,fmoy_cvsa,comuse,indrad,facesup,facesdown,areatype);
 raddiv_hybr = raddiv(fmox_hybr,fmoy_hybr,comuse,indrad,facesup,facesdown,areatype);
 
-%%
+%% Fluxes required to calculate the divergence of the fluxes in indpol
+fmo2_flua = raddiv_pol(fmox_flua,fmoy_flua,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fmo2_cvsa = raddiv_pol(fmox_cvsa,fmoy_cvsa,comuse,indpol,facesup_pol,facesdown_pol,areatype);
+fmo2_hybr = raddiv_pol(fmox_hybr,fmoy_hybr,comuse,indpol,facesup_pol,facesdown_pol,areatype);
 
 %% Calculate the poloidal divergence of the viscous, hybrid correction and new ion viscosity form parts...
 % visc = zeros(nx,ny);
