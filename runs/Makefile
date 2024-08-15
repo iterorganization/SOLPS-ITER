@@ -221,11 +221,13 @@ endif
 	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
-	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
+	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
+	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null ; \
+	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
+	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
 endif
 ifdef IMAS_VERSION
-	[ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
 ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/${B2EX}.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
@@ -328,11 +330,13 @@ endif
 	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
-	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null
+	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
+	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null ; \
+	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
+	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
 endif
 ifdef IMAS_VERSION
-	[ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 	-[ -s ${fort_lc}30 ] || ( [ -s ../baserun/${fort_lc}30 ] || ( [ -s b2mn.exe.dir/${fort_lc}30 ] && mv b2mn.exe.dir/${fort_lc}30 . || ( [ -e b2mn.exe.dir/${fort_lc}30 ] && rm b2mn.exe.dir/${fort_lc}30 || echo > /dev/null ) ) )
