@@ -3,14 +3,11 @@
 move_to_F90.sh
 rm b2uxus_b.F90 solve_covariance_b.F90
 collect_nodiff_b.sh
-rm dmax_b.F90 smax_b.F90poi samax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90 eirflux_map_b.F90 chord_dv.F90
+rm damax_b.F90 smax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90 eirflux_map_b.F90 chord_b.F90 calc_res_fp_b.F90
 
-sed -i '/DIFFSIZES/d' ./*.F90 
+sed -i '/DIFFSIZES/d' ./*.F90
+sed -i -e '0,/\& nshift_opt, ncorr_opt/{s/\& nshift_opt, ncorr_opt/\& nshift_opt, ncorr_opt, par_opt_phys, par_opt_physb/g}' b2mn_b.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
-sed -i -e 's/LOGICAL :: mask$/LOGICAL :: mask(-1:m%nx,-1:m%ny)/g' b2us_prep_diff.F90
-sed -i -e 's/LOGICAL :: mask0/LOGICAL :: mask0(m%ncmxvx)/g' b2us_prep_diff.F90
-sed -i -e 's/LOGICAL :: mask1/LOGICAL :: mask1(m%nfc,2)/g' b2us_prep_diff.F90
-sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(2*m%nfc)/g' b2us_prep_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1), SIZE(x3, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
@@ -34,7 +31,7 @@ sed -i -e 's/ISIZE1OFMETAVAR:abs/nCv/g' b2trcl_b.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_b.F90 
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_b.F90
 sed -i -e 's/ISIZE1OFgeo%cvvol/nCv/g' b2stbc_b.F90
-sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2stbc_b.F90 b2stbc_phys_b.F90 b2tfch__b.F90 b2tfhe__b.F90 b2tfhi__b.F90 b2trno_b.F90 #b2sian_b.F90 b2tfnb_b.F90
+sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2stbc_b.F90 b2stbc_phys_b.F90 b2tfch__b.F90 b2tfhe__b.F90 b2tfhi__b.F90 b2trno_b.F90
 # start issues with disappearing arguments in forward routines
 sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%sna0ep, incx=1, sy=srw%sna0(1, 0, is)/CALL B2SAXPY_FWD(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is)/g" b2stbc_b.F90
 sed -i -e 's/\&              syb=srwb%sna0(1, 0, is), incy=1)/\&              srwb%sna0(1, 0, is), 1)/g' b2stbc_b.F90
@@ -77,20 +74,16 @@ sed -i -e 's/ISIZE1OFmaskINb2usco/mpg%mxStencil/g' b2usco_b.F90
 sed -i -e 's/ISIZE1OFmaskINb2usht/mpg%mxStencil/g' b2usht_b.F90
 sed -i -e 's/ISIZE1OFmaskINb2usmo/mpg%mxStencil/g' b2usmo_b.F90
 sed -i -e 's/ISIZE1OFmaskINb2uspo/mpg%mxStencil/g' b2uspo_b.F90
-sed -i -e 's/ISIZE1OFarg1/20/g' calc_err_b.F90
-sed -i -e 's/ISIZE1OFarg2/20/g' calc_err_b.F90
-sed -i -e 's/LOGICAL :: arg1/LOGICAL :: arg1(m%nFc)/g' find_faces_b.F90
 sed -i '/REAL(kind=r8) :: const_h/i\# ifndef CONSTANTS_PROVIDED' heatdiff1D_b.F90 ratstr_b.F90
 sed -i '/PARAMETER (const_h/a\# endif' heatdiff1D_b.F90 ratstr_b.F90
 sed -i -e 's/mb%cfoncv = 0.D0/mb%cfoncv = .true./g' b2us_map_diff.F90
 sed -i -e 's/mb%cvonclosedsurface = 0.D0/mb%cvonclosedsurface = .true./g' b2us_map_diff.F90
 sed -i -e 's/state_extb%is_neutral = 0.D0/state_extb%is_neutral = .true./g' b2us_plasma_diff.F90
-sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diff.F90 b2mod_geo2_diff.F90
-sed -i -e 's/LOGICAL :: result10/INTEGER :: result10/g' b2mod_geo2_diff.F90
+sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diff.F90
 sed -i -e 's/REAL8ARRAY(small_r4_constant, r4\/8)/REAL4(small_r4_constant, r4\/8)/g' *.F90
 sed -i -e 's/CALL POPREAL8ARRAY(switch/CALL POPREAL8(switch/g' *.F90
 sed -i -e 's/REAL8ARRAY\(.*, r8\/8\)/REAL8\1/g' *.F90 ## match any [PUSH/POP]REAL8ARRAY, and substitute with REAL8, only when this addresses a scalar, for which only ", r8/8" is present
-sed -i '/INTRINSIC MAX/d' b2stbc_fb_b.F90 b2stbc_phys_b.F90 b2usr_cost_function_b.F90 fix_user_b.F90
+sed -i '/INTRINSIC MAX/d' b2stbc_phys_b.F90 b2usr_cost_function_b.F90 fix_user_b.F90
 # WARNING! the following three may be dangerous in future!!
 sed -i '/CALL INTCELL_FWD/i\  gfunrf = 1.0_R8 \!csc added this here for safety in gfortran' gradc_r_b.F90
 sed -i '/CALL INTFACE_FWD/i\        wrk = 1.0_R8 \!csc added this here for safety in gfortran' b2tiner_b.F90
@@ -111,6 +104,7 @@ sed -i -e "s/REAL8ARRAY(cfvsa(0, is), r8)/REAL8(cfvsa(0, is), r8)/g" b2tqna_b.F9
 sed -i -e "s/REAL8ARRAY(cfvla(0, is), r8)/REAL8(cfvla(0, is), r8)/g" b2tqna_b.F90
 sed -i -e "s/REAL8ARRAY(cfdpa(0, is), r8)/REAL8(cfdpa(0, is), r8)/g" b2tqna_b.F90
 sed -i -e "s/REAL8ARRAY(cfdna(0, is), r8)/REAL8(cfdna(0, is), r8)/g" b2tqna_b.F90
+sed -i -e "s/REAL8(dabs1)/REAL8(dabs1, r8\/8)/g" b2tqna_b.F90
 
 sed -i -e "s/REAL8ARRAY(cfhce, r8)/REAL8ARRAY(cfhce, r8*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90 b2tqna_b.F90
 sed -i -e "s/REAL8ARRAY(cflim, r8)/REAL8ARRAY(cflim, r8*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90 b2tqna_b.F90
@@ -129,21 +123,21 @@ sed -i -e "s/REAL8(userfluxparm(0:0), r8\/8)/REAL8ARRAY(userfluxparm, r8*nstraid
 sed -i -e "s/ARRAY(targsp(0:1), 2)/ARRAY(targsp, nstraid*ntrack)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
 sed -i -e "s/ARRAY(arcend(0:1), 2)/ARRAY(arcend, nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
 sed -i -e "s/ARRAY(ompind(0:1), 2)/ARRAY(ompind, nncf*2)/g" b2mod_driver_diff.F90
-sed -i -e "s/ARRAY(cfdata(0:1), r8\/8)/ARRAY(cfdata, r8*nncf*4*DEF_NLIM\/8)/g" b2mod_driver_diff.F90
+sed -i -e "s/REAL8(cfdata(0:0), r8\/8)/REAL8ARRAY(cfdata, r8*nncf*4*DEF_NLIM\/8)/g" b2mod_driver_diff.F90
 
 sed -i -e "s/corr_lengthb(0:0)/corr_lengthb/g" b2usr_cost_function_b.F90 calc_log_prior_b.F90
 sed -i -e "s/cfnormb(0:0)/cfnormb/g" b2usr_cost_function_b.F90
+sed -i -e "s/voldb(0:0)/voldb/g" b2usr_cost_function_b.F90
 sed -i -e "s/userfluxparmb(0:0)/userfluxparmb/g" b2mod_driver_diff.F90
 sed -i -e "s/eneparb(0:0)/eneparb/g" b2mod_driver_diff.F90
 sed -i -e "s/eniparb(0:0)/eniparb/g" b2mod_driver_diff.F90
 sed -i -e "s/potparb(0:0)/potparb/g" b2mod_driver_diff.F90
 sed -i -e "s/enkparb(0:0)/enkparb/g" b2mod_driver_diff.F90
 
-sed -i -e "d/tmp(1:ic2-ic1+1) = b2rr(icf, ic1-1:ic2-1)/" b2usr_cost_function_b.F90
+sed -i -e "/tmp(1:ic2-ic1+1) = b2rr(icf, ic1-1:ic2-1)/d" b2usr_cost_function_b.F90
 sed -i -e "s/b2rr(icf, 1:n1) = tmp(1:ic2-ic1+1)/b2rr(icf, 1:n1) = b2rr(icf, ic1-1:ic2-1)/g" b2usr_cost_function_b.F90
-sed -i -e "d/ISIZE1OFDrfb2rrINb2usr_cost_function/" b2usr_cost_function_b.F90
+sed -i -e "/ISIZE1OFDrfb2rrINb2usr_cost_function/d" b2usr_cost_function_b.F90
 
-sed -i -e 's/PUBLIC :: to_struct_plasma_b,/PUBLIC :: /g' b2us_prep_diff.F90
 sed -i '/PUBLIC :: alloc_switches_b/d' b2mod_switches_diff.F90
 sed -i '/& check_values_switches_b/d' b2mod_switches_diff.F90
 sed -i -e 's/dealloc_b2mod_wall, dealloc_b2mod_wall_b/dealloc_b2mod_wall/g' b2mod_driver_diff.F90
@@ -162,34 +156,29 @@ sed -i '/& check_geometry_b/d' b2us_geo_diff.F90
 sed -i -e 's/read_b2fgmtry_b, read_b2fstate_b, write_b2fstate_b, &/read_b2fgmtry_b, read_b2fstate_b/g' b2us_io_diff.F90
 sed -i '/& write_b2fplasma_b/d' b2us_io_diff.F90
 sed -i 's/read_b2mod_par_opt, read_b2mod_par_opt_b/read_b2mod_par_opt/g' b2mod_driver_diff.F90
-sed -i -e 's/USE B2MOD_RESIDUALS_DIFF/USE B2MOD_RESIDUALS/g' b2mod_diag_diff.F90 b2us_prep_diff.F90 b2mwmv_b.F90
+sed -i -e 's/USE B2MOD_RESIDUALS_DIFF/USE B2MOD_RESIDUALS/g' b2mod_diag_diff.F90
+sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_diag_diff.F90
 sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__b.F90 b2npmo_b.F90 b2usht_b.F90 b2news_m_b.F90
-sed -i -e 's/result10 = ISGHOSTCELL(cflag(:, :, cellflag_type))/result10 = count(ISGHOSTCELL(cflag(:, :, cellflag_type)))/g' b2mod_geo2_diff.F90
-sed -i -e 's/IF (COUNT(result10) .EQ. 0) THEN/IF (result10 .EQ. 0) THEN/g' b2mod_geo2_diff.F90
-sed -i -e 's/result10 = ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type))/result10 = count(ISUNUSEDCELL(cflag(0:nx-1, 0:ny-1, cellflag_type)))/g' b2mod_geo2_diff.F90
-sed -i -e 's/fullgrid = COUNT(result10) .EQ. 0/fullgrid = result10 .EQ. 0/g' b2mod_geo2_diff.F90
  
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
-sed -i '/EXTERNAL ISGHOSTCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2mod_geo_diff.F90 b2mod_indirect_diff.F90
-sed -i '/LOGICAL :: ISGHOSTCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2mod_geo_diff.F90 b2mod_indirect_diff.F90
-sed -i '/EXTERNAL ISREALCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2mod_geo_diff.F90 b2mod_indirect_diff.F90
-sed -i '/LOGICAL :: ISREALCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2mod_geo_diff.F90 b2mod_indirect_diff.F90
-sed -i '/EXTERNAL ISBOUNDARYCELL/d' b2us_prep_diff.F90
-sed -i '/LOGICAL :: ISBOUNDARYCELL/d' b2us_prep_diff.F90
-sed -i '/EXTERNAL ISUNUSEDCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2xvsg_b.F90 b2mod_geo_diff.F90
-sed -i '/LOGICAL :: ISUNUSEDCELL/d' b2us_prep_diff.F90 b2mod_geo2_diff.F90 b2xvsg_b.F90 b2mod_geo_diff.F90
-sed -i '/EXTERNAL ISCLASSICALGRID/d' b2us_prep_diff.F90 
-sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2us_prep_diff.F90
-sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diff.F90 b2mod_geo2_diff.F90 b2mod_indirect_diff.F90
-sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diff.F90 b2mod_geo2_diff.F90 b2mod_indirect_diff.F90
+sed -i '/EXTERNAL ISGHOSTCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
+sed -i '/LOGICAL :: ISGHOSTCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
+sed -i '/EXTERNAL ISREALCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
+sed -i '/LOGICAL :: ISREALCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
+sed -i '/EXTERNAL ISUNUSEDCELL/d' b2mod_geo_diff.F90
+sed -i '/LOGICAL :: ISUNUSEDCELL/d' b2mod_geo_diff.F90
+sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diff.F90  b2mod_indirect_diff.F90
+sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diff.F90  b2mod_indirect_diff.F90
 sed -i '/EXTERNAL ISCLASSICALGRID/d' b2mod_geo_diff.F90
 sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2mod_geo_diff.F90
+sed -i '/EXTERNAL DEALLOCATEB2GRIDMAP/d' b2mod_geo_diff.F90
 sed -i '/EXTERNAL DEALLOC_B2MOD_MA28_FOR_US/d' b2mod_driver_diff.F90
 sed -i -e 's/MSTEP_NODIFF/MSTEP/g' heatdiff1D_b.F90
 sed -i -e 's/LINES2C_NODIFF/LINES2C/g' heatdiff1D_b.F90
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
+sed -i -e '/REAL(kind=r8) :: tempb3/a\  EXTERNAL DIM_FWD' b2usht_b.F90
 sed -i -e '/EXTERNAL DIM_FWD/a\  real(kind=r8) :: dim_fwd' b2usht_b.F90 b2mod_math_diff.F90
 sed -i -e '/EXTERNAL EXPU_FWD/a\  real(kind=r8) :: expu_fwd' b2sqcx_b.F90 b2sqel_b.F90 b2mod_recycle_diff.F90
 sed -i -e '/EXTERNAL INTP_2DTABLE_B, INTP_2DTABLE0_B, EXPU_FWD/a\  real(kind=r8) :: expu_fwd' b2mod_recycle_diff.F90
@@ -246,11 +235,6 @@ sed -i -e 's/USE B2MOD_NEUTR_SRC_SCALING_DIFF/USE B2MOD_NEUTR_SRC_SCALING/g' b2m
 sed -i -e 's/USE B2MOD_SOURCES_DIFF/USE B2MOD_SOURCES/g' b2mod_batch_average_diff.F90 profile_average_b.F90 b2sihs_b.F90
 sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFF/USE B2MOD_ANOMALOUS_TRANSPORT/g' b2stbc_bas_b.F90 b2stbc_spb_b.F90 b2txvspr_b.F90
 
-# remove when b2ual_* are excluded from differentiation
-sed -i -e '/INTEGER :: regiontype_yedge/d' b2mod_ual_io_grid_diff.F90
-sed -i -e '/INTEGER :: regiontype_xedge/d' b2mod_ual_io_grid_diff.F90
-sed -i -e '/INTEGER :: regiontype_cell/d' b2mod_ual_io_grid_diff.F90
-
 sed -i -e 's/MY_OUT_US_NODIFF/MY_OUT_US/g' ./*.F90
 sed -i -e 's/sort_faces/sort_faces_nodiff/g' b2wdat.F
 
@@ -298,9 +282,6 @@ sed -i -e "s/recycmb(0:nsdmax-1, nstraid)/recycmb(0:nsdmax-1, nstraid),recycmb0(
 sed -i -e "s/b2recycb(0:nsdmax-1, nstraid)/b2recycb(0:nsdmax-1, nstraid),b2recycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
 sed -i -e "s/mrecycb(0:nsdmax-1, nstraid)/mrecycb(0:nsdmax-1, nstraid),mrecycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
 sed -i -e "s/erecycb(0:nsdmax-1, nstraid)/erecycb(0:nsdmax-1, nstraid),erecycb0(0:nsdmax-1, nstraid)/g" b2mod_neutrals_namelist_diff.F90
-sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  REAL(kind=r8), SAVE :: depositionb0(nwall, ntrack), \&" b2mod_wall_diff.F90
-sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  monolayer_depositionb0(nwall, ntrack), erosionb0(nwall, ntrack), \&" b2mod_wall_diff.F90
-sed -i -e "/REAL(kind=r8), SAVE :: depositionb(/i\  & monolayer_erosionb0(nwall, ntrack), plate_timeb0(nwall), plate_areab0(nwall)" b2mod_wall_diff.F90
 
 sed -i -e "s/momparb(0:nsdmax-1, nbcd, 2)/momparb(0:nsdmax-1, nbcd, 2),momparb0(0:nsdmax-1, nbcd, 2)/g" b2mod_boundary_namelist_diff.F90
 sed -i -e "s/gammaeb/gammaeb,gammaeb0/g" b2mod_boundary_namelist_diff.F90
@@ -352,7 +333,9 @@ sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       b2mndr_cpu .AND. b2mndr_cpu .GT.
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       elapsedinit .GT. b2mndr_elapsed .AND. b2mndr_elapsed .GT. 0.0_R8)" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      ITERCOUNT = ITERCOUNT + 1" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT ITERATION ',ITERCOUNT" b2mod_driver_diff.F90
-sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'GRADIENT MAX RES ',cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      write(*,*) 'MAX ADJ RESIDUAL ',cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      gradient_res = cumul" b2mod_driver_diff.F90
+sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      gradient_iterations = ITERCOUNT" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      if (b2mndr_cpu.gt.0.0_R8) then\n        write(\*,'(1x,3(a,es11.3))') 'adj-step-cpu =',cpuval-cpustart,' elapsed ',\&" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       elapsedval-elapsedstart,' estimated remaining CPU time (s) =',\&\n\&       min((ntim-itim)\*real(cpuval-cpustart,R8),max(0.0_R8,b2mndr_cpu-\&" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       real(cpuval-cpuinit,R8)))" b2mod_driver_diff.F90
@@ -362,23 +345,29 @@ sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       (elapsedval-elapsedinit)))\n    
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\        write(\*,'(1x,3(a,es11.3))') 'adj-step-cpu =',cpuval-cpustart,' elapsed ',\&\n\&       elapsedval-elapsedstart,' estimated remaining elapsed time (s) =',\&" b2mod_driver_diff.F90
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\\&       (ntim-itim)\*(elapsedval-elapsedstart)\n      end if" b2mod_driver_diff.F90
 sed -i -e '0,/elapsedinit = EPOCH_SECONDS()/s//elapsedinit = EPOCH_SECONDS()\n    call cpu_time(cpuinit)/'  b2mod_driver_diff.F90
+sed -i -e "/diffparam_save = momparb/a\    b2recycb0 = b2recycb" b2mod_driver_diff.F90
+sed -i -e "/momparb = diffparam_save/a\    b2recycb = b2recycb0" b2mod_driver_diff.F90
+sed -i -e "s/diffparam_save12 = rtlcxb/rtlcxb0 = rtlcxb/g" b2mod_driver_diff.F90
+sed -i -e "s/diffparam_save11 = rtlqab/rtlqab0 = rtlqab/g" b2mod_driver_diff.F90
+sed -i -e "s/diffparam_save10 = rtlrab/rtlrab0 = rtlrab/g" b2mod_driver_diff.F90
+sed -i -e "s/diffparam_save9 = rtlsab/rtlsab0 = rtlsab/g" b2mod_driver_diff.F90
+sed -i -e "/      momparb = 0.D0/a\      b2recycb = 0.D0" b2mod_driver_diff.F90
+sed -i -e "s/rtlcxb = diffparam_save12/rtlcxb = rtlcxb0/g" b2mod_driver_diff.F90
+sed -i -e "s/rtlqab = diffparam_save11/rtlqab = rtlqab0/g" b2mod_driver_diff.F90
+sed -i -e "s/rtlrab = diffparam_save10/rtlrab = rtlrab0/g" b2mod_driver_diff.F90
+sed -i -e "s/rtlsab = diffparam_save9/rtlsab = rtlsab0/g" b2mod_driver_diff.F90
 
 ## insert an extra call to b2usr_cost_function within the fixed point loop, only for output purposes.
 ## This could have been done using $AD DO-NOT-DIFF pragmas but they fail for adjoint AD
-sed -i -e "/\&                  state_ext, ierr)/a\      end do" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\        write(\*, \*) 'Cost function value '//ss//': ', j(icf)" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\        write(ss, '(I1)') icf" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\      do icf=1,ncf" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\&                             state_ext, switch\%boris, j)" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\      call b2usr_cost_function_nodiff(ncv, nfc, nvx, ns, geo, mpg, state,\&" b2mod_driver_diff.F90
-sed -i -e "/\&                  state_ext, ierr)/a\!     manually inserted call to cost function, for output purposes only" b2mod_driver_diff.F90
-
-
-
-
-
-
-
+sed -i -e "/\&                  , ierr)/a\      end do" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\        write(\*, \*) 'Cost function value '//ss//': ', j(icf)" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\        if (icf.gt.9) write(ss,'(I2)') icf" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\        write(ss, '(I1)') icf" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\      do icf=1,ncf" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\&                             state_ext, switch\%boris, j)" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\      call b2usr_cost_function_nodiff(ncv, nfc, nvx, ns, geo, mpg, state,\&" b2mod_driver_diff.F90
+sed -i -e "/\&                  , ierr)/a\!     manually inserted call to cost function, for output purposes only" b2mod_driver_diff.F90
+sed -i -e "/primal_iterations = itim/i\      primal_res = res_max" b2mod_driver_diff.F90
 
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\  REAL(kind=r8), ALLOCATABLE, SAVE :: rtlrab0(:, :, :), rtlsab0(:, :, :),&" b2mod_b2cmrc_diff.F90
 sed -i -e "/INTEGER, ALLOCATABLE, SAVE :: rtyr(:)/i\& rtlqab0(:, :, :), rtlcxb0(:, :, :)" b2mod_b2cmrc_diff.F90
@@ -394,6 +383,10 @@ sed -i -e "/DEALLOCATE(rtlsab)/a\      DEALLOCATE(rtlsab0)" b2mod_b2cmrc_diff.F9
 sed -i -e "/DEALLOCATE(rtlrab)/a\      DEALLOCATE(rtlrab0)" b2mod_b2cmrc_diff.F90
 sed -i -e "/DEALLOCATE(rtlqab)/a\      DEALLOCATE(rtlqab0)" b2mod_b2cmrc_diff.F90
 sed -i -e "/DEALLOCATE(rtlcxb)/a\      DEALLOCATE(rtlcxb0)" b2mod_b2cmrc_diff.F90
+
+# add calls to write out adjoint state
+sed -i -e "0,/CALL CFOPEN(nout(5), 'b2ftrack', 'new', 'un\*formatted')/{s/CALL CFOPEN(nout(5), 'b2ftrack', 'new', 'un\*formatted')/CALL CFOPEN(nout(5), 'b2ftrack', 'new', 'un\*formatted')\n    call cfopen(nout(9), 'b2fdiffe', 'new', 'un\*formatted')/g}" b2mod_main_diff.F90
+sed -i -e "0,/!   ..save final state/{s/!   ..save final state/!   ..save final state\n    CALL write_b2fstate_diff(nout(9), ncv, nfc, ns, stateb)/g}" b2mod_driver_diff.F90
 
 sed -i "/POINTER8/d" b2mndt_b.F90 b2news__b.F90 b2sral_b.F90 b2news_m_b.F90 b2stbr_b.F90 b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i -e '/stateb1 = state0b/d' b2mod_driver_diff.F90 
@@ -550,7 +543,7 @@ sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    IF (ALLOCATED(coeffb%hci0save
 sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\      DEALLOCATE(coeffb%hci0save)" b2us_plasma_diff.F90
 sed -i -e "/IF (ALLOCATED(coeffb%cssb)) THEN/i\    END IF" b2us_plasma_diff.F90
 sed -i -e "s/dzt0b, dna_exb, dna_exbb, hce_exb, hce_exbb, hci_exb, hci_exbb)/dzt0b, dna_exb, dna_exbb, hce_exb, hce_exbb, hci_exb, hci_exbb, dna0bsave, hce0bsave, hci0bsave)/g" b2tqna_b.F90
-sed -i -e '0,/\& ncall_transp_keps/{s/\& ncall_transp_keps/\& ncall_transp_keps, last_call_transp/}' b2tqna_b.F90
+sed -i -e '0,/USE B2MOD_AD_DIFF, ONLY : my_out_folder, ncall_transp_keps/{s/USE B2MOD_AD_DIFF, ONLY : my_out_folder, ncall_transp_keps/USE B2MOD_AD_DIFF, ONLY : my_out_folder, ncall_transp_keps, last_call_transp/}' b2tqna_b.F90
 sed -i -e "/\& , hci_exbb(ncv)/a\  REAL(kind=r8) :: dna0bsave(ncv, 0:ns-1), hci0bsave(ncv), hce0bsave(ncv)" b2tqna_b.F90
 sed -i -e "/\& , hci_exbb(ncv)/a\! the sensitivity of the transport coefficient for each cell" b2tqna_b.F90
 sed -i -e "/\& , hci_exbb(ncv)/a\! csc these additional variables are added manually and are used to save" b2tqna_b.F90
@@ -595,6 +588,7 @@ sed -i -e "s/geodiff/geob/g" b2optim_*.F*
 sed -i -e "s/mpgdiff/mpgb/g" b2optim_*.F*
 sed -i -e "s/statediff/stateb/g" b2optim_*.F*
 sed -i -e "s/state_extdiff/state_extb/g" b2optim_*.F*
+sed -i -e "s/state_avgdiff/state_avgb/g" b2optim_*.F*
 sed -i -e "s/switchdiff/switchb/g" b2optim_*.F*
 sed -i -e "s/par_opt_physdiff/par_opt_physb/g" b2optim_*.F*
 sed -i -e "s/stateb, state_ext, state_extb, j, jdiff)/stateb, state_ext, state_extb, j)/g" b2optim_*.F*

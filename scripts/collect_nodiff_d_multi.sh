@@ -87,7 +87,9 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2plot_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
+cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
 cp $SOLPSTOP/modules/B2.5/src/sources/average.F .
@@ -115,14 +117,12 @@ cp $SOLPSTOP/modules/B2.5/src/utility/smin.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/smax.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/damax.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/open_file.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/lnblnk.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ipget* .
 cp $SOLPSTOP/modules/B2.5/src/utility/mstep.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/hybr.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/upwind.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/intface.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ilutern_us_solps.F .
-cp $SOLPSTOP/modules/B2.5/src/utility/trimg.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cfru* .
 cp $SOLPSTOP/modules/B2.5/src/utility/cfwuch.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/cfwuin.F .
