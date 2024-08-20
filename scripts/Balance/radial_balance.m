@@ -7,7 +7,6 @@
 % src:         An (nCv*nd) sized matrix, where nd is the number of different   %
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
-% divrad:      Radial divergences in every flux tube                           %
 % res:         The code residual                                               %
 % totname:     A cell of length 4 with strings stating the names of (1) the    %
 %              upstream flux, (2) the downstream flux, (3) the integrated      %
@@ -35,7 +34,7 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function rb = radial_balance(flux,src,divrad,res,totname,fluxname,srcname,comuse,indrad,facesup,facesdown,area,reverse,ismom,axbal,unitstr,makeplot,areaend)
+function rb = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,facesup,facesdown,area,reverse,ismom,axbal,unitstr,makeplot,areaend)
 
 % Fluxes through the ends of each flux tube present in indrad:
 fluxup = zeros(comuse.nFt,size(flux,2));
@@ -79,9 +78,6 @@ for iFt = 1:comuse.nFt % integration in flux tube
         end
     end
 end
-
-% Concatenate the radial divergences to the sources
-srcint = cat(2,divrad,srcint);
 
 % Account for reversal (normally inner-to-outer fluxes are positive but if
 % reverse==true then outer-to-inner fluxes become positive):

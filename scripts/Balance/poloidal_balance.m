@@ -4,8 +4,6 @@
 % flux:        An (nCv*nd) sized matrix, where nd is the number of different   %
 %              fluxes into which the total flux is decomposed. Comprising      %
 %              the flux from each component in the entire grid                 %
-% fluxy:       The flux in the radial direction required for the radial        %
-%              balance in case of AREATYPE = 'parallel'                        %
 % src:         An (nCv*nd) sized matrix, where nd is the number of different   %
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
@@ -34,15 +32,25 @@
 % polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
 %              on the x-axis of the poloidal balance plots. Distances are      %
 %              mapped to the first SOL ring.                                   %
+% len:         Optional argument to specify the number of fluxes that need     %
+%              to be used to correct the radial balance.                       %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) August 2024 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function area_divide = poloidal_balance(flux,fluxy,src,res,totname,fluxname,srcname,comuse,indpol,facesup_pol,facesdown_pol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist)
+function area_divide = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,facesup_pol,facesdown_pol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist,len)
+
+if nargin <= 17
+    len = size(flux,2);
+end
 
 % Summed fluxes and integrated sources and residuals:
-[fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist);
-srcint = cat(2,raddiv,srcint);
+[fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist);
+
+% Correct the radial divergences for fluxes that are already in fluxedge
+for i = 1:size(srcint,1)
+    srcint(i,1:len) = srcint(i,1:len) - fluxedge(i,1:len) + fluxedge(i+1,1:len);
+end
 
 % Account for reversal (normally inner-to-outer fluxes are positive but if
 % reverse==true then outer-to-inner fluxes become positive):

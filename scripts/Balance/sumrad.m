@@ -2,11 +2,7 @@
 % values of fluxes, sources and residuals
 % Also immediately calculate the distance from the downstream boundary for
 % plotting
-function [fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist)
-
-    if isempty(fluxy)
-        fluxy = zeros(size(flux));
-    end
+function [fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist)
 
     % Using the poloidal or parallel distance for plotting
     switch polbaldist
@@ -20,7 +16,6 @@ function [fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,re
 
     % Initialization
     fluxedge = zeros(size(flux));
-    raddiv = zeros(length(src),size(flux,2));
     srcint = zeros(size(src));
     resint = zeros(size(res));
     xdata = zeros(size(res));
@@ -65,11 +60,6 @@ function [fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,re
             iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
             for j = iFc1:iFc2
                 iFc = comuse.cvFc(j);
-                if iCv == comuse.fcCv(iFc,1)
-                    raddiv(iout-1,:) = raddiv(iout-1,:) - fluxy(iFc,:);
-                else
-                    raddiv(iout-1,:) = raddiv(iout-1,:) + fluxy(iFc,:);
-                end
                 if any(iFc_done == iFc) 
                     continue;
                 end
@@ -94,7 +84,6 @@ function [fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,re
     %% Eliminate all unnecessary elements from the fluxes, sources and residuals
     fluxedge(iout+1:end,:) = [];
     srcint(iout:end,:) = [];
-    raddiv(iout:end,:) = [];
     resint(iout:end) = [];
     xdatax(iout+1:end) = [];
 
