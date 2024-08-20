@@ -5,7 +5,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function raddiv = raddiv(fluxx,fluxy,comuse,indrad,facesup,facesdown,areatype)
 
+nCv = comuse.nCv;
 nFt = comuse.nFt;
+
+% Determine the possible area
+switch areatype
+    case 'parallel2'
+        area = comuse.cvVol.*comuse.cvHz./comuse.cvHx.*...
+            comuse.cvBb(:,1)./comuse.cvBb(:,4);
+    otherwise
+        area = ones(nCv,1);
+end
 
 raddiv = zeros(nFt,1);
 for iFt = 1:nFt
@@ -25,16 +35,22 @@ for iFt = 1:nFt
                 switch areatype
                     case 'parallel' % Radial component has to be added
                         if comuse.fcCv(iFc,1) == iCv
-                            raddiv(iFt) = raddiv(iFt) - fluxy(iFc);
+                            raddiv(iFt) = raddiv(iFt) - fluxy(iFc)/area(iCv);
                         else
-                            raddiv(iFt) = raddiv(iFt) + fluxy(iFc);
+                            raddiv(iFt) = raddiv(iFt) + fluxy(iFc)/area(iCv);
+                        end
+                    case 'parallel2' % Radial component has to be added
+                        if comuse.fcCv(iFc,1) == iCv
+                            raddiv(iFt) = raddiv(iFt) - fluxy(iFc)/area(iCv);
+                        else
+                            raddiv(iFt) = raddiv(iFt) + fluxy(iFc)/area(iCv);
                         end
                 end
             elseif comuse.cvFt(comuse.fcCv(iFc,1)) ~= comuse.cvFt(comuse.fcCv(iFc,2)) % Face at border of flux tube
                 if comuse.fcCv(iFc,1) == iCv
-                    raddiv(iFt) = raddiv(iFt) - fluxx(iFc) - fluxy(iFc);
+                    raddiv(iFt) = raddiv(iFt) - (fluxx(iFc) + fluxy(iFc))/area(iCv);
                 else
-                    raddiv(iFt) = raddiv(iFt) + fluxx(iFc) + fluxy(iFc);
+                    raddiv(iFt) = raddiv(iFt) + (fluxx(iFc) + fluxy(iFc))/area(iCv);
                 end
             end
         end

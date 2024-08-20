@@ -4,6 +4,10 @@
 % plotting
 function [fluxedge,raddiv,srcint,resint,xdata,xdatax] = sumrad(flux,fluxy,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist)
 
+    if isempty(fluxy)
+        fluxy = zeros(size(flux));
+    end
+
     % Using the poloidal or parallel distance for plotting
     switch polbaldist
         case 'parallel'

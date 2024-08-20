@@ -42,6 +42,7 @@ comuse.nomp = finfo.Dimensions(dimMatch).Length;
 comuse.cvX = ncread(filename,'cvX');
 comuse.cvY = ncread(filename,'cvY');
 comuse.cvHx = ncread(filename,'cvHx');
+comuse.cvHz = ncread(filename,'cvHz');
 comuse.vxX = ncread(filename,'vxX');
 comuse.vxY = ncread(filename,'vxY');
 comuse.cvFc = ncread(filename,'cvFc');
