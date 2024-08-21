@@ -45,7 +45,7 @@ endloop:
   if(! $?TAO) then
     set RUN_OPTIONS=""
   else
-    set RUN_OPTIONS="-tao_monitor -tao_view_solution -tao_ls_view ${TAO_OPT}"
+    set RUN_OPTIONS="-tao_monitor -tao_view_solution -tao_ls_view -tao_ls_type armijo ${TAO_OPT}"
   endif
   set KMP_AFFINITY=""
   set OMP_NUM_THREADS=1

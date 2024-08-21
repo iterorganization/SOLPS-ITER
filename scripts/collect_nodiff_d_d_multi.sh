@@ -58,6 +58,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmgs.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
 
 cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
 
@@ -143,11 +144,15 @@ cp $SOLPSTOP/modules/B2.5/src/utility/solve_covariance.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/open_file.F .
 
 cp $SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance_dv_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/erf_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_dv_dv.F .
-cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/dim_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_hessian.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mwqt_diffv_diffv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxac_diffv_diffv.F .
+cp $SOLPSTOP/modules/B2.5/src/differentiation/b2mxar_diffv_diffv.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/intp_2dtable_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/intp_3dtable_dv.F90 .
