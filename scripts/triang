@@ -291,7 +291,7 @@ while true; do {
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" "$eirlink"
                 $EIRENE > "$eirlog"
-                rm $eirlink fort.85
+                rm $eirlink fort.85 user_data.input eirene*.input.json
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
                     (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"
