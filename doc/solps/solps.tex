@@ -225,7 +225,7 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol.
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol. Please also note that the SSH key needs to be 1024 bits.
 
 It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
@@ -286,9 +286,9 @@ which will also update the files contained in the various submodules \SOLPSITER 
 \begin{verbatim}
 > solps-iter_update
 \end{verbatim}
-which will fetch and pull the main development branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
+which will fetch and pull the master branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
 
-\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
+\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone. In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
 
 The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual standalone modules, the main pieces of the SOLPS suite, i.e. {\tt DivGeo}, {\tt Carre}, {\tt Eirene} and {\tt B2.5}, although this is not recommended.
 
@@ -303,7 +303,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[MPI] Parallelization framework (optional)
 \item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
 \item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
-\item[NCAR] plotting library (available from \href{http://library.ucar.edu}{http://library.ucar.edu})
+\item[NCAR] plotting library (available from \href{https://www.ncl.ucar.edu/Download/}{https://www.ncl.ucar.edu/Download/})
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
@@ -1669,7 +1669,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
+  \item[IDS\_yaml\_replace \#pulse \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run number of pulse {\tt \#pulse} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[import\_files\_from\_convert\_wg]\index{import\_files\_from\_convert\_wg}\index{b2us} Imports and renames the files produced by {\tt b2us} in a {\tt convert} directory at the same level as the current directory to prepare the new converted wide-grid case for a run.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -4257,14 +4257,16 @@ or
 This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
-\begin{sloppypar}
+\begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
   \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
-  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
-  \item {\tt b2mndr\_shot\_number} defines the shot number
-  \item {\tt b2mndr\_run\_number} defines the run number
+  \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_pulse\_number} defines the pulse (in Access Layer 5) or shot (in Access Layer 4) number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_shot\_number}, superseded by {\tt b2mndr\_pulse\_number}.
+  \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
 \end{itemize}
 These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is initialized but {\em not} started, so that the final
@@ -4278,16 +4280,21 @@ It is possible to replace (or supplement) the IDS switch settings coming from th
 \end{verbatim}
 which will recognize, within the quotes following the {\tt -o} additional options opener, the switches:
 \begin{itemize}
-  \item {\tt -s}, {\tt --shot} The shot number
-  \item {\tt -r}, {\tt --run} The run number
-  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
+  \item {\tt -p}, {\tt --path} The path to the directory where to save the IMAS data entry (only available with Access Layer 5).
+  \item {\tt -s}, {\tt --shot} {\tt --pulse} The pulse (in Access Layer 5) or shot (in Access Layer 4) number (superseded by {\tt --path}). If used, must be positive.
+  \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
 \end{itemize}
 
-Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
+Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 4) and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER pulse or shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new pulse or shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
-After the IDS files are created, one should also run the {\tt create\_db\_entry} script, with the syntax:
+\begin{sloppypar}
+With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} is expected to be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. It should be set as part of the local environment variables in a {\tt setup.csh.local} file. Use of the {\tt user}, {\tt database}, or {\tt version} input flags allows to overwrite their values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
+\end{sloppypar}
+
+After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -7932,7 +7939,7 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 \widetilde{V}_{ay}^{\left( dia \right)} & =
 & \left\{
 \begin{matrix}
--c_{dia} \frac{T_i B_z}{z_a e}   \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
+-c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_x\partial x} \left(\frac{1}{B^2} \right), & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -7941,19 +7948,35 @@ c_{dia} \frac{T_i B_z}{z_a e} \frac{\partial}{h_y\partial y} \left(\frac{1}{B^2}
 $V_{ax}^{(AN)}=0$
 
 \begin{equation}\label{eq:V_ayAN}
-V_{ay}^{(AN)} = c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|}
+V_{ay}^{(AN)} = \left( c_{V_a^{(AN)},0} + c_{V_a^{(AN)},1} \frac{10^{20}}{n_e} + c_{V_a^{(AN)},2} D_{f,a} + c_{V_a^{(AN)},3} \frac{T_e}{16 e|B|} \right) f_{V_a^{(AN)}}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{V_a^{(AN)},x}$ coefficients correspond to the {\tt cfvla} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typically, no pinch velocity is applied:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $a=0, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
 
 $a=1, c_{V_a^{(AN)},0}=0, c_{V_a^{(AN)},1}=0, c_{V_a^{(AN)},2}=0, c_{V_a^{(AN)},3}=0$
+
+The $f_{V_a^{(AN)}}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{V_a^{(AN)},7} \ne 0$, then $f_{V_a^{(AN)}}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three pinch velocities scalings according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the pinch velocity in the core is given according to \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 5}, a pinch velocity for ions is applied between the top of the machine and the X-point on the low-field side. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vl\_alfa[1-4]}. Blobby transport in the SOL can also be added. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 9}, a blobby transport model is applied in the SOL. See code for details.
 
 \subsection{Particle transport coefficients}
 
 $
 \left\{
 \begin{matrix}
-D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle}   \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{axy}= \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{axy}=0, & z_a=0
 \end{matrix}
 \right.
@@ -7963,7 +7986,7 @@ $, where $\left \langle B^2 \right \rangle = \frac{\mathlarger{\iint \limits_{co
 \left\{
 \begin{matrix}
 \label{eq:D_axy}
-D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right)  \frac{B_z}{z_a e}, & z_a \neq 0\\
+D_{ayx} = \left( \frac{1}{B^2} - \frac{1}{\left\langle B^2\right\rangle} \right) \frac{B_z}{z_a e}, & z_a \neq 0\\
 D_{ayx} = 0, & z_a=0
 \end{matrix}
 \right.
@@ -7973,30 +7996,21 @@ D_{ayx} = 0, & z_a=0
 D_{n,a} = D^{(AN)}_{n,a}
 \end{equation}
 
-
 \begin{equation}
-D^{(AN)}_{n,a}=\left( c_{D_{n,a},0}+c_{D_{n,a},1}\frac{10^{20}}{n_e}+c_{D_{n,a},2}D_{f,a}+c_{D_{n,a},3}\frac{T_e}{16 e|B|}\right)f_D(x,y)
+D^{(AN)}_{n,a} = \left( c_{D_{n,a},0} + c_{D_{n,a},1} \frac{10^{20}}{n_e} + c_{D_{n,a},2} D_{f,a} + c_{D_{n,a},3} \frac{T_e}{16 e|B|} \right) f_{D_n,a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_D(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,D}, & \ -\delta_{1,D} \le y \le 0, x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,D}, & \ 0 \le y \le \delta_{2,D}, x \in \text{Core} \\
-\alpha_{3,D}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{D_{n,a},x}$ coefficients correspond to the {\tt cfdna} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
-$a=0,\;\;\;c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=0,\;\;\;c_{D_{n,a},3}=0$
+$ a=0,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=0,\;\;\; c_{D_{n,a},3}=0$
 
-$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\;c_{D_{n,a},1}=0,\;\;\;c_{D_{n,a},2}=1,\;\;\;c_{D_{n,a},3}=0$
+$ a=1,\;\;\; c_{D_{n,a},0}=0,\;\;\; c_{D_{n,a},1}=0,\;\;\; c_{D_{n,a},2}=1,\;\;\; c_{D_{n,a},3}=0$
 
-$D_{f,a}=c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i}
-+ \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
+$D_{f,a}$ is a diffusivity used to scale the various transport coefficients together and its coefficients $c_{D_{f,a},x}$ correspond to the {\tt cfdf0} array provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. Typical values are:\index{b2ah}\index{b2mn}
+
+$D_{f,a} = c_{D_{f,a},0} + c_{D_{f,a},1} \frac{10^{20}}{n_i} + \frac{c_{D_{f,a},2} \sqrt{\frac{T_i}{m_a}}}{c_{D_{f,a},3} n_i + c_{D_{f,a},4} n_e}$,
 
 \begin{table}[ht]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -8006,7 +8020,47 @@ $0$ & $10^2$ & $0$ & $1$ & $5 \cdot 10^{-20}$ & $1.5 \cdot 10^{-18}$ & $0$ & $0$
 $1$ & $0.3$ & $0$ & $0$ & -- & -- & $0$ & $0$ & $0$ \\ \hline
 \end{tabular}
 \end{table}
+
+If {\tt 'b2tqna\_new\_df0'} is set to {\tt '1'} (default is {\tt '0'}), then, the diffusivity for neutral species is computed as:
+
+$D_{f,a} = \frac{\sqrt{\frac{T_i}{m_a}}}{ {\left\langle \sigma v \right\rangle}_{ion} n_e + \sum \limits_{b} {\left\langle \sigma v \right\rangle}_{CX} n_{b}} + \frac{1}{\frac{n_a}{2 \times 10^{19}}}, \; \; \; z_a = 0$
+
+The $f_{D_n,a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{D_{n,a},7} \ne 0$, then $f_{D_n,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $D^{(AN)}_{n,a}$ coefficient is scaled by the same amount as $\chi_e^{(AN)}$ necessary to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 4}, the diffusion coefficient is modified in the main SOL to reproduce the model from \cite{NAULIN2005}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_alfa[1-4]} are used to modify $f_{D_n,a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $D_{n,a}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
+
 %-------- end of 3rd page -------------
+
+\begin{equation}\label{eq:D_pa}
+D_{p,a} = D^{(AN)}_{p,a}
+\end{equation}
+
+\begin{equation*}
+D^{(AN)}_{p,a} = \frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|} \right) f_{D_p,a}(x,y)
+\end{equation*}
+
+Typical values are:
+
+\begin{equation*}
+a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
+\end{equation*}
+\begin{equation*}
+a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
+\end{equation*}
+
+If $c_{D_{p,a},7} \ne 0$, then $f_{D_p,a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
+
+The flux limits for $D_{p,a}$ are applied as:
 
 \begin{equation}\label{eq:D_pax}
 \begin{matrix}
@@ -8033,21 +8087,6 @@ D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-
-\begin{equation}\label{eq:D_pa}
-D_{p,a} = D^{(AN)}_{p,a}
-\end{equation}
-
-\begin{equation*}
-D^{(AN)}_{p,a}=\frac{1}{z_a T_e + T_i} \left( c_{D_{p,a},0} + c_{D_{p,a},1} \frac{10^{20}}{n_e} + c_{D_{p,a},2} D_{f,a} + c_{D_{p,a},3} \frac{T_e}{16 e|B|}\right)
-\end{equation*}
-
-\begin{equation*}
-a=0,c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=1, c_{D_{p,a},3}=0
-\end{equation*}
-\begin{equation*}
-a=1, c_{D_{p,a},0}=0, c_{D_{p,a},1}=0, c_{D_{p,a},2}=0, c_{D_{p,a},3}=0
-\end{equation*}
 
 \section{Parallel momentum conservation equations}
 
@@ -8389,36 +8428,23 @@ m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
 %-------- end of 6th page -------------
 
 \begin{equation}\label{eq:mom_etana}
-\begin{matrix}
-\eta^{(AN)}_{a} & = m_an_a\nu_a^{visc} =
-& \left\{
-\begin{matrix}
+\eta^{(AN)}_{a} = m_a n_a \nu_a^{visc} =
 \left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a f_{\eta_a}(x,y), & z_a\neq 0 \\
-\left( c_{\eta_a,0} + c_{\eta_a,1} \frac{10^{20}}{n_e} + c_{\eta_a,2} D_{f,a} +
-c_{\eta_a,3} \frac{T_e}{16 e|B|}\right)
-m_a n_a , & z_a = 0
-\end{matrix} \right.
-\end{matrix}
+c_{\eta_a,3} \frac{T_e}{16 e|B|} \right)
+m_a n_a f_{\eta_a}(x,y)
 \end{equation}
 
-\begin{equation}
-\begin{matrix}
-f_{\eta_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,\eta_a}, & \ -\delta_{1,\eta_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,\eta_a}, & \ 0 \le y \le \delta_{2,\eta_a}, & x \in \text{Core} \\
-\alpha_{3,\eta_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-\end{equation}
+\begin{sloppypar}
+The $c_{\eta_a,x}$ coefficients correspond to the {\tt cfvsa} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. For charged species, they can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. Typical values are:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{\eta_a,0} = 0, \;\;\;  c_{\eta_a,1} = 0, \;\;\;  c_{\eta_a,2} = 1,  \;\;\;  c_{\eta_a,3} = 0$
+
+The $f_{\eta_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{\eta_a,7} \ne 0$, then $f_{\eta_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_vs\_alfa[1-4]} are used to modify $f_{\eta_a}$. See code for details.
 
 \begin{align}\label{eq:mom_dveta}
 \widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \widetilde{\eta}^{(CL)}_{ax}
@@ -8480,7 +8506,7 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \  $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}{\mathlarger{\oint} \sqrt g / h_y dx}$
+$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}{\mathlarger{\oint} \sqrt g / h_y dx}$
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -8551,7 +8577,7 @@ $
 q_{a \parallel}^{(0)} = - \frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
 $
 
-Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).
+Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).%$
 
 $
 q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{\widetilde{n}_i T_i}{e} \frac{\partial T_i}{h_y \partial y}
@@ -8567,11 +8593,13 @@ $
 \cdot
 \frac{1}{1 +
 \frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
-{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}$, \ \ \ \
+{c(y) \sum \limits^{ns-1}_{a=0} z_a^2 n_a}}
+$, \ \ \ \
+
 $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
-\left( \frac{ 4 \pi \epsilon_0 }{e²} \right)^2
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $
 
 This correction is compatible {\bf only} with plateau and banana correction ('b2trcl\_lluciani' set to '3').
@@ -8783,24 +8811,30 @@ value at $z_{eff} = 1$ of 0.71 otherwise.
 \begin{equation}\label{eq:ene_chie}
 \chi_e^{(AN)} = \left(
         c_{h_e,0} + c_{h_e,1} \frac{10^{20}}{n_e} + c_{h_e,3} \frac{T_e}{16 e|B|}
-\right) f_{h_e} (x,y)
+\right) f_{h_e}(x,y)
 \end{equation}
+
+\begin{sloppypar}
+The $c_{h_e,x}$ coefficients correspond to the {\tt cfhce} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 %-------- end of 10th page -------------
 
-$c_{h_e,0} = 1.2 , \;\; c_{h_e,1}=0, \;\;\; c_{h_e,3}=0$
+$c_{h_e,0} = 1.2 , \;\; c_{h_e,1} = 0, \;\;\; c_{h_e,3} = 0$
 
-$
-\begin{matrix}
-f_{h_e}(x,y) & =
-& \left\{
-\begin{matrix}
-\alpha_{1,h_e}, & \ -\delta_{1,h_e} \le y \le 0, & x \in \text{Core} \\
-\alpha_{2,h_e}, & \ 0 \le y \le \delta_{2,h_e}, & x \in \text{Core} \\
-\alpha_{3,h_e}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_e}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_e,7} \ne 0$, then $f_{h_e}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 1}, the $\chi_e^{(AN)}$ coefficient is scaled so as to maintain the local $T_e$ gradient at the reference transport location to {\tt set\_transport\_required\_te\_gradient}.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 3}, use parameters from the {\tt b2.transport\_models\_save.parameters} namelist to maintain a constant $\frac{\grad T_e}{\grad n_e}$ ratio at the reference location via feedback.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_te\_alfa[1-4]} are used to modify $f_{h_e}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \frac{n_{e,ref}}{n_e} \left( \frac{T_e}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_e^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:ene_dmkapexcl}
 \widetilde{\widetilde{\kappa}}_{ex}^{(CL)} = c_{\kappa_{ex}}^{(F \lim)} \widetilde{\kappa}_{ex}^{(CL)}
@@ -9102,10 +9136,16 @@ $\alpha_{ey} = \alpha^{(AN)}_{y} + \alpha^{(CL)}_{y}$
 \alpha^{(AN)}_{y} = \left(
         c_{\alpha,0} + c_{\alpha,1} \frac{10^{20}}{n_e} +
         c_{\alpha,3} \frac{T_e}{16 e |B|}
-\right) n_e \sqrt{\frac{e}{T_e}}
+\right) n_e \sqrt{\frac{e}{T_e}} f_\alpha(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{\alpha,x}$ coefficients correspond to the {\tt cfalf} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
 $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
+
+If $c_{\alpha,7} \ne 0$, then $f_\alpha$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\alpha^{(CL)}_{y} = 0$
 
@@ -9213,7 +9253,6 @@ r_{I_a} n_e n_a \left( \frac{m_a + m_{a+1}}4 \right)
 Atom heat source due to recombination
 
 %-------- end of 14th page -------------
-
 
 \begin{equation}
 \label{eq:eni_QRi}
@@ -9333,26 +9372,26 @@ V_{h_a} = \sqrt{\frac{2 T_i}{m_a}}
 \begin{equation}\label{eq:eni_chiAN}
 \chi_a^{(AN)} = \left(
 c_{h_a,0} + c_{h_a,1} \frac{10^{20}}{n_e} + c_{h_a,2} D_{f,a} + c_{h_a,3}\frac{T_e}{16 e|B|}
-\right) f_{h_a} (x,y)
+\right) f_{h_a}(x,y)
 \end{equation}
 
+\begin{sloppypar}
+The $c_{h_a,x}$ coefficients correspond to the {\tt cfhci} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
 
 $ a = 0, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.4,  \;\;\;  c_{h_a,3} = 0$
 
 $ a = 1, \;\;\;  c_{h_a,0} = 0, \;\;\;  c_{h_a,1} = 0, \;\;\;  c_{h_a,2} = 1.2,  \;\;\;  c_{h_a,3} = 0$
 
-$
-\begin{matrix}
-f_{h_a}(x,y) & =
-& \left\{
-\begin{matrix}
-1, & \ z_a = 0 \\
-\alpha_{1,h_a}, & \ -\delta_{1,h_a} \le y \le 0, & x \in \text{Core}, z_a \neq 0 \\
-\alpha_{2,h_a}, & \ 0 \le y \le \delta_{2,h_a}, & x \in \text{Core} \\
-\alpha_{3,h_a}, & \ x,y \in \text{PFR} \cup \text{SOL}
-\end{matrix} \right.
-\end{matrix}
-$
+The $f_{h_a}$ function is an optional modifier, governed by the value of {\tt b2tqna\_user\_transport}. If $c_{h_a,7} \ne 0$, then $f_{h_a}$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 2}, an ELM model is applied, with three levels of transport scaling according to radial location and alternating between inter-ELM and intra-ELM values. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 6}, a transport barrier can be applied in a parametric fashion, according to the value of {\tt b2tqna\_itype}, and the coefficients {\tt b2tqna\_ti\_alfa[1-4]} are used to modify $f_{h_a}$. See code for details.
+
+If {\tt b2tqna\_user\_transport} is {\tt 7}, the disruption model is applied, adding $1000 f_{quench} \sqrt{\frac{m_e}{m_a}} \frac{n_{a,ref}}{n_a} \left( \frac{T_i}{1000 \text{eV}} \right)^{\frac{5}{2}} \left( \frac{h_y}{h_{y,ref}} \right)^2$ to $\chi_a^{(AN)}$.
+
+If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is applied. See code for details.
 
 \begin{equation}\label{eq:eni_dtkapixCL}
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
@@ -9897,20 +9936,20 @@ $\sigma^{(AN)}$  depends on {\tt 'b2tqna\_model\_sig'}.
 If {\tt 'b2tqna\_model\_sig'} is {\tt '0'}, then:
 \begin{equation}\label{eq:pot_sigan0}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e n_e,
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e n_e f_\sigma(x,y),
 \end{equation}
 
 otherwise:
 
 \begin{equation}\label{eq:pot_sigan}
 \sigma^{(AN)} = \left(
-        c_{\sigma_a,0} + c_{\sigma_a,1} \frac{10^{20}}{n_e} +
-        c_{\sigma_a,3} \frac{T_e}{16 e|B|} +
-        c_{\sigma_a,4} e^{-c_{\sigma_a,5}\left(\frac{y}{L\left(x\right)}\right)^2}
-\right) e \widetilde n_e
+        c_{\sigma^{(AN)},0} + c_{\sigma^{(AN)},1} \frac{10^{20}}{n_e} +
+        c_{\sigma^{(AN)},3} \frac{T_e}{16 e|B|} +
+        c_{\sigma^{(AN)},4} e^{-c_{\sigma^{(AN)},5}\left(\frac{y}{L\left(x\right)}\right)^2}
+\right) e \widetilde n_e f_\sigma(x,y)
 \end{equation}
 
 where $\widetilde n_e$ is the electron density at the location where the innermost flux surface crosses the outer midplane.
@@ -9919,7 +9958,13 @@ where $\widetilde n_e$ is the electron density at the location where the innermo
 L\left( x \right) = \int \limits_0^{y_{out}} h_y \left( x,y \right) ~ dy
 \end{equation*}
 
-$c_{\sigma_a,0} = 10^{-6} \div 10^{-3}$, $c_{\sigma_a,1}=0$, $c_{\sigma_a,3}=0$
+\begin{sloppypar}
+The $c_{\sigma^{(AN)},x}$ coefficients correspond to the {\tt cfsig} array elements provided in the {\tt b2ah.dat} file, or, if present, in the {\tt b2cmpt} block of the {\tt b2mn.dat} file. They can be overwritten by means of the {\tt b2.transport.parameters} file, see Section~\ref{lab:b2:transport:parameters}. A typical choice may be:\index{b2ah}\index{b2mn}\index{b2.transport.parameters}
+\end{sloppypar}
+
+$c_{\sigma^{(AN)},0} = 10^{-6} \div 10^{-3}$, $c_{\sigma^{(AN)},1} = 0$, $c_{\sigma^{(AN)},3} = 0$
+
+If $c_{\sigma^{(AN)},7} \ne 0$, then $f_\sigma$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\sigma^{(CL)}_{y} = 0$
 
@@ -17799,7 +17844,7 @@ surf
 
 mach
 -1.2 1.2 17 clvn
-'rainbow_16' cltb 'rainbow palette' extl
+'rainbow_16.pal' cltb 'rainbow palette' extl
 surf
 \end{verbatim}
 
@@ -18394,7 +18439,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
-\item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
 \item[GGD\_MAJOR\_VERSION] \index{GGD\_MAJOR\_VERSION} Major version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
@@ -18409,6 +18453,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
+\item[LEGACYCOMP] \index{LEGACYCOMP} To be used for legacy compilers not compatible with {\tt Fortran 2003}
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -18813,26 +18858,6 @@ DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
-F2003 & convert/b2cdftallies2mds.F \\
-F2003 & convert/conv\_surface\_models.F \\
-F2003 & convert/conv\_triangles.F \\
-F2003 & convert/write\_triangles.F \\
-F2003 & modules/b2mod\_boundary\_namelist.F \\
-F2003 & modules/b2mod\_mdsplus.F \\
-F2003 & modules/b2mod\_neutrals\_namelist.F \\
-F2003 & modules/b2mod\_running\_average.F \\
-F2003 & modules/b2mod\_user\_namelist.F \\
-F2003 & modules/b2us\_feedback.F \\
-F2003 & modules/b2us\_plasma.F \\
-F2003 & modules/b2us\_prep.F \\
-F2003 & postprocessing/b2ye.F \\
-F2003 & preprocessing/b2agdr.F \\
-F2003 & preprocessing/b2aidr.F \\
-F2003 & test/check\_b2\_output.F90 \\
-F2003 & user/out\_for\_plot.F \\
-F2003 & utility/calc\_err.F \\
-F2003 & utility/cfopen.F \\
-F2003 & utility/mds\_routines.F \\
 F77 & user/b2file.F \\
 FIXED\_POINT & driver/b2mod\_driver.F \\
 G95 & utility/mds\_routines.F \\
@@ -18912,6 +18937,25 @@ JET & ids/b2\_ual\_write.F90 \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
+LEGACYCOMP & convert/b2cdftallies2mds.F \\
+LEGACYCOMP & convert/conv\_surface\_models.F \\
+LEGACYCOMP & convert/conv\_triangles.F \\
+LEGACYCOMP & convert/write\_triangles.F \\
+LEGACYCOMP & modules/b2mod\_batch\_average.F \\
+LEGACYCOMP & modules/b2mod\_boundary\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_mdsplus.F \\
+LEGACYCOMP & modules/b2mod\_neutrals\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_par\_opt.F \\
+LEGACYCOMP & modules/b2mod\_running\_average.F \\
+LEGACYCOMP & modules/b2us\_feedback.F \\
+LEGACYCOMP & modules/b2us\_plasma.F \\
+LEGACYCOMP & modules/b2us\_prep.F \\
+LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & test/check\_b2\_output.F90 \\
+LEGACYCOMP & user/out\_for\_plot.F \\
+LEGACYCOMP & utility/calc\_err.F \\
+LEGACYCOMP & utility/cfopen.F \\
+LEGACYCOMP & utility/mds\_routines.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
@@ -18983,6 +19027,8 @@ NAGFOR & transport/b2tvskt.F \\
 NAGFOR & transport/b2tvspr.F \\
 NAGFOR & transport/b2tvsq.F \\
 NAGFOR & utility/calc\_atomic\_data.F \\
+NAGFOR & utility/smax.F \\
+NAGFOR & utility/smin.F \\
 NCAR4 & b2plot/end\_page.F \\
 NCAR4 & b2plot/initialize\_plotting.F \\
 NCAR4 & b2plot/terminate\_plotting.F \\
@@ -19241,13 +19287,16 @@ B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/wneutral\_fluxes.F \\
-F2003 & output/outidlgeo.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
+LEGACYCOMP & assistant/eirmod\_algebra.f \\
+LEGACYCOMP & file-handling/wrplam\_shrt.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.f \\
+LEGACYCOMP & output/outildsrf.f \\
+LEGACYCOMP & particle-tracing/eirmod\_samsrf.f \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & main-routines/eirene.f \\

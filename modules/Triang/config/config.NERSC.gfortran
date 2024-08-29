@@ -6,7 +6,7 @@ LD_GKS   ?= -L${GLI_HOME} -lgks
 
 CPP = cpp -traditional
 
-FC = ftn
+FC ?= ftn
 ifdef SOLPS_DEBUG
 FCOPTS = -Wall -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 endif

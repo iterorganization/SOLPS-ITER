@@ -1,7 +1,10 @@
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FFLAGS  += -g -C -traceback -debug all -check all
+FFLAGS  += -g -C -traceback -debug all -check all -diag-disable:10440 -diag-disable:10182
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FFLAGS  += -check nouninit
+endif
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FFLAGS  += -vec_report0
@@ -14,7 +17,7 @@ ifdef SOLPS_OPENMP
    FFLAGS   += -openmp
   endif
  else
-  ifeq ($(FC),mpiifort)
+  ifneq (,$(findstring mpiifort,${FC}))
    ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
     FFLAGS  += -qopenmp
    else

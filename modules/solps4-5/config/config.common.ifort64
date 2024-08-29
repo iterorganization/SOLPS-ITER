@@ -14,8 +14,15 @@ COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut 
 
 ifdef SOLPS_DEBUG
 FCOPTS += -g -C -debug all
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FCOPTS += -diag-disable:10440
+endif
+else
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FCOPTS += -O0
 else
 FCOPTS += -O3
+endif
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FCOPTS += -vec_report0

@@ -22,6 +22,13 @@ LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
 #
+# Provide compiler
+#
+
+FC         = ftn
+CC         = cc
+
+#
 # Preprocessor options
 #
 

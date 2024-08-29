@@ -6,7 +6,7 @@ NODENAME  ?= `hostname`
 
 CPP = /lib/cpp -traditional
 
-FC = gfortran
+FC ?= gfortran
 ifndef SOLPS_DEBUG
 FCOPTS  += -fdefault-real-8
 endif

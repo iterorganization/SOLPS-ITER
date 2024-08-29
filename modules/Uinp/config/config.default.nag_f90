@@ -3,10 +3,11 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
+MPI_FC  ?= mpif90
 ifdef USE_MPI
-FC       = mpif90
+FC       = ${MPI_FC}
 else
-FC       = nagfor
+FC      ?= nagfor
 endif
 
 ifdef SOLPS_DEBUG

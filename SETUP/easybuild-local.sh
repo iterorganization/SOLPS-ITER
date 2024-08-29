@@ -127,7 +127,7 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh # defaults to foss modules
     SETUP/easybuild-local.sh --imas-foss 
     SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.10.4-GCC-10.2.0-DD-3.38.1.eb
+    SETUP/easybuild-local.sh GGD-1.11.0-GCC-10.2.0-DD-3.38.1.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
     SETUP/easybuild-local.sh Viz-2.8.0-foss-2020b.eb --robot
     SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
@@ -547,7 +547,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.40.1}
-TAG_AL=${TAG_AL:-4.11.9}
+TAG_AL=${TAG_AL:-5.1.0}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
@@ -686,13 +686,13 @@ IMAS_INTEL_2020b_MODULES="
 # IMAS modules are built separately and listed here for check only
 IMAS_2020b_APPLICATIONS="
     IMAS/${TAG_DD}-${TAG_AL}-2020b
-    AMNS/1.4.0-foss-2020b-DD-${TAG_DD}
-    GGD/1.10.4-GCC-10.2.0-DD-${TAG_DD}
+    AMNS/1.5.0-GCC-10.2.0-DD-${TAG_DD}
+    GGD/1.11.0-GCC-10.2.0-DD-${TAG_DD}
     Viz/2.8.0-foss-2020b
     SimDB/0.7.1-foss-2020b
     IMAS/${TAG_DD}-${TAG_AL}-2020b
-    GGD/1.10.4-intel-2020b-DD-${TAG_DD}
-    AMNS/1.4.0-intel-2020b-DD-${TAG_DD}
+    GGD/1.11.0-iccifort-2020.4.304-DD-${TAG_DD}
+    AMNS/1.5.0-iccifort-2020.4.304-DD-${TAG_DD}
     Viz/2.8.0-intel-2020b
     SimDB/0.7.1-intel-2020b
     "

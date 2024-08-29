@@ -29,6 +29,9 @@ setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 module load texlive
 module load paraview/5.10.0
 
+# Compiler
+setenv FC gfortran
+
 # Set environment variables
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then

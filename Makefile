@@ -116,15 +116,15 @@ DEFAULT: solps
 #----------------------
 
 
-solps: divgeo b25eirene carre uinp triang amds sonnet-light manual
+solps: divgeo b25eirene carre uinp triang amds manual
 
 solps_nox: nox
 
-solps_openmp: divgeo b25eirene_openmp carre uinp_openmp triang amds_openmp sonnet-light manual
+solps_openmp: divgeo b25eirene_openmp carre uinp_openmp triang amds_openmp manual
 
-solps_mpi: divgeo b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi sonnet-light manual
+solps_mpi: divgeo b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi manual
 
-solps_openmp_mpi: divgeo b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
+solps_openmp_mpi: divgeo b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
 
 solps_mpi_openmp: solps_openmp_mpi
 
@@ -138,27 +138,33 @@ nox_openmp_mpi: divgeo_nox b25eirene_nox_openmp_mpi carre_nox uinp_nox_openmp_mp
 
 nox_mpi_openmp: nox_openmp_mpi
 
-all: divgeo b25 eirene b25eirene carre uinp triang amds sonnet-light manual
+all: divgeo b25 eirene b25eirene carre uinp triang amds manual
 
 all_nox: divgeo_nox b25_nox eirene_nox b25eirene_nox carre_nox uinp_nox triang_nox manual
 
-all_openmp: divgeo b25_openmp eirene b25eirene_openmp carre uinp_openmp triang amds_openmp sonnet-light manual
+all_openmp: divgeo b25_openmp eirene b25eirene_openmp carre uinp_openmp triang amds_openmp manual
 
-all_mpi: divgeo b25_mpi eirene_mpi b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi sonnet-light manual
+all_mpi: divgeo b25_mpi eirene_mpi b25eirene_mpi carre uinp_mpi triang_mpi amds_mpi manual
 
 all_nox_openmp: divgeo_nox b25_nox_openmp eirene_nox b25eirene_nox_openmp carre_nox uinp_nox_openmp triang_nox manual
+
+all_openmp_nox: all_nox_openmp
 
 all_nox_mpi: divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi carre_nox uinp_nox_mpi triang_nox_mpi manual
 
 all_mpi_nox: all_nox_mpi
 
-all_openmp_mpi: divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi sonnet-light manual
+all_openmp_mpi: divgeo b25_openmp_mpi eirene_mpi b25eirene_openmp_mpi carre uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
 
 all_mpi_openmp: all_openmp_mpi
 
 all_nox_openmp_mpi: divgeo_nox b25_nox_openmp_mpi eirene_nox_mpi b25eirene_nox_openmp_mpi carre_nox uinp_nox_openmp_mpi triang_nox_mpi manual
 
 all_nox_mpi_openmp: all_nox_openmp_mpi
+
+all_openmp_mpi_nox: all_nox_openmp_mpi
+
+all_mpi_openmp_nox: all_nox_openmp_mpi
 
 carre:
 	cd modules/Carre2; ${MAKE}
@@ -243,15 +249,23 @@ b25_nox_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
 
+b25_openmp_nox: b25_nox_openmp
+
 b25_nox_mpi:
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
+
+b25_mpi_nox: b25_nox_mpi
 
 b25_nox_openmp_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
 
 b25_nox_mpi_openmp: b25_nox_openmp_mpi
+
+b25_mpi_openmp_nox: b25_nox_openmp_mpi
+
+b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
 b25_all_mpi:
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
@@ -343,7 +357,8 @@ b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 uinp: b25eirene
 	cd modules/Uinp; ${MAKEO}
 
-uinp_nox: uinp
+uinp_nox: b25eirene_nox
+	cd modules/Uinp; ${MAKEO}
 
 uinp_openmp: b25eirene_openmp
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
@@ -356,13 +371,24 @@ uinp_openmp_mpi: b25eirene_openmp_mpi
 
 uinp_mpi_openmp: uinp_openmp_mpi
 
-uinp_nox_openmp: uinp_openmp
+uinp_nox_openmp: b25eirene_nox_openmp
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
-uinp_nox_mpi: uinp_mpi
+uinp_openmp_nox: uinp_nox_openmp
 
-uinp_nox_openmp_mpi: uinp_openmp_mpi
+uinp_nox_mpi: b25eirene_nox_mpi
+	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
-uinp_nox_mpi_openmp: uinp_openmp_mpi
+uinp_mpi_nox: uinp_nox_mpi
+
+uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+
+uinp_nox_mpi_openmp: uinp_nox_openmp_mpi
+
+uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
+
+uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
 triang: eirene_nox
 	cd modules/Triang; ${MAKE}
@@ -398,7 +424,7 @@ amds_openmp_mpi:
 	$(warning AMDS will not be compiled because Motif library file is not installed.)
 endif
 
-fxdr:
+fxdr: sonnet-light
 	cd modules/fxdr; ${MAKEO}
 
 sonnet-light:
@@ -415,7 +441,7 @@ nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
-b2sxdr:
+b2sxdr: sonnet-light
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
@@ -573,7 +599,6 @@ VERSION:
 	cd modules/DivGeo; ${MAKE} VERSION
 	cd modules/Uinp;   ${MAKE} VERSION
 
-
 # Debug targets
 #--------------
 
@@ -603,15 +628,15 @@ nox_build_mpi_openmp: nox_build_openmp_mpi
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_sonnet-light clean_manual clean_amds
+clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_manual clean_amds
 
 clean_solps_nox: clean_nox
 
-clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_sonnet-light clean_manual clean_amds
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_manual clean_amds
 
-clean_solps_openmp: clean_carre clean_divgeo clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_sonnet-light clean_manual clean_amds
+clean_solps_openmp: clean_carre clean_divgeo clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
 
-clean_solps_openmp_mpi: clean_carre clean_divgeo clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_sonnet-light clean_manual clean_amds
+clean_solps_openmp_mpi: clean_carre clean_divgeo clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
 
 clean_solps_mpi_openmp: clean_solps_openmp_mpi
 
@@ -651,9 +676,13 @@ clean_all_mpi: clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25
 
 clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
 
+clean_all_mpi_nox: clean_all_nox_mpi
+
 clean_all_openmp: clean_carre clean_divgeo clean_b25_openmp clean_eirene clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
 
 clean_all_nox_openmp: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp clean_eirene_nox clean_b25eirene_nox_openmp clean_uinp_openmp clean_triang_nox clean_manual
+
+clean_all_openmp_nox: clean_all_nox_openmp
 
 clean_all_openmp_mpi: clean_carre clean_divgeo clean_b25_openmp_mpi clean_eirene_mpi clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
 
@@ -662,6 +691,10 @@ clean_all_nox_openmp_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp_
 clean_all_mpi_openmp: clean_all_openmp_mpi
 
 clean_all_nox_mpi_openmp: clean_all_nox_openmp_mpi
+
+clean_all_openmp_mpi_nox: clean_all_nox_openmp_mpi
+
+clean_all_mpi_openmp_nox: clean_all_nox_openmp_mpi
 
 clean_carre:
 	cd modules/Carre2; ${MAKE} clean
