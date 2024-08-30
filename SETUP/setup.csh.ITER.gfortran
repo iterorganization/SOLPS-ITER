@@ -37,9 +37,10 @@ if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "Cent
   setenv SYSNAME amd64_sles15
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0
 else
-  module load IMAS/3.41.0-foss-2023b
-  module load GGD/1.11.1-foss-2023b-DD-3.41.0
-  module load AMNS/1.5.0-foss-2023b-DD-3.41.0
+  module load IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0
+  module load IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0
+  module load GGD/1.12.0-foss-2023b-DD-3.42.0
+  module load AMNS/1.5.1-foss-2023b-DD-3.42.0
   module load Viz/2.8.0-foss-2023b
   module load ToFu/1.7.9-gfbf-2023b
   module load xarray/2024.5.0-gfbf-2023b
