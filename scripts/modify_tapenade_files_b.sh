@@ -168,8 +168,8 @@ sed -i '/EXTERNAL ISREALCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
 sed -i '/LOGICAL :: ISREALCELL/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
 sed -i '/EXTERNAL ISUNUSEDCELL/d' b2mod_geo_diff.F90
 sed -i '/LOGICAL :: ISUNUSEDCELL/d' b2mod_geo_diff.F90
-sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diff.F90  b2mod_indirect_diff.F90
-sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diff.F90  b2mod_indirect_diff.F90
+sed -i '/EXTERNAL ISINDOMAIN/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
+sed -i '/LOGICAL :: ISINDOMAIN/d' b2mod_geo_diff.F90 b2mod_indirect_diff.F90
 sed -i '/EXTERNAL ISCLASSICALGRID/d' b2mod_geo_diff.F90
 sed -i '/LOGICAL :: ISCLASSICALGRID/d' b2mod_geo_diff.F90
 sed -i '/EXTERNAL DEALLOCATEB2GRIDMAP/d' b2mod_geo_diff.F90
@@ -191,10 +191,7 @@ sed -i -e 's/SFILL_FWD(n, sa, sab, sx, sxb, incx)/SFILL_FWD(n, sa, sx, sxb, incx
 sed -i -e 's/SIZE(sx, 1)+1/n/g' sfill_b.F90
 sed -i -e 's/SFILL_FWD(n, sa, sab, sx, sxb, incx)/SFILL_FWD(n, sa, sx, sxb, incx)/g' sfill_b.F90
 sed -i -e '0,/REAL(kind=r8) :: sab/{/REAL(kind=r8) :: sab/d}' sfill_b.F90
-#sed -i -e '0,/EXTERNAL HYBR/{s/EXTERNAL HYBR/EXTERNAL HYBR, hybr_fwd/}' calccoef_b.F90
-#sed -i -e '0,/REAL(kind=r8) :: HYBR/{s/REAL(kind=r8) :: HYBR/REAL(kind=r8) :: HYBR, hybr_fwd/}' calccoef_b.F90
-#sed -i -e '0,/EXTERNAL UPWIND, HYBR/{s/EXTERNAL UPWIND, HYBR/EXTERNAL UPWIND, HYBR, hybr_fwd, upwind_fwd/}' calcflow_b.F90
-#sed -i -e '0,/REAL(kind=r8) :: HYBR, UPWIND/{s/REAL(kind=r8) :: HYBR, UPWIND/REAL(kind=r8) :: HYBR, UPWIND, hybr_fwd, upwind_fwd/}' calcflow_b.F90
+
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diff.F90
 sed -i '/TRIM_B/d' b2mod_main_diff.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_b.F90 
