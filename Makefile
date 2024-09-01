@@ -1069,6 +1069,7 @@ clean_b2sxdr:
 
 clean_manual:
 	cd doc/solps; ${MAKE} clean
+	cd modules/Eirene; ${MAKE} -f config/Makefile clean_manual
 
 # help
 help:
