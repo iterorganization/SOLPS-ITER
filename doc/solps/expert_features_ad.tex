@@ -14,7 +14,7 @@ The website of {\tt Tapenade} provides a manual for this tool as well as an exte
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To start, the user needs to make sure all code changes they need have been correctly implemented and the code has been re-compiled in standalone {\tt B2.5} mode, as {\tt Tapenade} needs the pre-processed source files compiled in {\tt B2.5/builds/standalone.\${HOST\_NAME}.\${COMPILER}}. Additionally, the environment variable {\tt \$TAPENADEDIR} has to correctly point to the {\tt Tapenade} installation folder. Be aware that {\tt Tapenade} requires a specific Java installation and that the additional environment variable {\tt \$JAVA\_HOME} must be correctly set, see \cite{tapesite} for details.
+To start, the user needs to make sure all code changes they need have been correctly implemented and the code has been re-compiled in standalone {\tt B2.5} mode, as {\tt Tapenade} needs the pre-processed source files compiled in {\tt B2.5/builds/standalone.\${HOST\_NAME}.\${COMPILER}}. It is also recommended to compile the code in fixed-point form, see \ref{sec:runningTapeAdj}, although it is not strictly necessary as for adjoint AD. Additionally, the environment variable {\tt \$TAPENADEDIR} has to correctly point to the {\tt Tapenade} installation folder. Be aware that {\tt Tapenade} requires a specific Java installation and that the additional environment variable {\tt \$JAVA\_HOME} must be correctly set, see \cite{tapesite} for details.
 
 Once the above requirements have been fulfilled, the user can start differentiating the code. The current implementation requires the user to create the folder {\tt \$SOLPSTOP/modules/B2.5/build/differentiated\_files.diff\_d} where the compiler will look for the differentiated (diff'ed) source files. The actual differentiation can be done in any other folder/location but then the user has to move the obtained source files to there. From experience, the differentiation failed due to Java memory issues when {\tt Tapenade} was run interactively on the terminal. As such, it is advised to submit it as a job. In this case, experience with the VSC cluster (KU-Leuven, Belgium) has shown that 5 processes were apparently needed for successful differentiation, or with enough memory (\(\sim \)10~GB).
 
@@ -29,15 +29,25 @@ $TAPENADEDIR/bin/tapenade -d -O . -head "b2mn_step(J)/(enepar)" \
 The different options and their meaning is listed below:
 \begin{description}
   \item {\tt -d} This flag tells {\tt Tapenade} to use the tangent AD mode
+  
   \item {\tt -O .} This flag indicates that the output directory is the current directory
+  
   \item {\tt -head "b2mn\_step(J)/(enepar)"} This flag tells {\tt Tapenade} which is the head/root subroutine for the differentiation and the dependent and independent variables. In the current implementation the head routine should be {\tt b2mn\_step}. Within the first parentheses it is indicated which is/are the dependent variables, i.e. the outputs or cost function {\tt J}. Note that again, in the current implementation, the dependent variable should be {\tt J}. Finally, within the second parentheses are indicated the independent variables, i.e. the input parameters. In this example it is the energy boundary condition parameter, but other common options are the anomalous transport coefficients e.g. {\tt parm\_dna}, {\tt parm\_hce}, and {\tt parm\_hci}. Note also that even though these are arrays, it is not necessary to specify the array elements, this will be done at a later stage, see Section~\ref{sec:diff_files}. Finally, be aware that the specified inputs/outputs must be arguments of the head subroutine or must be {\em visible} within the routine using modules.
+  
   \item {\tt `collect\_tapenade\_files.sh`} This script is run in order to pass to {\tt Tapenade} the names of the necessary source files to be differentiated. These source files must be the {\tt *.f} and {\tt *.f90} files which have been produced by the {\tt cpp} preprocessor and this is why the user needs to re-compile the code first.
+  
   \item {\tt -ext \$SOLPSTOP/modules/B2.5/src/differentiation/solpsGeneralLib} This flag provides the description of several functions/subroutines which have been excluded from the differentiation but for which {\tt Tapenade} needs to know the shape, i.e. number of arguments and their type. Additionally, information on the dependencies between arguments can also be specified. The user is referred to the {\tt Tapenade} website or manual for additional information.
+  
   \item {\tt -context} This flag allows {\tt Tapenade} to search dependencies outside the head routine, for example input variables defined within a module. It also introduces some code lines around the head routine which enable verification of derivatives, see Section~\ref{sec:diff_files}.
+  
   \item {\tt -java "-mx30g"} This flag requires the maximum heap memory for Java to be set to 30~GB. This number came from experience with the code and may change depending on the installation and/or the {\tt B2.5} version.
+  
   \item {\tt -noisize} This flag is optional but it is recommended to switch it on. If not, {\tt Tapenade} will not try to assign the size of newly introduced variables, with the drawback that the user has to do so routine by routine (although the use of a module {\tt DIFFSIZES.F} can partially simplify the procedure). Note that, notwithstanding enabling this option, {\tt Tapenade} will still not provide the size of a few variables. These, for the current implementation, are always found in the same subroutines and as such their size is automatically specified by an {\it ad hoc} script, see Section~\ref{sec:diff_files}.
+  
   \item {\tt -msglevel 30} This flag is optional and controls the amount of output messages that {\tt Tapenade} issues. It is advised to always use it when new implementations are being built.
+  
   \item {\tt -html} This flag is optional and asks {\tt Tapenade} to produce an additional set of {\tt html} files which can be interactively opened with any browser. This allows an easier inspection of the diff'ed subroutines and eventually of errors.
+  
   \item {\tt -r8} This flag is required to specify that the size for reals is 8 bytes (and therefore 16 for double precision reals). See \cite{tapesite} for details.
 \end{description}
 
@@ -76,6 +86,7 @@ The automated part will perform the following actions, which the user can take i
       parm_dnad(1) = 1.0_R8
 \end{verbatim}
     \end{description}
+  
   \item Obtain in output the cost function gradient. The script modifies {\tt b2mndr\_1\_d} within {\tt b2mod\_driver\_diff.F90}. Right after the call to {\tt b2usr\_cost\_function\_d}, the cost function value is printed in a {\tt FOR}-loop, and just after that a few new lines are added to print in the log tile the cost function gradient.
 \end{itemize}
 
@@ -121,8 +132,9 @@ The first difference wrt to the normal tangent AD mode is that now the diff'ed s
 \begin{sloppypar}
 Tangent vector mode requires scripts similar to those for the normal tangent mode, but their principles remain the same. Therefore, the user can follow the same procedure described in Section~\ref{sec:diff_files}, this time executing the script {\tt postprocess\_tapenade\_tgt\_multi.sh} in the directory {\tt differentiated\_files.diff\_d}. This will:
 \begin{itemize}
-  \item Initialize in {\tt b2mn\_d.F90} the variable {\tt nbdirs} to a specific default integer. This must be done before calling the fist subroutine ({\tt b2mn\_init\_dv}).
-  \item Initialize the diff'ed input parameters.They have now an extra first dimension, that must not clash with the other parameters. For the default example provided this means:
+  \item Initialize in {\tt b2mn\_d.F90} the variable {\tt nbdirs} to a specific default integer based on {\tt b2.optimization.parameters}.
+  
+  \item Initialize the diff'ed input parameters by inserting a call in {\tt b2mn\_dv.F90} to the ad-hoc routine {\tt set\_tgt\_perturbation.F}. This will automatically initialize the parameters according to what is specified in {\tt b2.optimization.parameters}, and write in {\tt run.log} which parameters are being looked at. The diff'ed inputs have now an extra first dimension, that must not clash with the other parameters. For example, this means:
     \begin{verbatim}
       enepard(1,1,1) = 1.0_R8
       enipard(2,1,1) = 1.0_R8
@@ -131,7 +143,11 @@ Tangent vector mode requires scripts similar to those for the normal tangent mod
       parm_dnad(5,1) = 1.0_R8
     \end{verbatim}
     In this way, the first direction will evaluate the cost function gradient wrt {\tt ENEPAR(1,1)}, the second wrt {\tt ENIPAR(1,1)}, and so on. It is instead WRONG to initialize this way: {\tt enepard(1,1,1) = 1.0\_R8} and {\tt parm\_hced(1) = 1.0\_R8}. In this case the first derivative direction would yield the sum $\frac{\partial J}{\partial \mathrm{enepar}} + \frac{\partial J}{\partial \mathrm{cfhce}}$.
-  \item Modify the printout of the cost function gradient in {\tt b2mod\_driver\_diffv.F90} after the call to {\tt b2usr\_cost\_function\_dv}. In case of errors, the user needs to wrap the {\tt DO}-loop with the additional loop on {\tt nbdirs} and modify the printout such that {\tt Jd(idir,icf)} is correctly addressed.
+  
+  \item If the code has been differentiated in fixed-point form, insert an extra call to {\tt b2usr\_cost\_function\_dv} within the fixed-point loop in {\tt b2mod\_driver\_diffv.F90}, for output monitoring.
+  
+  \item Allow the printout of the cost function gradient in {\tt b2mod\_driver\_diffv.F90} by calling the ad-hoc routine {\tt print\_tgt\_gradient} after the call to {\tt b2usr\_cost\_function\_dv}.
+  
   \item Change the use of module {\tt DIFFSIZES} into {\tt b2mod\_diffsizes}, and create such a module.
 \end{itemize}
 \end{sloppypar}
@@ -147,11 +163,12 @@ It is possible to enable additional output to check the convergence of the diff'
 For the output of the diff'ed equation residuals an additional file {\tt b2ftraced} needs to be written and the dedicated quantities calculated. For this purpose, three dedicated subroutines from {\tt B2.5} have been adapted and are available in {\tt B2.5/src/differentiation}: {\tt b2mwqt\_diff.F}, {\tt b2mxac\_diff.F} and {\tt b2mxar\_diff.F}. Such routines are automatically copied into the {\tt differentiated\_files.diff\_d} folder. Additionally, the script brings changes in the following routines:
 \begin{description}
   \item[\tt b2mndt\_d.F90] The first change deals with the declaration of diff'ed residuals variables, while the other two routines mentioned above are called to evaluate the norm of the residuals and of the corrections and to write the output in {\tt b2ftraced}. Compare with the unmodified output of {\tt Tapenade} or with {\tt src/differentiation/tangent/\allowbreak b2mndt\_dv.F90} if help is needed.
+  
   \item[\tt b2mod\_main\_diff.F90] An extra line that opens the {\tt b2ftraced} file is added.
+  
   \item[\tt b2mod\_driver\_diff.F90] A line that calls the {\tt createB2Diagnostic} subroutine is added.
+  
   \item[\tt b2mnds\_d.F90] Headers are written to the {\tt b2ftraced} file.
-%  \item[\tt b2mod\_residuals\_diff.F90] Look in the file for the three labels and uncomment the lines following them. The first one refers to declaration of diff'ed residuals variables, the second to their allocation and initialization, and the third to their de-allocation. The first set of commented line is somehow moved by {\tt Tapenade} within the {\tt CONTAINS} statement, and therefore has to be placed before it.
-%  \item[\tt b2mod\_diag\_diff.F90] Look in the file for the three labels and uncomment the lines following them. The first one refers to declaration of diff'ed residuals per region variables, the second to their allocation and initialization, and the third to their de-allocation.
 \end{description}
 
 \textbf{Note:} It may be that the source code of these routines needs to be further modified for the user's needs or if developments are made in the original routines.
@@ -170,7 +187,9 @@ Here a clarification has to be made, because with the diff'ed code it is anyway 
 To enable this code option, two dedicated subroutines from {\tt b2us\_plasma\_state.F} have been adapted and are available in {\tt B2.5/src/differentiation}: {\tt read\_plasma\_state\_diff.F} and {\tt write\_plasma\_state\_diff.F}. Such routines are automatically copied into the {\tt differentiated\_files} folder. Additionally, the user has to manually add lines in the following routines:
 \begin{description}
   \item[\tt b2mod\_main\_diff.F90] Action is needed to first open the {\tt b2fdiffi} file and read the file version. Here the user is encouraged to also modify the lines that follow, where the file version {\tt b2fdiffi\_version} should be added to the comparison. Further, headers from {\tt b2fdiffi} should be read and some quantities tested, then a new {\tt b2fdiffe} file should be opened. Compare and mimic how {\tt b2fstati} and {\tt b2fstate} are handled.
+  
   \item[\tt b2mod\_driver\_diff.F90] Action is needed to enable the call to {\tt read\_plasma\_state\_diff} and {\tt write\_plasma\_state\_diff} respectively, again mimicking how the state plasma is read/written.
+  
   \item[\tt b2mnds\_d.F90] Action is first to re-enble the statement function {\tt ltst} (unless it is already inherited from {\tt b2mod\_math}), which is needed afterwards. Second, the headers of {\tt b2fdiffi} should be read and tested. Third, the label of {\tt b2fdiffi} should be printed in output. Fourth, headers should be written to {\tt b2fdiffe}. Again, compare and mimic how {\tt b2fstati} and {\tt b2fstate} are handled.
 \end{description}
 \end{sloppypar}
@@ -191,12 +210,13 @@ READING AND WRITING OF DIFF'ED STATE FILES FOR VECTOR MODE IS NOT YET DEVELOPED.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Again, the user needs to make sure all needed code changes have been correctly implemented. Specifically, for adjoint AD, the time-iterating scheme of {\tt B2.5} (essentially a {\tt FOR}-loop on the number of iterations) needs to be converted into a fixed-point iterator form. This is essential to apply the \textit{two-phases} scheme, which allows significantly lower memory requirements, see \cite{griewank,carlijcp}. To convert into a fixed point form, users need to set a specific environment variable and recompile {\tt b2mod\_driver}:
+Again, the user needs to make sure all needed code changes have been correctly implemented. Specifically, for adjoint AD, the time-iterating scheme of {\tt B2.5} (essentially a {\tt FOR}-loop on the number of iterations) MUST be converted into a fixed-point iterator form. This is essential to apply the \textit{two-phases} scheme, which allows significantly lower memory requirements, see \cite{griewank,carlijcp}. To convert into a fixed point form, users need to set a specific environment variable and recompile standalone {\tt B2.5}:
 \begin{verbatim}
 $ setenv FIXED_POINT yes
-$ touch $SOLPSTOP/modules/B2.5/src/driver/b2mod_driver.F
+$ gmake clean_b25
 $ gmake b25
 \end{verbatim}
+Using the {\tt FIXED\_POINT} environment variable will also make sure that additional features such as balance routines computations are excluded from compilation, as they increase the memory cost of adjoint AD while not being necessary for sensitivity computation or optimization.
 
 After that, the user should create the folder {\tt \$SOLPSTOP/modules/B2.5/build/differentiated\_files\allowbreak.diff\_b} (note the different ending compared to tangent mode!) where the compiler will look for the adjoint diff'ed source files. For adjoint AD the time required for differentiation is much longer (5 hours instead of 1 on the VSC cluster in Belgium). Again, experience with VSC shows that 5 processes are needed for successful differentiation, or about 10~GB of memory.
 
@@ -226,7 +246,10 @@ The automated part will perform the following actions, from which the user can t
       jb(1) = 1.0_R8
     \end{verbatim}
     This is because the optimization (see Section~\ref{sec:optimization}) will only employ the first element of the cost function array {\tt J}.
-  \item Obtain in output the cost function gradient. The script modifies {\tt b2mn\_step\_b} and also {\tt b2mndr\_1\_b} within {\tt b2mod\_driver\_diff.F90} to print the gradient at each iteration. A few examples are:
+  
+  \item Insert a call in {\tt b2mn\_b.F90} to the routine {\tt print\_adj\_parameters} which writes in {\tt run.log} information on which parameters are being looked at, based on {\tt b2.optimization.parameter}.
+  
+  \item Obtain in output the cost function gradient. The script modifies {\tt b2mndr\_1\_b} within {\tt b2mod\_driver\_diff.F90} to print the gradient at each iteration by adding a call to the routine {\tt set\_adj\_gradient}. A few examples are:
     \begin{description}
       \item \verb|write(*,*) 'GRADIENT conpar 1',conparb(1,1,1)|, for continuity BC at boundary {\tt 1}, species {\tt 1};
       \item \verb|write(*,*) 'GRADIENT conpar 2',conparb(0,2,1)|, for continuity BC at boundary {\tt 2}, species {\tt 0};
@@ -238,13 +261,7 @@ The automated part will perform the following actions, from which the user can t
 
 Again, if the user wants to verify the obtained derivatives using the {\tt Tapenade} built-in option, then no automatic initialization should be done and the calls to {\tt CALL ADCONTEXTADJ\_*} need to be re-introduced in {\tt b2mn\_step\_b} within {\tt b2mod\_main\_diff.F90} around the call to {\tt b2mndr\_1\_b}.
 
-A simple modification of the {\tt while} loop condition in {\tt b2mndr\_1\_b} enables the user to stop the fixed point iterator after the required number of iterations, by automatically modifying {\tt b2mndr\_1\_b} to have the following:
-\begin{verbatim}
-      DO WHILE ((res_max .GE. res_quit) .and. (itim .le. ntim))
-      DO WHILE ((cumul .GT. res_quit) .and. (ITERCOUNT.le.ntim))
-\end{verbatim}
-
-\textbf{Note:} It should be possible to re-enable the elapsed time and {\tt .quit} options to smoothly stop the adjoint code, but this has not been done yet.
+A simple modification of the {\tt while} loop condition in {\tt b2mndr\_1\_b} enables the user to stop the fixed point iterator after the required number of iterations, when {\tt .quit} or {\tt \_quit} is seen and after the specified elapsed time.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Adjoint code compilation}
@@ -280,7 +297,9 @@ Also, if one for example wants to obtain a full 2D map of transport coefficient 
 Some AD pragmas are already inserted as comments in the {\tt B2.5} code and mainly affect the adjoint mode. Such pragmas are:
 \begin{description}
   \item[AD FP-LOOP ``state''] This pragma is used in {\tt b2mndr\_1} to tell {\tt Tapenade} that the loop that follows is a fixed point iterator, with state variable "state". It is required for efficient memory usage in adjoint mode and is not relevant for tangent mode.
+  
   \item[AD NOCHECKPOINT] This pragma is used at the beginning of several low-level routines. In adjoint mode it turns off checkpointing of this routine (i.e. saving a snapshot of the variables around the call to this routine), which at the low level of the call tree may be less performing than a full recalculation.
+  
   \item[AD II-LOOP] This pragma indicates that the following loop has independent iterations, which means that adjoint AD can perform better computations by applying an {\it ad hoc} checkpointing scheme. Seems to have sped up the adjoint code when used for the matrix computation in {\tt b2usco}, {\tt b2usmo}, {\tt b2uspo}, or {\tt b2usht}.
 \end{description}
 
@@ -302,6 +321,82 @@ $TAPENADEDIR/bin/tapenade -p -O . -head "b2mn_step(J)/(parm_dna parm_hce \
 
 The only difference wrt to tangent and adjoint mode is in the {\tt -p} flag in place of {\tt -d} or {\tt -b}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Running Tapenade in tangent over tangent mode}\label{sec:tgttgt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This time, the user needs to make sure all needed code changes have been correctly implemented also in the \textit{tangent} code, which is the one that Tapenade will differentiate.
+
+After that, the user should create the folder {\tt \$SOLPSTOP/modules/B2.5/build/differentiated\_files\allowbreak.diff\_d\_d} where the compiler will look for the tangent over tangent diff'ed source files. 
+
+The command line to perform the tangent over tangent differentiation is the following:
+\begin{verbatim}
+	$TAPENADEDIR/bin/tapenade -d -multi -O . -head "b2mn_step_dv(Jd)/(parm_dna parm_hce \
+	parm_hci enepar enipar conpar)" `collect_tapenade_files_tgt.sh` -ext \
+	$SOLPSTOP/modules/B2.5/src/differentiation/solpsGeneralLib -context -java \
+	"-mx30g" -noisize -msglevel 30 -html -r8 >! log
+\end{verbatim}
+
+\textbf{Important:} Note the different head routine, which is now {\tt b2mn\_step\_dv}, and the dependent variable which is now {\tt Jd}.
+
+{\tt Tapenade} will produce files with an additional {\tt \_dv} for routine names, and . Similarly as with tangent AD, diff'ed files need some tuning, described in the following section.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Modifications to the differentiated files}\label{sec:diff_files_tgttgt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+An automated correction of the diff'ed files is carried out now by executing the script {\tt postprocess\_tapenade\_hess\_tgt.\allowbreak sh} in the folder {\tt differentiated\_files.diff\_d\_d}. As with tangent mode, new code developments may make some of the script actions obsolete or insufficient, and the user should then manually tune the required files.
+
+The automated part will perform the following actions, from which the user can take inspiration for personal needs:
+\begin{itemize}
+	\item Initialize in {\tt b2mn\_d.F90} the variable {\tt nbdirs0} to a specific default integer based on {\tt b2.optimization.parameters}.
+	
+	\item Initialize the diff'ed input parameters by inserting a call in {\tt b2mn\_dv\_dv.F90} to the ad-hoc routine {\tt set\_tg\_tgt\_perturbation.F}. This will automatically initialize the parameters according to what is specified in {\tt b2.optimization.parameters}, and write in {\tt run.log} which parameters are being looked at. There is now a new set of diff'ed input parameters with the suffix {\tt d0} which behave exactly as the diff'ed input parameters of tangent vector AD, and must be initialized in a similar way. For example:
+	\begin{verbatim}
+		enepard(1,1,1) = 1.0_R8
+		enepard0(1,1,1) = 1.0_R8
+		enipard(2,1,1) = 1.0_R8
+		enipard0(2,1,1) = 1.0_R8
+		parm_hced(3) = 1.0_R8
+		parm_hced0(3) = 1.0_R8
+	\end{verbatim}
+	
+	\item Allow the printout of the cost function gradient and hessian in {\tt b2mod\_driver\_diffv.F90} by calling the ad-hoc routine {\tt print\_tgt\_hessian} after the call to {\tt b2usr\_cost\_function\_dv\_dv}.
+	
+	\item Change the use of module {\tt DIFFSIZES} into {\tt b2mod\_diffsizes}, and create such a module.
+	
+	\item Enable output of the residuals of the twice diff'ed equations by modifying {\tt b2mndt\_dv\_dv} inserting calls to the ad-hoc routines {\tt b2mwqt\_diffv\_diffv} {\tt b2mxac\_diffv\_diffv} and {\tt b2mxar\_diffv\_diffv}
+\end{itemize}
+
+Again, if the user wants to verify the obtained derivatives using the {\tt Tapenade} built-in option, then no automatic initialization should be done and the calls to {\tt CALL ADCONTEXTTGT\_*} need to be re-introduced in {\tt b2mn\_step\_dv\_dv}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tangent over tangent code compilation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Having completed the modifications to the diff'ed source files, the compilation can be carried out. To do so, the user has to first define the environment variable:
+\begin{verbatim}
+	$ setenv DIFF_DD yes
+\end{verbatim}
+and then make the objects and dependencies list in the standard way in {\tt \$SOLPSTOP}:
+\begin{verbatim}
+	$ gmake listobj depend
+\end{verbatim}
+Finally, the diff'ed code compilation can be started with the command:
+\begin{verbatim}
+	$ gmake b25_diff_dd
+\end{verbatim}
+
+In case the {\tt debug} version is needed, it follows the standard \SOLPSITER rules which simply require to append {\tt \_debug} to the make targets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Derivatives verification}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To verify the second order derivatives one can either use the {\tt Tapenade} built-in option or by applying finite differences and running the tangent vector AD mode in place of the primal.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Common pitfalls}\label{sec:errors_ad}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -312,7 +407,9 @@ In case of an unsuccessful differentiation, at the end of the log file produced 
 From experience, differentiation failures could be caused by these main aspects:
 \begin{itemize}
   \item Presence of {\tt entry} statements. These are not tolerated by {\tt Tapenade} and therefore an error message from the Fortran parser is issued in the log file. Therefore, some subroutines have been excluded from the differentiation or have been restructured to become a module.
+  
   \item {\tt NetCDF} routines. All the {\tt NetCDF} routines have therefore been moved to a single module, which is then excluded from the differentiation. These routines have also been described in {\tt B2.5/src/differentiation/\allowbreak solpsGeneralLib} so that {\tt Tapenade} knows their shape.
+  
   \item Statement functions. Although generally accepted by {\tt Tapenade}, they have caused problems in two ways. First, because {\tt Tapenade} expects them to be defined after all variable declarations. Second, because sometimes such statement functions use variables which are also used within the subroutine/function. While in the first case the Fortran parser will issue an error and the differentiation will fail, in the second case the differentiation will succeed but the derivatives might be incorrect. Therefore, when possible these statement functions have been substituted by normal functions.
 \end{itemize}
 
@@ -321,9 +418,14 @@ The items above were the main cause of errors in the differentiation but the use
 Other errors encountered:
 \begin{itemize}
   \item Some labels of the {\tt GOTO} statements in {\tt b2stbc\_phys.F} were disappearing in the diff'ed file. Therefore, all these statements have been replaced by {\tt SELECT CASE}. This has solved the problem, which seems to arise only when many {\tt GOTO}'s are present.
+  
   \item Several other 'small' errors in the differentiation are still present and are addressed in the next section by the scripts described there. These are mostly related to formatting and to the fact that some subroutines have been excluded from {\tt Tapenade}, while in fact they do not prevent correct propagation of the derivative information.
+  
   \item ALIASING: it is a bad coding practice which is normally (but apparently not always) spotted by {\tt Tapenade} in the log file. It is a quite important issue for adjoint AD, while is not a problem for tangent. The explanation of the potential error comes from the example in Figure~\ref{fig:alias}. The function{\tt fun} and its call are on the left of the figure, while the adjoint of the function {\tt fun\_b} and its call are on the right. The aliasing happens when passing to the function the same variable {\tt x} to two formally separate arguments {\tt a} and {\tt b}. The correct adjoint for this specific call should be: {\tt xb = 2*x*yb}. However, since the same variable is passed when the routine is called, within {\tt fun\_b} the calculated {\tt ab} is passed to the first instance of {\tt xb}, while the calculated {\tt bb} is passed to the second instance. The order in which this is done determines the actual value of {\tt xb} but neither of the two is correct since it will overwrite, not sum to, the previous value!
-  \item SIDE EFFECT: this issue happens again only in adjoint, when {\tt Tapenade} needs to restore some {\tt SAVE}'d variables within a certain routine. Such {\tt SAVE}'d variables must therefore be visible in the calling routine, in order for {\tt Tapenade} to checkpoint them before the called routine and restore them after. Side effect variables are mentioned in the log file. An example is the case in which \textit{routine\_A} calls \textit{routine\_B}, and \textit{routine\_B} saves the variable \textit{ncall\_B} because it performs different actions depending on its value. As a result, {\tt Tapenade} will ask that variable \textit{ncall\_B} is visible within \textit{routine\_A}. This can be solved for example using a module, as the dedicated {\tt b2mod\_ad} already available for this purpose, which defines and stores \textit{ncall\_B}, and is {\tt USE}'d by both routines.
+  
+  \item SIDE EFFECT/HIDDEN VARIABLES: this issue happens again only in adjoint, when {\tt Tapenade} needs to restore some {\tt SAVE}'d variables within a certain routine. Such {\tt SAVE}'d variables must therefore be visible in the calling routine, in order for {\tt Tapenade} to checkpoint them before the called routine and restore them after. Side effect variables are mentioned in the log file. An example is the case in which \textit{routine\_A} calls \textit{routine\_B}, and 
+  \textit{routine\_B} saves the variable \textit{ncall\_B} because it performs different actions depending on its value. As a result, {\tt Tapenade} will ask that variable \textit{ncall\_B} is visible within \textit{routine\_A}. This can be solved for example using a module, as the dedicated {\tt b2mod\_ad} already available for this purpose, which defines and stores \textit{ncall\_B}, and is {\tt USE}'d by both routines.
+  
   \item ARRAY DIMENSIONS: in some cases {\tt Tapenade} is not able to reconstruct the sizes of certain extra variables it has created during the differentiation. Often this happens when array slicing is done in the primal code. In these cases it employs for the variable definition the size {\tt ISIZE1OFXXX}, where {\tt XXX} is the variable name. In the automated script files some of these instances are already corrected using typical sizes like {\tt nCv}, {\tt nFc}, etc... When differentiating the code, some of these may re-appear somewhere else. The user can look at the script files below in Section~\ref{sec:script_ad} to find inspiration on how to correct these.
 \end{itemize}
 
@@ -351,9 +453,24 @@ Other errors encountered:
 
 In this section additional information is given on the pre-differentiated routines available in {\tt B2.5/src/differentiation}. It is possible that with further code developments, the source code for some of the routines that have been duplicated and adapted will not be valid anymore, and as such should be modified.
 \begin{description}
-  \item{\tt b2mwqt\_diff.F} This routine is a copy of {\tt b2mwqt.F} used to write output data concerning the numerical evolution of the diff'ed equations. The main difference wrt {\tt b2mwqt} is that here no checks on signs of quantities is done. {\tt b2mwqt\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation.
-  \item{\tt b2mxac\_diff.F} This routine is a copy of {\tt b2mxac.F} and is used to evaluate the norm of the corrections. The difference wrt {\tt b2mxac.F} is that the type of the input variable {\tt dv} is {\tt B2Derivatives\_diff}. {\tt b2mxac\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation.
-  \item{\tt b2mxar\_diff.F} This routine is a copy of {\tt b2mxar.F} and is used to evaluate the norm of the residuals. The difference wrt {\tt b2mxar.F} is that all sums are done using the absolute value of diff'ed quantities, since these can be negative and the use of {\tt sqrt} would fail. {\tt b2mxar\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation.
+  \item{\tt b2mwqt\_diff.F} This routine is a copy of {\tt b2mwqt.F} used to write output data concerning the numerical evolution of the diff'ed equations. The main difference wrt {\tt b2mwqt} is that here no checks on signs of quantities is done. 
+  
+  \item{\tt b2mwqt\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation.
+  
+  \item{\tt b2mwqt\_diffv\_diffv.F} is the same routine adapted also for tangent over tangent multi-directional  differentiation.
+  
+  \item{\tt b2mxac\_diff.F} This routine is a copy of {\tt b2mxac.F} and is used to evaluate the norm of the corrections. The difference wrt {\tt b2mxac.F} is that the type of the input variable {\tt dv} is {\tt B2Derivatives\_diff}. 
+  
+  \item{\tt b2mxac\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation. 
+  
+  \item{\tt b2mxac\_diffv\_diffv.F} is the same routine adapted also for tangent over tangent multi-directional  differentiation.
+  
+  \item{\tt b2mxar\_diff.F} This routine is a copy of {\tt b2mxar.F} and is used to evaluate the norm of the residuals. The difference wrt {\tt b2mxar.F} is that all sums are done using the absolute value of diff'ed quantities, since these can be negative and the use of {\tt sqrt} would fail. 
+  
+  \item{\tt b2mxar\_diffv.F} is the same routine adapted also for multi-directional tangent differentiation.
+  
+  \item{\tt b2mxar\_diffv\_diffv.F} is the same routine adapted also for tangent over tangent multi-directional  differentiation.
+  
   \item{\tt b2uxus\_d.F} This routine solves a linear system of equations both for the primal and the derived quantities in tangent mode and is not a copy of {\tt b2uxus.F}. This pre-differentiated form of the linear solver is much more efficient than letting {\tt Tapenade} differentiate throughout all the {\tt ilutern\_us\_solps} and {\tt b2mod\_ma28\_for\_us} routines. The theory behind is quite simple because tangent differentiating a linear system of equation of the form:
     \begin{equation*}
 	Ax=b
@@ -364,25 +481,99 @@ In this section additional information is given on the pre-differentiated routin
       \dot{A}x+A\dot{x}=\dot{b}\\
       A\dot{x}=\dot{b}-\dot{A}x
     \end{eqnarray*}
-  where $\dot{v}$ indicates the tangent derivative operator for the quantity $v$. The final system of equations makes use of the already known solution $x$ and solves for the unknown $\dot{x}$. {\tt b2uxus\_dv.F} is the same routine adapted for multi-directional tangent differentiation
+  where $\dot{v}$ indicates the tangent derivative operator for the quantity $v$. The final system of equations makes use of the already known solution $x$ and solves for the unknown $\dot{x}$. 
+  
+  \item{\tt b2uxus\_dv.F} is the same routine adapted for multi-directional tangent differentiation
+  
+  \item{\tt b2uxus\_dv\_dv.F} is the same routine adapted for multi-directional tangent over tangent differentiation. This is done based on the fact that the first tangent differentiation leads to perform the following operations within {\tt b2uxus\_dv}:
+  \begin{eqnarray*}
+  	Ax=b\\
+  	y=\dot{b}-\dot{A}x\\
+  	A\dot{x}=y
+  \end{eqnarray*}
+  Thus differentiating once more in tangent mode leads to:
+  
+  $d(Ax)=d(b) \rightarrow $ same as {\tt b2uxus\_dv}
+  
+  $d(y)=d(\dot{b})-d(\dot{A}x) \rightarrow \dot{y} = \ddot{b} - \ddot{A}x - \dot{A}\dot{x}$
+  
+  $d(A\dot{x})=d(y) \rightarrow $ same as {\tt b2uxus\_dv} but with different arguments.
+  
   \item{\tt b2uxus\_b.F} Similar to the previous, but for adjoint AD. The routine solves te following equations:
     \begin{align*}
        &A^T \overline{b} =  \overline{x},\\
        &\overline{A}_{i,j} = -x_j\overline{b}_i.
     \end{align*}
     In this case, the first linear system is solved for $\overline{b}$ and simply transposing the matrix $A$. Afterwards, the primal linear system is solved and $x$ fed to the second equation.
-  \item{\tt cond\_coef.F} This function is a copy of the same function present in {\tt heatdiff1D.F}. The reason it is put here is that {\tt Tapenade} somehow produces a diff'ed {\tt heatdiff1D\_[db].F90} file that does not contain this subroutine.
-  \item{\tt dim\_[db].F90} This subroutine is a manual differentiation of the intrinsic function {\tt dim}. {\tt dim\_dv.F90} is the same routine adapted for multi-directional tangent differentiation.
+  
+  \item{\tt b2uxus.f} A fake version of {\tt b2uxus} that is provided to {\tt Tapenade} for differentiation in tangent and adjoint mode with the only purpose of avoiding to provide the whole solver routines.
+  
+  \item{\tt b2uxus\_tgt.f} Same as above, but used for tangent over tangent mode.
+  
+  \item{\tt dim\_[db].F90} This subroutine is a manual differentiation of the intrinsic function {\tt dim}.
+  
+  \item {\tt dim\_dv.F90} is the same routine adapted for multi-directional tangent differentiation.
+  
+  \item {\tt dim.f} A fake version of the intrinsic {\tt dim} that is provided to {\tt Tapenade}, otherwise the differentiation of this intrinsic was not correctly done (might be removed with future versions of Tapenade).
+  
+  \item {\tt calc\_res\_fp\_diff.F} and {\tt calc\_res\_fp\_multi.F} These subroutines are used for the tangent/adjoint and tangent vector mode to calculate the maximum residual used in the adjoint fixed point iterator (see Section~\ref{sec:run_adj}).
+  
   \item{\tt erf\_[db].F} This subroutine is a manual differentiation of the intrinsic {\tt erf} which calculates the derivative of the error function as:
     \begin{equation*}
       \frac{\partial \mathrm{erf}}{\partial z}=\frac{2}{\sqrt{\pi}}e^{-z^2}
     \end{equation*}
     {\tt erf\_dv.F} is the same routine adapted for multi-directional tangent differentiation.
-  \item{\tt read\_plasma\_state\_diff.F} and {\tt write\_plasma\_state\_diff.F} are copies of the same routines found in {\tt b2us\_plasma.F} with the only difference in the type of the input argument {\tt st}, which here is {\tt B2STATE\_DIFF}.
-  \item {\tt calc\_res\_fp\_diff.F} and {\tt calc\_res\_fp\_multi.F} These subroutines are used for the tangent/adjoint and tangent vector mode to calculate the maximum residual used in the adjoint fixed point iterator (see Section~\ref{sec:run_adj}).
+  
+  \item {\tt print\_adj\_parameters.F} This routine checks and writes in {\tt run.log} which parameters are being used for the sensitivity computation or for optimization, based on the input specified in {\tt b2.optimization.parameters}.
+  
+  \item {\tt print\_tgt\_gradient.F} This routine writes in {\tt run.log} the value of the derivatives for each cost function and for each parameter when using the tangent vector mode.
+  
+  \item {\tt print\_tgt\_hessian.F} This routine writes in {\tt run.log} the value of the first and second order derivatives (Hessian) for each cost function and for each parameter when using the tangent over tangent vector mode.
+  
+  \item{\tt read\_b2fstate\_diff.F} and {\tt write\_b2fstate\_diff.F} are copies of the same routines found in {\tt b2us\_plasma.F} with the only difference in the type of the input argument {\tt st}, which here is {\tt B2STATE\_DIFF}.
+  
   \item {\tt set\_adj\_gradient.F} This routine is used by {\tt b2optim*} routines to set and pass the gradient information from adjoint AD code to the optimization routines.
-  \item {\tt set\_tgt\_perturbation.F} This routine is used by {\tt b2optim*} routines to set and pass the input perturbation from the optimization routines to the tangent AD code.
+  
   \item {\tt set\_parameters.F } This routine is added in the diff'ed version of {\tt b2mn\_step} within {\tt b2mod\_main} to assign the optimization parameters obtained from the optimization routines to the input variables actually used by {\tt B2.5}.
+  
+  \item {\tt set\_tgt\_perturbation.F} This routine is used by {\tt b2optim*} and {\tt b2mn\_dv} routines to set and pass the input perturbation from the optimization routines to the tangent AD code.
+  
+  \item {\tt set\_tgt\_tgt\_perturbation.F} This routine is used by {\tt b2mn\_dv\_dv} to set and pass the input perturbation from the optimization routines to the tangent over tangent AD code.
+  
+  \item {\tt solve\_covariance\_dv.F} This routine computes the tangent vector differentiation of {\tt solve\_covariance}. The original routines solves the system $C^{-1}z=r$ with $C$ the covariance matrix, and computes the log-determinant of $C$, $\log(\det(C))$. The tangent AD differentiation results in:
+  
+  $d(C^{-1}z)=d(r) \rightarrow C\dot{r}= \dot{z} - \dot{C}r$
+  
+  $p=\det(C)$
+  
+  $\dot{p} = d(\det(C)) = \det(C)Tr(C^{-1}\dot{C})$
+  
+  $d(\log(\det(C)))=d(\log(p)) = \dot{p}/p= Tr(C^{-1}\dot{C})$
+  
+  \item {\tt solve\_covariance\_dv\_dv.F} This routines computes the tangent vector differentiation of {\tt solve\_covariance\_dv}. The linear system is differentiated similarly to {\tt b2uxus\_dv\_dv}:
+  
+   $d(C^{-1}z)=d(r) \rightarrow $ same as {\tt solve\_covariance\_dv}
+  
+  $d(y)=d(\dot{z}-\dot{C}r) \rightarrow \dot{y} = \ddot{r} - \ddot{C}r - \dot{C}\dot{r}$
+  
+  $d(C\dot{r})=d(y) \rightarrow $ same as {\tt solve\_covariance\_dv} but with different arguments.
+  
+  The second derivative of the log-determinant can be computed based on the fact that $d(Tr(A)) = Tr(d(A))$, with $A=C^{-1}\dot{C}$. Then, using the product chain rule, one gets $d(A)=d(C^{-1}\dot{C})=\dot{C^{-1}}\dot{C}+C^{-1}\ddot{C}$. The derivative od $C^{-1}$ can be computed based on the fact that $CC^{-1}=CB=I$ and thus $d(CB)=0$, which implies that $\dot{C}B+C\dot{B}=0$, and further $C\dot{B}=-\dot{C}B$, so that eventually $\dot{B}=\dot{C^{-1}}=-C\dot{C}^{-1}C$. This finally gives that:
+  
+   $d(d(\log(\det(C))))=d(Tr(C^{-1}\dot{C})) = Tr(C^{-1}(\ddot{C}-\dot{C}C^{-1}\dot{C}))$
+  
+  \item {\tt solve\_covariance\_b.F} This routine performs the differentiation of {\tt solve\_covariance} in adjoint AD mode. The linear system $C^{-1}z=r$ is differentiated in the same way as explained for {\tt b2uxus\_b}. The adjoint of the log-determinant of $C$ is done as follows:
+  
+  $p=\det(C)$
+  
+  $q=\log(p)$
+  
+  $\bar{p} = \bar{q}/p$
+  
+  $\bar{C}=\bar{p}p(C^{-1})^T$=$\bar{q}C^{-1}$, since covariance is symmetric.
+ 
+  \item {\tt solve\_covariance.f} A fake version of {\tt solve\_covariance} that is provided to {\tt Tapenade} for differentiation in tangent and adjoint mode with the only purpose of avoiding to provide the whole solver routines.
+  
 \end{description}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -393,16 +584,23 @@ In this section additional information is given on the pre-differentiated routin
 In this section additional information is given on the script files used for or after the differentiation (available in {\tt \$SOLPSTOP/scripts}). Be aware that after modification of the source code some of the command lines in these scripts might not work anymore and thus the user has to modify them according to need.
 \begin{description}
   \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} This scripts provides {\tt Tapenade} with the name and path of the {\tt *.f} and {\tt *.f90} source files to be differentiated. These are automatically found in {\tt B2.5/builds/standalone.\$HOST\_NAME.\allowbreak\$COMPILER}. This script also excludes specific files from the differentiation according to the {\tt excluded.txt} list produced by calling the script {\tt exclude\_tapenade\_files.sh}.
-  \item[exclude\_tapenade\_files.sh]\index{exclude\_tapenade\_files.sh} This script produces the file {\tt excluded.txt} that lists all the files that have been excluded from the differentiation. Those are mainly the source files from {\tt B2.5/src/b2plot}, {\tt B2.5/src/\allowbreak convert}, {\tt B2.5/src/documentation}, {\tt B2.5/src/postprocessing}, {\tt B2.5/src/preprocessing}, and {\tt B2.5/src/output}. Additionally, it allows to exclude/ignore/include specific source files according to these text files:
+  
+  \item[collect\_tapenade\_files\_tgt.sh]\index{collect\_tapenade\_files\_tgt.sh} This scripts provides {\tt Tapenade} with the name and path of the {\tt *.f} and {\tt *.f90} source files to be differentiated when using tangent over tangent AD mode. These are automatically found in {\tt B2.5/builds/standalone.\$HOST\_NAME.\allowbreak\$COMPILER.tgt}. This script also excludes specific files from the differentiation according to the file {\tt files\_to\_exclude\_tgt.txt} in {\tt \$SOLPSTOP/modules/B2.5/src/differentiation}.
+  
+  \item[exclude\_tapenade\_files.sh]\index{exclude\_tapenade\_files.sh} This script produces the file {\tt excluded.txt} that lists all the files that have been excluded from the differentiation. Those are mainly the source files from {\tt B2.5/src/b2plot}, {\tt B2.5/src/\allowbreak convert}, {\tt B2.5/src/documentation}, {\tt B2.5/src/postprocessing}, {\tt B2.5/src/preprocessing}, and {\tt B2.5/src/output}. Additionally, it allows to exclude/include specific source files according to these text files:
     \begin{description}
       \item{\tt B2.5/src/differentiation/files\_to\_exclude.txt}
-      \item{\tt B2.5/src/differentiation/files\_to\_ignore.txt}
       \item{\tt B2.5/src/differentiation/files\_to\_keep.txt}
     \end{description}
-    The difference among files to \textit{exclude} and to \textit{ignore} is that the latter are then used by postprocessing scripts that collect these files for compiling the diff'ed code.
+    
   \item[postprocess\_tapenade\_tgt.sh]\index{postprocess\_tapenade\_tgt.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent mode. It calls {\tt modify\_tapenade\_files\_d.sh}.
+  
   \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector mode. It calls {\tt modify\_tapenade\_files\_d\_multi.sh}.
+  
   \item[postprocess\_tapenade\_adj.sh]\index{postprocess\_tapenade\_adj.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in adjoint mode. It calls {\tt modify\_tapenade\_files\_b.sh}.
+  
+  \item[postprocess\_tapenade\_hess\_tgt.sh]\index{postprocess\_tapenade\_hess\_tgt.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent over tangent mode. It calls {\tt modify\_tapenade\_files\_d\_d\_multi.sh}.
+  
   \item[modify\_tapenade\_files\_d.sh]\index{modify\_tapenade\_files\_d.sh} This script modifies the diff'ed source files produced by {\tt Tapenade} in tangent AD mode so that the diff'ed code can properly compile and run. The actions executed in the script are, among others:
     \begin{itemize}
       \item Call the script {\tt move\_to\_F90.sh}.
@@ -417,13 +615,25 @@ In this section additional information is given on the script files used for or 
       \item Introduce a {\tt B2DIAGNOSTIC} type for the diff'ed plasma state.
       \item Copy from {\tt \$TAPENADEDIR} the two additional source files needed for the context verification procedure.
     \end{itemize}
+  
   \item[move\_to\_F90.sh]\index{move\_to\_F90.sh} Changes the diff'ed files extensions from {\tt .f90} to {\tt .F90}. This is needed by the compilations rules within the {\tt B2.5} Makefile.
+  
   \item[collect\_nodiff\_d.sh]\index{collect\_nodiff\_d.sh} Collect source files that have not been diff'ed and make sure the modules used in such files are the diff'ed ones. At this stage also the name of the diff'ed modules is changed by substituting the {\tt \_d} in their name with {\tt \_diff}, which makes it easier to compile.
+  
   \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90}, {\tt Tapenade} sets the initialization of some diff'ed variables to {\tt 0.0\_R8}. Among these, also diff'ed plasma state variables, as for example {\tt state\%pl\%te}, are initialized. However, when run continuation is enabled, such initializations would overwrite the data read from {\tt b2fdiffi}. Therefore, this script looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure that their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
+  
   \item[modify\_tapenade\_files\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_multi.sh} This script modifies the diff'ed source files produced by {\tt Tapenade} in tangent vector mode so that the diff'ed code can properly compile and run. The actions executed in the script are similar to what is done in {\tt modify\_tapenade\_files\_d.sh}.
+  
   \item[collect\_nodiff\_d\_multi.sh]\index{collect\_nodiff\_d\_multi.sh} Called within {\tt modify\_tapenade\_files\_d\_multi.sh} and executes similar commands as {\tt collect\_nodiff\_d.sh}.
+  
+  \item[modify\_tapenade\_files\_d\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_d\_multi.sh} This script modifies the diff'ed source files produced by {\tt Tapenade} in tangent over tangent vector mode so that the diff'ed code can properly compile and run. The actions executed in the script are similar to what is done in {\tt modify\_tapenade\_files\_d\_multi.sh}
+  
+  \item[collect\_nodiff\_d\_d\_multi.sh]\index{collect\_nodiff\_d\_d\_multi.sh} Called within {\tt modify\_tapenade\_files\_d\_d\_multi.sh} and executes similar commands as {\tt collect\_nodiff\_d.sh}.
+  
   \item[modify\_tapenade\_files\_b.sh]\index{modify\_tapenade\_files\_b.sh} This script modifies the diff'ed source files produced by {\tt Tapenade} in adjoint mode so that the diff'ed code can properly compile and run. The actions executed in the script are similar to what is done in {\tt modify\_tapenade\_files\_d.sh}.
+  
   \item[collect\_nodiff\_b.sh]\index{collect\_nodiff\_b.sh} Called within {\tt modify\_tapenade\_files\_b.sh} and executes similar commands as {\tt collect\_nodiff\_d.sh}.
+  
   \item[collect\_nodiff\_p.sh]\index{collect\_nodiff\_p.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, can be used to collect files when the pre-processing mode of {\tt Tapenade} is used.
 \end{description}
 \end{sloppypar}
