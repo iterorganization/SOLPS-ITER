@@ -15,6 +15,9 @@ VPATH = ../
 CPL = g++
 ## CXX = g++
 CXXFLAGS = -g
+ifeq (${CXX},icpx)
+CXXFLAGS += -Rno-debug-disables-optimization
+endif
 FC = gfortran
 
 .PHONY: all test clean install local_install

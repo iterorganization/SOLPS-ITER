@@ -6,6 +6,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+      use carre_dimensions
 c
 c  version : 24.03.99 23:20
 c

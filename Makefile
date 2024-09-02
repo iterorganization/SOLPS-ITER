@@ -360,34 +360,34 @@ b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
 
 b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 
-uinp: b25eirene
+uinp: b25eirene carre
 	cd modules/Uinp; ${MAKEO}
 
-uinp_nox: b25eirene_nox
+uinp_nox: b25eirene_nox carre_nox
 	cd modules/Uinp; ${MAKEO}
 
-uinp_openmp: b25eirene_openmp
+uinp_openmp: b25eirene_openmp carre
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
-uinp_mpi: b25eirene_mpi
+uinp_mpi: b25eirene_mpi carre
 	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
-uinp_openmp_mpi: b25eirene_openmp_mpi
+uinp_openmp_mpi: b25eirene_openmp_mpi carre
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 uinp_mpi_openmp: uinp_openmp_mpi
 
-uinp_nox_openmp: b25eirene_nox_openmp
+uinp_nox_openmp: b25eirene_nox_openmp carre_nox
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
 uinp_openmp_nox: uinp_nox_openmp
 
-uinp_nox_mpi: b25eirene_nox_mpi
+uinp_nox_mpi: b25eirene_nox_mpi carre_nox
 	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
 uinp_mpi_nox: uinp_nox_mpi
 
-uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi
+uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi carre_nox
 	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 uinp_nox_mpi_openmp: uinp_nox_openmp_mpi
