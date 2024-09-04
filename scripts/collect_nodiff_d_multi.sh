@@ -68,7 +68,6 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmfs.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirdiag.F .
-#cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_indirect.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_types.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_time.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_residuals.F .
@@ -88,6 +87,8 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_stack.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirsrt.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .

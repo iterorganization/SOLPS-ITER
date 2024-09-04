@@ -59,6 +59,8 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_movies.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_stack.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirsrt.F .
 
 cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
 

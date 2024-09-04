@@ -41,7 +41,7 @@ sed -i -e 's/DAMAX_NODIFF/damax/g' b2mndt_dv_dv.F90 b2mxac_dv_dv.F90 b2mxac_diff
 sed -i -e '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv_diffv.F90
 sed -i -e '/INTRINSIC MAX/d' b2wdat_dv.F90
 
-sed -i -e 's/CALL MAXVAL_DV(abs0, abs0d, result10, result10d0, nbdirs0)/result10 = MAXVAL(abs0)/g' ./b2stcx_dv_dv.F90
+sed -i -e '/CALL MAXVAL_DV/a\    result10 = MAXVAL(abs0)' b2stcx_dv_dv.F90
 sed -i '/MINVAL_DV/d' ./*.F90
 sed -i '/MAXVAL_DV/d' ./*.F90
 

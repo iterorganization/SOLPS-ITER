@@ -65,7 +65,6 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmfs.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirdiag.F .
-#cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_indirect.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_types.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_time.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_residuals.F .
@@ -75,7 +74,6 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_cdf.F90 .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ma28_for_us.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirbra.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2_to_astr* .
-#cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_astra_to_b2.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmgs.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2plot_wall_loading.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ranges.F .
@@ -99,6 +97,8 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_braeir.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_anomalous_transport.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ppout.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_stack.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirsrt.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uppo.F .
