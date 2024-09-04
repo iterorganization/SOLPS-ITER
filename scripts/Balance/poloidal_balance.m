@@ -38,14 +38,16 @@
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) August 2024 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function area_divide = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,facesup_pol,facesdown_pol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist,len)
+function pb = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,facesup_pol,facesdown_pol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist,len)
 
 if nargin <= 17
     len = size(flux,2);
 end
 
 % Summed fluxes and integrated sources and residuals:
-[fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist);
+[fluxedge,srcint,resint,xdata,xdatax,pbCv,pbCvP] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist);
+pb.pbCv = pbCv;
+pb.pbCvP = pbCvP;
 
 % Correct the radial divergences for fluxes that are already in fluxedge
 for i = 1:size(srcint,1)
@@ -80,17 +82,17 @@ switch areaend
             faces = facesdown_pol;
         end
 end
-area_divide = sum(area(faces));
+pb.area_divide = sum(area(faces));
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-plot(xdatax,momfac*sum(fluxedge,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(xdata,momfac*sum(srcint,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:));
-coderes = momfac*(resint/area_divide);
+plot(xdatax,momfac*sum(fluxedge,2)/pb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(xdata,momfac*sum(srcint,2)/pb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:));
+coderes = momfac*(resint/pb.area_divide);
 plot(xdata,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
-postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/area_divide;
+postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/pb.area_divide;
 plot(xdata,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
 plot(xdata,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{3},' (post-cal.-code)']);
 % fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
@@ -106,7 +108,7 @@ cmap = comuse.cmap;
 for i=1:size(fluxedge,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxedge(:,i))
-        plot(xdatax,momfac*fluxedge(:,i)./area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdatax,momfac*fluxedge(:,i)./pb.area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 legend(axbal(2),'show','location','best');
@@ -120,7 +122,7 @@ cmap = comuse.cmap;
 for i=1:size(srcint,2)
     % Only make the plot if the source is non-zero somewhere
     if any(srcint(:,i))
-        plot(xdata,momfac*srcint(:,i)./area_divide','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdata,momfac*srcint(:,i)./pb.area_divide','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 legend(axbal(3),'show','location','best');

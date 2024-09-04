@@ -1,5 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculate the radial divergence in each flux tube                            %
+% Calculate the radial divergence in each cell                                 %
+% Fluxes through facesup and facesdown are already taken into account by       %
+% the fluxes and are omitted (except for the radial component if               %
+% areatype = 'parallel'                                                        %
 %                                                                              %
 % Niels Horsten (niels.horsten@kuleuven.be) July 2024.                         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

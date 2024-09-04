@@ -1,4 +1,4 @@
-function make_strata_plots(eirene_atom,eirene_mol,eirene_tion,eirene_rc,titlestr,namestr,comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,ismom)
+function make_strata_plots(eirene_atom,eirene_mol,eirene_tion,eirene_rc,titlestr,namestr,comuse,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,ismom,index,pbCv,pbCvP)
 
 cmap = comuse.cmap;
 
@@ -27,34 +27,34 @@ tot_rc = repmat({zeros(size(xplot))},1,length(eirene_rc));
 for istra = 1:nstra
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_atom));
     for ie = 1:length(eirene_atom)
-        tmp = momfac*sumpol(eirene_atom{ie}(:,:,istra),indrad,comuse)./areadownrad;
+        tmp = momfac*sumpol(eirene_atom{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(1),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_atom{ie} = tot_atom{ie}+tmp;
+            tot_atom{ie} = tot_atom{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_mol));
     for ie = 1:length(eirene_mol)
-        tmp = momfac*sumpol(eirene_mol{ie}(:,:,istra),indrad,comuse)./areadownrad;
+        tmp = momfac*sumpol(eirene_mol{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(2),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_mol{ie} = tot_mol{ie}+tmp;
+            tot_mol{ie} = tot_mol{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_tion));
     for ie = 1:length(eirene_tion)
-        tmp = momfac*sumpol(eirene_tion{ie}(:,:,istra),indrad,comuse)./areadownrad;
+        tmp = momfac*sumpol(eirene_tion{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(3),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_tion{ie} = tot_tion{ie}+tmp;
+            tot_tion{ie} = tot_tion{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_rc));
     for ie = 1:length(eirene_rc)
-        tmp = momfac*sumpol(eirene_rc{ie}(:,:,istra),indrad,comuse)./areadownrad;
+        tmp = momfac*sumpol(eirene_rc{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(4),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_rc{ie} = tot_rc{ie}+tmp;
+            tot_rc{ie} = tot_rc{ie}+tmp';
         end
     end
 end
@@ -106,34 +106,34 @@ tot_rc = repmat({zeros(size(xplot))},1,length(eirene_rc));
 for istra = 1:nstra
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_atom));
     for ie = 1:length(eirene_atom)
-        tmp = momfac*sumrad(eirene_atom{ie}(:,:,istra),indpol,comuse)/areadownpol;
+        tmp = momfac*sumrad2(eirene_atom{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(5),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_atom{ie} = tot_atom{ie}+tmp;
+            tot_atom{ie} = tot_atom{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_mol));
     for ie = 1:length(eirene_mol)
-        tmp = momfac*sumrad(eirene_mol{ie}(:,:,istra),indpol,comuse)/areadownpol;
+        tmp = momfac*sumrad2(eirene_mol{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(6),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_mol{ie} = tot_mol{ie}+tmp;
+            tot_mol{ie} = tot_mol{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_tion));
     for ie = 1:length(eirene_tion)
-        tmp = momfac*sumrad(eirene_tion{ie}(:,:,istra),indpol,comuse)/areadownpol;
+        tmp = momfac*sumrad2(eirene_tion{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(7),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_tion{ie} = tot_tion{ie}+tmp;
+            tot_tion{ie} = tot_tion{ie}+tmp';
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_rc));
     for ie = 1:length(eirene_rc)
-        tmp = momfac*sumrad(eirene_rc{ie}(:,:,istra),indpol,comuse)/areadownpol;
+        tmp = momfac*sumrad2(eirene_rc{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(8),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_rc{ie} = tot_rc{ie}+tmp;
+            tot_rc{ie} = tot_rc{ie}+tmp';
         end
     end
 end

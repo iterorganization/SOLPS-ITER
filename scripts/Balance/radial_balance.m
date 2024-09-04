@@ -197,12 +197,12 @@ end
 rb.area_divide = rb.area_divide(rb.area_divide ~= 0);
 
 % Sort the data according to increasing ymysep:
-[~,index] = sort(ymysep);
-fluxup = fluxup(index,:);
-fluxdown = fluxdown(index,:);
-srcint = srcint(index,:);
-resint = resint(index,1);
-ymysep = ymysep(index,1);
+[~,rb.index] = sort(ymysep);
+fluxup = fluxup(rb.index,:);
+fluxdown = fluxdown(rb.index,:);
+srcint = srcint(rb.index,:);
+resint = resint(rb.index,1);
+ymysep = ymysep(rb.index,1);
 
 % Total balance with residuals:
 cmap = comuse.cmap;

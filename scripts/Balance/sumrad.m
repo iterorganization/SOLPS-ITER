@@ -2,7 +2,9 @@
 % values of fluxes, sources and residuals
 % Also immediately calculate the distance from the downstream boundary for
 % plotting
-function [fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist)
+% pbCv and pbCvP determine the cells that are used for the radial
+% integration of src ==> required for the strata plots
+function [fluxedge,srcint,resint,xdata,xdatax,pbCv,pbCvP] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist)
 
     % Using the poloidal or parallel distance for plotting
     switch polbaldist
@@ -22,6 +24,9 @@ function [fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,face
     xdatax = zeros(length(flux),1);
     iFc_done = []; % keep track of faces that are already included
     iCv_done = []; % keep track of cells that are already considered
+
+    pbCv = []; % List of used cells for the source integration
+    pbCvP = zeros(size(src,1),2);
 
     % Start with summing the fluxes at the upstream faces
     for i = 1:length(facesup_pol)
@@ -54,6 +59,16 @@ function [fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,face
                 break;
             end
             srcint(iout-1,:) = srcint(iout-1,:) + src(iCv,:);
+            pbCv = [pbCv;iCv];
+            if pbCvP(iout-1,1) == 0 && iout == 2
+                pbCvP(iout-1,1) = 1;
+                pbCvP(iout-1,2) = 1;
+            elseif pbCvP(iout-1,1) == 0
+                pbCvP(iout-1,1) = pbCvP(iout-2,1) + pbCvP(iout-2,2);
+                pbCvP(iout-1,2) = 1;
+            else
+                pbCvP(iout-1,2) = pbCvP(iout-1,2) + 1;
+            end
             resint(iout-1) = resint(iout-1) + res(iCv);
             distx = distx + comuse.cvHx(iCv)/pit(iCv)/length(iFc_next);
             iFc1 = comuse.cvFcP(iCv,1);
@@ -86,6 +101,7 @@ function [fluxedge,srcint,resint,xdata,xdatax] = sumrad(flux,src,res,indpol,face
     srcint(iout:end,:) = [];
     resint(iout:end) = [];
     xdatax(iout+1:end) = [];
+    pbCvP(iout:end,:) = [];
 
     % Reverse the distance
     xdatax = xdatax(end) - xdatax;
