@@ -71,3 +71,11 @@ mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 2
+
+# Go back to normal settings
+cd ${SOLPSTOP}/modules/B2.5
+rm src.local/cfwure.F
+touch src/utility/cfwure.F
+touch src/modules/.new_modules
+cd ${SOLPSTOP}
+make b25eirene_nox

@@ -3,7 +3,6 @@ c  VERSION : 01.04.2005 14:26
 c*** The basic data for uinput
 
 #include "COUPLE/KOPPLDIM.F"
-#include "CARREDIM.F"
 
 c=======================================================================
 c*** Temporary assignment - the max. number of photon species

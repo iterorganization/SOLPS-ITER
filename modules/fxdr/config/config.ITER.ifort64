@@ -6,9 +6,9 @@ LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
 OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
 ifeq (,$(findstring CentOS,$(OS)))
-FC       ?= ifort
-else
 FC       ?= ifx
+else
+FC       ?= ifort
 endif
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
