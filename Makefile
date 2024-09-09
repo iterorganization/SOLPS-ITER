@@ -516,6 +516,9 @@ listobj_nox:
 	cd modules/Eirene;         ${MAKEE} listobj ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj TGT=yes
+	cd modules/B2.5;           ${MAKE} listobj ADJ=yes
+	cd modules/B2.5;           ${MAKE} listobj HESS_TGT=yes
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} listobj ${OPT_NOX}
@@ -598,6 +601,15 @@ ifndef NO_MPI
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/Eirene;         ${MAKEE} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
+endif
+ifeq (${TAO_PRESENT},1)
+# The following dependency builds must be done last as they change the filelist
+	cd modules/B2.5;           ${MAKE} depend TGT=yes TAO=yes
+	cd modules/B2.5;           ${MAKE} depend ADJ=yes TAO=yes
+else
+	cd modules/B2.5;           ${MAKE} depend TGT=yes
+	cd modules/B2.5;           ${MAKE} depend ADJ=yes
+	cd modules/B2.5;           ${MAKE} depend HESS_TGT=yes
 endif
 
 VERSION:

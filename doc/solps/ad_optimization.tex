@@ -760,7 +760,7 @@ Note that the prior range may be superfluous if a lower/upper bound for the opti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Second order derivatives can be obtained by applying AD a second time on an already differentiated code. These second order derivatives can be employed in optimization to perform full Newton steps (not implemented yes) or for approximate Bayesian posterior estimation using the Laplace approximation. At the moment, only the tangent over tangent AD method has been deployed in \SOLPSITER, which allows to retrieve the Hessian matrix:
+Second order derivatives can be obtained by applying AD a second time on an already differentiated code. These second order derivatives can be employed in optimization to perform full Newton steps (not implemented yet) or for approximate Bayesian posterior estimation using the Laplace approximation. At the moment, only the tangent over tangent AD method has been deployed in \SOLPSITER, which allows to retrieve the Hessian matrix:
 
 \begin{equation}\label{hess}
 	\begin{pmatrix}
@@ -824,4 +824,4 @@ they are modified into:
 	DO i = 1, nd
 	  DO j = i, nd 
 \end{verbatim}
-This makes to computational cost lie between $n!$ and $n^2$.
+This makes to computational cost lie between $n$ and $n^2$.

@@ -64,7 +64,7 @@ LD_MPI     =
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNCAR4 -DF2003
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

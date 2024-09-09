@@ -133,7 +133,7 @@ The first difference wrt to the normal tangent AD mode is that now the diff'ed s
 Tangent vector mode requires scripts similar to those for the normal tangent mode, but their principles remain the same. Therefore, the user can follow the same procedure described in Section~\ref{sec:diff_files}, this time executing the script {\tt postprocess\_tapenade\_tgt\_multi.sh} in the directory {\tt differentiated\_files.diff\_d}. This will:
 \begin{itemize}
   \item Initialize in {\tt b2mn\_d.F90} the variable {\tt nbdirs} to a specific default integer based on {\tt b2.optimization.parameters}.
-  
+
   \item Initialize the diff'ed input parameters by inserting a call in {\tt b2mn\_dv.F90} to the ad-hoc routine {\tt set\_tgt\_perturbation.F}. This will automatically initialize the parameters according to what is specified in {\tt b2.optimization.parameters}, and write in {\tt run.log} which parameters are being looked at. The diff'ed inputs have now an extra first dimension, that must not clash with the other parameters. For example, this means:
     \begin{verbatim}
       enepard(1,1,1) = 1.0_R8
@@ -143,11 +143,11 @@ Tangent vector mode requires scripts similar to those for the normal tangent mod
       parm_dnad(5,1) = 1.0_R8
     \end{verbatim}
     In this way, the first direction will evaluate the cost function gradient wrt {\tt ENEPAR(1,1)}, the second wrt {\tt ENIPAR(1,1)}, and so on. It is instead WRONG to initialize this way: {\tt enepard(1,1,1) = 1.0\_R8} and {\tt parm\_hced(1) = 1.0\_R8}. In this case the first derivative direction would yield the sum $\frac{\partial J}{\partial \mathrm{enepar}} + \frac{\partial J}{\partial \mathrm{cfhce}}$.
-  
+
   \item If the code has been differentiated in fixed-point form, insert an extra call to {\tt b2usr\_cost\_function\_dv} within the fixed-point loop in {\tt b2mod\_driver\_diffv.F90}, for output monitoring.
-  
+
   \item Allow the printout of the cost function gradient in {\tt b2mod\_driver\_diffv.F90} by calling the ad-hoc routine {\tt print\_tgt\_gradient} after the call to {\tt b2usr\_cost\_function\_dv}.
-  
+
   \item Change the use of module {\tt DIFFSIZES} into {\tt b2mod\_diffsizes}, and create such a module.
 \end{itemize}
 \end{sloppypar}
