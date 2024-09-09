@@ -19,6 +19,7 @@ text(0.5,0.5,titlestr{2},'horizontalalignment','center','fontsize',14);
 % Poloidally integrated sources with radial resolution:
 tmp = get(axbal(2),'children');
 xplot = get(tmp(1),'xdata');
+xplot = xplot';
 cmap = repmat(comuse.cmap,[nstra,1]);
 tot_atom = repmat({zeros(size(xplot))},1,length(eirene_atom));
 tot_mol = repmat({zeros(size(xplot))},1,length(eirene_mol));
@@ -30,7 +31,7 @@ for istra = 1:nstra
         tmp = momfac*sumpol(eirene_atom{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(1),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_atom{ie} = tot_atom{ie}+tmp';
+            tot_atom{ie} = tot_atom{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_mol));
@@ -38,7 +39,7 @@ for istra = 1:nstra
         tmp = momfac*sumpol(eirene_mol{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(2),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_mol{ie} = tot_mol{ie}+tmp';
+            tot_mol{ie} = tot_mol{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_tion));
@@ -46,7 +47,7 @@ for istra = 1:nstra
         tmp = momfac*sumpol(eirene_tion{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(3),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_tion{ie} = tot_tion{ie}+tmp';
+            tot_tion{ie} = tot_tion{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_rc));
@@ -54,7 +55,7 @@ for istra = 1:nstra
         tmp = momfac*sumpol(eirene_rc{ie}(:,istra),indrad,comuse,index)./areadownrad;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(4),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_rc{ie} = tot_rc{ie}+tmp';
+            tot_rc{ie} = tot_rc{ie}+tmp;
         end
     end
 end
@@ -99,6 +100,7 @@ end
 % Sources along the poloidal direction:
 tmp = get(axbal(end),'children');
 xplot = get(tmp(1),'xdata');
+xplot = xplot';
 tot_atom = repmat({zeros(size(xplot))},1,length(eirene_atom));
 tot_mol = repmat({zeros(size(xplot))},1,length(eirene_mol));
 tot_tion = repmat({zeros(size(xplot))},1,length(eirene_tion));
@@ -109,7 +111,7 @@ for istra = 1:nstra
         tmp = momfac*sumrad2(eirene_atom{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(5),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_atom{ie} = tot_atom{ie}+tmp';
+            tot_atom{ie} = tot_atom{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_mol));
@@ -117,7 +119,7 @@ for istra = 1:nstra
         tmp = momfac*sumrad2(eirene_mol{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(6),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_mol{ie} = tot_mol{ie}+tmp';
+            tot_mol{ie} = tot_mol{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_tion));
@@ -125,7 +127,7 @@ for istra = 1:nstra
         tmp = momfac*sumrad2(eirene_tion{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(7),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_tion{ie} = tot_tion{ie}+tmp';
+            tot_tion{ie} = tot_tion{ie}+tmp;
         end
     end
     linestyle = repmat({'-','--',':','-.'},1,length(eirene_rc));
@@ -133,7 +135,7 @@ for istra = 1:nstra
         tmp = momfac*sumrad2(eirene_rc{ie}(:,istra),pbCv,pbCvP)/areadownpol;
         if any(tmp)
             plot(xplot,tmp,'parent',axstrat(8),'color',cmap(istra,:),'linestyle',linestyle{ie},'displayname',['stratum ',num2str(istra),' ',namestr{ie}]);
-            tot_rc{ie} = tot_rc{ie}+tmp';
+            tot_rc{ie} = tot_rc{ie}+tmp;
         end
     end
 end
