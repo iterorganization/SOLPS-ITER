@@ -12,18 +12,7 @@ echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentatio
 echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
 echo or online at http://www.eirene.de/
 
-if ( "$0" != "tcsh" ) then
-  if ( "$0" != "-tcsh" ) then
-    if ( "$0" != "/entrypoint.csh" ) then
-      if ( "$shell" != "/bin/tcsh" ) then
-        if ( "$shell" != "/usr/bin/tcsh" ) then
-          echo "\e[31mUse tcsh to source setup.csh!\e[m"
-          exit 1
-        endif
-      endif
-    endif
-  endif
-endif
+( ps -p $$ | grep -q tcsh ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP,
 # or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
