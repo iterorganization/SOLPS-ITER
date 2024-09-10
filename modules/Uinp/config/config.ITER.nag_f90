@@ -5,7 +5,7 @@ MPI_FC  ?= mpif90
 ifdef USE_MPI
 FC       = ${MPI_FC}
 else
-FC      ?= nagfor
+FC       = nagfor
 endif
 
 FFLAGS   = -PIC -compatible

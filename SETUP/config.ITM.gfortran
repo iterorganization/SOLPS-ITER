@@ -56,10 +56,7 @@ ADDLIBS    = -lgfortran
 MPI_FC    ?= mpifort
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}
-else
-FC        ?= gfortran
 endif
-CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

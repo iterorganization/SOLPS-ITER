@@ -71,10 +71,7 @@ ifdef SOLPS_MPI
 FC         = ${MPI_FC}
 MPDIR     ?= ${I_MPI_ROOT}
 LD_MPI    ?= -L${MPDIR}/lib64
-else
-FC        ?= gfortran
 endif
-CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options
