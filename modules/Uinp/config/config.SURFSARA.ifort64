@@ -8,8 +8,6 @@ endif
 MPI_FC      ?= mpiifort
 ifdef USE_MPI
 FC 	     = ${MPI_FC}
-else
-FC	    ?= ifort
 endif
 
 CPP	     = /lib/cpp -C -traditional -ffreestanding
