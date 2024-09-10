@@ -74,6 +74,17 @@
 :ptnt_cor:particles:1.e-6
 :ntrl_cor:neutrals:1.e-6
 :tot_core:total:1.e-6
+@page: Impurity radiation, MW
+:imp_rad:total:1.e-6
+:imp_rad_He:He:1.e-6
+:imp_rad_Li:Li:1.e-6
+:imp_rad_Be:Be:1.e-6
+:imp_rad_B:B:1.e-6
+:imp_rad_C:C:1.e-6
+:imp_rad_N:N:1.e-6
+:imp_rad_Ne:Ne:1.e-6
+:imp_rad_Ar:Ar:1.e-6
+:imp_rad_W:W:1.e-6
 @page: Stored energy, W
 :tot_enre:electrons:
 :tot_enri:ions:
