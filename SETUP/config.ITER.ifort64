@@ -64,8 +64,6 @@ ifndef MPDIR
 MPDIR      = ${EBROOTIMPI}
 LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
 endif
-else
-FC        ?= ifort
 endif
 
 #

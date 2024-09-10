@@ -7,18 +7,11 @@ MPI_FC   ?= mpiifort
 ifdef USE_MPI
 FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
-else
-FC       ?= ifort
 endif
-
-COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 FFLAGS    = -fPIC -assume no2underscore
 ifndef SOLPS_DEBUG
 FFLAGS   += -O2
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
-FFLAGS   += -fp-model=precise
-endif
 endif
 
 CPP       = /lib/cpp -C -traditional -ffreestanding

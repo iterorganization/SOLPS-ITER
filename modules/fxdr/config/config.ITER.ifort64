@@ -4,8 +4,6 @@
 LD_MSCL   ?= `pkg-config mscl --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
-FC        ?= ifort
-
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG

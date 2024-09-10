@@ -10,8 +10,6 @@ GLI_HOME ?= ${EBROOTGLI}
 #CPP      = -/lib/cpp -C -traditional
 CPP       = /lib/cpp -traditional
 
-FC       ?= ifort
-
 ifdef SOLPS_DEBUG
 FCOPTS    = -traceback -check all
 LDOPTS    = -check all

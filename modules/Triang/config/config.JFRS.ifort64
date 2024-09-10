@@ -8,7 +8,7 @@ LD_NAG   ?= -mkl
 
 CPP       = /lib/cpp -traditional
 
-FC       ?= ftn
+FC        = ftn
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -O0 -traceback -fpe0

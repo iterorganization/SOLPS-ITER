@@ -5,8 +5,6 @@ LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
 MPI_FC  ?= mpiifort
 ifdef USE_MPI
 FC       = ${MPI_FC}
-else
-FC      ?= ifort
 endif
 
 CPP      = /lib/cpp -C -traditional -ffreestanding

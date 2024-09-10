@@ -5,12 +5,11 @@ endif
 
 MPI_FC  ?= mpif90
 ifdef USE_MPI
-FC       = ${MPI_FC}
-ifdef SOLPS_OPENMP
-FFLAGS   = -fopenmp
-endif
-else
-FC      ?= ifort
+ FC       = ${MPI_FC}
+ COMPILER_TYPE = $(shell ${FC} --version | head -1 | cut -d ' ' -f 1)
+ ifeq (${COMPILER_TYPE},GNU)
+  COMPILER_REDEF = yes
+ endif
 endif
 
 CPP      = /lib/cpp -C -traditional
