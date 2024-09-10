@@ -40,7 +40,7 @@
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and w/o dissipation, inner lower divertor, MW/m^{2}
+@page: Target heat flux, inner lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :WWtrg:w/o diss:1.e-6
@@ -151,7 +151,7 @@
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and w/o dissipation, outer lower divertor, MW/m^{2}
+@page: Target heat flux, outer lower divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :WWtrg:w/o diss:1.e-6
@@ -262,7 +262,7 @@
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and w/o dissipation, outer upper upper divertor, MW/m^{2}
+@page: Target heat flux, outer upper upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :WWtrg:w/o diss:1.e-6
@@ -373,7 +373,7 @@
 @setxmin:0.
 :Wpar_xpt:q_{\parallel}^{xpt}:1.e-6
 :WWpar:q_{\parallel}^{trg}:1.e-6
-@page: Target heat flux with and w/o dissipation, outer upper divertor, MW/m^{2}
+@page: Target heat flux, outer upper divertor, MW/m^{2}
 @setx:x:r-r_{sep}, m:
 @setymin:0.
 :WWtrg:w/o diss:1.e-6
