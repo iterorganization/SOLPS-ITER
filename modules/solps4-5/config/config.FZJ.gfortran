@@ -1,6 +1,5 @@
 CPP = /lib/cpp -ffreestanding
 
-FC ?= gfortran
 ifndef SOLPS_DEBUG
 FCOPTS = -v -ff90
 endif

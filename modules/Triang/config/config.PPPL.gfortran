@@ -17,7 +17,6 @@ CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED =
 LINK_MOD =
 
-FC ?= gfortran
 ifdef SOLPS_DEBUG
 FCOPTS = -C -g -Wall -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else

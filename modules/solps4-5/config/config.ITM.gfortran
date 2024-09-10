@@ -1,6 +1,5 @@
 CPP = /lib/cpp -traditional
 
-FC ?= gfortran
 ifdef SOLPS_DEBUG
 FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal
 endif
