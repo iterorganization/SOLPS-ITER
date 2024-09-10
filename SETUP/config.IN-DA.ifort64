@@ -48,11 +48,12 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 MPI_FC    ?= mpif90
 ifdef SOLPS_MPI
-FC         = ${MPI_FC}
-else
-FC        ?= ifort
+ FC        = ${MPI_FC}
+ COMPILER_TYPE = $(shell ${FC} --version | head -1 | cut -d ' ' -f 1)
+ ifeq (${COMPILER_TYPE},GNU)
+  COMPILER_REDEF = yes
+ endif
 endif
-CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

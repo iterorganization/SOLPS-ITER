@@ -10,7 +10,7 @@ ifndef LD_SONNET
   $(error LD_SONNET not defined)
 endif
 
-FC      ?= ifort
+FC       = ifort
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
