@@ -88,9 +88,9 @@ MPI_FC    ?=
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}
 else
-FC        ?=
+FC         =
 endif
-CC        ?=
+CC         =
 
 #
 # Preprocessor options

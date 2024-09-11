@@ -42,7 +42,7 @@ endif
 MAKETAGS ?= ctags -e -f
 
 # Extensions for object directories when various options are used
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif
 ifdef SOLPS_DEBUG
@@ -51,7 +51,7 @@ endif
 ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 else
-ifdef USE_MPI
+ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
 endif
