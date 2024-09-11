@@ -3,7 +3,7 @@ MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
 LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
 
 MPI_FC  ?= mpiifort
-ifdef USE_MPI
+ifdef SOLPS_MPI
 FC       = ${MPI_FC}
 endif
 

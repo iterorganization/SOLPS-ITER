@@ -36,7 +36,7 @@ INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 
 MOD      = mod
 LDLIBS   = ${LD_MSCL} ${LD_NAG}
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LDLIBS  += ${LD_MPI}
 endif
 

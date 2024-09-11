@@ -2,7 +2,7 @@
 LD_MSCL ?= `pkg-config mscl --libs`
 
 MPI_FC  ?= mpif90
-ifdef USE_MPI
+ifdef SOLPS_MPI
 FC       = ${MPI_FC}
 else
 FC       = nagfor
@@ -22,7 +22,7 @@ MOD      = mod
 
 LDLIBS   = ${LD_MSCL} ${LD_NAG}
 LDEXTRA  =
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LDLIBS  += ${LD_MPI}
 endif
 
