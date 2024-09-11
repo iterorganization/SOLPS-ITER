@@ -9,7 +9,7 @@ endif
 
 CPP      = /lib/cpp -traditional
 
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LDEXTRA  = ${LD_MPI}
 endif
 

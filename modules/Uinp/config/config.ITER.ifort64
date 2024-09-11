@@ -9,7 +9,7 @@ MPI_FC   ?= mpiifort -fc=mpiifx
 else
 MPI_FC   ?= mpiifort
 endif
-ifdef USE_MPI
+ifdef SOLPS_MPI
 FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
 else

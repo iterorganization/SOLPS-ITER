@@ -34,7 +34,7 @@
 # Variables for linking
 #
 
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LD_NETCDF  = `pkg-config pnetcdf --libs`
 else
 LD_NETCDF  = `pkg-config netcdf-fortran --libs`
