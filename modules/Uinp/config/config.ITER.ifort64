@@ -4,7 +4,7 @@ LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
 LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
 MPI_FC   ?= mpiifort
-ifdef USE_MPI
+ifdef SOLPS_MPI
 FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
 endif
