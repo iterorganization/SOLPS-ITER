@@ -13,8 +13,6 @@ LD_GR    ?= -L${GR_ROOT} -lgr
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC        = gfortran
-
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace
 endif

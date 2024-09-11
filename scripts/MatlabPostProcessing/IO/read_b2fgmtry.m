@@ -22,6 +22,7 @@ version = line(8:17);
 
 disp(['read_b2fgmtry -- file version ',version]);
 
+gmtry.version = version;
 
 %% Read dimensions nx, ny, and symmetry
 

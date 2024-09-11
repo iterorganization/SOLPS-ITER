@@ -15,6 +15,9 @@ VPATH = ../
 CPL = g++
 ## CXX = g++
 CXXFLAGS = -g
+ifeq (${CXX},icpx)
+CXXFLAGS += -Rno-debug-disables-optimization
+endif
 FC = gfortran
 
 .PHONY: all test clean install local_install
@@ -28,7 +31,7 @@ all: libsonnet.a
 	rm -f $@.$$$$
 
 libsonnet.a: $(sources:.cpp=.o) Makefile
-	ar clq libsonnet.a $(sources:.cpp=.o)
+	ar cq libsonnet.a $(sources:.cpp=.o)
 	${INSTALL} libsonnet.a ${INSTALL_DIR}
 	${INSTALL} libsonnet.a ${INSTALL_USERAREA}
 

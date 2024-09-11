@@ -17,8 +17,8 @@
 # If using the Cray compiler:
 # Add -DCRAY to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 # If you have NCAR version 3 (or no NCAR at all) on your system:
 # Remove -DNCAR4 from SOLPS_CPP
@@ -69,14 +69,14 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 LD_NETCDF  = `pkg-config netcdf-fortran --libs`
-ifdef USE_MPI
-ifdef USE_OPENMP
+ifdef SOLPS_MPI
+ifdef SOLPS_OPENMP
 LD_NAG     = `pkg-config sci_mpi_mp --libs`
 else
 LD_NAG     = `pkg-config sci_mpi --libs`
 endif
 else
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
 LD_NAG     = `pkg-config sci_mp --libs`
 else
 LD_NAG     = `pkg-config sci --libs`
@@ -84,10 +84,16 @@ endif
 endif
 
 #
+# Provide compiler
+#
+
+FC        = ftn
+
+#
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DF2003 -DCRAY -DNCAR4
+SOLPS_CPP      = -DNO_NAG -DCRAY -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -146,9 +152,16 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    IMAS_PKG_LIST += al-fortran al-identifiers-fortran
   else
     IMAS_PKG_LIST += imas-ifort
+    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+      IMAS_PKG_LIST += imas-identifiers-ifort
+    else
+      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-ifort
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION

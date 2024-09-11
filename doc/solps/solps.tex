@@ -231,7 +231,7 @@ To do this, one must upload a copy of their public ssh key here: \href{https://g
 > git submodule update
 \end{verbatim}
 
-If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol.
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol. Please also note that the SSH key needs to be 1024 bits.
 
 It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
@@ -292,9 +292,9 @@ which will also update the files contained in the various submodules \SOLPSITER 
 \begin{verbatim}
 > solps-iter_update
 \end{verbatim}
-which will fetch and pull the main development branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
+which will fetch and pull the master branches for the main \SOLPSITER repository and all of its submodules, provided you are in a clean state, i.e. with no locally modified files under version control, unless these are stashed or committed to local branches. After the distribution files have been updated, the script will attempt to recompile the code.
 
-\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone.  In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
+\SOLPSITER is a complicated code package and it would be difficult to learn how to install, compile and run it from this document and the internal documentation alone. In the past we have found that an initial visit of at least two weeks to a research team already proficient with \SOLPSITER use with subsequent visits, or about two months and no further visits, are desirable.
 
 The Git \SOLPSITER repository is structured as a self-contained whole, but some effort was also devoted to be able to check out, as individual standalone modules, the main pieces of the SOLPS suite, i.e. {\tt DivGeo}, {\tt Carre}, {\tt Eirene} and {\tt B2.5}, although this is not recommended.
 
@@ -309,7 +309,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[MPI] Parallelization framework (optional)
 \item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
 \item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
-\item[NCAR] plotting library (available from \href{http://library.ucar.edu}{http://library.ucar.edu})
+\item[NCAR] plotting library (available from \href{https://www.ncl.ucar.edu/Download/}{https://www.ncl.ucar.edu/Download/})
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
@@ -494,7 +494,7 @@ then do the following:
   sbb
   cd src
   mkdir -p modules.local
-  cp modules/b2mod_dimensions.F modules.local
+  cp modules/b2mod\_dimensions.F modules.local
   touch modules/.new_modules
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
@@ -1633,20 +1633,26 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[collect\_nodiff\_b.sh]\index{collect\_nodiff\_b.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for adjoint AD code.
   \item[collect\_nodiff\_d.sh]\index{collect\_nodiff\_d.sh} Collect source files that have not been diff'ed in tangent mode.
   \item[collect\_nodiff\_d\_multi.sh]\index{collect\_nodiff\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent vector mode.
+  \item[collect\_nodiff\_d\_d\_multi.sh]\index{collect\_nodiff\_d\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent over tangent vector mode.
   \item[collect\_nodiff\_p.sh]\index{collect\_nodiff\_p.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for AD pre-processing mode.
   \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated.
+  \item[collect\_tapenade\_files\_tgt.sh]\index{collect\_tapenade\_files\_tgt.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over tangent vector mode.
+  \item[collect\_tapenade\_files\_adj.sh]\index{collect\_tapenade\_files\_adj.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over adjoint mode.
   \item[cost\_function \$i]\index{cost\_function} Allows the user to plot the value of the cost function {\tt \$i} as a function of the iterations.
   \item[cost\_function\_gradient \$i]\index{cost\_function\_gradient} Allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
   \item[exclude\_tapenade\_files.sh]\index{exclude\_tapenade\_files.sh} Produces a file that lists all the files that have been excluded from the differentiation.
   \item[modify\_tapenade\_files\_b.sh]\index{modify\_tapenade\_files\_b.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in adjoint mode so that the diff'ed code can properly compile and run.
   \item[modify\_tapenade\_files\_d.sh]\index{modify\_tapenade\_files\_d.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent AD mode so that the diff'ed code can properly compile and run.
   \item[modify\_tapenade\_files\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_multi.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent vector mode so that the diff'ed code can properly compile and run.
+  \item[modify\_tapenade\_files\_d\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_d\_multi.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent over tangent vector mode so that the diff'ed code can properly compile and run.
   \item[move\_to\_F90.sh]\index{move\_to\_F90.sh} Changes the diff'ed files extensions from {\tt .f90} to {\tt .F90}.
   \item[postprocess\_tapenade\_adj.sh]\index{postprocess\_tapenade\_adj.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in adjoint mode.
   \item[postprocess\_tapenade\_tgt.sh]\index{postprocess\_tapenade\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent mode.
   \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector mode.
+  \item[postprocess\_tapenade\_hess\_tgt.sh]\index{postprocess\_tapenade\_hess\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent over tangent vector mode.
   \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90}, looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
   \item[resall\_D\_diff]\index{resall\_D\_diff} Plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
+  \item[resall\_D\_diff\_diff]\index{resall\_D\_diff\_diff} Plots the evolution of the residuals of all the second order diff'ed equations for D only cases (in tangent over tangent mode only).
   \item[resco\_diff]\index{resco\_diff} Plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
   \item[reskt\_diff]\index{reskt\_diff} Plots the evolution of the residuals of the diff'ed $k$ equation (in tangent mode only).
   \item[resmo\_diff]\index{resmo\_diff} Plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
@@ -1677,7 +1683,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[get\_git\_email]\index{get\_git\_email} Finds the user's email address from the {\tt .gitconfig} file.
   \item[get\_git\_name]\index{get\_git\_name} Finds the user's name from the {\tt .gitconfig} file.
   \item[get\_parm.bpl]\index{get\_parm.bpl} extracts certain useful quantities from a run input and output files for use in later scripts, particularly those building \btwoplot command files.
-  \item[IDS\_yaml\_replace \#shot \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run runmber of shot {\tt \#shot} is now replaced by run number {\tt \#new\_run}.
+  \item[IDS\_yaml\_replace \#pulse \#old\_run \#new\_run]\index{IDS\_yaml\_replace}\index{b2\_ual\_rewrite} Script invoked by the {\tt b2\_ual\_rewrite} program (see~\ref{sec:b2_ual_rewrite}) to update the {\tt .yaml} IMAS database files to indicate that the {\tt \#old\_run} run number of pulse {\tt \#pulse} is now replaced by run number {\tt \#new\_run}.
   \item[import\_files\_from\_convert]\index{import\_files\_from\_convert}\index{b2yt}\index{correct\_baserun\_timestamps} Imports and renames the files produced by {\tt b2yt} in a {\tt convert} directory at the same level as the current directory to prepare the new converted case for a run. Also updates some of the files in the {\tt baserun} directory, so it is often prudent to use {\tt correct\_baserun\_timestamps}, from the parent directory, afterwards.
   \item[import\_files\_from\_convert\_wg]\index{import\_files\_from\_convert\_wg}\index{b2us} Imports and renames the files produced by {\tt b2us} in a {\tt convert} directory at the same level as the current directory to prepare the new converted wide-grid case for a run.
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
@@ -4265,14 +4271,16 @@ or
 This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
-\begin{sloppypar}
+\begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
   \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
-  \item {\tt b2mndr\_device} superseded by {\tt b2mndr\_database}
-  \item {\tt b2mndr\_shot\_number} defines the shot number
-  \item {\tt b2mndr\_run\_number} defines the run number
+  \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_pulse\_number} defines the pulse (in Access Layer 5) or shot (in Access Layer 4) number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_shot\_number}, superseded by {\tt b2mndr\_pulse\_number}.
+  \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
 \end{itemize}
 These switches are used as identification parameters for the IDS. Afterwards, a
 {\tt b2mn} run is initialized but {\em not} started, so that the final
@@ -4286,16 +4294,21 @@ It is possible to replace (or supplement) the IDS switch settings coming from th
 \end{verbatim}
 which will recognize, within the quotes following the {\tt -o} additional options opener, the switches:
 \begin{itemize}
-  \item {\tt -s}, {\tt --shot} The shot number
-  \item {\tt -r}, {\tt --run} The run number
-  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER})
-  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise)
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3})
+  \item {\tt -p}, {\tt --path} The path to the directory where to save the IMAS data entry (only available with Access Layer 5).
+  \item {\tt -s}, {\tt --shot} {\tt --pulse} The pulse (in Access Layer 5) or shot (in Access Layer 4) number (superseded by {\tt --path}). If used, must be positive.
+  \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
+  \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
+  \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
 \end{itemize}
 
-Concerning the assignment of shot and run numbers, the following rules are in effect. The shot number is a six digit number between 1 and 214748. ITER shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new shot number should be used. Until a more automatic way of assigning numbers (and a better overall scheme) can be implemented, please send an email to the IO code responsible officer ({\tt Xavier.Bonnin@iter.org}), when you wish to obtain a new shot number, as the IO will keep track of those already assigned. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
+Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 4) and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER pulse or shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new pulse or shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
 
-After the IDS files are created, one should also run the {\tt create\_db\_entry} script, with the syntax:
+\begin{sloppypar}
+With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} is expected to be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. It should be set as part of the local environment variables in a {\tt setup.csh.local} file. Use of the {\tt user}, {\tt database}, or {\tt version} input flags allows to overwrite their values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
+\end{sloppypar}
+
+After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -17866,7 +17879,7 @@ surf
 
 mach
 -1.2 1.2 17 clvn
-'rainbow_16' cltb 'rainbow palette' extl
+'rainbow_16.pal' cltb 'rainbow palette' extl
 surf
 \end{verbatim}
 
@@ -18461,7 +18474,6 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
-\item[F2003] \index{F2003} To be used if the compiler is compatible with {\tt Fortran 2003}
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
 \item[GFORTRAN] \index{GFORTRAN} To be used with {\tt gfortran} compilation
 \item[GGD\_MAJOR\_VERSION] \index{GGD\_MAJOR\_VERSION} Major version number of the IMAS GGD library to which the code is linked (set internally by the configuration files)
@@ -18476,6 +18488,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[IMAS\_MINOR\_VERSION] \index{IMAS\_MINOR\_VERSION} Minor version number of the IMAS library to which the code is linked (set internally by the configuration files)
 \item[ITM] \index{ITM} To be used when compiling within the ITM framework
 \item[ITM\_ENVIRONMENT\_LOADED] \index{ITM\_ENVIRONMENT\_LOADED} To be used when wishing to compile with ITM CPOs
+\item[LEGACYCOMP] \index{LEGACYCOMP} To be used for legacy compilers not compatible with {\tt Fortran 2003}
 \item[MDSPLUS] \index{MDSPLUS} Enables use of {\tt MDSplus} trees
 \item[NAGF95] \index{NAGF95} To be used when compiling with the {\tt NAG} F95 compiler
 \item[NAG22] \index{NAG22} Specific to using the Nag Mark 22 or higher mathematical library
@@ -18875,31 +18888,12 @@ DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\
 DBG & utility/ma28copy4.F \\
 DBG & utility/my\_out.F \\
+DBG & utility/ratamjhyd.F \\
 DBG & utility/ysmp\_d.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
 DEF\_MAXCHORDS & b2plot/process\_eirene\_chords.F \\
 EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
-F2003 & convert/b2cdftallies2mds.F \\
-F2003 & convert/conv\_surface\_models.F \\
-F2003 & convert/conv\_triangles.F \\
-F2003 & convert/write\_triangles.F \\
-F2003 & modules/b2mod\_boundary\_namelist.F \\
-F2003 & modules/b2mod\_mdsplus.F \\
-F2003 & modules/b2mod\_neutrals\_namelist.F \\
-F2003 & modules/b2mod\_running\_average.F \\
-F2003 & modules/b2mod\_user\_namelist.F \\
-F2003 & modules/b2us\_feedback.F \\
-F2003 & modules/b2us\_plasma.F \\
-F2003 & modules/b2us\_prep.F \\
-F2003 & postprocessing/b2ye.F \\
-F2003 & preprocessing/b2agdr.F \\
-F2003 & preprocessing/b2aidr.F \\
-F2003 & test/check\_b2\_output.F90 \\
-F2003 & user/out\_for\_plot.F \\
-F2003 & utility/calc\_err.F \\
-F2003 & utility/cfopen.F \\
-F2003 & utility/mds\_routines.F \\
 F77 & user/b2file.F \\
 FIXED\_POINT & driver/b2mod\_driver.F \\
 G95 & utility/mds\_routines.F \\
@@ -18979,6 +18973,25 @@ JET & ids/b2\_ual\_write.F90 \\
 JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
+LEGACYCOMP & convert/b2cdftallies2mds.F \\
+LEGACYCOMP & convert/conv\_surface\_models.F \\
+LEGACYCOMP & convert/conv\_triangles.F \\
+LEGACYCOMP & convert/write\_triangles.F \\
+LEGACYCOMP & modules/b2mod\_batch\_average.F \\
+LEGACYCOMP & modules/b2mod\_boundary\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_mdsplus.F \\
+LEGACYCOMP & modules/b2mod\_neutrals\_namelist.F \\
+LEGACYCOMP & modules/b2mod\_par\_opt.F \\
+LEGACYCOMP & modules/b2mod\_running\_average.F \\
+LEGACYCOMP & modules/b2us\_feedback.F \\
+LEGACYCOMP & modules/b2us\_plasma.F \\
+LEGACYCOMP & modules/b2us\_prep.F \\
+LEGACYCOMP & postprocessing/b2ye.F \\
+LEGACYCOMP & test/check\_b2\_output.F90 \\
+LEGACYCOMP & user/out\_for\_plot.F \\
+LEGACYCOMP & utility/calc\_err.F \\
+LEGACYCOMP & utility/cfopen.F \\
+LEGACYCOMP & utility/mds\_routines.F \\
 MDSPLUS & convert/b2cdf2mds.F \\
 MDSPLUS & convert/b2cdfmovies2mds.F \\
 MDSPLUS & convert/b2cdftallies2mds.F \\
@@ -19050,6 +19063,8 @@ NAGFOR & transport/b2tvskt.F \\
 NAGFOR & transport/b2tvspr.F \\
 NAGFOR & transport/b2tvsq.F \\
 NAGFOR & utility/calc\_atomic\_data.F \\
+NAGFOR & utility/smax.F \\
+NAGFOR & utility/smin.F \\
 NCAR4 & b2plot/end\_page.F \\
 NCAR4 & b2plot/initialize\_plotting.F \\
 NCAR4 & b2plot/terminate\_plotting.F \\
@@ -19308,13 +19323,16 @@ B25\_EIRENE & startup-routines/find\_param.f \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
-F2003 & interfaces/couple\_SOLPS-ITER/wneutral\_fluxes.F \\
-F2003 & output/outidlgeo.F \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.f \\
 G95 & assistant/exit\_own.f \\
 HPUX & modules/eirmod\_cinit.F \\
+LEGACYCOMP & assistant/eirmod\_algebra.f \\
+LEGACYCOMP & file-handling/wrplam\_shrt.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.f \\
+LEGACYCOMP & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.f \\
+LEGACYCOMP & output/outildsrf.f \\
+LEGACYCOMP & particle-tracing/eirmod\_samsrf.f \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 NAGFOR & main-routines/eirene.f \\

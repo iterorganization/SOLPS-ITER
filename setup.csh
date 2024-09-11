@@ -9,12 +9,7 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-if ( "$0" != "tcsh" ) then
-  if ( "$0" != "-tcsh" ) then
-    echo "\e[31mUse tcsh to source setup.csh!\e[m"
-    exit 1
-  endif
-endif
+( ps -p $$ | grep -q tcsh ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`

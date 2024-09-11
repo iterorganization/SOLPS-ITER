@@ -3,21 +3,24 @@ NODENAME ?= $(shell echo `hostname`)
 LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
 LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
-ifdef USE_MPI
-FC        = mpiifort
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+ifeq (,$(findstring CentOS,$(OS)))
+MPI_FC   ?= mpiifort -fc=mpiifx
+else
+MPI_FC   ?= mpiifort
+endif
+ifdef SOLPS_MPI
+FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
 else
-FC        = ifort
+ifeq (,$(findstring CentOS,$(OS)))
+FC        = ifx
 endif
-
-COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
+endif
 
 FFLAGS    = -fPIC -assume no2underscore
 ifndef SOLPS_DEBUG
 FFLAGS   += -O2
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
-FFLAGS   += -fp-model=precise
-endif
 endif
 
 CPP       = /lib/cpp -C -traditional -ffreestanding

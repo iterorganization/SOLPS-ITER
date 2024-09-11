@@ -41,12 +41,10 @@ LD_MPI     = -lmpi4
 # Provide compiler
 #
 
+MPI_FC    ?= mpif90
 ifdef SOLPS_MPI
-FC         = mpif90
-else
-FC         = gfortran
+FC         = ${MPI_FC}
 endif
-MPI_FC     = mpif90
 
 #
 # Preprocessor options

@@ -1,3 +1,6 @@
+ifeq (${FC},f77)
+FC = gfortran
+endif
 COMPILER_MAJOR_VERSION = $(shell echo `${FC} --version | head -1 | awk '{printf "%s ",$$4,"\n"}' | cut -d '.' -f 1`)
 
 FFLAGS  += -fsignaling-nans

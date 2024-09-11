@@ -1,6 +1,5 @@
 CPP = /lib/cpp
 
-FC = gfortran
 ifndef SOLPS_DEBUG
 FCOPTS = -fdefault-real-8 -ffixed-line-length-80
 endif

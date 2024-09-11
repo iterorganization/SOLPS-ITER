@@ -26,6 +26,9 @@ module load netcdff/4.4.4--intel--pe-xe-2018--binary
 
 #module load imas
 
+# Compiler
+setenv FC ifort
+
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
     setenv DEVICE $TOKAMAKNAME

@@ -5,6 +5,9 @@
 c
 c  version : 14.08.2003 23:11
 c
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #include "uib2pprm.inc"
       integer i

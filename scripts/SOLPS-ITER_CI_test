@@ -5,7 +5,7 @@
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
-make MAKE_OPTIONS=-j8 nox_build b25_nox
+make MAKE_OPTIONS=-j8 nox_build b25_nox b25_tgt b25_adj b25_hess_tgt
 
 # Run test cases
 
@@ -14,7 +14,6 @@ make COMPASS_16515_1150ms_D_drift_AFN
 cd COMPASS_16515_1150ms_D_drift_AFN
 export DEVICE=compass
 correct_baserun_timestamps
-
 mkdir run_kin_test
 cd run_kin_test
 cp ../run_kin_CI/b2.*.parameters .
@@ -72,3 +71,11 @@ mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 2
+
+# Go back to normal settings
+cd ${SOLPSTOP}/modules/B2.5
+rm src.local/cfwure.F
+touch src/utility/cfwure.F
+touch src/modules/.new_modules
+cd ${SOLPSTOP}
+make b25eirene_nox
