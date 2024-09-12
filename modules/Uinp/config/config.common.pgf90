@@ -1,4 +1,4 @@
-FC      ?= pgf90
+FC       = pgf90
 
 ifdef SOLPS_DEBUG
 FFLAGS   = -g
@@ -15,7 +15,7 @@ MOD      = mod
 
 LDLIBS  += ${LD_MSCL} ${LD_NAG}
 LDEXTRA  =
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LDLIBS  += ${LD_MPI}
 endif
 

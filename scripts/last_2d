@@ -197,8 +197,8 @@ else
 fi
 
 echo "cleaning..."
-echo "rm -rf $LEXEC $LCMD $WRK_DIR"
-rm -rf "$LEXEC" "$LCMD" "$WRK_DIR"
+echo "rm -rf $LEXEC $LCMD $WRK_DIR $MARK"
+rm -rf "$LEXEC" "$LCMD" "$WRK_DIR" "$MARK"
 
 if [ -f "$OUTPUT_RAW" ]
 then

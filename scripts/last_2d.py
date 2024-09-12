@@ -193,7 +193,7 @@ def READ_VarID():
             dvar = 'L'
             if ( var == dvar ):
                 try:
-                    L=np.int(val)
+                    L=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -210,7 +210,7 @@ def READ_VarID():
             dvar = 'NSPEC'
             if ( var == dvar ):
                 try:
-                    NSPEC=np.int(val)
+                    NSPEC=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -227,7 +227,7 @@ def READ_VarID():
             dvar = 'NS'
             if ( var == dvar ):
                 try:
-                    NS=np.int(val)
+                    NS=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -235,8 +235,8 @@ def READ_VarID():
                 var_read = False
 
         SPEC_tmp = []
-        SUMZ_1_tmp = np.zeros(NSPEC, dtype=np.int)
-        SUMZ_N_tmp = np.zeros(NSPEC, dtype=np.int)
+        SUMZ_1_tmp = np.zeros(NSPEC, dtype=np.int64)
+        SUMZ_N_tmp = np.zeros(NSPEC, dtype=np.int64)
         for i in range(1,NSPEC+1):
             line = ff.readline()
             s = line.find('=')
@@ -268,7 +268,7 @@ def READ_VarID():
                 dvar = 'SUMZ_1[' + str(i) + ']'
                 if ( var == dvar ):
                     try:
-                        SUMZ_1_tmp[i-1]=np.int(val)
+                        SUMZ_1_tmp[i-1]=np.int64(val)
                     except:
                         logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
                         SUMZ_1_tmp[i-1]=0
@@ -286,7 +286,7 @@ def READ_VarID():
                 dvar = 'SUMZ_N[' + str(i) + ']'
                 if ( var == dvar ):
                     try:
-                        SUMZ_N_tmp[i-1]=np.int(val)
+                        SUMZ_N_tmp[i-1]=np.int64(val)
                     except:
                         logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
                         SUMZ_N_tmp[i-1]=0
@@ -308,7 +308,7 @@ def READ_VarID():
             dvar = 'NX'
             if ( var == dvar ):
                 try:
-                    NX=np.int(val)
+                    NX=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -325,7 +325,7 @@ def READ_VarID():
             dvar = 'NY'
             if ( var == dvar ):
                 try:
-                    NY=np.int(val)
+                    NY=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -342,7 +342,7 @@ def READ_VarID():
             dvar = 'NSEP'
             if ( var == dvar ):
                 try:
-                    NSEP=np.int(val)
+                    NSEP=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -359,7 +359,7 @@ def READ_VarID():
             dvar = 'NMP_I'
             if ( var == dvar ):
                 try:
-                    NMP_I=np.int(val)
+                    NMP_I=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -376,7 +376,7 @@ def READ_VarID():
             dvar = 'NMP_O'
             if ( var == dvar ):
                 try:
-                    NMP_O=np.int(val)
+                    NMP_O=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -393,7 +393,7 @@ def READ_VarID():
             dvar = 'NNISO'
             if ( var == dvar ):
                 try:
-                    NY=np.int(val)
+                    NY=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -410,7 +410,7 @@ def READ_VarID():
             dvar = 'NXC_I'
             if ( var == dvar ):
                 try:
-                    NXC_I=np.int(val)
+                    NXC_I=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -427,7 +427,7 @@ def READ_VarID():
             dvar = 'NXC_O'
             if ( var == dvar ):
                 try:
-                    NXC_O=np.int(val)
+                    NXC_O=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -444,7 +444,7 @@ def READ_VarID():
             dvar = 'NXT_I'
             if ( var == dvar ):
                 try:
-                    NXT_I=np.int(val)
+                    NXT_I=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -461,7 +461,7 @@ def READ_VarID():
             dvar = 'NXT_O'
             if ( var == dvar ):
                 try:
-                    NXT_O=np.int(val)
+                    NXT_O=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -478,7 +478,7 @@ def READ_VarID():
             dvar = 'NTP_I'
             if ( var == dvar ):
                 try:
-                    NTP_I=np.int(val)
+                    NTP_I=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -495,7 +495,7 @@ def READ_VarID():
             dvar = 'NTP_O'
             if ( var == dvar ):
                 try:
-                    NTP_O=np.int(val)
+                    NTP_O=np.int64(val)
                 except:
                     logging.error('value (%s) of variable (%s) is a wrong type and wont be set', val, var)
             else:
@@ -1235,7 +1235,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
                 continue;
             tmp_scl = tmp[:s].strip()
             try:
-                tmp_scl = np.float(tmp_scl)
+                tmp_scl = np.float64(tmp_scl)
             except:
                 logging.error('error number expected (%s read) for argument C, line %s of the command file %s... will be replaced by 1.0', line.strip(), k, cmd_file)
                 tmp_scl = 1.0
@@ -1301,7 +1301,7 @@ def WRITE_FMT(out_file, cmd_file, l2d_files, l2d_header, l2d_data, ires):
                 found, ind = match_raw(l2d_files, cmd_fle[i], l2d_header, cmd_quan[i])
                 if ( found == True ):
                     logging.info('writing formatted output for A:B:C:D:E => %s:%s:%s:%s:%s',cmd_fle[i],cmd_quan[i],cmd_scl[i],cmd_txt[i],cmd_uni[i])
-                    val = np.float(l2d_data[ind])
+                    val = np.float64(l2d_data[ind])
                     if ( cmd_scl[i] != 0.):
                         val = val * cmd_scl[i]
                     hlp = '{0}'.format('% 4.3E' % val)

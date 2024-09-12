@@ -1,46 +1,43 @@
+ifeq (${FC},f77)
+FC = ifort
+endif
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
-ifdef SOLPS_DEBUG
-FFLAGS  += -g -C -traceback -debug all -check all -diag-disable:10440 -diag-disable:10182
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
-FFLAGS  += -check nouninit
-endif
-endif
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-FFLAGS  += -vec_report0
-endif
-ifdef SOLPS_OPENMP
- ifndef SOLPS_MPI
+ifndef COMPILER_REDEF
+ COMPILE   = ${FC} -c ${FFLAGS} -module ${OBJDIR}
+ ifdef SOLPS_DEBUG
+  FFLAGS  += -g -C -traceback -debug all -check all -diag-disable:10440 -diag-disable:10182
+  ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+   FFLAGS += -check nouninit
+  endif
+ endif
+ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
+  FFLAGS  += -vec_report0
+  LDEXTRA  = -i_dynamic
+ endif
+ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
+  FFLAGS  += -fp-model=precise
+ endif
+ ifdef SOLPS_OPENMP
   ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
-   FFLAGS   += -qopenmp
+   FFLAGS += -qopenmp
   else
-   FFLAGS   += -openmp
+   FFLAGS += -openmp
   endif
- else
-  ifneq (,$(findstring mpiifort,${FC}))
-   ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 15; echo $$?),0)
-    FFLAGS  += -qopenmp
-   else
-    FFLAGS  += -openmp
-   endif
-  endif
+ endif
+else
+ COMPILE   = ${FC} -c ${FFLAGS} -J${OBJDIR}
+ ifdef SOLPS_OPENMP
+  FFLAGS  += -fopenmp
  endif
 endif
 
-INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC}
-ifndef COMPILER_REDEF
-COMPILE  = ${FC} -c ${FFLAGS} -module ${OBJDIR}
-else
-COMPILE  = ${FC} -c ${FFLAGS} -J${OBJDIR}
-endif
+INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 
 MOD      = mod
 LDLIBS   = ${LD_MSCL} ${LD_NAG}
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LDLIBS  += ${LD_MPI}
-endif
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-LDEXTRA  = -i_dynamic
 endif
 
 #!!!Local Variables:

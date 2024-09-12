@@ -48,6 +48,8 @@
 :nr_sep_Li:\eta_{Li}^{sep}:1.e+2
 @page: Separatrix density fraction Be, \%
 :nr_sep_Be:\eta_{Be}^{sep}:1.e+2
+@page: Separatrix density fraction B, \%
+:nr_sep_B:\eta_{B}^{sep}:1.e+2
 @page: Separatrix density fraction C, \%
 :nr_sep_C:\eta_{C}^{sep}:1.e+2
 @page: Separatrix density fraction N, \%
@@ -72,6 +74,17 @@
 :ptnt_cor:particles:1.e-6
 :ntrl_cor:neutrals:1.e-6
 :tot_core:total:1.e-6
+@page: Impurity radiation, MW
+:imp_rad:total:1.e-6
+:imp_rad_He:He:1.e-6
+:imp_rad_Li:Li:1.e-6
+:imp_rad_Be:Be:1.e-6
+:imp_rad_B:B:1.e-6
+:imp_rad_C:C:1.e-6
+:imp_rad_N:N:1.e-6
+:imp_rad_Ne:Ne:1.e-6
+:imp_rad_Ar:Ar:1.e-6
+:imp_rad_W:W:1.e-6
 @page: Stored energy, W
 :tot_enre:electrons:
 :tot_enri:ions:
@@ -167,6 +180,18 @@
 :flux_tot_Be:
 @page: Be ion dn/dt, s^{-1}
 :ion_dn/dt_Be:
+@page: Flux balance total B, s^{-1}
+:ion_core_B:
+:ntr_core_B:
+:ntr_targ_spt_B:
+:ntr_targ_pmp_B::-1.
+:ntr_wall_spt_B:
+:ntr_wall_pmp_B::-1.
+:ntr_puff_B:
+:src_ext_B:
+:flux_tot_B:
+@page: B ion dn/dt, s^{-1}
+:ion_dn/dt_B:
 @page: Flux balance total C, s^{-1}
 :ion_core_C:
 :ntr_core_C:
@@ -317,6 +342,16 @@
 :N_a_reg_02_Be:SOL:
 :N_a_reg_03_Be:inner:
 :N_a_reg_04_Be:outer:
+@page: Total number of B ions per region
+:N_i_reg_01_B:core:
+:N_i_reg_02_B:SOL:
+:N_i_reg_03_B:inner:
+:N_i_reg_04_B:outer:
+@page: Total number of B neutrals per region
+:N_a_reg_01_B:core:
+:N_a_reg_02_B:SOL:
+:N_a_reg_03_B:inner:
+:N_a_reg_04_B:outer:
 @page: Total number of C ions per region
 :N_i_reg_01_C:core:
 :N_i_reg_02_C:SOL:
@@ -389,6 +424,10 @@
 :N_i_edge_Be:N_{i,Be}^{edge}:
 @page: Total number of Be particles in the egde
 :N_t_edge_Be:N_{Be}^{edge}:
+@page: Total number of B ions in the egde
+:N_i_edge_B:N_{i,B}^{edge}:
+@page: Total number of B particles in the egde
+:N_t_edge_B:N_{B}^{edge}:
 @page: Total number of C ions in the egde
 :N_i_edge_C:N_{i,C}^{edge}:
 @page: Total number of C particles in the egde
@@ -915,6 +954,108 @@
 :sclfact_48_Be:
 :sclfact_49_Be:
 :sclfact_50_Be:
+@page: Internal source rescaling ratios B
+:sclrtio_01_B:
+:sclrtio_02_B:
+:sclrtio_03_B:
+:sclrtio_04_B:
+:sclrtio_05_B:
+:sclrtio_06_B:
+:sclrtio_07_B:
+:sclrtio_08_B:
+:sclrtio_09_B:
+:sclrtio_10_B:
+:sclrtio_11_B:
+:sclrtio_12_B:
+:sclrtio_13_B:
+:sclrtio_14_B:
+:sclrtio_15_B:
+:sclrtio_16_B:
+:sclrtio_17_B:
+:sclrtio_18_B:
+:sclrtio_19_B:
+:sclrtio_20_B:
+:sclrtio_21_B:
+:sclrtio_22_B:
+:sclrtio_23_B:
+:sclrtio_24_B:
+:sclrtio_25_B:
+:sclrtio_26_B:
+:sclrtio_27_B:
+:sclrtio_28_B:
+:sclrtio_29_B:
+:sclrtio_30_B:
+:sclrtio_31_B:
+:sclrtio_32_B:
+:sclrtio_33_B:
+:sclrtio_34_B:
+:sclrtio_35_B:
+:sclrtio_36_B:
+:sclrtio_37_B:
+:sclrtio_38_B:
+:sclrtio_39_B:
+:sclrtio_40_B:
+:sclrtio_41_B:
+:sclrtio_42_B:
+:sclrtio_43_B:
+:sclrtio_44_B:
+:sclrtio_45_B:
+:sclrtio_46_B:
+:sclrtio_47_B:
+:sclrtio_48_B:
+:sclrtio_49_B:
+:sclrtio_50_B:
+@page: Internal source rescaling factors B
+:sclfact_01_B:
+:sclfact_02_B:
+:sclfact_03_B:
+:sclfact_04_B:
+:sclfact_05_B:
+:sclfact_06_B:
+:sclfact_07_B:
+:sclfact_08_B:
+:sclfact_09_B:
+:sclfact_10_B:
+:sclfact_11_B:
+:sclfact_12_B:
+:sclfact_13_B:
+:sclfact_14_B:
+:sclfact_15_B:
+:sclfact_16_B:
+:sclfact_17_B:
+:sclfact_18_B:
+:sclfact_19_B:
+:sclfact_20_B:
+:sclfact_21_B:
+:sclfact_22_B:
+:sclfact_23_B:
+:sclfact_24_B:
+:sclfact_25_B:
+:sclfact_26_B:
+:sclfact_27_B:
+:sclfact_28_B:
+:sclfact_29_B:
+:sclfact_30_B:
+:sclfact_31_B:
+:sclfact_32_B:
+:sclfact_33_B:
+:sclfact_34_B:
+:sclfact_35_B:
+:sclfact_36_B:
+:sclfact_37_B:
+:sclfact_38_B:
+:sclfact_39_B:
+:sclfact_40_B:
+:sclfact_41_B:
+:sclfact_42_B:
+:sclfact_43_B:
+:sclfact_44_B:
+:sclfact_45_B:
+:sclfact_46_B:
+:sclfact_47_B:
+:sclfact_48_B:
+:sclfact_49_B:
+:sclfact_50_B:
 @page: Internal source rescaling ratios C
 :sclrtio_01_C:
 :sclrtio_02_C:
@@ -1454,6 +1595,10 @@
 :resco01_02_Be:
 :resco01_03_Be:
 :resco01_04_Be:
+:resco01_01_B:
+:resco01_02_B:
+:resco01_03_B:
+:resco01_04_B:
 :resco01_01_C:
 :resco01_02_C:
 :resco01_03_C:
@@ -1527,6 +1672,10 @@
 :resco02_02_Be:
 :resco02_03_Be:
 :resco02_04_Be:
+:resco02_01_B:
+:resco02_02_B:
+:resco02_03_B:
+:resco02_04_B:
 :resco02_01_C:
 :resco02_02_C:
 :resco02_03_C:
@@ -1600,6 +1749,10 @@
 :resco03_02_Be:
 :resco03_03_Be:
 :resco03_04_Be:
+:resco03_01_B:
+:resco03_02_B:
+:resco03_03_B:
+:resco03_04_B:
 :resco03_01_C:
 :resco03_02_C:
 :resco03_03_C:
@@ -1673,6 +1826,10 @@
 :resco04_02_Be:
 :resco04_03_Be:
 :resco04_04_Be:
+:resco04_01_B:
+:resco04_02_B:
+:resco04_03_B:
+:resco04_04_B:
 :resco04_01_C:
 :resco04_02_C:
 :resco04_03_C:
@@ -1746,6 +1903,10 @@
 :resmo01_02_Be:
 :resmo01_03_Be:
 :resmo01_04_Be:
+:resmo01_01_B:
+:resmo01_02_B:
+:resmo01_03_B:
+:resmo01_04_B:
 :resmo01_01_C:
 :resmo01_02_C:
 :resmo01_03_C:
@@ -1819,6 +1980,10 @@
 :resmo02_02_Be:
 :resmo02_03_Be:
 :resmo02_04_Be:
+:resmo02_01_B:
+:resmo02_02_B:
+:resmo02_03_B:
+:resmo02_04_B:
 :resmo02_01_C:
 :resmo02_02_C:
 :resmo02_03_C:
@@ -1892,6 +2057,10 @@
 :resmo03_02_Be:
 :resmo03_03_Be:
 :resmo03_04_Be:
+:resmo03_01_B:
+:resmo03_02_B:
+:resmo03_03_B:
+:resmo03_04_B:
 :resmo03_01_C:
 :resmo03_02_C:
 :resmo03_03_C:
@@ -1965,6 +2134,11 @@
 :resmo04_02_Be:
 :resmo04_03_Be:
 :resmo04_04_Be:
+:resmo04_01_B:
+:resmo04_02_B:
+:resmo04_03_B:
+:resmo04_04_B:
+:resmo04_01_C:
 :resmo04_01_C:
 :resmo04_02_C:
 :resmo04_03_C:
@@ -2050,12 +2224,12 @@
 :q_max_o:q_{peak}^{outer}:1.e-6
 :q_max_iu:q_{peak}^{inner,up}:1.e-6
 :q_max_ou:q_{peak}^{outer,up}:1.e-6
-@page: Neutral pressure in PFR as defined by SPb, Pa
+@page: Neutral pressure in PFR, Pa
 :p_neut_PFR:average:
 :p_neut_PFR_i:inner:
 :p_neut_PFR_o:outer:
 @file:user
-@page: Neutral pressure in PFR as defined by ank, Pa
+@page: Neutral pressure in PFR (ank), Pa
 :Pneu_PFR:average:
 :Pneu_PFRi:inner:
 :Pneu_PFRo:outer:

@@ -4,13 +4,8 @@ ifndef LD_MSCL
 endif
 
 MPI_FC  ?= mpif90
-ifdef USE_MPI
+ifdef SOLPS_MPI
 FC       = ${MPI_FC}
-ifdef SOLPS_OPENMP
-FFLAGS   = -fopenmp
-endif
-else
-FC      ?= gfortran
 endif
 
 CPP      = /usr/bin/cpp -traditional
