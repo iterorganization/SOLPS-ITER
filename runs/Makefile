@@ -208,7 +208,7 @@ endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -317,7 +317,7 @@ endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -602,7 +602,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -641,7 +641,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
