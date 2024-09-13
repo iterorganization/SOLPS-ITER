@@ -197,29 +197,29 @@ eirene_nox:
 eirene_nox_mpi:
 	cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
 
-b25:
+b25: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO}
 
-b25_diff_d:
+b25_diff_d: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} DIFF_D
 
-b25_diff_b:
+b25_diff_b: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} DIFF_B
 
-b25_diff_dd:
+b25_diff_dd: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} DIFF_DD
 
-b25_tgt:
+b25_tgt: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} TANGENT TGT=yes
 
-b25_adj:
+b25_adj: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ADJOINT ADJ=yes
 
-b25_hess_tgt:
+b25_hess_tgt: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} HESS_TGT HESS_TGT=yes
 
-b25_all:
+b25_all: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ALL
@@ -228,7 +228,7 @@ b25_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
 
-b25_mpi:
+b25_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
 
@@ -238,11 +238,11 @@ b25_openmp_mpi: nc2text_simple nc_reduce
 
 b25_mpi_openmp: b25_openmp_mpi
 
-b25_nox:
+b25_nox: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} NOPLOT
 
-b25_ig:
+b25_ig: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
@@ -257,7 +257,7 @@ b25_nox_openmp: nc2text_simple nc_reduce
 
 b25_openmp_nox: b25_nox_openmp
 
-b25_nox_mpi:
+b25_nox_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
 
@@ -273,7 +273,7 @@ b25_mpi_openmp_nox: b25_nox_openmp_mpi
 
 b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
-b25_all_mpi:
+b25_all_mpi: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
@@ -285,18 +285,18 @@ b25_all_openmp_mpi: nc2text_simple nc_reduce
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
-b25eirene:
+b25eirene: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
 
-b25eirene_all:
+b25eirene_all: nc2text_simple nc_reduce
 	cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 	cd modules/solps4-5; ${MAKE}  links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
-b25eirene_nox:
+b25eirene_nox: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
@@ -306,7 +306,7 @@ b25eirene_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 
-b25eirene_mpi:
+b25eirene_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
@@ -323,12 +323,12 @@ b25eirene_nox_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
 
-b25eirene_nox_mpi:
+b25eirene_nox_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
 
-b25eirene_ig:
+b25eirene_ig: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
@@ -339,7 +339,7 @@ b25eirene_all_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
-b25eirene_all_mpi:
+b25eirene_all_mpi: nc2text_simple nc_reduce
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
