@@ -5,6 +5,11 @@
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
+pkg-config fundamental-constants --cflags
+ls /work/imas/opt/EasyBuild/software/Fundamental-Constants/0.1.1/include/fundamental-constants
+cd modules/DivGeo/equtrn
+make
+cd ${SOLPSTOP}
 make MAKE_OPTIONS=-j8 nox_build b25_nox
 
 # Run test cases
