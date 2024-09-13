@@ -349,11 +349,11 @@ eirene_mpi_openmp: eirene_openmp_mpi
 
 eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
 
-b25:
+b25: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO}
 
-b25_all:
+b25_all: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ALL
@@ -362,7 +362,7 @@ b25_openmp: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
 
-b25_mpi:
+b25_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
 
@@ -372,11 +372,11 @@ b25_openmp_mpi: nc2text_simple nc_reduce
 
 b25_mpi_openmp: b25_openmp_mpi
 
-b25_nox:
+b25_nox: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} NOPLOT
 
-b25_ig:
+b25_ig: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
@@ -391,7 +391,7 @@ b25_nox_openmp: nc2text_simple nc_reduce
 
 b25_openmp_nox: b25_nox_openmp
 
-b25_nox_mpi:
+b25_nox_mpi: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
 
@@ -407,7 +407,7 @@ b25_mpi_openmp_nox: b25_nox_openmp_mpi
 
 b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
-b25_all_mpi:
+b25_all_mpi: nc2text_simple nc_reduce
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
@@ -419,7 +419,7 @@ b25_all_openmp_mpi: nc2text_simple nc_reduce
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
-b25eirene:
+b25eirene: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -429,7 +429,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
 
-b25eirene_all:
+b25eirene_all: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -440,7 +440,7 @@ endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
-b25eirene_nox:
+b25eirene_nox: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -460,7 +460,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 
-b25eirene_mpi:
+b25eirene_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -492,7 +492,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
 
-b25eirene_nox_mpi:
+b25eirene_nox_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -518,7 +518,7 @@ endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
-b25eirene_all_mpi:
+b25eirene_all_mpi: nc2text_simple nc_reduce
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
