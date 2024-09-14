@@ -6,7 +6,7 @@ echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.IT
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug
-make MAKE_OPTIONS=-j8 nox_build_debug b25_nox_debug
+make MAKE_OPTIONS=-j8 solps_nox_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh
@@ -24,6 +24,7 @@ cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
 touch b2fstati
+setup_baserun_B25_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone ./
