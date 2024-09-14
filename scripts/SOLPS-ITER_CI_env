@@ -10,9 +10,6 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
 }
 
 export MAKE=/usr/bin/gmake
-export LMOD_SH_DBG_ON=1
 echo "export HOST_NAME=ITER" > $(dirname $0)/../SETUP/setup.ksh.HOST_NAME.local
 . $(dirname $0)/../setup.ksh ifort64
 make local
-pkg-config fundamental-constants al-fortran al-identifiers-fortran ggd amns --cflags
-ls /work/imas/opt/EasyBuild/software/Fundamental-Constants/0.1.1/include/fundamental-constants
