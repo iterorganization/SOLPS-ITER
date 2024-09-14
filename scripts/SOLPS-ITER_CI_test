@@ -5,7 +5,8 @@
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox depend_nox
-make MAKE_OPTIONS=-j8 nox_build b25_nox
+make divgeo_nox
+make MAKE_OPTIONS=-j8 solps_nox b25_nox
 
 # Run test cases
 
