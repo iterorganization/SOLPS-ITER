@@ -230,11 +230,27 @@ nox:         carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
 
 nox_openmp:  carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
+solps_nox_openmp: nox_openmp
+
+solps_openmp_nox: nox_openmp
+
 nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+
+solps_nox_mpi: nox_mpi
+
+solps_mpi_nox: nox_mpi
 
 nox_openmp_mpi: carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
 
 nox_mpi_openmp: nox_openmp_mpi
+
+solps_openmp_mpi_nox: nox_openmp_mpi
+
+solps_mpi_openmp_nox: nox_openmp_mpi
+
+solps_nox_openmp_mpi: nox_openmp_mpi
+
+solps_nox_mpi_openmp: nox_openmp_mpi
 
 all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds manual
 
