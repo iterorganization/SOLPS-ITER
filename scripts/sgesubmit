@@ -106,7 +106,7 @@ EOF
   endif
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
+  if (-s fort.1 && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.sge_coupled$compress
     set QSUB=`climb_and_look_for QSUB.sge_coupled$compress`
@@ -118,7 +118,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
+    if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
     echo No argument is specified. Looking for QSUB.sge$compress
     set QSUB=`climb_and_look_for QSUB.sge$compress`
     if ($QSUB == "//QSUB.sge$compress") then

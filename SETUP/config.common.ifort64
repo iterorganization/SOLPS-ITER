@@ -163,11 +163,6 @@ export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
 #
 # Export for use in sub-makefiles
 #
@@ -200,6 +195,8 @@ export LIBZ
 export ADDLIBS
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES

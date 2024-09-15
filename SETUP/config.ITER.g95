@@ -210,6 +210,8 @@ export LD_SONNET
 export LD_JSON
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export B25_DEFINES
 export EIRENE_DEFINES
 export JSON_INC

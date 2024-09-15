@@ -176,7 +176,7 @@ endif
 unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
+  if (-s fort.1 && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for $job_prefix.iter_coupled$compress
     set QSUB=`climb_and_look_for $job_prefix.iter_coupled$compress`
@@ -188,7 +188,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
+    if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
     echo No argument is specified. Looking for $job_prefix.iter$compress
     set QSUB=`climb_and_look_for $job_prefix.iter$compress`
     if ($QSUB == "//$job_prefix.iter$compress") then

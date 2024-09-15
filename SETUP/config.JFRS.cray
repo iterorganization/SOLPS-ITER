@@ -257,6 +257,8 @@ export LD_SONNET
 export LD_MPI
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES
