@@ -26,11 +26,11 @@ export LD_LIBRARY_PATH
 
 update_solps_run_status "Started on `hostname` at `date`"
 
-if [ -s input.dat -a ${standalone} = "no" ]; then
+if [ -s fort.1 -a ${standalone} = "no" ]; then
   if [ ${compress} = "-gz" ]; then
-    time b2run ${argv} b2mn < input.dat | gzip -9 > run.log.gz
+    time b2run ${argv} b2mn < fort.1 | gzip -9 > run.log.gz
   else
-    time b2run ${argv} b2mn < input.dat > run.log
+    time b2run ${argv} b2mn < fort.1 > run.log
   fi
 else
   if [ ${compress} = "-gz" ]; then

@@ -127,7 +127,7 @@ EOF
   endif
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
+  if (-s fort.1 && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for QSUB.cumulus_coupled$compress
     set QSUB=`climb_and_look_for QSUB.cumulus_coupled$compress`
