@@ -488,7 +488,7 @@ then do the following:
   sbb
   cd src
   mkdir -p modules.local
-  cp modules/b2mod\_dimensions.F modules.local
+  cp modules/b2mod_dimensions.F modules.local
   touch modules/.new_modules
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
@@ -596,11 +596,11 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
 with MPI parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory. This can also be done automatically by use of the {\tt set\_mpi} script before the compilation.
 
 Adding the {\tt \_openmp} suffix at the end of any build target will execute the command
 with OpenMP parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory. This can also be done automatically by use of the {\tt set\_openmp} script before the compilation.
 
 Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any build target will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
@@ -608,7 +608,7 @@ with both OpenMP and MPI parallelization options, when relevant, and put the exe
 
 Adding the {\tt \_debug} suffix at the end of any build target will execute the command
 in debug mode, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory. This can also be done automatically by use of the {\tt set\_debug} script before the compilation.
 
 Adding the {\tt clean\_} prefix at the beginning of any build target will remove that build target
 from its directory, as well as all associated pre-processed source files, object files, module files,
@@ -1702,8 +1702,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by settings up links to the proper data files.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by settings up links to the proper data files.
+  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
