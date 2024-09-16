@@ -272,6 +272,7 @@ endif
 	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
 	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
+	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
@@ -370,6 +371,7 @@ endif
 	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
 	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
 	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
+	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
