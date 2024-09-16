@@ -92,6 +92,30 @@ setup_baserun_eirene_links
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_for_CI/ ./ || exit 4
 
+# Test to check JSON input also works
+cd ..
+mkdir run_CI_JSON_test
+cd run_CI_JSON_test
+cp ../run_for_CI/b2.*.parameters .
+cp ../run_for_CI/b2mn.dat .
+cp ../run_for_CI/b2fstati .
+cp ../run_for_CI/fort.10.i fort.10
+cp ../run_for_CI/fort.11.i fort.11
+cp ../run_for_CI/fort.13.i fort.13
+cp ../run_for_CI/fort.14.i fort.14
+cp ../run_for_CI/fort.44.i fort.44
+cp ../run_for_CI/fort.46.i fort.46
+cp ../run_for_CI/eirene.input.json .
+cp ../run_for_CI/eirene_add_surfaces.input.json .
+cp ../run_for_CI/eirene_physics_model.input.json .
+cp ../run_for_CI/user_data.input .
+cp ../run_for_CI/b2time.nc.i b2time.nc
+cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
+touch b2fstati
+setup_baserun_eirene_links
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_for_CI/ ./ || exit 5
+
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
 cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
@@ -139,7 +163,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 5
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 6
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5
