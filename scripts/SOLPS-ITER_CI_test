@@ -4,9 +4,9 @@
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
-make listobj_nox depend_nox
-make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox
+make FC=ifort listobj_nox depend_nox
+make FC=ifort divgeo_nox
+make FC=ifort MAKE_OPTIONS=-j8 solps_nox b25_nox
 
 # Run test cases
 
@@ -149,7 +149,7 @@ cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_json_links
 b2run b2mn
-../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 6
+../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 7
 
 cd ..
 mkdir run_CI_test_9-pt
@@ -169,7 +169,7 @@ cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-../run_checks_DIIID_3106_coupled.sh ../run_for_CI_9-pt/ ./ || exit 7
+../run_checks_DIIID_3106_coupled.sh ../run_for_CI_9-pt/ ./ || exit 8
 
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
@@ -218,7 +218,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-../run_checks_DIIID_3106_restart.sh ../run_CI_test_9-pt_20/ ./ || exit 8
+../run_checks_DIIID_3106_restart.sh ../run_CI_test_9-pt_20/ ./ || exit 9
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5
