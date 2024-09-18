@@ -13287,7 +13287,7 @@ stored in the {\tt output/} folder inside the run directory. The general naming 
 (except for geometry related quantities and a few others):
 
  \begin{verbatim}
-  <subroutine_name>_<quantity>[_<XXX>].dat
+  <subroutine_name>_<quantity>[_<XXX>]_us.dat
  \end{verbatim}
 
 Here, {\tt <subroutine\_name>} is the name of subroutine (or sometimes the name of the Fortran source file containing this subroutine)
@@ -13296,56 +13296,52 @@ variable inside the subroutine, if such a variable exists. Otherwise some associ
 omitted from common quantities (such as {\tt te}, {\tt ti} or {\tt po}). For example, the file containing the density of the species with index {\tt is = 1} would be
 
 \begin{verbatim}
- b2npco_na_001.dat
+ b2npco_na_001_us.dat
 \end{verbatim}
 
 The content of the file looks like the following:
 
 \begin{verbatim}
-            -1             0             1             2             3
-  36   2.525043E+19  2.517455E+19  1.625484E+19  1.444400E+19  1.407206E+19
-  35   2.681619E+19  2.673561E+19  1.804678E+19  1.575019E+19  1.516221E+19
-  34   3.360574E+19  3.350655E+19  2.279144E+19  1.984601E+19  1.907786E+19
-  33   4.343278E+19  4.330891E+19  2.978478E+19  2.597130E+19  2.498425E+19
-  32   5.664300E+19  5.649203E+19  3.951054E+19  3.444186E+19  3.309993E+19
-  31   7.393565E+19  7.375144E+19  5.240743E+19  4.567851E+19  4.384763E+19
-  30   9.590684E+19  9.568531E+19  6.914344E+19  6.032204E+19  5.781704E+19
-  29   1.230569E+20  1.227959E+20  9.057685E+19  7.919435E+19  7.575477E+19
-  28   1.556381E+20  1.553424E+20  1.176512E+20  1.032794E+20  9.859909E+19
-  27   1.932463E+20  1.929148E+20  1.497150E+20  1.323182E+20  1.263528E+20
-  26   2.335330E+20  2.331599E+20  1.844608E+20  1.643623E+20  1.576109E+20
-  25   2.721367E+20  2.716981E+20  2.163190E+20  1.948967E+20  1.888368E+20
-  24   2.992329E+20  2.987071E+20  2.372826E+20  2.165452E+20  2.127225E+20
-  23   3.069312E+20  3.063232E+20  2.417565E+20  2.224695E+20  2.209700E+20
-  22   2.972805E+20  2.966824E+20  2.323948E+20  2.140750E+20  2.134266E+20
-  21   2.785257E+20  2.779398E+20  2.158066E+20  1.981130E+20  1.971063E+20
-  20   2.592405E+20  2.586764E+20  1.986355E+20  1.815245E+20  1.801132E+20
-  19   2.447657E+20  2.442036E+20  1.861651E+20  1.694604E+20  1.678487E+20
-  18   2.378737E+20  2.373074E+20  1.802841E+20  1.638746E+20  1.621619E+20
-  17   2.345108E+20  2.339292E+20  1.774551E+20  1.611951E+20  1.594105E+20
-  16   2.302662E+20  2.297536E+20  1.742077E+20  1.580295E+20  1.561263E+20
-  15   2.263556E+20  2.258411E+20  1.711906E+20  1.550573E+20  1.530871E+20
-  14   2.219169E+20  2.214601E+20  1.678177E+20  1.517517E+20  1.497154E+20
-  13   2.171240E+20  2.166303E+20  1.639932E+20  1.481086E+20  1.459853E+20
-  12   2.121178E+20  2.116556E+20  1.601201E+20  1.444459E+20  1.422191E+20
-  11   2.064163E+20  2.059699E+20  1.556076E+20  1.401716E+20  1.378837E+20
-  10   2.005827E+20  2.000971E+20  1.507593E+20  1.356803E+20  1.333992E+20
-   9   1.944365E+20  1.940038E+20  1.458187E+20  1.311082E+20  1.288094E+20
-   8   1.872176E+20  1.868137E+20  1.399629E+20  1.256621E+20  1.233961E+20
-   7   1.797522E+20  1.793348E+20  1.339149E+20  1.200777E+20  1.178179E+20
-   6   1.717291E+20  1.713409E+20  1.275705E+20  1.142528E+20  1.119222E+20
-   5   1.627565E+20  1.623631E+20  1.203216E+20  1.076693E+20  1.053815E+20
-   4   1.534325E+20  1.530565E+20  1.128591E+20  1.008665E+20  9.870904E+19
-   3   1.433210E+20  1.429840E+20  1.049081E+20  9.352627E+19  9.151503E+19
-   2   1.324803E+20  1.321455E+20  9.642263E+19  8.568567E+19  8.379455E+19
-   1   1.208139E+20  1.205130E+20  8.754242E+19  7.755114E+19  7.573841E+19
-   0   1.083148E+20  1.080124E+20  7.790863E+19  6.878814E+19  6.712576E+19
-  -1   1.015473E+20  1.012638E+20  7.310223E+19  6.428731E+19  6.265369E+19
+         1   1.334884E+19
+         2   1.357794E+19
+         3   1.422283E+19
+         4   1.591764E+19
+         5   1.950276E+19
+         6   2.558840E+19
+         7   3.389793E+19
+         8   4.246212E+19
+         9   4.749358E+19
+        10   4.531322E+19
+        11   3.734540E+19
+        12   2.820136E+19
+        13   2.101713E+19
+        14   1.615825E+19
+        15   1.280937E+19
+        16   1.036007E+19
+        17   8.326655E+18
+        18   6.587507E+18
+        19   5.128458E+18
+        20   3.965141E+18
+        21   3.215927E+18
+        22   2.912588E+18
+        23   2.963722E+18
+        24   3.181588E+18
+        25   1.870758E+19
+        26   1.874680E+19
+        27   1.876753E+19
+        28   1.874173E+19
+        29   1.871714E+19
+        30   1.874141E+19
+        31   1.881712E+19
+        32   1.891364E+19
+        33   1.900573E+19
+        34   1.908675E+19
+        35   1.916120E+19
+        36   1.923514E+19
 \end{verbatim}
 
-Here the first row (truncated in the example above) gives the poloidal cell index
-{\tt ix}, the first column (to the right) contains the radial cell index
-{\tt iy}, the rest are the values of the 2D array in each cell.
+Here the first row (truncated in the example above) gives the index of the 
+control volume ({\tt iCv}), and the second row gives the density.
 
 The price for the possibility to output each quantity exactly from the subroutine where this quantity is calculated
 is the production of output files each time the corresponding subroutine is called.
