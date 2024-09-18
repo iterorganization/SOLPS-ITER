@@ -2509,28 +2509,21 @@ The boundary conditions are specified by the {\tt boundary} namelist
 which contains
 \begin{description}
 \item[NBC]\index{NBC} {\tt integer}, number of boundary segments
-\item[BCCHAR]\index{BCCHAR} {\tt character array, length NBC}, specifying the nature of
-  the boundary segment
+\item[BCCHAR]\index{BCCHAR} {\tt character array, length NBC}
   \begin{description}
-  \item[N] "North" boundary
-  \item[S] "South" boundary
-  \item[W] "West" boundary
-  \item[E] "East" boundary
-  \item[X] "X" boundary used for specifying a fixed value on
-  a row of cells
-  \item[Y] "Y" boundary used for specifying a fixed value on
-  a column of cells
+  \item[A] BCHAR is always equal to 'A' (automatic) and a boundary list is defined
+   by the mesh boundary faces that have fcLbl.ge.BCSTART and fcLbl.le.BCEND.
   \end{description}
 \item[BCPOS]\index{BCPOS} {\tt integer array, length NBC}, for North, South
   or X boundary conditions, it specifies the row index; for West, East
-  and Y boundary conditions, it specifies the column index
-\item[BCSTART]\index{BCSTART} {\tt integer array, length NBC}, for North,
-  South or X boundary conditions, it specifies the start column index;
-  for West, East and Y boundary conditions, it specifies the start row
-  index
-\item[BCEND]\index{BCEND} {\tt integer array, length NBC}, for North, South
-  or X boundary conditions, it specifies the end column index; for
-  West, East and Y boundary conditions, it specifies the end row index
+  and Y boundary conditions, it specifies the column index.
+  Obsolete for WG.
+\item[BCSTART]\index{BCSTART} {\tt integer array, length NBC}, 
+  Starting label (fcLbl) of the cells belonging to this boundary condition.
+  (see description of BCCHAR).
+\item[BCEND]\index{BCEND} {\tt integer array, length NBC},   
+  Ending label (fcLbl) of the cells belonging to this boundary condition.
+  (see description of BCCHAR).
 \item[BCCON]\index{BCCON} {\tt integer array, length NS * NBC}, specifying
   the type of density boundary condition for each segment and species
   (fastest varying index is species); makes use of {\tt CONPAR} to
