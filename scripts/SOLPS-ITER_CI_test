@@ -90,7 +90,7 @@ cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_for_CI/ ./ || exit 4
+../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 4
 
 # Test to check JSON input also works
 cd ..
@@ -114,7 +114,7 @@ cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_for_CI/ ./ || exit 5
+../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 5
 
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
