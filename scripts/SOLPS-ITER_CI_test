@@ -163,7 +163,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 6
+../run_checks_DIIID_3106_restart.sh ../run_CI_test_20/ ./ || exit 6
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5
