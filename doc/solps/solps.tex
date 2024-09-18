@@ -4445,7 +4445,7 @@ DO I=1,NADMOD
    NRS   IPUNKT   XCOOR   YCOOR   ZCOOR
 ENDDO
 DO I=1,NASMOD
-   LIMPOS   ONETWO
+   LIMPOS   ONETWO   ICOOR
    IF (ONETWO.LT.0) XPOLPOS   YPOLPOS
 ENDDO
 \end{verbatim}
@@ -4485,6 +4485,7 @@ ENDDO
   \item[ZCOOR] New Z-coordinate of the vertex being modified (in cm).
   \item[LIMPOS] Index of the additional surface to be fixed to a grid corner. The particular grid corner to which this additional surface is fixed is given by the ordering specified in the introductory paragraph of this subsection.
   \item[ONETWO] {\tt ABS(ONETWO)} is the index of the vertex being modified in that additional surface, and can only be 1 or 2
+  \item[ICOOR] The index of the EIRENE vertex whose coordinates will overwrite the original coordinates of the additional surface. 
   \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
