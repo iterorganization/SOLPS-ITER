@@ -5061,7 +5061,7 @@ Several functional forms for setting time-dependent gas puff inputs can be set u
 \section{Averaging scheme}
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
-When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
+When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the
 averaging scheme detailed in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
 run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section~\ref{sec:b2ye} below).  It should be noted that this averaging scheme does NOT affect the physical run behaviour as such and therefore does not have any stabilizing effect on the run.
 
