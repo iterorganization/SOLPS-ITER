@@ -112,7 +112,7 @@ cp ../run_for_CI/user_data.input .
 cp ../run_for_CI/b2time.nc.i b2time.nc
 cp ../run_for_CI/b2tallies.nc.i b2tallies.nc
 touch b2fstati
-setup_baserun_eirene_links
+setup_baserun_eirene_json_links
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_for_CI/ ./ || exit 5
 
