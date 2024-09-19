@@ -63,10 +63,10 @@ ADDLIBS    = -lgfortran
 #
 
 ifeq (,$(findstring CentOS,$(OS)))
-MPI_FC    ?= mpiifort -fc=mpiifx
+MPI_FC     = "mpiifort -fc=mpiifx"
 FCVOPTS    = -check nouninit
 else
-MPI_FC    ?= mpiifort
+MPI_FC     = mpiifort
 endif
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}

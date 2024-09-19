@@ -1,6 +1,7 @@
 # Autodetected optional features...
 ifeq (${FC},f77)
   FC = ifort
+  FN = ifort
 endif
 ifeq (${CC},cc)
   ifneq (${FC},ftn)
@@ -206,6 +207,7 @@ export JSON_INC
 
 export MPI_FC
 export FC
+export FN
 export CC
 
 #!!!Local Variables:
