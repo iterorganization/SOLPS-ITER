@@ -1,6 +1,7 @@
 # Autodetected optional features...
 
 FC          = pgf90
+FN          = pgf90
 SOLPS_CPP  += -DPGF90 -DNOQUAD
 LD_MPI      = -Mmpi=mpich
 FFLAGSEXTRA = -Mnorpath
@@ -174,6 +175,7 @@ export EIRENE_DEFINES
 export MPI_CPP
 
 export FC
+export FN
 export CC
 
 #!!!Local Variables:

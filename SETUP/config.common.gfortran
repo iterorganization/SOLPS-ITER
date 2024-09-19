@@ -2,6 +2,7 @@
 
 ifeq (${FC},f77)
 FC             = gfortran
+FN             = gfortran
 endif
 ifeq (${CC},cc)
 ifneq (${FC},ftn)
@@ -177,6 +178,7 @@ export EIRENE_DEFINES
 
 export MPI_FC
 export FC
+export FN
 export CC
 
 #!!!Local Variables:

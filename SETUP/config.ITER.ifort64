@@ -59,7 +59,7 @@ NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 #
 
 ifeq (,$(findstring CentOS,$(OS)))
-MPI_FC    ?= mpiifort -fc=mpiifx
+MPI_FC    ?= "mpiifort -fc=mpiifx"
 FCVOPTS    = -check nouninit
 else
 MPI_FC    ?= mpiifort
