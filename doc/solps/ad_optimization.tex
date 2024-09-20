@@ -13,9 +13,9 @@ The user must be aware that the AD differentiated code, available in {\tt B2.5/s
 
 An additional caveat must be known by the user: this manual version and the procedure described here are valid and have been proven to work with specific {\tt Tapenade} and \SOLPSITER versions. New {\tt Tapenade} releases and \SOLPSITER development can make some of the procedure below obsolete or require modifications. Therefore, here are listed the git hash of both \SOLPSITER and {\tt B2.5}, and the {\tt Tapenade} version that have been verified to work with this manual version:
 \begin{description}
-  \item{\SOLPSITER} \href{https://git.iter.org/projects/BND/repos/solps-iter/commits/6d4ad74aa97fdd71df4b1bc008623603e0af3d78}{6d4ad74aa97}
-  \item{B2.5} \href{https://git.iter.org/projects/BND/repos/b2.5/commits/3eabeb0698f9894e72e8ee832b09f8dbd07a1083}{3eabeb0698f}
-  \item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/686e29d1a492ce72f4f7f61d94a47066695c9da8}{3.16-v2-120-g686e29d1a}
+  \item{\SOLPSITER} \href{https://git.iter.org/projects/BND/repos/solps-iter/commits/9bc274af132fb79d2e2ed9d4735b487d9383a189}{9bc274af132}
+  \item{B2.5} \href{https://git.iter.org/projects/BND/repos/b2.5/commits/0989b83a16677b22a8fada69013397a1e8727cbe}{0989b83a166}
+  \item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/29c2bf30f4de2b5f0f624d3f36026a77e167068a}{3.16-develop-29c2bf30}
 \end{description}
 
 \subsubsection{Acknowledgments}
@@ -62,21 +62,41 @@ For a MAP estimation, the following cost function is employed:
 \end{equation}
 where $\mathcal{D}$ is the experimental dataset available for the analysis, of which $q^{\mathrm{EXP}}$ is a specific measurement. In Eq.~(\ref{eq:mapcost}), $\mathcal{L}(\mathcal{D}\vert\theta)$ is the likelihood function and $\pi(\theta)$ the prior distribution.
 
-The prior distribution $\pi(\theta)$ can be chosen by the user, and currently available options are uniform distributions (i.e. $\pi(\theta_i)=1.0$), or Gaussian priors $\pi(\theta_i)=\frac{2}{\sigma_{\theta,i}\sqrt{(2\pi)}} \exp{\left[-\frac{1}{2} \frac{\left( \theta_i -\mu_{\theta_i}\right)^2}{\sigma_{\theta,i}^2} \right]}$, where $i$ indicates the specific element in the vector of control variables $\theta$, and $\mu_{\theta_i}$ and $\sigma_{\theta,i}$ are respectively the mean and standard deviation associated with the Gaussian for variable $\theta_i$.
+The prior distribution $\pi(\theta)$ can be chosen by the user, and currently available options are:
+\begin{description}
+	\item[uniform prior] $\pi(\theta_i)=1.0$,
+	\item[Gaussian prior] $\pi(\theta_i)=\frac{1}{\sigma_{\theta,i}\sqrt{(2\pi)}} \exp{\left[-\frac{1}{2} \frac{\left( \theta_i -\mu_{\theta_i}\right)^2}{\sigma_{\theta,i}^2} \right]}$,
+	\item[Gamma prior] $\pi(\theta_i)=\frac{\theta_i^{\alpha_i-1}e^{-\beta_i \theta_i}\beta_i^{\alpha_i}}{\Gamma(\alpha_i)}$, for $\theta_i, \alpha_i, \beta_i >0$. $\Gamma$ is the gamma function, $\alpha_i=(\mu_{\theta_i}/\sigma_{\theta,i})^2$, and $\beta_i=\mu_{\theta_i}/\sigma_{\theta,i}^2$,
+\end{description}
+ where $i$ indicates the specific element in the vector of control variables $\theta$, and $\mu_{\theta_i}$ and $\sigma_{\theta,i}$ are respectively the mean and standard deviation associated with the Gaussian or Gamma priors for variable $\theta_i$.
 
 The likelihood function $\mathcal{L}(\mathcal{D}\vert \theta)$ is currently available as a Gaussian distribution, while other types may be implemented in the future if needed. The Gaussian likelihood for a quantity $q$ at a specific spatial location $\Omega_l$ takes the form
 \begin{equation}\label{eq:likelihood}
 \mathcal{L}(\mathcal{D}\vert\theta)=\frac{1}{\sqrt{(2\pi)^{N_\mathcal{D}}\det\Sigma}} \exp{\left(-\frac{1}{2}z^T\Sigma^{-1}z \right)},
 \end{equation}
-where $z=q^{\mathrm{EXP}}-q(\theta)-\mu$, $\Sigma$ is the covariance matrix and $N_\mathcal{D}$ is the number of data points in $q^{\mathrm{EXP}}$ for this specific quantity at this specific location $\Omega_l$. $\mu$ is the mean of the Gaussian distribution (not a tunable parameter at the moment). The covariance matrix is a diagonal matrix with $\Sigma_{ii}=\sigma_{q,l}^2$, if an absolute error is assumed in the likelihood. If instead the likelihood models a relative, instead of an absolute, error, the diagonal elements of $\Sigma$ take the form $\Sigma_{ii}=\sigma_i^2=(\sigma_{q,l} q_i^{\mathrm{EXP}})^2$, with $\sigma_{q,l}$ a constant standard deviation. Note that in both cases $\sigma_{q,l}$ is the standard deviation associated with this specific quantity $q$ at this location $\Omega_l$.
+where $z=q^{\mathrm{EXP}}-q(\theta)-\mu$ is the total prediction error accounting for modeling and experimental error/uncertainties, $\Sigma$ is the covariance matrix and $N_\mathcal{D}$ is the number of data points in $q^{\mathrm{EXP}}$ for this specific quantity at this specific location $\Omega_l$. $\mu$ is the mean of the Gaussian distribution.
 
-Whenever data is available at multiple locations (OMP, targets,...) and for multiple quantities (density, temperature,...), the total likelihood simply becomes the multiplication of the likelihoods for each quantity at each spatial location, each of them with their specific standard deviation.
+Taking the logarithm of Eq.\ref{eq:likelihood} and performing the Cholesky factorization $\Sigma=U^TU$ one obtains the following expression for the so-called log-likelihood as implemented in the code:
+\begin{equation}\label{eq:loglikelihood}
+	\log\left[ \mathcal{L}(\mathcal{D}\vert\theta)\right]=-\frac{1}{2}\left[N_\mathcal{D}\log\left(2\pi\right) + 2\sum_{i=1}^{N_\mathcal{D}}\log{U_{ii}} + z^T\Sigma^{-1}z \right].
+\end{equation}
+
+Whenever data is available at multiple locations (OMP, targets,...) and for multiple quantities (density, temperature,...), the total likelihood simply becomes the multiplication of the likelihoods (or sum of the log-likelihoods) for each quantity at each spatial location, each with their specific covariance matrix.
+
+\subsubsection{Covariance matrix}
+The covariance matrix $\Sigma$ embeds the information on the prediction error standard deviation and cross-correlations. The default model for the prediction error implies a diagonal covariance matrix with $\Sigma_{ii}=\sigma_{q,l}^2$, if an absolute error is assumed in the likelihood. If instead the likelihood models a relative, instead of an absolute, error, the diagonal elements of $\Sigma$ take the form $\Sigma_{ii}=\sigma_i^2=(\sigma_{q,l} q_i^{\mathrm{EXP}})^2$, with $\sigma_{q,l}$ a constant standard deviation. Note that in both cases $\sigma_{q,l}$ is the standard deviation associated with this specific quantity $q$ at this location $\Omega_l$.
+
+The first extension to the covariance matrix employs an error cross-correlation model with an exponential decay defined by
+\begin{equation}\label{eq:correlation_1}
+	\Sigma_{ij} = \sqrt{\sigma_i\sigma_j} \exp\left(-\frac{\Delta_{ij}}{\lambda_{q,t}}\right),
+\end{equation}
+where $\sigma_i=\sqrt{\Sigma_{ii}}$ with $\Sigma_{ii}$ as defined above, $\Delta_{ij}=\left\| r_i -r_j \right\|$ with $r_i$ the radial (spatial) coordinate of experimental point $i$, and finally $\lambda_{q,t}$ is a correlation length associated with this specific quantity $q$ at this location $\Omega_l$, which can be either fixed or can be estimated. An ad-hoc cutoff of small off-diagonal elements $\Sigma_{ij}$ is performed imposing a certain threshold $\epsilon_\Sigma$ (see {\tt CORR\_CUTOFF} below). When $\exp\left(-\frac{\Delta_{ij}}{\lambda_{q,t}}\right)<\epsilon_\Sigma$ then $\Sigma_{ij}$ is set to zero.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{How to specify the cost function in B2.5}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}.
+The user can select one of these cost functions through the input file {\tt b2.optimization.parameters}. To do so, it is needed to specify the following parameters, contained in the {\tt OPTIMIZATION} namelist, which are similar to the boundary condition specification. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}. Note that to read the {\tt b2.optimization.parameters} file users needs to set in {\tt b2mn.dat} the switch {\tt 'b2optim\_namelist'} to {\tt '1'}. 
 \begin{description}
   \item[NCF]\index{NCF} {\tt integer}, number of cost functions ({\tt icf = 1, NCF}). Defaults to {\tt 0}.
   \item[CFTYPE]\index{CFTYPE} {\tt integer array, dimension (NCF)}, specifies the type of cost function for index {\tt icf}. Defaults to {\tt -1}. Available options are:
@@ -86,12 +106,16 @@ The user can select one of these cost functions through the input file {\tt b2.o
       \item[2] Weighted least squares, on the desired CVs, of calculated electron temperature and values read from file, normalized with average experimental value (units must be $eV$).
       \item[3] Weighted least squares, on the desired CVs, of calculated ion temperature and values read from file, normalized with average experimental value (units must be $eV$).
       \item[4] Maximum electron temperature on the desired CVs (output in $eV$).
-      \item[5] Maximum heat flux on the desired FCs (output in $W$).
+      \item[5] Maximum heat flux on the desired FCs (output in $W/m^2$).
       \item[6] Bayesian MAP cost function (see \cite{carlpet21}). {\tt CFSTART}, {\tt CFEND} indicate over which {\tt icf} indices the cost functions are to be summed (valid cost function to be summed are types are 1-3 and 7-9).
       \item[7] Weighted least squares, on the desired CVs, of calculated electron density radial gradient and experimental values read from file, normalized with average experimental value (units must be $10^{19}~m^{-4}$).
       \item[8] Weighted least squares, on the desired CVs, of calculated electron temperature radial gradient and values read from file, normalized with average experimental value (units must be $eV/m$).
       \item[9] Weighted least squares, on the desired CVs, of calculated ion temperature radial gradient and values read from file, normalized with average experimental value (units must be $eV/m$).
+      \item[10] Weighted least squares, on the desired CVs, of calculated ion saturation current ($n_ec_seV$) and values read from file, normalized with average experimental value (units must be $kA/m^2$).
+      \item[11] Heat flux peakedness on the desired FCs as $1/2\int_\Omega(q_\perp^2)d\Omega$ (output in $W^2/m^2$).
+      \item[12] Weighted least squares, on the desired FCs, of calculated perpendicular or parallel heat flux and values read from file, normalized with average experimental value (units must be $MW^2/m^2$). Use {\tt PARALLEL\_HF} to specify whehter the parallel or perpendicular heat flux is used.
     \end{description}
+  \item[PARALLEL\_HF]\index{PARALLEL\_HF} {\tt logical}, Indicates for cost function 12 if the heat flux considered is the one parallel to the magnetic field (TRUE) or perpendicular to the surface (FALSE). Defaults to {\tt .true.}.
   \item[CFDEF]\index{CFDEF} {\tt integer array, dimension (NCF)}, indicates how the domain of cost function {\tt icf} is specified. Defaults to {\tt 0}. Valid options are:
     \begin{description}
       \item[1] The cost function is defined on the OMP, using the {\tt RZOMP} array. In this case {\tt CFSTART}, {\tt CFEND} are not necessary and ignored.
@@ -102,23 +126,41 @@ The user can select one of these cost functions through the input file {\tt b2.o
   \item[CFSTART, CFEND]\index{CFSTART}\index{CFEND} {\tt integer arrays, dimension (NCF)}, specify the starting/ending, face (FC) label {\tt fcLbl} or control volume (CV) label {\tt cvLbl} where the cost function {\tt icf} will be evaluated. For {\tt CFTYPE = 0} and {\tt CFTYPE = 6}, they instead identify which cost functions will be summed together. Default to {\tt 0}.
   \item[CF\_REGP]\index{CF\_REGP} {\tt integer array, dimension (NCF, 2)}, points for each cost function to the first index in the {\tt CF\_REG} list, and its number of items. Defaults to {\tt 0}.
   \item[CF\_REG]\index{CF\_REG} {\tt integer array, dimension (MXNCF)}\footnote{The parameter {\tt MXNCF} is hard-coded with value {\tt 1000} in {\tt b2mod\_par\_opt.F}.}, lists for each cost function the corresponding domain CVs or FCs. WARNING! No attempt is made to check if these CVs or FCs are connected, sorted or even available in the current geometry: it is up to the user to make sure the list is correct. Defaults to {\tt 0}.
-  \item[CFWEIGHT]\index{CFWEIGHT} {\tt real array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
+  \item[CFWEIGHT]\index{CFWEIGHT} {\tt real*8 array, dimension (NCF)}. Multipliers to rescale each cost function separately, $w_{l,q}$ in Eq.~(\ref{eq:regression}). Defaults to {\tt 1.0}.
   \item[MapToOMP]\index{MapToOMP} {\tt logical array, dimension (NCF)}, indicates if cost function {\tt icf} is to be re-mapped to the OMP, according to {\tt CFTYPE}. \textbf{Warning:} the mapping is a rigid translation of the data to the OMP and is safe to work only for non-extended grids and for cost functions defined on the same number of elements as the OMP list. Defaults to {\tt .false.}.
   \item[READ\_SIGMA]\index{READ\_SIGMA} {\tt logical array, dimension (NCF)}, indicates if file {\tt cf[i].dat} containing the experimental data uncertainty is to be read. Defaults to {\tt .false.}.
   \item[NSIGMA]\index{NSIGMA} {\tt integer}, number of standard deviation variables used for Bayesian MAP cost function (normally this should be equal to the number of cost functions summed for {\tt CFTYPE = 6}, i.e. one for each variable on each domain) ({\tt isigma = 1, NSIGMA}). Defaults to {\tt 0}.
-  \item[SIGMA]\index{SIGMA} {\tt real array, dimension (NSIGMA)}. Value of the standard deviation $\sigma$ in the likelihood function. For absolute STD, the units are the same as the experimental data used for the cost function it refers to. Defaults to {\tt 0.0}.
+  \item[SIGMA]\index{SIGMA} {\tt real*8 array, dimension (NSIGMA)}. Value of the standard deviation $\sigma$ in the likelihood function. For absolute STD, the units are the same as the experimental data used for the cost function it refers to. Defaults to {\tt 0.0}.
   \item[SCALE\_SIGMA]\index{SCALE\_SIGMA} {\tt logical array, dimension (NSIGMA)}, indicates if {\tt SIGMA(isigma)} is intended as relative standard deviation ({\tt SCALE\_SIGMA(isigma)=.true.}) or absolute ({\tt SCALE\_SIGMA(isigma)=\allowbreak .false.}). Defaults to {\tt .true.}.
+  \item[NMEAN]\index{NMEAN} {\tt integer}, number of error mean/bias variables used for Bayesian MAP cost function. Defaults to {\tt 0}.
+  \item[MEAN]\index{MEAN} {\tt real*8 array, dimension (NMEAN)}. Value of the error mean/bias $\mu$ in the likelihood function. Defaults to {\tt 0.0}.
   \item[PRIOR\_TYPE]\index{PRIOR\_TYPE} {\tt integer array, dimension (NNVAR)}. Defines the type of prior distribution for each parameter for the MAP cost function. Defaults to {\tt -1}. Possible values are:
     \begin{description}
       \item[0] Uniform distribution.
       \item[1] Uninformative, proper, Gaussian prior.
+      \item[2] Gamma distributed prior.
     \end{description}
-  \item[PRIOR\_PAR]\index{PRIOR\_PAR} {\tt real array, dimension (NNVAR,2)}. Indicates parameters for the prior distributions. Defaults to {\tt -1.0}. For {\tt PRIOR\_TYPE}:
+  \item[PRIOR\_PAR]\index{PRIOR\_PAR} {\tt real*8 array, dimension (NNVAR,2)}. Indicates parameters for the prior distributions. Defaults to {\tt -1.0}. For {\tt PRIOR\_TYPE}:
     \begin{description}
       \item[0] Not used
-      \item[1] {\tt PRIOR\_PAR(ii,1)} indicates the mean $\mu_{\theta_i}$ and {\tt PRIOR\_PAR(ii,2)} indicates the standard deviation $\sigma_{\theta,i}$ of the Gaussian distribution.
+      \item[1] {\tt PRIOR\_PAR(ii,1)} indicates the mean $\mu_{\theta_i}$ and {\tt PRIOR\_PAR(ii,2)} indicates the standard deviation $\sigma_{\theta,i}$ for the Gaussian and Gamma distributions.
     \end{description}
-  \item[PRIOR\_RANGE]\index{PRIOR\_RANGE} {\tt real array, dimension (NNVAR,2)}. Indicates the valid range for the prior distributions, outside of which the program will return an infinite cost function value. {\tt PRIOR\_RANGE(:,1)} sets the lower bound and {\tt PRIOR\_RANGE(:,2)} sets the upper bound. Defaults to {\tt $\pm 10p_{\infty}$}, where $p_{\infty}$ is a parameter currently set to $10^{30}$.
+  \item[PRIOR\_RANGE]\index{PRIOR\_RANGE} {\tt real*8 array, dimension (NNVAR,2)}. Indicates the valid range for the prior distributions, outside of which the program will return an infinite cost function value. {\tt PRIOR\_RANGE(:,1)} sets the lower bound and {\tt PRIOR\_RANGE(:,2)} sets the upper bound. Defaults to {\tt $\pm 10p_{\infty}$}, where $p_{\infty}$ is a parameter currently set to $10^{30}$.
+  \item[SHIFT\_CF\_DATA]\index{SHIFT\_CF\_DATA} {\tt integer array, dimension (NCF)}. For each cost function where experimental data is read, specifies whether or not to shift the separatrix position in the experimental data spatial coordinate as follows: $(r - r_{sep}) - shift\_value$. Unique integers larger than zero for each cost function means that each has its specific shift value. Using the same integer for two (or more) cost functions makes to code use the same shift value for those cost functions (the first {\tt SHIFT\_VALUE} among the cost function with the same integer is adopted). Possible usage: Thomson scattering data of density and temperature which should be defined in two separate cost functions but come from the same source and thus have the same shift. {\tt NSHIFT} is then the number of unique integers and is used to define other parameters below other parameters. Defaults to {\tt 0}.
+  \item[SHIFT\_VALUE]\index{SHIFT\_VALUE} {\tt real*8 array, dimension (NCF)}. Defines the value of the shift in \underline{millimeters} for each cost function with {\tt SHIFT\_CF\_DATA}$\neq0$. This is also used as initial guess in case of optimization. Defaults to {\tt 0.0}.
+  \item[SHIFT\_PRIOR\_TYPE]\index{SHIFT\_PRIOR\_TYPE} {\tt integer array, dimension (NSHIFT)}. Same as {\tt PRIOR\_TYPE} but defined for each unique cost function shift. Defaults to {\tt -1}.
+  \item[SHIFT\_PRIOR\_PAR]\index{SHIFT\_PRIOR\_PAR} {\tt real*8 array, dimension (NSHIFT,2)}. Same as {\tt PRIOR\_PAR} but defined for each unique cost function shift. Defaults to {\tt -1.0}.
+  \item[SHIFT\_PRIOR\_RANGE]\index{SHIFT\_PRIOR\_RANGE} {\tt real*8 array, dimension (NSHIFT,2)}. Same as {\tt PRIOR\_RANGE} but defined for each unique cost function shift. Defaults to {\tt $\pm 10p_{\infty}$}.
+  \item[CORR\_MODEL]\index{CORR\_MODEL} {\tt integer array, dimension (NCF)}. Specifies the type of correlation model for the covariance matrix in the MAP cost function. Defaults to {\tt 0}. Possible values are:
+  \begin{description}
+  	\item[0] No correlation, thus simple diagonal covariance matrix.
+  	\item[1] Correlation model based on exponential decay with a correlation length specified using {\tt CORR\_LENGTH}.
+  \end{description}
+  \item[CORR\_LENGTH]\index{CORR\_LENGTH} {\tt real*8 array, dimension (NCF)}. Defines the value of the correlation length $\lambda_{q,t}$ in \underline{millimeters} for each MAP-type cost function with {\tt CORR\_MODEL}$\neq0$. This is also used as initial guess in case of optimization. Defaults to {\tt 0.0}.
+  \item[CORR\_CUTOFF]\index{CORR\_CUTOFF} {\tt real*8}. For the exponential decay correlation model, off-diagonal elements with value of the exponential below this threshold are set to zero. Defaults to {\tt 0.01}.
+  \item[CORR\_PRIOR\_TYPE]\index{CORR\_PRIOR\_TYPE} {\tt integer array, dimension (NCORR\_OPT)}. Same as {\tt PRIOR\_TYPE} but defined for each MAP cost function where sensitivity for {\tt CORR\_LENGTH} is calculated or this parameter optimized (see {\tt CORR\_OPT}). {\tt NCORR\_OPT} is the number of correlation lengths which are optimized, so for which a prior is required. Defaults to {\tt -1}.
+  \item[CORR\_PRIOR\_PAR]\index{CORR\_PRIOR\_PAR} {\tt real*8 array, dimension (NCORR\_OPT,2)}. Same as {\tt PRIOR\_PAR} but defined for each MAP cost function where sensitivity for {\tt CORR\_LENGTH} is calculated or this parameter optimized. Defaults to {\tt -1.0}.
+  \item[CORR\_PRIOR\_RANGE]\index{CORR\_PRIOR\_RANGE} {\tt real*8 array, dimension (NCORR\_OPT,2)}. Same as {\tt PRIOR\_RANGE} but defined for each MAP cost function where sensitivity for {\tt CORR\_LENGTH} is calculated or this parameter optimized. Defaults to {\tt $\pm 10p_{\infty}$}.
 \end{description}
 
 
@@ -131,7 +173,7 @@ Dedicated internal mapping arrays have been additionally defined in {\tt b2us\_m
   \item[cfRegP] \index{cfRegP} {\tt integer array, dimension (NCF, 2)}, pointing for each cost function to the first index in the {\tt cfReg} list, and its number of elements.
   \item[cfReg] \index{cfReg} {\tt integer array, dimension (MXNCF)}, listing for each cost function the corresponding domain cells or faces.
   \item[cfOnCv] \index{cfOnCv} {\tt logical array, dimension (NCF)}. Logical to indicate whether a CF domain is on CVs ({\tt .true.}) or FCs ({\tt .false.}).
-  \item[cfFcOr] \index{cfFcOr} {\tt real array, dimension (NCF)}. Multiplier to indicate whether outward normal coincides with the face normal ({\tt 1.0}) or not ({\tt -1.0}).
+  \item[cfFcOr] \index{cfFcOr} {\tt real*8 array, dimension (NCF)}. Multiplier to indicate whether outward normal coincides with the face normal ({\tt 1.0}) or not ({\tt -1.0}).
 \end{description}
 
 Cost functions requiring cell-centered quantities like density or temperature can be correctly defined also using FC labels, since the lowest numbered internal CV belonging to each face will be mapped.
@@ -224,15 +266,16 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 \begin{sloppypar}
 \begin{description}
 	\item[NNVAR]\index{NNVAR} {\tt integer}, number of sensitivity/optimization parameters $\theta$ (radially varying transport coefficients count as 1 as a whole) ({\tt ipar = 1, NNVAR}). Defaults to {\tt 0}.
-	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -1}. Available options are:
+	\item[PARTYPE]\index{PARTYPE} {\tt integer array, dimension (NNVAR)}, indicates the type of sensitivity/optimization parameter $\theta$ for index {\tt ipar}. Defaults to {\tt -2}. Available options are:
 	\begin{description}
-		\item[0] {\tt SIGMA}, standard deviation $\sigma_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). These must {\em always} be the last parameters in the {\tt PARTYPE} vector!
+		\item[-1] {\tt MEAN}, error mean $\mu_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). If present, these must {\em always} be the last parameters in the vector!
+		\item[0] {\tt SIGMA}, standard deviation $\sigma_{q,l}$ in likelihood function for Bayesian inference (one for each plasma quantity and location used). If present, these must {\em always} be defined after each physical parameter (PARTYPE>0) and before the mean (PARTYPE=-1).
 		\item[1] {\tt PARM\_DNA} or {\tt TDATA(:,:,1,:)}
 		\item[2] {\tt PARM\_DPA} or {\tt TDATA(:,:,2,:)}
 		\item[3] {\tt PARM\_HCI} or {\tt TDATA(:,:,3,:)}
 		\item[4] {\tt PARM\_HCE} or {\tt TDATA(:,:,4,:)}
-		\item[5] {\tt PARM\_VLA} or {\tt TDATA(:,:,5,:)} (not yet tested!)
-		\item[6] nothing yet (presumably $y$-component of {\tt vla}?)
+		\item[5] {\tt TDATA(:,:,5,:)}
+		\item[6] {\tt PARM\_VLA} or {\tt TDATA(:,:,6,:)}
 		\item[7] {\tt PARM\_VSA} or {\tt TDATA(:,:,7,:)}
 		\item[8] {\tt PARM\_SIG} or {\tt TDATA(:,:,8,:)}
 		\item[9] {\tt PARM\_ALF} or {\tt TDATA(:,:,9,:)}
@@ -268,6 +311,9 @@ Below is a description of the variables needed in {\tt b2.optimization.parameter
 		\item[39] {\tt b2tfhe\_vis\_kt}
 	\end{description}
 	\item[SIGMA\_OPT]\index{SIGMA\_OPT} {\tt logical array, dimension (NSIGMA)}, for each {\tt SIGMA}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .true.}.
+	\item[MEAN\_OPT]\index{MEAN\_OPT} {\tt logical array, dimension (NMEAN)}, for each {\tt MEAN}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
+	\item[SHIFT\_OPT]\index{SHIFT\_OPT} {\tt logical array, dimension (NCF)}. For each {\tt SHIFT\_CF\_VALUE}, specifies whether its sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
+	\item[CORR\_OPT]\index{CORR\_OPT} {\tt logical array, dimension (NCF)}. For each MAP cost function where {\tt CORR\_MODEL}$\neq0$, specifies whether {\tt CORR\_LENGTH} sensitivity is computed or not, and whether is optimized or fixed. Defaults to {\tt .false.}.
 	\item[SPATIAL\_DEP]\index{SPATIAL\_DEP} {\tt logical array, dimension (NNVAR)}, for each sensitivity/optimization variable {\tt ipar}, specifies if radially varying coefficients are optimized. Meaningful only for {\tt PARTYPE = 1} to {\tt 9}. Defaults to {\tt .false.}.
 	\item[SPATIAL\_POINTS]\index{SPATIAL\_POINTS} {\tt integer array, dimension (NNVAR)}, number of spatial points for sensitivity/optimization parameter {\tt ipar} (should be the same as {\tt NDATA} in {\tt b2.transport.inputfile}). The actual number of optimized variables ({\tt NPAR\_OPT}) is then equal to the total number of spatial points + any other additional parameters. Defaults to {\tt 0}.
 	\item[PARIS]\index{PARIS} {\tt integer array, dimension (NNVAR)}, specifies the species of the sensitivity/optimization parameter {\tt ipar}. Only meaningful for {\tt PARTYPE = [1-5,7,12,13,16]}. Defaults to {\tt 0}.
@@ -508,10 +554,15 @@ After successful compilation, the optimization case can be setup. This requires 
 Below is a description of the additional variables set in {\tt b2.optimization.parameters} within the {\tt OPTIMIZATION} namelist. An up-to-date list is also available in Appendix~\ref{lis:b2cdcn}.
 
 \begin{description}
-  \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Defaults to {\tt 1.0}.
-  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
+  \item[PAR\_RESCALE]\index{PAR\_RESCALE} {\tt real*8 array, dimension (NPAR\_OPT)}, coefficient to rescale optimization parameters (and their gradient). Note that the dimension is {\tt NPAR\_OPT}, so it needs to be specified also for each spatial point in case of radially varying coefficients. Note: for {\tt SHIFT\_CF\_VALUE} there is no rescaling foreseen as this is typically expected in the order of 10 mm. Defaults to {\tt 1.0}.
+  \item[X0]\index{X0} {\tt real*8 array, dimension (NPAR\_OPT)}, initial guess for each optimization parameter. Must be set for MAP cost function as its value is employed for calculating priors. Note: {\tt SHIFT\_CF\_VALUE} acts as initial guess for such parameter and thus it should not be specified here. Defaults to $10*p_\infty$, where $p_\infty$ is a parameter currently set to $10^{30}$.
   \item[XL]\index{XL} {\tt real*8 array, dimension (NPAR\_OPT)}, lower bound for each optimization parameter. Defaults to $-10*p_\infty$.
   \item[XU]\index{XU} {\tt real*8 array, dimension (NPAR\_OPT)}, upper bound for each optimization parameter. Defaults to $10*p_\infty$.
+  \item[SHIFT\_L]\index{SHIFT\_L} {\tt real*8 array, dimension (NCF)}, lower bound for {\tt SHIFT\_CF\_DATA} parameter. Defaults to {\tt -1000.0}.
+  \item[SHIFT\_U]\index{SHIFT\_U} {\tt real*8 array, dimension (NCF)}, upper bound for {\tt SHIFT\_CF\_DATA} parameter. Defaults to {\tt 1000.0}.
+  \item[CORR\_L]\index{CORR\_L} {\tt real*8 array, dimension (NCF)}, lower bound for {\tt CORR\_LENGTH} parameters. Must be specified for each cost function! Defaults to $-10*p_\infty$.
+  \item[CORR\_U]\index{CORR\_U} {\tt real*8 array, dimension (NCF)}, upper bound for {\tt CORR\_LENGTH} parameters. Must be specified for each cost function! Defaults to $10*p_\infty$.
+  \item[CORR\_RESCALE]\index{CORR\_RESCALE} {\tt real*8 array, dimension (NCF)}, same as {\tt PAR\_RESCALE} but defined for {\tt CORR\_LENGTH} parameters. Must be specified for each cost function! Defaults to  {\tt 1.0}.
   \item[CPU\_OPT]\index{CPU\_OPT} {\tt real*8}, maximum amount of CPU time in seconds after which the optimization is stopped. Defaults to {\tt 0.0}.
   \item[MAXITER]\index{MAXITER} {\tt integer}, maximum number of optimization iterations. The maximum number of cost function evaluations is set to {\tt 2*MAXITER} to allow for line searches. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to {\tt 100}.
   \item[TOL\_OPT]\index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For {\tt PETSc/TAO} it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to $10^{-7}$.
@@ -702,3 +753,75 @@ where we have added 4 extra entries at the beginning of the arrays {\tt PRIOR\_T
 In this specific case we used a uniform prior for the first four optimization parameters, while for the sigmas the same as in the example cost function is retained.
 
 Note that the prior range may be superfluous if a lower/upper bound for the optimization parameters and sigmas is used, and {\it vice versa}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Second order derivatives computation}\label{sec:hessian}\index{hess}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Second order derivatives can be obtained by applying AD a second time on an already differentiated code. These second order derivatives can be employed in optimization to perform full Newton steps (not implemented yet) or for approximate Bayesian posterior estimation using the Laplace approximation. At the moment, only the tangent over tangent AD method has been deployed in \SOLPSITER, which allows to retrieve the Hessian matrix:
+
+\begin{equation}\label{hess}
+	\begin{pmatrix}
+		\frac{\partial^2 \mathcal{J}}{\partial x_1^2} & \frac{\partial^2 \mathcal{J}}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 \mathcal{J}}{\partial x_1 \partial x_n} \\
+		
+		\frac{\partial^2 \mathcal{J}}{\partial x_2 \partial x_1} & \frac{\partial^2 \mathcal{J}}{\partial x_2^2} & \cdots & \frac{\partial^2 \mathcal{J}}{\partial x_2 \partial x_n} \\
+		
+		\vdots & \vdots & \ddots & \vdots \\
+		
+		\frac{\partial^2 \mathcal{J}}{\partial x_n \partial x_1} & \frac{\partial^2 \mathcal{J}}{\partial x_n \partial x_2 } & \cdots & \frac{\partial^2 \mathcal{J}}{\partial x_n^2}
+	\end{pmatrix}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code compilation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To compile the tangent over tangent code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
+\begin{verbatim}
+	$ gmake listobj depend
+\end{verbatim}
+Then compile with:
+\begin{verbatim}
+	$ gmake b25_hess_tgt
+\end{verbatim}
+
+A new executable called {\tt b2mn\_hess.exe} will be created in {\tt B2.5/builds/standalone.\allowbreak\${HOST\_NAME}.\allowbreak\${COMPILER}.hess\_tgt}.
+
+In case the {\tt debug} version is needed, it follows the standard \SOLPSITER rules which simply require to append {\tt \_debug} to the make targets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Code run}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Once the code has been successfully compiled, it can be run with the following command:
+\begin{verbatim}
+	$ b2run -hess_tgt b2mn > run.log
+\end{verbatim}
+
+This code will converge the original {\tt B2.5} equations (the primal), the tangent equations (derivative of the original equations in tangent mode), and the second order tangent equations (derivative of the tangent equations in tangent mode). By default, running this version of the code will calculate the first and second order derivative of ALL cost functions specified in {\tt b2.optimization.parameters} wrt the parameters specified in {\tt b2.optimization.parameters}.
+
+The code will automatically print in {\tt run.log} the value of the cost function(s) and their derivatives. To check it, simply do:
+\begin{verbatim}
+	$ grep -i cost run.log
+	$ grep -i gradient run.log
+	$ grep -i hessian run.log
+\end{verbatim}
+
+In addition to the monitoring quantities already available for tangent AD, there is also:
+\begin{description}
+	\item[resall\_D\_diff\_diff] This script plots the evolution of the residuals of all the second order differentiated equations for D-only cases (in tangent over tangent mode).
+\end{description}
+
+\textbf{Caveat}: since the tangent mode has a cost which is roughly proportional to the number of independent variables $n$ \cite{carlijcp}, it follows that the tangent over tangent mode has a cost which is roughly proportional to $n^2$. In the \SOLPSITER implementation we take advantage of the fact that the Hessian is symmetric, thus, whenever in the code are nested loops of this kind:
+\begin{verbatim}
+	DO i = 1, nd
+	  DO j = 1, nd 
+\end{verbatim}
+they are modified into:
+\begin{verbatim}
+	DO i = 1, nd
+	  DO j = i, nd 
+\end{verbatim}
+This makes to computational cost lie between $n$ and $n^2$.

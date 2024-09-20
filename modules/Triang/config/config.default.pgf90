@@ -9,8 +9,6 @@ endif
 CPP = /lib/cpp -traditional
 SED = sed s:\#PREC\#:d:g
 
-FC ?= pgf90
-
 DBLSED = sed -e s:\#PREC\#:d:g
 
 LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET

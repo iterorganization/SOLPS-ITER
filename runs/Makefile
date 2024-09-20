@@ -32,6 +32,10 @@ ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
 endif
+ifdef DIFF_DD
+EXT_DIFF = .diff_dd
+DIFF=_hess
+endif
 ifdef TGT
 EXT_DIFF = .tgt
 DIFF=_d
@@ -39,6 +43,10 @@ endif
 ifdef ADJ
 EXT_DIFF = .adj
 DIFF=_b
+endif
+ifdef HESS_TGT
+EXT_DIFF = .hess_tgt
+DIFF=_hess
 endif
 MNEXE=b2mn${DIFF}
 ifdef OPT_D
@@ -89,7 +97,7 @@ target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced b2ftracedd
 target_opt = target_mn
 ifdef USE_IMPGYRO
 target_mn += restart_ext

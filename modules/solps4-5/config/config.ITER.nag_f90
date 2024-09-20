@@ -7,7 +7,7 @@ CPP4OPTS = -P -I${SRCDIR} ${EQUIV4}
 CPP5OPTS = -P -I${SRCDIR} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 
-FC ?= nagfor
+FC = nagfor
 FCOPTS = -O -x77 # -mismatch
 INCMOD = -I
 MOD = mod
