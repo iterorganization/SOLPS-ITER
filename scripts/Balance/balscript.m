@@ -34,7 +34,7 @@
 
 BALFILE = '../../runs/examples/COMPASS_16515_1150ms_D_drift_AFN/run_AFN_drift/balance.nc';
 BAL_QUANT = 'momentum';
-SPECIES_INDEX = 7:16;
+SPECIES_INDEX = 2:2;
 DEFAULT_REGION = 'user';
 AREAEND = 'right';
 AREATYPE = 'none';
