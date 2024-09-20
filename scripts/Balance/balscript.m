@@ -32,7 +32,7 @@
 % Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-BALFILE = '../../runs/workshop_yokohama/standard/run/balance.nc';
+BALFILE = '../../runs/examples/COMPASS_16515_1150ms_D_drift_AFN/run_AFN_drift/balance.nc';
 BAL_QUANT = 'momentum';
 SPECIES_INDEX = 7:16;
 DEFAULT_REGION = 'user';
