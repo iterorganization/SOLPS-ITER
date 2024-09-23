@@ -99,7 +99,17 @@ comuse.cmap = ([0.0000    0.4470    0.7410;...
 
 % Find flux tubes in SOL near separatrix
 if comuse.nXpt == 1 
-    for i = 1:comuse.nomp
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 1
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
         if ((comuse.cvReg(comuse.omp(i)) == 2) || ...
                 (comuse.cvReg(comuse.omp(i)) == 6))
             comuse.ftSep = comuse.cvFt(comuse.omp(i));
@@ -107,22 +117,53 @@ if comuse.nXpt == 1
         end
     end
 elseif comuse.nXpt == 2
-    warning('Only connected double null is supported')
+    warning(['Only connected double null is fully supported. '...
+        'Errors might occur for disconnected double null.'])
     comuse.ftSep = zeros(2,1);
-    for i = 1:comuse.nimp
+    % Check in which direction imp is defined
+    if comuse.cvReg(comuse.imp(1)) == 1
+        istart = 1;
+        iend = comuse.nimp;
+        step = 1;
+    else
+        istart = comuse.nimp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
         if (comuse.cvReg(comuse.imp(i)) == 2)
             comuse.ftSep(1) = comuse.cvFt(comuse.imp(i));
             break;
         end
     end
-    for i = 1:comuse.nomp
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 5
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
         if (comuse.cvReg(comuse.omp(i)) == 6)
             comuse.ftSep(2) = comuse.cvFt(comuse.omp(i));
             break;
         end
     end
 elseif comuse.nXpt == 0
-    for i = 1:comuse.nomp
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 1
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
         if (comuse.cvReg(comuse.omp(i) == 2))
             comuse.ftSep = comuse.cvFt(comuse.omp(i));
             break;
