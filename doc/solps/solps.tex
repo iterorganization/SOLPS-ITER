@@ -4645,7 +4645,9 @@ triangular grid regions.
 When running the coupled version of \SOLPSITERns, you will obtain additional output files, named {\tt fort.44} and {\tt fort.46}, which contain data computed from {\tt Eirene}. The contents of the {\tt fort.44} file is a series of data blocks, each starting with a title line, after a header providing the grid size and species list, as well as a format identifier. The relevant dimensions are (please also refer to the {\tt Eirene} manual for further details and to the code for the actual way the arrays are written out):
 
 \begin{description}
-  \item[NCV] Number of grid cells in the {\tt Eirene} computational grid
+  \item[NCV] Number of grid cells in the {\tt B2.5} computational grid
+  \item[NCVTOT] Number of grid cells in the {\tt B2.5} computational grid + 
+                the number of {\tt Eirene} cells that lie outside the {\tt B2.5} grid (void triangles).
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
@@ -4654,7 +4656,6 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
   \item[NSTS] Number of "non-standard surfaces" (plasma boundaries) declared in block 3A of the {\tt Eirene} input file
   \item[NTRII] Number of triangles forming the {\tt Eirene} computational grid
-  \item[NCVTOT] Number of coarse cells forming the {\tt Eirene} computational grid
   \item[NCL] Number of segments for resolved tallies on non-standard surfaces
 \end{description}
 
