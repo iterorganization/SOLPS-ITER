@@ -71,8 +71,8 @@ endif
 ifdef SOLPS_MPI
  FC         = ${MPI_FC}
  ifndef MPDIR
-  MPDIR      = ${EBROOTIMPI}
-  LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
+  MPDIR     = ${EBROOTIMPI}
+  LD_MPI   += -Wl,-rpath,${MPDIR}/lib64
  endif
 else
 ifeq (,$(findstring CentOS,$(OS)))

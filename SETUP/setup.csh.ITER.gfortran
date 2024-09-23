@@ -46,7 +46,7 @@ else
   module load ToFu/1.7.9-gfbf-2023b
   module load xarray/2024.5.0-gfbf-2023b
   module load makedepend/1.0.9-GCCcore-13.2.0
-  module load MSCL/1.2.3-GCCcore-13.2.0
+  module load MSCL/1.2.4-GCCcore-13.2.0
   module load GR/0.0.94-GCCcore-13.2.0
   module load GLI/4.5.31-GCCcore-13.2.0
   module load NCL/6.6.2-foss-2023b
