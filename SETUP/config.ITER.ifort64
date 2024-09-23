@@ -59,21 +59,21 @@ NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 #
 
 ifeq (,$(findstring CentOS,$(OS)))
-MPI_FC    ?= mpiifort -fc=mpiifx
-FCVOPTS    = -check nouninit
+ MPI_FC   ?= mpiifort -fc=mpiifx
+ FCVOPTS   = -check nouninit
 else
-MPI_FC    ?= mpiifort
+ MPI_FC   ?= mpiifort
 endif
 ifdef SOLPS_MPI
-FC         = ${MPI_FC}
-ifndef MPDIR
-MPDIR      = ${EBROOTIMPI}
-LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
-endif
+ FC        = ${MPI_FC}
+ ifndef MPDIR
+  MPDIR    = ${EBROOTIMPI}
+  LD_MPI  += -Wl,-rpath,${MPDIR}/lib64
+ endif
 else
-ifeq (,$(findstring CentOS,$(OS)))
-FC         = ifx
-endif
+ ifeq (,$(findstring CentOS,$(OS)))
+  FC       = ifx
+ endif
 endif
 
 #
