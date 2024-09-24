@@ -2539,7 +2539,7 @@ which contains
   \item[4] prescribe the value of the density, weakly a mixed boundary
   condition, {\tt CONPAR(,,1)} specifies the required density in
   $m^{-3}$ and {\tt CONPAR(,,2)} specifies the "strength" of the
-  boundary condition
+  boundary condition. Not yet available for WG.
   \item[5] prescribe the particle flux per unit area,
   {\tt CONPAR(,,1)} specifies the required particle flux density in
   $m^{-2} s^{-1}$
@@ -2599,7 +2599,7 @@ which contains
   {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
     Not yet available for WG.
   \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$. Not yet available for WG.
   \item[28] Prescribe the flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain. Only intended for core boundaries.
   {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
   \item[29] Feedback on the total particle flux, by imposing a flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -2812,7 +2812,7 @@ which contains
         Not yet available for WG.
   \item[28] Prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the average temperature in $eV$.
-   \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux
+  \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux
     tube just inside domain. {\tt ENIPAR(,1)} specifies the energy flux in $W$. {\tt ENIPAR(,2)} specifies the strength of the feedback.
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
@@ -2850,9 +2850,10 @@ which contains
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for theprivate flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[14] Presdribe the total current without imposing a specific profile. Follow the profile of the 1st flux tube inside.
+  \item[14] Prescribe the total current without imposing a specific profile. Follow the profile of the 1st flux tube inside.
    Intended use: core boundary, total PF boundary,.. For testing purposes, use with care!
-  \item[15] Feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$
+  \item[15] Feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$. 
+  {\tt POTPAR(,2)} specifies the strength of the feedback.
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases. Not yet available for WG. 
   \item[17] Feedback boundary condition on total current by imposing the potential, with same profile as neighbouring flux tube.
   {\tt POTPAR(,1)} specifies the electric current in $A$. {\tt POTPAR(,2)} specifies the under-relaxation factor for the feedback mechanism. 
@@ -2897,9 +2898,9 @@ which contains
   kt = {\tt ENKPAR(,1)} + kt2 - kt2av, where kt2 is the enstrophy in the first cell inside the domain,
   and kt2av is the average enstrohpy in the flux tube just inside the domain.
   Intended for core boundaries only. 
-  \item[17]  Feedback on turbulent kinetic energy flux, by imposing a flux surface
-   averaged $\kappa$, with poloidal perturbation taken from flux tube just inside domain.
-   Intended for core boundaries only.   {\tt ENKPAR(,1)} specifies the flux in $W$.
+  \item[17]  Feedback on the turbulent kinetic energy flux, by imposing a flux surface
+   averaged $\kappa$, with a poloidal perturbation taken from the flux tube just inside the domain.
+   Intended for core boundaries only. {\tt ENKPAR(,1)} specifies the flux in $W$.
    {\tt ENKPAR(,2)} specifies the strength of the feedback. 
   \end{description}
 \item[BCENZ]\index{BCENZ} {\tt integer array, length NBC}, specifying the
