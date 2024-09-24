@@ -16,11 +16,11 @@ MAKETAGS ?= ctags -e -f
 ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 else
-ifdef USE_MPI
+ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
 endif
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif
 ifdef SOLPS_DEBUG

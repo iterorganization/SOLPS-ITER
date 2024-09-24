@@ -18,8 +18,6 @@ DEFINES   =
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC       ?= gfortran
-
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace
 DEFINES  += -DDBG

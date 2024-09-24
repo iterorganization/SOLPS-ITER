@@ -4,14 +4,14 @@
 
 # Test whether necessary variables are defined
 LD_GR    ?= -L${SOLPSLIB} -lgr
-ifdef USE_OPENMP
-ifdef USE_MPI
+ifdef SOLPS_OPENMP
+ifdef SOLPS_MPI
 LD_NAG    = `pkg-config sci_mpi_mp --libs`
 else
 LD_NAG    = `pkg-config sci_mp --libs`
 endif
 else
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LD_NAG    = `pkg-config sci_mpi --libs`
 else
 LD_NAG    = `pkg-config sci --libs`
@@ -21,7 +21,7 @@ endif
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
-FC       ?= ftn
+FC        = ftn
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fbounds-check -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans

@@ -69,10 +69,7 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 MPI_FC    ?= mpiifort
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}
-else
-FC        ?= ifort
 endif
-CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

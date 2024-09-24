@@ -1,3 +1,6 @@
+ifeq (${FC},f77)
+FC = ifort
+endif
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 EQUIVS    =
@@ -9,9 +12,11 @@ LINK_MOD  =
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FCOPTS   += -g -C -debug all
+FCOPTS   += -g -C -debug all -diag-disable:10182,10440
+LDOPTS   += -diag-disable:10182
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
-FCOPTS   += -diag-disable:10440 -check nouninit
+FCOPTS   += -check nouninit
+LDOPTS   += -check nouninit
 endif
 else
 FCOPTS   += -O3

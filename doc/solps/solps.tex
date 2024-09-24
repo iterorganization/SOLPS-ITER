@@ -596,11 +596,11 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
 with MPI parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory. This can also be done automatically by use of the {\tt set\_mpi} script before the compilation.
 
 Adding the {\tt \_openmp} suffix at the end of any build target will execute the command
 with OpenMP parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory. This can also be done automatically by use of the {\tt set\_openmp} script before the compilation.
 
 Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any build target will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
@@ -608,7 +608,7 @@ with both OpenMP and MPI parallelization options, when relevant, and put the exe
 
 Adding the {\tt \_debug} suffix at the end of any build target will execute the command
 in debug mode, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory. This can also be done automatically by use of the {\tt set\_debug} script before the compilation.
 
 Adding the {\tt clean\_} prefix at the beginning of any build target will remove that build target
 from its directory, as well as all associated pre-processed source files, object files, module files,
@@ -1625,20 +1625,26 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[collect\_nodiff\_b.sh]\index{collect\_nodiff\_b.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for adjoint AD code.
   \item[collect\_nodiff\_d.sh]\index{collect\_nodiff\_d.sh} Collect source files that have not been diff'ed in tangent mode.
   \item[collect\_nodiff\_d\_multi.sh]\index{collect\_nodiff\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent vector mode.
+  \item[collect\_nodiff\_d\_d\_multi.sh]\index{collect\_nodiff\_d\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent over tangent vector mode.
   \item[collect\_nodiff\_p.sh]\index{collect\_nodiff\_p.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for AD pre-processing mode.
   \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated.
+  \item[collect\_tapenade\_files\_tgt.sh]\index{collect\_tapenade\_files\_tgt.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over tangent vector mode.
+  \item[collect\_tapenade\_files\_adj.sh]\index{collect\_tapenade\_files\_adj.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over adjoint mode.
   \item[cost\_function \$i]\index{cost\_function} Allows the user to plot the value of the cost function {\tt \$i} as a function of the iterations.
   \item[cost\_function\_gradient \$i]\index{cost\_function\_gradient} Allows the user to plot the value of the gradient of cost function {\tt \$i} as a function of the iterations (in tangent mode only).
   \item[exclude\_tapenade\_files.sh]\index{exclude\_tapenade\_files.sh} Produces a file that lists all the files that have been excluded from the differentiation.
   \item[modify\_tapenade\_files\_b.sh]\index{modify\_tapenade\_files\_b.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in adjoint mode so that the diff'ed code can properly compile and run.
   \item[modify\_tapenade\_files\_d.sh]\index{modify\_tapenade\_files\_d.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent AD mode so that the diff'ed code can properly compile and run.
   \item[modify\_tapenade\_files\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_multi.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent vector mode so that the diff'ed code can properly compile and run.
+  \item[modify\_tapenade\_files\_d\_d\_multi.sh]\index{modify\_tapenade\_files\_d\_d\_multi.sh} Modifies the diff'ed source files produced by {\tt Tapenade} in tangent over tangent vector mode so that the diff'ed code can properly compile and run.
   \item[move\_to\_F90.sh]\index{move\_to\_F90.sh} Changes the diff'ed files extensions from {\tt .f90} to {\tt .F90}.
   \item[postprocess\_tapenade\_adj.sh]\index{postprocess\_tapenade\_adj.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in adjoint mode.
   \item[postprocess\_tapenade\_tgt.sh]\index{postprocess\_tapenade\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent mode.
   \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector mode.
+  \item[postprocess\_tapenade\_hess\_tgt.sh]\index{postprocess\_tapenade\_hess\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent over tangent vector mode.
   \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90}, looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
   \item[resall\_D\_diff]\index{resall\_D\_diff} Plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
+  \item[resall\_D\_diff\_diff]\index{resall\_D\_diff\_diff} Plots the evolution of the residuals of all the second order diff'ed equations for D only cases (in tangent over tangent mode only).
   \item[resco\_diff]\index{resco\_diff} Plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
   \item[reskt\_diff]\index{reskt\_diff} Plots the evolution of the residuals of the diff'ed $k$ equation (in tangent mode only).
   \item[resmo\_diff]\index{resmo\_diff} Plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
@@ -1696,8 +1702,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by settings up links to the proper data files.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by settings up links to the proper data files.
+  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.

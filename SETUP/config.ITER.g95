@@ -213,6 +213,8 @@ export LD_MDSPLUS
 export LD_SONNET
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export B25_DEFINES
 export EIRENE_DEFINES
 

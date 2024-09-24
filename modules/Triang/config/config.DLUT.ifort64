@@ -1,8 +1,27 @@
-EQUIV5 = -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4
+#  VERSION : 16.12.2004 23:58
 
-CPP = /lib/cpp -C -traditional -ffreestanding
+# The version relying on Fujitsu Fortran installed on AFS
 
-FC ?= ifort
+# Test whether necessary variables are defined
+ifndef LD_GR
+  $(error LD_GR not defined)
+endif
+ifndef LD_GKS
+  $(error LD_GKS not defined)
+endif
+ifndef LD_NAG
+  $(error LD_NAG not defined)
+endif
+
+#CPP      = -/lib/cpp -C -traditional
+CPP       = /lib/cpp -traditional -ffreestanding
+
+FC        = ifort
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
 
 #!!!Local Variables:
 #!!! mode: Makefile

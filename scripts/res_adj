@@ -1,5 +1,5 @@
 #! /bin/tcsh -f
 
 pipe_run.log | \
-  grep -ai "GRADIENT MAX RES" | \
+  grep -ai "MAX ADJ RESIDUAL" | \
   awk '{print NR, $4}' | xlyplot
