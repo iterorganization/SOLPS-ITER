@@ -28,8 +28,8 @@
 # Leave LD_MDSPLUS blank
 # Remove -DMDSPLUS from SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR ?= ${EBROOTNETCDFMINFORTRAN}
@@ -61,10 +61,19 @@ LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
 LD_MPI     = 
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?= mpiifort
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+endif
+
+#
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNCAR4 -DF2003
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

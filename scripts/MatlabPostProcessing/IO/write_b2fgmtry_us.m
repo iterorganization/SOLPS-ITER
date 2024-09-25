@@ -85,7 +85,6 @@ write_ifield(fid, 'fcLbl',   gmtry.fcLbl );
 write_ifield(fid, 'cvLbl',   gmtry.cvLbl );
 write_ifield(fid, 'ftLbl',   gmtry.ftLbl );
 
-
 %% Write geometry variables
 
 % cell volumes 

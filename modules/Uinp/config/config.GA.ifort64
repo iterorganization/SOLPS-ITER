@@ -3,10 +3,13 @@ IRISLIB   ?= /fusion/projects/codes/solps/SOLPS-ITER/public_lib/GA.ifort64
 MSCL_ROOT ?= ${IRISLIB}
 LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
 
-ifdef USE_MPI
-FC       = mpif90
-else
-FC       = ifort
+MPI_FC  ?= mpif90
+ifdef SOLPS_MPI
+ FC       = ${MPI_FC}
+ COMPILER_TYPE = $(shell ${FC} --version | head -1 | cut -d ' ' -f 1)
+ ifeq (${COMPILER_TYPE},GNU)
+  COMPILER_REDEF = yes
+ endif
 endif
 
 

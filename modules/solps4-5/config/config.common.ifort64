@@ -1,3 +1,6 @@
+ifeq (${FC},f77)
+FC = ifort
+endif
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 
 EQUIV5 += ${SOLPS_CPP} ${USE_EIRENE} -DDOFLUSH -Dsmin=dmin # -DNO_CDF -DNO_PROCESS
@@ -14,8 +17,15 @@ COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut 
 
 ifdef SOLPS_DEBUG
 FCOPTS += -g -C -debug all
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FCOPTS += -diag-disable:10440
+endif
+else
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FCOPTS += -O0
 else
 FCOPTS += -O3
+endif
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FCOPTS += -vec_report0

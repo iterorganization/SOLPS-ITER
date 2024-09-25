@@ -4,12 +4,20 @@
 LD_MSCL   ?= `pkg-config mscl --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
-FC         = ifort
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+ifeq (,$(findstring CentOS,$(OS)))
+FC        = ifx
+else
+FC        = ifort
+endif
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FFLAGS     = -g debug all
+FFLAGS     = -g -debug all
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+FFLAGS    += -diag-disable:10440
+endif
 else
 FFLAGS     = -O
 endif
@@ -20,7 +28,7 @@ endif
 
 INCLUDE    = -Isrc
 COMPILE    = ${FC} -c ${FFLAGS}
-CPP        = /lib/cpp -C -traditional
+CPP        = /lib/cpp -traditional
 
 LDLIBS     = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
 LDEXTRA    =

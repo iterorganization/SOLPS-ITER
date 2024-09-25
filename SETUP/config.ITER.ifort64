@@ -16,10 +16,11 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
+         OS ?= $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
    NODENAME ?= $(shell echo `hostname`)
   MSCL_ROOT ?= ${EBROOTMSCL}
     GR_ROOT ?= ${EBROOTGR}
@@ -32,9 +33,13 @@ MDSPLUS_DIR ?=
 # Variables for linking, using pkg-config
 #
 
+ifeq (,$(findstring CentOS,$(OS)))
+LD_NETCDF  = `pkg-config netcdf-fortran --libs`
+else
 LD_NETCDF  = `nf-config --flibs`
+endif
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L/work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib -lGKS -lgfortran -lX11 -lXt
+LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MSCL    = `pkg-config mscl --libs`
@@ -50,10 +55,32 @@ endif
 NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 
 #
+# Provide compiler
+#
+
+ifeq (,$(findstring CentOS,$(OS)))
+ MPI_FC   ?= mpiifort -fc=mpiifx
+ FCVOPTS   = -check nouninit
+else
+ MPI_FC   ?= mpiifort
+endif
+ifdef SOLPS_MPI
+ FC        = ${MPI_FC}
+ ifndef MPDIR
+  MPDIR    = ${EBROOTIMPI}
+  LD_MPI  += -Wl,-rpath,${MPDIR}/lib64
+ endif
+else
+ ifeq (,$(findstring CentOS,$(OS)))
+  FC       = ifx
+ endif
+endif
+
+#
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DF2003
+SOLPS_CPP      =
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

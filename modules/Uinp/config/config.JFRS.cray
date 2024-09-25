@@ -5,6 +5,9 @@ LD_MSCL ?= -L/opt/gcc/8.3.0/snos/lib64 -lgfortran -L${SOLPSLIB} -lmscl
 
 FC       = ftn
 FFLAGS   = -e0 -ez -ef
+ifdef SOLPS_OPENMP
+FFLAGS  += -homp
+endif
 ifdef SOLPS_DEBUG
 FFLAGS  += -g -O0 -G0 -Rb -K trap=fp -K trap=divz
 endif

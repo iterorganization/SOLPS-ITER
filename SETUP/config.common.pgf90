@@ -1,6 +1,7 @@
 # Autodetected optional features...
 
 FC          = pgf90
+FN          = pgf90
 SOLPS_CPP  += -DPGF90 -DNOQUAD
 LD_MPI      = -Mmpi=mpich
 FFLAGSEXTRA = -Mnorpath
@@ -55,9 +56,16 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    IMAS_PKG_LIST += al-fortran al-identifiers-fortran
   else
     IMAS_PKG_LIST += imas-pgi
+    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+      IMAS_PKG_LIST += imas-identifiers-pgi
+    else
+      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-pgi
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
@@ -133,11 +141,6 @@ export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
 #
 # Export for use in sub-makefiles
 #
@@ -163,11 +166,17 @@ export LD_SONNET
 export LD_MPI
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+
+export FC
+export FN
+export CC
 
 #!!!Local Variables:
 #!!! mode: Makefile

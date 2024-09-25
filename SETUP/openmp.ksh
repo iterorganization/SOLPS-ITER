@@ -20,7 +20,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
   export   USE_OPENMP="-D_OPENMP"
   export   SOLPS_OPENMP="yes"
-  export   KMP_STACKSIZE="48M"
+  export   KMP_STACKSIZE="128M"
   export   KMP_AFFINITY="norespect,compact"
   unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER OpenMP mode turned on"

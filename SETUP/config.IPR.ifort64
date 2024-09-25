@@ -18,8 +18,8 @@ $(error First use of config.IPR.ifort64. Provide paths to libraries first.)
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR ?=
@@ -47,6 +47,19 @@ endif
 LD_NAG     = -L${NAGDIR}/lib -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpif90
+ifdef SOLPS_MPI
+ FC        = ${MPI_FC}
+ COMPILER_TYPE = $(shell ${FC} --version | head -1 | cut -d ' ' -f 1)
+ ifeq (${COMPILER_TYPE},GNU)
+  COMPILER_REDEF = yes
+ endif
+endif
 
 #
 # Preprocessor options

@@ -6,20 +6,43 @@ module use /work/imas/etc/modules/all
 # Modules needed by SOLPS-ITER
 
 nodename=`hostname`
-module load IMAS/3.40.1-4.11.9-2020b
-module load GGD/1.10.4-iccifort-2020.4.304-DD-3.40.1
-module load AMNS/1.4.0-iccifort-2020.4.304-DD-3.40.1
-module load makedepend/1.0.6-GCCcore-10.2.0
-module load MSCL/1.2.2-intel-2020b
-module load Doxygen/1.8.20-GCCcore-10.2.0
-module load ParaView/5.10.0-intel-2020b-mpi
-module load texlive/20210216-GCCcore-10.2.0
-module load SimDB/0.7.1-intel-2020b
-module load netCDF-Fortran/4.5.3-iimpi-2020b
-module load NAG/26-intel-2020b
+export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
+[ $OS = "CentOS" ] && {
+  module load IMAS-AL-Fortran/5.2.1-intel-2020b-DD-3.41.0
+  module load IMAS-AL-Python/5.2.1-intel-2020b-DD-3.41.0
+  module load IDStools/1.14.1-intel-2020b
+  module load GGD/1.11.0-intel-2020b-DD-3.41.0
+  module load AMNS/1.5.0-intel-2020b-DD-3.41.0
+  module load makedepend/1.0.6-GCCcore-10.2.0
+  module load MSCL/1.2.2-intel-2020b
+  module load Doxygen/1.8.20-GCCcore-10.2.0
+  module load ParaView/5.10.0-intel-2020b-mpi
+  module load texlive/20210216-GCCcore-10.2.0
+  module load SimDB/0.7.1-intel-2020b
+  module load netCDF-Fortran/4.5.3-iimpi-2020b
+  module load NAG/26-intel-2020b
+  module load CMake/3.20.1-GCCcore-10.2.0
+  module load netcdf4-python/1.5.5.1-intel-2020b
+  export SYSNAME="amd64_sles15"
+} || {
+  module load IMAS-AL-Fortran/5.3.0-intel-2023b-DD-3.42.0
+  module load IMAS-AL-Python/5.3.0-intel-2023b-DD-3.42.0
+  module load IDStools/2.0.0-iimkl-2023b
+  module load GGD/1.12.0-intel-2023b-DD-3.42.0
+  module load AMNS/1.5.1-intel-2023b-DD-3.42.0
+  module load makedepend/1.0.9-GCCcore-13.2.0
+  module load MSCL/1.2.4-GCCcore-13.2.0
+  module load Doxygen/1.9.8-GCCcore-13.2.0
+# module load ParaView/5.12.0-foss-2023b
+  module load texlive/20230313-intel-compilers-2023.2.1
+  module load netCDF/4.9.2-iimpi-2023b
+  module load netCDF-Fortran/4.6.1-iimpi-2023b
+  module load NAG/26-intel-compilers-2023.2.1
+  module load CMake/3.27.6-GCCcore-13.2.0
+  module load json-fortran/8.5.2-intel-compilers-2023.2.1
+  export SYSNAME="x86_64_rhel9"
+}
 module load Fundamental-Constants/0.1.1
-module load CMake/3.20.1-GCCcore-10.2.0
-module load netcdf4-python/1.5.5.1-intel-2020b
 
 export GGD_VERSION=`pkg-config ggd --modversion`
 export EBVERSIONMSCL=`pkg-config mscl --modversion`
@@ -34,9 +57,17 @@ module load TotalView/2023.4.16_linux_x86-64
 export DBX="totalview"
 
 # Compilers
-export CC="icc"
-export FC="ifort"
-export CXX="icpc"
+[ $OS = "CentOS" ] && {
+  export CC="icc"
+  export FC="ifort"
+  export MPI_FC="mpiifort"
+  export CXX="icpc"
+} || {
+  export CC="icx"
+  export FC="ifx"
+  export MPI_FC="mpiifort -fc=mpiifx"
+  export CXX="icpx"
+}
 
 [ -x paraview-config ] && {
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...

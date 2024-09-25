@@ -2,15 +2,13 @@
 
 # The version relying on Fujitsu Fortran installed on AFS
 
-LD_GR    ?= -L/work/imas/opt/gr/0.0.94/lib -lgr
-LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
+LD_GR    ?= -L${EBROOTGR}/lib -lgr
+LD_GKS   ?= -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt -lXmu
 LD_NAG   ?= `pkg-config nag --libs`
-GLI_HOME ?= /work/imas/opt/gks/4.4.74/lib
+GLI_HOME ?= ${EBROOTGLI}
 
 #CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
-
-FC        = gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
@@ -18,7 +16,7 @@ endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib
 LDLIBS    =
 
 OBJDEST   = -J${OBJDIR}

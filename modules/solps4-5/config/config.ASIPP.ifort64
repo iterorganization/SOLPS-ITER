@@ -1,8 +1,7 @@
 EQUIV5 = -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4
 
-CPP = /lib/cpp -traditional
+CPP = /lib/cpp -C -traditional
 
-FC = ifort
 
 #!!!Local Variables:
 #!!! mode: Makefile
