@@ -41,6 +41,7 @@
 \fi
 \usepackage{color}
 \usepackage{alltt}
+\usepackage{tabularx}
 \input{Old_packages}
 
 \def\topfraction{.9}
@@ -65,6 +66,24 @@
 \newcommand{\grad}{\nabla}
 \definecolor{Red}{rgb}{1.0,0.0,0.0}
 
+%% for k-model
+\newcommand{\dexb}{D_{E{\times}B}}
+\newcommand{\heexb}{\chi_{e,E{\times}B}}
+\newcommand{\hiexb}{\chi_{i,E{\times}B}}
+\newcommand{\nuexb}{\nu_{E{\times}B}}
+\newcommand{\hckexb}{\chi_{\kappa,E{\times}B}}
+\newcommand{\etaexb}{\eta_{E{\times}B}}
+\newcommand{\kepscd}{C_D}
+\newcommand{\kepscs}{C_S}
+\newcommand{\kepsheate}{C_{\chi_e}}
+\newcommand{\kepsheati}{C_{\chi_i}}
+\newcommand{\kepsvisc}{C_\nu}
+\newcommand{\kepseta}{C_\eta}
+\newcommand{\kepsrho}{\rho_L}
+\newcommand{\kepskappa}{C_\kappa}
+\newcommand{\kepscsigpar}{C_{\sigma_{||},1}}
+\newcommand{\kepscsigpartwo}{C_{\sigma_{||},2}}
+\newcommand{\kepscdiss}{C_{diss}}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
@@ -10115,6 +10134,188 @@ $c_{\sigma^{(AN)},0} = 10^{-6} \div 10^{-3}$, $c_{\sigma^{(AN)},1} = 0$, $c_{\si
 If $c_{\sigma^{(AN)},7} \ne 0$, then $f_\sigma$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\sigma^{(CL)}_{y} = 0$
+
+\section{Turbulent kinetic energy equation}
+
+Note: the equations above are written in the 'old' form. In the unstructured code, it is now more natural to describe the equations in vector notation. Dedicated routines now take care of consistently computing gradients and divergences. We recommend that new equations are written in vector notation. In the long run, it would also be beneficial to rewrite (with great care!) the equations above in vector notation.
+
+\subsection{Purpose}
+
+The aim of the $\kappa$-model is to capture the average effect of plasma turbulence in a mean-field code like {\tt SOLPS-ITER}, thereby improving the 
+predictive capabilities of the code compared to the use of ad-hoc anomalous perpendicular transport coefficients. The model is optional and the main switch to activate it is
+{\tt b2mndr\_solve\_keps}. The development of the models is described in References
+ \cite{coosemans2020new,carli2020interchange,coosemans2021bayesian,de2021bayesian,coosemans2021turbulent,dekeyser2022self,coosemans2022self,coosemans2024mean}. Ref. \cite{dekeyser2022self} presents an overview of the work and the equations is this manual are derived from that paper. While the paper often makes use of proportionality signs $\sim$, they are replaced here by equals signs, to better represent the code implementation. 
+ 
+For a general quantity $x$ we have either a Reynolds
+decomposition $x = \overline{x} + x′$, or a Favre decomposition $x = \widetilde{x} + x''$, where $x = \mathrm{lim}_{T \rightarrow \infty} \frac{1}{T} \int_T x \mathrm{d}t$
+and $\widetilde{x} = \overline{xn} / \overline{n}$. For example, $\overline{n}$ corresponds to $n_i$ in {\tt B2.5} and $\widetilde{T_i}$ corresponds to $T_i$ in {\tt B2.5}. However, 
+{\tt B2.5} has no direct information on the fluctuations (e.g. $n'$ or $T_i''$) because it is not a turbulence code. The goal of the $\kappa$-model is to approximate the most important
+terms containing products of the fluctuations, using available mean-field information. 
+
+
+The model assumes that electrostatic $E{\times}B$ interchange turbulence is the dominant anomalous transport mechanism.
+The user-defined anomalous transport coefficients, $D_i^{(AN)}$, $\chi_i^{(AN)}$, $\chi_e^{(AN)}$ and $\nu_i^{(AN)}$ are replaced by $\dexb$, $\heexb$, $\hiexb$ and $\nuexb$.
+$\heexb$, $\hiexb$ and $\nuexb$ scale with $\dexb$, i.e. $\heexb = \kepsheate \ \dexb$, $\hiexb = \kepsheati \ \dexb$ and $\nuexb = \kepsvisc \ \dexb$, where $\kepsheati$, $\kepsheate$ and $\kepsvisc$ are constants of order unity. $\dexb$ is given by 
+
+\begin{equation}
+\dexb = \kepscd \frac{\kappa/m}{\sqrt{\kappa/m}/\kepsrho + \kepscs |S_{mean}|}.
+\end{equation}
+
+Here, $\kappa$ is the turbulent kinetic energy, $m$ is the ion mass, $\kepsrho$ is the ion Larmor radius, $|S_{mean}|$ is the mean $E{\times}B$ flow shear, and $\kepscs$ is a user-defined multiplier to choose the importance of the flow shear contribution. With $\kepscs=0$, $\dexb = \kepscd \kepsrho \sqrt{\kappa/m}$ remains.
+
+The turbulent kinetic energy is defined by
+\begin{equation}\label{eq:dekeyser31}
+\overline{n} \kappa \equiv \frac{m \overline{n {\mathbf{V}''_E}^2}}{2},
+\end{equation}
+
+where ${\mathbf{V}''_E}$ are the fluctuations of the $E{\times}B$ velocity.
+
+In Reference \cite{coosemans2021turbulent} it is shown that the anomalous transport due to isothermal electrostatic $E{\times}B$ fluctuations can be
+described rather accurately through a diffusive model
+
+\begin{equation}\label{eq:dekeyser30}
+\overline{n' \mathbf{V}'_E} = - \dexb \nabla_\perp \overline{n}.
+\end{equation}
+
+ In Reference \cite{coosemans2022self} it is additionally shown that the electron and ion heat fluxes due
+to $E{\times}B$ fluctuations can be approximated with a diffusive relation, where the diffusivities follow the same characteristic
+scaling as $\dexb$ up to a constant of order unity:
+
+\begin{equation}\label{eq:dekeyser32} 
+\frac{3}{2} \overline{n \mathbf{V}''_E {T''_e}} = - \overline{n} \heexb \nabla_{\perp} \widetilde{T_e} ,
+\end{equation}
+
+\begin{equation}\label{eq:dekeyser33}
+\frac{3}{2} \overline{n \mathbf{V}''_E T''_i} = - \overline{n} \hiexb \nabla_\perp \widetilde{T_i}.
+\end{equation}
+
+In the absence of dedicated simulations, we assume that also the parallel momentum
+transport due to these fluctuations will follow a similar diffusive law,
+
+\begin{equation}\label{eq:dekeyser34}
+m \overline{n {u_{||}''} \mathbf{V}''_E} = - m \overline{n} \nuexb \nabla_\perp \widetilde{u_{||}}.
+\end{equation}.
+
+\subsection{Model equation for turbulent kinetic energy}\label{eq:kmodel_main}
+
+The transport equation for $\kappa$, as given by Eq. 41 in Ref. \cite{dekeyser2022self} is
+
+\begin{equation}
+\underbrace{\frac{\partial \overline{n} \kappa}{\partial t}}_\text{term 1} + 
+\nabla \cdot \Big( 
+\underbrace{\overline{n} \widetilde{\mathbf{V}} \kappa}_\text{term 2} 
++ 
+\underbrace{\frac{m}{2} \overline{n \mathbf{V}'' {\mathbf{V}''}^2_E}}_\text{term 3}
++
+\underbrace{ \overline{\phi' {j'}_{||} } \mathbf{b}}_\text{term 4} \Big) 
+=
+- \underbrace{\mathbf{\Pi}_\mathrm{RS} : \nabla {\overline{\mathbf{V}_E}}^T }_\text{term 5}
++ \underbrace{\overline{{j'}_{||} \nabla_{||} \phi'}}_\text{term 6}
+- \underbrace{\overline{p' \mathbf{V}'_E} \cdot \nabla \mathrm{ln} B^2}_\text{term 7} .
+\end{equation}
+
+
+{\tt term 1} is the time evolution of $\kappa$, where $\overline{n} = n_i$. This term is similar to the time derivatives of densities, parallel velocities and temperatures.
+
+{\tt term 2} is the advection of $\kappa$ with $\overline{n} \widetilde{\mathbf{V}}$, which is the mean-field ion flux $\Gamma_i$.
+
+{\tt term 3} was shown to be only a minor transport term in Ref. \cite{coosemans2021turbulent} and is modelled as a small diffusion term on $\kappa$ that mainly
+facilitates the numerical implementation:
+
+\begin{equation}\label{eq:dekeyser42}
+\frac{m}{2} \overline{n {\mathbf{V}''} {\mathbf{V}''_E}^2 } \approx - \overline{n} \hckexb \nabla \kappa,
+\end{equation}
+
+with $\hckexb =  \kepskappa \dexb$ and $\kepskappa$ a model constant.
+
+{\tt term 4} is approximated as 
+
+\begin{equation}\label{eq:dekeyser46}
+\overline{\phi' j_{||}'} \mathbf{b} = - \kepscsigpar \sigma_{||} B^2 \kepsrho^2 \nabla_{||} \frac{\kappa}{m} \mathbf{b},
+\end{equation}
+
+with $\kepscsigpar$ a constant introduced in the model that can be used to control the magnitude of the parallel transport, and
+can be expected to be of order unity.
+
+{\tt term 5} is related to the Reynolds stress-tensor $\mathbf{\Pi}_\mathrm{RS}$. We want to model the dominant effect that $E{\times}B$ flow shear, in particular
+radial shear of the poloidal $E{\times}B$ velocity which tends to tear turbulent eddies apart, reducing the turbulence intensity and associated
+transport. To accomplish this, we assume that the $E{\times}B$ contribution will be dominant to the Reynolds stress tensor, and use a negative turbulent
+viscosity model to make the corresponding term in Equation \ref{eq:kmodel_main} a sink:
+
+\begin{equation}\label{eq:dekeyser48}
+\mathbf{\Pi}_\mathrm{RS} = \frac{2}{3} \overline{n} \kappa I - 2 \etaexb \Big( \frac{1}{2} \Big( \nabla \overline{\mathbf{V}_E} + \nabla \overline{\mathbf{V}_E}^T \Big)
+- \frac{1}{3} \Big( \nabla \cdot \overline{\mathbf{V}_E} \Big) I \Big),
+\end{equation}
+
+where $I$ is the identity tensor. Note that the trace of this tensor is determined by $\kappa$, as it should by definition, while the
+anisotropic piece is determined by the rate-of-strain tensor multiplied by a turbulent viscosity $\etaexb$ which we assume to
+be negative, $\etaexb = - \kepseta m \overline{n} \dexb$. With this model for $\mathbf{\Pi}_\mathrm{RS}$, {\tt term 5} 
+becomes
+
+\begin{equation}\label{eq:dekeyser49}
+- \mathbf{\Pi}_\mathrm{RS} : \nabla \overline{V_E}^T = \frac{2}{3} \overline{n} \kappa \overline{\mathbf{V}_E} \cdot \nabla \mathrm{ln} B^2
+- \frac{2}{3} \etaexb \big( \overline{\mathbf{V}_E} \cdot \nabla \mathrm{ln} B^2 \big)^2 + \etaexb \big( \nabla_r \overline{V_{E,\theta}} \big)^2.
+\end{equation}
+
+As with the interchange and parallel dissipation terms, we need to consider global energy conservation in our model.
+In contrast to the previous terms which exchange energy with the ion or electron heat equations, the Reynolds stress term
+appears in the perpendicular momentum equation instead, and hence leads to an additional mean-field drift.
+Using our model for $\mathbf{\Pi}_\mathrm{RS}$, the resulting drift can be approximated as
+
+
+\begin{equation}\label{eq:dekeyser50}
+ \frac{\mathbf{b}}{B} \times \nabla \cdot \mathbf{\Pi}_\mathrm{RS} \approx \frac{\mathbf{b}}{B} \times \nabla \big(  \frac{2}{3} \overline{n} \kappa \big)
+ - \frac{\mathbf{e}_r}{B} \nabla \cdot \big( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \big),
+\end{equation}
+
+where $\overline{V_{E,\wedge}} = \big( \nabla_r \overline{\phi} \big) / B$ is the component of the $E{\times}B$ velocity in the diamagnetic direction.
+
+
+{\tt term 6} is approximated as 
+
+\begin{equation}\label{eq:dekeyser47}
+\overline{j_{||}'  \nabla_{||} \phi' } \approx \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m},
+\end{equation}
+
+with a second model constant $\kepscsigpartwo$ = $\kepscsigpar \ \kepscdiss$ and $L_{\mathrm{conn}}$ the connection length. 
+
+{\tt term 7} is the source of $\kappa$ due to the interchange mechanism. This was found to be the dominant source of $\kappa$ in recent studies of interchange $E{\times}B$ drift turbulence for the SOL using TOKAM2D simulations \cite{coosemans2021turbulent,coosemans2020new,coosemans2021bayesian,coosemans2022self}. No additional closure is needed
+for this term for electrostatic $E{\times}B$ turbulence, as a closure for the turbulent heat flux due to ions and electrons is already
+proposed above. Indeed, using the properties of Reynolds and Favre averages one can show that
+
+\begin{equation}\label{eq:dekeyser43}
+\overline{p' \mathbf{V}'_E} = \overline{n' \mathbf{V}'_E} \big( \widetilde{T_e} + \widetilde{T_i}\big)
++ \overline{n \mathbf{V}''_E T_e''} + \overline{n \mathbf{V}''_E T_e''} , 
+\end{equation}
+
+so that the closures proposed in Equations \ref{eq:dekeyser30}, \ref{eq:dekeyser32} and \ref{eq:dekeyser33} can be used to close the interchange term.
+
+\subsection{Link between symbols and code variables} 
+
+The table below links the equation symbols to the names of the variables in the code. Some variables are global, and some are local to {\tt set\_transport\_keps}.
+
+\begin{tabular}{c | c }
+\underline{Symbol} & \underline{Code}   \\
+$\dexb$ & {\tt dna\_ExB}  \\
+$\heexb$ & {\tt hce\_ExB} \\
+$\hiexb$ & {\tt hci\_ExB}\\
+$\nuexb$ & {\tt vsa0} \\
+$\kepscd$ & {\tt keps\_cd} \\
+$\kepscs$ & {\tt keps\_shear} \\
+$\kepsheate$ & {\tt keps\_heat}\\
+$\kepsheati$ & {\tt keps\_heat\_i}\\
+$\kepsvisc$ & {\tt keps\_visc} \\
+$\kepsrho$ & {\tt rhol} \\
+$\kepskappa$ & {\tt keps\_dkt} \\
+$\kepscsigpar$& {\tt fsigkt} \\
+$\kepscdiss$ & {\tt fac\_diss(\_core)} \\
+$\kepseta$ & {\tt fac\_vis\_RS} \\
+\end{tabular}
+
+\section{Turbulent enstrophy equation}
+
+The equation for turbulent enstrophy ($\zeta$) is in a very early stage of development. Not yet indended for users.
+Documentation will follow when the model is more mature.
 
 %-------- end of 20th page -------------
 \section{Typical boundary conditions}
@@ -22160,7 +22361,7 @@ introduced a very small effect, seen only as a jump in the residuals.
 \input{CONTRIBUTING.tex}
 
 \bibliographystyle{iaea}
-\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt,afn}
+\bibliography{tok,aug,general,extern,main,model,divgas,mnw,xpb,adopt,afn,keps}
 
 \input{solps.ind}
 
