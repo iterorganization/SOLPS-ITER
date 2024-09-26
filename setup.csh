@@ -12,7 +12,7 @@ echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentatio
 echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
 echo or online at http://www.eirene.de/
 
-( ps -p $$ | grep -q tcsh ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
+( ps -p $$ | grep -Eq "tcsh|csh" ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP,
 # or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
