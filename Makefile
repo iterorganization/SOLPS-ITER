@@ -295,6 +295,8 @@ divgeo_nox:
 
 ifndef NO_CMAKE
 
+ifeq ($(MACOS),false)
+
 eirene:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
 	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
@@ -328,6 +330,29 @@ eirene_nox_openmp_mpi:
 	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
 
 else
+# Forcing the compilation of Eirene without graphics on MacOS
+
+eirene eirene_nox:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
+	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+
+eirene_mpi eirene_nox_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
+
+eirene_openmp eirene_nox_openmp:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
+
+eirene_openmp_mpi eirene_nox_openmp_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
+
+endif
+
+else
+
+ifeq ($(MACOS),false)
 
 eirene:
 	cd modules/Eirene; ${MAKEE}
@@ -353,11 +378,37 @@ eirene_nox_openmp:
 eirene_nox_openmp_mpi:
 	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 
+else
+# Forcing the compilation of Eirene without graphics on MacOS
+
+eirene eirene_nox:
+	cd modules/Eirene; ${MAKEE} ${OPT_NOX}
+
+eirene_mpi eirene_nox_mpi:
+	cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
+
+eirene_openmp eirene_nox_openmp:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${OPT_NOX}
+
+eirene_openmp_mpi eirene_nox_openmp_mpi:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+
 endif
+
+endif
+
+ifeq ($(MACOS),false)
 
 eirene_mpi_openmp: eirene_openmp_mpi
 
 eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
+
+else
+# Forcing the compilation of Eirene without graphics on MacOS
+
+eirene_mpi_openmp eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
+
+endif
 
 b25: nc2text_simple nc_reduce
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
@@ -600,6 +651,8 @@ uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
 
 uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
+ifeq ($(MACOS),false)
+
 triang: eirene_nox
 	cd modules/Triang; ${MAKE}
 
@@ -613,6 +666,19 @@ triang_nox: eirene_nox
 triang_nox_mpi: eirene_nox_mpi
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
+
+else 
+# Forcing the compilation of Eirene without graphics on MacOS
+
+triang triang_nox: eirene_nox
+	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
+	cd modules/Triang; ${MAKE} ${OPT_NOX}
+
+triang_mpi triang_nox_mpi: eirene_nox_mpi
+	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
+	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
+
+endif
 
 ifndef NO_MOTIF
 amds: b25eirene
@@ -1110,3 +1176,4 @@ help:
 	@echo "      nox_openmp_debug : compile debug version (OpenMP) (no X main codes)"
 	@echo "     all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
 	@echo "  nox_openmp_mpi_debug : compile debug version (OpenMP+MPI) (no X main codes)"
+
