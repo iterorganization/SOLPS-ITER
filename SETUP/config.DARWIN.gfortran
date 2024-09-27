@@ -36,8 +36,8 @@ FREETYPE_HOME ?= ${FREETYPE_HOME}
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L${NCFDIR}/lib -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT}/darwin.gfortran -lmscl
-LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME}/lib -lgks
+LD_GR      = 
+LD_GKS     = 
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_HOME}/lib -lfreetype -L${LIBPNG_HOME}/lib -lpng
 LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
 LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
