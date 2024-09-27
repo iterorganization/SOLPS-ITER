@@ -578,17 +578,17 @@ sed -i -e "s/rtltb(ii1), 1/rtltb, 1/" b2mod_driver_diff.F90
 sed -i -e "s/rtlnb0(ii1), 1/rtlnb0, 1/" b2mod_driver_diff.F90
 sed -i -e "s/rtlnb(ii1), 1/rtlnb, 1/" b2mod_driver_diff.F90
 
-sed -i -e "s/b2mn_init_diff/b2mn_init_b/g" b2optim_*.F*
-sed -i -e "s/b2mn_fin_diff/b2mn_fin_b/g" b2optim_*.F*
-sed -i -e "s/b2mn_step_diff/b2mn_step_b/g" b2optim_*.F*
-sed -i -e "s/geodiff/geob/g" b2optim_*.F*
-sed -i -e "s/mpgdiff/mpgb/g" b2optim_*.F*
-sed -i -e "s/statediff/stateb/g" b2optim_*.F*
-sed -i -e "s/state_extdiff/state_extb/g" b2optim_*.F*
-sed -i -e "s/state_avgdiff/state_avgb/g" b2optim_*.F*
-sed -i -e "s/switchdiff/switchb/g" b2optim_*.F*
-sed -i -e "s/par_opt_physdiff/par_opt_physb/g" b2optim_*.F*
-sed -i -e "s/stateb, state_ext, state_extb, j, jdiff)/stateb, state_ext, state_extb, j)/g" b2optim_*.F*
+sed -i -e "s/b2mn_init_diff/b2mn_init_b/g" b2optim_tao.F90
+sed -i -e "s/b2mn_fin_diff/b2mn_fin_b/g" b2optim_tao.F90
+sed -i -e "s/b2mn_step_diff/b2mn_step_b/g" b2optim_tao.F90
+sed -i -e "s/geodiff/geob/g" b2optim_tao.F90
+sed -i -e "s/mpgdiff/mpgb/g" b2optim_tao.F90
+sed -i -e "s/statediff/stateb/g" b2optim_tao.F90
+sed -i -e "s/state_extdiff/state_extb/g" b2optim_tao.F90
+sed -i -e "s/state_avgdiff/state_avgb/g" b2optim_tao.F90
+sed -i -e "s/switchdiff/switchb/g" b2optim_tao.F90
+sed -i -e "s/par_opt_physdiff/par_opt_physb/g" b2optim_tao.F90
+sed -i -e "s/stateb, state_ext, state_extb, j, jdiff)/stateb, state_ext, state_extb, j)/g" b2optim_tao.F90
 
 cp $TAPENADEDIR/ADFirstAidKit/adStack.c .
 cp $TAPENADEDIR/ADFirstAidKit/adStack.h .

@@ -799,7 +799,6 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item two aliases to swap between the TGT and no\_TGT versions of the code ({\tt set\_tgt} and {\tt unset\_tgt})
 \item two aliases to swap between the ADJ and no\_ADJ versions of the code ({\tt set\_adj} and {\tt unset\_adj})
 \item two aliases to swap between the TAO and no\_TAO versions of the code ({\tt set\_tao} and {\tt unset\_tao})
-\item two aliases to swap between the IPOPT and no\_IPOPT versions of the code ({\tt set\_ipopt} and {\tt unset\_ipopt})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}
@@ -1649,7 +1648,6 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[reskt\_diff]\index{reskt\_diff} Plots the evolution of the residuals of the diff'ed $k$ equation (in tangent mode only).
   \item[resmo\_diff]\index{resmo\_diff} Plots the evolution of the residuals of the diff'ed momentum equation (in tangent mode only).
   \item[resrest\_diff]\index{resrest\_diff} Plots the evolution of the residuals of the diff'ed total momentum, ion energy, electron energy, and potential equations (in tangent mode only).
-  \item[result\_ipopt.sh]\index{result\_ipopt.sh} Produces files that summarize an optimization run performed with {\tt IPOPT}. See \ref{sec:optim_results} for details.
   \item[result\_tao.sh]\index{result\_tao.sh} Produces files that summarize an optimization run performed with {\tt PETSc/TAO}. See \ref{sec:optim_results} for details.
   \item[run\_info]\index{run\_info} Prints the file {\tt run.info} that contains information about cost function, gradient, optimization. See \ref{sec:optim_results} for details.
  \end{description}

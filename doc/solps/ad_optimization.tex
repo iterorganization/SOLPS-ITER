@@ -493,7 +493,7 @@ The optimization framework will try to minimize the cost function $\hat{\mathcal
 \end{equation*}
 where $\theta_{L}$ and $\theta_{U}$ are the lower and upper bounds for $\theta$ respectively. Currently, no other nonlinear constraint is implemented.
 
-The minimization is carried out by coupling the tangent or adjoint AD code to some optimization library, such as {\tt PETSc/TAO} \cite{petsc1} or {\tt IPOPT} \cite{ipopt}. What these optimizers do is to calculate the cost function and its gradient starting from an initial guess supplied by the user. Once the gradient is known, a suitable direction is computed along which the cost function decreases. This descent direction depends on the algorithm chosen (BFGS is the default, other possibilities include other quasi-Newton methods, steepest-descent, conjugate gradient, etc...). Subsequently, a so-called line search is typically applied to find a step-length in the descent direction that guarantees convergence of the algorithm. Also here different choices are possible, the most common ones require the Armijo or the strong Wolfe condition. With {\tt PETSc/TAO}, it is possible to flexibly choose the descent direction type, the line search options, or even switch to trust region in place of line search methods. Users who would like to know more regarding optimization methods are encouraged to read \cite{nocedal}.
+The minimization is carried out by coupling the tangent or adjoint AD code to some optimization library, such as {\tt PETSc/TAO} \cite{petsc1}. What these optimizers do is to calculate the cost function and its gradient starting from an initial guess supplied by the user. Once the gradient is known, a suitable direction is computed along which the cost function decreases. This descent direction depends on the algorithm chosen (BFGS is the default, other possibilities include other quasi-Newton methods, steepest-descent, conjugate gradient, etc...). Subsequently, a so-called line search is typically applied to find a step-length in the descent direction that guarantees convergence of the algorithm. Also here different choices are possible, the most common ones require the Armijo or the strong Wolfe condition. With {\tt PETSc/TAO}, it is possible to flexibly choose the descent direction type, the line search options, or even switch to trust region in place of line search methods. Users who would like to know more regarding optimization methods are encouraged to read \cite{nocedal}.
 
 A schematic view of the optimization process is available in Figure~\ref{fig:optim} when tangent AD is employed for gradient computation. The initial guess {\tt X0} is fed to the tangent AD version of the main driver routine {\tt b2mndr\_1\_d}, which will compute the value of the cost function and its gradient. If certain criteria regarding tolerances, computational time, or iterations, are met (see below), the optimization is stopped, otherwise the line search procedure is started and a new value for the parameter set $\theta$ is computed and fed again to the main driver. Note that the line search will actually require one or more additional calls to the driver routines to evaluate the cost function and/or the gradient.
 
@@ -525,7 +525,7 @@ For {\tt PETSc/TAO} the tolerance is easily linked with optimization quantities 
 \subsection{Compile optimization code}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In order to compile the optimization code, one must make sure that one of the optimization libraries currently tested with {\tt B2.5} is available, such as {\tt PETSc/TAO} (version 3.10 or younger) or {\tt IPOPT}, either as a module to be loaded or as a locally installed library from the user. Both {\tt PETSc/TAO} and {\tt IPOPT} are open source so the latter should always be feasible.
+In order to compile the optimization code, one must make sure that one of the optimization libraries currently tested with {\tt B2.5} is available, such as {\tt PETSc/TAO} (version 3.10 or younger), either as a module to be loaded or as a locally installed library from the user. {\tt PETSc/TAO} is open source so the latter should always be feasible.
 
 For the local installation on the KU-Leuven VSC cluster, for {\tt PETSc/TAO} to the following command line options to configure the installation were used:
 \begin{verbatim}
@@ -541,7 +541,7 @@ $ game listobj depend
 $ set_tao
 $ gmake b25_tgt b25_adj
 \end{verbatim}
-where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. Alternatively, one can do the same with command {\tt set\_ipopt}. In both cases an additional executable named {\tt b2optim\_tao.exe} or {\tt b2optim\_ipopt.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.[tgt|adj]}.
+where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. An additional executable named {\tt b2optim\_tao.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.[tgt|adj]}.
 
 \textbf{Important:} On the ITER cluster it is currently possible to compile only the {\tt PETSc/TAO} version.
 
@@ -568,13 +568,6 @@ Below is a description of the additional variables set in {\tt b2.optimization.p
   \item[TOL\_OPT]\index{TOL\_OPT} {\tt real*8}, tolerance below which optimization is stopped. For {\tt PETSc/TAO} it is used for the absolute gradient norm, the relative gradient norm, and the gradient reduction stopping criteria. Can be overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to $10^{-7}$.
   \item[HESSIAN\_APPROXIMATION]\index{HESSIAN\_APPROXIMATION} {\tt character*256}, type of Hessian approximation employed. Depends on optimization library. Possible values are currently: {\tt 'limited-memory'} and {\tt 'exact'}. When using the {\tt 'exact'} option the steepest descent algorithm is used. Defaults to {\tt 'limited-memory'}.
   \item[LIMITED\_MEMORY\_UPDATE\_TYPE]\index{LIMITED\_MEMORY\_UPDATE\_TYPE} {\tt character*256}, specifies which kind of Hessian approximation is employed if {\tt HESSIAN\_APPROXIMATION} is set to {\tt 'limited-memory'}. Can overridden with {\tt PETSc/TAO} by using command line options for the optimization. Defaults to {\tt 'bfgs'}.
-  \item[NNCON]\index{NNCON} {\tt integer}, number of nonlinear constraints to impose (not used for the moment). Defaults to {\tt 0}.
-  \item[GL]\index{GL} {\tt real*8 array, dimension (NNCON)}, lower bound for each nonlinear constraint (not used for the moment). Defaults to $-10*p_\infty$.
-  \item[GU]\index{GU} {\tt real*8 array, dimension (NNCON)}, upper bound for each nonlinear constraint (not used for the moment). Defaults to $10*p_\infty$.
-  \item[NNJAC]\index{NNJAC} {\tt integer}, number of non-zeros in Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0}.
-  \item[JCOL]\index{JCOL} {\tt integer array, dimension (NNJAC)}, contains the column index of the non-zero element of the Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0}.
-  \item[JROW]\index{JROW} {\tt integer array, dimension (NNJAC)}, contains the row index of the non-zero element of the Jacobian for the nonlinear constraints. (not used for the moment). Defaults to {\tt 0}.
-  \item[JJ]\index{JJ} {\tt real*8 array, dimension (NNJAC)}, contains the value of the non-zero element of the Jacobian for the nonlinear constraints (not used for the moment). Defaults to {\tt 0.0}.
 \end{description}
 
 Once the optimization case is ready, it can be started with the commands:\index{set\_tao}
@@ -594,7 +587,7 @@ $ setenv TAO_OPT "list-of-valid-options"
 \begin{itemize}
   \item Scaling of the problem is quite important! Therefore, aim at parameters which are in a similar range of order of magnitude, using {\tt PAR\_RESCALE};
   \item {\tt PETSc/TAO} requires by default the strong Wolfe conditions for the line search, which may be too strict or be affected by gradient discontinuities. It may be better to require the Armijo condition only with setting the option {\tt setenv TAO\_OPT "-tao\_ls\_type armijo"};
-  \item the BFGS method with {\tt PETSc/TAO} seems so far the most performing option, with {\tt IPOPT} and other {\tt PETSc/TAO} methods more demanding.
+  \item the BFGS method with {\tt PETSc/TAO} seems so far the most performing option, with other {\tt PETSc/TAO} methods more demanding.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -605,24 +598,18 @@ When the optimization is running, the user can check its status by doing:
 \begin{verbatim}
 $ grep -i tao run.log
 \end{verbatim}
-or
-\begin{verbatim}
-$ grep -i ipopt run.log
-\end{verbatim}
 
 This will print out information on the iterations performed, cost function value and gradient, and value of the parameters.
 
-Once the optimization is completed, results can be analyzed. It is suggested to first check if the optimization crashed, in which case there will not be any {\tt b2fstate} and error messages in the log file. After that, a script can be run to extract information from {\tt run.log} concerning the optimization. The script to use is either {\tt result\_tao.sh} or {\tt result\_ipopt.sh}, depending on the optimization library adopted. These scripts will create the following files:
+Once the optimization is completed, results can be analyzed. It is suggested to first check if the optimization crashed, in which case there will not be any {\tt b2fstate} and error messages in the log file. After that, a script can be run to extract information from {\tt run.log} concerning the optimization. The script to use is {\tt result\_tao.sh}. These scripts will create the following files:
 \begin{description}
   \item[run\_info]\index{run.info} which stores information about GIT version, number of iterations performed, number and last 10 values of cost functions, number of parameters, cost function gradient (last 200 values), and other info from the optimization libraries.
   \item[objval.dat]\index{objval.dat} which stores the cost function value for each optimization iteration.
   \item[grad.dat]\index{grad.dat} which stores the cost function gradient norm for each optimization iteration.
   \item[parm\_histX.dat]\index{parm\_histX.dat} which stores the value of optimization parameter {\tt X} for each optimization iteration.
   \item[fgeval.dat]\index{fgeval.dat} which stores the number of optimization iterations (for {\tt PETSc/TAO} only).
-  \item[feval.dat]\index{fgeval.dat} which stores the number of function evaluations (for {\tt IPOPT} only).
-  \item[geval.dat]\index{fgeval.dat} which stores the number of optimization iterations (for {\tt IPOPT} only).
 \end{description}
-Additionally, the files {\tt PETSC-TAO.OUT} and {\tt IPOPT.OUT} will be copied from {\tt b2mn.exe.dir} into the run directory, and will contain further details on the optimization (e.g. stopping criteria).
+Additionally, the file {\tt PETSC-TAO.OUT} will be copied from {\tt b2mn.exe.dir} into the run directory, and will contain further details on the optimization (e.g. stopping criteria).
 
 Finally, the optimization will also write some intermediate state files in {\tt b2mn.exe.dir}, with names {\tt b2fstate\_optim.XXXX}, where {\tt XXXX} is the optimization iteration. These can be used for checking intermediate optimization states or reconstruct the optimization history if needed.
 
@@ -651,11 +638,6 @@ TOL_OPT = 1.0e-4,
 CPU_OPT = 255000.0,
 HESSIAN_APPROXIMATION = 'limited-memory',
 LIMITED_MEMORY_UPDATE_TYPE = 'bfgs',
-NNCON = 1,
-NNJAC = 1,
-JCOL = 1,
-JROW = 1,
-JJ = 0.0,
 /
 \end{verbatim}
 
@@ -676,7 +658,7 @@ There is no radially dependent transport coefficient in this case, so we set {\t
 
 Next, we set as stopping criteria a maximum number of 20 optimization iterations with {\tt MAXITER=20}, a minimum tolerance of $10^{-4}$ with {\tt TOL\_OPT = 1e-4}, and maximum of about 71 hours of cpu time for the optimization with {\tt CPU\_OPT = 255000.0}.
 
-The last parameters could be omitted in a standard optimization with {\tt PETSc/TAO} BFGS and without nonlinear constraints, while they should be specified for {\tt IPOPT}, as in there a 'hard-coded' trivial constraint needs to be specified (automatically done).
+The last parameters could be omitted in a standard optimization with {\tt PETSc/TAO} BFGS and without nonlinear constraints.
 
 \subsubsection{Radially dependent coefficients}
 
@@ -720,11 +702,6 @@ TOL_OPT = 1.0e-4,
 CPU_OPT = 255000.0,
 HESSIAN_APPROXIMATION = 'limited-memory',
 LIMITED_MEMORY_UPDATE_TYPE = 'bfgs',
-NNCON = 1,
-NNJAC = 1,
-JCOL = 1,
-JROW = 1,
-JJ = 0.0,
 /
 \end{verbatim}
 
