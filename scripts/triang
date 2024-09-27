@@ -385,7 +385,7 @@ while true; do {
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
             break;;
-      ( t|T )                                               # run TRIA to make triangular mesh:
+      ( t|T )                                               # run TRIA to make triangular mesh for the void regions:
             [ -r "$triain" ] && [ -s "$triain" ] && {
               N=
               print -u2 -- "Starting a TRIA run."
@@ -409,35 +409,6 @@ while true; do {
             } 
             break;;
       ( g|G )                                               # run b2us to triangulate unstructured plasma Grid and build combined mesh
-            #[ -r $b2agout ] && [ -s $b2agout ] && {
-            #  check_files $triaoutlist && {
-            #    N=
-            #    print -u2 -- "Starting a TRIAGEOM run"
-            #    print -u2 -- "Command line: $TRIAGEOM > $triglog"
-            #    "$TRIAGEOM" > $triglog
-            #    [ -s "$gkseps" ] && [ -r "$gkseps" ] && mv "$gkseps" "$trigeps"
-            #    check_files $trigoutlist && {
-            #      q=g
-            #      set -A L -- $triglnklist
-            #      ln -sf $trignodes ${L[0]}
-            #      ln -sf $trigcells ${L[1]}
-            #      ln -sf $triglinks ${L[2]}
-            #    } || {
-            #      print -u2 -- "Not all output files, $trigoutlist, are produced"
-            #      print -u2 -- "    ==> Check $triglog"
-            #      q=u
-            #    }
-            #    true
-            #  } || {
-            #    print -u2 -- "Not all valid input files, $triaoutlist, are present"
-            #    print -u2 -- "Probably, some of the previous steps forgotten?"
-            #    q=t 
-            #  }
-            #  true
-            #} || {
-            #  print -u2 -- "No valid $b2agout file is found. Run b2ag or b2plot first"
-            #  q=b
-            #}
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
             [ -r $b2usinp ] && {
               [ -r b2mn.dat ] && {
