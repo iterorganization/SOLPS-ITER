@@ -7460,6 +7460,23 @@ A detailed description of the theoretical derivation, code implementation detail
 The LaTeX source files for this pdf are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code/}. An example {\tt b2ab.dat} file is available under
 {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab/}.
 
+\subsection{Spatially hybrid fluid-kinetic neutrals}
+\index{neutrals, spatially hybrid neutral model}
+
+The spatially hybrid (SpH) fluid-kinetic neutral models aim to combine the benefits of fluid and kinetic neutral modeling in a consistent way.
+The goal is to keep neutrals kinetic in the regions where they have longer mean-free paths, and/or in the first few collisions after recycling (first flight), 
+but to have a fluid neutral model in the CX-dominated regions where the mean-free paths are short, and where consequently the EIRENE CPU time per particle is large. 
+
+The spatially hybrid approach is discussed in detail in the References \cite{blommaert2019spatially,VanUytven_advanced_SpH,horsten2021application,borodin2022fluid,van2023phd}.
+On the \SOLPSITER SharePoint website, there is a presentation explaining the setup of spatially hybrid cases: {\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_hybrid}.
+
+Very good agreement between the hybrid and the fully kinetic methods has been achieved, while strongly reducing the average CPU time per particle. However, more work is needed before the SpH model can truly speed up simulations by orders of magnitude in all conditions:
+
+\begin{itemize}
+\item Since there is no fluid approximation for the neutral molecules, they have to be kept fully kinetic. However, in detached conditions, the CPU time for the molecules is not negligible compared to the atoms.
+\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this inteface further down in the divertor with the extended grids code.
+\item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata in the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach. 
+\end{itemize}
 
 
 \subsection{First-flight model}
