@@ -159,6 +159,20 @@ upwind scheme in convection-dominated flows.
 The discretization schemes of the unstructured solver no longer neglect effects of misalignment
 w.r.t. the magnetic field, and hence the solver is more accurate than older {\tt B2.5} versions
  even for non-extended grid cases.
+ 
+Dedicated routines in {\tt \$\{SOLPSTOP\}/modules/B2.5/src/utility/} now take care of recurring numerical operations:
+
+\begin{itemize}
+\item {\tt GRAD} computes gradients of a cell centered quantity on the cell faces, in poloidal and radial direction.
+\item {\tt GRAD\_NT} computes gradients of a cell centered quantity on the cell faces, in tangential and normal direction.
+\item {\tt GRADC} computes gradients of a cell centered quantity in the in cell center by first computing
+the gradients on faces, and then interpolateing back to cell centers.
+\item {\tt GRADC\_DIV} computes gradients of a cell centered quantity in the in cell center by 
+applying the divergence theorem.
+\item {\tt DIV} computes the divergence of a flow field.
+\item {\tt INTFACE} interpolates a cell centered quantity to the cell faces.
+\item {\tt INTCELL} interpolates a face based quantity to the cell centers.
+\end{itemize}
 
 
 
