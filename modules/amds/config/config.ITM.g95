@@ -1,4 +1,4 @@
-CFLAGS = -g
+CFLAGS = -g -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lXft -lpthread -lm -lxcb
 
 #!!!Local Variables:
