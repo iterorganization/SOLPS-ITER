@@ -100,11 +100,17 @@ gmtry.ftReg = read_ifield(fid, 'ftReg', [nFt]   );
 gmtry.intcellP = read_rfield(fid, 'intcellP', [nCmxFc]);
 gmtry.intcellR = read_rfield(fid, 'intcellR', [nCmxFc]);
 if gmtry.isClassicalGrid == 1
-  gmtry.imapCv  = read_ifield(fid, 'imapCv',  [nx+2,ny+2]   );
-  gmtry.imapFcx = read_ifield(fid, 'imapFcx', [nx+2,ny+2]   );
-  gmtry.imapFcy = read_ifield(fid, 'imapFcy', [nx+2,ny+2]   );
-  gmtry.imapVx  = read_ifield(fid, 'imapVx',  [nx+2,ny+2]   );
-  gmtry.icornVx  = read_ifield(fid, 'icornVx',  nx   );
+    gmtry.imapCv  = read_ifield(fid, 'imapCv',  [nx+2,ny+2]   );
+    gmtry.imapFcx = read_ifield(fid, 'imapFcx', [nx+2,ny+2]   );
+    gmtry.imapFcy = read_ifield(fid, 'imapFcy', [nx+2,ny+2]   );
+    gmtry.imapVx  = read_ifield(fid, 'imapVx',  [nx+2,ny+2]   );
+    gmtry.icornVx = read_ifield(fid, 'icornVx',  nx   );
+else
+    gmtry.imapCv  = [];
+    gmtry.imapFcx = [];
+    gmtry.imapFcy = [];
+    gmtry.imapVx  = [];
+    gmtry.icornVx = [];
 end
 gmtry.fcLbl = read_ifield(fid, 'fcLbl', [nFc]);
 gmtry.cvLbl = read_ifield(fid, 'cvLbl', [nCv]);
