@@ -1,5 +1,14 @@
-CC = cc
-CFLAGS = -g
+CFLAGS += -g
+ifeq (${CC},icx)
+CFLAGS += -Rno-debug-disables-optimization -Wno-void-pointer-to-int-cast -Wno-int-to-void-pointer-cast
+else
+ifeq (${CC},icc)
+CFLAGS += -diag-disable:810
+else
+CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+endif
+endif
+
 
 #!!!Local Variables:
 #!!! mode: Makefile

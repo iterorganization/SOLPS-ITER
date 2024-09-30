@@ -106,10 +106,9 @@ TOOLSHORT = ${HOST_NAME}.${COMPILER}
 TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
 
 ifdef LD_NETCDF
-B25_SERIAL = mods nc2text_simple nc_reduce
-else
-B25_SERIAL = mods
+NCEXECS = nc2text_simple nc_reduce
 endif
+B25_SERIAL = mods ${NCEXECS}
 
 DEFLIBS =
 DEGLIBS = -DGRAPHICS=ON
@@ -359,55 +358,55 @@ eirene_mpi_openmp: eirene_openmp_mpi
 
 eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
 
-b25: nc2text_simple nc_reduce
+b25: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO}
 
-b25_all: nc2text_simple nc_reduce
+b25_all: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ALL
 
-b25_openmp: nc2text_simple nc_reduce
+b25_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
 
-b25_mpi: nc2text_simple nc_reduce
+b25_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
 
-b25_openmp_mpi: nc2text_simple nc_reduce
+b25_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 b25_mpi_openmp: b25_openmp_mpi
 
-b25_nox: nc2text_simple nc_reduce
+b25_nox: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} NOPLOT
 
-b25_ig: nc2text_simple nc_reduce
+b25_ig: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25_all_openmp: nc2text_simple nc_reduce
+b25_all_openmp: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
 
-b25_nox_openmp: nc2text_simple nc_reduce
+b25_nox_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
 
 b25_openmp_nox: b25_nox_openmp
 
-b25_nox_mpi: nc2text_simple nc_reduce
+b25_nox_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
 
 b25_mpi_nox: b25_nox_mpi
 
-b25_nox_openmp_mpi: nc2text_simple nc_reduce
+b25_nox_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
 
@@ -417,19 +416,19 @@ b25_mpi_openmp_nox: b25_nox_openmp_mpi
 
 b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
-b25_all_mpi: nc2text_simple nc_reduce
+b25_all_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
 
-b25_all_openmp_mpi: nc2text_simple nc_reduce
+b25_all_openmp_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
-b25eirene: nc2text_simple nc_reduce
+b25eirene: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -439,7 +438,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
 
-b25eirene_all: nc2text_simple nc_reduce
+b25eirene_all: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -450,7 +449,7 @@ endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
-b25eirene_nox: nc2text_simple nc_reduce
+b25eirene_nox: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -460,7 +459,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
 
-b25eirene_openmp: nc2text_simple nc_reduce
+b25eirene_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -470,7 +469,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 
-b25eirene_mpi: nc2text_simple nc_reduce
+b25eirene_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -480,7 +479,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
 
-b25eirene_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -492,7 +491,7 @@ endif
 
 b25eirene_mpi_openmp: b25eirene_openmp_mpi
 
-b25eirene_nox_openmp: nc2text_simple nc_reduce
+b25eirene_nox_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -502,7 +501,7 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
 
-b25eirene_nox_mpi: nc2text_simple nc_reduce
+b25eirene_nox_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -512,12 +511,12 @@ endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
 
-b25eirene_ig: nc2text_simple nc_reduce
+b25eirene_ig: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25eirene_all_openmp: nc2text_simple nc_reduce
+b25eirene_all_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -528,7 +527,7 @@ endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
-b25eirene_all_mpi: nc2text_simple nc_reduce
+b25eirene_all_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -539,7 +538,7 @@ endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
 
-b25eirene_all_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_all_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -552,7 +551,7 @@ endif
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
-b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_nox_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
 	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
@@ -685,7 +684,7 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.[fF] modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[fF] modules/Eirene/src/user-routines/user_iter/*.[fF] modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
+	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.[fF] modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[fF] modules/Eirene/src/user-routines/user_iter/*.[fF] modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/amds/src/*.[ch] modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj

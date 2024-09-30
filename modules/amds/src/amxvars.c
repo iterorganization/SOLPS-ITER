@@ -131,7 +131,6 @@ Widget OpenSetupDlg(View w) {
   } else XtPopup(XtParent(wDlg),XtGrabNone);
 }
 
-
 Widget OpenVarDefListDlg(View w) {
   Widget wDlg;
 

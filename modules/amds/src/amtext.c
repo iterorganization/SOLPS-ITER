@@ -71,6 +71,8 @@ int DisplayReactionText(View w,Reaction r) {
   XtFree(str);
 
   XtPopup(XtParent(wDlg),XtGrabNone);
+
+  return 0;
 }
 
 
