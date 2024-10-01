@@ -10335,7 +10335,42 @@ The equation for turbulent enstrophy ($\zeta$) is in a very early stage of devel
 Documentation will follow when the model is more mature.
 
 %-------- end of 20th page -------------
-\section{Typical boundary conditions}
+\section{Typical boundary conditions}\label{sec:typical_BCs}
+
+In the unstructured {\tt B2.5} code, the concept of 'East', 'West', 'North' and 'South' boundaries no longer exists. In the structured code, there was typically a hard-code destinction between for example 'East' and 'West' boundaries, to get all signs correct. In the unstructured code, there is only a single type of boundary ('A', for 'Automatic'), indicating a general interface between the plasma and a boundary segment. Some boundary conditions are only allowed for core boundaries, and these are checked with help of the {\tt cvOnClosedSurface} variable.
+
+To get all signs correct for the generalized interface, the unstructured code makes use of the face angles $\alpha$, $\beta$ and $\gamma$, and the additional variable {\tt bcFcOr}, which incidates if the outward boundary normal coincides with the face normal (+1.0) or not (-1.0). Figure \ref{fig:bcfcor} illustrates the definition of  {\tt bcFcOr}.
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[height=4cm]{FiguresWG/bcfcor.PNG}}
+\else
+    \centerline{\includegraphics[height=4cm]{FiguresWG/bcfcor.eps}}
+\fi
+    \caption{Illustration of {\tt bcFcOr}.}
+    \label{fig:bcfcor}
+\end{figure}
+
+Most boundary conditions fall in one of three categories: Dirichlet, Neumann, or flux. 
+
+\textbf{Flux}
+To impose a given flux, the net source term in the guard cell must be equal to that flux. Since no fluxes are computed between the guard cells, the flux across the guard cell face must equal the source term. 
+
+\textbf{Dirichlet} 
+To impose a fixed value in a guard cell, the code makes use of the different source contributions and very large numbers. For example, to set a fixed density {\tt $n_{BC}$},
+the code sets {\tt sna(iCv,0,is) = VBIG * fcS * $n_{BC}$}, and {\tt sna(iCv,1,is) = -VBIG * fcS}, \newline 
+where {\tt sna(iCv,is) = sna(iCv,0,is) + sna(iCv,1,is)*na(iCv,is)} and where {\tt VBIG} is a very large number. Because {\tt VBIG} is so large, the only way to get a physical source is to have  {\tt na(iCv,is) = $n_{BC}$}.
+
+\textbf{Neumann}
+To set the gradient normal to the boundary, the code again makes use of the different source contributions and very large numbers. For orthogonal cells, these boundary conditions correctly impose the gradient normal to the boundary face. For cells that are skewed with respect to the boundary face,
+the implementation depends on the (partially experimental) {\tt b2stbc\_BC2\_cor9} switch. 
+To impose for example a density gradient $\Phi$ with {\tt b2stbc\_BC2\_cor9 = 0.0}, the code sets
+{\tt sna(iCv,0,is) = VBIG * fcS * ($\Phi$ * (fcHc(1)+fcHc(2)) * cos $\gamma$ + na(iCv\_internal)} and 
+\newline {\tt sna(iCv,1,is) = - VBIG * fcS}, 
+ \newline where {\tt na(iCv\_internal)} is the density in the first interior cell. To get a physical source, we must have
+{\tt $\Phi$ * (fcHc(1)+fcHc(2)) * cos $\gamma$ + na(iCv\_internal))= na(iCv)}. This results in the correct normal gradient for skewed cells, only if there would be no gradients in the direction tangential to the boundary face. When {\tt b2stbc\_BC2\_cor9 = 1.0}, a correction term based on the vertex values is added, such that $\Phi$ is the gradient normal to the boundary, also in the presence of tangential gradients (up to the interpolation error).
+
+TODO convert all below to unstructured?
 
 In this Section, the boundaries are denoted as $S_0$ for the PFR boundaries, $S_1$ for the core boundaries, $E$ for the East boundaries (right targets), $W$ for the West boundaries (left targets) and $N$ for the outer main wall boundary.
 
