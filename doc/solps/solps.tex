@@ -7456,9 +7456,17 @@ database over the known velocity distribution of incident ions and an assumed ve
 ~\cite{HorstenNF,BlommaertCtPP,VanUytven_Tn,VanUytvenPSI2022,VanUytven_AFN_assessment}.
 The AFN BCs at runtime make use of pre-computed databases. For certain combinations of incident particles and wall materials, these are stored in {\tt B2.5/Database/trim.data/refl.data}.
 The pre-processor to create new databases for new combinations of incident particles and wall materials is now available in the source code as {\tt b2ab}.
-A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under  {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
-The LaTeX source files for this pdf are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code/}. An example {\tt b2ab.dat} file is available under
+A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under 
+\newline
+ {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
+The LaTeX source files for this pdf are available in \newline 
+{\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code/}. An example {\tt b2ab.dat} file is available under 
+\newline
 {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab/}.
+
+Additionaly, there are two presentation on the \SOLPSITER SharePoint website, explaining the setup of AFN cases: \newline 
+{\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_AFN} and \newline 
+{\tt SOLPS-ITER Extended Grids Workshops / AFN handson session}. 
 
 \subsection{Spatially hybrid fluid-kinetic neutrals}
 \index{neutrals, spatially hybrid neutral model}
@@ -7468,13 +7476,15 @@ The goal is to keep neutrals kinetic in the regions where they have longer mean-
 but to have a fluid neutral model in the CX-dominated regions where the mean-free paths are short, and where consequently the EIRENE CPU time per particle is large. 
 
 The spatially hybrid approach is discussed in detail in the References \cite{blommaert2019spatially,VanUytven_advanced_SpH,horsten2021application,borodin2022fluid,van2023phd}.
-On the \SOLPSITER SharePoint website, there is a presentation explaining the setup of spatially hybrid cases: {\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_hybrid}.
+On the \SOLPSITER SharePoint website, there are two presentation explaining the setup of spatially hybrid cases: \newline 
+ {\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_hybrid} and \newline 
+ {\tt SOLPS-ITER Extended Grids Workshops / hybrid handson session}.
 
 Very good agreement between the hybrid and the fully kinetic methods has been achieved, while strongly reducing the average CPU time per particle. However, more work is needed before the SpH model can truly speed up simulations by orders of magnitude in all conditions:
 
 \begin{itemize}
 \item Since there is no fluid approximation for the neutral molecules, they have to be kept fully kinetic. However, in detached conditions, the CPU time for the molecules is not negligible compared to the atoms.
-\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this inteface further down in the divertor with the extended grids code.
+\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this inteface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
 \item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata in the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach. 
 \end{itemize}
 
