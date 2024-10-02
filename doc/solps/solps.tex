@@ -7729,13 +7729,13 @@ Note also that, in the code, the magnetic field components are always positive, 
 
 \begin{multline}
 \label{eq:GammaAX_appC}
-\widetilde{\Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) \\
+\widetilde{\Gamma}_{ax} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ax} \right) \\
 - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x} - \widetilde{\Gamma}_{ax}^{\left( PSch \right)}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAY_appC}
-\widetilde{\Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) \\
+\widetilde{\Gamma}_{ay} = \left( V_{ay}^{\left( E \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ay} \right) \\
  - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y} - \widetilde{\Gamma}_{ay}^{\left( PSch \right)}
 \end{multline}
 
@@ -7768,25 +7768,25 @@ V_{T_a} = \sqrt{ \frac{8 T_i}{\pi m_a} }
 \begin{multline}
 \label{eq:GammaAXnoTilde_appC}
 \Gamma_{ax} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + {j}_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + {j}_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ax} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYnoTilde_appC}
-\Gamma_{ay} = \left( \widetilde{U}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) \\
+\Gamma_{ay} = \left( \widetilde{U}_{ay}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ay} \right) \\
 - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAXCor_appC}
 \Gamma_{ax}^{Cor} = \left( b_x V_{\parallel a} + \widetilde{U}_{ax}^{\left( 2dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} +j^{(\kappa,\mathrm{RS})}_{ax} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:GammaAYCor_appC}
 \Gamma_{ay}^{Cor} = \left( \widetilde{U}_{ay}^{\left( 2dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+ \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + j_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ay} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} - \widetilde{D}_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \end{multline}
 
 \begin{equation}
@@ -7853,13 +7853,13 @@ V_{ay}^{(E)} =
 \begin{multline}
 \label{eq:Gamma_ax_Eir}
 \Gamma_{ax}^{\left( Eir \right)} = \left( b_x V_{\parallel a} + V_{ax}^{\left( E \right)} + \widetilde{W}_{ax}^{\left( dia \right)} + V_{ax}^{\left( AN \right)} + V_a^{corr\_dpc} \right) n_a + \\
- 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
+ 0 \cdot \frac{1}{z_a e} \left( j_{ax}^{\left( AN \right)} + j_{ax}^{\left( in \right)} + \widetilde{j}_{ax}^{\left( vis \parallel \right)} + j_{ax}^{\left( vis \perp \right)} + \widetilde{j}_{ax}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ax} \right) - D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x}
 \end{multline}
 
 \begin{multline}
 \label{eq:Gamma_ay_Eir}
 \Gamma_{ay}^{\left( Eir \right)} = \left( V_{ay}^{\left( E \right)} + \widetilde{W}_{ya}^{\left( dia \right)} + V_{ay}^{\left( AN \right)} \right) n_a + \\
- \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + {j}_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
+ \frac{1}{z_a e} \left( j_{ay}^{\left( AN \right)} + j_{ay}^{\left( in \right)} + \widetilde{j}_{ay}^{\left( vis \parallel \right)} + {j}_{ay}^{\left( vis \perp \right)} + \widetilde{j}_{ay}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_{ay} \right) - D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y}
 \end{multline}
 
 \noindent where
@@ -8814,7 +8814,8 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 \right)
 -
 \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
-+ Q_{Fei} + Q_e^{\rm EIRENE}
++ Q_{Fei} + Q_e^{\rm EIRENE} \\
+& + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,||}
 \end{align}
 
 \subsection{Electron energy sources}
@@ -8827,7 +8828,7 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 \right)
 - \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
 + Q_{Fei} -\\
-- \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) + Q_e^{\rm EIRENE}
+- \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) + Q_e^{\rm EIRENE} + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,||}
 \end{multline}
 
 $Q_e = -Q_{\Delta } - Q_R$
@@ -8878,6 +8879,8 @@ Q_{Fei} = \left\{
 j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is activated}
 \end{aligned}\right.
 \end{equation}
+
+$Q_e^{\kappa,\mathrm{inter}}$ and $Q_e^{\kappa,||}$ are interchange terms related to the $\kappa$-model, see Eqs. \ref{eq:sikt_t1} and \ref{eq:sikt_t3}.
 
  %-------- end of 9th page -------------
 
@@ -9362,7 +9365,7 @@ $\alpha^{(CL)}_{y} = 0$
         + \eta^{(AN)}_{a} \left(
                 \frac{\partial V_{a \parallel}}{h_y \partial y}
         \right)^2
-\right) + Q_I^{(i)} + Q_R^{(i)} + Q_i^{\rm EIRENE},
+\right) + Q_I^{(i)} + Q_R^{(i)} + Q_i^{\rm EIRENE} + Q_i^{\kappa,\mathrm{inter}},
 \end{multline}
 
 The "sum over fluid species" above means the species index $a$ ranges from $0$ to $ns - 1$ for {\bf B2.5} standalone runs and only over charged species for coupled \SOLPSITER runs.
@@ -9383,7 +9386,7 @@ The "sum over fluid species" above means the species index $a$ ranges from $0$ t
 \\
 + Q_{vis} + Q_I^{(i)} + Q_R^{(i)} - \sum \limits^{ns-1}_{a = 0} \frac{n_a T_i}{\sqrt{g}} \frac{\partial}{\partial x} \left(
         \frac{\sqrt g}{h_x} V_{a \parallel} b_x
-\right)
+\right) + Q_i^{\kappa,\mathrm{inter}}
 %\end{matrix}
 \end{multline}
 
@@ -9479,16 +9482,18 @@ $
 \end{matrix}
 $
 
+$Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-model, see Eq. \ref{eq:sikt_t0}.
+
 \subsection{Poloidal ion energy fluxes}
 
 \begin{multline}\label{eq:eni_tiqix}
 \widetilde q_{ix} = \widetilde f_{ix} T_i - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\
-= \frac{3}{2} \Gamma_{ix} T_i + V_{ix}^{(str)} n_i T_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right) T_i - \\
+= \frac{3}{2} \Gamma_{ix} T_i + V_{ix}^{(str)} n_i T_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x }{e} \right) T_i - \\
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch}
 \end{multline}
 
 \begin{equation*}
-\widetilde f_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+\widetilde f_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x }{e} \right)
 \end{equation*}
 
 \begin{equation}\label{eq:eni_qixPSch}
@@ -9500,7 +9505,7 @@ q_{ix} = \left[
         \frac{3}{2} \Gamma_{ix} +
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
         V_{ix}^{(str)} n_i \right. \\ \left. +
-        \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
+        \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{split}
@@ -9713,7 +9718,7 @@ $V_{ix}^{(str)}=0$
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
 \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
 q_{iy}^{P.Sch} = \left[\frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
-        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} + j^{(\kappa,\mathrm{RS})}_y
 \right)} e \right] T_i - \\
 - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
 q_{iy}^{P.Sch}
@@ -9722,7 +9727,7 @@ q_{iy}^{P.Sch}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
-        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} + j^{(\kappa,\mathrm{RS})}_y
 \right)} e
 \end{equation*}
 
@@ -9739,7 +9744,7 @@ q_{iy} = \left[
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ay}^{(dia)} +
         V_{iy}^{(str)} n_i +
         \frac{3}{2} \frac{\left(
-                j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
+                j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} + j^{(\kappa,\mathrm{RS})}_y
         \right)} e
 \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y}
 \end{equation}
@@ -9795,7 +9800,7 @@ $\kappa_{iy}^{(CL)} = 0$
 
 \begin{equation}\label{eq:pot_jx}
 j_x = j_x^{(AN)} + \widetilde{j}_x^{(dia)} + j_x^{(in)} + \widetilde{j}_x^{(vis \parallel)} + j_x^{(vis \perp)}
-+ \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x
++ \widetilde{j}_x^{(visq)} + \widetilde{j}_x^{(s)} + j^{(\parallel)}_x + j^{(\kappa,\mathrm{RS})}_x
 \end{equation}
 
 \begin{equation}\label{eq:pot_jxan}
@@ -9945,11 +9950,13 @@ it is a mix of post-processed EIRENE perpendicular atom velocities and B2.5 CX r
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
+$j^{(\kappa,\mathrm{RS})}_x$ - see Eq. \ref{eq:j_RS} below.
+
 \subsection{Radial currents}
 
 \begin{equation}\label{eq:pot_jy}
 j_y = j_y^{(AN)} + \widetilde{j}_y^{(dia)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + j_y^{(vis \perp)}
-+ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)} + j_y^{(ST)}
++ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)} + j_y^{(ST)} + j^{(\kappa,\mathrm{RS})}_y 
 \end{equation}
 
 \begin{equation}\label{eq:pot_jyan}
@@ -10098,6 +10105,8 @@ The diamagnetic neutral flux $\Gamma_{a_{0}\perp}$ is the density-weighted avera
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
+$j^{(\kappa,\mathrm{RS})}_y$ - see Eq. \ref{eq:j_RS} below.
+
 \subsection{Conductivities}
 
 \begin{equation}\label{eq:pot_sigst}
@@ -10161,10 +10170,10 @@ Note: the equations above are written in the 'old' form. In the unstructured cod
 The aim of the $\kappa$-model is to capture the average effect of plasma turbulence in a mean-field code like {\tt SOLPS-ITER}, thereby improving the 
 predictive capabilities of the code compared to the use of ad-hoc anomalous perpendicular transport coefficients. The model is optional and the main switch to activate it is
 {\tt b2mndr\_solve\_keps}. The development of the models is described in References
- \cite{coosemans2020new,carli2020interchange,coosemans2021bayesian,de2021bayesian,coosemans2021turbulent,dekeyser2022self,coosemans2022self,coosemans2024mean}. Ref. \cite{dekeyser2022self} presents an overview of the work and the equations is this manual are derived from that paper. While the paper often makes use of proportionality signs $\sim$, they are replaced here by equals signs, to better represent the code implementation. 
+ \cite{coosemans2020new,carli2020interchange,coosemans2021bayesian,de2021bayesian,coosemans2021turbulent,dekeyser2022self,coosemans2022self,coosemans2024mean}. Ref. \cite{dekeyser2022self} presents an overview of the work and the equations is this manual are derived from that paper. While the paper often makes use of proportionality signs $\sim$, they are replaced here by equality signs, to better represent the code implementation. 
  
 For a general quantity $x$ we have either a Reynolds
-decomposition $x = \overline{x} + x′$, or a Favre decomposition $x = \widetilde{x} + x''$, where $x = \mathrm{lim}_{T \rightarrow \infty} \frac{1}{T} \int_T x \mathrm{d}t$
+decomposition $x = \overline{x} + x'$, or a Favre decomposition $x = \widetilde{x} + x''$, where $\overline{x} = \mathrm{lim}_{T \rightarrow \infty} \frac{1}{T} \int_T x \mathrm{d}t$
 and $\widetilde{x} = \overline{xn} / \overline{n}$. For example, $\overline{n}$ corresponds to $n_i$ in {\tt B2.5} and $\widetilde{T_i}$ corresponds to $T_i$ in {\tt B2.5}. However, 
 {\tt B2.5} has no direct information on the fluctuations (e.g. $n'$ or $T_i''$) because it is not a turbulence code. The goal of the $\kappa$-model is to approximate the most important
 terms containing products of the fluctuations, using available mean-field information. 
@@ -10172,7 +10181,7 @@ terms containing products of the fluctuations, using available mean-field inform
 
 The model assumes that electrostatic $E{\times}B$ interchange turbulence is the dominant anomalous transport mechanism.
 The user-defined anomalous transport coefficients, $D_i^{(AN)}$, $\chi_i^{(AN)}$, $\chi_e^{(AN)}$ and $\nu_i^{(AN)}$ are replaced by $\dexb$, $\heexb$, $\hiexb$ and $\nuexb$.
-$\heexb$, $\hiexb$ and $\nuexb$ scale with $\dexb$, i.e. $\heexb = \kepsheate \ \dexb$, $\hiexb = \kepsheati \ \dexb$ and $\nuexb = \kepsvisc \ \dexb$, where $\kepsheati$, $\kepsheate$ and $\kepsvisc$ are constants of order unity. $\dexb$ is given by 
+$\heexb$, $\hiexb$ and $\nuexb$ scale with $\dexb$, i.e. $\heexb = \kepsheate \ \dexb$, $\hiexb = \kepsheati \ \dexb$ and $\nuexb = \kepsvisc \ \dexb$, where $\kepsheati$, $\kepsheate$ and $\kepsvisc$ are constants of order unity. To avoid zero diffusion, minimum diffusion coefficients $D_{i,\mathrm{min}}$, $\chi_{i,\mathrm{min}}$, $\chi_{e,\mathrm{min}}$ and $\nu_{i,\mathrm{min}}$ are added to $\dexb$, $\hiexb$, $\heexb$ and $\nuexb$, respectively. $\dexb$ is given by 
 
 \begin{equation}
 \dexb = \kepscd \frac{\kappa/m}{\sqrt{\kappa/m}/\kepsrho + \kepscs |S_{mean}|}.
@@ -10211,7 +10220,13 @@ transport due to these fluctuations will follow a similar diffusive law,
 
 \begin{equation}\label{eq:dekeyser34}
 m \overline{n {u_{||}''} \mathbf{V}''_E} = - m \overline{n} \nuexb \nabla_\perp \widetilde{u_{||}}.
-\end{equation}.
+\end{equation}
+
+
+All research regarding the $\kappa$-model up till now has been performed for single-species deuterium cases, such that $n = n_i = n_e$.
+The current approach for multi-species cases in SOLPS-ITER is to assume that the turbulent kinetic energy is only determined by the main ion species 
+and that $\dexb$ is the same for all ion species. 
+
 
 \subsection{Model equation for turbulent kinetic energy}\label{eq:kmodel_main}
 
@@ -10248,14 +10263,14 @@ with $\hckexb =  \kepskappa \dexb$ and $\kepskappa$ a model constant.
 {\tt term 4} is approximated as 
 
 \begin{equation}\label{eq:dekeyser46}
-\overline{\phi' j_{||}'} \mathbf{b} = - \kepscsigpar \sigma_{||} B^2 \kepsrho^2 \nabla_{||} \frac{\kappa}{m} \mathbf{b},
+\overline{\phi' j_{||}'} \mathbf{b} = - \kepscsigpar \sigma_{||} B^2 \kepsrho^2 \big( \nabla_{||} \frac{\kappa}{m} \big) \mathbf{b},
 \end{equation}
 
 with $\kepscsigpar$ a constant introduced in the model that can be used to control the magnitude of the parallel transport, and
 can be expected to be of order unity.
 
 {\tt term 5} is related to the Reynolds stress-tensor $\mathbf{\Pi}_\mathrm{RS}$. We want to model the dominant effect that $E{\times}B$ flow shear, in particular
-radial shear of the poloidal $E{\times}B$ velocity which tends to tear turbulent eddies apart, reducing the turbulence intensity and associated
+radial shear of the poloidal $E{\times}B$ velocity tends to tear turbulent eddies apart, reducing the turbulence intensity and associated
 transport. To accomplish this, we assume that the $E{\times}B$ contribution will be dominant to the Reynolds stress tensor, and use a negative turbulent
 viscosity model to make the corresponding term in Equation \ref{eq:kmodel_main} a sink:
 
@@ -10291,10 +10306,10 @@ where $\overline{V_{E,\wedge}} = \big( \nabla_r \overline{\phi} \big) / B$ is th
 {\tt term 6} is approximated as 
 
 \begin{equation}\label{eq:dekeyser47}
-\overline{j_{||}'  \nabla_{||} \phi' } \approx \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m},
+\overline{j_{||}'  \nabla_{||} \phi' } \approx - \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m},
 \end{equation}
 
-with a second model constant $\kepscsigpartwo$ = $\kepscsigpar \ \kepscdiss$ and $L_{\mathrm{conn}}$ the connection length. 
+with a second model constant $\kepscsigpartwo$ and $L_{\mathrm{conn}}$ the connection length. 
 
 {\tt term 7} is the source of $\kappa$ due to the interchange mechanism. This was found to be the dominant source of $\kappa$ in recent studies of interchange $E{\times}B$ drift turbulence for the SOL using TOKAM2D simulations \cite{coosemans2021turbulent,coosemans2020new,coosemans2021bayesian,coosemans2022self}. No additional closure is needed
 for this term for electrostatic $E{\times}B$ turbulence, as a closure for the turbulent heat flux due to ions and electrons is already
@@ -10302,10 +10317,34 @@ proposed above. Indeed, using the properties of Reynolds and Favre averages one 
 
 \begin{equation}\label{eq:dekeyser43}
 \overline{p' \mathbf{V}'_E} = \overline{n' \mathbf{V}'_E} \big( \widetilde{T_e} + \widetilde{T_i}\big)
-+ \overline{n \mathbf{V}''_E T_e''} + \overline{n \mathbf{V}''_E T_e''} , 
++ \overline{n \mathbf{V}''_E T_e''} + \overline{n \mathbf{V}''_E T_i''} , 
 \end{equation}
 
 so that the closures proposed in Equations \ref{eq:dekeyser30}, \ref{eq:dekeyser32} and \ref{eq:dekeyser33} can be used to close the interchange term.
+
+The heat source terms that end up in the ion and electron heat equation are:
+
+\begin{align}\label{eq:sikt_t0}
+Q_i^{\kappa,\mathrm{inter}} & = -\bigg( - \Big( \overline{n' \mathbf{V}'_E} \widetilde{T_i} + \overline{n \mathbf{V}''_E T_i''}  \Big) \cdot \nabla \mathrm{ln} B^2 \bigg) \nonumber \\ 
+  & = -\Big( \dexb \nabla_\perp \overline{n} \widetilde{T_i} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_i}  \Big) \cdot \nabla \mathrm{ln} B^2 
+\end{align}
+
+\begin{align}\label{eq:sikt_t1}
+Q_e^{\kappa,\mathrm{inter}} & = - \bigg( \Big( \overline{n' \mathbf{V}'_E} \widetilde{T_e} + \overline{n \mathbf{V}''_E T_e''}  \Big) \cdot \nabla \mathrm{ln} B^2 \bigg) \nonumber \\ 
+  & = -\Big(  \dexb \nabla_\perp \overline{n} \widetilde{T_e} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_e}   \Big) \cdot \nabla \mathrm{ln} B^2 
+\end{align}
+
+\begin{align}\label{eq:sikt_t3}
+Q_e^{\kappa,||} & = - \overline{j_{||}'  \nabla_{||} \phi' } \nonumber \\
+  & = \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m}
+\end{align}
+
+The current due to the Reynolds stress is 
+
+\begin{equation}\label{eq:j_RS}
+j^{(\kappa,\mathrm{RS})} = \frac{\mathbf{b}}{B} \times \nabla \big(  \frac{2}{3} \overline{n} \kappa \big)
+ - \frac{\mathbf{e}_r}{B} \nabla \cdot \big( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \big)
+\end{equation}
 
 \subsection{Link between symbols and code variables} 
 
@@ -10316,7 +10355,7 @@ The table below links the equation symbols to the names of the variables in the 
 $\dexb$ & {\tt dna\_ExB}  \\
 $\heexb$ & {\tt hce\_ExB} \\
 $\hiexb$ & {\tt hci\_ExB}\\
-$\nuexb$ & {\tt vsa0} \\
+$\nuexb$ & {\tt vsa\_ExB} \\
 $\kepscd$ & {\tt keps\_cd} \\
 $\kepscs$ & {\tt keps\_shear} \\
 $\kepsheate$ & {\tt keps\_heat}\\
@@ -10325,9 +10364,13 @@ $\kepsvisc$ & {\tt keps\_visc} \\
 $\kepsrho$ & {\tt rhol} \\
 $\kepskappa$ & {\tt keps\_dkt} \\
 $\kepscsigpar$& {\tt fsigkt} \\
-$\kepscdiss$ & {\tt fac\_diss(\_core)} \\
+$\kepscsigpartwo$ & {\tt fac\_diss(\_core)} \\
 $\kepseta$ & {\tt fac\_vis\_RS} \\
-\end{tabular}
+$D_{i,\mathrm{min}}$ & {\tt dna\_min} \\
+$\chi_{i,\mathrm{min}}$ & {\tt hci\_min} \\ 
+$\chi_{e,\mathrm{min}}$ & {\tt hce\_min} \\ 
+$\nu_{i,\mathrm{min}}$ & {\tt  vsa\_min}
+\end{tabular} 
 
 \section{Turbulent enstrophy equation}
 
