@@ -47,7 +47,7 @@ else
   module load CMake/3.27.6-GCCcore-13.2.0
   module load xarray/2024.5.0-iimkl-2023b
   module load makedepend/1.0.9-GCCcore-13.2.0
-  module load MSCL/1.2.4-GCCcore-13.2.0
+  module load MSCL/1.2.4-iimkl-2023b
   module load GR/0.0.94-GCCcore-13.2.0
   module load GLI/4.5.31-GCCcore-13.2.0
   module load NCL/6.6.2-intel-2023b
