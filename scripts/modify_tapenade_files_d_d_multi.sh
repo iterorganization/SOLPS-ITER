@@ -202,5 +202,5 @@ sed -i 's/cfwure/cfwure_nodiff/g' b2mod_residuals.F
 sed -i -e 's/cvfpsi(icv) = SUM(arg1)\/mpg%cvvxp(icv, 2)/cvfpsi(icv) = SUM(gm%vxfpsi(verts))\/mpg%cvvxp(icv, 2)/g' b2us_geo_diffv_diffv.F90
 sed -i -e '/arg1 = gm%vxfpsi(verts)/d' b2us_geo_diffv_diffv.F90
 
-
-
+sed -i -e '/REAL(kind=r8) :: const_h/i\# ifndef CONSTANTS_PROVIDED' heatdiff1D_dv_dv.F90 ratstr_dv_dv.F90
+sed -i -e '/PARAMETER (const_h=6.62607015e-34_R8)/a\# endif' heatdiff1D_dv_dv.F90 ratstr_dv_dv.F90

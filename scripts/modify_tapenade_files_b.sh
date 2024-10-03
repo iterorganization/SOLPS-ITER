@@ -6,6 +6,11 @@ collect_nodiff_b.sh
 rm damax_b.F90 smax_b.F90 smin_b.F90 get_jsep_b.F90 my_outi_us_b.F90 eirflux_map_b.F90 chord_b.F90 calc_res_fp_b.F90
 
 sed -i '/DIFFSIZES/d' ./*.F90
+sed -i '/INTRINSIC DABS/d' b2us_geo_diff.F90 b2stbr_bas_b.F90 b2trcl_b.F90
+sed -i -e 's/DIMENSION(:) :: dabs0/DIMENSION(mpg%nFs) :: dabs0/g' b2us_geo_diff.F90
+sed -i -e 's/DIMENSION(ISIZE1OFMETAVAR:abs)/DIMENSION(mpg%nFs)/g' b2us_geo_diff.F90
+sed -i -e 's/INTEGER, DIMENSION(ISIZE1OFresult1)/INTEGER/g' b2us_geo_diff.F90
+sed -i -e 's/DIMENSION(ISIZE1OFfspsi)/DIMENSION(mpg%nFs)/g' b2us_geo_diff.F90
 sed -i -e '0,/\& nshift_opt, ncorr_opt/{s/\& nshift_opt, ncorr_opt/\& nshift_opt, ncorr_opt, par_opt_phys, par_opt_physb/g}' b2mn_b.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
@@ -13,6 +18,12 @@ sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1), SIZE(x3, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x4, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x5, 1), SIZE(x5, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs0/DIMENSION(SIZE(rza0, 1), SIZE(rza0, 2)) :: dabs0/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs1/DIMENSION(SIZE(rz20, 1), SIZE(rz20, 2)) :: dabs1/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs2/DIMENSION(SIZE(rpt0, 1), SIZE(rpt0, 2)) :: dabs2/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs3/DIMENSION(SIZE(rpi0, 1), SIZE(rpi0, 2)) :: dabs3/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:) :: dabs4/DIMENSION(mpg%nCv) :: dabs4/g' b2mod_driver_diff.F90
+sed -i -e 's/ISIZE1OFne/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diff.F90 b2mod_recycle_diff.F90
@@ -56,6 +67,7 @@ sed -i -e 's/ISIZE1OFvadia/nFc/g' b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFpa/nCv/g' b2tfnb_b.F90
 sed -i -e 's/ISIZE1OFvaecrb/nFc/g' b2tfrn_b.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_b.F90
+sed -i -e 's/DIMENSION(:) :: dabs/DIMENSION(nCv) :: dabs/g' b2tinnt_b.F90 b2tqna_b.F90 b2trcl_b.F90
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_b.F90
 sed -i -e 's/ISIZE1OFco%cthi/nFc/g' b2tral_b.F90
 sed -i -e 's/ISIZE2OFco%cthi/0:ns-1/g' b2tral_b.F90
@@ -191,7 +203,17 @@ sed -i -e 's/SFILL_FWD(n, sa, sab, sx, sxb, incx)/SFILL_FWD(n, sa, sx, sxb, incx
 sed -i -e 's/SIZE(sx, 1)+1/n/g' sfill_b.F90
 sed -i -e 's/SFILL_FWD(n, sa, sab, sx, sxb, incx)/SFILL_FWD(n, sa, sx, sxb, incx)/g' sfill_b.F90
 sed -i -e '0,/REAL(kind=r8) :: sab/{/REAL(kind=r8) :: sab/d}' sfill_b.F90
-
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shedu = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidu = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidun = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shedd = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidd = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivc = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shiva = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivcn = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivan = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shefr = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shifr = 0.0_R8' b2sihs__b.F90
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diff.F90
 sed -i '/TRIM_B/d' b2mod_main_diff.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_b.F90 
@@ -239,6 +261,14 @@ sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diff.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diff.F90
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_b.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_b.F90
+
+sed -i -e 's/DOUBLE PRECISION, DIM/REAL(kind=r8), DIM/g' b2mod_driver_diff.F90 b2mod_feedback_diff.F90 b2siav_b.F90 b2sikt_b.F90 b2srdt_b.F90 b2srsm_b.F90 b2stbr_bas_b.F90 b2stcx_b.F90 b2tdia_b.F90 b2tinnt_b.F90 b2tqna_b.F90 b2trcl_b.F90 b2tvsq_b.F90 b2us_geo_diff.F90
+sed -i -e 's/DOUBLE PRECISION :: res/REAL(kind=r8) :: res/g' b2mod_driver_diff.F90 b2mod_feedback_diff.F90 b2srdt_b.F90 b2srsm_b.F90 b2stbr_bas_b.F90 b2stcx_b.F90 b2tdia_b.F90 b2us_geo_diff.F90
+sed -i -e 's/DOUBLE PRECISION :: dab/REAL(kind=r8) :: dab/g' b2sikt_b.F90 b2tqna_b.F90
+sed -i -e 's/DOUBLE PRECISION :: tempb/REAL(kind=r8) :: tempb/g' b2tqna_b.F90
+sed -i -e 's/INTRINSIC DABS/INTRINSIC ABS/g' ./*.F90
+sed -i -e 's/REAL(kind=r8) :: result15/INTEGER :: result15/g' b2us_geo_diff.F90
+sed -i -e 's/REAL(kind=r8) :: result10/INTEGER :: result10/g' b2srdt_b.F90
 
 sed -i -e "s/(:)//g" b2mod_driver_diff.F90 #extend to all?
 
