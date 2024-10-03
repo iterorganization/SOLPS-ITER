@@ -4729,8 +4729,15 @@ In addition to those, please see the recommended averaging scheme described in
 Section~\ref{sec:B2Eirene:averaging}.
 
 \subsection{b2.boundary.parameters}
-\index{b2.boundary.parameters, D+C+He example}
+
+\subsubsection{Structured code version}
+\index{b2.boundary.parameters, D+C+He example structured}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.boundary.parameters}
+
+\subsubsection{WG code version}
+
+\index{b2.boundary.parameters, D+C+He example unstructured}
+\VerbatimInput[fontsize=\footnotesize]{D+C+He/b2us.boundary.parameters}
 
 \subsection{b2.numerics.parameters}
 \index{b2.numerics.parameters, D+C+He example}
@@ -4741,8 +4748,25 @@ Section~\ref{sec:B2Eirene:averaging}.
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.transport.parameters}
 
 \subsection{b2.neutrals.parameters}
-\index{b2.neutrals.parameters, D+C+He example}
+
+\subsubsection{Structured code version}
+\index{b2.neutrals.parameters, D+C+He example structured}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.neutrals.parameters}
+
+
+\subsubsection{WG code version}
+
+With all species bundled for each boundary segment (not recommended):
+\index{b2.neutrals.parameters, D+C+He example unstructured, species bundled}
+\VerbatimInput[fontsize=\footnotesize]{D+C+He/b2us.neutrals.parameters}
+
+With a separate stratum for each isonuclear sequence (D=0-1, C=2-8, He=9-11) for each boundary segment (recommended) :
+
+\index{b2.neutrals.parameters, D+C+He example unstructured, species unbundled}
+\VerbatimInput[fontsize=\footnotesize]{D+C+He/b2us.neutrals.parameters_unbundled}
+
+Note that the unbundled format has unused entries in the input file: for example {\tt recyc} is given for each ionization state of each species for each stratum, but for each stratum only the entries between {\tt SPECIES\_START} and {\tt SPECIES\_END} will be used.
+
 
 In this file the user defines many parameters that are used for communication
 between the
@@ -4772,9 +4796,10 @@ boundary". If the {\tt Eirene} input file is being produced by use of the
 provided a {\tt b2.neutrals.parameters} file containing any other data not
 deductible from the {\tt DG} model is present.
 
-Third, in \SOLPSITERns, the North and South boundaries of the {\tt B2.5} grid are
+Third, in \SOLPSITERns, the main chamber and private flux boundaries of the {\tt B2.5} grid are
 no longer recycling/sputtering surfaces but rather only switching surfaces to the
-triangular grid regions.
+triangular grid regions (unless the grid is fully extended to the walls). The recycling and sputtering
+factors for these surfaces are not used.
 
 \section{Output files}
 \index{fort.44}\index{fort.46}
