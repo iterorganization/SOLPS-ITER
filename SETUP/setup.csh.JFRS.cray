@@ -46,6 +46,7 @@ setenv DBX gdb4hpc
 
 # Compilers
 setenv FC ftn
+setenv MPI_FC ftn
 setenv CC cc
 setenv CXX CC
 
