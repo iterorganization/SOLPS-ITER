@@ -19,7 +19,7 @@ LDOPTS += --trace --trap
 endif
 
 DBLFC = ${FC}
-DDBLOPTION = -Ad # ???
+DBLOPTION = -Ad # ???
 DBLSED = sed -e s:\#PREC\#:d:g
 DBLSED = 
 
