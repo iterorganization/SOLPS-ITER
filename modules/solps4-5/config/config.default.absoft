@@ -17,7 +17,7 @@ FCOPTS = -O2 -YEXT_NAMES=LCS -YEXT_SFX='_' -YCOM_NAMES=LCS -YCOM_SFX='_'
 endif
 
 DBLFC = ${FC}
-DDBLOPTION = -Ad # ???
+DBLOPTION = -Ad # ???
 DBLSED = 
 
 INCMOD = -p
