@@ -81,12 +81,12 @@ blne    : imp_rad_Ne : 1.e-6 : Q_imp_Ne    : MW
 blne    : imp_rad_Ar : 1.e-6 : Q_imp_Ar    : MW
 blne    : imp_rad_W  : 1.e-6 : Q_imp_W     : MW
 
-b2time  : feexip_l : -1.e-6 : P_div_e_il  : MW
-b2time  : feixip_l : -1.e-6 : P_div_i_il  : MW
-b2time  : fetxip_l : -1.e-6 : P_div_t_il  : MW
-b2time  : feexap_l :  1.e-6 : P_div_e_ol  : MW
-b2time  : feixap_l :  1.e-6 : P_div_i_ol  : MW
-b2time  : fetxap_l :  1.e-6 : P_div_t_ol  : MW
+b2time  : feesip_l : -1.e-6 : P_div_e_il  : MW
+b2time  : feisip_l : -1.e-6 : P_div_i_il  : MW
+b2time  : fetsip_l : -1.e-6 : P_div_t_il  : MW
+b2time  : feesap_l :  1.e-6 : P_div_e_ol  : MW
+b2time  : feisap_l :  1.e-6 : P_div_i_ol  : MW
+b2time  : fetsap_l :  1.e-6 : P_div_t_ol  : MW
 
 blne    : pwr_totl_il  : 1.e-6 : Q_tot_trg_il   : MW
 blne    : pwr_plsm_il  : 1.e-6 : Q_plsm_trg_il  : MW
