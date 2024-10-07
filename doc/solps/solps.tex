@@ -1081,7 +1081,7 @@ directories. They contain the {\tt TRIM} range, reflection and sputtering
 data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
 {\tt n} are for particles. {\tt refl.data} also contains files such as
 {\tt dc.fnn} and {\tt dc.fnn.coarse} which are the databases used for the
-advanced fuid neutral models.
+advanced fluid neutral models.
 
 \newpage
 \subsection{modules/Eirene}
@@ -2868,7 +2868,7 @@ which contains
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[13] imposes the currents due to drifts for theprivate flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
+  \item[13] imposes the currents due to drifts for the private flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[14] Prescribe the total current without imposing a specific profile. Follow the profile of the 1st flux tube inside.
    Intended use: core boundary, total PF boundary,.. For testing purposes, use with care!
   \item[15] Feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$. 
@@ -7489,7 +7489,7 @@ The LaTeX source files for this pdf are available in \newline
 \newline
 {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab/}.
 
-Additionaly, there are two presentation on the \SOLPSITER SharePoint website, explaining the setup of AFN cases: \newline 
+Additionally, there are two presentation on the \SOLPSITER SharePoint website, explaining the setup of AFN cases: \newline 
 {\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_AFN} and \newline 
 {\tt SOLPS-ITER Extended Grids Workshops / AFN handson session}. 
 
@@ -7509,7 +7509,7 @@ Very good agreement between the hybrid and the fully kinetic methods has been ac
 
 \begin{itemize}
 \item Since there is no fluid approximation for the neutral molecules, they have to be kept fully kinetic. However, in detached conditions, the CPU time for the molecules is not negligible compared to the atoms.
-\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this inteface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
+\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this interface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
 \item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata in the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach. 
 \end{itemize}
 
@@ -10409,15 +10409,15 @@ $\nu_{i,\mathrm{min}}$ & {\tt  vsa\_min}
 
 \section{Turbulent enstrophy equation}
 
-The equation for turbulent enstrophy ($\zeta$) is in a very early stage of development. Not yet indended for users.
+The equation for turbulent enstrophy ($\zeta$) is in a very early stage of development. Not yet intended for users.
 Documentation will follow when the model is more mature.
 
 %-------- end of 20th page -------------
 \section{Typical boundary conditions}\label{sec:typical_BCs}
 
-In the unstructured {\tt B2.5} code, the concept of 'East', 'West', 'North' and 'South' boundaries no longer exists. In the structured code, there was typically a hard-code destinction between for example 'East' and 'West' boundaries, to get all signs correct. In the unstructured code, there is only a single type of boundary ('A', for 'Automatic'), indicating a general interface between the plasma and a boundary segment. Some boundary conditions are only allowed for core boundaries, and these are checked with help of the {\tt cvOnClosedSurface} variable.
+In the unstructured {\tt B2.5} code, the concept of 'East', 'West', 'North' and 'South' boundaries no longer exists. In the structured code, there was typically a hard-coded distinction between for example 'East' and 'West' boundaries, to get all signs correct. In the unstructured code, there is only a single type of boundary ('A', for 'Automatic'), indicating a general interface between the plasma and a boundary segment. Some boundary conditions are only allowed for core boundaries, and these are checked with help of the {\tt cvOnClosedSurface} variable.
 
-To get all signs correct for the generalized interface, the unstructured code makes use of the face angles $\alpha$, $\beta$ and $\gamma$, and the additional variable {\tt bcFcOr}, which incidates if the outward boundary normal coincides with the face normal (+1.0) or not (-1.0). Figure \ref{fig:bcfcor} illustrates the definition of  {\tt bcFcOr}.
+To get all signs correct for the generalized interface, the unstructured code makes use of the face angles $\alpha$, $\beta$ and $\gamma$, and the additional variable {\tt bcFcOr}, which indiates if the outward boundary normal coincides with the face normal (+1.0) or not (-1.0). Figure \ref{fig:bcfcor} illustrates the definition of  {\tt bcFcOr}.
 
 \begin{figure}[hbtp]
 \ifpdf
@@ -17768,13 +17768,13 @@ See {\bf zcol} above for a list of available colours.
 Produces flow chart of arrays {\em up} and {\em vv} using a maximum arrow
 length of $\langle${\tt length}$\rangle$ metres.
 The use of {\em up} and {\em vv} can be superseded
-by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
+by the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
 \subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
 Produces flow chart of Eirene array {\em vxa} and {\em vya} using a
 maximum arrow length of $\langle${\tt length}$\rangle$ metres. The use of {\em vxa} and
-{\em vya} can be superseded by the the commands {\bf earox} and {\bf earoy},
+{\em vya} can be superseded by the commands {\bf earox} and {\bf earoy},
 respectively, which will then use data from the Eirene stack for computing
 the arrow directions instead.
 

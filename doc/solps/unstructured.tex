@@ -55,7 +55,7 @@ cell face, and positive from {\tt $C_1$} to {\tt $C_2$}.
 \item {\tt y} The y-direction is tangent to the face, positive from {\tt $V_1$} to {\tt $V_2$}.
 \item {\tt $\alpha$} is the included angle between the magnetic field vector and the face normal.
 {\tt fcQalf(iFc,0)} is the cosine of {\tt $\alpha$} and {\tt fcQalf(iFc,1)} is the sine of {\tt $\alpha$}.
-\item {\tt $\gamma$} is the is the included angle between the the cell-connector vector and the normal vector
+\item {\tt $\gamma$} is the included angle between the cell-connector vector and the normal vector
 of face {\tt iFc}. {\tt fcQgam(iFc,0)} is the cosine of {\tt $\gamma$} and {\tt fcQgam(iFc,1)} is the sine of {\tt $\gamma$}. It will hold that 0.lt.fcQgam(,).le.1.
 \item {\tt $\beta$} is the included angle between the cell-connector and the magnetic field vector.
 {\tt fcQbet(iFc,0)} is the cosine of {\tt $\beta$} and {\tt fcQbet(iFc,1)} is the sine of {\tt $\beta$}.
@@ -166,7 +166,7 @@ Dedicated routines in {\tt \$\{SOLPSTOP\}/modules/B2.5/src/utility/} now take ca
 \item {\tt GRAD} computes gradients of a cell centered quantity on the cell faces, in poloidal and radial direction.
 \item {\tt GRAD\_NT} computes gradients of a cell centered quantity on the cell faces, in tangential and normal direction.
 \item {\tt GRADC} computes gradients of a cell centered quantity in the in cell center by first computing
-the gradients on faces, and then interpolateing back to cell centers.
+the gradients on faces, and then interpolating back to cell centers.
 \item {\tt GRADC\_DIV} computes gradients of a cell centered quantity in the in cell center by 
 applying the divergence theorem.
 \item {\tt DIV} computes the divergence of a flow field.
@@ -179,14 +179,14 @@ applying the divergence theorem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Rhie-Chow corection in unstructured code}
+\section{Rhie-Chow correction in unstructured code}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 To avoid odd-even decoupling in the parallel direction due to the
 collocated velocity and density (pressure) fields, a Rhie-Chow scheme
 for compressible flow as described in Ref. \cite{MOUKALLED2016} is implemented for the
 parallel direction. The scheme is also explained in Section 8.8 and 10.2 (older versions) or 9.8 and 11.2 (newer versions) of Ref. \cite{FERZIGER2019}.
-The switches {\tt b2npco\_pcm0}, {\tt b2npco\_pcm1}, {\tt b2npht\_pcm0} and {\tt b2npht\_pcm1} determine the strength of the corretions.
+The switches {\tt b2npco\_pcm0}, {\tt b2npco\_pcm1}, {\tt b2npht\_pcm0} and {\tt b2npht\_pcm1} determine the strength of the corrections.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
