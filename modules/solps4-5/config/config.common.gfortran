@@ -11,13 +11,13 @@ SED = sed s:\#PREC\#:d:g
 LINK_MOD = yes
 
 ifdef SOLPS_DEBUG
-FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
+FCOPTS = -g -fbounds-check -fbacktrace -ffpe-trap=denormal -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
 else
 FCOPTS += -O3
 endif
 
 DBLFC = ${FC}
-DBLOPTION =
+DBLOPTION = -fdefault-real-8
 DBLSED = sed -e s:\#PREC\#:d:g
 
 INCMOD = -I

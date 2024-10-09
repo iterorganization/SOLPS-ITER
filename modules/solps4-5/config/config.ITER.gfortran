@@ -6,12 +6,9 @@ NODENAME  ?= `hostname`
 
 CPP = /lib/cpp -traditional
 
-ifndef SOLPS_DEBUG
-FCOPTS += -fdefault-real-8
-endif
-
 SOLPSINCLUDE += `pkg-config libtirpc --cflags`
 LDLIBES = `pkg-config libtirpc --libs`
+
 
 #!!!Local Variables:
 #!!! mode: Makefile

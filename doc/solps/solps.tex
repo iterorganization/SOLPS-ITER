@@ -513,7 +513,7 @@ then do the following:
   sbb
   cd src
   mkdir -p modules.local
-  cp modules/b2mod\_dimensions.F modules.local
+  cp modules/b2mod_dimensions.F modules.local
   touch modules/.new_modules
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
@@ -621,11 +621,11 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
 with MPI parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.mpi} directory. This can also be done automatically by use of the {\tt set\_mpi} script before the compilation.
 
 Adding the {\tt \_openmp} suffix at the end of any build target will execute the command
 with OpenMP parallelization options, when relevant, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.openmp} directory. This can also be done automatically by use of the {\tt set\_openmp} script before the compilation.
 
 Adding both the {\tt \_openmp} and {\tt \_mpi} suffixes, in either order, i.e. {\tt \_openmp\_mpi} or {\tt \_mpi\_openmp}, at the end of any build target will execute the command
 with both OpenMP and MPI parallelization options, when relevant, and put the executables in a separate
@@ -633,7 +633,7 @@ with both OpenMP and MPI parallelization options, when relevant, and put the exe
 
 Adding the {\tt \_debug} suffix at the end of any build target will execute the command
 in debug mode, and put the executables in a separate
-{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory.
+{\tt builds/\$\{TOOL\_CHAIN\}.debug} directory. This can also be done automatically by use of the {\tt set\_debug} script before the compilation.
 
 Adding the {\tt clean\_} prefix at the beginning of any build target will remove that build target
 from its directory, as well as all associated pre-processed source files, object files, module files,
@@ -1729,8 +1729,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[rps]\index{rps} Shifts $\Psi$ values by a given amount within a {\tt DG} equilibrium file (see Sec.~\ref{sec:equtrn}).
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
-  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by settings up links to the proper data files.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by settings up links to the proper data files.
+  \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
@@ -19307,7 +19307,6 @@ CRAY & solvers/b2ux11p.F \\
 CRAY & solvers/b2ux5p.F \\
 CRAY & solvers/b2ux7p.F \\
 CRAY & solvers/b2ux9p.F \\
-CRAY & sources/b2stbr.F \\
 CRAY & utility/illtern\_7\_solps.F \\
 CRAY & utility/ilutern\_7\_solps.F \\
 CRAY & utility/ilutern\_9\_solps.F \\
@@ -19338,6 +19337,31 @@ EASY & b2plot/chord.F \\
 EASY & b2plot/chord\_triangle.F \\
 F77 & user/b2file.F \\
 FIXED\_POINT & driver/b2mod\_driver.F \\
+FIXED\_POINT & equations/b2npco.F \\
+FIXED\_POINT & equations/b2npht.F \\
+FIXED\_POINT & equations/b2npmo.F \\
+FIXED\_POINT & equations/b2nxdv.F \\
+FIXED\_POINT & solvers/b2urmo.F \\
+FIXED\_POINT & sources/b2mod\_eirene.F \\
+FIXED\_POINT & sources/b2sian.F \\
+FIXED\_POINT & sources/b2siav.F \\
+FIXED\_POINT & sources/b2sicf.F \\
+FIXED\_POINT & sources/b2sifr\_.F \\
+FIXED\_POINT & sources/b2sifrtf.F \\
+FIXED\_POINT & sources/b2sigp.F \\
+FIXED\_POINT & sources/b2sihs.F \\
+FIXED\_POINT & sources/b2sihs\_.F \\
+FIXED\_POINT & sources/b2srdt.F \\
+FIXED\_POINT & sources/b2srsm.F \\
+FIXED\_POINT & sources/b2srst.F \\
+FIXED\_POINT & sources/b2stbc.F \\
+FIXED\_POINT & sources/b2stbm.F \\
+FIXED\_POINT & sources/b2stbr.F \\
+FIXED\_POINT & sources/b2stcx.F \\
+FIXED\_POINT & sources/b2stel.F \\
+FIXED\_POINT & transport/b2tfhe\_.F \\
+FIXED\_POINT & transport/b2tfhi\_.F \\
+FIXED\_POINT & transport/b2tfnb.F \\
 G95 & utility/mds\_routines.F \\
 GGD\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 GGD\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_data.F90 \\
@@ -19462,6 +19486,7 @@ NAGF95 & output/b2wgpj\_gnuplot.F \\
 NAGF95 & preprocessing/b2agfs.F \\
 NAGF95 & utility/open\_file.F \\
 NAGF95 & utility/usrnam.F \\
+NAGFOR & b2plot/chord.F \\
 NAGFOR & b2plot/dhdata.F \\
 NAGFOR & b2plot/set\_extralabel.F \\
 NAGFOR & convert/b2plasmastate\_inspect.F \\
@@ -19562,7 +19587,6 @@ NO\_NAG & b2plot/caltraj.F \\
 NO\_NAG & sources/heatdiff1D.F \\
 NO\_NAG & transport/b2tr21.F \\
 NO\_NAG & utility/nagsubst.F \\
-NO\_OPENMP\_B2SRDT & sources/b2srdt.F \\
 NO\_OPT & b2plot/b2plot.F \\
 NO\_OPT & ids/b2mod\_ual\_io.F90 \\
 NO\_OPT & postprocessing/b2ytdr.F \\

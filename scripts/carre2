@@ -73,6 +73,27 @@ endings="dgo equ str trg"
     q=p
     qqs=c
     grid_stem=`ls -ls $indir/dg.str | awk '{print $NF}' | xargs basename | sed 's:\.str$::'`
+    for ext in $endings; do
+      [ -e $indir/dg.$ext ] && {
+        filename=`lln $indir/dg.$ext`
+        [ "$filename" != '' ] || {
+          /bin/echo -e "File dg.$ext is not a symbolic link!"
+          q=q
+        }
+      } || {
+        /bin/echo -e "File dg.$ext is missing!"
+        q=q
+        qqs=q
+      }
+    done
+    [ "$q" != 'q' ] || {
+      [ "$qqs" = 'q' ] && {
+        /bin/echo -e "Run the lns script first."
+      } || {
+        /bin/echo -e "Case storage step will fail."
+        /bin/echo -e "Run the lns script first to assign a stem name to this case"
+      }
+    }
   } || {
     /bin/echo -e "Linking error - the input files were not found in \"$indir\""
     /bin/echo -e "Use (I)nput command to provide correct input directory"
@@ -187,7 +208,7 @@ do {
                 set -- $griddir/$grid_stem.v[0-9][0-9][0-9].geo
                 [ -f $1 ] && {
                     m=`ls $griddir/$grid_stem.v[0-9][0-9][0-9].geo | tail -1`
-#		    m=`echo $griddir/$grid_stem.v[0-9][0-9][0-9].geo | awk '{print $NF}'`
+#                    m=`echo $griddir/$grid_stem.v[0-9][0-9][0-9].geo | awk '{print $NF}'`
                     m=${m#*/$grid_stem.v}
                     m=${m%.geo}
                     /bin/echo -e "Last grid number found is : $m"
@@ -201,8 +222,18 @@ do {
                     [ ${#m} -lt 3 ] && m=0$m
                 }
                 touch CARRE.HISTORY
-		echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
-		ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
+                echo $user `date +%Y-%m-%d_%H:%M:%S` >> CARRE.HISTORY
+                ls -ls dg.??? | cut -d ' ' -f 9- >> CARRE.HISTORY
+                [ -d "$dgdir" ] || {
+                    /bin/echo -e "The directory \"$dgdir\" does not exist. Create it (y/n)? \c"
+                    read u; case "$u" in
+                      ( y|Y )   /bin/echo -e mkdir "$dgdir"
+                      mkdir -p "$dgdir" || break;;
+                      (  *  )   /bin/echo -e break
+                      break;;
+                    esac
+                }
+                /bin/echo -e dir OK
                 cp traduit.sno $dgdir/$grid_stem.v$m.sno && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" && \
                   /bin/echo -e "The grid in DG format is stored as $dgdir/$grid_stem.v$m.sno" >> CARRE.HISTORY

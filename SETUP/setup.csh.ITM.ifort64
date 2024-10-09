@@ -56,6 +56,6 @@ setenv DBX totalview
 
 # compilers
 
-#setenv CC gcc
-#setenv FC ifort
-#setenv CXX g++
+setenv CC icc
+setenv FC ifort
+setenv CXX icpc

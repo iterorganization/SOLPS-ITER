@@ -12,7 +12,7 @@ Tested on the following examples:
 
 files = ['traduit.out.b2us.target',   # unstructured AUG file
          'traduit.out.b2us.standard', # structured AUG file
-         'traduit.out.b2us_iter',     # unstructured ITER file
+         'traduit.out.b2us_ITER',     # unstructured ITER file
          'tiara.122408_4_b2us',       # unstructured ITER file from TIARA
         ]
 
@@ -209,7 +209,9 @@ vector_type = {
     'fcAligned':int,               
     'ft': 'nFt', 'ftCvP1': int, 'ftCvP2': int, 'ftFcP1': int, 'ftFcP2': int,# ft
     'ftReg': int,                
-    'fs': 'nFs', 'fsFcP1': int, 'fsFcP2': int, 'fsPsi': float,              # fs              
+    'fs': 'nFs', 'fsFcP1': int, 'fsFcP2': int, 'fsPsi': float,              # fs
+    'Xpoint': int, 
+    'cvOMP': 'ncvOMP', 'cvIMP': 'ncvIMP', 'fcOMP': 'nfcOMP', 'fcIMP': 'nfcIMP',
 }
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, 
                       argparse.RawTextHelpFormatter):
@@ -231,19 +233,19 @@ parser.add_argument('-t', '--plot-type', default=0, type=int,
                          '6: flux_tube_faces,\n'
                          '7: flux surface,\n'
                          '8: flux surface + fsPsi,\n'
-                         '9: DivDeo template file')
+                         '9: DivGeo template file')
 parser.add_argument('-o', '--ogr',metavar='FILE', default='divgeo.ogr', type=str,
    help='Saves as mesh in DivGeo template format if --plot-type=9')
 args = parser.parse_args()
 
 plot_type = args.plot_type 
 
-#Read the b2us files which are stored in Downloads.
+#Read the b2us files .
 with open(args.input_file, 'r') as file:
     lines=file.readlines()
 for i in range(0, len(lines)):
     if lines[i].startswith("*cf:"):
-        line_without_arrays = re.sub(r'\(:,*([1-9]*)\)', r'\1', lines[i]).strip()
+        line_without_arrays = re.sub(r'\([:,s]*([1-9]*)\)', r'\1', lines[i]).strip()
         line = re.split(r'[ ,]+', line_without_arrays)
         data_type = line[1]
         if data_type in ('int', 'real'):
@@ -263,10 +265,13 @@ for i in range(0, len(lines)):
                     exec(f"{array_name}[{j}:{j+values.size}] = values")
                     j += values.size              
             else: # singletons, read next line only
-                i += 1
-                values = re.findall(r'\d+', lines[i])
-                for var in range(len(values)):
-                    exec(line[var+3] + '=' + values[var])
+                if num_elements == 0 : # empty next line
+                    exec(line[var+3] + '= 0')
+                else:
+                    i += 1
+                    values = re.findall(r'\d+', lines[i])
+                    for var in range(len(values)):
+                        exec(line[var+3] + '=' + values[var])
                     
         elif data_type in vector_type:
             exec(f'vector_size = {vector_type[data_type]}')
@@ -284,27 +289,27 @@ for i in range(0, len(lines)):
 #print(nCi,nFc,nVx,nCg,nFs,nFt,isClassicalGrid)
 
 
-# # Plot of vertices vxX and vxY
+## Plot of vertices vxX and vxY
 if plot_type in (0, 1):
     fig1 = plt.figure(figsize=(7, 7)) 
     ax = fig1.add_subplot(111, aspect='equal')
 
     plt.plot(vxX, vxY, '.')
         
-    ax.set_xlim((min(vxX)-0.1, max(vxX)+0.1)) 
-    ax.set_ylim((min(vxY)-0.1, max(vxY)+0.1))
+    ax.set_xlim((min(vxX) - 0.1, max(vxX) + 0.1)) 
+    ax.set_ylim((min(vxY) - 0.1, max(vxY) + 0.1))
     plt.xlabel('R [m]')
     plt.ylabel('Z [m]')
     plt.title('Vertices ')
     plt.show()
 
-# # Plot of vertices vxX and vxY + vxPsi
+## Plot of vertices vxX and vxY + vxPsi
 if plot_type in (0, 2):
     fig2 = plt.figure(figsize=(7, 7))
     ax = fig2.add_subplot(111, aspect='equal')
 
     # Create a scatter plot with color mapping based on vxPsi values
-    sc = plt.scatter(vxX, vxY, c=vxPsi, cmap='plasma', marker='.', s=25)
+    sc = plt.scatter(vxX, vxY, c=vxPsi, cmap='plasma', marker='.', s=20)
 
     ax.set_xlim((min(vxX)-0.1, max(vxX)+0.1))
     ax.set_ylim((min(vxY)-0.1, max(vxY)+0.1))
@@ -316,7 +321,7 @@ if plot_type in (0, 2):
     plt.show()
 
 
-# # Plot of cells
+## Plot of cells
 if plot_type in (0, 3):
     fig3 = plt.figure(figsize=(7, 7)) 
     ax = fig3.add_subplot(111, aspect='equal')
@@ -340,7 +345,7 @@ if plot_type in (0, 3):
     plt.show()
 
 
-# # Plot of faces
+## Plot of faces
 if plot_type in (0, 4):
     fig4, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 7))
 
@@ -381,7 +386,7 @@ if plot_type in (0, 4):
 
     plt.show()
 
-# # Plot of flux_tube_cells
+## Plot of flux_tube_cells
 if plot_type in (0, 5):  
     if 'nFt' in locals() and 'ftCvP1' in locals() and 'ftCvP2' in locals() and \
       'ftCv' in locals() and 'cvVxP1' in locals() and 'cvVxP2' in locals() and \
@@ -392,7 +397,6 @@ if plot_type in (0, 5):
         for i in range(nFt):
             ftCv_start = ftCvP1[i] - 1
             number_of_cells = ftCvP2[i]
-            flux_tube_cells = []
             color = plt.cm.jet(i / nFt)
             for j in range(number_of_cells):
                 cell_number = ftCv[ftCv_start+j] - 1
@@ -415,7 +419,7 @@ if plot_type in (0, 5):
     else:
         print('Warning: Required data is missing for plot of flux_tube_cells.')
 
-# # Plot of flux_tube_faces
+## Plot of flux_tube_faces
 if plot_type in (0, 6): 
     if 'nFt' in locals() and 'ftFcP1' in locals() and 'ftFcP2' in locals() \
         and 'ftFc' in locals() and 'fcVx1' in locals() and 'fcVx2' in locals() \
@@ -449,7 +453,7 @@ if plot_type in (0, 6):
     else:
         print("Warning: Required data is missing for plot of flux_tube_faces.")
 
-# # Plot of flux surface
+## Plot of flux surface
 if plot_type in (0, 7):
     fig7 = plt.figure(figsize=(7, 7)) 
     ax = fig7.add_subplot(111, aspect='equal')
@@ -458,7 +462,6 @@ if plot_type in (0, 7):
     #     print(fsFcP1[i], fsFcP2[i])
         fsFc_start = fsFcP1[i] - 1
         number_of_faces = fsFcP2[i]
-
         for j in range(number_of_faces):
             face_number = fsFc[fsFc_start+j] - 1
             fcVx_first_point = fcVx1[face_number] - 1
@@ -475,7 +478,7 @@ if plot_type in (0, 7):
     plt.title('Flux surface')
     plt.show()    
 
-# # Plot of flux surface + fsPsi
+## Plot of flux surface + fsPsi
 if plot_type in (0, 8):
     fig8 = plt.figure(figsize=(7, 7))
     ax = fig8.add_subplot(111, aspect='equal')
@@ -489,7 +492,6 @@ if plot_type in (0, 8):
         fsFc_start = fsFcP1[i] - 1
         number_of_faces = fsFcP2[i]
     #     print(number_of_faces)
-
         for j in range(number_of_faces):
             face_number = fsFc[fsFc_start+j] - 1
             fcVx_first_point = fcVx1[face_number] - 1
@@ -522,6 +524,7 @@ if plot_type in (0, 8):
 
     plt.show()
 
+# Saves as mesh in DivGeo template format
 if plot_type == 9:
     with open(args.ogr, 'w') as f:
         for i in range(nFc):
@@ -532,5 +535,5 @@ if plot_type == 9:
             second_point = [vxX[fcVx_second_point] * 1000, vxY[fcVx_second_point] * 1000]
             face_points = np.array([first_point, second_point])
 
-            np.savetxt(f, face_points, fmt='%.8f', delimiter='    ')
+            np.savetxt(f, face_points, fmt='%.6f', delimiter='    ')
             f.write('\n')  # Add an empty line after each pair of points

@@ -52,6 +52,7 @@ MPI_FC    ?= mpiifort
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}
 endif
+CC         = icc
 
 #
 # Preprocessor options
