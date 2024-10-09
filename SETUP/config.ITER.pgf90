@@ -47,6 +47,8 @@ LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 
 NO_MPI         = true
 
+NO_MPI         = true
+
 # Preprocessor options
 #
 
