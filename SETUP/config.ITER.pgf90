@@ -49,6 +49,8 @@ LIBGKS         = ${GKSDIR}/lib/libGKS.so
 LIBGRS         = ${GR_ROOT}/lib/libgr.a
 ADDLIBS        = -lgfortran
 
+NO_MPI         = true
+
 # Preprocessor options
 #
 

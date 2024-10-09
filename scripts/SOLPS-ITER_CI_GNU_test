@@ -1,0 +1,9 @@
+# Set up SOLPS-ITER environment
+. $(dirname $0)/SOLPS-ITER_CI_GNU_env
+
+# Compile the code
+echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+make listobj_nox depend_nox
+make divgeo_nox
+make MAKE_OPTIONS=-j8 solps_nox b25_nox
