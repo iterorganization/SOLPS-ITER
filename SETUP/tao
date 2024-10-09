@@ -9,7 +9,6 @@ if ($?SOLPS_PATH) then
     exit 1
   endif
 
-  unsetenv IPOPT
   setenv OPT tao
   setenv TAO yes
   setenv TAO_OPT "$1"

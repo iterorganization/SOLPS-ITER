@@ -9,7 +9,6 @@ if [[ -n "$SOLPS_PATH" ]]; then
     exit 1
   fi
 
-  unset IPOPT
   export OPT="tao"
   export TAO="yes"
   export TAO_OPT="$1"
