@@ -21,7 +21,7 @@ FCOPTS = -O -fw -Am -X9 -Kfast,eval -Ad --sav
 endif
 
 DBLFC = ${FC}
-DDBLOPTION =-Ad # ???
+DBLOPTION = -Ad # ???
 DBLSED = sed -e s:\#PREC\#:d:g
 DBLSED = 
 
