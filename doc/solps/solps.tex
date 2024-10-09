@@ -18664,6 +18664,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
+\item[TAO\_NEW] \index{TAO\_NEW} Indicates that the code is to be linked with version 3.16 or newer of the {\tt PETSc} package. Automatically set by the session start-up scripts.
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WOS] \index{WOS} Uses the {\tt WOS} libraries for accessing experimental data at IPP
@@ -19187,6 +19188,9 @@ SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
+TAO\_NEW & differentiation/b2optim\_tao.F90 \\
+TAO\_NEW & differentiation/adjoint/b2optim\_tao.F90 \\
+TAO\_NEW & differentiation/tangent/b2optim\_tao.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
