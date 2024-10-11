@@ -31,6 +31,7 @@
 \usepackage{longtable}
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
+\usepackage{dsfont}
 \usepackage{tocbibind}
 \ifpdf
 \usepackage{thumbpdf}
@@ -67,12 +68,13 @@
 \definecolor{Red}{rgb}{1.0,0.0,0.0}
 
 %% for k-model
-\newcommand{\dexb}{D_{E{\times}B}}
-\newcommand{\heexb}{\chi_{e,E{\times}B}}
-\newcommand{\hiexb}{\chi_{i,E{\times}B}}
-\newcommand{\nuexb}{\nu_{E{\times}B}}
-\newcommand{\hckexb}{\chi_{\kappa,E{\times}B}}
-\newcommand{\etaexb}{\eta_{E{\times}B}}
+\newcommand{\exb}{{\bf E}\times{\bf B}}
+\newcommand{\dexb}{D_{\exb}}
+\newcommand{\heexb}{\chi_{e,\exb}}
+\newcommand{\hiexb}{\chi_{i,\exb}}
+\newcommand{\nuexb}{\nu_{\exb}}
+\newcommand{\hckexb}{\chi_{\kappa,\exb}}
+\newcommand{\etaexb}{\eta_{\exb}}
 \newcommand{\kepscd}{C_D}
 \newcommand{\kepscs}{C_S}
 \newcommand{\kepsheate}{C_{\chi_e}}
@@ -81,8 +83,8 @@
 \newcommand{\kepseta}{C_\eta}
 \newcommand{\kepsrho}{\rho_L}
 \newcommand{\kepskappa}{C_\kappa}
-\newcommand{\kepscsigpar}{C_{\sigma_{||},1}}
-\newcommand{\kepscsigpartwo}{C_{\sigma_{||},2}}
+\newcommand{\kepscsigpar}{C_{\sigma_\parallel,1}}
+\newcommand{\kepscsigpartwo}{C_{\sigma_\parallel,2}}
 \newcommand{\kepscdiss}{C_{diss}}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -204,9 +206,7 @@ When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI201
 
 Several of the {\bf SOLPS4.2} features are detailed in {\tt Kotov\_SOLPS42\_Report.pdf}.
 
-{\tt B2} and {\tt B2.5} originally used structured finite-volume meshes with a rectangular topology. Since 2017, an effort is ongoing to transform the code to an unstructured mesh format,
-making it possible to model up to the real vessels walls, and having more control over local refinement. This new version is typically called the wide-grids version or WG. Chapter \ref{cha:unstructured} explains the
-WG discretization.
+{\tt B2} and {\tt B2.5} originally used structured finite-volume meshes with a rectangular topology. Since 2017, an effort is ongoing to transform the code to an unstructured mesh format, making it possible to model up to the real vessel walls, and having more control over local refinement. This new version is typically called the wide-grids version or WG. Chapter \ref{cha:unstructured} explains the WG discretization.
 
 The next section discusses obtaining and updating the code.
 
@@ -2530,38 +2530,39 @@ which contains
 \item[NBC]\index{NBC} {\tt integer}, number of boundary segments
 \item[BCCHAR]\index{BCCHAR} {\tt character array, length NBC}
   \begin{description}
-  \item[A] BCHAR is always equal to 'A' (automatic) and a boundary list is defined
-   by the mesh boundary faces that have fcLbl.ge.BCSTART and fcLbl.le.BCEND.
+  \item[A] {\tt BCCHAR} is always equal to {\tt 'A'} (automatic) and
+    a boundary list is defined by the mesh boundary faces that have
+    {\tt fcLbl.ge.BCSTART} and {\tt fcLbl.le.BCEND}.
   \end{description}
 \item[BCPOS]\index{BCPOS} {\tt integer array, length NBC}, for North, South
   or X boundary conditions, it specifies the row index; for West, East
   and Y boundary conditions, it specifies the column index.
   Obsolete for WG.
-\item[BCSTART]\index{BCSTART} {\tt integer array, length NBC}, 
-  Starting label (fcLbl) of the cells belonging to this boundary condition.
-  (see description of BCCHAR).
-\item[BCEND]\index{BCEND} {\tt integer array, length NBC},   
-  Ending label (fcLbl) of the cells belonging to this boundary condition.
-  (see description of BCCHAR).
+\item[BCSTART]\index{BCSTART} {\tt integer array, length NBC},
+  Starting label ({\tt fcLbl}) of the cells belonging to this boundary condition.
+  (see description of {\tt BCCHAR}).
+\item[BCEND]\index{BCEND} {\tt integer array, length NBC},
+  Ending label ({\tt fcLbl}) of the cells belonging to this boundary condition.
+  (see description of {\tt BCCHAR}).
 \item[BCCON]\index{BCCON} {\tt integer array, length NS * NBC}, specifying
   the type of density boundary condition for each segment and species
   (fastest varying index is species); makes use of {\tt CONPAR} to
   specify additional information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the density, {\tt CONPAR(,,1)}
-  specifies the required density in $m^{-3}$
+  specifies the required density in $m^{-3}$.
   \item[2] prescribe the gradient of the density, {\tt CONPAR(,,1)}
-  specifies the required density gradient in $m^{-4}$
+  specifies the required density gradient in $m^{-4}$.
   \item[3] sheath conditions, {\tt CONPAR(,,1)} not used (zero
-  gradient is used)
+  gradient is used).
   \item[4] prescribe the value of the density, weakly a mixed boundary
   condition, {\tt CONPAR(,,1)} specifies the required density in
   $m^{-3}$ and {\tt CONPAR(,,2)} specifies the "strength" of the
   boundary condition. Not yet available for WG.
   \item[5] prescribe the particle flux per unit area,
   {\tt CONPAR(,,1)} specifies the required particle flux density in
-  $m^{-2} s^{-1}$
+  $m^{-2} \cdot s^{-1}$
   \item[6] prescribe the total particle flux for a constant density,
   {\tt CONPAR(,,1)} specifies the particle flux in
   $s^{-1}$. Not yet available for WG.
@@ -2585,7 +2586,7 @@ which contains
   {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
   {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
-  If {\tt CONPAR(,,2)}.gt.0, an additional decay-length loss is added, where {\tt CONPAR(,,2)} is the decay length.
+  If {\tt CONPAR(,,2).gt.0}, an additional decay-length loss is added, where {\tt CONPAR(,,2)} is the decay length.
   \item[15] prescribe a radial leakage velocity,
   {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2594,7 +2595,7 @@ which contains
   \item[18] prescribe total main ion particle flux, used with {\tt ASTRA} coupling.
   Not yet available for WG.
   \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with {\tt ASTRA}. The total desired flux is summed over all {\tt BCCON=19} core boundaries. This boundary condition applies to ions in their highest ionisation stage.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$. 
+  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   Not yet available for WG.
   \item[20] constant density feedback condition,
   {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
@@ -2629,17 +2630,16 @@ which contains
   and species (fastest varying index is species); makes use of {\tt MOMPAR} to
   specify additional information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the parallel velocity,
-  {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
+  {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$.
   \item[2] prescribe the gradient of the parallel velocity,
-  {\tt MOMPAR(,,1)} specifies the parallel velocity gradient in $s^{-1}$
+  {\tt MOMPAR(,,1)} specifies the parallel velocity gradient in $s^{-1}$.
   \item[3] sheath conditions, Mach number as input, if
   {\tt MOMPAR(,,2)} $< \frac{1}{2}$, then the velocity is set to exactly
   {\tt MOMPAR(,,1)} $\times C_{s, \mbox{collective}}$, otherwise the
-  velocity is set to be at least {\tt MOMPAR(,,1)} $\times
-  C_{s,\mbox{species}}$
-  BCMOM = 3 was not adapted for WG. Replace with drift-compatible BCMOM = 13.
+  velocity is set to be at least {\tt MOMPAR(,,1)} $\times C_{s,\mbox{species}}$
+  {\tt BCMOM = 3} was not adapted for WG. Replace with drift-compatible {\tt BCMOM = 13}.
   \item[4] prescribe the value of the velocity, weakly a mixed
   boundary condition, {\tt MOMPAR(,,1)} specifies the parallel
   velocity in $m.s^{-1}$ and {\tt MOMPAR(,,2)} specifies the
@@ -2676,16 +2676,16 @@ which contains
   each segment; makes use of {\tt ENEPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the electron temperature,
-  {\tt ENEPAR(,1)} specifies the temperature in $eV$
+  {\tt ENEPAR(,1)} specifies the temperature in $eV$.
   \item[2] prescribe the gradient of the electron temperature,
-  {\tt ENEPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$
+  {\tt ENEPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$.
   \item[3] sheath conditions, electron energy transmission,
   {\tt ENEPAR(,1)} specifies an additional contribution to the energy
   transmission coefficient in addition to that of the potential
   difference [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-  BCENE = 3 not adapted for WG. Replace with drift-compatible BCENE = 15.
+  {\tt BCENE = 3} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
   \item[4] prescribe the value of the electron temperature, weakly a
   mixed boundary condition, {\tt ENEPAR(,1)} specifies the
   temperature in $eV$ and {\tt ENEPAR(,2)} specifies the
@@ -2706,8 +2706,8 @@ which contains
   \item[11] not used
   \item[12] sheath conditions, electron energy transmission coefficient,
   {\tt ENEPAR(,1)} specifies an energy transmission factor,
-  $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$. 
-  BCENE = 12 not adapted for WG. Replace with drift-compatible BCENE = 15.
+  $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$.
+  {\tt BCENE = 12} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
   \item[13] prescribe the electron energy flux per unit area
   proportional to temperature, {\tt ENEPAR(,1)} specifies the energy
   flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature
@@ -2715,10 +2715,10 @@ which contains
     Not yet available for WG.
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, recommended when using drifts (see Section \ref{sec:bcene} of manual for details). Linked to using BCCON=14 and BCMOM=13 for all ion species, BCENI=15, and BCPOT=11.
+  \item[15] sheath boundary condition, recommended when using drifts (see Section \ref{sec:bcene} of manual for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
+    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
     If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
@@ -2752,16 +2752,16 @@ which contains
   segment; makes use of {\tt ENIPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the ion temperature,
-  {\tt ENIPAR(,1)} specifies the temperature in $eV$
+  {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[2] prescribe the gradient of the ion temperature,
-  {\tt ENIPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$
+  {\tt ENIPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$.
   \item[3] sheath conditions, ion energy transmission,
   {\tt ENIPAR(,1)} specifies the contribution to the energy
   transmission coefficient [the sound speed used depends on settings
   of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-  BCENI = 3 not adapted for WG. Replace with drift-compatible BCENI = 15.
+  {\tt BCENI = 3} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
   \item[4] prescribe the value of the ion temperature, weakly a mixed
   boundary condition, {\tt ENIPAR(,1)} specifies the temperature in
   $eV$ and {\tt ENIPAR(,2)} specifies the "strength" of the
@@ -2786,18 +2786,18 @@ which contains
   \item[12] sheath conditions, ion energy transmission coefficient,
   {\tt ENIPAR(,1)} specifies an energy transmission factor,
   $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
-   BCENI = 12 not adapted for WG. Replace with drift-compatible BCENI = 15.
+   {\tt BCENI = 12} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
   \item[13] prescribe the ion energy flux per unit area proportional
   to temperature, {\tt ENIPAR(,1)} specifies the energy flux density
   per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   Not yet available for WG.
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, recommended when using drifts (see Section \ref{sec:bceni} of manual for details). Linked to using BCCON=14 and BCMOM=13 for all ion species,
-   along with BCENE=15 and BCPOT=11.
+  \item[15] sheath boundary condition, recommended when using drifts (see Section \ref{sec:bceni} of manual for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species,
+   along with {\tt BCENE=15} and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENIPAR(,2)}
+    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
     If {\tt bceni\_16\_style=1}, integrated ion heat flux with constant $T_i$, summed over all core boundaries with {\tt BCENI=16}.
@@ -2839,14 +2839,14 @@ which contains
   segment; makes use of {\tt POTPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary conditon is applied (default)
+  \item[0] no boundary conditon is applied (default).
   \item[1] prescribe the value of the potential, {\tt POTPAR(,1)}
-  specifies the potential in $V$
+  specifies the potential in $V$.
   \item[2] prescribe the gradient of the potential, {\tt POTPAR(,1)}
-  specifies the potential gradient in $V.m^{-1}$
+  specifies the potential gradient in $V.m^{-1}$.
   \item[3] sheath conditions,
   {\tt POTPAR(,2)} used for biasing [see code for details].
-  BCPOT = 3 not adapted for WG. Replace with drift-compatible BCPOT = 11.
+  {\tt BCPOT = 3} not adapted for WG. Replace with drift-compatible {\tt BCPOT = 11}.
   \item[4] prescribe the value of the potential weakly a mixed
   boundary condition, {\tt POTPAR(,1)} specifies the potential in
   $V$ and {\tt POTPAR(,2)} specifies the "strength" of the
@@ -2869,20 +2869,20 @@ which contains
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
   \item[12] imposes the currents due to drifts for the core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
   \item[13] imposes the currents due to drifts for the private flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[14] Prescribe the total current without imposing a specific profile. Follow the profile of the 1st flux tube inside.
+  \item[14] Prescribe the total current without imposing a specific profile. Follow the profile of the first flux tube inside.
    Intended use: core boundary, total PF boundary,.. For testing purposes, use with care!
-  \item[15] Feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$. 
+  \item[15] Feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$.
   {\tt POTPAR(,2)} specifies the strength of the feedback.
-  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases. Not yet available for WG. 
+  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases. Not yet available for WG.
   \item[17] Feedback boundary condition on total current by imposing the potential, with same profile as neighbouring flux tube.
-  {\tt POTPAR(,1)} specifies the electric current in $A$. {\tt POTPAR(,2)} specifies the under-relaxation factor for the feedback mechanism. 
-  If not specified by the user, {\tt POTPAR(,2)} = $1^{-2}$.
+  {\tt POTPAR(,1)} specifies the electric current in $A$. {\tt POTPAR(,2)} specifies the under-relaxation factor for the feedback mechanism.
+  If not specified by the user, {\tt POTPAR(,2)} = $10^{-2}$.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
   {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
   {\tt POTPAR(,,2)} is the strength of the feedback.
    Not yet available for WG.
    \item[22]  Prescribe the value of the potential, with a perturbation taken from the first flux tube in the domain. Intended for core boundaries only.
-   {\tt POTPAR(,1)} specifies the average potential. 
+   {\tt POTPAR(,1)} specifies the average potential.
    \item[23] Feedback on the total current for the core boundary, by imposing a flux surface averaged potential, with poloidal perturbation taken from flux
     tube just inside domain. The feedback is scaled with the ion temperature.
    {\tt POTPAR(,1)} specifies the desired integral current through flux surfaces in $A$.
@@ -2893,54 +2893,54 @@ which contains
   segment; makes use of {\tt ENKPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the turbulent kinetic energy,
-  {\tt ENKPAR(,1)} specifies the energy in $eV$
+  {\tt ENKPAR(,1)} specifies the energy in $eV$.
   \item[2] prescribe the gradient of the turbulent kinetic energy,
-  {\tt ENKPAR(,1)} specifies the gradient of the turbulent kinetic energy in $eV.m^{-1}$
-  \item[6] prescribe the total flux of turbulent kinetic energy, following the 
-  profile of the total heat flux. 
-  {\tt ENKPAR(,1)} specifies the flux in $W$
-  \item[7] prescribe the total flux of turbulent kinetic energy, following the 
-  profile of the particle flux. 
-  {\tt ENKPAR(,1)} specifies the flux in $W$
-  \item[8] prescribe the total flux of turbulent kinetic energy, 
-  with constant flux density. 
-  {\tt ENKPAR(,1)} specifies the flux in $W$
+  {\tt ENKPAR(,1)} specifies the gradient of the turbulent kinetic energy in $eV.m^{-1}$.
+  \item[6] prescribe the total flux of turbulent kinetic energy, following the
+  profile of the total heat flux.
+  {\tt ENKPAR(,1)} specifies the flux in $W$.
+  \item[7] prescribe the total flux of turbulent kinetic energy, following the
+  profile of the particle flux.
+  {\tt ENKPAR(,1)} specifies the flux in $W$.
+  \item[8] prescribe the total flux of turbulent kinetic energy,
+  with constant flux density.
+  {\tt ENKPAR(,1)} specifies the flux in $W$.
   \item[14] leakage option for turbulent kinetic energy, {\tt ENKPAR(,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \kappa$
-  \item[15] Sheath loss boundary condition. For now it assumed that BCCON = 14 is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to 
-  the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENKPAR(,2)} specifies the sheath transmission factor corresponding to 
+  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \kappa$.
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to
+  the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENKPAR(,2)} specifies the sheath transmission factor corresponding to
   the particle fluxes dictated by {\tt CONPAR(,,2)}.
   \item[16] Prescribe the value of the turbulent kinetic energy, with a poloidal
-  perturbation taken from the flux tube just inside domain. 
-  kt = {\tt ENKPAR(,1)} + kt2 - kt2av, where kt2 is the enstrophy in the first cell inside the domain,
-  and kt2av is the average enstrohpy in the flux tube just inside the domain.
-  Intended for core boundaries only. 
+  perturbation taken from the flux tube just inside domain.
+  {\tt kt = ENKPAR(,1) + kt2 - kt2av}, where {\tt kt2} is the turbulent kinetic energy in the first cell inside the domain,
+  and {\tt kt2av} is the average turbulent kinetic energy in the flux tube just inside the domain.
+  Intended for core boundaries only.
   \item[17]  Feedback on the turbulent kinetic energy flux, by imposing a flux surface
    averaged $\kappa$, with a poloidal perturbation taken from the flux tube just inside the domain.
    Intended for core boundaries only. {\tt ENKPAR(,1)} specifies the flux in $W$.
-   {\tt ENKPAR(,2)} specifies the strength of the feedback. 
+   {\tt ENKPAR(,2)} specifies the strength of the feedback.
   \end{description}
 \item[BCENZ]\index{BCENZ} {\tt integer array, length NBC}, specifying the
   type of boundary condition for the turbulent enstrophy for each
   segment; makes use of {\tt ENZPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the turbulent enstrophy,
-  {\tt ENZPAR(,1)} specifies the energy in $eV$
+  {\tt ENZPAR(,1)} specifies the energy in $s^{-2}$.
   \item[2] prescribe the gradient of the turbulent enstrophy,
-  {\tt ENZPAR(,1)} specifies the gradient of the turbulent enstrophy in $eV.m^{-1}$
+  {\tt ENZPAR(,1)} specifies the gradient of the turbulent enstrophy in $s^{-2}.m^{-1}$.
   \item[14] leakage option for turbulent enstrophy, {\tt ENZPAR(,1)} specifies
   the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \zeta$
-  \item[15] Sheath loss boundary condition. For now it assumed that BCCON = 14 is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to 
-  the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENZPAR(,2)} specifies the sheath transmission factor corresponding to 
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to
+  the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENZPAR(,2)} specifies the sheath transmission factor corresponding to
   the particle fluxes dictated by {\tt CONPAR(,,2)}.
-  \item[16] Prescribe the value of the turbulent enstorphy, with a poloidal
-  perturbation taken from the flux tube just inside domain. 
-  zt = {\tt ENZPAR(,1)} + zt2 - zt2av, where zt2 is the enstrophy in the first cell inside the domain,
-  and zt2av is the average enstrohpy in the flux tube just inside the domain.
+  \item[16] Prescribe the value of the turbulent enstrophy, with a poloidal
+  perturbation taken from the flux tube just inside the domain.
+  {\tt zt = ENZPAR(,1) + zt2 - zt2av}, where {\tt zt2} is the enstrophy in the first cell inside the domain,
+  and {\tt zt2av} is the average enstrohpy in the flux tube just inside the domain.
   Intended for core boundaries only.
   \end{description}
 \item[CONPAR]\index{CONPAR} {\tt real array, length NS * NBC * 3}, supplies
@@ -4470,7 +4470,7 @@ This program rewrites an existing IDS in case a correction needs to be made (bec
 {\tt Eirene} is documented at
 \href{http://www.eirene.de/}{http://www.eirene.de/}.
 The user is strongly encouraged to check out that very complete manual.
-Reference \cite{Reiter2005} also provides a useful description.
+Reference~\cite{Reiter2005} also provides a useful description.
 
 The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI parallelization and debugging options can be requested by adding {\tt \_mpi} and {\tt \_debug} (last) to the compilation target name. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
 
@@ -4554,7 +4554,7 @@ We only include here the variables or aspects thereof not already described in t
   \item[DUM7-10] Dummy parameters, not in use in the wide grids code. Present to avoid issues when starting from a converted structured case (with additional inputs).
   \item[NCOND] Number of atoms that is allowed to ``condense" from the {\tt Eirene} kinetic to the {\tt B2.5} fluid population in the hybrid model.
   \item[LKINDP] Index of the {\tt Eirene} atom this species is linked to
-  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if ({\tt NGENA(IATM).lt.0} in block 4) and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt -10000/(NGENA+1)} (see EIRENE manual). The format of {\tt NGENA} is I3, which means that the range of transition Knudsen number is limited. However, the probability of kinetic-fluid condensation can be decreased by decreasing {\tt L\_macro\_AFN}.
+  \item[CONDENSE\_FROM] Index of atom ({\tt IATM}) that is able to condense from the kinetic to fluid population. The condensation will happen if {\tt NGENA(IATM).lt.0} in block 4 and when the Knudsen number based on the local charge-exchange mean-free path of the atom becomes smaller than the value specified by {\tt -10000/(NGENA+1)} (see {\tt Eirene} manual). The format of {\tt NGENA} is {\tt I3}, which means that the range of transition Knudsen number is limited. However, the probability of kinetic-fluid condensation can be decreased by decreasing {\tt L\_macro\_AFN}.
   \item[CONDENSE\_TO] Index of background species of block 5 ({\tt IPLS}) with the corresponding fluid neutral background.
   \item[NCVP] Total number of cells in the {\tt B2.5} mesh
   \item[NCIP] Total number of internal cells in the {\tt B2.5} mesh
@@ -4622,9 +4622,9 @@ ENDDO
   \item[ZCOOR] New Z-coordinate of the vertex being modified (in cm).
   \item[LIMPOS] Index of the additional surface to be fixed to a grid corner. The particular grid corner to which this additional surface is fixed is given by the ordering specified in the introductory paragraph of this subsection.
   \item[ONETWO] {\tt ABS(ONETWO)} is the index of the vertex being modified in that additional surface, and can only be 1 or 2
-  \item[ICOOR] The index of the EIRENE vertex whose coordinates will overwrite the original coordinates of the additional surface. 
-  \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
-  \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[ICOOR] The index of the {\tt Eirene} vertex whose coordinates will overwrite the original coordinates of the additional surface.
+  \item[XPOLPOS] Integer {\tt X}-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[YPOLPOS] Integer {\tt Y}-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
   \item[NSSIR] Index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
   \item[IDIR] Direction of the face which normal is being inverted (1 = radial, 2 = poloidal)
@@ -4753,25 +4753,22 @@ Section~\ref{sec:B2Eirene:averaging}.
 \index{b2.neutrals.parameters, D+C+He example structured}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2.neutrals.parameters}
 
-
 \subsubsection{WG code version}
 
 With all species bundled for each boundary segment (not recommended):
 \index{b2.neutrals.parameters, D+C+He example unstructured, species bundled}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2us.neutrals.parameters}
 
-With a separate stratum for each isonuclear sequence (D=0-1, C=2-8, He=9-11) for each boundary segment (recommended) :
+With a separate stratum for each isonuclear sequence ({\tt D=0-1}, {\tt C=2-8}, {\tt He=9-11}) for each boundary segment (recommended) :
 
 \index{b2.neutrals.parameters, D+C+He example unstructured, species unbundled}
 \VerbatimInput[fontsize=\footnotesize]{D+C+He/b2us.neutrals.parameters_unbundled}
 
-Note that the unbundled format has unused entries in the input file: for example {\tt recyc} is given for each ionization state of each species for each stratum, but for each stratum only the entries between {\tt SPECIES\_START} and {\tt SPECIES\_END} will be used.
-
+Note that the unbundled format has unused entries in the input file: for example {\tt RECYC} is given for each ionization state of each species for each stratum, but for each stratum only the entries between {\tt SPECIES\_START} and {\tt SPECIES\_END} will be used.
 
 In this file the user defines many parameters that are used for communication
 between the
-{\tt B2.5} and {\tt Eirene} parts of the code. Please see Appendix
-\ref{lis:b2cdcn} for full details. In particular, it is
+{\tt B2.5} and {\tt Eirene} parts of the code. Please see Appendix~\ref{lis:b2cdcn} for full details. In particular, it is
 essential that the neutrals boundary conditions declared here match, in
 number and in order, the strata declared in the {\tt Eirene} input file.
 
@@ -4781,7 +4778,7 @@ should be noted here.
 First, the number of strata {\tt NSTRAI} need no longer include the
 time-dependent {\tt 'T'} stratum.
 
-Second, the array sizes of {\tt chemical\_sputter\_yield}, is used, now need to match the
+Second, the array sizes of {\tt chemical\_sputter\_yield}, if used, now need to match the
 actual number of wall and non-standard surfaces
 {\tt NLIM} and {\tt NSTS} as they are found in the {\tt Eirene} input file.
 Non-zero values should only be assigned to
@@ -4790,11 +4787,11 @@ actual walls (so the 200 in the above example corresponds to the real number of 
 the surface numbering considers block 3B first, and then block 3A, so non-standard surfaces will have
 indices varying between {\tt NLIM+1} and {\tt NLIM+NSTS}. Moreover,
 {\tt Eirene} adds a last non-standard (absorbing) surface that is used as a "time
-boundary". If the {\tt Eirene} input file is being produced by use of the
+boundary" (or "horizon"). If the {\tt Eirene} input file is being produced by use of the
 {\tt Uinp} utility and/or the {\tt triang} script, then a
 {\tt b2.neutrals.parameters.2} file meeting these criteria will be created,
 provided a {\tt b2.neutrals.parameters} file containing any other data not
-deductible from the {\tt DG} model is present.
+deducible from the {\tt DG} model is present.
 
 Third, in \SOLPSITERns, the main chamber and private flux boundaries of the {\tt B2.5} grid are
 no longer recycling/sputtering surfaces but rather only switching surfaces to the
@@ -4808,7 +4805,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
 
 \begin{description}
   \item[NCV] Number of grid cells in the {\tt B2.5} computational grid
-  \item[NCVTOT] Number of grid cells in the {\tt B2.5} computational grid + 
+  \item[NCVTOT] Number of grid cells in the {\tt B2.5} computational grid +
                 the number of {\tt Eirene} cells that lie outside the {\tt B2.5} grid (void triangles).
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
@@ -6447,12 +6444,12 @@ V_y^{\left( in \right)} + V_y^{\left( vis \right)} +
 V_y^{\left( s \right)}
 \end{gather}
 Velocities $V_{\perp,y}^{\left( a \right)}$ are the sum of the
-$\vec{E} \times \vec{B}$ drifts and diffusive and thermo-diffusive
+$\exb$ drifts and diffusive and thermo-diffusive
 velocities.
 This part corresponds to the ambipolar flux. It is the same both for ions and
 electrons.
 The second term in the r.h.s. of
-Eqs. (\ref{eq:nf1}) and (\ref{eq:nf2})
+Eqs.~(\ref{eq:nf1}) and (\ref{eq:nf2})
 corresponds to diamagnetic flow of ions, while the other terms are caused
 by inertial, viscous and ion-neutral friction forces.
 These non-ambipolar terms are
@@ -6666,9 +6663,9 @@ The effective diamagnetic current can be chosen in a form
 \frac{\partial}{\partial x}\left(\frac{1}{B^2}\right)~.
 \end{gather}
 Current driven by parallel viscosity should be taken into account in
-Eqs. (\ref{eq:curr0}), (\ref{eq:curr1}) and (\ref{eq:curr2}).
+Eqs.~(\ref{eq:curr0}), (\ref{eq:curr1}) and (\ref{eq:curr2}).
 This current is a small correction to the diamagnetic current
-Eqs. (\ref{eq:curr3}) and (\ref{eq:curr4}).
+Eqs.~(\ref{eq:curr3}) and (\ref{eq:curr4}).
 However, on closed flux surfaces, where the pressure is almost constant,
 the diamagnetic current averaged
 over the flux surfaces tends to zero. The resulting remaining part can
@@ -6919,7 +6916,7 @@ $\tilde{\eta}_\perp$. \\
 Since $\vec{R}^e=-{\sum_{a}\vec{R}^a}$, one has a
 modified total ion momentum equation at hand which in conjuction with the
 pressure equilibrium (not affected by the additional term)
-$\vec{J} \times \vec{B} =  \nabla P$, gives the diffusive part of the
+$\vec{J} \times \vec{B} = \nabla P$, gives the diffusive part of the
 radial current, namely
 \begin{gather}
 J_y^{diff}=\frac{\tilde{\eta}_\perp en_e}{B^2} \frac{\partial P_i}{\partial y}
@@ -7037,7 +7034,7 @@ The leading numerical coefficient is then $\frac{5}{2} \frac{2.16 z}{1 + 0.27 z}
 formula \cite{NRL}. The perpendicular heat conductivity
 $\kappa_{e \perp}$ can be
 either classical or anomalous. In the last term of the energy balance
-equation, it is taken into account that the $\vec{E} \times \vec{B}$
+equation, it is taken into account that the $\exb$
 drift velocity is
 almost divergence-free.
 \end{sloppypar}
@@ -7168,7 +7165,7 @@ For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for f
 \index{drifts and currents, boundary conditions}
 \index{boundary conditions, drifts and currents}
 
-Whether one deals with the diamagnetic or ${\bf E}\times{\bf B}$ perpendicular
+Whether one deals with the diamagnetic or $\exb$ perpendicular
 drift velocity, special care must be taken to avoid unphysical flows
 at the plates. The standard boundary condition is to require that the flow be
 at least sonic at the sheath entrance \cite{STANGEBY95B},
@@ -7473,46 +7470,37 @@ the {\tt Eirene} Monte Carlo model, is covered in detail with examples in~\cite{
 \subsection{Advanced fluid neutrals}
 \index{neutrals, advanced fluid neutral model}
 
+\begin{sloppypar}
 The advanced fluid neutral (AFN) models developed by the KU Leuven group provide a description for the fluid neutrals
-that is more consistent with EIRENE than the fluid neutral model historically available in B2.5.
+that is more consistent with {\tt Eirene} than the fluid neutral model historically available in {\tt B2.5}.
 The models have been developed and tested for single-species hydrogenic cases. More research is needed to generalize for H/D/T mixtures. A fluid description for the molecules is also still missing. The transport model is derived assuming dominant CX between ions and atoms.
-The ionization, recombination and CX rates are derived from the same databases as EIRENE. The advanced fluid neutral boundary conditions provide macroscopic BCs based on integration of EIRENE's TRIM
-database over the known velocity distribution of incident ions and an assumed velocity distribution of the incident atoms. The model equations and benchmarks with EIRENE are discussed in full in the following references:
-~\cite{HorstenNF,BlommaertCtPP,VanUytven_Tn,VanUytvenPSI2022,VanUytven_AFN_assessment}.
-The AFN BCs at runtime make use of pre-computed databases. For certain combinations of incident particles and wall materials, these are stored in {\tt B2.5/Database/trim.data/refl.data}.
-The pre-processor to create new databases for new combinations of incident particles and wall materials is now available in the source code as {\tt b2ab}.
-A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under 
-\newline
- {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
-The LaTeX source files for this pdf are available in \newline 
-{\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code/}. An example {\tt b2ab.dat} file is available under 
-\newline
-{\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab/}.
+The ionization, recombination, and CX rates are derived from the same databases as {\tt Eirene}. The advanced fluid neutral boundary conditions provide macroscopic BCs based on integration of the {\tt TRIM}
+database from {\tt Eirene} over the known velocity distribution of incident ions and an assumed velocity distribution of the incident atoms. The model equations and benchmarks with {\tt Eirene} are discussed in full in the following references:~\cite{HorstenNF,BlommaertCtPP,VanUytven_Tn,VanUytvenPSI2022,VanUytven_AFN_assessment}.
+The AFN BCs at runtime make use of pre-computed databases. For the most common combinations of incident particles and wall materials, these are stored in {\tt B2.5/Database/trim.data/refl.data}.
+A pre-processor to create new databases for new combinations of incident particles and wall materials is available in the source code as {\tt b2ab}.
+A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
+The \LaTeX source files for this PDF are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code}. An example {\tt b2ab.dat} file is available under {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab}.
 
-Additionally, there are two presentation on the \SOLPSITER SharePoint website, explaining the setup of AFN cases: \newline 
-{\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_AFN} and \newline 
-{\tt SOLPS-ITER Extended Grids Workshops / AFN handson session}. 
+Additionally, there are two PDF presentations on the \SOLPSITER SharePoint website, in the \href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/SOLPS-ITER\%20Extended\%20Grids\%20Workshops}{SOLPS-ITER Extended Grids Workshops} directory, explaining the setup of AFN cases: {\tt workshop\_presentation\_AFN} and {\tt AFN handson session}.
+\end{sloppypar}
 
 \subsection{Spatially hybrid fluid-kinetic neutrals}
 \index{neutrals, spatially hybrid neutral model}
 
 The spatially hybrid (SpH) fluid-kinetic neutral models aim to combine the benefits of fluid and kinetic neutral modeling in a consistent way.
-The goal is to keep neutrals kinetic in the regions where they have longer mean-free paths, and/or in the first few collisions after recycling (first flight), 
-but to have a fluid neutral model in the CX-dominated regions where the mean-free paths are short, and where consequently the EIRENE CPU time per particle is large. 
+The goal is to keep neutrals kinetic in the regions where they have longer mean-free paths, and/or as they undergo the first few collisions after recycling (first flight),
+but to have a fluid neutral model in the CX-dominated regions where the mean-free paths are short, and where consequently the {\tt Eirene} CPU time per particle trajectory is large.
 
-The spatially hybrid approach is discussed in detail in the References \cite{blommaert2019spatially,VanUytven_advanced_SpH,horsten2021application,borodin2022fluid,van2023phd}.
-On the \SOLPSITER SharePoint website, there are two presentation explaining the setup of spatially hybrid cases: \newline 
- {\tt SOLPS-ITER Extended Grids Workshops / workshop\_presentation\_hybrid} and \newline 
- {\tt SOLPS-ITER Extended Grids Workshops / hybrid handson session}.
+The spatially hybrid approach is discussed in detail in the references~\cite{blommaert2019spatially,VanUytven_advanced_SpH,horsten2021application,borodin2022fluid,van2023phd}.
+On the \SOLPSITER SharePoint website, in the \href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/SOLPS-ITER\%20Extended\%20Grids\%20Workshops}{SOLPS-ITER Extended Grids Workshops} directory, there are two presentations explaining the setup of spatially hybrid cases: {\tt workshop\_presentation\_hybrid} and {\tt hybrid handson session}.
 
 Very good agreement between the hybrid and the fully kinetic methods has been achieved, while strongly reducing the average CPU time per particle. However, more work is needed before the SpH model can truly speed up simulations by orders of magnitude in all conditions:
 
 \begin{itemize}
 \item Since there is no fluid approximation for the neutral molecules, they have to be kept fully kinetic. However, in detached conditions, the CPU time for the molecules is not negligible compared to the atoms.
 \item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this interface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
-\item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata in the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach. 
+\item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata along the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach.
 \end{itemize}
-
 
 \subsection{First-flight model}
 \index{neutrals, first-flight model}
@@ -7792,7 +7780,7 @@ Note also that, in the code, the magnetic field components are always positive, 
 \left\{
 \begin{aligned}
 \Gamma_{ay}^{\left( PSch \right)} , &  \  z_a = 0 \\
-\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , &  \  z_a \neq 0
+\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , &  \ z_a \neq 0
 \end{aligned} \right.
 \end{equation}
 
@@ -7998,14 +7986,14 @@ W_{ay}^{\left( dia \right)} =
 \end{equation}
 
 \begin{equation}
-V_{a \perp}^{\left( E \times B \right)} =
+V_{a \perp}^{\left( \exb \right)} =
 \left\{
 \begin{aligned}
 -\frac{1}{B} \frac{1}{h_y} \frac{\partial \Phi}{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
-V_{ay}^{\left( E \times B \right)} =
+V_{ay}^{\left( \exb \right)} =
 \left\{
 \begin{aligned}
 \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x}, & \ z_a \neq 0 \\
@@ -8123,7 +8111,7 @@ is a (physically meaningless) damping term, often called the "Rhie and Chow" cor
 V_{ax}^{\left( E\right)} & =
 & \left\{
 \begin{matrix}
--c_{E\times B} \frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi }{\partial y}, & \ z_a \neq 0 \\
+-c_{\exb} \frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi }{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8134,7 +8122,7 @@ V_{ax}^{\left( E\right)} & =
 V_{ay}^{\left( E \right)} & =
 & \left\{
 \begin{matrix}
-c_{E\times B} \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi }{\partial x}, & \ z_a \neq 0 \\
+c_{\exb} \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi }{\partial x}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8842,28 +8830,28 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
 \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{q}_{ey} \right) +
 \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) = \notag \\
-= Q_e &+ c_{E\times B} n_e T_e B_z \frac{1}{h_x h_y}
+= Q_e &+ c_{\exb} n_e T_e B_z \frac{1}{h_x h_y}
 \left(
         \frac{\partial \Phi }{\partial y} \frac{\partial}{\partial x} \left(\frac{1}{B^2} \right) -
         \frac{\partial \Phi }{\partial x} \frac{\partial}{\partial y} \left(\frac{1}{B^2} \right)
 \right)
 -
 \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
-+ Q_{Fei} + Q_e^{\rm EIRENE} \\
-& + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,||}
++ Q_{Fei} + Q_e^{\rm EIRENE} \notag \\
+& + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,\parallel}
 \end{align}
 
 \subsection{Electron energy sources}
 
 \begin{multline}\label{eq:ene_seheat}
- S_e^{heat} = Q_e + c_{E\times B} n_e T_e B_z \frac{1}{h_x h_y}
+ S_e^{heat} = Q_e + c_{\exb} n_e T_e B_z \frac{1}{h_x h_y}
 \left(
         \frac{\partial \Phi }{\partial y} \frac{\partial}{\partial x} \left(\frac{1}{B^2} \right) -
         \frac{\partial \Phi }{\partial x} \frac{\partial}{\partial y} \left(\frac{1}{B^2} \right)
 \right)
 - \frac{j_y^{(ST)}}{e n_e} \frac{\partial n_e T_e}{h_y \partial y}
 + Q_{Fei} -\\
-- \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) + Q_e^{\rm EIRENE} + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,||}
+- \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) + Q_e^{\rm EIRENE} + Q_e^{\kappa,\mathrm{inter}} + Q_e^{\kappa,\parallel}
 \end{multline}
 
 $Q_e = -Q_{\Delta } - Q_R$
@@ -8915,7 +8903,7 @@ j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is ac
 \end{aligned}\right.
 \end{equation}
 
-$Q_e^{\kappa,\mathrm{inter}}$ and $Q_e^{\kappa,||}$ are interchange terms related to the $\kappa$-model, see Eqs. \ref{eq:sikt_t1} and \ref{eq:sikt_t3}.
+$Q_e^{\kappa,\mathrm{inter}}$ and $Q_e^{\kappa,\parallel}$ are interchange terms related to the $\kappa$-model, see Eqs.~(\ref{eq:sikt_t1}) and (\ref{eq:sikt_t3}).
 
  %-------- end of 9th page -------------
 
@@ -9383,7 +9371,7 @@ $\alpha^{(CL)}_{y} = 0$
         \frac{\sqrt g}{h_x} V_{a \parallel} b_x
 \right) =
 \\
-= Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
+= Q_{\Delta} + Q_{F_{ab}} +  c_{\exb} T_i B_z \frac{1}{h_x h_y} \left(
         \frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
                 \frac{1}{B^2}
         \right) -
@@ -9409,7 +9397,7 @@ The "sum over fluid species" above means the species index $a$ ranges from $0$ t
 
 \begin{multline}\label{eq:eni_siheat}
 %\begin{matrix}
- S_i^{heat} =  Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
+ S_i^{heat} =  Q_{\Delta} + Q_{F_{ab}} +  c_{\exb} T_i B_z \frac{1}{h_x h_y} \left(
         \frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
                 \frac{1}{B^2}
         \right) -
@@ -9517,7 +9505,7 @@ $
 \end{matrix}
 $
 
-$Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-model, see Eq. \ref{eq:sikt_t0}.
+$Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-model, see Eq.~(\ref{eq:sikt_t0}).
 
 \subsection{Poloidal ion energy fluxes}
 
@@ -9748,17 +9736,12 @@ $V_{ix}^{(str)}=0$
 
 \subsection{Radial ion energy fluxes}
 
-\begin{equation}\label{eq:eni_tiqiy}
-\begin{matrix}
+\begin{multline}\label{eq:eni_tiqiy}
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
-\kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch} = \left[\frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
-        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} + j^{(\kappa,\mathrm{RS})}_y
-\right)} e \right] T_i - \\
-- \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch}
-\end{matrix}
-\end{equation}
+\kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} - q_{iy}^{P.Sch} \\
+= \left[\frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
+        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} + j^{(\kappa,\mathrm{RS})}_y \right)}{e} \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} - q_{iy}^{P.Sch}
+\end{multline}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
@@ -9920,7 +9903,7 @@ $j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity 
 
 $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+For the definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 The poloidal component of the ion-neutral current is
 
@@ -9985,13 +9968,13 @@ it is a mix of post-processed EIRENE perpendicular atom velocities and B2.5 CX r
 
 $j_x^{(\parallel)}$ - see Eq.~(\ref{eq:fch_p}) above.
 
-$j^{(\kappa,\mathrm{RS})}_x$ - see Eq. \ref{eq:j_RS} below.
+$j^{(\kappa,\mathrm{RS})}_x$ - see Eq.~(\ref{eq:j_RS}) below.
 
 \subsection{Radial currents}
 
 \begin{equation}\label{eq:pot_jy}
 j_y = j_y^{(AN)} + \widetilde{j}_y^{(dia)} + j_y^{(in)} + \widetilde{j}_y^{(vis \parallel)} + j_y^{(vis \perp)}
-+ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)} + j_y^{(ST)} + j^{(\kappa,\mathrm{RS})}_y 
++ \widetilde{j}_y^{(visq)} + \widetilde{j}_y^{(s)} + j_y^{(ST)} + j^{(\kappa,\mathrm{RS})}_y
 \end{equation}
 
 \begin{equation}\label{eq:pot_jyan}
@@ -10140,7 +10123,7 @@ The diamagnetic neutral flux $\Gamma_{a_{0}\perp}$ is the density-weighted avera
 
 $\sigma_{aa_0}$ see Eq.~(\ref{eq:pot_sigaa0}) above.
 
-$j^{(\kappa,\mathrm{RS})}_y$ - see Eq. \ref{eq:j_RS} below.
+$j^{(\kappa,\mathrm{RS})}_y$ - see Eq.~(\ref{eq:j_RS}) below.
 
 \subsection{Conductivities}
 
@@ -10202,126 +10185,119 @@ Note: the equations above are written in the 'old' form. In the unstructured cod
 
 \subsection{Purpose}
 
-The aim of the $\kappa$-model is to capture the average effect of plasma turbulence in a mean-field code like {\tt SOLPS-ITER}, thereby improving the 
-predictive capabilities of the code compared to the use of ad-hoc anomalous perpendicular transport coefficients. The model is optional and the main switch to activate it is
-{\tt b2mndr\_solve\_keps}. The development of the models is described in References
- \cite{coosemans2020new,carli2020interchange,coosemans2021bayesian,de2021bayesian,coosemans2021turbulent,dekeyser2022self,coosemans2022self,coosemans2024mean}. Ref. \cite{dekeyser2022self} presents an overview of the work and the equations is this manual are derived from that paper. While the paper often makes use of proportionality signs $\sim$, they are replaced here by equality signs, to better represent the code implementation. 
- 
+The aim of the $\kappa$-model is to capture the average effect of plasma turbulence in a mean-field code like \SOLPSITERns, thereby improving the
+predictive capabilities of the code compared to the use of {\it ad hoc} anomalous perpendicular transport coefficients. The model is optional and the main switch to activate it is
+{\tt b2mndr\_solve\_keps}. The development of the model is described in references~\cite{coosemans2020new,carli2020interchange,coosemans2021bayesian,de2021bayesian,coosemans2021turbulent,dekeyser2022self,coosemans2022self,coosemans2024mean}. Ref.~\cite{dekeyser2022self} presents an overview of the work and the equations in this manual are derived from that paper. While the paper often makes use of proportionality signs $\sim$, they are replaced here by equality signs, to better represent the code implementation.
+
 For a general quantity $x$ we have either a Reynolds
-decomposition $x = \overline{x} + x'$, or a Favre decomposition $x = \widetilde{x} + x''$, where $\overline{x} = \mathrm{lim}_{T \rightarrow \infty} \frac{1}{T} \int_T x \mathrm{d}t$
-and $\widetilde{x} = \overline{xn} / \overline{n}$. For example, $\overline{n}$ corresponds to $n_i$ in {\tt B2.5} and $\widetilde{T_i}$ corresponds to $T_i$ in {\tt B2.5}. However, 
-{\tt B2.5} has no direct information on the fluctuations (e.g. $n'$ or $T_i''$) because it is not a turbulence code. The goal of the $\kappa$-model is to approximate the most important
-terms containing products of the fluctuations, using available mean-field information. 
+decomposition $x = \overline{x} + x^\prime$, or a Favre decomposition $x = \widetilde{x} + x^{\prime\prime}$, where $\overline{x} = \mathrm{lim}_{T \rightarrow \infty} \frac{1}{T} \int_T x \mathrm{d}t$
+and $\widetilde{x} = \overline{x n} / \overline{n}$. For example, $\overline{n}$ corresponds to $n_i$ in {\tt B2.5} and $\widetilde{T_i}$ corresponds to $T_i$ in {\tt B2.5}. However,
+{\tt B2.5} has no direct information on the fluctuations (e.g. $n^\prime$ or $T_i^{\prime\prime}$) because it is not a turbulence code. The goal of the $\kappa$-model is to approximate the most important
+terms containing products of the fluctuations, using available mean-field information.
 
-
-The model assumes that electrostatic $E{\times}B$ interchange turbulence is the dominant anomalous transport mechanism.
-The user-defined anomalous transport coefficients, $D_i^{(AN)}$, $\chi_i^{(AN)}$, $\chi_e^{(AN)}$ and $\nu_i^{(AN)}$ are replaced by $\dexb$, $\heexb$, $\hiexb$ and $\nuexb$.
-$\heexb$, $\hiexb$ and $\nuexb$ scale with $\dexb$, i.e. $\heexb = \kepsheate \ \dexb$, $\hiexb = \kepsheati \ \dexb$ and $\nuexb = \kepsvisc \ \dexb$, where $\kepsheati$, $\kepsheate$ and $\kepsvisc$ are constants of order unity. To avoid zero diffusion, minimum diffusion coefficients $D_{i,\mathrm{min}}$, $\chi_{i,\mathrm{min}}$, $\chi_{e,\mathrm{min}}$ and $\nu_{i,\mathrm{min}}$ are added to $\dexb$, $\hiexb$, $\heexb$ and $\nuexb$, respectively. $\dexb$ is given by 
+The model assumes that electrostatic $\exb$ interchange turbulence is the dominant anomalous transport mechanism.
+The user-defined anomalous transport coefficients, $D_i^{(AN)}$, $\chi_i^{(AN)}$, $\chi_e^{(AN)}$, and $\nu_i^{(AN)}$ are replaced by $\dexb$, $\heexb$, $\hiexb$, and $\nuexb$.
+$\heexb$, $\hiexb$, and $\nuexb$ scale with $\dexb$, i.e. $\heexb = \kepsheate \ \dexb$, $\hiexb = \kepsheati \ \dexb$ and $\nuexb = \kepsvisc \ \dexb$, where $\kepsheati$, $\kepsheate$ and $\kepsvisc$ are constants of order unity. To avoid zero diffusion, minimum diffusion coefficients $D_{i,\mathrm{min}}$, $\chi_{i,\mathrm{min}}$, $\chi_{e,\mathrm{min}}$, and $\nu_{i,\mathrm{min}}$ are added to $\dexb$, $\hiexb$, $\heexb$, and $\nuexb$, respectively. $\dexb$ is given by:
 
 \begin{equation}
 \dexb = \kepscd \frac{\kappa/m}{\sqrt{\kappa/m}/\kepsrho + \kepscs |S_{mean}|}.
 \end{equation}
 
-Here, $\kappa$ is the turbulent kinetic energy, $m$ is the ion mass, $\kepsrho$ is the ion Larmor radius, $|S_{mean}|$ is the mean $E{\times}B$ flow shear, and $\kepscs$ is a user-defined multiplier to choose the importance of the flow shear contribution. With $\kepscs=0$, $\dexb = \kepscd \kepsrho \sqrt{\kappa/m}$ remains.
+Here, $\kappa$ is the turbulent kinetic energy, $m$ is the ion mass, $\kepsrho$ is the ion Larmor radius, $|S_{mean}|$ is the mean $\exb$ flow shear, and $\kepscs$ is a user-defined multiplier to choose the importance of the flow shear contribution. With $\kepscs=0$, $\dexb = \kepscd \kepsrho \sqrt{\kappa/m}$ remains.
 
-The turbulent kinetic energy is defined by
+The turbulent kinetic energy is defined by:
 \begin{equation}\label{eq:dekeyser31}
-\overline{n} \kappa \equiv \frac{m \overline{n {\mathbf{V}''_E}^2}}{2},
+\overline{n} \kappa \equiv \frac{m \overline{n {\mathbf{V}^{\prime\prime}_E}^2}}{2},
 \end{equation}
 
-where ${\mathbf{V}''_E}$ are the fluctuations of the $E{\times}B$ velocity.
+where ${\mathbf{V}^{\prime\prime}_E}$ is the fluctuation of the $\exb$ velocity.
 
-In Reference \cite{coosemans2021turbulent} it is shown that the anomalous transport due to isothermal electrostatic $E{\times}B$ fluctuations can be
+In Ref.~\cite{coosemans2021turbulent}, it is shown that the anomalous transport due to isothermal electrostatic $\exb$ fluctuations can be
 described rather accurately through a diffusive model
 
 \begin{equation}\label{eq:dekeyser30}
-\overline{n' \mathbf{V}'_E} = - \dexb \nabla_\perp \overline{n}.
+\overline{n^\prime \mathbf{V}^\prime_E} = - \dexb \nabla_\perp \overline{n}.
 \end{equation}
 
- In Reference \cite{coosemans2022self} it is additionally shown that the electron and ion heat fluxes due
-to $E{\times}B$ fluctuations can be approximated with a diffusive relation, where the diffusivities follow the same characteristic
+ In Ref.~\cite{coosemans2022self}, it is additionally shown that the electron and ion heat fluxes due
+to $\exb$ fluctuations can be approximated with a diffusive relation, where the diffusivities follow the same characteristic
 scaling as $\dexb$ up to a constant of order unity:
 
-\begin{equation}\label{eq:dekeyser32} 
-\frac{3}{2} \overline{n \mathbf{V}''_E {T''_e}} = - \overline{n} \heexb \nabla_{\perp} \widetilde{T_e} ,
+\begin{equation}\label{eq:dekeyser32}
+\frac{3}{2} \overline{n \mathbf{V}^{\prime\prime}_E {T^{\prime\prime}_e}} = - \overline{n} \heexb \nabla_{\perp} \widetilde{T_e} ,
 \end{equation}
 
 \begin{equation}\label{eq:dekeyser33}
-\frac{3}{2} \overline{n \mathbf{V}''_E T''_i} = - \overline{n} \hiexb \nabla_\perp \widetilde{T_i}.
+\frac{3}{2} \overline{n \mathbf{V}^{\prime\prime}_E T^{\prime\prime}_i} = - \overline{n} \hiexb \nabla_\perp \widetilde{T_i}.
 \end{equation}
 
 In the absence of dedicated simulations, we assume that also the parallel momentum
 transport due to these fluctuations will follow a similar diffusive law,
 
 \begin{equation}\label{eq:dekeyser34}
-m \overline{n {u_{||}''} \mathbf{V}''_E} = - m \overline{n} \nuexb \nabla_\perp \widetilde{u_{||}}.
+m \overline{n {u_\parallel^{\prime\prime}} \mathbf{V}^{\prime\prime}_E} = - m \overline{n} \nuexb \nabla_\perp \widetilde{u_\parallel}.
 \end{equation}
-
 
 All research regarding the $\kappa$-model up till now has been performed for single-species deuterium cases, such that $n = n_i = n_e$.
-The current approach for multi-species cases in SOLPS-ITER is to assume that the turbulent kinetic energy is only determined by the main ion species 
-and that $\dexb$ is the same for all ion species. 
+The current approach for multi-species cases in \SOLPSITER is to assume that the turbulent kinetic energy is only determined by the main ion species
+and that $\dexb$ is the same for all ion species.
 
+\subsection{Model equations for turbulent kinetic energy}\label{eq:kmodel_main}
 
-\subsection{Model equation for turbulent kinetic energy}\label{eq:kmodel_main}
-
-The transport equation for $\kappa$, as given by Eq. 41 in Ref. \cite{dekeyser2022self} is
+The transport equation for $\kappa$, as given by Eq.~41 in Ref.~\cite{dekeyser2022self} is
 
 \begin{equation}
-\underbrace{\frac{\partial \overline{n} \kappa}{\partial t}}_\text{term 1} + 
-\nabla \cdot \Big( 
-\underbrace{\overline{n} \widetilde{\mathbf{V}} \kappa}_\text{term 2} 
-+ 
-\underbrace{\frac{m}{2} \overline{n \mathbf{V}'' {\mathbf{V}''}^2_E}}_\text{term 3}
+\underbrace{\frac{\partial \overline{n} \kappa}{\partial t}}_\text{term 1} +
+\nabla \cdot \left(
+\underbrace{\overline{n} \widetilde{\mathbf{V}} \kappa}_\text{term 2}
 +
-\underbrace{ \overline{\phi' {j'}_{||} } \mathbf{b}}_\text{term 4} \Big) 
+\underbrace{\frac{m}{2} \overline{n \mathbf{V}^{\prime\prime} {\mathbf{V}^{\prime\prime}}^2_E}}_\text{term 3}
++
+\underbrace{ \overline{\phi^\prime j^\prime_\parallel } \mathbf{b}}_\text{term 4} \right)
 =
 - \underbrace{\mathbf{\Pi}_\mathrm{RS} : \nabla {\overline{\mathbf{V}_E}}^T }_\text{term 5}
-+ \underbrace{\overline{{j'}_{||} \nabla_{||} \phi'}}_\text{term 6}
-- \underbrace{\overline{p' \mathbf{V}'_E} \cdot \nabla \mathrm{ln} B^2}_\text{term 7} .
++ \underbrace{\overline{j^\prime_\parallel \nabla_\parallel \phi^\prime}}_\text{term 6}
+- \underbrace{\overline{p^\prime \mathbf{V}^\prime_E} \cdot \nabla \mathrm{ln} B^2}_\text{term 7} .
 \end{equation}
 
+{\tt Term 1} is the time evolution of $\kappa$, where $\overline{n} = n_i$. This term is similar to the time derivatives of densities, parallel velocities, and temperatures.
 
-{\tt term 1} is the time evolution of $\kappa$, where $\overline{n} = n_i$. This term is similar to the time derivatives of densities, parallel velocities and temperatures.
+{\tt Term 2} is the advection of $\kappa$ with $\overline{n} \widetilde{\mathbf{V}}$, which is the mean-field ion flux $\Gamma_i$.
 
-{\tt term 2} is the advection of $\kappa$ with $\overline{n} \widetilde{\mathbf{V}}$, which is the mean-field ion flux $\Gamma_i$.
-
-{\tt term 3} was shown to be only a minor transport term in Ref. \cite{coosemans2021turbulent} and is modelled as a small diffusion term on $\kappa$ that mainly
+{\tt Term 3} was shown to be only a minor transport term in Ref.~\cite{coosemans2021turbulent} and is modelled as a small diffusion term on $\kappa$ that mainly
 facilitates the numerical implementation:
 
 \begin{equation}\label{eq:dekeyser42}
-\frac{m}{2} \overline{n {\mathbf{V}''} {\mathbf{V}''_E}^2 } \approx - \overline{n} \hckexb \nabla \kappa,
+\frac{m}{2} \overline{n {\mathbf{V}^{\prime\prime}} {\mathbf{V}^{\prime\prime}_E}^2 } \approx - \overline{n} \hckexb \nabla \kappa,
 \end{equation}
 
-with $\hckexb =  \kepskappa \dexb$ and $\kepskappa$ a model constant.
+with $\hckexb = \kepskappa \dexb$ and $\kepskappa$ a model constant.
 
-{\tt term 4} is approximated as 
+{\tt Term 4} is approximated as
 
 \begin{equation}\label{eq:dekeyser46}
-\overline{\phi' j_{||}'} \mathbf{b} = - \kepscsigpar \sigma_{||} B^2 \kepsrho^2 \big( \nabla_{||} \frac{\kappa}{m} \big) \mathbf{b},
+\overline{\phi^\prime j_\parallel^\prime} \mathbf{b} = - \kepscsigpar \sigma_\parallel B^2 \kepsrho^2 \left( \nabla_\parallel \frac{\kappa}{m} \right) \mathbf{b},
 \end{equation}
 
 with $\kepscsigpar$ a constant introduced in the model that can be used to control the magnitude of the parallel transport, and
 can be expected to be of order unity.
 
-{\tt term 5} is related to the Reynolds stress-tensor $\mathbf{\Pi}_\mathrm{RS}$. We want to model the dominant effect that $E{\times}B$ flow shear, in particular
-radial shear of the poloidal $E{\times}B$ velocity tends to tear turbulent eddies apart, reducing the turbulence intensity and associated
-transport. To accomplish this, we assume that the $E{\times}B$ contribution will be dominant to the Reynolds stress tensor, and use a negative turbulent
-viscosity model to make the corresponding term in Equation \ref{eq:kmodel_main} a sink:
+{\tt Term 5} is related to the Reynolds stress-tensor $\mathbf{\Pi}_\mathrm{RS}$. We want to model the dominant effect that $\exb$ flow shear, in particular
+radial shear of the poloidal $\exb$ velocity, tends to tear turbulent eddies apart, reducing the turbulence intensity and associated transport. To accomplish this, we assume that the $\exb$ contribution will dominate the Reynolds stress tensor, and use a negative turbulent viscosity model to make the corresponding term in Equation~(\ref{eq:kmodel_main}) a sink:
 
 \begin{equation}\label{eq:dekeyser48}
-\mathbf{\Pi}_\mathrm{RS} = \frac{2}{3} \overline{n} \kappa I - 2 \etaexb \Big( \frac{1}{2} \Big( \nabla \overline{\mathbf{V}_E} + \nabla \overline{\mathbf{V}_E}^T \Big)
-- \frac{1}{3} \Big( \nabla \cdot \overline{\mathbf{V}_E} \Big) I \Big),
+\mathbf{\Pi}_\mathrm{RS} = \frac{2}{3} \overline{n} \kappa \mathds{I} - 2 \etaexb \left( \frac{1}{2} \left( \nabla \overline{\mathbf{V}_E} + \nabla \overline{\mathbf{V}_E}^T \right)
+- \frac{1}{3} \left( \nabla \cdot \overline{\mathbf{V}_E} \right) \mathds{I} \right),
 \end{equation}
 
-where $I$ is the identity tensor. Note that the trace of this tensor is determined by $\kappa$, as it should by definition, while the
+where $\mathds{I}$ is the identity tensor. Note that the trace of this tensor is determined by $\kappa$, as it should by definition, while the
 anisotropic piece is determined by the rate-of-strain tensor multiplied by a turbulent viscosity $\etaexb$ which we assume to
-be negative, $\etaexb = - \kepseta m \overline{n} \dexb$. With this model for $\mathbf{\Pi}_\mathrm{RS}$, {\tt term 5} 
+be negative, $\etaexb = - \kepseta m \overline{n} \dexb$. With this model for $\mathbf{\Pi}_\mathrm{RS}$, {\tt term 5}
 becomes
 
 \begin{equation}\label{eq:dekeyser49}
 - \mathbf{\Pi}_\mathrm{RS} : \nabla \overline{V_E}^T = \frac{2}{3} \overline{n} \kappa \overline{\mathbf{V}_E} \cdot \nabla \mathrm{ln} B^2
-- \frac{2}{3} \etaexb \big( \overline{\mathbf{V}_E} \cdot \nabla \mathrm{ln} B^2 \big)^2 + \etaexb \big( \nabla_r \overline{V_{E,\theta}} \big)^2.
+- \frac{2}{3} \etaexb \left( \overline{\mathbf{V}_E} \cdot \nabla \mathrm{ln} B^2 \right)^2 + \etaexb \left( \nabla_r \overline{V_{E,\theta}} \right)^2.
 \end{equation}
 
 As with the interchange and parallel dissipation terms, we need to consider global energy conservation in our model.
@@ -10329,63 +10305,61 @@ In contrast to the previous terms which exchange energy with the ion or electron
 appears in the perpendicular momentum equation instead, and hence leads to an additional mean-field drift.
 Using our model for $\mathbf{\Pi}_\mathrm{RS}$, the resulting drift can be approximated as
 
-
 \begin{equation}\label{eq:dekeyser50}
- \frac{\mathbf{b}}{B} \times \nabla \cdot \mathbf{\Pi}_\mathrm{RS} \approx \frac{\mathbf{b}}{B} \times \nabla \big(  \frac{2}{3} \overline{n} \kappa \big)
- - \frac{\mathbf{e}_r}{B} \nabla \cdot \big( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \big),
+ \frac{\mathbf{b}}{B} \times \nabla \cdot \mathbf{\Pi}_\mathrm{RS} \approx \frac{\mathbf{b}}{B} \times \nabla \left( \frac{2}{3} \overline{n} \kappa \right)
+ - \frac{\mathbf{e}_r}{B} \nabla \cdot \left( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \right),
 \end{equation}
 
-where $\overline{V_{E,\wedge}} = \big( \nabla_r \overline{\phi} \big) / B$ is the component of the $E{\times}B$ velocity in the diamagnetic direction.
+where $\overline{V_{E,\wedge}} = \left( \nabla_r \overline{\phi} \right) / B$ is the component of the $\exb$ velocity in the diamagnetic direction.
 
-
-{\tt term 6} is approximated as 
+{\tt Term 6} is approximated as
 
 \begin{equation}\label{eq:dekeyser47}
-\overline{j_{||}'  \nabla_{||} \phi' } \approx - \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m},
+\overline{j_\parallel^\prime  \nabla_\parallel \phi^\prime } \approx - \kepscsigpartwo \sigma_\parallel B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m},
 \end{equation}
 
-with a second model constant $\kepscsigpartwo$ and $L_{\mathrm{conn}}$ the connection length. 
+with a second model constant $\kepscsigpartwo$ and $L_{\mathrm{conn}}$ the connection length.
 
-{\tt term 7} is the source of $\kappa$ due to the interchange mechanism. This was found to be the dominant source of $\kappa$ in recent studies of interchange $E{\times}B$ drift turbulence for the SOL using TOKAM2D simulations \cite{coosemans2021turbulent,coosemans2020new,coosemans2021bayesian,coosemans2022self}. No additional closure is needed
-for this term for electrostatic $E{\times}B$ turbulence, as a closure for the turbulent heat flux due to ions and electrons is already
+{\tt Term 7} is the source of $\kappa$ due to the interchange mechanism. This was found to be the dominant source of $\kappa$ in recent studies of interchange $\exb$ drift turbulence for the SOL using TOKAM2D simulations \cite{coosemans2021turbulent,coosemans2020new,coosemans2021bayesian,coosemans2022self}. No additional closure is needed
+for this term for electrostatic $\exb$ turbulence, as a closure for the turbulent heat flux due to ions and electrons is already
 proposed above. Indeed, using the properties of Reynolds and Favre averages one can show that
 
 \begin{equation}\label{eq:dekeyser43}
-\overline{p' \mathbf{V}'_E} = \overline{n' \mathbf{V}'_E} \big( \widetilde{T_e} + \widetilde{T_i}\big)
-+ \overline{n \mathbf{V}''_E T_e''} + \overline{n \mathbf{V}''_E T_i''} , 
+\overline{p^\prime \mathbf{V}^\prime_E} = \overline{n^\prime \mathbf{V}^\prime_E} \left( \widetilde{T_e} + \widetilde{T_i} \right)
++ \overline{n \mathbf{V}^{\prime\prime}_E T_e^{\prime\prime}} + \overline{n \mathbf{V}^{\prime\prime}_E T_i^{\prime\prime}} ,
 \end{equation}
 
-so that the closures proposed in Equations \ref{eq:dekeyser30}, \ref{eq:dekeyser32} and \ref{eq:dekeyser33} can be used to close the interchange term.
+so that the closures proposed in Equations~(\ref{eq:dekeyser30}), (\ref{eq:dekeyser32}), and (\ref{eq:dekeyser33}) can be used to close the interchange term.
 
 The heat source terms that end up in the ion and electron heat equation are:
 
 \begin{align}\label{eq:sikt_t0}
-Q_i^{\kappa,\mathrm{inter}} & = -\bigg( - \Big( \overline{n' \mathbf{V}'_E} \widetilde{T_i} + \overline{n \mathbf{V}''_E T_i''}  \Big) \cdot \nabla \mathrm{ln} B^2 \bigg) \nonumber \\ 
-  & = -\Big( \dexb \nabla_\perp \overline{n} \widetilde{T_i} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_i}  \Big) \cdot \nabla \mathrm{ln} B^2 
+Q_i^{\kappa,\mathrm{inter}} & = - \left( - \left( \overline{n^\prime \mathbf{V}^\prime_E} \widetilde{T_i} + \overline{n \mathbf{V}^{\prime\prime}_E T_i^{\prime\prime}} \right) \cdot \nabla \mathrm{ln} B^2 \right) \nonumber \\
+  & = - \left( \dexb \nabla_\perp \overline{n} \widetilde{T_i} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_i} \right) \cdot \nabla \mathrm{ln} B^2
 \end{align}
 
 \begin{align}\label{eq:sikt_t1}
-Q_e^{\kappa,\mathrm{inter}} & = - \bigg( \Big( \overline{n' \mathbf{V}'_E} \widetilde{T_e} + \overline{n \mathbf{V}''_E T_e''}  \Big) \cdot \nabla \mathrm{ln} B^2 \bigg) \nonumber \\ 
-  & = -\Big(  \dexb \nabla_\perp \overline{n} \widetilde{T_e} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_e}   \Big) \cdot \nabla \mathrm{ln} B^2 
+Q_e^{\kappa,\mathrm{inter}} & = - \left( \left( \overline{n^\prime \mathbf{V}^\prime_E} \widetilde{T_e} + \overline{n \mathbf{V}^{\prime\prime}_E T_e^{\prime\prime}} \right) \cdot \nabla \mathrm{ln} B^2 \right) \nonumber \\
+  & = - \left( \dexb \nabla_\perp \overline{n} \widetilde{T_e} + \overline{n} \heexb \nabla_{\perp} \widetilde{T_e} \right) \cdot \nabla \mathrm{ln} B^2
 \end{align}
 
 \begin{align}\label{eq:sikt_t3}
-Q_e^{\kappa,||} & = - \overline{j_{||}'  \nabla_{||} \phi' } \nonumber \\
-  & = \kepscsigpartwo \sigma_{||} B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m}
+Q_e^{\kappa,\parallel} & = - \overline{j_\parallel^\prime \nabla_\parallel \phi^\prime } \nonumber \\
+  & = \kepscsigpartwo \sigma_\parallel B^2 \frac{\kepsrho^2}{L_{\mathrm{conn}}^2} \frac{\kappa}{m}
 \end{align}
 
-The current due to the Reynolds stress is 
+The current due to the Reynolds stress is
 
 \begin{equation}\label{eq:j_RS}
-j^{(\kappa,\mathrm{RS})} = \frac{\mathbf{b}}{B} \times \nabla \big(  \frac{2}{3} \overline{n} \kappa \big)
- - \frac{\mathbf{e}_r}{B} \nabla \cdot \big( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \big)
+j^{(\kappa,\mathrm{RS})} = \frac{\mathbf{b}}{B} \times \nabla \left( \frac{2}{3} \overline{n} \kappa \right)
+ - \frac{\mathbf{e}_r}{B} \nabla \cdot \left( \etaexb \nabla_r \overline{V_{E,\wedge}} \mathbf{e}_r \right)
 \end{equation}
 
-\subsection{Link between symbols and code variables} 
+\subsection{Link between symbols and code variables}
 
 The table below links the equation symbols to the names of the variables in the code. Some variables are global, and some are local to {\tt set\_transport\_keps}.
 
-\begin{tabular}{c | c }
+\begin{tabular}{c|c}
 \underline{Symbol} & \underline{Code}   \\
 $\dexb$ & {\tt dna\_ExB}  \\
 $\heexb$ & {\tt hce\_ExB} \\
@@ -10402,10 +10376,10 @@ $\kepscsigpar$& {\tt fsigkt} \\
 $\kepscsigpartwo$ & {\tt fac\_diss(\_core)} \\
 $\kepseta$ & {\tt fac\_vis\_RS} \\
 $D_{i,\mathrm{min}}$ & {\tt dna\_min} \\
-$\chi_{i,\mathrm{min}}$ & {\tt hci\_min} \\ 
-$\chi_{e,\mathrm{min}}$ & {\tt hce\_min} \\ 
+$\chi_{i,\mathrm{min}}$ & {\tt hci\_min} \\
+$\chi_{e,\mathrm{min}}$ & {\tt hce\_min} \\
 $\nu_{i,\mathrm{min}}$ & {\tt  vsa\_min}
-\end{tabular} 
+\end{tabular}
 
 \section{Turbulent enstrophy equation}
 
@@ -10415,9 +10389,9 @@ Documentation will follow when the model is more mature.
 %-------- end of 20th page -------------
 \section{Typical boundary conditions}\label{sec:typical_BCs}
 
-In the unstructured {\tt B2.5} code, the concept of 'East', 'West', 'North' and 'South' boundaries no longer exists. In the structured code, there was typically a hard-coded distinction between for example 'East' and 'West' boundaries, to get all signs correct. In the unstructured code, there is only a single type of boundary ('A', for 'Automatic'), indicating a general interface between the plasma and a boundary segment. Some boundary conditions are only allowed for core boundaries, and these are checked with help of the {\tt cvOnClosedSurface} variable.
+In the unstructured {\tt B2.5} code, the concept of 'East', 'West', 'North' and 'South' boundaries no longer exists. In the structured code, there was typically a hard-coded distinction between for example 'East' and 'West' boundaries, to get all signs correct. In the unstructured code, there is only a single type of boundary ({\tt 'A'}, for 'Automatic'), indicating a general interface between the plasma and a boundary segment. Some boundary conditions are only allowed for core boundaries, and these are checked with help of the {\tt cvOnClosedSurface} variable.
 
-To get all signs correct for the generalized interface, the unstructured code makes use of the face angles $\alpha$, $\beta$ and $\gamma$, and the additional variable {\tt bcFcOr}, which indiates if the outward boundary normal coincides with the face normal (+1.0) or not (-1.0). Figure \ref{fig:bcfcor} illustrates the definition of  {\tt bcFcOr}.
+To get all signs correct for the generalized interface, the unstructured code makes use of the face angles $\alpha$, $\beta$ and $\gamma$, and the additional variable {\tt bcFcOr}, which indicates if the outward boundary normal coincides with the face normal ({\tt +1.0}) or not ({\tt -1.0}). Figure \ref{fig:bcfcor} illustrates the definition of {\tt bcFcOr}.
 
 \begin{figure}[hbtp]
 \ifpdf
@@ -10429,28 +10403,29 @@ To get all signs correct for the generalized interface, the unstructured code ma
     \label{fig:bcfcor}
 \end{figure}
 
-Most boundary conditions fall in one of three categories: Dirichlet, Neumann, or flux. 
+Most boundary conditions fall in one of three categories: Dirichlet, Neumann, or flux.
 
 \textbf{Flux}
-To impose a given flux, the net source term in the guard cell must be equal to that flux. Since no fluxes are computed between the guard cells, the flux across the guard cell face must equal the source term. 
 
-\textbf{Dirichlet} 
+To impose a given flux, the net source term in the guard cell must be equal to that flux. Since no fluxes are computed between the guard cells, the flux across the guard cell face must equal the source term.
+
+\textbf{Dirichlet}
+\begin{sloppypar}
 To impose a fixed value in a guard cell, the code makes use of the different source contributions and very large numbers. For example, to set a fixed density {\tt $n_{BC}$},
-the code sets {\tt sna(iCv,0,is) = VBIG * fcS * $n_{BC}$}, and {\tt sna(iCv,1,is) = -VBIG * fcS}, \newline 
-where {\tt sna(iCv,is) = sna(iCv,0,is) + sna(iCv,1,is)*na(iCv,is)} and where {\tt VBIG} is a very large number. Because {\tt VBIG} is so large, the only way to get a physical source is to have  {\tt na(iCv,is) = $n_{BC}$}.
+the code sets {\tt sna(iCv,0,is) = VBIG $\times$ fcS $\times$ $n_{BC}$}, and {\tt sna(iCv,1,is) = - VBIG $\times$ fcS}, with {\tt sna(iCv,is) = sna(iCv,0,is) + sna(iCv,1,is) $\times$ na(iCv,is)} and where {\tt VBIG} is a very large number. Because {\tt VBIG} is so large, the only way to get a physical source is to have {\tt na(iCv,is) = $n_{BC}$}.
+\end{sloppypar}
 
 \textbf{Neumann}
+\begin{sloppypar}
 To set the gradient normal to the boundary, the code again makes use of the different source contributions and very large numbers. For orthogonal cells, these boundary conditions correctly impose the gradient normal to the boundary face. For cells that are skewed with respect to the boundary face,
-the implementation depends on the (partially experimental) {\tt b2stbc\_BC2\_cor9} switch. 
+the implementation depends on the (partially experimental) {\tt b2stbc\_BC2\_cor9} switch.
 To impose for example a density gradient $\Phi$ with {\tt b2stbc\_BC2\_cor9 = 0.0}, the code sets
-{\tt sna(iCv,0,is) = VBIG * fcS * ($\Phi$ * (fcHc(1)+fcHc(2)) * cos $\gamma$ + na(iCv\_internal)} and 
-\newline {\tt sna(iCv,1,is) = - VBIG * fcS}, 
- \newline where {\tt na(iCv\_internal)} is the density in the first interior cell. To get a physical source, we must have
-{\tt $\Phi$ * (fcHc(1)+fcHc(2)) * cos $\gamma$ + na(iCv\_internal))= na(iCv)}. This results in the correct normal gradient for skewed cells, only if there would be no gradients in the direction tangential to the boundary face. When {\tt b2stbc\_BC2\_cor9 = 1.0}, a correction term based on the vertex values is added, such that $\Phi$ is the gradient normal to the boundary, also in the presence of tangential gradients (up to the interpolation error).
+{\tt sna(iCv,0,is) = VBIG $\times$ fcS $\times$ ($\Phi$ $\times$ ( fcHc(1) + fcHc(2) ) $\times \cos \gamma$ + na(iCv\_internal)} and {\tt sna(iCv,1,is) = - VBIG $\times$ fcS}, where {\tt na(iCv\_internal)} is the density in the first interior cell. To get a physical source, we must have {\tt $\Phi$ $\times$ ( fcHc(1) + fcHc(2) ) $\times \cos \gamma$ + na(iCv\_internal) = na(iCv)}. This results in the correct normal gradient for skewed cells, only if there would be no gradients in the direction tangential to the boundary face. When {\tt b2stbc\_BC2\_cor9 = 1.0}, a correction term based on the vertex values is added, such that $\Phi$ is the gradient normal to the boundary, also in the presence of tangential gradients (up to the interpolation error).
+\end{sloppypar}
 
-TODO convert all below to unstructured?
+%% TODO: convert all below to unstructured?
 
-In this Section, the boundaries are denoted as $S_0$ for the PFR boundaries, $S_1$ for the core boundaries, $E$ for the East boundaries (right targets), $W$ for the West boundaries (left targets) and $N$ for the outer main wall boundary.
+In this Section, the boundaries are denoted as $S_0$ for the PFR boundaries, $S_1$ for the core boundaries, $E$ for the Eastern boundaries (right targets), $W$ for the Western boundaries (left targets), and $N$ for the outer main wall boundary.
 
 \subsection{Particle balance equations}
 
@@ -10502,7 +10477,7 @@ $p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species soun
                 D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
         \right) n_a
         + \\
-        \frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} & D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         +
         \frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
 \end{matrix}
@@ -10534,7 +10509,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 \left. \left[
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
         +
-        \frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         +
         \min \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
 \right] \right|_{S_0}, & \text{mdf\_fnb} = 1
@@ -10555,7 +10530,7 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 When using drifts, one should use {\tt BCCON = 10} instead.
 
 \begin{equation}
-\left. -\frac{\sqrt g}{h_y^2} D_{n,ay} \frac{\partial n_a}{\partial y} \right|_{S_0}
+\left. - \frac{\sqrt g}{h_y^2} D_{n,ay} \frac{\partial n_a}{\partial y} \right|_{S_0}
 =
 \left. \left[
 c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
@@ -10622,7 +10597,7 @@ $p_{n,a,0}$ is the desired total particle flux, per unit time.
 {\em For leakage boundary condition:} {\tt BCCON = 10}
 
 \begin{equation}
-\left. -\frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
+\left. - \frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
 =
 \left. \left[
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
@@ -10646,7 +10621,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
 \begin{equation}
 \begin{matrix}
-\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
 & \left\{
 \begin{matrix}
 \left. \left[
@@ -10661,7 +10636,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
                 D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
         \right) n_a \\
         -
-        \frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} & D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         -
         \frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
 \end{matrix}
@@ -10681,7 +10656,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 
 \begin{equation}
 \begin{matrix}
-\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
 & \left\{
 \begin{matrix}
 \left. \left[
@@ -10693,7 +10668,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 \left. \left[
         p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
         -
-        \frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         -
         \max \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
 \right] \right|_{N}, & \text{mdf\_fnb} = 1
@@ -11106,7 +11081,7 @@ with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-1
 
 \begin{equation*}
 V_{West} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
@@ -11178,7 +11153,7 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 
 \begin{equation*}
 V_{East} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
@@ -12146,8 +12121,8 @@ if these equations are implicitly taken into account).
 Thus the total energy density is
 
 \begin{equation}
- \varepsilon = \sum\limits_a\frac{m_aV_{a\parallel}^2}{2}
- +\frac32\sum\limits_an_aT_i + \frac32 n_eT_e.
+ \varepsilon = \sum\limits_a \frac{m_a V_{a\parallel}^2}{2}
+ +\frac{3}{2} \sum\limits_a n_a T_i + \frac{3}{2} n_e T_e.
 \end{equation}
 
 The energy flux
@@ -12467,16 +12442,16 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Parallel momentum equation residual for species } a \mbox{:}
 \frac{
-        \sum  \limits_{i=1}^{nCi} \left| r_{u_a,i} \right|
+        \sum \limits_{i=1}^{nCi} \left| r_{u_a,i} \right|
 }{
-        \sum  \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i} \sqrt{m_a T_i}
+        \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i} \sqrt{m_a T_i}
 }
 \end{equation}
 
 \begin{equation}
 \mbox{Electron energy equation residual:}
 \frac{
-        \sum  \limits_{i=1}^{nCi} \left| r_{h_e,i} \right|
+        \sum \limits_{i=1}^{nCi} \left| r_{h_e,i} \right|
 }{
         \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i}
         \left( z_a T_e + T_i \right)
@@ -12486,7 +12461,7 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Ion energy equation residual:}
 \frac{
-        \sum  \limits_{i=1}^{nCi} \left| r_{h_i,i} \right|
+        \sum \limits_{i=1}^{nCi} \left| r_{h_i,i} \right|
 }{
         \left( \frac{3}{2} + BoRiS \right) \sum \limits_{a=0}^{ns-1} \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} n_{a,i}
         \left( z_a T_e + T_i \right)
@@ -12496,9 +12471,9 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 \begin{equation}
 \mbox{Electric potential equation residual:}
 \frac{
-        \sum  \limits_{i=1}^{nCi} \left| r_{po,i} \right|
+        \sum \limits_{i=1}^{nCi} \left| r_{po,i} \right|
 }{
-        \sum  \limits_{i=1}^{nCi} \sqrt{g_{i}} e n_{e,i}
+        \sum \limits_{i=1}^{nCi} \sqrt{g_{i}} e n_{e,i}
 }
 \end{equation}
 
@@ -12548,8 +12523,8 @@ of the effects related to the stronger local electric field in the magnetic
 presheath. This electric field causes a strong acceleration of the ions
 along the magnetic field lines, similarly to a non-magnetic
 plasma presheath or when the magnetic field is perpendicular to
-the surface, and an additional poloidal $\mathbf{E \times B}$ drift due to the
-radial component of the electric field. In some cases the $\mathbf{E \times B}$
+the surface, and an additional poloidal $\exb$ drift due to the
+radial component of the electric field. In some cases the $\exb$
 drift velocity can be comparable with the local ion sound
 velocity~\cite{STANGEBY95B,ROGNLIEN99A,ROGNLIEN99B}. The correction of the
 poloidal component of the ion drift velocity due to the
@@ -12677,7 +12652,7 @@ c_{sD\alpha}=\max\left(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
 u_{Dx}\right)   \label{11}
 \end{equation}
 is the conditionally corrected ion drift velocity of the atomic species $\alpha$
-due to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the
+due to the poloidal $\exb$ drift, where '$+$' applies to the
 "WEST" and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{s\alpha}$;
 \begin{equation}
@@ -12685,7 +12660,7 @@ c_{stD}=\max\left(c_{st},0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}\right)
 \label{12}
 \end{equation}
 is the conditionally corrected ion drift velocity of the multi-species plasma due
-to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the "WEST"
+to the poloidal $\exb$ drift, where '$+$' applies to the "WEST"
 and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{st}$;
 \begin{equation}
@@ -12786,37 +12761,37 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{29}
 
 \begin{equation}
 S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy}   \label{30}
+\max\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy} \label{30}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDy}}{T_i}   \label{31}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDy}}{T_i} \label{31}
 \end{equation}
 
 \begin{equation}
-S_{hi2}=0   \label{32}
+S_{hi2}=0 \label{32}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+  \\
-~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{33}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, - \Gamma_{\alpha y} \right) }{n_{i}} \right] \label{33}
+\end{multline}
 
 \paragraph{Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_e   \label{34}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_e \label{34}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ey}\right) +Q_{heDy}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max \left( 0, \Gamma_{ey} \right) + Q_{heDy}
 \label{35}
 \end{equation}
 
 \begin{equation}
-S_{he1}=C_{he1}S_{0}+\frac{Q_{heDy}}{T_{e}}   \label{36}
+S_{he1}=C_{he1}S_{0}+\frac{Q_{heDy}}{T_{e}} \label{36}
 \end{equation}
 
 \begin{equation}
@@ -12839,7 +12814,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{39}
 S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+
 \max\left(C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{T_{e}}   \label{40}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{T_e}   \label{41}
@@ -12917,17 +12891,17 @@ S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDy}}{T_{i}}   \labe
 S_{hi2}=0   \label{55}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{56}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
+\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}} \right] \label{56}
+\end{multline}
 
 \paragraph{Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{57}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{57}
 \end{equation}
 
 \begin{equation}
@@ -12958,7 +12932,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{62}
 S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+
 \max\left(C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{T_{e}}   \label{63}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{T_{e}}   \label{64}
@@ -13021,37 +12994,37 @@ S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}
 \paragraph{All Atom/Ion Heat Source}
 
 \begin{equation}
-S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{75}
+S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i} \label{75}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha x}\right) \right] +Q_{hiDx}   \label{76}
+S_{hi0}=\sum_{\alpha} \left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max \left( 0, \Gamma_{\alpha x} \right) \right] +Q_{hiDx} \label{76}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDx}}{T_{i}}   \label{77}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDx}}{T_{i}} \label{77}
 \end{equation}
 
 \begin{equation}
 S_{hi2}=0   \label{78}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{79}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, - \Gamma_{\alpha x} \right) }{n_{i}} \right] \label{79}
+\end{multline}
 
 \paragraph{\protect\bigskip Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{80}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{80}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ex}\right) +Q_{heDx}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0, \Gamma_{ex} \right) +Q_{heDx}
 \label{81}
 \end{equation}
 
@@ -13079,7 +13052,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{85}
 S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+
 \max\left(C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{T_{e}}   \label{86}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}}   \label{87}
@@ -13143,37 +13115,37 @@ S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}
 \paragraph{All Atom/Ion Heat Source}
 
 \begin{equation}
-S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{98}
+S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i} \label{98}
 \end{equation}
 
 \begin{equation}
 S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx}   \label{99}
+\max\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx} \label{99}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDx}}{T_{i}}   \label{100}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDx}}{T_{i}} \label{100}
 \end{equation}
 
 \begin{equation}
 S_{hi2}=0   \label{101}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{102}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, \Gamma_{\alpha x} \right) }{n_{i}} \right] \label{102}
+\end{multline}
 
 \paragraph{\protect\bigskip Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{103}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{103}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,-\Gamma_{ex}\right) -Q_{heDx}
+S_{he0}=C_{he0}S_{0}+C_{he6} \max \left( 0, - \Gamma_{ex} \right) - Q_{heDx}
 \label{104}
 \end{equation}
 
@@ -13194,7 +13166,7 @@ S_{he3} =~ & C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{stD}S_{0}+ \\
 \paragraph{Electric Charge Source}
 
 \begin{equation}
-S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{108}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi \label{108}
 \end{equation}
 
 \begin{equation}
@@ -13202,10 +13174,9 @@ S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+
 \max\left(C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{T_{e}}
 \label{109}
 \end{equation}
-\bigskip
 
 \begin{equation}
-S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}}   \label{110}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}} \label{110}
 \end{equation}
 
 \begin{equation}
@@ -13215,7 +13186,7 @@ S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{stD}S_{1}
 
 \begin{equation}
 S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
-\frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{T_{e}}   \label{112}
+\frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{T_{e}} \label{112}
 \end{equation}
 
 \clearpage
@@ -13641,8 +13612,8 @@ The meaning of the dimensions are:
 b2bremreg \index{b2bremreg}\index{b2tallies.nc, b2bremreg}                       & vreg, time     & $W$           & Bremsstrahlung radiation rate \\
 b2divua \index{b2divua}\index{b2tallies.nc, b2divua}                             & vreg, time     & $W$           & Heating term from $\nabla u_a$ \\
 b2divue \index{b2divue}\index{b2tallies.nc, b2divue}                             & vreg, time     & $W$           & Heating term from $\nabla u_e$ \\
-b2exba \index{b2exba}\index{b2tallies.nc, b2exba}                                & vreg, time     & $W$           & Heating term to ions from ${\bf E} \times {\bf B}$ \\
-b2exbe \index{b2exbe}\index{b2tallies.nc, b2exbe}                                & vreg, time     & $W$           & Heating term to electrons from ${\bf E} \times {\bf B}$ \\
+b2exba \index{b2exba}\index{b2tallies.nc, b2exba}                                & vreg, time     & $W$           & Heating term to ions from $\exb$ \\
+b2exbe \index{b2exbe}\index{b2tallies.nc, b2exbe}                                & vreg, time     & $W$           & Heating term to electrons from $\exb$ \\
 b2fraa \index{b2fraa}\index{b2tallies.nc, b2fraa}                                & vreg, time     & $W$           & Heating from inter-species friction \\
 b2joule \index{b2joule}\index{b2tallies.nc, b2joule}                             & vreg, time     & $W$           & Joule heating \\
 b2qie \index{b2qie}\index{b2tallies.nc, b2qie}                                   & vreg, time     & $W$           & Electron/ion exchange term \\
@@ -13792,8 +13763,8 @@ The content of the file looks like the following:
         36   1.923514E+19
 \end{verbatim}
 
-Here the first row (truncated in the example above) gives the index of the 
-control volume ({\tt iCv}), and the second row gives the density.
+Here the first column (truncated in the example above) gives the index of the
+control volume ({\tt iCv}), and the second column gives the density.
 
 The price for the possibility to output each quantity exactly from the subroutine where this quantity is calculated
 is the production of output files each time the corresponding subroutine is called.
@@ -13889,7 +13860,7 @@ $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}$ & $s^{-1}$ & \textt
 
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc11\_fnay[XXX].dat} or & (\ref{eq:GammaAY_appC}) \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} b_x V_{||a} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} b_x V_{a\parallel} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} V_{ax}^{(E)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC}) \\
 
@@ -14064,9 +14035,9 @@ $\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g}$ & $W$ &
 $\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tednedt.dat} or &  \\
  & & \texttt{b2nph9\_tednedt.dat} &  \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
+$\displaystyle \frac{3}{2} \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay}) \\
+$\displaystyle \frac{3}{2} \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $W$ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx}) \\
 
@@ -14292,24 +14263,25 @@ cell faces, it is necessary to compute it from the quantities also computed at c
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
-  \frac23 \left(q_{ex}^{E \times B} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  \frac{2}{3} \left(q_{ex}^{\exb} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{E \times B} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  \frac{2}{3} \left(q_{ix}^{\exb} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
-  \frac23 q_{ey}^{E \times B} \\
+  \frac{2}{3} q_{ey}^{\exb} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{E \times B} + q_{iy}^{conv} + q_{iy}^{j}
+  \frac{2}{3} q_{iy}^{\exb} + q_{iy}^{conv} + q_{iy}^{j}
 \end{gather}
 
 \begin{gather}
- \widetilde{q}_{ex}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \widetilde{q}_{ex}^{dia} = -\frac{5}{2} T_e^{\rm (face)} \sum\limits_a
  \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ax}^{(dia)}n_a \\
- \widetilde{q}_{ey}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \widetilde{q}_{ey}^{dia} = -\frac{5}{2} T_e^{\rm (face)} \sum\limits_a
  \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ay}^{(dia)}n_a \\
- \widetilde{q}_{ix}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
- \widetilde{q}_{iy}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
+ \widetilde{q}_{ix}^{dia} = \frac{5}{2} T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
+ \widetilde{q}_{iy}^{dia} = \frac{5}{2} T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
 \end{gather}
+
 Here and below the superscript "(face)" means that the temperature (or other
 quantity) should be computed at the cell face as a half-sum its neighboring cell-centered values.
 Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and
@@ -14321,22 +14293,22 @@ to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
- q_{ex}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
- q_{ey}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
- q_{ix}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+ q_{ex}^{\exb} = \frac{3}{2} T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{\exb} = \frac{3}{2} T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{\exb} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{\exb} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
- q_{ex}^{u_\parallel} = \frac32 T_e^{\rm (face)} \left(
+ q_{ex}^{u_\parallel} = \frac{3}{2} T_e^{\rm (face)} \left(
  \sum\limits_a z_a b_x n_a V_{\parallel a} - \frac{j_x^{(\parallel)}}{e} \right)\\
- q_{ix}^{u_\parallel} = \frac32 T_i^{\rm (face)} \sum\limits_a b_x n_a V_{\parallel a}
+ q_{ix}^{u_\parallel} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a b_x n_a V_{\parallel a}
 \end{gather}
 
 \begin{gather}
- q_{ex}^{uDPC} = \frac32 T_e^{\rm (face)}
+ q_{ex}^{uDPC} = \frac{3}{2} T_e^{\rm (face)}
  \sum\limits_a z_a n_a V_a^{\rm corr\_dpc} \\
- q_{ix}^{uDPC} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
+ q_{ix}^{uDPC} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
 \end{gather}
 
 \begin{gather}
@@ -14967,10 +14939,10 @@ coordinate index.
     bche     & \index{b2plot, bche} Boundary electron heat source {\em b2stbc\_she} $(W)$ \\
     bchi     & \index{b2plot, bchi} Boundary ion heat source {\em b2stbc\_shi} $(W)$ \\
     bchn     & \index{b2plot, bchn} Boundary fluid neutral heat source {\em b2stbc\_shn} $(W)$ \\
-    bckt     & \index{b2plot, bckt} Boundary ${\bf E} \times {\bf B}$ turbulent energy source {\em b2stbc\_skt} $(W)$ \\
+    bckt     & \index{b2plot, bckt} Boundary $\exb$ turbulent energy source {\em b2stbc\_skt} $(W)$ \\
     bcmo     & \index{b2plot, bcmo} Boundary parallel momentum source {\em b2stbc\_smo} $(N)$ \\
     bcna     & \index{b2plot, bcna} Boundary particle source {\em b2stbc\_sna} $(particles.s^{-1})$ \\
-    bczt     & \index{b2plot, bczt} Boundary ${\bf E} \times {\bf B}$ turbulent enstrophy source {\em b2stbc\_szt} $(s^{-3}?)$ \\
+    bczt     & \index{b2plot, bczt} Boundary $\exb$ turbulent enstrophy source {\em b2stbc\_szt} $(s^{-3}?)$ \\
     bix      & \index{b2plot, bix} Bottom neighbour {\em ix} coordinate \\
     biy      & \index{b2plot, biy} Bottom neighbour {\em iy} coordinate  \\
     brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ \\
@@ -14980,12 +14952,12 @@ coordinate index.
     brhi     & \index{b2plot, brhi} Recycling ion heat source {\em b2stbr\_shi} $(W)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brhn     & \index{b2plot, brhn} Recycling fluid neutral heat source {\em b2stbr\_shn} $(W)$ \\
-    brkt     & \index{b2plot, brkt} Recycling ${\bf E} \times {\bf B}$ turbulent energy source {\em b2stbr\_skt} $(W)$ \\
+    brkt     & \index{b2plot, brkt} Recycling $\exb$ turbulent energy source {\em b2stbr\_skt} $(W)$ \\
     brmo     & \index{b2plot, brmo} Recycling parallel momentum source {\em b2stbr\_smo} $(N)$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
     brna     & \index{b2plot, brna} Recycling particle source {\em b2stbr\_sna} $(particles.s^{-1})$ \\
              & \hspace{1cm} (including any {\tt Eirene} contributions) \\
-    brzt     & \index{b2plot, brzt} Recycling ${\bf E} \times {\bf B}$ turbulent enstrophy source {\em b2stbr\_skt} $(s^{-3}?)$ \\
+    brzt     & \index{b2plot, brzt} Recycling $\exb$ turbulent enstrophy source {\em b2stbr\_skt} $(s^{-3}?)$ \\
     bvis     & \index{b2plot, bvis} Braams viscosity piece $(m.kg^{-1}.s^{-1})$ \\
     bx, bpol & \index{b2plot, bx} Poloidal magnetic field $(T)$ \index{b2plot, bpol} \\
     by, brad & \index{b2plot, by} Radial magnetic field $(T)$ \index{b2plot, brad} \\
@@ -14994,7 +14966,7 @@ coordinate index.
     ceqp     & \index{b2plot, ceqp} Equipartition term multiplier \\
     chhichii & \index{b2plot, chhichii} Chang-Hinton $\chi_i$ $(m^2.s^{-1})$ \\
     chineo   & \index{b2plot, chineo} Neoclassical heat conductivity $\chi$ $(m^2.s^{-1})$ \\
-    ckt      & \index{b2plot, ckt} ${\bf E} \times {\bf B}$ turbulent energy correction $(eV)$ \\
+    ckt      & \index{b2plot, ckt} $\exb$ turbulent energy correction $(eV)$ \\
     clbl     & \index{b2plot, clbl} Cell label number \\
     coni     & \index{b2plot, coni} Coronal equilibrium densities \\
     conn     & \index{b2plot, conn} Connection length $(m)$ \\
@@ -15013,7 +14985,7 @@ coordinate index.
     cvsy     & \index{b2plot, cvsy} Radial classical viscosity $(m.kg^{-1}.s^{-1})$ \\
     cvv      & \index{b2plot, cvv} {\em CORVV} (\SOLPSfour runs) \\
     cz       & \index{b2plot, cz} Vertical coordinate $(m)$ \\
-    czt      & \index{b2plot, czt} ${\bf E} \times {\bf B}$ turbulent enstrophy correction $(s^{-2}?)$ \\
+    czt      & \index{b2plot, czt} $\exb$ turbulent enstrophy correction $(s^{-2}?)$ \\
     d        & \index{b2plot, d} Particle density diffusion coefficient $(m^2.s^{-1})$ \\
     dab2     & \index{b2plot, dab2} Atomic density $(m^{-3})$ \\
     dd       & \index{b2plot, dd} Radial component of diamagnetic current $(m.s^{-1})$ \\
@@ -15029,14 +15001,14 @@ coordinate index.
     dfhm     & \index{b2plot, dfhm} Divergence of the parallel kinetic energy flux $(W)$ \\
     dfhn     & \index{b2plot, dfhn} Divergence of the fluid neutral energy flux $(W)$ \\
     dfhp     & \index{b2plot, dfhp} Divergence of the potential energy flux $(W)$ \\
-    dfkt     & \index{b2plot, dfkt} Divergence of the ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
+    dfkt     & \index{b2plot, dfkt} Divergence of the $\exb$ turbulent energy flux $(W)$ \\
     dfmo     & \index{b2plot, dfmo} Divergence of the momentum flux $(N.s)$ \\
     dfna     & \index{b2plot, dfna} Divergence of the particle flux $(s^{-1})$ \\
     dfzt     & \index{b2plot, dfzt} Divergence of the enstrophy flux $(W)$ \\
     dhet, dfhet     & \index{b2plot, dhet} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhet} \\
     dhit, dfhit     & \index{b2plot, dhit} Divergence of the electron total energy flux $(W)$ \index{b2plot, dfhit} \\
     dib2     & \index{b2plot, dib2} Test ion density $(m^{-3})$ \\
-    dkt      & \index{b2plot, dkt} ${\bf E} \times {\bf B}$ turbulent energy diffusion coefficient $(m^2.s^{-1})$ \\
+    dkt      & \index{b2plot, dkt} $\exb$ turbulent energy diffusion coefficient $(m^2.s^{-1})$ \\
     dmb2     & \index{b2plot, dmb2} Molecular density $(m^{-3})$ \\
     dnneo    & \index{b2plot, dnneo} Neoclassical particle diffusivity $D_n$ $(m^2.s^{-1})$ \\
     dp       & \index{b2plot, dp} Particle pressure diffusion coefficient $(m^2.s^{-1})$ \\
@@ -15044,21 +15016,21 @@ coordinate index.
     dvue     & \index{b2plot, dvue} Electron heat source {\em b2sihs\_divue} $(W)$ \\
     dx       & \index{b2plot, dx} Cell poloidal length {\em dx} $(m)$ (\SOLPSfour runs) \\
     dy       & \index{b2plot, dy} Cell radial width {\em dy} $(m)$ (\SOLPSfour runs) \\
-    dzt      & \index{b2plot, dzt} ${\bf E} \times {\bf B}$ turbulent enstrophy diffusion coefficient $(m^2.s^{-1})$ \\
+    dzt      & \index{b2plot, dzt} $\exb$ turbulent enstrophy diffusion coefficient $(m^2.s^{-1})$ \\
     ebal     & \index{b2plot, ebal} Energy balance $(W)$ \\
     ebld     & \index{b2plot, ebld} Energy balance (-divergence of fluxes) $(W)$ \\
     ebls     & \index{b2plot, ebls} Energy balance (sources) $(W)$ \\
     edissml  & \index{b2plot, edissml} Power to atoms due to molecule dissociation $(W)$ \\
     ehx      & \index{b2plot, ehx} {\em ehx} $(V)$ \\
     ehy      & \index{b2plot, ehy} {\em ehy} $(V)$ \\
-    exba     & \index{b2plot, exba} ${\bf E} \times {\bf B}$ ion heating term {\em b2sihs\_exba} $(W)$ \\
-    exbe     & \index{b2plot, exbe} ${\bf E} \times {\bf B}$ electron heating term {\em b2sihs\_exbe} $(W)$ \\
+    exba     & \index{b2plot, exba} $\exb$ ion heating term {\em b2sihs\_exba} $(W)$ \\
+    exbe     & \index{b2plot, exbe} $\exb$ electron heating term {\em b2sihs\_exbe} $(W)$ \\
     exch     & \index{b2plot, exch} External charge source {\em ext\_sch} $(A)$ \\
     exhe     & \index{b2plot, exhe} External electron heat source {\em ext\_she} $(W)$ \\
     exhi     & \index{b2plot, exhi} External ion heat source {\em ext\_shi} $(W)$ \\
     exmo     & \index{b2plot, exmo} External parallel momentum source {\em ext\_smo} $(N)$ \\
     exna     & \index{b2plot, exna} External particle source {\em ext\_sna} $(particles.s^{-1})$ \\
-    fac\_exb & \index{b2plot, fac\_exb} ${\bf E} \times {\bf B}$ drift multiplier {\em fac\_ExB} \\
+    fac\_exb & \index{b2plot, fac\_exb} $\exb$ drift multiplier {\em fac\_ExB} \\
     fac\_vis & \index{b2plot, fac\_vis} Viscosity drift terms multiplier {\em fac\_vis} \\
     facdrift & \index{b2plot, facdrift} Diamagnetic drift terms multiplier {\em facdrift} \\
     fax\_ext & \index{b2plot, fax\_ext} External species poloidal flux $(s^{-1})$ \\
@@ -15099,8 +15071,8 @@ coordinate index.
     fhpy     & \index{b2plot, fhpy} Radial potential energy flux $(W)$ \\
     fhtx     & \index{b2plot, fhtx} Poloidal total energy flux $(W)$ \\
     fhty     & \index{b2plot, fhty} Peprendicular total energy flux $(W)$ \\
-    fktx     & \index{b2plot, fktx} Poloidal ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
-    fkty     & \index{b2plot, fkty} Peprendicular ${\bf E} \times {\bf B}$ turbulent energy flux $(W)$ \\
+    fktx     & \index{b2plot, fktx} Poloidal $\exb$ turbulent energy flux $(W)$ \\
+    fkty     & \index{b2plot, fkty} Peprendicular $\exb$ turbulent energy flux $(W)$ \\
     flal     & \index{b2plot, flal} Thermo-electric classical flux limit factor \\
     flalc    & \index{b2plot, flalc} Thermo-electric coefficient limit factor \\
     flbl     & \index{b2plot, flbl} Face label number \\
@@ -15144,8 +15116,8 @@ coordinate index.
     fnny52   & \index{b2plot, fnny52} Conductive fluid neutral radial particle flux $(s^{-1})$ \\
     fraa     & \index{b2plot, fraa} Friction heating term {\em b2sihs\_fraa} $(W)$ \\
     freg     & \index{b2plot, freg} Flux region number \\
-    fztx     & \index{b2plot, fztx} Poloidal ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
-    fzty     & \index{b2plot, fzty} Peprendicular ${\bf E} \times {\bf B}$ turbulent enstrophy flux $(s^{-3}?)$ \\
+    fztx     & \index{b2plot, fztx} Poloidal $\exb$ turbulent enstrophy flux $(s^{-3}?)$ \\
+    fzty     & \index{b2plot, fzty} Peprendicular $\exb$ turbulent enstrophy flux $(s^{-3}?)$ \\
     gdcl     & \index{b2plot, gdcl} Guard cells \\
     hx       & \index{b2plot, hx} Poloidal cell length $(m)$ \\
     hy       & \index{b2plot, hy} Radial cell width $(m)$ \\
@@ -15187,8 +15159,8 @@ coordinate index.
     iyne     & \index{b2plot, iyne} Radial cell index {\em iy} is not equal to \\
     joul     & \index{b2plot, joul} Joule heating term {\em b2sihs\_joule} $(W)$ \\
     ke       & \index{b2plot, ke} Parallel kinetic energy $(J)$ \\
-    kt       & \index{b2plot, kt} ${\bf E} \times {\bf B}$ turbulent kinetic energy $(eV)$ \\
-    kt0      & \index{b2plot, kt0} ${\bf E} \times {\bf B}$ turbulent kinetic energy {\em kt} at previous time step $(eV)$ \\
+    kt       & \index{b2plot, kt} $\exb$ turbulent kinetic energy $(eV)$ \\
+    kt0      & \index{b2plot, kt0} $\exb$ turbulent kinetic energy {\em kt} at previous time step $(eV)$ \\
     kye      & \index{b2plot, kye} Electron heat diffusivity $\chi_e$ $(m^2.s^{-1})$ \\
     kyi      & \index{b2plot, kyi} Ion heat diffusivity $\chi_i$ $(m^2.s^{-1})$ \\
     kyi0     & \index{b2plot, kyi0} Total ion heat diffusivity $(m^2.s^{-1})$ \\
@@ -15261,7 +15233,7 @@ coordinate index.
     rfla     & \index{b2plot, rfla} Radial atomic flux $(s^{-1}.m^{-2})$ \\
     rflm     & \index{b2plot, rflm} Radial molecular flux $(s^{-1}.m^{-2})$ \\
     rhol     & \index{b2plot, rhol} Full-B Larmor radius $(m)$ \\
-    rkt      & \index{b2plot, rkt} ${\bf E} \times {\bf B}$ turbulent energy equation residuals $(W)$ \\
+    rkt      & \index{b2plot, rkt} $\exb$ turbulent energy equation residuals $(W)$ \\
     rix      & \index{b2plot, rix} Right neighbour poloidal index {\em rightix} \\
     riy      & \index{b2plot, riy} Right neighbour radial index {\em rightiy} \\
     rlcl     & \index{b2plot, rlcl} Real cells \\
@@ -15279,14 +15251,14 @@ coordinate index.
     rud      & \index{b2plot, rud} {\em RESUD} (\SOLPSfour runs) \\
     rudc     & \index{b2plot, rudc} {\em RESUDC} (\SOLPSfour runs) \\
     rvd      & \index{b2plot, rvd} {\em RESVD} (\SOLPSfour runs) \\
-    rzt      & \index{b2plot, rzt} ${\bf E} \times {\bf B}$ turbulent enstrophy equation residuals $(s^{-3}?)$ \\
+    rzt      & \index{b2plot, rzt} $\exb$ turbulent enstrophy equation residuals $(s^{-3}?)$ \\
     s        & \index{b2plot, s} Magnetic shear \\
     sch      & \index{b2plot, sch} Charge sources $(C)$ \\
     she      & \index{b2plot, she} Electron energy sources $(W)$ (excluding equipartition) \\
     shi      & \index{b2plot, shi} Ion energy sources $(W)$ (excluding equipartition) \\
     shn      & \index{b2plot, shn} Fluid neutral energy sources $(W)$ \\
     sig      & \index{b2plot, sig} Anomalous conductivity $(\Omega^{-1}.m^{-1})$ \\
-    skt      & \index{b2plot, skt} ${\bf E} \times {\bf B}$ turbulent energy sources $(W)$ \\
+    skt      & \index{b2plot, skt} $\exb$ turbulent energy sources $(W)$ \\
     smaf     & \index{b2plot, smaf} Parallel momentum source from friction {\em b2npmo\_smaf} $(N)$ \\
     smag     & \index{b2plot, smag} Parallel momentum source from pressure gradient {\em b2npmo\_smag} $(N)$ \\
     smav     & \index{b2plot, smav} Parallel momentum source from additional viscosity {\em b2npmo\_smav} $(N)$ \\
@@ -15305,7 +15277,7 @@ coordinate index.
     sxperp   & \index{b2plot, sxperp} Poloidal area perpendicular to $x$-direction $(m^2)$ \\
     sy       & \index{b2plot, sy} Radial area of contact for cell $(m^2)$ \\
     sz       & \index{b2plot, sz} Poloidal cross-sectional area for cell $(m^2)$ \\
-    szt      & \index{b2plot, szt} ${\bf E} \times {\bf B}$ turbulent enstrophy sources $(s^{-3}?)$ \\
+    szt      & \index{b2plot, szt} $\exb$ turbulent enstrophy sources $(s^{-3}?)$ \\
     tab2     & \index{b2plot, tab2} Neutral atom temperature $(eV)$ \\
     ta\_ext  & \index{b2plot, ta\_ext} External species temperature $(eV)$ \\
     te       & \index{b2plot, te} Electron temperature $(eV)$ \\
@@ -15334,10 +15306,10 @@ coordinate index.
     vd       & \index{b2plot, vd} Radial component of drift velocity $(m.s^{-1})$ \\
     vedia.x  & \index{b2plot, vedia.x} Poloidal component of divergent part of electron diamagnetic drift velocity $(m.s^{-1})$ \\
     vedia.y  & \index{b2plot, vedia.y} Radial component of divergent part of electron diamagnetic drift velocity $(m.s^{-1})$ \\
-    veexb.x  & \index{b2plot, veexb.x} Poloidal component of electron ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    veexb.y  & \index{b2plot, veexb.y} Radial component of electron ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    vexb.y   & \index{b2plot, vexb.y} Radial component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
+    veexb.x  & \index{b2plot, veexb.x} Poloidal component of electron $\exb$ drift velocity $(m.s^{-1})$ \\
+    veexb.y  & \index{b2plot, veexb.y} Radial component of electron $\exb$ drift velocity $(m.s^{-1})$ \\
+    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ion $\exb$ drift velocity $(m.s^{-1})$ \\
+    vexb.y   & \index{b2plot, vexb.y} Radial component of ion $\exb$ drift velocity $(m.s^{-1})$ \\
     visa     & \index{b2plot, visa} Viscous heating term {\em b2sihs\_visa} $(W)$ \\
     visc     & \index{b2plot, visc} Viscosity $(m.kg^{-1}.s^{-1})$ \\
     vlax     & \index{b2plot, vlax} Poloidal pinch velocity $(m.s^{-1})$ \\
@@ -15364,8 +15336,8 @@ coordinate index.
     zi, za   & \index{b2plot, zi} Ion charge $(amu)$ \index{b2plot, za} \\
     zn       & \index{b2plot, zn} Nuclear charge $(amu)$ \\
     zn\_ext  & \index{b2plot, zn\_ext} External species nuclear charge $(amu)$ \\
-    zt       & \index{b2plot, zt} ${\bf E} \times {\bf B}$ turbulent enstrophy $(s^{-2}?)$ \\
-    zt0      & \index{b2plot, zt0} ${\bf E} \times {\bf B}$ turbulent enstrophy {\em zt} at previous time step $(s^{-2}?)$ \\
+    zt       & \index{b2plot, zt} $\exb$ turbulent enstrophy $(s^{-2}?)$ \\
+    zt0      & \index{b2plot, zt0} $\exb$ turbulent enstrophy {\em zt} at previous time step $(s^{-2}?)$ \\
     \hline
     \caption{Available quantities}
     \label{tab:available-quantities}
@@ -18861,7 +18833,7 @@ number of extra isolating cells
 \end{description}
 
 The current default settings of {\tt b2mod\_dimensions.F}, which allow for a
-128$\times$36 DN geometry case including species H, D, T, He, Be and C, are:
+128~$\times$~36 DN geometry case including species H, D, T, He, Be and C, are:
 \VerbatimInput[fontsize=\footnotesize]{b2mod_dimensions.F}
 
 \section{Making movies}
@@ -19581,6 +19553,7 @@ NO\_GETENV & modules/b2mod\_solpstop.F \\
 NO\_GETENV & preprocessing/b2agfs.F \\
 NO\_GETENV & utility/open\_file.F \\
 NO\_GETENV & utility/usrnam.F \\
+NO\_IEEE & modules/b2mod\_create\_afn\_bc\_tables.F \\
 NO\_IEEE & utility/nancheck.F \\
 NO\_LONG\_LINES & output/tallies.F \\
 NO\_NAG & b2plot/caltraj.F \\

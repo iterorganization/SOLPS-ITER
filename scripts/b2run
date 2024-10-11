@@ -71,6 +71,7 @@ argloop:
     echo ' -opt_adj: request a B2.5 parameter optimization with adjoint differentiated executable'
     echo ' '
     echo 'Executable: One of the following'
+    echo ' b2ab: Build tables for advanced fluid neutral (AFN) boundary conditions'
     echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
     echo ' b2ah: Build the run parameters file b2fpardf'
     echo ' b2ai: Build the initial state file b2fstati'
@@ -98,7 +99,6 @@ argloop:
     echo ' b2mn_b: Main SOLPS-ITER run program differentiated in adjoint mode'
     echo ' b2optim_tao: Parameter optimization with PETSc/TAO solver'
     echo ' b2optim_ipopt: Parameter optimization with Ipopt solver'
-    echo ' b2ab: Build tables for advanced fluid neutral (AFN) boundary conditions'
     echo ' '
     exit
   endif
