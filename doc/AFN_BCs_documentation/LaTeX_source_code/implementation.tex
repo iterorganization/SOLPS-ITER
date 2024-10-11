@@ -26,8 +26,8 @@ A final point is that the reflection coefficients scaling with $\dnndz$ or $\dnn
 \noindent Equations~\eqref{eq:Gammarefl}, \eqref{eq:Gammarec}, \eqref{eq:finorm}, and \eqref{eq:Gammanmin} lead to the definition of the macroscopic particle reflection coefficient scaling with density
 \begin{align}
    \rconei & (u_{a,\phi},T_a,\dshpot) = \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rv (v')^3  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')
+    \Rv (v')^3 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rconei_def}
 \end{align}
 
@@ -36,9 +36,9 @@ A final point is that the reflection coefficients scaling with $\dnndz$ or $\dnn
 \begin{align}
     \rctwoi & (u_{a,\phi},T_a,\dshpot) =
      \frac{1}{\pi^{\frac{3}{2}}} \frac{1}{\ca^{5}} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
-    \dd v' \dd \vartheta' \dd \varphi'.  \label{eq:rctwoi_def}
+    \Rv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
+    \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rctwoi_def}
 \end{align}
 
 \noindent The macroscopic particle reflection coefficient scaling with the tangential gradient of the neutral density is zero and hence not tabulated:
@@ -46,8 +46,8 @@ A final point is that the reflection coefficients scaling with $\dnndz$ or $\dnn
 \begin{align}
     \mathrm{RC}_n^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
      \frac{1}{\pi^{\frac{3}{2}}} \frac{1}{\ca^{5} }\int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin(\varphi')
+    \Rv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -58,8 +58,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \rmxonei & (u_{a,\phi},T_a,\dshpot) =
          \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
+    \Rmomparv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rmxonei_def}
 \end{align}
 
@@ -67,8 +67,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \rmxtwoi & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) (\cos (\vartheta') \sin (\vartheta'))^2 \cos (\varphi')
+    \Rmomparv (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \left( \cos (\vartheta') \sin (\vartheta') \right)^2 \cos (\varphi')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmxtwoi_def}
 \end{align}
 
@@ -77,8 +77,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
      \mathrm{RC}_{m,\phi}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^3 \cos(\varphi') \sin(\varphi')
+    \Rmomparv (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^3 \cos (\varphi') \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -87,8 +87,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \mathrm{R}_{\mathrm{m},\tau} & (u_{a,\phi},T_a,\dshpot) =
          \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi')
+    \Rmomparv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -97,8 +97,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \mathrm{R}_{\mathrm{m},\tau} & (u_{a,\phi},T_a,\dshpot) =
          \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi') \cos(\varphi')
+    \Rmomparv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi') \cos (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -107,8 +107,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \rmytwoi & (u_{a,\phi},T_a,\dshpot) =
       \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomparv (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')^2
+    \Rmomparv (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')^2
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmytwo_def}
 \end{align}
 
@@ -117,8 +117,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \rmzonei & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomperpv (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
+    \Rmomperpv (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rmzonei_def}
 \end{align}
 
@@ -127,8 +127,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \rmztwoi & (u_{a,\phi},T_a,\dshpot) =
         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomperpv (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^3 \sin (\vartheta')
+    \Rmomperpv (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^3 \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rmztwoi_def}
 \end{align}
 
@@ -137,8 +137,8 @@ Equations~\eqref{eq:finorm}, \eqref{eq:Gammanmin}, and the term in Eq.~\eqref{eq
 \begin{align}
     \mathrm{RC}_{\mathrm{m},\nu}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rmomperpv (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')^2 \sin(\varphi')
+    \Rmomperpv (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -151,8 +151,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \rponeonei & (u_{a,\phi},T_a,\dshpot) =
         \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvone (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')
+    \Rpvone (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rponeonei_def}
 \end{align}
 
@@ -161,8 +161,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \rponetwoi & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvone (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \cos (\vartheta') \sin (\vartheta')
+    \Rpvone (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \cos (\vartheta') \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rponetwoi_def}
 \end{align}
 
@@ -171,8 +171,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \mathrm{RC}_{p}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^3} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvone (v')^2  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \sin (\vartheta')^2 \sin(\varphi')
+    \Rpvone (v')^2 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -181,8 +181,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \rptwoonei & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvtwo (v')^3  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')
+    \Rpvtwo (v')^3 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rptwoonei_def}
 \end{align}
 
@@ -191,8 +191,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \rptwotwoi & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvtwo (v')^3  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \cos(\vartheta') \sin(\vartheta')
+    \Rpvtwo (v')^3 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rptwotwo_def}
 \end{align}
 
@@ -201,19 +201,18 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \mathrm{RC}_{n_{\mathrm{n}}}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvtwo (v')^3  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \sin(\vartheta')^2 \sin (\varphi')
+    \Rpvtwo (v')^3 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
-
 
 \noindent Equations~\eqref{eq:wwnboundary}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to the definition of part of the macroscopic toroidal velocity reflection coefficient scaling with density
 
 \begin{align}
     \rpthreeonei & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^4} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvthree (v')^3  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \sin (\vartheta')^2 \cos (\varphi')
+    \Rpvthree (v')^3 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \sin (\vartheta')^2 \cos (\varphi')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:rpthreeonei_def}
 \end{align}
 
@@ -222,8 +221,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \rpthreetwoi & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvthree (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
+    \Rpvthree (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \cos (\varphi')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:rpthreetwo_def}
 \end{align}
 
@@ -232,8 +231,8 @@ Equations~\eqref{eq:v2fn}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lead to t
 \begin{align}
     \mathrm{RC}_{u_{\mathrm{n},\phi}}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^5} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rpvthree (v')^4  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right)  \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')
+    \Rpvthree (v')^4 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^3 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -244,8 +243,8 @@ Equations~\eqref{eq:Qnboundary}, \eqref{eq:Gammanmin}, and \eqref{eq:finorm} lea
 \begin{align}
     \reonei & (u_{a,\phi},T_a,\dshpot) =
             \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^6} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rev (v')^5  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
+    \Rev (v')^5 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi', \label{eq:reonei_def}
 \end{align}
 
@@ -254,8 +253,8 @@ and the macroscopic energy reflection coefficient scaling with the normal gradie
 \begin{align}
     \retwoi & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^7} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rev (v')^6  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
+    \Rev (v')^6 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta')^2 \sin (\vartheta')
     \dd v' \dd \vartheta' \dd \varphi'. \label{eq:retwoi_def}
 \end{align}
 
@@ -264,8 +263,8 @@ The macroscopic energy reflection coefficient scaling with the tangential gradie
 \begin{align}
     \mathrm{RC}_{E}^{\dnndy} & (u_{a,\phi},T_a,\dshpot) =
     \frac{1}{\pi^\frac{3}{2}} \frac{1}{\ca^7} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
-    \Rev (v')^6  \nonumber \\
-    & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \mathrm{sin}(\vartheta') \mathrm{cos}(\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin(\varphi')
+    \Rev (v')^6 \times \nonumber \\
+    \times & \exp \left( - \frac{m}{2 T_a} \left( (v')^2-2 (v') u_{a,\phi} \sin (\vartheta') \cos (\varphi') + u_{a,\phi}^2 - \frac{2 \dshpot T_a}{m} \right) \right) \cos (\vartheta') \sin (\vartheta')^2 \sin (\varphi')
     \dd v' \dd \vartheta' \dd \varphi' = 0.
 \end{align}
 
@@ -324,7 +323,7 @@ The $p_1$ terms correspond to term (1) in Equation~\eqref{eq:pnboundary2}. The $
 
 \subsubsection{Flux contributions}
 
-Using the definition of $\rmzonei$ (Eq.~\eqref{eq:rmzonei_def} and $\rmxonei$ (Eq.~\eqref{eq:rmxonei_def}, the fast recycled part of Eq.~\eqref{eq:Gammanmomp} is written as
+Using the definition of $\rmzonei$ (Eq.~\eqref{eq:rmzonei_def}) and $\rmxonei$ (Eq.~\eqref{eq:rmxonei_def}), the fast recycled part of Eq.~\eqref{eq:Gammanmomp} is written as
 \begin{equation}
 \Gamma^{\mathrm{n}}_{\mathrm{m,||,rec}} = \pit \left( \fmozrec \cosa - \fmoyrec \sina \right) - \pitt \fmoxrec
 \end{equation}
@@ -391,7 +390,7 @@ with
 %    \fmoxrect & = 0.
 \end{align}
 
-where $\pti = \max \left( \Rifl - \pfi, 0 \right)$.
+where $\pti = \max \left( \Rifl - \pfi, 0 \right)$. \\
 
 The thermally reflected contribution to the parallel momentum flux from Eq.~\eqref{eq:par_momentum_T} is written as
 
@@ -425,14 +424,14 @@ The incident flux of parallel momentum according to the diffusion approximation 
 
 with
 \begin{align}
-    \fmozincd & = m \frac{\vcx}{\vtot} \left( - \nn \itwol + \frac{1}{\vtot} ( \dnndy \uy \itwol + \dnndz \ithreel ) \right), \\
-    \fmoyincd & = m \frac{\vcx}{\vtot} \left( - \nn \uy \ionel + \frac{1}{\vtot} \left( \dnndy (\frac{\Ti}{m} + \uy^2) \ionel + \dnndz \uy \itwol \right) \right),\\
-    \fmoxincd & = m \frac{\vcx}{\vtot} \left( - \nn \ux \ionel + \frac{1}{\vtot} ( \dnndy \ux \uy \ionel + \dnndz \ux \itwol) \right).
+    \fmozincd & = m \frac{\vcx}{\vtot} \left( - \nn \itwol + \frac{1}{\vtot} \left( \dnndy \uy \itwol + \dnndz \ithreel \right) \right), \\
+    \fmoyincd & = m \frac{\vcx}{\vtot} \left( - \nn \uy \ionel + \frac{1}{\vtot} \left( \dnndy \left( \frac{\Ti}{m} + \uy^2 \right) \ionel + \dnndz \uy \itwol \right) \right),\\
+    \fmoxincd & = m \frac{\vcx}{\vtot} \left( - \nn \ux \ionel + \frac{1}{\vtot} \left( \dnndy \ux \uy \ionel + \dnndz \ux \itwol \right) \right).
 \end{align}
 
 When using the drifting Maxwellian approximation, this becomes
 \begin{equation}
-    \Gamma^{\mathrm{n,Maxw}}_{\mathrm{m,||,inc}} =  -\pit (\fmozincm \cosa + \fmoyincm \sina) - \pitt \fmoxincm
+    \Gamma^{\mathrm{n,Maxw}}_{\mathrm{m,||,inc}} =  -\pit \left( \fmozincm \cosa + \fmoyincm \sina \right) - \pitt \fmoxincm
 \end{equation}
 
 with
@@ -443,6 +442,7 @@ with
 \end{align}
 
 \subsubsection{Term (1) pressure contributions}
+
 Using the definition of $\rponeonei$ (Eq.~\eqref{eq:rponeonei_def}) and $\rponetwoi$ (Eq.~\eqref{eq:rponetwoi_def}), the term (1) pressure contributions from Equation~\eqref{eq:v2fn} as written in Eq.~\eqref{eq:par_mom_final} become
 \begin{equation}
      p^{\mathrm{n}}_{\mathrm{1,rec}} = \pcorfi \frac{m}{3} \rponeonei \ci^2 \frac{\fdni}{-\ionel},
@@ -535,7 +535,7 @@ Similar to the particle and parallel momentum flux, we write the net neutral ene
     Q^{\mathrm{n,diff/Maxw}} = Q^{\mathrm{n}}_{\mathrm{rec}} + Q^{\mathrm{n,diff/Maxw}}_{\mathrm{refl}} + Q^{\mathrm{n}}_{T,\mathrm{rec}} + Q^{\mathrm{n,diff/Maxw}}_{\mathrm{T,refl}} - Q^{\mathrm{n,diff/Maxw}}_{\mathrm{T,inc}}
 \end{equation}
 
-Using the definitions of $\reonei$ (Eq.~\eqref{eq:reonei_def}) and $\retwoi$ (Eq.~\eqref{eq:retwoi_def}), the components are written as
+\noindent Using the definitions of $\reonei$ (Eq.~\eqref{eq:reonei_def}) and $\retwoi$ (Eq.~\eqref{eq:retwoi_def}), the components are written as
 
 \begin{align}
     Q^{\mathrm{n}}_{\mathrm{rec}} & = \frac{1}{2} \pcorfi m \reonei \ci^3 \frac{\fdni}{-\ionel}, \\
@@ -544,8 +544,8 @@ Using the definitions of $\reonei$ (Eq.~\eqref{eq:reonei_def}) and $\retwoi$ (Eq
     Q^{\mathrm{n}}_{\mathrm{T,rec}} & = \pti \fdni \efc, \\
     Q^{\mathrm{n,diff}}_{\mathrm{T,refl}} & = \ptn \fnnid \efc, \\
     Q^{\mathrm{n,Maxw}}_{\mathrm{T,refl}} & = \ptn \fnnim \efc,\\
-    Q^{\mathrm{n,diff}}_{\mathrm{inc}} & = \frac{\vcx}{\vtot} \left( -\nn \left( \left(\Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \ionel + \frac{m}{2} \ithreel \right) \nonumber \right. \\ & + \frac{1}{\vtot} \left( \dnndy \left( \left( 2 \Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \uy \ionel + \frac{m}{2} \uy \ithreel \right) \right. \nonumber \\
-    & + \left. \left. \dnndz \left( \left( \Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \itwol + \frac{m}{2} \ifourl \right) \right) \right), \\
+    Q^{\mathrm{n,diff}}_{\mathrm{inc}} & = \frac{\vcx}{\vtot} \Bigg\{ -\nn \left( \left(\Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \ionel + \frac{m}{2} \ithreel \right) \nonumber \\ & + \frac{1}{\vtot} \Bigg[ \dnndy \left( \left( 2 \Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \uy \ionel + \frac{m}{2} \uy \ithreel \right) \nonumber \\
+    & + \dnndz \left( \left( \Ti + \frac{m}{2} \left( \ux^2 + \uy^2 \right) \right) \itwol + \frac{m}{2} \ifourl \right) \Bigg] \Bigg\}, \\
     Q^{\mathrm{n,Maxw}}_{\mathrm{inc}} & = -\nn \left( \left( \Tn + \frac{m}{2} \left( \uxn^2 + \uyn^2 \right) \right) \ionel + \frac{m}{2} \ithreel \right).
 \end{align}
 
