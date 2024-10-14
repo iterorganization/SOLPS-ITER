@@ -6,6 +6,9 @@
 
 The switches to control the behavior of the AFN model in B2.5 are listed here. The default values are given after the name of the switch. \newline
 \\
+{\tt `b2mn\_afn' (default = `0')} \newline
+Master switch for AFN model. {\tt b2mn\_afn.eq.1} sets both {\tt `b2stbr\_recycle\_afn'} (AFN BCs, see below) and {\tt `b2tqna\_transport\_afn'} (AFN transport coefficients) to 1. \newline
+\\
 {\tt `b2stbr\_recycle\_afn' (default = `0')} \newline
 Main switch to enable the use of the AFN boundary conditions. \newline
 \\
@@ -24,11 +27,9 @@ When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b1} determines the Knudsen nu
 {\tt `b2stbr\_Kn\_b2' (default = `0.1')} \newline
 When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b2} determines the Knudsen number above which the Maxwellian approximation is used. \newline
 \\
-{\tt `use\_uy\_uz\_0' (default = `0')} \newline
-This switch controls the contribution from the tangential and normal bulk velocity of the ions or neutrals in the calculation of the incident fluxes. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculation of the incident fluxes, but the AFN database files are only tabulated for the toroidal Mach number. \newline
-\\
-{\tt `use\_uy\_uz\_1' (default = `0')} \newline
-This switch controls the contribution from the tangential and normal bulk velocity of the ions or neutrals in the calculation of the incident and recycled/reflected fluxes. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number.
+{\tt `use\_uy\_uz\_0' (default = `0')} and {\tt `use\_uy\_uz\_1' (default = `0')} \newline
+These switches control the contribution from the tangential and normal bulk velocity of the ions or neutrals. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number.
+{\tt use\_uy\_uz\_0.eq.0} turns off the contributions from perpendicular bulk velocities already before the calculations of the moments of the incident particles. {\tt use\_uy\_uz\_1.eq.0} turns off any contributions from perpendicular bulk velocities, but only after the calculation of the moments of the incident particles. \newline
 
  \subsection{Inputs in b2.neutrals.paramters}
 
