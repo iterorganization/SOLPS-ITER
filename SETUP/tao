@@ -12,8 +12,7 @@ if ($?SOLPS_PATH) then
   setenv OPT tao
   setenv TAO yes
   setenv TAO_OPT "$1"
-  echo "PETSC-TAO compilation and optimization turned on"
-  echo "with TAO options $TAO_OPT"
+  echo "PETSC-TAO compilation and optimization turned on with TAO options $TAO_OPT"
 else
   echo "SOLPS_PATH not set. Exiting."
 endif
