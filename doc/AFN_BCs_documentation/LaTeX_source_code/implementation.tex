@@ -608,23 +608,23 @@ $\rpthreetwoi$ & \texttt{Rp32} & \texttt{rp32i} \\
 \begin{tabular}{L{3cm} L{8cm}}
 \underline{Symbol} & \underline{Code} \\
 $e$ & \texttt{qe} \\
-$\nn$ & \texttt{nnf} / \texttt{nn} \\
+$\nn$ & \texttt{nnf} or \texttt{nn} \\
 $\pit$ & \texttt{pit} \\
 $\pitt$ & \texttt{pit2} \\
-$\pfi / \pfn$ &  \texttt{pf}\\
-$\pcorfi / \pcorfn$ &  \texttt{pcorf}\\
-$\pti / \ptn $ &  \texttt{pt}\\
-$\Rnxfl / \Rifl$ &  \texttt{recyc0} / \texttt{b2recyc} \\
+$\pfi$ or $\pfn$ &  \texttt{pf}\\
+$\pcorfi$ or $\pcorfn$ &  \texttt{pcorf}\\
+$\pti$ or $\ptn $ &  \texttt{pt}\\
+$\Rnxfl$ or $\Rifl$ &  \texttt{recyc0} or \texttt{b2recyc} \\
 $\recycm$ & \texttt{recycm}\\
 $\cosa$ & \texttt{cosa} \\
 $\sina$ & \texttt{sina} \\
 $\phi$ & \texttt{x} \\
 $\tau$ & \texttt{y} \\
 $\nu$ & \texttt{z} \\
-$u_{||} / u_{\mathrm{n}||}$ & \texttt{upf} \\
-$ \ux / \uxn $ & \texttt{ux} \\
-$ \uy / \uyn$ & \texttt{uy} \\
-$ \uz / \uzn $ & \texttt{uz} \\
+$u_{||}$ or $u_{\mathrm{n}||}$ & \texttt{upf} \\
+$ \ux $ or $ \uxn $ & \texttt{ux} \\
+$ \uy $ or $ \uyn$ & \texttt{uy} \\
+$ \uz $ or $ \uzn $ & \texttt{uz} \\
 $\mathcal{M}_\phi$ & \texttt{Mj}\\
 $A_f$ & \texttt{area} \\
 $\vcx$ & \texttt{vcx} \\
@@ -637,11 +637,11 @@ $\Ti$ & \texttt{tif}\\
 $\vT$ & \texttt{vt}\\
 $\efc$ & \texttt{E\_fc}\\
 $\mathrm{Kn}$ & \texttt{Kn} \\
-$L$ & \texttt{L} / \texttt{L\_macro\_AFN}  \\
+$L$ & \texttt{L} or \texttt{L\_macro\_AFN}  \\
 $\mathrm{Kn^{bd}}$ & \texttt{Kn\_b1} \\
 $\mathrm{Kn^{bm}}$ & \texttt{Kn\_b2} \\
 $c_{\mathrm{n},th}$ & \texttt{c\_th} \\
-$\ci / \cn $ & \texttt{cs} \\
+$\ci $ or $ \cn $ & \texttt{cs} \\
 $\lambda_{\mathrm{cx}}$ & \texttt{mfp} \\
 $\dshpotj$ & \texttt{shpottauj}
 \end{tabular}
@@ -652,19 +652,19 @@ $\dshpotj$ & \texttt{shpottauj}
 $\izerol$ & \texttt{i0l} \\
 $\ionel$ & \texttt{i1l} \\
 $\itwol$ & \texttt{i2l} \\
-$M_{\tau \nu}$ &  \texttt{uy i1l} \\
-$M_{\phi \nu}$ & \texttt{ux i1l} \\
-$M_{\tau \tau \nu}$ & \texttt{(ti/mn + uy**2) i1l} \\
-$M_{\tau \nu \nu}$ &  \texttt{uy i2l}\\
-$M_{\phi \tau \nu}$ &  \texttt{ux uy i1l}\\
+$M_{\tau \nu}$ &  \texttt{uy*i1l} \\
+$M_{\phi \nu}$ & \texttt{ux*i1l} \\
+$M_{\tau \tau \nu}$ & \texttt{(ti/mn + uy**2)*i1l} \\
+$M_{\tau \nu \nu}$ &  \texttt{uy*i2l}\\
+$M_{\phi \tau \nu}$ &  \texttt{ux*uy*i1l}\\
 $\ithreel$ &  \texttt{i3l}\\
-$M_{\phi \nu \nu}$ &  \texttt{ux i2l}\\
-$M_{\phi \phi \nu}$ &  \texttt{(ti/mn + ux**2) i1l}\\
-$M_{\phi \phi \tau \nu}$ &  \texttt{(ti/mn + ux**2) uy i1l}\\
-$M_{\tau \tau \tau \nu}$ &  \texttt{(ti/mn + uy**2) uy i1l}\\
-$M_{\tau \nu \nu \nu}$ &  \texttt{uy i3l}\\
-$M_{\phi \phi \nu \nu}$ &  \texttt{(ti/mn + ux**2) i2l}\\
-$M_{\tau \tau \nu \nu}$ &  \texttt{(ti/mn + uy**2) i2l} \\
+$M_{\phi \nu \nu}$ &  \texttt{ux*i2l}\\
+$M_{\phi \phi \nu}$ &  \texttt{(ti/mn + ux**2)*i1l}\\
+$M_{\phi \phi \tau \nu}$ &  \texttt{(ti/mn + ux**2)*uy*i1l}\\
+$M_{\tau \tau \tau \nu}$ &  \texttt{(ti/mn + uy**2)*uy*i1l}\\
+$M_{\tau \nu \nu \nu}$ &  \texttt{uy*i3l}\\
+$M_{\phi \phi \nu \nu}$ &  \texttt{(ti/mn + ux**2)*i2l}\\
+$M_{\tau \tau \nu \nu}$ &  \texttt{(ti/mn + uy**2)*i2l} \\
 $M_{\nu \nu \nu \nu}$ &  \texttt{i4l}\\
 \end{tabular}
 
@@ -672,14 +672,14 @@ $M_{\nu \nu \nu \nu}$ &  \texttt{i4l}\\
 
 \begin{tabular}{L{4cm} L{6cm}}
 \underline{Symbol} & \underline{Code} \\
-$\fmoxincd / \fmoxincm$ & \texttt{fmox} \\
-$\fmoyincd / \fmoyincm$ & \texttt{fmoy} \\
-$\fmozincd / \fmozincm$ & \texttt{fmoz} \\
-$ \Gamma^{\mathrm{n,diff}}_{\mathrm{m,||,inc}} / \Gamma^{\mathrm{n,Maxw}}_{\mathrm{m,||,inc}} $ & \texttt{fmomni} \\
-$Q^{\mathrm{n,diff}}_{\mathrm{inc}} / Q^{\mathrm{n,Maxw}}_{\mathrm{inc}}$ & \texttt{feneni} \\
-$(\nn')_{\mathrm{inc}}^{\mathrm{diff}} / (\nn')_{\mathrm{inc}}^{\mathrm{Maxw}}$ & \texttt{nni} \\
+$\fmoxincd $ or $ \fmoxincm$ & \texttt{fmox} \\
+$\fmoyincd $ or $ \fmoyincm$ & \texttt{fmoy} \\
+$\fmozincd $ or $ \fmozincm$ & \texttt{fmoz} \\
+$ \Gamma^{\mathrm{n,diff}}_{\mathrm{m,||,inc}}$ or  $\Gamma^{\mathrm{n,Maxw}}_{\mathrm{m,||,inc}} $ & \texttt{fmomni} \\
+$Q^{\mathrm{n,diff}}_{\mathrm{inc}} $ or  $ Q^{\mathrm{n,Maxw}}_{\mathrm{inc}}$ & \texttt{feneni} \\
+$(\nn')_{\mathrm{inc}}^{\mathrm{diff}} $ or  $ (\nn')_{\mathrm{inc}}^{\mathrm{Maxw}}$ & \texttt{nni} \\
 $ (\nn' \wwn')_{\mathrm{inc}}^{\mathrm{diff}}$ & \texttt{nnwwni} \\
-$p^{\mathrm{n,diff}}_{\mathrm{1,inc}} / p^{\mathrm{n,Maxw}}_{\mathrm{1,inc}}$ & \texttt{pn} \\
+$p^{\mathrm{n,diff}}_{\mathrm{1,inc}} $ or  $ p^{\mathrm{n,Maxw}}_{\mathrm{1,inc}}$ & \texttt{pn} \\
 \end{tabular}
 
 \subsubsection{CalcRecycledFluxes}
@@ -700,9 +700,9 @@ $\Gamma^{\mathrm{n}}_{\mathrm{m,||,rec}} + \Gamma^{\mathrm{n}}_{\mathrm{m,||,T,r
 
 \begin{tabular}{L{8cm} L{3cm}}
 \underline{Symbol} & \underline{Code} \\
-$\fmoxrefld / \fmoxreflm$ & \texttt{fmox} \\
-$\fmoyrefld / \fmoyreflm$ & \texttt{fmoy} \\
-$ \fmozrefld / \fmozreflm + \fmozrefldt / \fmozreflmt$ & \texttt{fmoz} \\
+$\fmoxrefld $ or  $ \fmoxreflm$ & \texttt{fmox} \\
+$\fmoyrefld $ or  $ \fmoyreflm$ & \texttt{fmoy} \\
+$ \fmozrefld + \fmozrefldt$ or  $ \fmozreflm + \fmozreflmt $  & \texttt{fmoz} \\
 $ (\nn')_{\mathrm{refl}}^{\mathrm{diff/Maxw}} + (\nn')_{\mathrm{T,refl}}^{\mathrm{diff/Maxw}} $& \texttt{nnrefl} \\
 $(\nn' \wwn')_{\mathrm{refl}}^{\mathrm{diff/Maxw}}$ & \texttt{nnwwnrefl} \\
 $Q^{\mathrm{n,diff/Maxw}}_{\mathrm{refl}} + Q^{\mathrm{n,diff/Maxw}}_{\mathrm{T,refl}}$ & \texttt{fene} \\
