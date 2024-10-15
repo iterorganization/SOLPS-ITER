@@ -65,6 +65,8 @@
 \newcommand{\grad}{\nabla}
 \definecolor{Red}{rgb}{1.0,0.0,0.0}
 
+\newcommand{\exb}{{\bf E}\times{\bf B}}
+
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
@@ -338,7 +340,7 @@ For fuller code capability, it is also recommended to load the IMAS (Integrated 
 If the {\tt nc2text} utility program is not present on the system, but the {\tt NetCDF} library is available, the code will then automatically build an alternative skeleton version and add it to the scripts path.\index{nc2text}
 
 \index{NO\_MANUAL}
-If there is no \LaTeX interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
+If there is no \LaTeX~interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -886,7 +888,7 @@ will take you to {\tt \$\{SOLPSTOP\}}.
 
 \begin{sloppypar}
 The {\tt modules/B2.5} subtree contains the source directories
-for {\tt B2.5}; {\tt modules/Eirene} for the Monte Carlo code, {\tt modules/Carre} and
+for {\tt B2.5}, {\tt modules/Eirene} for the Monte Carlo code, {\tt modules/Carre} and
 {\tt modules/fxdr}
 the grid generator and associated converter,
 {\tt modules/DivGeo} for the {\tt DG} graphical interface
@@ -2598,140 +2600,128 @@ which contains
   \item[S] "South" boundary
   \item[W] "West" boundary
   \item[E] "East" boundary
-  \item[X] "X" boundary used for specifying a fixed value on
-  a row of cells
-  \item[Y] "Y" boundary used for specifying a fixed value on
-  a column of cells
+  \item[X] "X" boundary used for specifying a fixed value on a row of cells
+  \item[Y] "Y" boundary used for specifying a fixed value on a column of cells
   \end{description}
 \item[BCPOS]\index{BCPOS} {\tt integer array, length NBC}, for North, South
   or X boundary conditions, it specifies the row index; for West, East
-  and Y boundary conditions, it specifies the column index
+  and Y boundary conditions, it specifies the column index.
 \item[BCSTART]\index{BCSTART} {\tt integer array, length NBC}, for North,
   South or X boundary conditions, it specifies the start column index;
   for West, East and Y boundary conditions, it specifies the start row
-  index
+  index.
 \item[BCEND]\index{BCEND} {\tt integer array, length NBC}, for North, South
   or X boundary conditions, it specifies the end column index; for
-  West, East and Y boundary conditions, it specifies the end row index
+  West, East and Y boundary conditions, it specifies the end row index.
 \item[BCCON]\index{BCCON} {\tt integer array, length NS * NBC}, specifying
   the type of density boundary condition for each segment and species
   (fastest varying index is species); makes use of {\tt CONPAR} to
-  specify additional information, as indicated
+  specify additional information, as indicated.
   \begin{description}
-  \item[0] no boundary condition is applied (default)
-  \item[1] prescribe the value of the density, {\tt CONPAR(,,1)}
-  specifies the required density in $m^{-3}$
-  \item[2] prescribe the gradient of the density, {\tt CONPAR(,,1)}
-  specifies the required density gradient in $m^{-4}$
-  \item[3] sheath conditions, {\tt CONPAR(,,1)} not used (zero
-  gradient is used)
-  \item[4] prescribe the value of the density, weakly a mixed boundary
-  condition, {\tt CONPAR(,,1)} specifies the required density in
-  $m^{-3}$ and {\tt CONPAR(,,2)} specifies the "strength" of the
-  boundary condition
+  \item[0] no boundary condition is applied (default).
+  \item[1] prescribe the value of the density,
+    {\tt CONPAR(,,1)} specifies the required density in $m^{-3}$.
+  \item[2] prescribe the gradient of the density,
+    {\tt CONPAR(,,1)} specifies the required density gradient in $m^{-4}$.
+  \item[3] sheath conditions, {\tt CONPAR(,,1)} not used (zero gradient is used).
+  \item[4] prescribe the value of the density, weakly a mixed boundary condition,
+    {\tt CONPAR(,,1)} specifies the required density in $m^{-3}$ and
+    {\tt CONPAR(,,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the particle flux per unit area,
-  {\tt CONPAR(,,1)} specifies the required particle flux density in
-  $m^{-2} s^{-1}$
+    {\tt CONPAR(,,1)} specifies the required particle flux density in $m^{-2}.s^{-1}$.
   \item[6] prescribe the total particle flux for a constant density,
-  {\tt CONPAR(,,1)} specifies the particle flux in
-  $s^{-1}$
-  \item[7] prescribe the density as a function of other plasma
-  parameters [not yet available]
-  \item[8] prescribe the total particle flux with constant flux
-  density, {\tt CONPAR(,,1)} specifies the particle flux in
-  $s^{-1}$
+    {\tt CONPAR(,,1)} specifies the particle flux in $s^{-1}$.
+  \item[7] prescribe the density as a function of other plasma parameters [not yet available].
+  \item[8] prescribe the total particle flux with constant flux density,
+    {\tt CONPAR(,,1)} specifies the particle flux in $s^{-1}$.
   \item[9] prescribe the decay length for the density,
-  {\tt CONPAR(,,1)} specifies the gradient length in $m$
+    {\tt CONPAR(,,1)} specifies the gradient length in $m$.
   \item[10] leakage option for density, recommended for cases with drifts,
-  {\tt CONPAR(,,1)} specifies the leakage factor,
-  $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$.
-  {\tt CONPAR(,,2)} provides an optional additional stabilization parameter to
-  help with the linearization (must be positive if used).
+    {\tt CONPAR(,,1)} specifies the leakage factor,
+    $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,a} n_a$.
+    {\tt CONPAR(,,2)} provides an optional additional stabilization parameter to
+    help with the linearization (must be positive if used).
   \item[11] particle flux feedback boundary condition,
-  {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
-  The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
+    {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
+    The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
   \item[12] particle density feedback boundary condition, as above,
-  {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
-  The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
+    {\tt CONPAR(,,1)} not used, derived from {\tt CBSNA(0,IS,IREG)}.
+    The species used must be declared using the {\tt b2stbc\_isfeedback} switch.
   \item[13] particle density to achieve specified total flux,
-  {\tt CONPAR(,,1)} is the specified radial flux crossing the surface
-  {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
-  the returning flux of ionised neutrals that crossed into the plasma core
-  ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
-  {\tt 'ionising\_core'} switch is used,
-  {\tt CONPAR(,,2)} is the strength of the feedback.
+    {\tt CONPAR(,,1)} is the specified radial flux crossing the surface
+    {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
+    the returning flux of ionised neutrals that crossed into the plasma core
+    ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
+    {\tt 'ionising\_core'} switch is used,
+    {\tt CONPAR(,,2)} is the strength of the feedback.
   \item[14] sound speed velocity flux,
-  {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+    {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
   \item[15] prescribe a radial leakage velocity,
-  {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
+    {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[18] prescribe total main ion particle flux, used with {\tt ASTRA} coupling.
   \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with {\tt ASTRA}. The total desired flux is summed over all {\tt BCCON=19} core boundaries. This boundary condition applies to ions in their highest ionisation stage.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[20] constant density feedback condition,
-  {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
+    {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
+    {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[23] Feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
-  {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-  {\tt CONPAR(,,2)} is the strength of the feedback
-  \item[25] Feedback boundary condition: prescribe the average value of the density and add the poloidal density variation from neighbouring radial ring. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
-  {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
-  \item[26] Feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[27] Feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the ionisation state to which the {\tt BCCON=27} condition is applied. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries. For main ions and low $Z$ impurities, it is recommended to set {\tt BCCON=27} for the highest ionisation state. For high $Z$ impurities, if the ionisation potential of the highest ionisation state of the given isonuclear sequence is much larger than the expected core plasma temperature, the {\tt BCCON=27} condition should be set for the ionisation state for which the density is expected to be maximal. For ionisation states higher than that one, it is recommended to set {\tt BCCON=2} with {\tt CONPAR=0.0}, since their densities are expected to be negligible, and {\tt BCCON=2} with {\tt CONPAR=0.0} seems to be the safest boundary condition for low density species.
-  {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[28] Density profile is read from file specified in {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum density of the profile.
-  \item[29] Constant pressure prescribed by {\tt CONPAR(,,1)} in units of $Pa$. Density is calculated by dividing the pressure by the temperature.
-  \item[30] The particle flux per unit area profile is read from the file {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum value of the profile. Only applicable to E and W boundaries.
+    {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
+    {\tt CONPAR(,,2)} is the strength of the feedback.
+  \item[25] feedback boundary condition: prescribe the average value of the density and add the poloidal density variation from neighbouring radial ring. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
+    {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
+  \item[26] feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+  \item[27] feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the ionisation state to which the {\tt BCCON=27} condition is applied. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries. For main ions and low $Z$ impurities, it is recommended to set {\tt BCCON=27} for the highest ionisation state. For high $Z$ impurities, if the ionisation potential of the highest ionisation state of the given isonuclear sequence is much larger than the expected core plasma temperature, the {\tt BCCON=27} condition should be set for the ionisation state for which the density is expected to be maximal. For ionisation states higher than that one, it is recommended to set {\tt BCCON=2} with {\tt CONPAR=0.0}, since their densities are expected to be negligible, and {\tt BCCON=2} with {\tt CONPAR=0.0} seems to be the safest boundary condition for low density species.
+    {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
+  \item[28] density profile is read from file specified in {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum density of the profile.
+  \item[29] constant pressure prescribed by {\tt CONPAR(,,1)} in units of $Pa$. Density is calculated by dividing the pressure by the temperature.
+  \item[30] the particle flux per unit area profile is read from the file {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum value of the profile. Only applicable to E and W boundaries.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
   the type of parallel momentum or velocity boundary condition for each segment
   and species (fastest varying index is species); makes use of {\tt MOMPAR} to
   specify additional information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the parallel velocity,
-  {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
+    {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$.
   \item[2] prescribe the gradient of the parallel velocity,
-  {\tt MOMPAR(,,1)} specifies the parallel velocity gradient in $s^{-1}$
+    {\tt MOMPAR(,,1)} specifies the parallel velocity gradient in $s^{-1}$.
   \item[3] sheath conditions, Mach number as input, if
-  {\tt MOMPAR(,,2)} $< \frac{1}{2}$, then the velocity is set to exactly
-  {\tt MOMPAR(,,1)} $\times C_{s, \mbox{collective}}$, otherwise the
-  velocity is set to be at least {\tt MOMPAR(,,1)} $\times
-  C_{s,\mbox{species}}$
-  \item[4] prescribe the value of the velocity, weakly a mixed
-  boundary condition, {\tt MOMPAR(,,1)} specifies the parallel
-  velocity in $m.s^{-1}$ and {\tt MOMPAR(,,2)} specifies the
-  "strength" of the boundary condition
+    {\tt MOMPAR(,,2)} $< \frac{1}{2}$, then the velocity is set to exactly
+    {\tt MOMPAR(,,1)} $\times C_{s, \mbox{collective}}$, otherwise the
+    velocity is set to be at least {\tt MOMPAR(,,1)} $\times C_{s,\mbox{species}}$.
+  \item[4] prescribe the value of the velocity, weakly a mixed boundary condition,
+    {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$ and
+    {\tt MOMPAR(,,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the parallel momentum flux per unit area,
-  {\tt MOMPAR(,,1)} specifies the parallel momentum flux density in $N.m^{-2}$
+    {\tt MOMPAR(,,1)} specifies the parallel momentum flux density in $N.m^{-2}$.
   \item[6] prescribe the total parallel momentum flux for a constant
-  parallel velocity [not yet available]
-  \item[7] prescribe the parallel momentum as a function of other plasma
-  parameters [not yet available]
+    parallel velocity [not yet available].
+  \item[7] prescribe the parallel momentum as a function of other plasma parameters [not yet available].
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
-  [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the
-  gradient of the Mach number in $m^{-1}$]]]
+    [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the gradient of the Mach number in $m^{-1}$]]].
   \item[9] prescribe the total parallel momentum flux with constant flux
-  density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$
+    density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
   \item[10] prescribe the decay length for the parallel momentum,
-  {\tt MOMPAR(,,1)} specifies the decay length in $m$
+    {\tt MOMPAR(,,1)} specifies the decay length in $m$.
   \item[11] Rozhansky viscosity condition for the parallel momentum,
-  {\tt MOMPAR(,,1)} is not used
-  \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum
+    {\tt MOMPAR(,,1)} is not used.
+  \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
-  \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum
-  \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$
+  \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
+  \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
   \item[16] prescribe the average value of the parallel velocity,
-  {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$
+    {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$.
   \item[17] leakage option for parallel momentum, {\tt MOMPAR(,,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$
+    the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, a} m_a n_a u_a$.
   \item[18] prescribe the parallel velocity profile in units of $m.s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity is given by {\tt MOMPAR(IS,IB,1)} in $m.s^{-1}$. Only available for E and W boundaries.
   \item[19] prescribe the momentum flux profile in units of $m^{-2}.s^{-1}$, read from {\tt MOM\_FN}. This has to be used in combination with {\tt BCCON = 1}, {\tt 28} , or {\tt 30} and {\tt BCENI = 15}. Only available for E and W boundaries.
   \item[20] the parallel velocity is based on the temperature and the Mach number read from the {\tt MOM\_FN} file. It is assumed that $\gamma_i = 1$. Only available for E and W boundaries.
@@ -2742,46 +2732,41 @@ which contains
   each segment; makes use of {\tt ENEPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the electron temperature,
-  {\tt ENEPAR(,1)} specifies the temperature in $eV$
+    {\tt ENEPAR(,1)} specifies the temperature in $eV$.
   \item[2] prescribe the gradient of the electron temperature,
-  {\tt ENEPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$
+    {\tt ENEPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$.
   \item[3] sheath conditions, electron energy transmission,
-  {\tt ENEPAR(,1)} specifies an additional contribution to the energy
-  transmission coefficient in addition to that of the potential
-  difference [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)}]
-  \item[4] prescribe the value of the electron temperature, weakly a
-  mixed boundary condition, {\tt ENEPAR(,1)} specifies the
-  temperature in $eV$ and {\tt ENEPAR(,2)} specifies the
-  "strength" of the boundary condition
+    {\tt ENEPAR(,1)} specifies an additional contribution to the energy
+    transmission coefficient in addition to that of the potential
+    difference [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)}].
+  \item[4] prescribe the value of the electron temperature, weakly a mixed boundary condition,
+    {\tt ENEPAR(,1)} specifies the temperature in $eV$ and
+    {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the electron energy flux per unit area,
-  {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$
+    {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
   \item[6] prescribe the total electron energy flux for a constant
-  electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
-  in $W$ (no longer supported, use types [16] or [17] instead)
-  \item[7] prescribe the electron temperature as a function of
-  other plasma parameters [not yet available]
-  \item[8] prescribe the total electron heat flux with constant flux
-  density, {\tt ENEPAR(,1)} specifies the energy flux in $W$
+    electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
+    in $W$ (no longer supported, use types [16] or [17] instead).
+  \item[7] prescribe the electron temperature as a function of other plasma parameters [not yet available].
+  \item[8] prescribe the total electron heat flux with constant flux density,
+    {\tt ENEPAR(,1)} specifies the energy flux in $W$.
   \item[9] prescribe the decay length for the electron temperature,
-  {\tt ENEPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead)
-  \item[10] feedback option for core, {\tt ENEPAR(,1)} not used,
-  derived from {\tt cbshe(0,coreregno)}
+    {\tt ENEPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
+  \item[10] feedback option for core, {\tt ENEPAR(,1)} not used, derived from {\tt cbshe(0,coreregno)}.
   \item[11] not used
   \item[12] sheath conditions, electron energy transmission coefficient,
-  {\tt ENEPAR(,1)} specifies an energy transmission factor,
-  $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$
-  \item[13] prescribe the electron energy flux per unit area
-  proportional to temperature, {\tt ENEPAR(,1)} specifies the energy
-  flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature
-  here in $J$)
+    {\tt ENEPAR(,1)} specifies an energy transmission factor,
+    $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$.
+  \item[13] prescribe the electron energy flux per unit area proportional to temperature,
+    {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
+    the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
   \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
+    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
     If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
@@ -2796,125 +2781,118 @@ which contains
   \item[18] fractional drop condition. Not yet working.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
   \item[20] feedback boundary condition with constant temperature,
-  as per type [16] but with {\tt type20\_} switches and a different
-  feedback scheme.
-  \item[21] constant temperature feedback scaled by temperature on the ring
-   {\tt bc\_type21\_ref} away. {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$. {\tt ENEPAR(,2)} is the strength of the feedback.
+    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
+  \item[21] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away.
+   {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$.
+   {\tt ENEPAR(,2)} is the strength of the feedback.
   \item[22] radial leakage condition for the electron temperature.
-  {\tt ENEPAR(,1)} specifies the leakage velocity in units of the electron thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
-  \item[23] prescribe electron temperature profile in $eV$, read from file {\tt ENE\_FN}. If {\tt ENEPAR(IB,2)} is positive, the profile is scaled such that {\tt ENEPAR(IB,1)} is the maximum electron temperature of the profile in $eV$. Only available for E and W boundaries.
+    {\tt ENEPAR(,1)} specifies the leakage velocity in units of the electron thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
+  \item[23] prescribe electron temperature profile in $eV$, read from file {\tt ENE\_FN}.
+    If {\tt ENEPAR(IB,2)} is positive, the profile is scaled such that {\tt ENEPAR(IB,1)} is the maximum electron temperature of the profile in $eV$.
+    Only available for E and W boundaries.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
   type of ion energy or temperature boundary condition for each
   segment; makes use of {\tt ENIPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary condition is applied (default)
+  \item[0] no boundary condition is applied (default).
   \item[1] prescribe the value of the ion temperature,
-  {\tt ENIPAR(,1)} specifies the temperature in $eV$
+    {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[2] prescribe the gradient of the ion temperature,
-  {\tt ENIPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$
+    {\tt ENIPAR(,1)} specifies the temperature gradient in $eV.m^{-1}$.
   \item[3] sheath conditions, ion energy transmission,
-  {\tt ENIPAR(,1)} specifies the contribution to the energy
-  transmission coefficient [the sound speed used depends on settings
-  of {\tt MOMPAR(,ISMAIN,2)}]
-  \item[4] prescribe the value of the ion temperature, weakly a mixed
-  boundary condition, {\tt ENIPAR(,1)} specifies the temperature in
-  $eV$ and {\tt ENIPAR(,2)} specifies the "strength" of the
-  boundary condition
+    {\tt ENIPAR(,1)} specifies the contribution to the energy transmission coefficient
+    [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)}].
+  \item[4] prescribe the value of the ion temperature, weakly a mixed boundary condition,
+    {\tt ENIPAR(,1)} specifies the temperature in $eV$ and
+    {\tt ENIPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the ion energy flux per unit area,
-  {\tt ENIPAR(,1)} specifies the energy flux density in $W.m^{-2}$
-  \item[6] prescribe the total ion energy flux for a constant ion
-  temperature, {\tt ENIPAR(,1)} specifies the energy flux in $W$
-  (no longer supported, use types [16] or [17] instead)
-  \item[7] prescribe the ion temperature as a function of other plasma
-  parameters [not yet available]
-  \item[8] prescribe the total ion heat flux with constant flux
-  density, {\tt ENIPAR(,1)} specifies the energy flux in $W$
+    {\tt ENIPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
+  \item[6] prescribe the total ion energy flux for a constant ion temperature,
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$
+    (no longer supported, use types [16] or [17] instead).
+  \item[7] prescribe the ion temperature as a function of other plasma parameters [not yet available]
+  \item[8] prescribe the total ion heat flux with constant flux density,
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$
   \item[9] prescribe the decay length for the ion temperature,
-  {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead)
-  \item[10] feedback option for core, {\tt ENIPAR(,1)} not used,
-  derived from {\tt cbshi(0,ISMAIN,coreregno)}
+    {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
+  \item[10] feedback option for core, {\tt ENIPAR(,1)} not used, derived from {\tt cbshi(0,ISMAIN,coreregno)}.
   \item[11] sheath conditions, ion energy transmission coefficient,
-  {\tt ENIPAR(,1)} specifies an energy transmission factor,
-  $\delta_i$ in $Q_i = \delta_i T_i \sum_a n_a C_{s,a}$
+    {\tt ENIPAR(,1)} specifies an energy transmission factor,
+    $\delta_i$ in $Q_i = \delta_i T_i \sum_a n_a C_{s,a}$.
   \item[12] sheath conditions, ion energy transmission coefficient,
-  {\tt ENIPAR(,1)} specifies an energy transmission factor,
-  $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$
-  \item[13] prescribe the ion energy flux per unit area proportional
-  to temperature, {\tt ENIPAR(,1)} specifies the energy flux density
-  per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$)
+    {\tt ENIPAR(,1)} specifies an energy transmission factor,
+    $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
+  \item[13] prescribe the ion energy flux per unit area proportional to temperature,
+   {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
-  the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
+    the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENIPAR(,2)}
+    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
     should be something like {\tt 0.1} and specifies the strength of the
     feedback. Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
     If {\tt bceni\_16\_style=1}, integrated ion heat flux with constant $T_i$, summed over all core boundaries with {\tt BCENI=16}.
-  \item[17] Feedback boundary condition with constant shared temperature
+  \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, see {\tt BCENE=17} above for description.
-  \item[18] Fractional drop condition. Not yet working.
+  \item[18] fractional drop condition. Not yet working.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
-  \item[20] Feedback boundary condition with constant temperature,
-  as per type [16] but with {\tt type20\_} switches and a different
-  feedback scheme.
+  \item[20] feedback boundary condition with constant temperature,
+    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
   \item[21] from {\tt b2stbc\_spb}
-  \item[22] Radial leakage velocity for the ion temperature.
-  {\tt ENIPAR(,1)} specifies the leakage velocity in units of the collective ion thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
-  \item[23] Prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The average is taken over all core boundaries with {\tt BCENI=23}.
-  {\tt ENIPAR(,1)} specifies the temperature in $eV$
-  \item[24] Feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
-  {\tt ENIPAR(,1)} specifies the energy flux in $W$
-  \item[25] Constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
-  {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-  {\tt ENIPAR(,,2)} is the strength of the feedback
-  \item[26] Prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
-  {\tt ENIPAR(,1)} specifies the temperature in $eV$
-  \item[27] Feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
-  {\tt ENIPAR(,1)} specifies the energy flux in $W$
-  \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}. If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$. Only available for E and W boundaries.
+  \item[22] radial leakage velocity for the ion temperature.
+    {\tt ENIPAR(,1)} specifies the leakage velocity in units of the collective ion thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
+  \item[23] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The average is taken over all core boundaries with {\tt BCENI=23}.
+    {\tt ENIPAR(,1)} specifies the temperature in $eV$.
+  \item[24] feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
+  \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
+    {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
+    {\tt ENIPAR(,,2)} is the strength of the feedback.
+  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
+    {\tt ENIPAR(,1)} specifies the temperature in $eV$.
+  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
+  {\tt ENIPAR(,1)} specifies the energy flux in $W$.
+  \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}.
+    If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$.
+    Only available for E and W boundaries.
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
   type of electric potential or current boundary condition for each
   segment; makes use of {\tt POTPAR} to specify additional
   information, as indicated
   \begin{description}
-  \item[0] no boundary conditon is applied (default)
-  \item[1] prescribe the value of the potential, {\tt POTPAR(,1)}
-  specifies the potential in $V$
-  \item[2] prescribe the gradient of the potential, {\tt POTPAR(,1)}
-  specifies the potential gradient in $V.m^{-1}$
+  \item[0] no boundary conditon is applied (default).
+  \item[1] prescribe the value of the potential,
+    {\tt POTPAR(,1)} specifies the potential in $V$.
+  \item[2] prescribe the gradient of the potential,
+    {\tt POTPAR(,1)} specifies the potential gradient in $V.m^{-1}$.
   \item[3] sheath conditions,
-  {\tt POTPAR(,2)} used for biasing [see code for details]
-  \item[4] prescribe the value of the potential weakly a mixed
-  boundary condition, {\tt POTPAR(,1)} specifies the potential in
-  $V$ and {\tt POTPAR(,2)} specifies the "strength" of the
-  boundary condition
+    {\tt POTPAR(,2)} used for biasing [see code for details].
+  \item[4] prescribe the value of the potential weakly a mixed boundary condition,
+    {\tt POTPAR(,1)} specifies the potential in $V$ and
+    {\tt POTPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the current flux density per unit area,
-    {\tt POTPAR(,1)} specifies the electric current flux density in
-    $A.m^{-2}$
-  \item[6] prescribe the total current flux density for a
-  constant potential [not yet available]
-  \item[7] prescribe the potential as a function of other
-  plasma parameters [not yet available]
+    {\tt POTPAR(,1)} specifies the electric current flux density in $A.m^{-2}$.
+  \item[6] prescribe the total current flux density for a constant potential [not yet available].
+  \item[7] prescribe the potential as a function of other plasma parameters [not yet available].
   \item[8] prescribe the total electric current with constant flux
-  density, {\tt POTPAR(,1)} specifies the electric current in $A$
+    density, {\tt POTPAR(,1)} specifies the electric current in $A$.
   \item[9] prescribe the decay length for the potential,
-  {\tt POTPAR(,1)} specifies the decay length in $m$
-  \item[10] feedback option for core [not yet tested!!!!!!!!!] (based
-  on using {\tt cbsch(0,coreregno)})
-  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$
-  \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}
-  \item[14] prescribe the value of the radial sheath potential, {\tt POTPAR(,1)}, in $V$
+    {\tt POTPAR(,1)} specifies the decay length in $m$.
+  \item[10] feedback option for core [not yet tested!!!!!!!!!] (based on using {\tt cbsch(0,coreregno)}).
+  \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$.
+  \item[12] imposes the currents due to drifts for the South core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
+  \item[13] imposes the currents due to drifts for the South private flux and North boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
+  \item[14] prescribe the value of the radial sheath potential, {\tt POTPAR(,1)}, in $V$.
   \item[15] prescribe potential profile in $V$, read from file defined in {\tt POT\_FN}. Only available in E and W boundaries.
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
-  \item[17] Sheath condition for floating target. This BC provides a zero net current through the target. First, the total current through the surface is computed. Then, the potential is corrected by a factor of {\tt POTPAR(,1) * current} to reduce the current. {\tt POTPAR(,2)} used for storing the potential value, in $V$, during the iterative process and to provide an initial guess.
+  \item[17] sheath condition for floating target. This BC provides a zero net current through the target. First, the total current through the surface is computed. Then, the potential is corrected by a factor of {\tt POTPAR(,1) * current} to reduce the current. {\tt POTPAR(,2)} used for storing the potential value, in $V$, during the iterative process and to provide an initial guess.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
-  {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
-  {\tt POTPAR(,,2)} is the strength of the feedback.
+    {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
+    {\tt POTPAR(,,2)} is the strength of the feedback.
   \end{description}
 \item[CONPAR]\index{CONPAR} {\tt real array, length NS * NBC * 3}, supplies
   the additional parameters needed for the option specified by
@@ -4501,7 +4479,7 @@ distribution as the {\tt \$SOLPSTOP/modules/\allowbreak Eirene/Manual/eirene.pdf
 automatically built with the code compilation.
 If not present, it can also be found at \href{http://www.eirene.de/}{http://www.eirene.de/}.
 The user is strongly encouraged to check out that very complete manual.
-Reference \cite{Reiter2005} also provides a useful description.
+Reference~\cite{Reiter2005} also provides a useful description.
 
 The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI and/or OpenMP parallelization and debugging options can be requested by adding {\tt \_mpi}, {\tt \_openmp} and {\tt \_debug} (last) to the compilation target name, or by using, respectively, the {\tt set\_mpi}, {\tt set\_openmp}, and {\tt set\_debug} scripts before launching the compilation. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
 
@@ -4645,8 +4623,8 @@ ENDDO
   \item[ZCOOR] New Z-coordinate of the vertex being modified (in cm).
   \item[LIMPOS] Index of the additional surface to be fixed to a grid corner. The particular grid corner to which this additional surface is fixed is given by the ordering specified in the introductory paragraph of this subsection.
   \item[ONETWO] {\tt ABS(ONETWO)} is the index of the vertex being modified in that additional surface, and can only be 1 or 2
-  \item[XPOLPOS] Integer X-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
-  \item[YPOLPOS] Integer Y-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[XPOLPOS] Integer {\tt X}-index (poloidal) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
+  \item[YPOLPOS] Integer {\tt Y}-index (radial) of the {\tt Eirene} grid vertex to which the additional surface vertex must be matched. To be used only if the default setting does not give the desired result.
   \item[NAS] Index of the additional surface to be modified
   \item[NSSIR] Radial index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
   \item[NSSIP] Poloidal index of the {\tt Eirene} grid vertex to which the additional surface vertex is to be matched
@@ -4828,8 +4806,8 @@ Section~\ref{sec:B2Eirene:averaging}.
 
 In this file the user defines many parameters that are used for communication
 between the
-{\tt B2.5} and {\tt Eirene} parts of the code. Please see Appendix
-\ref{lis:b2cdcn} for full details. In particular, it is
+{\tt B2.5} and {\tt Eirene} parts of the code.
+Please see Appendix~\ref{lis:b2cdcn} for full details. In particular, it is
 essential that the neutrals boundary conditions declared here match, in
 number and in order, the strata declared in the {\tt Eirene} input file.
 
@@ -4839,7 +4817,7 @@ should be noted here.
 First, the number of strata {\tt NSTRAI} need no longer include the
 time-dependent {\tt 'T'} stratum.
 
-Second, the array sizes of {\tt chemical\_sputter\_yield}, is used, now need to match the
+Second, the array sizes of {\tt chemical\_sputter\_yield}, if used, now need to match the
 actual number of wall and non-standard surfaces
 {\tt NLIM} and {\tt NSTS} as they are found in the {\tt Eirene} input file.
 Non-zero values should only be assigned to
@@ -4848,11 +4826,11 @@ actual walls (so the 200 in the above example corresponds to the real number of 
 the surface numbering considers block 3B first, and then block 3A, so non-standard surfaces will have
 indices varying between {\tt NLIM+1} and {\tt NLIM+NSTS}. Moreover,
 {\tt Eirene} adds a last non-standard (absorbing) surface that is used as a "time
-boundary". If the {\tt Eirene} input file is being produced by use of the
+boundary" (or "horizon"). If the {\tt Eirene} input file is being produced by use of the
 {\tt Uinp} utility and/or the {\tt triang} script, then a
 {\tt b2.neutrals.parameters.2} file meeting these criteria will be created,
 provided a {\tt b2.neutrals.parameters} file containing any other data not
-deductible from the {\tt DG} model is present.
+deducible from the {\tt DG} model is present.
 
 Third, in \SOLPSITERns, the North and South boundaries of the {\tt B2.5} grid are
 no longer recycling/sputtering surfaces but rather only switching surfaces to the
@@ -5002,10 +4980,10 @@ Similarly, the {\tt fort.46} file contains the following data blocks, this time 
   \item[VZDENM] $Z$-directed momentum density carried by molecules (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NMOL})
   \item[VZDENI] $Z$-directed momentum density carried by test ions (in $g.cm^{-2}.s^{-1}$), dimension ({\tt NTRII},{\tt NION})
   \item[VOL] Triangle volumes (in $cm^3$), dimension ({\tt NTRII})
-  \item[PUX] $X$-component of the poloidal unit vector at the triangle center
-  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center
-  \item[PVX] $X$-component of the radial unit vector at the triangle center
-  \item[PVY] $Y$-component of the radial unit vector at the triangle center
+  \item[PUX] $X$-component of the poloidal unit vector at the triangle center, dimension ({\tt NTRII})
+  \item[PUY] $Y$-component of the poloidal unit vector at the triangle center, dimension ({\tt NTRII})
+  \item[PVX] $X$-component of the radial unit vector at the triangle center, dimension ({\tt NTRII})
+  \item[PVY] $Y$-component of the radial unit vector at the triangle center, dimension ({\tt NTRII})
 \end{description}
 
 Please note that, for the momentum densities, the coordinate system used by {\tt Eirene} is cartesian, i.e. independent of the local magnetic field, and that this data is given in CGS units. For cases without a certain species type, for example a pure Helium case with no molecules, the relevant data fields have a species dimension of {\tt 1} as they are mapped internally in {\tt Eirene} to a dummy pointer array.
@@ -5319,7 +5297,7 @@ Several functional forms for setting time-dependent gas puff inputs can be set u
 \section{Averaging scheme}
 \label{sec:B2Eirene:averaging}\index{Averaging}\index{b2faveri}\index{b2favere}\index{b2fstate}\index{b2fstati}
 
-When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the source
+When running a coupled \SOLPSITER case to obtain a steady-state solution, it is recommended to use the
 averaging scheme detailed in {\tt \$\{SOLPSTOP\}/doc/SOLPS-ITER\_Eirene\_averaging.pdf} and references therein. This averaging scheme is meant to yield significant
 run speed-up and lower the statistical error introduced by the {\tt Eirene} Monte Carlo noise, as well as provide means to estimate the errors on the solution, following the formalism detailed in \cite{Ghoos_PET2016, Ghoos_JCP2016}. Error estimates are obtained by means of the {\tt b2ye} program (See Section~\ref{sec:b2ye} below).  It should be noted that this averaging scheme does NOT affect the physical run behaviour as such and therefore does not have any stabilizing effect on the run.
 
@@ -6540,12 +6518,12 @@ V_y^{\left( in \right)} + V_y^{\left( vis \right)} +
 V_y^{\left( s \right)}
 \end{gather}
 Velocities $V_{\perp,y}^{\left( a \right)}$ are the sum of the
-$\vec{E} \times \vec{B}$ drifts and diffusive and thermo-diffusive
+$\exb$ drifts and diffusive and thermo-diffusive
 velocities.
 This part corresponds to the ambipolar flux. It is the same both for ions and
 electrons.
 The second term in the r.h.s. of
-Eqs. (\ref{eq:nf1}) and (\ref{eq:nf2})
+Eqs.~(\ref{eq:nf1}) and (\ref{eq:nf2})
 corresponds to diamagnetic flow of ions, while the other terms are caused
 by inertial, viscous and ion-neutral friction forces.
 These non-ambipolar terms are
@@ -6759,9 +6737,9 @@ The effective diamagnetic current can be chosen in a form
 \frac{\partial}{\partial x}\left(\frac{1}{B^2}\right)~.
 \end{gather}
 Current driven by parallel viscosity should be taken into account in
-Eqs. (\ref{eq:curr0}), (\ref{eq:curr1}) and (\ref{eq:curr2}).
+Eqs.~(\ref{eq:curr0}), (\ref{eq:curr1}) and (\ref{eq:curr2}).
 This current is a small correction to the diamagnetic current
-Eqs. (\ref{eq:curr3}) and (\ref{eq:curr4}).
+Eqs.~(\ref{eq:curr3}) and (\ref{eq:curr4}).
 However, on closed flux surfaces, where the pressure is almost constant,
 the diamagnetic current averaged
 over the flux surfaces tends to zero. The resulting remaining part can
@@ -7012,7 +6990,7 @@ $\tilde{\eta}_\perp$. \\
 Since $\vec{R}^e=-{\sum_{a}\vec{R}^a}$, one has a
 modified total ion momentum equation at hand which in conjuction with the
 pressure equilibrium (not affected by the additional term)
-$\vec{J} \times \vec{B} =  \nabla P$, gives the diffusive part of the
+$\vec{J} \times \vec{B} = \nabla P$, gives the diffusive part of the
 radial current, namely
 \begin{gather}
 J_y^{diff}=\frac{\tilde{\eta}_\perp en_e}{B^2} \frac{\partial P_i}{\partial y}
@@ -7130,7 +7108,7 @@ The leading numerical coefficient is then $\frac{5}{2} \frac{2.16 z}{1 + 0.27 z}
 formula \cite{NRL}. The perpendicular heat conductivity
 $\kappa_{e \perp}$ can be
 either classical or anomalous. In the last term of the energy balance
-equation, it is taken into account that the $\vec{E} \times \vec{B}$
+equation, it is taken into account that the $\exb$
 drift velocity is
 almost divergence-free.
 \end{sloppypar}
@@ -7261,7 +7239,7 @@ For \SOLPSITERns, the orthogonal coordinates $(x,r,z)$ are more convenient for f
 \index{drifts and currents, boundary conditions}
 \index{boundary conditions, drifts and currents}
 
-Whether one deals with the diamagnetic or ${\bf E}\times{\bf B}$ perpendicular
+Whether one deals with the diamagnetic or $\exb$ perpendicular
 drift velocity, special care must be taken to avoid unphysical flows
 at the plates. The standard boundary condition is to require that the flow be
 at least sonic at the sheath entrance \cite{STANGEBY95B},
@@ -7848,7 +7826,7 @@ Is it important to know, that, in the equations below, the parallel velocity $V_
 \left\{
 \begin{aligned}
 \Gamma_{ay}^{\left( PSch \right)} , &  \  z_a = 0 \\
-\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , &  \  z_a \neq 0
+\frac{\Gamma_{ay}^{\left( PSch \right)}}{1 + \frac{\left| \Gamma_{ay}^{\left( PSch \right)} \right|}{\frac{\sqrt{g}}{h_y} n_a V_{T_a}}} , &  \ z_a \neq 0
 \end{aligned} \right.
 \end{equation}
 
@@ -8054,14 +8032,14 @@ W_{ay}^{\left( dia \right)} =
 \end{equation}
 
 \begin{equation}
-V_{a \perp}^{\left( E \times B \right)} =
+V_{a \perp}^{\left( \exb \right)} =
 \left\{
 \begin{aligned}
 -\frac{1}{B} \frac{1}{h_y} \frac{\partial \Phi}{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{aligned} \right.
 \qquad\qquad
-V_{ay}^{\left( E \times B \right)} =
+V_{ay}^{\left( \exb \right)} =
 \left\{
 \begin{aligned}
 \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi}{\partial x}, & \ z_a \neq 0 \\
@@ -8179,7 +8157,7 @@ is a (physically meaningless) damping term, often called the "Rhie and Chow" cor
 V_{ax}^{\left( E\right)} & =
 & \left\{
 \begin{matrix}
--c_{E\times B} \frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi }{\partial y}, & \ z_a \neq 0 \\
+-c_{\exb} \frac{B_z}{B^2} \frac{1}{h_y} \frac{\partial \Phi }{\partial y}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8190,7 +8168,7 @@ V_{ax}^{\left( E\right)} & =
 V_{ay}^{\left( E \right)} & =
 & \left\{
 \begin{matrix}
-c_{E\times B} \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi }{\partial x}, & \ z_a \neq 0 \\
+c_{\exb} \frac{B_z}{B^2} \frac{1}{h_x} \frac{\partial \Phi }{\partial x}, & \ z_a \neq 0 \\
 0, & \ z_a = 0
 \end{matrix} \right.
 \end{matrix}
@@ -8938,7 +8916,7 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 \frac{1}{\sqrt g} \frac{\partial}{\partial x} \left( \frac{\sqrt g}{h_x} \widetilde{q}_{ex} \right) +
 \frac{1}{\sqrt g} \frac{\partial}{\partial y} \left( \frac{\sqrt g}{h_y} \widetilde{q}_{ey} \right) +
 \frac{n_e T_e}{\sqrt g} \frac{\partial}{\partial x} \left(\frac{\sqrt g}{h_x} b_x V_{e \parallel} \right) = \notag \\
-= Q_e &+ c_{E\times B} n_e T_e B_z \frac{1}{h_x h_y}
+= Q_e &+ c_{\exb} n_e T_e B_z \frac{1}{h_x h_y}
 \left(
         \frac{\partial \Phi }{\partial y} \frac{\partial}{\partial x} \left(\frac{1}{B^2} \right) -
         \frac{\partial \Phi }{\partial x} \frac{\partial}{\partial y} \left(\frac{1}{B^2} \right)
@@ -8951,7 +8929,7 @@ $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 \subsection{Electron energy sources}
 
 \begin{multline}\label{eq:ene_seheat}
- S_e^{heat} = Q_e + c_{E\times B} n_e T_e B_z \frac{1}{h_x h_y}
+ S_e^{heat} = Q_e + c_{\exb} n_e T_e B_z \frac{1}{h_x h_y}
 \left(
         \frac{\partial \Phi }{\partial y} \frac{\partial}{\partial x} \left(\frac{1}{B^2} \right) -
         \frac{\partial \Phi }{\partial x} \frac{\partial}{\partial y} \left(\frac{1}{B^2} \right)
@@ -9478,7 +9456,7 @@ $\alpha^{(CL)}_{y} = 0$
         \frac{\sqrt g}{h_x} V_{a \parallel} b_x
 \right) =
 \\
-= Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
+= Q_{\Delta} + Q_{F_{ab}} +  c_{\exb} T_i B_z \frac{1}{h_x h_y} \left(
         \frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
                 \frac{1}{B^2}
         \right) -
@@ -9504,7 +9482,7 @@ The "sum over fluid species" above means the species index $a$ ranges from $0$ t
 
 \begin{multline}\label{eq:eni_siheat}
 %\begin{matrix}
- S_i^{heat} =  Q_{\Delta} + Q_{F_{ab}} +  c_{E \times B} T_i B_z \frac{1}{h_x h_y} \left(
+ S_i^{heat} =  Q_{\Delta} + Q_{F_{ab}} +  c_{\exb} T_i B_z \frac{1}{h_x h_y} \left(
         \frac{\partial \Phi}{\partial y} \frac{\partial}{\partial x} \left(
                 \frac{1}{B^2}
         \right) -
@@ -9853,17 +9831,13 @@ $V_{ix}^{(str)}=0$
 
 \subsection{Radial ion energy fluxes}
 
-\begin{equation}\label{eq:eni_tiqiy}
+\begin{multline}\label{eq:eni_tiqiy}
 \begin{matrix}
 \widetilde q_{iy} = \widetilde f_{iy} T_i -
-\kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch} = \left[\frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
-        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)}
-\right)} e \right] T_i - \\
-- \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} -
-q_{iy}^{P.Sch}
-\end{matrix}
-\end{equation}
+\kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} - q_{iy}^{P.Sch} \\
+= \left[\frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
+        j_y^{(AN)} + \widetilde j_y^{(vis \parallel)} + j_y^{(vis \perp)} + \widetilde j_y^{(visq)} + j_y^{(in)} \right)}{e} \right] T_i - \kappa_{iy} \frac{1}{h_y} \frac{\partial T_i}{\partial y} - q_{iy}^{P.Sch}
+\end{multline}
 
 \begin{equation*}
 \widetilde f_{iy} = \frac{3}{2} \Gamma_{iy} + V_{iy}^{(str)} n_i + \frac{3}{2} \frac{\left(
@@ -10029,7 +10003,7 @@ $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity cu
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(visq)}$ is applied according to section \ref{sec:Zhdanov}.
 
-For the definition of $\widetilde{q}_a^{(0)}$, see Eqs. (\ref{eq:q0-0}) and (\ref{eq:q0-1}).
+For the definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
 The poloidal component of the ion-neutral current is
 
@@ -10318,7 +10292,19 @@ $\sigma^{(CL)}_{y} = 0$
 %-------- end of 20th page -------------
 \section{Typical boundary conditions}
 
-In this Section, the boundaries are denoted as $S_0$ for the PFR boundaries, $S_1$ for the core boundaries, $E$ for the East boundaries (right targets), $W$ for the West boundaries (left targets) and $N$ for the outer main wall boundary.
+Most boundary conditions are either of flux or Dirichlet type.
+
+\textbf{Flux}
+
+To impose a given flux, the net source term in the guard cell must be equal to that flux. Considering that fluxes between guard cells are negligibly small, the flux across the guard cell face must equal the source term.
+
+\textbf{Dirichlet}
+\begin{sloppypar}
+To impose a fixed value in a guard cell, the code makes use of the different source contributions and very large numbers. For example, to set a fixed density {\tt $n_{BC}$},
+the code sets {\tt sna(ix,iy,0,is) = VBIG $\times$ fcS $\times$ $n_{BC}$}, and {\tt sna(ix,iy,1,is) = - VBIG $\times$ fcS}, with {\tt sna(ix,iy,is) = sna(ix,iy,0,is) + sna(ix,iy,1,is) $\times$ na(ix,iy,is)} and where {\tt VBIG} is a very large number and {\tt fcS} the contact area between the guard cell and the domain cell. Because {\tt VBIG} is so large, the only way to get a physical source is to have {\tt na(ix,iy,is) = $n_{BC}$}.
+\end{sloppypar}
+
+In this Section, the boundaries are denoted as $S_0$ for the PFR boundaries, $S_1$ for the core boundaries, $E$ for the Eastern boundaries (right targets), $W$ for the Western boundaries (left targets), and $N$ for the outer main wall boundary.
 
 \subsection{Particle balance equations}
 
@@ -10370,7 +10356,7 @@ $p_{n_a,a,1}$ is the radial leakage velocity, in units of the local species soun
                 D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
         \right) n_a
         + \\
-        \frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} & D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         +
         \frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
 \end{matrix}
@@ -10402,7 +10388,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 \left. \left[
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
         +
-        \frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         +
         \min \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
 \right] \right|_{S_0}, & \text{mdf\_fnb} = 1
@@ -10423,7 +10409,7 @@ S^{no\_mdf}_{n_a,1} & = {p_{n_a,a,1}} \frac{\sqrt{g}}{h_y} \sqrt{\frac{z_a T_e +
 When using drifts, one should use {\tt BCCON = 10} instead.
 
 \begin{equation}
-\left. -\frac{\sqrt g}{h_y^2} D_{n,ay} \frac{\partial n_a}{\partial y} \right|_{S_0}
+\left. - \frac{\sqrt g}{h_y^2} D_{n,ay} \frac{\partial n_a}{\partial y} \right|_{S_0}
 =
 \left. \left[
 c_{n_a,a,2} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
@@ -10490,7 +10476,7 @@ $p_{n,a,0}$ is the desired total particle flux, per unit time.
 {\em For leakage boundary condition:} {\tt BCCON = 10}
 
 \begin{equation}
-\left. -\frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
+\left. - \frac{\sqrt g}{h_y} \Gamma_{ay} \right|_{N}
 =
 \left. \left[
 p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
@@ -10514,7 +10500,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
 
 \begin{equation}
 \begin{matrix}
-\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
 & \left\{
 \begin{matrix}
 \left. \left[
@@ -10529,7 +10515,7 @@ $\widetilde{\Gamma}_{ay}$ was replaced by $\Gamma_{ay}$
                 D^{(AN)}_{n,a} + D^{(AN)}_{p,a} \left(z_a T_e + T_i \right)
         \right) n_a \\
         -
-        \frac{\sqrt g}{h_y} & D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} & D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         -
         \frac{\sqrt g}{h_y} V_{ay}^{(E)} n_a
 \end{matrix}
@@ -10549,7 +10535,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 
 \begin{equation}
 \begin{matrix}
-\left. -\frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
+\left. - \frac{\sqrt g}{h_y} \widetilde{\Gamma}_{ay} \right|_{N}& =
 & \left\{
 \begin{matrix}
 \left. \left[
@@ -10561,7 +10547,7 @@ $p_{n_a,a,1}$ is the density radial decay length of species $a$, in $m$.
 \left. \left[
         p_{n_a,a,1} \frac{\sqrt g}{h_y} \sqrt{\frac{z_a T_e + T_i}{m_a}} n_a
         -
-        \frac{\sqrt g}{h_y} D_{ayx} \frac1{h_x} \frac{\partial n_a T_i}{\partial x}
+        \frac{\sqrt g}{h_y} D_{ayx} \frac{1}{h_x} \frac{\partial n_a T_i}{\partial x}
         -
         \max \left\{0, \frac{\sqrt g}{h_y} n_a V_{ay}^{(E)} \right\}
 \right] \right|_{N}, & \text{mdf\_fnb} = 1
@@ -10974,7 +10960,7 @@ with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-1
 
 \begin{equation*}
 V_{West} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
@@ -11046,7 +11032,7 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 
 \begin{equation*}
 V_{East} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(E \times B)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
@@ -12006,8 +11992,8 @@ if these equations are implicitly taken into account).
 Thus the total energy density is
 
 \begin{equation}
- \varepsilon = \sum\limits_a\frac{m_aV_{a\parallel}^2}{2}
- +\frac32\sum\limits_an_aT_i + \frac32 n_eT_e.
+ \varepsilon = \sum\limits_a \frac{m_a V_{a\parallel}^2}{2}
+ +\frac{3}{2} \sum\limits_a n_a T_i + \frac{3}{2} n_e T_e.
 \end{equation}
 
 The energy flux
@@ -13811,8 +13797,8 @@ of the effects related to the stronger local electric field in the magnetic
 presheath. This electric field causes a strong acceleration of the ions
 along the magnetic field lines, similarly to a non-magnetic
 plasma presheath or when the magnetic field is perpendicular to
-the surface, and an additional poloidal $\mathbf{E \times B}$ drift due to the
-radial component of the electric field. In some cases the $\mathbf{E \times B}$
+the surface, and an additional poloidal $\exb$ drift due to the
+radial component of the electric field. In some cases the $\exb$
 drift velocity can be comparable with the local ion sound
 velocity~\cite{STANGEBY95B,ROGNLIEN99A,ROGNLIEN99B}. The correction of the
 poloidal component of the ion drift velocity due to the
@@ -13861,7 +13847,7 @@ where the electric current density, $\mathbf{j}=e\left( \sum_{\alpha
 magnetic presheath edge should be specified in the discretized equations.
 
 \section{Analytical Expressions for the Standard ("Old") Boundary Sources
-in the B2.5 Code}
+in the B2.5 Code}\label{cha:Mladen_2}
 
 The boundary sources are expressed as linear and/or weakly nonlinear
 functions of the macroscopic plasma parameters ($n_{\alpha}$, $n_{e}$,
@@ -13934,7 +13920,7 @@ c_{sD\alpha}=\max\left(c_{s\alpha},0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right)
 u_{Dx}\right)   \label{11}
 \end{equation}
 is the conditionally corrected ion drift velocity of the atomic species $\alpha$
-due to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the
+due to the poloidal $\exb$ drift, where '$+$' applies to the
 "WEST" and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{s\alpha}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{s\alpha}$;
 \begin{equation}
@@ -13942,7 +13928,7 @@ c_{stD}=\max\left(c_{st},0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}\right)
 \label{12}
 \end{equation}
 is the conditionally corrected ion drift velocity of the multi-species plasma due
-to the poloidal $\mathbf{E \times B}$ drift, where '$+$' applies to the "WEST"
+to the poloidal $\exb$ drift, where '$+$' applies to the "WEST"
 and '$-$' to the "EAST" boundaries; the approximate correction is used only if
 $0.1c_{st}\pm\left( B_{z}/B_{x}\right) u_{Dx}>c_{st}$;
 \begin{equation}
@@ -14043,37 +14029,37 @@ S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{29}
 
 \begin{equation}
 S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy}   \label{30}
+\max\left( 0,\Gamma_{\alpha y}\right) \right] +Q_{hiDy} \label{30}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDy}}{T_i}   \label{31}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDy}}{T_i} \label{31}
 \end{equation}
 
 \begin{equation}
-S_{hi2}=0   \label{32}
+S_{hi2}=0 \label{32}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+  \\
-~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{33}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, - \Gamma_{\alpha y} \right) }{n_{i}} \right] \label{33}
+\end{multline}
 
 \paragraph{Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_e   \label{34}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_e \label{34}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ey}\right) +Q_{heDy}
+S_{he0}=C_{he0}S_{0}+C_{he6} \max \left( 0, \Gamma_{ey} \right) + Q_{heDy}
 \label{35}
 \end{equation}
 
 \begin{equation}
-S_{he1}=C_{he1}S_{0}+\frac{Q_{heDy}}{T_{e}}   \label{36}
+S_{he1}=C_{he1}S_{0}+\frac{Q_{heDy}}{T_{e}} \label{36}
 \end{equation}
 
 \begin{equation}
@@ -14096,7 +14082,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{39}
 S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+
 \max\left(C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{T_{e}}   \label{40}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{T_e}   \label{41}
@@ -14174,17 +14159,17 @@ S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDy}}{T_{i}}   \labe
 S_{hi2}=0   \label{55}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}}\Bigr]   \label{56}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{s\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{s\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{st}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{st}S_{1}+C_{hi7\alpha}
+\frac{\max\left(0,\Gamma_{\alpha y}\right) }{n_{i}} \right] \label{56}
+\end{multline}
 
 \paragraph{Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{57}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{57}
 \end{equation}
 
 \begin{equation}
@@ -14215,7 +14200,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{62}
 S_{ch0}=C_{ch7}J_{ey}-C_{ch6}J_{iy}+
 \max\left(C_{ch6}J_{iy},C_{ch7}J_{ey}\right) \frac{e\Phi}{T_{e}}   \label{63}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{iy},C_{ch7}J_{ey}\right) e}{T_{e}}   \label{64}
@@ -14257,63 +14241,63 @@ S_{m\alpha}=S_{m0\alpha}+S_{m1\alpha}u_{\alpha x}+S_{m2\alpha}\rho_{\alpha}
 \end{equation}
 
 \begin{equation}
-S_{m0\alpha}=C_{m0\alpha}S_{0}   \label{71}
+S_{m0\alpha}=C_{m0\alpha}S_{0} \label{71}
 \end{equation}
 
 \begin{equation}
-S_{m1\alpha}=0   \label{72}
+S_{m1\alpha}=0 \label{72}
 \end{equation}
 
 \begin{equation}
 S_{m2\alpha}=C_{m1\alpha}\left( -c_{sD\alpha}\right)
 S_{1}^{\pm}+C_{m2\alpha}\left( -c_{stD}\right) S_{1}^{\pm}+C_{m5\alpha}
-\frac{\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{73}
+\frac{\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}} \label{73}
 \end{equation}
 
 \begin{equation}
 S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}
-\frac{\max\left( 0,-\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{74}
+\frac{\max\left( 0,-\Gamma_{\alpha x}\right) }{n_{\alpha}} \label{74}
 \end{equation}
 
 \paragraph{All Atom/Ion Heat Source}
 
 \begin{equation}
-S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{75}
+S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i} \label{75}
 \end{equation}
 
 \begin{equation}
-S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,\Gamma_{\alpha x}\right) \right] +Q_{hiDx}   \label{76}
+S_{hi0}=\sum_{\alpha} \left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
+\max \left( 0, \Gamma_{\alpha x} \right) \right] +Q_{hiDx} \label{76}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDx}}{T_{i}}   \label{77}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}+\frac{Q_{hiDx}}{T_{i}} \label{77}
 \end{equation}
 
 \begin{equation}
 S_{hi2}=0   \label{78}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,-\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{79}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, - \Gamma_{\alpha x} \right) }{n_{i}} \right] \label{79}
+\end{multline}
 
 \paragraph{\protect\bigskip Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{80}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{80}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,\Gamma_{ex}\right) +Q_{heDx}
+S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0, \Gamma_{ex} \right) +Q_{heDx}
 \label{81}
 \end{equation}
 
 \begin{equation}
-S_{he1}=C_{he1}S_{0}+\frac{Q_{heDx}}{T_{e}}   \label{82}
+S_{he1}=C_{he1}S_{0}+\frac{Q_{heDx}}{T_{e}} \label{82}
 \end{equation}
 
 \begin{equation}
@@ -14336,7 +14320,6 @@ S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{85}
 S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+
 \max\left(C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{T_{e}}   \label{86}
 \end{equation}
-\bigskip
 
 \begin{equation}
 S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}}   \label{87}
@@ -14394,43 +14377,43 @@ S_{m2\alpha}=C_{m1\alpha}c_{sD\alpha}S_{1}^{\pm}+C_{m2\alpha}c_{stD}S_{1}^{\pm}
 
 \begin{equation}
 S_{m3\alpha}=C_{m3\alpha}S_{0}+C_{m4\alpha}S_{1}+C_{m6\alpha}
-\frac{\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}}   \label{97}
+\frac{\max\left( 0,\Gamma_{\alpha x}\right) }{n_{\alpha}} \label{97}
 \end{equation}
 
 \paragraph{All Atom/Ion Heat Source}
 
 \begin{equation}
-S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i}   \label{98}
+S_{hi}=S_{hi0}+S_{hi1}T_{i}+S_{hi2}n_{i}+S_{hi3}n_{i}T_{i} \label{98}
 \end{equation}
 
 \begin{equation}
 S_{hi0}=\sum_{\alpha}\left[ C_{hi0\alpha}t_{\alpha}S_{0}+C_{hi6\alpha}
-\max\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx}   \label{99}
+\max\left( 0,-\Gamma_{\alpha x}\right) \right] -Q_{hiDx} \label{99}
 \end{equation}
 
 \begin{equation}
-S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDx}}{T_{i}}   \label{100}
+S_{hi1}=\sum_{\alpha}C_{hi1\alpha}t_{\alpha}S_{0}-\frac{Q_{hiDx}}{T_{i}} \label{100}
 \end{equation}
 
 \begin{equation}
-S_{hi2}=0   \label{101}
+S_{hi2}=0 \label{101}
 \end{equation}
 
-\begin{equation}\begin{split}
-S_{hi3}=\sum_{\alpha}\Bigl[ ~ & C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
-t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0}+ \\
-~ & C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
-\frac{\max\left(0,\Gamma_{\alpha x}\right) }{n_{i}}\Bigr]   \label{102}
-\end{split}\end{equation}
+\begin{multline}
+S_{hi3}=\sum_{\alpha} \left[ ~ C_{hi2\alpha}t_{\alpha}c_{sD\alpha}S_{0}+C_{hi3\alpha}
+t_{\alpha}c_{sD\alpha}S_{1}+C_{hi4\alpha}t_{\alpha}c_{stD}S_{0} + \right. \\
+~ \left. C_{hi5\alpha}t_{\alpha}c_{stD}S_{1}+C_{hi7\alpha}
+\frac{\max \left( 0, \Gamma_{\alpha x} \right) }{n_{i}} \right] \label{102}
+\end{multline}
 
 \paragraph{\protect\bigskip Electron Heat Source}
 
 \begin{equation}
-S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e}   \label{103}
+S_{he}=S_{he0}+S_{he1}T_{e}+S_{he2}n_{e}+S_{he3}n_{e}T_{e} \label{103}
 \end{equation}
 
 \begin{equation}
-S_{he0}=C_{he0}S_{0}+C_{he6}\max\left( 0,-\Gamma_{ex}\right) -Q_{heDx}
+S_{he0}=C_{he0}S_{0}+C_{he6} \max \left( 0, - \Gamma_{ex} \right) - Q_{heDx}
 \label{104}
 \end{equation}
 
@@ -14451,7 +14434,7 @@ S_{he3} =~ & C_{he2}v_{th,e}S_{0}+C_{he3}v_{th,e}S_{1}+C_{he4}c_{stD}S_{0}+ \\
 \paragraph{Electric Charge Source}
 
 \begin{equation}
-S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi   \label{108}
+S_{ch}=S_{ch0}+S_{ch1}\Phi+S_{ch2}n_{e}+S_{ch3}n_{e}\Phi \label{108}
 \end{equation}
 
 \begin{equation}
@@ -14459,10 +14442,9 @@ S_{ch0}=C_{ch7}J_{ex}-C_{ch6}J_{ix}+
 \max\left(C_{ch6}J_{ix},C_{ch7}J_{ex}\right) \frac{e\Phi}{T_{e}}
 \label{109}
 \end{equation}
-\bigskip
 
 \begin{equation}
-S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}}   \label{110}
+S_{ch1}=-\frac{\max\left( C_{ch6}J_{ix},C_{ch7}J_{ex}\right) e}{T_{e}} \label{110}
 \end{equation}
 
 \begin{equation}
@@ -14472,7 +14454,7 @@ S_{ch2}=C_{ch0}ev_{th,e}S_{0}+C_{ch2}ev_{th,e}S_{1}+C_{ch4}ec_{stD}S_{1}
 
 \begin{equation}
 S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
-\frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{T_{e}}   \label{112}
+\frac{e^{2}v_{th,e}S_{1}}{T_{e}}+C_{ch5}\frac{e^{2}c_{stD}S_{1}}{T_{e}} \label{112}
 \end{equation}
 
 \clearpage
@@ -14899,8 +14881,8 @@ The meaning of the dimensions are:
 b2bremreg \index{b2bremreg}\index{b2tallies.nc, b2bremreg}                       & vreg, time     & $W$           & Bremsstrahlung radiation rate \\
 b2divua \index{b2divua}\index{b2tallies.nc, b2divua}                             & vreg, time     & $W$           & Heating term from $\nabla u_a$ \\
 b2divue \index{b2divue}\index{b2tallies.nc, b2divue}                             & vreg, time     & $W$           & Heating term from $\nabla u_e$ \\
-b2exba \index{b2exba}\index{b2tallies.nc, b2exba}                                & vreg, time     & $W$           & Heating term to ions from ${\bf E} \times {\bf B}$ \\
-b2exbe \index{b2exbe}\index{b2tallies.nc, b2exbe}                                & vreg, time     & $W$           & Heating term to electrons from ${\bf E} \times {\bf B}$ \\
+b2exba \index{b2exba}\index{b2tallies.nc, b2exba}                                & vreg, time     & $W$           & Heating term to ions from $\exb$ \\
+b2exbe \index{b2exbe}\index{b2tallies.nc, b2exbe}                                & vreg, time     & $W$           & Heating term to electrons from $\exb$ \\
 b2fraa \index{b2fraa}\index{b2tallies.nc, b2fraa}                                & vreg, time     & $W$           & Heating from inter-species friction \\
 b2joule \index{b2joule}\index{b2tallies.nc, b2joule}                             & vreg, time     & $W$           & Joule heating \\
 b2qie \index{b2qie}\index{b2tallies.nc, b2qie}                                   & vreg, time     & $W$           & Electron/ion exchange term \\
@@ -15166,7 +15148,7 @@ $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ax}$ & $s^{-1}$ & \textt
 $\displaystyle \frac{\sqrt{g}}{h_x} \widetilde{\Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2npc9\_fnay[XXX].dat} or & (\ref{eq:GammaAY_appC}) \\
  & & \texttt{b2npc11\_fnay[XXX].dat} & \\
 
-$\displaystyle \frac{\sqrt{g}}{h_x} b_x V_{||a} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
+$\displaystyle \frac{\sqrt{g}}{h_x} b_x V_{a\parallel} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_bxuanax[XXX].dat} & (\ref{eq:GammaAX_appC}), (\ref{eq:GammaAXnoTilde_appC}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_x} V_{ax}^{(E)} n_a$ & $s^{-1}$ & \texttt{b2tfnb\_vaecrbnax[XXX].dat} & (\ref{eq:vaExB_appC}) \\
 
@@ -15376,9 +15358,9 @@ $\displaystyle \frac{3}{2} n_e \frac{\partial T_e}{\partial t} \sqrt{g}$ & $W$ &
 $\displaystyle \frac{3}{2} T_e \frac{\partial n_e}{\partial t} \sqrt{g}$ & $W$ & \texttt{b2npht\_tednedt.dat} or &  \\
  & & \texttt{b2nph9\_tednedt.dat} &  \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
+$\displaystyle \frac{3}{2} \frac{\sqrt{g}}{h_{x}} \Gamma_{ex} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32x.dat} & (\ref{eq:ene_gammax}) \\
 
-$\displaystyle \frac32 \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay}) \\
+$\displaystyle \frac{3}{2} \frac{\sqrt{g}}{h_{y}} \Gamma_{ey} T_e$ & $W$ & \texttt{b2tfhe\_\_qe\_32y.dat} & (\ref{eq:ene_gammay}) \\
 
 $\displaystyle \frac{\sqrt{g}}{h_{x}} q_{ex}^{P.Sch}$ \footnote{Mind the sign! It is opposite in the output file and the heat balance.} & $W$ & \texttt{b2tfhe\_\_fhePSchx.dat} & (\ref{eq:ene_qPSchx}) \\
 
@@ -15638,24 +15620,25 @@ cell faces, it is necessary to compute it from the quantities also computed at c
 
 \begin{gather}
   q_{ex}^{\rm ENERGY} = \widetilde{q}_{ex} + q_{ex}^{P.Sch} + q_{ex}^{dia} +
-  \frac23 \left(q_{ex}^{E \times B} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
+  \frac{2}{3} \left(q_{ex}^{\exb} + q_{ex}^{u_\parallel} + q_{ex}^{uDPC}\right) \\
   q_{ix}^{\rm ENERGY} = \widetilde{q}_{ix} + q_{ix}^{P.Sch} + q_{ix}^{dia} +
-  \frac23 \left(q_{ix}^{E \times B} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
+  \frac{2}{3} \left(q_{ix}^{\exb} + q_{ix}^{u_\parallel} + q_{ix}^{uDPC}\right) +
   q_{ix}^{j} + q_{ix}^{conv}\\
   q_{ey}^{\rm ENERGY} = \widetilde{q}_{ey} + q_{ey}^{P.Sch} + q_{ey}^{dia} +
-  \frac23 q_{ey}^{E \times B} \\
+  \frac{2}{3} q_{ey}^{\exb} \\
   q_{iy}^{\rm ENERGY} = \widetilde{q}_{iy} + q_{iy}^{P.Sch} + q_{iy}^{dia} +
-  \frac23 q_{iy}^{E \times B} + q_{iy}^{conv} + q_{iy}^{j}
+  \frac{2}{3} q_{iy}^{\exb} + q_{iy}^{conv} + q_{iy}^{j}
 \end{gather}
 
 \begin{gather}
- \widetilde{q}_{ex}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \widetilde{q}_{ex}^{dia} = -\frac{5}{2} T_e^{\rm (face)} \sum\limits_a
  \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ax}^{(dia)}n_a \\
- \widetilde{q}_{ey}^{dia} = -\frac52 T_e^{\rm (face)} \sum\limits_a
+ \widetilde{q}_{ey}^{dia} = -\frac{5}{2} T_e^{\rm (face)} \sum\limits_a
  \frac{z_a^2 T_e^{\rm (face)}}{T_i^{\rm (face)}} \tilde{V}_{ay}^{(dia)}n_a \\
- \widetilde{q}_{ix}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
- \widetilde{q}_{iy}^{dia} = \frac52 T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
+ \widetilde{q}_{ix}^{dia} = \frac{5}{2} T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ax}^{(dia)}n_a \\
+ \widetilde{q}_{iy}^{dia} = \frac{5}{2} T_i^{\rm (face)} \sum\limits_a \tilde{V}_{ay}^{(dia)}n_a
 \end{gather}
+
 Here and below the superscript "(face)" means that the temperature (or other
 quantity) should be computed at the cell face as a half-sum its neighboring cell-centered values.
 Since $\displaystyle \frac{\sqrt{g}}{h_x} \tilde{V}_{ax}^{(dia)}n_a$ and
@@ -15667,22 +15650,22 @@ to get heat flux densities correctly computed at cell faces. A similar approach
 is applied below in all equations within this Appendix.
 
 \begin{gather}
- q_{ex}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
- q_{ey}^{E \times B} = \frac32 T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
- q_{ix}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
- q_{iy}^{E \times B} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
+ q_{ex}^{\exb} = \frac{3}{2} T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ax}^E \\
+ q_{ey}^{\exb} = \frac{3}{2} T_e^{\rm (face)} \sum\limits_a z_a n_a V_{ay}^E \\
+ q_{ix}^{\exb} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_{ax}^E \\
+ q_{iy}^{\exb} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_{ay}^E
 \end{gather}
 
 \begin{gather}
- q_{ex}^{u_\parallel} = \frac32 T_e^{\rm (face)} \left(
+ q_{ex}^{u_\parallel} = \frac{3}{2} T_e^{\rm (face)} \left(
  \sum\limits_a z_a b_x n_a V_{\parallel a} - \frac{j_x^{(\parallel)}}{e} \right)\\
- q_{ix}^{u_\parallel} = \frac32 T_i^{\rm (face)} \sum\limits_a b_x n_a V_{\parallel a}
+ q_{ix}^{u_\parallel} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a b_x n_a V_{\parallel a}
 \end{gather}
 
 \begin{gather}
- q_{ex}^{uDPC} = \frac32 T_e^{\rm (face)}
+ q_{ex}^{uDPC} = \frac{3}{2} T_e^{\rm (face)}
  \sum\limits_a z_a n_a V_a^{\rm corr\_dpc} \\
- q_{ix}^{uDPC} = \frac32 T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
+ q_{ix}^{uDPC} = \frac{3}{2} T_i^{\rm (face)} \sum\limits_a n_a V_a^{\rm corr\_dpc}
 \end{gather}
 
 \begin{gather}
@@ -16020,15 +16003,15 @@ region 8 === right outboard divertor
 \clearpage
 $X$-directed regions:
 \begin{verbatim}
-+-------+---------------+-------++-------+---------------+-------+
-|       :               :       ||       :               :       |
-|       2               3       ||       6               7       |
-|       :               +.......45.......+               :       |
-|       :               |       ||       |13             :       |
-1.......+---------------+10     ||       +---------------+.......8
-|       |9              |       ||       |11             |12     |
-|       |               |       ||       |               |       |
-+-------+---------------+-------++-------+---------------+-------+
++--------+--------------+--------++--------+--------------+--------+
+|        :              :        ||        :              :        |
+|        2              3        ||        6              7        |
+|        :              +........45........+              :        |
+|        :              |        ||        |13            :        |
+1........+--------------+10      ||        +--------------+........8
+|        |9             |        ||        |11            |12      |
+|        |              |        ||        |              |        |
++--------+--------------+--------++--------+--------------+--------+
 
 region 1 === left inboard divertor target
 region 2 === entrance to left inboard divertor
@@ -16187,15 +16170,15 @@ region 7 === outboard divertor leg 3
 \clearpage
 $X$-directed regions:
 \begin{Verbatim}
-+-------+-----------------------+-------+-------++-------+-------+
-|       :                       :       :       ||       :       |
-|       2                       3       6       ||       7       |
-|       :                       :       +.......45.......+.......|
-|       :                       :       |       ||       |13     |
-1.......+-----------------------+.......+11     ||       +.......8
-|       |9                      |10     |       ||       |12     |
-|       |                       |       |       ||       |       |
-+-------+-----------------------+-------+-------++-------+-------+
++--------+----------------------+--------+--------++--------+--------+
+|        :                      :        :        ||        :        |
+|        2                      3        6        ||        7        |
+|        :                      :        +........45........+........|
+|        :                      :        |        ||        |13      |
+1........+----------------------+........+11      ||        +........8
+|        |9                     |10      |        ||        |12      |
+|        |                      |        |        ||        |        |
++--------+----------------------+--------+--------++--------+--------+
 
 region 1 === inboard divertor target
 region 2 === entrance to inboard divertor
@@ -16267,8 +16250,8 @@ transformations, and then the plot command.
 based: seven different stacks are used\index{b2plot, stacks}.
 The most important stack is
 the "matrix" stack which is used to store quantities on the
-computational grid.  These quantities can be $nx \times ny \times
-ns$ where $nx$ and $ny$ are the size of the grid, and $ns$ ranges over
+computational grid.  These quantities can be $nx \times ny \times ns$
+where $nx$ and $ny$ are the size of the grid, and $ns$ ranges over
 the species.  An "integer" stack is used to supply arguments for some of
 the commands.  A "real" stack is also used to supply arguments for some
 commands and, importantly, for storing values to be used in doing
@@ -16442,14 +16425,14 @@ when calculating derived data.
     edissml  & \index{b2plot, edissml} Power to atoms due to molecule dissociation $(W)$ \\
     ehx      & \index{b2plot, ehx} {\em ehx} $(V)$ \\
     ehy      & \index{b2plot, ehy} {\em ehy} $(V)$ \\
-    exba     & \index{b2plot, exba} ${\bf E} \times {\bf B}$ ion heating term {\em b2sihs\_exba} $(W)$ \\
-    exbe     & \index{b2plot, exbe} ${\bf E} \times {\bf B}$ electron heating term {\em b2sihs\_exbe} $(W)$ \\
+    exba     & \index{b2plot, exba} $\exb$ ion heating term {\em b2sihs\_exba} $(W)$ \\
+    exbe     & \index{b2plot, exbe} $\exb$ electron heating term {\em b2sihs\_exbe} $(W)$ \\
     exch     & \index{b2plot, exch} External charge source {\em ext\_sch} $(A)$ \\
     exhe     & \index{b2plot, exhe} External electron heat source {\em ext\_she} $(W)$ \\
     exhi     & \index{b2plot, exhi} External ion heat source {\em ext\_shi} $(W)$ \\
     exmo     & \index{b2plot, exmo} External parallel momentum source {\em ext\_smo} $(N)$ \\
     exna     & \index{b2plot, exna} External particle source {\em ext\_sna} $(particles.s^{-1})$ \\
-    fac\_exb & \index{b2plot, fac\_exb} ${\bf E} \times {\bf B}$ drift multiplier {\em fac\_ExB} \\
+    fac\_exb & \index{b2plot, fac\_exb} $\exb$ drift multiplier {\em fac\_ExB} \\
     fac\_vis & \index{b2plot, fac\_vis} Viscosity drift terms multiplier {\em fac\_vis} \\
     facdrift & \index{b2plot, facdrift} Diamagnetic drift terms multiplier {\em facdrift} \\
     fax\_ext & \index{b2plot, fax\_ext} External species poloidal flux $(s^{-1})$ \\
@@ -16685,10 +16668,10 @@ when calculating derived data.
     vd       & \index{b2plot, vd} Radial component of drift velocity $(m.s^{-1})$ \\
     vedia.x  & \index{b2plot, vedia.x} Poloidal component of divergent part of electron diamagnetic drift velocity $(m.s^{-1})$ \\
     vedia.y  & \index{b2plot, vedia.y} Radial component of divergent part of electron diamagnetic drift velocity $(m.s^{-1})$ \\
-    veexb.x  & \index{b2plot, veexb.x} Poloidal component of electron ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    veexb.y  & \index{b2plot, veexb.y} Radial component of electron ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
-    vexb.y   & \index{b2plot, vexb.y} Radial component of ion ${\bf E} \times {\bf B}$ drift velocity $(m.s^{-1})$ \\
+    veexb.x  & \index{b2plot, veexb.x} Poloidal component of electron $\exb$ drift velocity $(m.s^{-1})$ \\
+    veexb.y  & \index{b2plot, veexb.y} Radial component of electron $\exb$ drift velocity $(m.s^{-1})$ \\
+    vexb.x   & \index{b2plot, vexb.x} Poloidal component of ion $\exb$ drift velocity $(m.s^{-1})$ \\
+    vexb.y   & \index{b2plot, vexb.y} Radial component of ion $\exb$ drift velocity $(m.s^{-1})$ \\
     visa     & \index{b2plot, visa} Viscous heating term {\em b2sihs\_visa} $(W)$ \\
     visc     & \index{b2plot, visc} Viscosity $(m.kg^{-1}.s^{-1})$ \\
     vlax     & \index{b2plot, vlax} Poloidal pinch velocity $(m.s^{-1})$ \\
@@ -16829,28 +16812,28 @@ are not met, an error is returned and no action is taken.
     nese \index{b2plot, nese}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nese}  & Overwrite onto electron density array \\
     nspe, nspec \index{b2plot, nspe}\index{b2plot, nspec} & 3 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nspe}  & New spectrometer \\
     over \index{b2plot, over}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:over}  & Copy over second top element of \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} matrix stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} matrix stack \\
     pne \index{b2plot, pne}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pne}   & Divide by electron density \\
     pos \index{b2plot, pos}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pos}   & Is positive? \\
     psx \index{b2plot, psx}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psx}   & Divide by poloidal contact area \\
     psxperp \index{b2plot, psxperp} & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psxperp}   & Divide by area perpendicular \\
-    &  &  &  &  &  &  &  &  & \hspace{1cm} to flux tube\\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} to flux tube\\
     psy \index{b2plot, psy}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:psy}   & Divide by radial contact area \\
     pvol \index{b2plot, pvol}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:pvol}  & Divide by cell volume \\
     rigz \index{b2plot, rigz}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rigz}  & Toggles use of ignorable cells \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} (\SOLPSfour runs) \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} (\SOLPSfour runs) \\
     rm* \index{b2plot, rm*}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm*}   & Matrix multiplication by real \\
     rm** \index{b2plot, rm**}      & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm**}  & Matrix taken to a real power \\
     rm+ \index{b2plot, rm+}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm+}   & Real added to matrix \\
     rm- \index{b2plot, rm-}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm-}   & Real substracted from matrix \\
     rm/ \index{b2plot, rm/}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rm/}   & Matrix divided by real \\
-    rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}        & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
-    rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}         & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
+    rmma, rmmax \index{b2plot, rmma}\index{b2plot, rmmax}  & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmma}  & Maximum between real and matrix \\
+    rmmi, rmmin \index{b2plot, rmmi}\index{b2plot, rmmin}  & 0 & 1 & 0 & 1 & 0 & 0 & 0 & \ref{sec:rmmi}  & Minimum between real and matrix \\
     rpsi \index{b2plot, rpsi}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:rpsi}  & Plot data against $\rho_{pol}~\left(~=~\sqrt{\psi}\right)$ value \\
     spec \index{b2plot, spec}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:spec}  & Old spectrometer \\
     sqrt \index{b2plot, sqrt}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sqrt}  & Square root of matrix \\
     stoe \index{b2plot, stoe}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stoe}  & Copy top of matrix stack to \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} Eirene stack \\
     stow \index{b2plot, stow}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stow}  & Copy top of matrix stack to wall stack \\
     sumx \index{b2plot, sumx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumx}  & Sum over $x$ \\
     sumy \index{b2plot, sumy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumy}  & Sum over $y$ \\
@@ -16858,17 +16841,17 @@ are not met, an error is returned and no action is taken.
     swap \index{b2plot, swap}      & 0 & 0 & 0 & 2 & 0 & 0 & 0 & \ref{sec:swap}  & Swap top two matrices on stack \\
     t\_\#p \index{b2plot, t\_\#p}  & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:t_hashp} & Number of trajectories \\
     tese \index{b2plot, tese}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto \\
-    &  &  &  &  &  &  &  &  & \hspace{1cm} electron temperature \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} electron temperature \\
     traj \index{b2plot, traj}      & 7+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
     uuse \index{b2plot, uuse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
     vvse \index{b2plot, vvse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
     wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto \\
-    &  &  &  &  &  &  &  &  & \hspace{1cm} matrix stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} matrix stack \\
     xsel \index{b2plot, xsel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:xsel}  & Select $X$ value \\
     xtow \index{b2plot, xtow}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:xtow}  & Copy $X$-row of matrix onto wall stack \\
     ysel \index{b2plot, ysel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:ysel}  & Select $Y$ value \\
     ytow \index{b2plot, ytow}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ytow}  & Copy $Y$-column of matrix \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} onto wall stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} onto wall stack \\
     zrng \index{b2plot, zrng}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zrng}  & Select species range \\
     zsel \index{b2plot, zsel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zsel}  & Select species index \\
     \hline
@@ -17127,7 +17110,7 @@ commands take one value off the "string" stack.
     chbx \index{b2plot, chbx}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chbx}     & Boxcar average of chords \\
     chmp \index{b2plot, chmp}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chmp}     & Chord contributions to the mesh element \\
     chor \index{b2plot, chor}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chor}     & Filename containing chords \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} (for integration) \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} (for integration) \\
     chpl \index{b2plot, chpl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chpl}     & Filename containing chords (to plot) \\
     chvl \index{b2plot, chvl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chvl}     & Value at positions \\
     cltb \index{b2plot, cltb}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cltb}     & Filename for a colour table \\
@@ -17135,7 +17118,7 @@ commands take one value off the "string" stack.
     cmdcdf \index{b2plot, cmdcdf} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmdcdf}   & Loop command file on {\tt CDF} data \\
     ecam \index{b2plot, ecam}    & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:ecam}     & Camera plot for Eirene stack data \\
     echbx \index{b2plot, echbx}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echbx}    & Boxcar average of chords for \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} Eirene stack data \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} Eirene stack data \\
     echmp \index{b2plot, echmp}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echmp}    & Chord contributions to the mesh element \\
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} from Eirene stack data \\
     echor \index{b2plot, echor}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echor}    & Filename containing chords for \\
@@ -17149,7 +17132,7 @@ commands take one value off the "string" stack.
     movie\index{b2plot, movie}, nmovie \index{b2plot, nmovie} & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movie} & New movie option \\
     mprt \index{b2plot, mprt}    & 0 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mprt}     & Output top of matrix stack to a file \\
     mtab \index{b2plot, mtab}    & 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} of the stack to a file \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} of the stack to a file \\
     omovie \index{b2plot, omovie} & 2 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:omovie}   & Old movie option \\
     oson \index{b2plot, oson}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:oson}     & Output geometry in {\tt Sonnet} format \\
     outp \index{b2plot, outp}    & 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
@@ -17157,7 +17140,7 @@ commands take one value off the "string" stack.
     saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data \\
                                  &   &   &   &   &   &   &   &   & \hspace{1cm} onto the matrix stack \\
     saws \index{b2plot, saws}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saws}     & Read external fluid species data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} onto the matrix stack \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} onto the matrix stack \\
     sawx \index{b2plot, sawx}    & 3 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sawx}     & Read external additional species data \\
                                  &   &   &   &   &   &   &   &   & \hspace{1cm} onto the matrix stack \\
     scat \index{b2plot, scat}    & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:scat}     & Concatenate two strings \\
@@ -17166,22 +17149,22 @@ commands take one value off the "string" stack.
     slbl \index{b2plot, slbl}    & 1 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:slbl}     & Set species label \\
     sonn \index{b2plot, sonn}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sonn}     & Read a new {\tt Sonnet} geometry \\
     sover \index{b2plot, sover}  & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:sover}    & Copy over the second element of the \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} string stack \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} string stack \\
     sprt \index{b2plot, sprt}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:sprt}     & Outputs the string stack \\
     sswap \index{b2plot, sswap}  & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:sswap}    & Swap the top two elements of the \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} string stack \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} string stack \\
     tlbl \index{b2plot, tlbl}    & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:tlbl}     & Set target graph label \\
     trgblbl \index{b2plot, trgblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:trgblbl}  & Set target bar label \\
     trgprt \index{b2plot, trgprt} & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgprt}  & Output top of target stack to a file \\
     trgtab \index{b2plot, trgtab} & 4 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgtab}  & Output part of the top of the \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} target stack to a file \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} target stack to a file \\
     uedgegrd \index{b2plot, uedgegrd} & 0 & 1 & 1 & 0 & 0 & 0 & 0 & \ref{sec:uedgegrd} & Output geometry in {\tt UEDGE} format \\
     wallblbl \index{b2plot, wallblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wallblbl} & Set wall bar label \\
     wlbl \index{b2plot, wlbl}    & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wlbl}     & Set wall graph label \\
     wprt \index{b2plot, wprt}    & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wprt}     & Output top of wall stack to a file \\
     wslbl \index{b2plot, wslbl}  & 1 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wslbl}    & Set wall species label \\
     wtab \index{b2plot, wtab}    & 2 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wtab}     & Output part of the top of the \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} wall stack to a file \\
+                                 &   &   &   &   &   &   &   &  & \hspace{1cm} wall stack to a file \\
     xlab \index{b2plot, xlab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:xlab}     & Set $x$-axis label \\
     ylab \index{b2plot, ylab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:ylab}     & Set $y$-axis label \\
     \hline
@@ -17274,14 +17257,14 @@ act on the "Eirene" stack or affect graphs of those data.
     earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}    & Use as Eirene array for arrow $x$-component \\
     earoy \index{b2plot, earoy}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earoy}    & Use as Eirene array for arrow $y$-component \\
     eavg \index{b2plot, eavg}      & 0 & 8 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eavg}     & Perform a volume average of Eirene data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} over a rectangular region \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} over a rectangular region \\
     echs \index{b2plot, echs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:echs}     & Change sign of Eirene data \\
     eclvd \index{b2plot, eclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvd}    & Customize Eirene contour levels (delta) \\
     eclvn \index{b2plot, eclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvn}    & Customize Eirene contour levels (number) \\
     eclvp \index{b2plot, eclvp}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eclvp}    & Customize Eirene contour levels (proportion) \\
     eclvs \index{b2plot, eclvs}    & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:eclvs}    & Customize Eirene contour levels (specified) \\
     edims \index{b2plot, edims}    & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:edims}    & Prints the dimensions and contents \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} of the Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} of the Eirene stack \\
     edrop \index{b2plot, edrop}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edrop}    & Drop top of Eirene stack \\
     edup \index{b2plot, edup}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:edup}     & Duplicate top of Eirene stack \\
     eexp \index{b2plot, eexp}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eexp}     & Take exponential of Eirene data \\
@@ -17295,18 +17278,18 @@ act on the "Eirene" stack or affect graphs of those data.
     em/ \index{b2plot, em/}        & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:em/}      & Eirene stack division \\
     emeq \index{b2plot, emeq}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emeq}     & Eirene matrix element is equal to \\
     emge \index{b2plot, emge}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emge}     & Eirene matrix element is greater than \\
-     &  &  &  &  &  &  &  &  &  \hspace{1cm} or equal to \\
+                                   &   &   &   &   &   &   &   &  &  \hspace{1cm} or equal to \\
     emgt \index{b2plot, emgt}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emgt}     & Eirene matrix element is greater than \\
     emle \index{b2plot, emle}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emle}     & Eirene matrix element is less than or equal to \\
     emlt \index{b2plot, emlt}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emlt}     & Eirene matrix element is less than \\
     emmax \index{b2plot, emmax}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:emmax}    & Maximum of top two elements \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} on the Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} on the Eirene stack \\
     emmin \index{b2plot, emmin}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:emmin}    & Minimum of top two elements \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} on the Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} on the Eirene stack \\
     emne \index{b2plot, emne}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:emne}     & Eirene matrix element is not equal to \\
     eoutp \index{b2plot, eoutp}    & 1 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:eoutp}    & Output the value of a specific Eirene triangle \\
     eover \index{b2plot, eover}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eover}    & Copy over the second element \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} of the Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} of the Eirene stack \\
     epos \index{b2plot, epos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:epos}     & Is Eirene data element positive? \\
     eprt \index{b2plot, eprt}      & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:eprt}     & Prints the Eirene data onto a file \\
     esel \index{b2plot, esel}      & 1 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esel}     & Select Eirene triangle \\
@@ -17315,7 +17298,7 @@ act on the "Eirene" stack or affect graphs of those data.
     esurf \index{b2plot, esurf}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:esurf}    & Plot Eirene data on the triangular grid \\
     eswap \index{b2plot, eswap}    & 0 & 0 & 0 & 0 & 2 & 0 & 0 & \ref{sec:eswap}    & Swap top two elements of Eirene stack \\
     etal \index{b2plot, etal}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:etal}     & Read Eirene tally output file \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} onto the Eirene stack \\
+                                   &   &   &   &   &   &   &   &  & \hspace{1cm} onto the Eirene stack \\
     etos \index{b2plot, etos}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:etos}     & Copy Eirene data onto matrix stack \\
     evac \index{b2plot, evac}      & 0 & 1 & 0 & 0 & 1 & 0 & 0 & \ref{sec:evac}     & Fill vacuum region of Eirene stack with a value \\
     wzrng \index{b2plot, ezrng}    & 2 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:ezrng}    & Select species range in Eirene data \\
@@ -17526,18 +17509,18 @@ act on the "wall" stack or affect wall graphs.
     wm/ \index{b2plot, wm/}       & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wm/}      & Wall stack division \\
     wmeq \index{b2plot, wmeq}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmeq}     & Wall matrix element is equal to \\
     wmge \index{b2plot, wmge}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmge}     & Wall matrix element is greater than \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} or equal to \\
+                                  &   &   &   &   &   &   &   &  & \hspace{1cm} or equal to \\
     wmgt \index{b2plot, wmgt}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmgt}     & Wall matrix element is greater than \\
     wmle \index{b2plot, wmle}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmle}     & Wall matrix element is less than or equal to \\
     wmlt \index{b2plot, wmlt}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmlt}     & Wall matrix element is less than \\
     wmmax \index{b2plot, wmmax}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmax}    & Maximum of top two elements \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} on the wall stack \\
+                                  &   &   &   &   &   &   &   &  & \hspace{1cm} on the wall stack \\
     wmmin \index{b2plot, wmmin}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wmmin}    & Minimum of top two elements \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} on the wall stack \\
+                                  &   &   &   &   &   &   &   &  & \hspace{1cm} on the wall stack \\
     wmne \index{b2plot, wmne}     & 0 & 1 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wmne}     & Wall matrix element is not equal to \\
     woff \index{b2plot, woff}     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:woff}     & Turn off wall plots \\
     wover \index{b2plot, wover}   & 0 & 0 & 0 & 0 & 0 & 2 & 0 & \ref{sec:wover}    & Copy over the second element \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} of the wall stack \\
+                                  &   &   &   &   &   &   &   &  & \hspace{1cm} of the wall stack \\
     wpos \index{b2plot, wpos}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wpos}     & Is wall data element positive? \\
     wprt \index{b2plot, wprt}     & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \ref{sec:wprt}     & Prints the wall data onto a file \\
     wsaw \index{b2plot, wsaw}     & 1 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:wsaw}     & Read external data onto the wall stack \\
@@ -17577,11 +17560,9 @@ temperature (in $K$) upon \btwoplot start-up.
     cp \index{b2plot, cp}        & Target specific heat capacity $(J.kg^{-1}.K^{-1})$ \\
     dkappadt \index{b2plot, dkappadt}  & Derivative of target heat conductivity $(W.m^{-1}.K^{-2})$ \\
     itrgeq \index{b2plot, itrgeq}    & Is the target element index equal to? \\
-    itrgge \index{b2plot, itrgge}    & Is the target element index greater
-    than or equal to? \\
+    itrgge \index{b2plot, itrgge}    & Is the target element index greater than or equal to? \\
     itrggt \index{b2plot, itrggt}    & Is the target element index greater than? \\
-    itrgle \index{b2plot, itrgle}    & Is the target element index less than
-    or equal to? \\
+    itrgle \index{b2plot, itrgle}    & Is the target element index less than or equal to? \\
     itrglt \index{b2plot, itrglt}    & Is the target element index less than? \\
     itrgne \index{b2plot, itrgne}    & Is the target element index not equal to? \\
     kappa \index{b2plot, kappa}     & Target heat conductivity (from polynomial fit) $(W.m^{-1}.K^{-1})$ \\
@@ -17604,11 +17585,9 @@ temperature (in $K$) upon \btwoplot start-up.
     trgz1 \index{b2plot, trgz1}     & $Z$ coordinate of first side of target element $(m)$ \\
     trgz2 \index{b2plot, trgz2}     & $Z$ coordinate of second side of target element $(m)$ \\
     ztrgeq \index{b2plot, ztrgeq}    & Is the target element depth index equal to? \\
-    ztrgge \index{b2plot, ztrgge}    & Is the target element depth index
-    greater than or equal to? \\
+    ztrgge \index{b2plot, ztrgge}    & Is the target element depth index greater than or equal to? \\
     ztrggt \index{b2plot, ztrggt}    & Is the target element depth index greater than? \\
-    ztrgle \index{b2plot, ztrgle}    & Is the target element depth index less
-    than or equal to? \\
+    ztrgle \index{b2plot, ztrgle}    & Is the target element depth index less than or equal to? \\
     ztrglt \index{b2plot, ztrglt}    & Is the target element depth index less than? \\
     ztrgne \index{b2plot, ztrgne}    & Is the target element depth index not equal to? \\
     \hline
@@ -17649,68 +17628,68 @@ stack requirements.
     \multicolumn{10}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    inttrgw \index{b2plot, inttrgw}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
+    inttrgw \index{b2plot, inttrgw}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
     inttrgw* \index{b2plot, inttrgw*} & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (per segment) \\
-    inttrgz \index{b2plot, inttrgz}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgz}  & Integrate in depth \\
-    lintrg \index{b2plot, lintrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lintrg}   & Linear target plot \\
-    linxtrg \index{b2plot, linxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linxtrg}  & Linear abscissae target plot \\
-    logtrg \index{b2plot, logtrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logtrg}   & Logarithmic target plot \\
-    logxtrg \index{b2plot, logxtrg}  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxtrg}  & Logarithmic abscissae target plot \\
-    outptrg \index{b2plot, outptrg}  & 2 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:outptrg}  & Outputs an element of target data \\
-    rtrgm* \index{b2plot, rtrgm*}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm*}   & Multiply the target data with a real \\
-    rtrgm** \index{b2plot, rtrgm**}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm**}  & Take the target data to a real power \\
-    rtrgm+ \index{b2plot, rtrgm+}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm+}   & Add a real to the target data \\
-    rtrgm- \index{b2plot, rtrgm-}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm-}   & Substract a real from the target data \\
-    rtrgm/ \index{b2plot, rtrgm/}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm/}   & Divide the target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} by a real \\
-    rtrgmma \index{b2plot, rtrgmma}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmma}  & Take the maximum of the target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} and a real \\
-    rtrgmmi \index{b2plot, rtrgmmi}  & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmmi}  & Take the minimum of the target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} and a real \\
-    sumtrgw \index{b2plot, sumtrgw}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgw}  & Sum along wall coordinate \\
-    sumtrgz \index{b2plot, sumtrgz}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgz}  & Sum over target depth \\
-    tclvd \index{b2plot, tclvd}    & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvd}    & Customize target contour levels (delta) \\
-    tclvn \index{b2plot, tclvn}    & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvn}    & Customize target contour levels (number) \\
-    tclvp \index{b2plot, tclvp}    & 2 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:tclvp}    & Customize target contour levels (proportion) \\
-    tclvs \index{b2plot, tclvs}    & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvs}    & Customize target contour levels (specified) \\
-    trg.w \index{b2plot, trg.w}    & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.w}    & Line target plot against wall element \\
-    trg.z \index{b2plot, trg.z}    & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.z}    & Line target plot against target depth \\
-    trgabs \index{b2plot, trgabs}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgabs}   & Absolute value of target data \\
-    trgchs \index{b2plot, trgchs}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgchs}   & Change sign of target data \\
-    trgddp \index{b2plot, trgddp}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddp}   & Take derivative of target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} along perpendicular direction \\
-    trgddw \index{b2plot, trgddw}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddw}   & Take derivative of target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} along wall coordinate \\
-    trgddz \index{b2plot, trgddz}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddz}   & Take derivative of target data \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} along target depth \\
-    trgdrop \index{b2plot, trgdrop}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdrop}  & Drop the top element from the target stack \\
-    trgdup \index{b2plot, trgdup}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdup}   & Duplicate the top element \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} from the target stack \\
-    trgeq \index{b2plot, trgeq}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgeq}    & Target data is equal to \\
-    trgexp \index{b2plot, trgexp}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgexp}   & Take exponential of target data \\
-    trgge \index{b2plot, trgge}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgge}    & Target data is greater than or equal to \\
-    trggt \index{b2plot, trggt}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trggt}    & Target data is greater than \\
-    trgle \index{b2plot, trgle}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgle}    & Target data is less than or equal to \\
-    trglist \index{b2plot, trglist}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglist}  & List the contents of the target stack \\
-    trgln \index{b2plot, trgln}    & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgln}    & Take natural logarithm of target data \\
-    trglog \index{b2plot, trglog}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglog}   & Take $log_{10}$ of target data \\
-    trglt \index{b2plot, trglt}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglt}    & Target data is less than \\
-    trgm* \index{b2plot, trgm*}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm*}    & Target stack multiplication \\
-    trgm+ \index{b2plot, trgm+}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm+}    & Target stack addition \\
-    trgm- \index{b2plot, trgm-}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm-}    & Target stack substraction \\
-    trgm/ \index{b2plot, trgm/}    & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm/}    & Target stack division \\
-    trgmmax \index{b2plot, trgmmax}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmax}  & Maximum of top two elements of target stack \\
-    trgmmin \index{b2plot, trgmmin}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmin}  & Minimum of top two elements of target stack \\
-    trgne \index{b2plot, trgne}    & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgne}    & Target data is not equal to \\
-    trgover \index{b2plot, trgover}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgover}  & Copy over second element on top \\
-     &  &  &  &  &  &  &  &  & \hspace{1cm} of target stack \\
-    trgpos \index{b2plot, trgpos}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgpos}   & Is target data positive? \\
-    trgsqrt \index{b2plot, trgsqrt}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsqrt}  & Take square root of target data \\
-    trgsurf \index{b2plot, trgsurf}  & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsurf}  & Create target data contour plot \\
-    trgswap \index{b2plot, trgswap}  & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgswap}  & Swap top two elements of target stack \\
-    trgtow \index{b2plot, trgtow}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgtow}   & Copy target data onto wall stack \\
-    trgwsel \index{b2plot, trgwsel}  & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
-    trgzsel \index{b2plot, trgzsel}  & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
+    inttrgz \index{b2plot, inttrgz}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgz}  & Integrate in depth \\
+    lintrg \index{b2plot, lintrg}     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:lintrg}   & Linear target plot \\
+    linxtrg \index{b2plot, linxtrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:linxtrg}  & Linear abscissae target plot \\
+    logtrg \index{b2plot, logtrg}     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logtrg}   & Logarithmic target plot \\
+    logxtrg \index{b2plot, logxtrg}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:logxtrg}  & Logarithmic abscissae target plot \\
+    outptrg \index{b2plot, outptrg}   & 2 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:outptrg}  & Outputs an element of target data \\
+    rtrgm* \index{b2plot, rtrgm*}     & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm*}   & Multiply the target data with a real \\
+    rtrgm** \index{b2plot, rtrgm**}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm**}  & Take the target data to a real power \\
+    rtrgm+ \index{b2plot, rtrgm+}     & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm+}   & Add a real to the target data \\
+    rtrgm- \index{b2plot, rtrgm-}     & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm-}   & Substract a real from the target data \\
+    rtrgm/ \index{b2plot, rtrgm/}     & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgm/}   & Divide the target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} by a real \\
+    rtrgmma \index{b2plot, rtrgmma}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmma}  & Take the maximum of the target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} and a real \\
+    rtrgmmi \index{b2plot, rtrgmmi}   & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:rtrgmmi}  & Take the minimum of the target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} and a real \\
+    sumtrgw \index{b2plot, sumtrgw}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgw}  & Sum along wall coordinate \\
+    sumtrgz \index{b2plot, sumtrgz}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:sumtrgz}  & Sum over target depth \\
+    tclvd \index{b2plot, tclvd}       & 0 & 3 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvd}    & Customize target contour levels (delta) \\
+    tclvn \index{b2plot, tclvn}       & 1 & 2 & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvn}    & Customize target contour levels (number) \\
+    tclvp \index{b2plot, tclvp}       & 2 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:tclvp}    & Customize target contour levels (proportion) \\
+    tclvs \index{b2plot, tclvs}       & 1 & * & 0 & 0 & 0 & 0 & 0 & \ref{sec:tclvs}    & Customize target contour levels (specified) \\
+    trg.w \index{b2plot, trg.w}       & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.w}    & Line target plot against wall element \\
+    trg.z \index{b2plot, trg.z}       & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trg.z}    & Line target plot against target depth \\
+    trgabs \index{b2plot, trgabs}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgabs}   & Absolute value of target data \\
+    trgchs \index{b2plot, trgchs}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgchs}   & Change sign of target data \\
+    trgddp \index{b2plot, trgddp}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddp}   & Take derivative of target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} along perpendicular direction \\
+    trgddw \index{b2plot, trgddw}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddw}   & Take derivative of target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} along wall coordinate \\
+    trgddz \index{b2plot, trgddz}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgddz}   & Take derivative of target data \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} along target depth \\
+    trgdrop \index{b2plot, trgdrop}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdrop}  & Drop the top element from the target stack \\
+    trgdup \index{b2plot, trgdup}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgdup}   & Duplicate the top element \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} from the target stack \\
+    trgeq \index{b2plot, trgeq}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgeq}    & Target data is equal to \\
+    trgexp \index{b2plot, trgexp}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgexp}   & Take exponential of target data \\
+    trgge \index{b2plot, trgge}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgge}    & Target data is greater than or equal to \\
+    trggt \index{b2plot, trggt}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trggt}    & Target data is greater than \\
+    trgle \index{b2plot, trgle}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgle}    & Target data is less than or equal to \\
+    trglist \index{b2plot, trglist}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglist}  & List the contents of the target stack \\
+    trgln \index{b2plot, trgln}       & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgln}    & Take natural logarithm of target data \\
+    trglog \index{b2plot, trglog}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglog}   & Take $log_{10}$ of target data \\
+    trglt \index{b2plot, trglt}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trglt}    & Target data is less than \\
+    trgm* \index{b2plot, trgm*}       & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm*}    & Target stack multiplication \\
+    trgm+ \index{b2plot, trgm+}       & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm+}    & Target stack addition \\
+    trgm- \index{b2plot, trgm-}       & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm-}    & Target stack substraction \\
+    trgm/ \index{b2plot, trgm/}       & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgm/}    & Target stack division \\
+    trgmmax \index{b2plot, trgmmax}   & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmax}  & Maximum of top two elements of target stack \\
+    trgmmin \index{b2plot, trgmmin}   & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgmmin}  & Minimum of top two elements of target stack \\
+    trgne \index{b2plot, trgne}       & 0 & 1 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgne}    & Target data is not equal to \\
+    trgover \index{b2plot, trgover}   & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgover}  & Copy over second element on top \\
+                                      &   &   &   &   &   &   &   &  & \hspace{1cm} of target stack \\
+    trgpos \index{b2plot, trgpos}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgpos}   & Is target data positive? \\
+    trgsqrt \index{b2plot, trgsqrt}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsqrt}  & Take square root of target data \\
+    trgsurf \index{b2plot, trgsurf}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgsurf}  & Create target data contour plot \\
+    trgswap \index{b2plot, trgswap}   & 0 & 0 & 0 & 0 & 0 & 0 & 2 & \ref{sec:trgswap}  & Swap top two elements of target stack \\
+    trgtow \index{b2plot, trgtow}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgtow}   & Copy target data onto wall stack \\
+    trgwsel \index{b2plot, trgwsel}   & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
+    trgzsel \index{b2plot, trgzsel}   & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
     \hline
     \caption{Commands related to the "target" stack and target plots.}
     \label{tab:targetcommands}
@@ -19074,13 +19053,13 @@ See {\bf zcol} above for a list of available colours.
 Produces flow chart of arrays {\em up} and {\em vv} using a maximum arrow
 length of $\langle${\tt length}$\rangle$ metres.
 The use of {\em up} and {\em vv} can be superseded
-by the the commands {\bf arox} and {\bf aroy}, respectively, which will then use
+by the commands {\bf arox} and {\bf aroy}, respectively, which will then use
 data from the matrix stack for computing the arrow directions instead.
 
 \subsubsection{$<$length,{\bf R}$>$ earow}\index{b2plot, earow}\label{sec:earow}\index{b2plot, earox}\label{sec:earox}\index{b2plot, earoy}\label{sec:earoy}
 Produces flow chart of Eirene array {\em vxa} and {\em vya} using a
 maximum arrow length of $\langle${\tt length}$\rangle$ metres. The use of {\em vxa} and
-{\em vya} can be superseded by the the commands {\bf earox} and {\bf earoy},
+{\em vya} can be superseded by the commands {\bf earox} and {\bf earoy},
 respectively, which will then use data from the Eirene stack for computing
 the arrow directions instead.
 
@@ -19356,8 +19335,8 @@ Specifically, the densities of neutrals species (when a match between {\tt B2.5}
 {\tt Eirene} species can be found) computed from {\tt Eirene} ({\em dab2}) are added
 to the fluid neutral densities from {\tt B2.5} ({\em na}).
 Same for the mass density field {\em ro}.
-If the atomic particle fluxes {\em pfla} and {\em rfla} are available, then the fluxes
-and velocities for the neutral species are also updated, meaning the {\em fnax}, {\em fnay},
+If the atomic particle fluxes {\em pfla} and {\em rfla} are available, then the fluxes and
+velocities for the neutral species are also updated, meaning the {\em fnax}, {\em fnay},
 {\em ua}, {\em up}, and {\em vv} fields, along with the default values of the {\em uutraj},
 {\em vvtraj}, {\em arrowx}, and {\em arrowy} arrays.
 
@@ -20167,7 +20146,7 @@ number of extra isolating cells
 \end{description}
 
 The current default settings of {\tt b2mod\_dimensions.F}, which allow for a
-128$\times$36 DN geometry case including species H, D, T, He, Be and C, are:
+128~$\times$~36 DN geometry case including species H, D, T, He, Be and C, are:
 \VerbatimInput[fontsize=\footnotesize]{b2mod_dimensions.F}
 
 \section{Making movies}
@@ -21157,13 +21136,13 @@ ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
 B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-CHECKBIN & src/assistant/wrstrt.F \\
-CHECKBIN & src/file-handling/wrgeom.F \\
-CHECKBIN & src/file-handling/wrplam\_long.F \\
-CHECKBIN & src/file-handling/wrplam\_shrt.F \\
-CHECKBIN & src/interfaces/couple\_B2/infcop.f \\
-CHECKBIN & src/main-routines/eirmod\_mcarlo.F \\
-CHECKBIN & src/modules/eirmod\_comxs.F \\
+CHECKBIN & assistant/wrstrt.F \\
+CHECKBIN & file-handling/wrgeom.F \\
+CHECKBIN & file-handling/wrplam\_long.F \\
+CHECKBIN & file-handling/wrplam\_shrt.F \\
+CHECKBIN & interfaces/couple\_B2/infcop.f \\
+CHECKBIN & main-routines/eirmod\_mcarlo.F \\
+CHECKBIN & modules/eirmod\_comxs.F \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.F \\
 COMPILER\_MINOR\_VERSION & assistant/exit\_own.F \\
 CRAY & broadcast/broad\_iestr.F \\
