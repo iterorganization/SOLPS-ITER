@@ -329,15 +329,15 @@ Using the definition of $\rmzonei$ (Eq.~\eqref{eq:rmzonei_def}) and $\rmxonei$ (
 \end{equation}
 with
 \begin{align}
-    \fmozrec & = \pcorfi \ m \rmzonei \ci^2 \frac{\fdni}{-\ionel}, \\
+    \fmozrec & = \pcorfi \ m \rmzonei \ci^2 \left( - \frac{\fdni}{\ionel} \right), \\
     \fmoyrec & = 0, \\
-    \fmoxrec & = \pcorfi \ m \rmxonei \ci^2 \frac{\fdni}{-\ionel} ,
+    \fmoxrec & = \pcorfi \ m \rmxonei \ci^2 \left( - \frac{\fdni}{\ionel} \right),
 \end{align}
 
 where $ \pcorfi = \frac{\min \left( \pfi, \Rifl \right)}{\pfi}$ with
 
 \begin{equation}
-    \pfi = \frac{\rconei \ci}{-\ionel}.
+    \pfi = - \frac{\rconei \ci}{\ionel}.
 \end{equation}
 
 Using the definition of $\rmzonei$ (Eq.~\eqref{eq:rmzonei_def}), $\rmztwoi$ (Eq.~\eqref{eq:rmztwoi_def}), $\rmytwoi$ (Eq.~\eqref{eq:rmytwo_def}), $\rmxonei$ (Eq.~\eqref{eq:rmxonei_def}), and $\rmxtwoi$ (Eq.~\eqref{eq:rmxtwoi_def}), the fast reflected part of Eq.~\eqref{eq:Gammanmomp} according to the diffusion approximation is written as
@@ -445,7 +445,7 @@ with
 
 Using the definition of $\rponeonei$ (Eq.~\eqref{eq:rponeonei_def}) and $\rponetwoi$ (Eq.~\eqref{eq:rponetwoi_def}), the term (1) pressure contributions from Equation~\eqref{eq:v2fn} as written in Eq.~\eqref{eq:par_mom_final} become
 \begin{equation}
-     p^{\mathrm{n}}_{\mathrm{1,rec}} = \pcorfi \frac{m}{3} \rponeonei \ci^2 \frac{\fdni}{-\ionel},
+     p^{\mathrm{n}}_{\mathrm{1,rec}} = \pcorfi \frac{m}{3} \rponeonei \ci^2 \left( - \frac{\fdni}{\ionel} \right),
 \end{equation}
 
 \begin{equation}
@@ -490,7 +490,7 @@ The contribution from Equation~\eqref{eq:pnboundary_term2} is implemented in the
 Using the definition of $\rptwoonei$ (Eq.~\eqref{eq:rptwoonei_def}) and $\rptwotwoi$ (Eq.~\eqref{eq:rptwotwo_def}), the density contributions from Eq.~\eqref{eq:nnboundary} as written in Eq.~\eqref{eq:p2_final} are given by
 
 \begin{align}
-    (\nn')_{\mathrm{rec}} & = \pcorfi \rptwoonei \frac{\fdni}{-\ionel}, \\
+    (\nn')_{\mathrm{rec}} & = \pcorfi \rptwoonei \left( - \frac{\fdni}{\ionel} \right), \\
     %-------
     (\nn')_{\mathrm{refl}}^{\mathrm{diff}} & = \pcorfnd \frac{\vcx}{\vtot} \left( \nn \rptwoonei + \frac{1}{\vtot} \dnndz \rptwotwoi \ci \right), \\
     %-------
@@ -510,7 +510,7 @@ Using the definition of $\rptwoonei$ (Eq.~\eqref{eq:rptwoonei_def}) and $\rptwot
 
 Using the definition of $\rpthreeonei$ (Eq.~\eqref{eq:rpthreeonei_def}) and $\rpthreetwoi$ (Eq.~\eqref{eq:rpthreetwo_def}), the $(\nn' \wwn')$ terms from Eq.~\eqref{eq:wwnboundary} as written in Eq.~\eqref{eq:p2_final} are written as
 \begin{align}
-    (\nn' \wwn')_{\mathrm{rec}} & = \pcorfi \rpthreeonei \ci \frac{\fdni}{-\ionel}, \\
+    (\nn' \wwn')_{\mathrm{rec}} & = \pcorfi \rpthreeonei \ci \left( - \frac{\fdni}{\ionel} \right), \\
     %-------
     (\nn' \wwn')_{\mathrm{refl}}^{\mathrm{diff}} & = \pcorfnd \frac{\vcx}{\vtot} \left( \nn \rpthreeonei \ci + \frac{1}{\vtot} \dnndz \rpthreetwoi \ci^2 \right), \\
     %-------
@@ -538,7 +538,7 @@ Similar to the particle and parallel momentum flux, we write the net neutral ene
 \noindent Using the definitions of $\reonei$ (Eq.~\eqref{eq:reonei_def}) and $\retwoi$ (Eq.~\eqref{eq:retwoi_def}), the components are written as
 
 \begin{align}
-    Q^{\mathrm{n}}_{\mathrm{rec}} & = \frac{1}{2} \pcorfi m \reonei \ci^3 \frac{\fdni}{-\ionel}, \\
+    Q^{\mathrm{n}}_{\mathrm{rec}} & = \frac{1}{2} \pcorfi m \reonei \ci^3 \left( - \frac{\fdni}{\ionel} \right), \\
     Q^{\mathrm{n,diff}}_{\mathrm{refl}} & = \frac{1}{2} \pcorfnd m \frac{\vcx}{\vtot} \left( - \nn \reonei \ci^3 + \frac{1}{\vtot} \dnndz \retwoi \ci^4 \right), \\
     Q^{\mathrm{n,Maxw}}_{\mathrm{refl}} & = \pcorfnm m \nn \reonei \cn^3, \\
     Q^{\mathrm{n}}_{\mathrm{T,rec}} & = \pti \fdni \efc, \\

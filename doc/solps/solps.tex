@@ -364,7 +364,7 @@ For fuller code capability, it is also recommended to load the IMAS (Integrated 
 If the {\tt nc2text} utility program is not present on the system, but the {\tt NetCDF} library is available, the code will then automatically build an alternative skeleton version and add it to the scripts path.\index{nc2text}
 
 \index{NO\_MANUAL}
-If there is no \LaTeX interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
+If there is no \LaTeX~interpreter found on the system, this manual will not be built. For other systems on which one may not wish to build the manual, the environment variable {\tt NO\_MANUAL} can be set to any non-empty string, for instance as part of the {\tt \$SOLPSTOP/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \section{Initial set-up}
 \index{Initial set-up}
@@ -7479,7 +7479,7 @@ database from {\tt Eirene} over the known velocity distribution of incident ions
 The AFN BCs at runtime make use of pre-computed databases. For the most common combinations of incident particles and wall materials, these are stored in {\tt B2.5/Database/trim.data/refl.data}.
 A pre-processor to create new databases for new combinations of incident particles and wall materials is available in the source code as {\tt b2ab}.
 A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
-The \LaTeX source files for this PDF are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code}. An example {\tt b2ab.dat} file is available under {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab}.
+The \LaTeX~source files for this PDF are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code}. An example {\tt b2ab.dat} file is available in the {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab} directory.
 
 Additionally, there are two PDF presentations on the \SOLPSITER SharePoint website, in the \href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/SOLPS-ITER\%20Extended\%20Grids\%20Workshops}{SOLPS-ITER Extended Grids Workshops} directory, explaining the setup of AFN cases: {\tt workshop\_presentation\_AFN} and {\tt AFN handson session}.
 \end{sloppypar}
@@ -22187,6 +22187,7 @@ JET in 2002.
 
 {\tt B2.5} consists of a number of programs
 \begin{description}
+\item[b2ab] \index{b2ab} prepares the AFN database files (see {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}, Section 5.2)
 \item[\textcolor{Red}{b2ag}] \index{b2ag} prepares the geometry and magnetic field (see \ref{sec:b2ag})
 \item[\textcolor{Red}{b2ah}] \index{b2ah} prepares the default physics parameters (see \ref{sec:b2ah})
 \item[\textcolor{Red}{b2ai}] \index{b2ai} prepares the initial plasma state (see \ref{sec:b2ai})
@@ -22237,6 +22238,7 @@ JET in 2002.
   \begin{center}
 \begin{tabular}{l|l|l}
 filename & formatted? & read by \\ \hline
+b2ab.dat \index{b2ab.dat} & formatted &  b2ab \\
 b2ag.dat \index{b2ag.dat} & formatted &  b2ag b2ai \\
 b2ah.dat \index{b2ah.dat} & formatted &  b2ah \\
 b2ai.dat \index{b2ai.dat} & formatted &  b2ai \\
@@ -22266,6 +22268,7 @@ weis.dat \index{weis.dat} & formatted &  b2ar \\
   \begin{center}
 \begin{tabular}{l|l|l}
 filename & formatted? & written by \\ \hline
+b2ab.prt \index{b2ab.prt} & formatted & b2ab \\
 b2ag.prt \index{b2ag.prt} & formatted & b2ag \\
 b2ah.prt \index{b2ah.prt} & formatted & b2ah \\
 b2ai.prt \index{b2ai.prt} & formatted & b2ai \\

@@ -6,43 +6,43 @@
 
 The switches to control the behavior of the AFN model in B2.5 are listed here. The default values are given after the name of the switch. \newline
 \\
-{\tt `b2mn\_afn' (default = `0')} \newline
-Master switch for AFN model. {\tt b2mn\_afn.eq.1} sets both {\tt `b2stbr\_recycle\_afn'} (AFN BCs, see below) and {\tt `b2tqna\_transport\_afn'} (AFN transport coefficients) to 1. \newline
+{\tt 'b2mn\_afn' (default = '0')} \newline
+Master switch for AFN model. {\tt b2mn\_afn.eq.1} sets both {\tt 'b2stbr\_recycle\_afn'} (AFN BCs, see below) and {\tt 'b2tqna\_transport\_afn'} (AFN transport coefficients) to 1. \newline
 \\
-{\tt `b2stbr\_recycle\_afn' (default = `0')} \newline
+{\tt 'b2stbr\_recycle\_afn' (default = '0')} \newline
 Main switch to enable the use of the AFN boundary conditions. \newline
 \\
-{\tt `diffusion\_bc\_safeguard' (default = `1')} \newline
+{\tt 'diffusion\_bc\_safeguard' (default = '1')} \newline
 When {\tt diffusion\_bc\_safeguard.eq.1}, the code will automatically switch to using the Maxwellian approach instead of the diffusion approach, when the diffusion approach gives rise to negative incident fluxes. \newline
 \\
-{\tt `remove\_FC\_el' (default = `0')} \newline
+{\tt 'remove\_FC\_el' (default = '0')} \newline
 When {\tt remove\_FC\_el.eq.1}, the 2-3 eV Franck-Condon energy given to the atoms originating from dissociating molecules is subtracted from the electrons. This switch should be active to guarantee global energy conservation. However, turning it on causes a strong localized electron heat sink, typically causing the electron temperature to drop to zero at the guard cells (see Ref.~\cite{phd_wim} Section 4.4). In all published AFN works, {\tt remove\_FC\_el = 0}. This is an important remaining shortcoming of the AFN model. An approximate fluid model for the molecules would solve this issue. \newline
 \\
-{\tt `afn\_bcs\_use\_coarse' (default = `1')} \newline
+{\tt 'afn\_bcs\_use\_coarse' (default = '1')} \newline
 When {\tt afn\_bcs\_use\_coarse = 0}, the code will use AFN database files such as {\tt dw.fnn} with 100 discretization points for the toroidal Mach number, 134 points for the temperature, and 28 points for the sheath potential drop. When {\tt afn\_bcs\_use\_coarse = 1}, the code will use AFN database files such as {\tt dw.fnn.coarse} with 11 discretization points for the toroidal Mach number, 134 points for the temperature, and 28 points for the sheath potential drop. \newline
 \\
-{\tt `b2stbr\_Kn\_b1' (default = `0.01')} \newline
-When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b1} determines the Knudsen number below which the diffusion approximation is used. \newline
+{\tt 'b2stbr\_Kn\_b1' (default = '0.01')} \newline
+When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b1} determines the Knudsen number below which the diffusion approximation is used for stratum {\tt istra}. \newline
 \\
-{\tt `b2stbr\_Kn\_b2' (default = `0.1')} \newline
-When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b2} determines the Knudsen number above which the Maxwellian approximation is used. \newline
+{\tt 'b2stbr\_Kn\_b2' (default = '0.1')} \newline
+When using {\tt maxw(istra) = 2}, {\tt b2stbr\_Kn\_b2} determines the Knudsen number above which the Maxwellian approximation is used for stratum {\tt istra}. \newline
 \\
-{\tt `use\_uy\_uz\_0' (default = `0')} and {\tt `use\_uy\_uz\_1' (default = `0')} \newline
-These switches control the contribution from the tangential and normal bulk velocity of the ions or neutrals. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number.
+{\tt 'use\_uy\_uz\_0' (default = '0')} and {\tt 'use\_uy\_uz\_1' (default = '0')} \newline
+These switches control the contribution from the tangential and normal bulk velocity components of the ions or neutrals. More research is needed on the role of these bulk velocities. It is a question of consistency, because these bulk velocities can be taken into account for the calculations of the incident fluxes, but the AFN databases are only tabulated for the toroidal Mach number.
 {\tt use\_uy\_uz\_0.eq.0} turns off the contributions from perpendicular bulk velocities already before the calculations of the moments of the incident particles. {\tt use\_uy\_uz\_1.eq.0} turns off any contributions from perpendicular bulk velocities, but only after the calculation of the moments of the incident particles. \newline
 
- \subsection{Inputs in b2.neutrals.paramters}
+ \subsection{Inputs in b2.neutrals.parameters}
 
 {\tt maxw(istra) (default = 1)} \newline
-When {\tt maxw(istra) = 0}, the diffusion approximation for the incident velocity distribution of the neutrals is chosen. When {\tt maxw(istra) = 1}, the Maxwellian approximation for the incident velocity distribution of the neutrals is chosen (recommended). When {\tt maxw(istra) = 2}, the choice between diffusion or Maxwellian approximation is based on the local Knudsen number, depending on {\tt b2stbr\_Kn\_b1} and {\tt b2stbr\_Kn\_b2}. \newline
+When {\tt maxw(istra) = 0}, the diffusion approximation for the incident velocity distribution of the neutrals in stratum {\tt istra} is chosen. When {\tt maxw(istra) = 1}, the Maxwellian approximation for the incident velocity distribution of the neutrals is chosen (recommended). When {\tt maxw(istra) = 2}, the choice between diffusion or Maxwellian approximation is based on the local Knudsen number, depending on {\tt b2stbr\_Kn\_b1} and {\tt b2stbr\_Kn\_b2} (see above). \newline
 \\
 {\tt maxw\_eff(istra) (default = 1)} \newline
-Relates to the option {\tt CalcIncidentFluxesMinKn}, where the choice between diffusion and Maxwellian option is the same for each cell of the same stratum, but automatically selected based on the lowest Knudsen number along the boundary faces of that stratum. This option is depreciated and was never published. Not recommended. \newline
+Relates to the option {\tt CalcIncidentFluxesMinKn}, where the choice between diffusion and Maxwellian option is the same for each cell of stratum {\tt istra}, but automatically selected based on the lowest Knudsen number along the boundary faces of that stratum. This option is deprecated and was never published. Not recommended. \newline
 \\
 {\tt e\_fc (default = 3.0)} \newline
-Franck-Condon eneregy (in $eV$) given to each atom resulting from a dissociating molecule. \newline
+Franck-Condon energy (in $eV$) given to each atom resulting from a dissociating molecule. \newline
 \\
-{\tt surf\_mat(istra) (default = `C')}  \newline
+{\tt surf\_mat(istra) (default = 'C')}  \newline
 Surface material used to select the appropriate AFN database.  \newline
 \\
 {\tt accel\_ion(istra) (default = 0)} \newline
@@ -63,54 +63,56 @@ Several AFN databases are available by default in {\tt B2.5/Database/trim.data/r
 Running {\tt b2run (-s) b2ab} will create a new AFN database file based on the inputs in {\tt b2ab.dat}, and place it in {\tt b2ab.exe.dir}. The {\tt b2ab.dat} file consists of a fixed-format header followed by optional arguments. The fixed-format header is: \newline
 \\
 *incident \\
-\hspace{2cm} `X' \\
+\hspace{2cm} 'X' \\
 *material \\
-\hspace{2cm} `Y' \\
+\hspace{2cm} 'Y' \\
 
-\noindent where {\tt `X'} is the incident particle (currently H, D, or T) and {\tt `Y'} is the name of the wall material (C, Be, Cr, Li, W, ...). The code will then look for the TRIM file {\tt X\_on\_Y}. It will first look in \newline {\tt modules/Eirene/Database/Surfacedata/TRIM}. A user that does not have access to the EIRENE repository should request the specific TRIM file from an EIRENE developer (respecting the EIRENE license requirements), and place it in {\tt modules/B2.5/Database/trim.data/refl.data.local}. \newline
+\noindent where {\tt 'X'} is the incident particle (currently H, D, or T) and {\tt 'Y'} is the name of the wall material (C, Be, Cr, Li, W, ...). The code will then look for the TRIM file {\tt X\_on\_Y}. It will first look in \newline {\tt modules/Eirene/Database/Surfacedata/TRIM}. A user that does not have access to the EIRENE repository should request the specific TRIM file from an EIRENE developer (respecting the EIRENE license requirements), and place it in {\tt modules/B2.5/Database/trim.data/refl.data.local}. \newline
+\\
+An example {\tt b2ab.dat} file is available in the {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab} directory. \newline
 \\
 The optional inputs are: \newline
 \\
-{\tt `b2abdr\_ntp' (default = `1e5')} \newline
-Number of Monte Carlo particles used to calculate the reflection coefficients that can not be evaluated analytically (see Section \ref{sec:trim_moment_reflection_coeff}). \newline
+{\tt 'b2abdr\_ntp' (default = '1.0e5')} \newline
+Number of Monte Carlo particles used to calculate the reflection coefficients that cannot be evaluated analytically (see Section \ref{sec:trim_moment_reflection_coeff}). \newline
 \\
-{\tt `b2abdr\_nv' (default = `100')} \newline
+{\tt 'b2abdr\_nv' (default = '100')} \newline
 Number of discretization points to evaluate the $\int_{v'=0}^{\infty} \dd v'$ integrals from Section~\ref{sec:final_expressions_RC}. \newline
 \\
-{\tt `b2abdr\_ntheta' (default = `100')} \newline
+{\tt 'b2abdr\_ntheta' (default = '100')} \newline
 Number of discretization points to evaluate the $\int_{\vartheta'=0}^{\pi/2} \dd \vartheta'$ integrals from Section~\ref{sec:final_expressions_RC}. \newline
 \\
-{\tt `b2abdr\_nphi' (default = `180')} \newline
+{\tt 'b2abdr\_nphi' (default = '180')} \newline
 Number of discretization points to evaluate the $\int_{\varphi'=0}^{2 \pi} \dd \varphi'$ integrals from Section~\ref{sec:final_expressions_RC}. \newline
 \\
-{\tt `b2abdr\_nT' (default = `0')} \newline
-Number of values for $T_a$ in the AFN database. \newline
+{\tt 'b2abdr\_nT' (default = '0')} \newline
+Number of values for $T_a$ in the AFN database file. \newline
 \\
-{\tt `b2abdr\_nM' (default = `0')} \newline
+{\tt 'b2abdr\_nM' (default = '0')} \newline
 Number of values for $M_{a,\phi}$ in the AFN database file. \newline
 \\
-{\tt `b2abdr\_nSh' (default = `0')} \newline
+{\tt 'b2abdr\_nSh' (default = '0')} \newline
 Number of values for $\dshpot$ in the AFN database file.  \newline
 \\
-{\tt `b2abdr\_Tmin' (default = `0.1')} \newline
+{\tt 'b2abdr\_Tmin' (default = '0.1')} \newline
 Minimum value for $T_a$ in the AFN database file, expressed in $eV$. \newline
 \\
-{\tt `b2abdr\_Tmax' (default = `1000')} \newline
+{\tt 'b2abdr\_Tmax' (default = '1000.0')} \newline
 Maximum value for $T_a$ in the AFN database file, expressed in $eV$. \newline
 \\
-{\tt `b2abdr\_Mmin' (default = `0.0')} \newline
+{\tt 'b2abdr\_Mmin' (default = '0.0')} \newline
 Minimum value for $M_{a,\phi}$ in the AFN database file. \newline
 \\
-{\tt `b2abdr\_Mmax' (default = `1.1')} \newline
+{\tt 'b2abdr\_Mmax' (default = '1.1')} \newline
 Maximum value for $M_{a,\phi}$ in the AFN database file. \newline
 \\
-{\tt `b2abdr\_Shmin' (default = `0.0')} \newline
+{\tt 'b2abdr\_Shmin' (default = '0.0')} \newline
 Minimum value for $\dshpot$ in the AFN database. \newline
 \\
-{\tt `b2abdr\_Shmax' (default = `6.0')} \newline
+{\tt 'b2abdr\_Shmax' (default = '6.0')} \newline
 Maximum value for $\dshpot$ in the AFN database. \newline
 \\
-{\tt `b2abdr\_Eomin' (default = `1e-6')} \newline
+{\tt 'b2abdr\_Eomin' (default = '1.0e-6')} \newline
 Minimum incident particle energy (in $eV$) used throughout all calculations. \newline
 \\
 
