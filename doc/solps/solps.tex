@@ -2708,8 +2708,8 @@ which contains
   \item[7] prescribe the parallel momentum as a function of other plasma parameters [not yet available].
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
     [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the gradient of the Mach number in $m^{-1}$]]].
-  \item[9] prescribe the total parallel momentum flux with constant flux
-    density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
+  \item[9] prescribe the total parallel momentum flux with constant flux density,
+    {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
   \item[10] prescribe the decay length for the parallel momentum,
     {\tt MOMPAR(,,1)} specifies the decay length in $m$.
   \item[11] Rozhansky viscosity condition for the parallel momentum,
@@ -2746,15 +2746,16 @@ which contains
     {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the electron energy flux per unit area,
     {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-  \item[6] prescribe the total electron energy flux for a constant
-    electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
-    in $W$ (no longer supported, use types [16] or [17] instead).
+  \item[6] prescribe the total electron energy flux for a constant electron temperature,
+    {\tt ENEPAR(,1)} specifies the energy flux in $W$
+    (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the electron temperature as a function of other plasma parameters [not yet available].
   \item[8] prescribe the total electron heat flux with constant flux density,
     {\tt ENEPAR(,1)} specifies the energy flux in $W$.
   \item[9] prescribe the decay length for the electron temperature,
     {\tt ENEPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
-  \item[10] feedback option for core, {\tt ENEPAR(,1)} not used, derived from {\tt cbshe(0,coreregno)}.
+  \item[10] feedback option for core,
+    {\tt ENEPAR(,1)} not used, derived from {\tt cbshe(0,coreregno)}.
   \item[11] not used
   \item[12] sheath conditions, electron energy transmission coefficient,
     {\tt ENEPAR(,1)} specifies an energy transmission factor,
@@ -2814,7 +2815,7 @@ which contains
     (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the ion temperature as a function of other plasma parameters [not yet available]
   \item[8] prescribe the total ion heat flux with constant flux density,
-    {\tt ENIPAR(,1)} specifies the energy flux in $W$
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[9] prescribe the decay length for the ion temperature,
     {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
   \item[10] feedback option for core, {\tt ENIPAR(,1)} not used, derived from {\tt cbshi(0,ISMAIN,coreregno)}.
@@ -2825,7 +2826,7 @@ which contains
     {\tt ENIPAR(,1)} specifies an energy transmission factor,
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
-   {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
+    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
@@ -2854,7 +2855,7 @@ which contains
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
-  {\tt ENIPAR(,1)} specifies the energy flux in $W$.
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}.
     If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$.
     Only available for E and W boundaries.
@@ -2878,8 +2879,8 @@ which contains
     {\tt POTPAR(,1)} specifies the electric current flux density in $A.m^{-2}$.
   \item[6] prescribe the total current flux density for a constant potential [not yet available].
   \item[7] prescribe the potential as a function of other plasma parameters [not yet available].
-  \item[8] prescribe the total electric current with constant flux
-    density, {\tt POTPAR(,1)} specifies the electric current in $A$.
+  \item[8] prescribe the total electric current with constant flux density,
+    {\tt POTPAR(,1)} specifies the electric current in $A$.
   \item[9] prescribe the decay length for the potential,
     {\tt POTPAR(,1)} specifies the decay length in $m$.
   \item[10] feedback option for core [not yet tested!!!!!!!!!] (based on using {\tt cbsch(0,coreregno)}).
@@ -20751,7 +20752,6 @@ NAG22 & b2plot/caltraj.F \\
 NAGF95 & b2plot/b2plot.F \\
 NAGF95 & b2plot/dhdata.F \\
 NAGF95 & b2plot/initialize\_plotting.F \\
-NAGF95 & b2plot/set\_extralabel.F \\
 NAGF95 & b2plot/spect.F \\
 NAGF95 & convert/b2mds.F \\
 NAGF95 & convert/b2plasmastate\_inspect.F \\
