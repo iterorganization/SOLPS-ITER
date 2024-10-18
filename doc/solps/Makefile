@@ -142,8 +142,8 @@ B2_5.config.ITER.ifort64: ${B25DIR}/config/config.ITER.ifort64
 B2_5.config.common.ifort64: ${B25DIR}/config/config.common.ifort64
 	ln -sf ${B25DIR}/config/config.common.ifort64 B2_5.config.common.ifort64
 
-LICENSE.tex: ${SOLPSTOP}/LICENSE.md
-	pandoc ${SOLPSTOP}/LICENSE.md -o LICENSE.tex || cat ${SOLPSTOP}/LICENSE.md | sed -e "s:#::g" > LICENSE.tex
+LICENSE.tex: ${SOLPSTOP}/LICENSE.md ${MAKES}
+	( pandoc ${SOLPSTOP}/LICENSE.md -o /tmp/LICENSE.tex ; cat /tmp/LICENSE.tex | sed -e 's:©:\\copyright :g' > LICENSE.tex ; rm /tmp/LICENSE.tex ) || cat ${SOLPSTOP}/LICENSE.md | sed -e "s:#::g" -e 's:©:\\copyright :g' > LICENSE.tex
 
 CONTRIBUTING.tex: ${SOLPSTOP}/CONTRIBUTING.md
 	pandoc ${SOLPSTOP}/CONTRIBUTING.md -o CONTRIBUTING.tex || cat ${SOLPSTOP}/CONTRIBUTING.md | sed -e "s:#::g" -e "s:_:\\\_:g" -e 's:$$SOLPSTOP:\\$$SOLPSTOP:g' -e 's:$$:\\\\:' -e 's:\^:\\\^:g' > CONTRIBUTING.tex
@@ -164,11 +164,10 @@ SOLPS_versions: force
 	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --tags --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
-solps-iter_git.log:
-	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
+solps-iter_git.log: ${MAKES}
+	( cd ${SOLPSTOP} ; ${GIT} log --oneline | sed -e "s:ü:ue:g" -e "s:ö:oe:g" ) > solps-iter_git.log
 
-update_log:
-	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
+update_log: solps-iter_git.log
 
 update: ${INCLUDES}
 
