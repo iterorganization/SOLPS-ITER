@@ -499,7 +499,7 @@ A schematic view of the optimization process is available in Figure~\ref{fig:opt
 
 If adjoint AD is used for gradient calculation, then the driver routine {\tt b2mndr\_1\_d} in Figure~\ref{fig:optim} is replaced by {\tt b2mndr\_1\_b} shown previously in Figure~\ref{fig:adjoint}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \ifpdf
   \includegraphics[width=120mm]{FiguresAD/optimization_scheme.png}
@@ -509,7 +509,6 @@ If adjoint AD is used for gradient calculation, then the driver routine {\tt b2m
 \caption{Scheme of the tangent AD optimization.}\label{fig:optim}
 \end{center}
 \end{figure}
-
 
 Stopping criteria for the optimization:
 \begin{itemize}
@@ -529,11 +528,11 @@ In order to compile the optimization code, one must make sure that one of the op
 
 For the local installation on the KU-Leuven VSC cluster, for {\tt PETSc/TAO} to the following command line options to configure the installation were used:
 \begin{verbatim}
-$ ./configure --with-mpi=0 --with-fc=ifort -–with-cpp:/lib/cpp -traditional \
+$ ./configure --with-mpi=0 --with-fc=ifort --with-cpp:/lib/cpp -traditional \
   --download-cmake=yes --download-superlu=yes
 \end{verbatim}
 
-On other clusters a similar configuration could be used. It was in particular necessary to make sure that when loading the {\tt PETSc/TAO} module or library the default compiler and compiler options of \SOLPSITER were retained and not overwritten by those of the library.
+On other clusters a similar configuration could be used. One may take care in particular that when loading the {\tt PETSc/TAO} module or library the default compiler and compiler options of \SOLPSITER are retained and not overwritten by those of the library.
 
 To compile the optimization version, for example with the {\tt PETSc/TAO} optimization library:\index{set\_tao}
 \begin{verbatim}
@@ -541,7 +540,7 @@ $ game listobj depend
 $ set_tao
 $ gmake b25_tgt b25_adj
 \end{verbatim}
-where {\tt set\_tao} allows to include extra compilation flags in the user's configuration files for {\tt B2.5}. An additional executable named {\tt b2optim\_tao.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.[tgt|adj]}.
+where the {\tt set\_tao} script sets extra compilation flags in the configuration files for {\tt B2.5}. An additional executable named {\tt b2optim\_tao.exe} is compiled in {\tt B2.5/builds/standalone.\allowbreak\$HOST\_NAME.\allowbreak\$COMPILER.\allowbreak[tgt|adj]}.
 
 \textbf{Important:} On the ITER cluster it is currently possible to compile only the {\tt PETSc/TAO} version.
 
