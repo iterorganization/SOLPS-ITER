@@ -55,7 +55,7 @@ The grant of the rights mentioned above is subject to some restrictions and obli
 **Provision of Source Code**: When distributing and/or communicating copies of the Work, the Licensee will provide a machine-readable copy of the Source Code or indicate a repository where this Source will be easily and freely available for as long as the Licensee continues to distribute and/or communicate the Work.
 
 **Legal Protection**: This Licence does not grant permission to use the trade names, trademarks, service marks, or names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the copyright notice.
-￼
+
 ## 6. Chain of Authorship
 The original Licensor warrants that the copyright in the Original Work granted hereunder is owned by him/her or licensed to him/her and that he/she has the power and authority to grant the Licence.
 
@@ -75,7 +75,7 @@ Except in the cases of wilful misconduct or damages directly caused to natural p
 
 ## 9. Additional agreements
 While distributing the Original Work or Derivative Works, You may choose to conclude an additional agreement to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or services consistent with this Licence. However, in accepting such obligations, You may act only on your own behalf and on your sole responsibility, not on behalf of the original Licensor or any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact You have accepted any such warranty or additional liability.
-￼￼￼
+
 ## 10. Acceptance of the Licence
 The provisions of this Licence can be accepted by clicking on an icon “I agree” placed under the bottom of a window displaying the text of this Licence or by affirming consent in any other similar way, in accordance with the rules of applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this Licence and all of its terms and conditions.
 
@@ -97,7 +97,7 @@ If any provision of the Licence is invalid or unenforceable under applicable law
 The European Commission may publish other linguistic versions and/or new versions of this Licence, so far this is required and reasonable, without reducing the scope of the rights granted by the Licence. New versions of the Licence will be published with a unique version number.
 
 All linguistic versions of this Licence, approved by the European Commission, have identical value. Parties can take advantage of the linguistic version of their choice.
-￼￼￼
+
 ## 14. Jurisdiction
 Any litigation resulting from the interpretation of this License, arising between the European Commission, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Communities, as laid down in article 238 of the Treaty establishing the European Community.
 
