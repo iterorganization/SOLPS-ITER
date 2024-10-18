@@ -173,8 +173,7 @@ SOLPS_versions: force
 	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
 	@( cd ${SOLPSTOP}/modules/B2.5 ; git describe --tags --always | awk '{print "B2.5 version : ",$$1}') >> SOLPS_versions_new
 	@( cd ${SOLPSTOP}/modules/Eirene ; git describe --tags --always | awk '{print "Eirene version : ",$$1}' ) >> SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/Carre ; git describe --tags --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
-	@( cd ${SOLPSTOP}/modules/Carre2 ; git describe --tags --always | awk '{print "Carre version : ",$$1}' ) >> SOLPS_versions_new
+	@( cd ${SOLPSTOP}/modules/Carre2 ; git describe --tags --always | awk '{print "Carre2 version : ",$$1}' ) >> SOLPS_versions_new
 	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --tags --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 

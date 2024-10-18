@@ -40,7 +40,7 @@ ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ../hess_sens_10iter.dat 
 
 # Run test case optimization
 cd ${SOLPSTOP}
-source $SOLPSTOP/SETUP/tao
+. $SOLPSTOP/SETUP/tao.ksh
 rm ${SOLPSTOP}/modules/B2.5/builds/*/b2optim_tao*.*
 make MAKE_OPTIONS=-j8 b25_tgt b25_adj
 
