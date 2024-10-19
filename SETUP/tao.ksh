@@ -14,7 +14,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export TAO_OPT="$1"
   echo "PETSC-TAO compilation and optimization turned on with TAO options $TAO_OPT"
   if [[ -n "$TAO_NEW" ]]; then
-    echo "(using new [>3.16] version of TAO optimization package"
+    echo "(using new [>3.16] version of TAO optimization package)"
   fi
 else
   echo "SOLPS_PATH not set. Exiting."
