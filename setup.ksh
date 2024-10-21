@@ -241,8 +241,6 @@ alias set_tgt='. $SOLPSTOP/SETUP/tgt'
 alias unset_tgt='. $SOLPSTOP/SETUP/notgt'
 alias set_adj='. $SOLPSTOP/SETUP/adj'
 alias unset_adj='. $SOLPSTOP/SETUP/noadj'
-alias set_ipopt='. $SOLPSTOP/SETUP/ipopt'
-alias unset_ipopt='. $SOLPSTOP/SETUP/noipopt'
 alias set_tao='. $SOLPSTOP/SETUP/tao'
 alias unset_tao='. $SOLPSTOP/SETUP/notao'
 

@@ -266,8 +266,6 @@ alias   set_tgt    'source $SOLPSTOP/SETUP/tgt'
 alias unset_tgt    'source $SOLPSTOP/SETUP/notgt'
 alias   set_adj    'source $SOLPSTOP/SETUP/adj'
 alias unset_adj    'source $SOLPSTOP/SETUP/noadj'
-alias   set_ipopt  'source $SOLPSTOP/SETUP/ipopt'
-alias unset_ipopt  'source $SOLPSTOP/SETUP/noipopt'
 alias   set_tao    'source $SOLPSTOP/SETUP/tao'
 alias unset_tao    'source $SOLPSTOP/SETUP/notao'
 

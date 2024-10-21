@@ -1,0 +1,778 @@
+\chapter{Backup}
+
+\subsection{\texttt{CalcRecycledFluxes}}
+
+Plasma velocities toroidal (x), tangential (y), and normal (z) to boundary assuming absence of drifts
+
+\begin{equation}
+      \ux = u_{||} \pitt
+\end{equation}
+
+\begin{equation}
+    \uz = - \cosa \isign u_{||} \pit
+\end{equation}
+
+Incident ion particle flux density
+
+\begin{equation}
+    \fdni = \frac{\tzero}{A_f}
+\end{equation}
+
+Calculate fast and thermal recycled parts
+      NOW HERE
+
+\begin{equation}
+    \pf = \mathrm{min}(\frac{\rconei c_s}{- \ionel},\recyczero) + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \pcorf = \frac{\mathrm{min}(\pf,\recyczero)}{\pf}
+\end{equation}
+
+\begin{equation}
+    \pt = \recyczero - \pf + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \vT = \sqrt{\frac{2 \efc}{m}}
+\end{equation}
+
+The reflection coefficients below already account for the probability of fast particle reflection. Like in Eirene, we will only pump fast particles once all thermal particles are pumped.
+
+Calculate the flux emitted as molecules. At the moment, molecules will be treated kinetically.
+
+\begin{equation}
+     \fnamolrec =  0.5 \recycm \pt \fdni A_f
+\end{equation}
+
+\begin{equation}
+          \fnnrec = \mathrm{max}(0,(\recyczero \tzero - 2 \fnamolrec) \fluidfrachyb)
+\end{equation}
+
+Recycled momentum flux densities
+\begin{equation}
+    \fmox = \pcorf m \rmxonei \mathrm{sign}(1,\ux) c_s^2 \frac{\fdni}{- \ionel} \fluidfrachyb
+\end{equation}
+
+
+why zero ???
+\begin{equation}
+    \fmoy = 0
+\end{equation}
+
+WRONG !! z = normal !!!!
+x = toroidal
+\begin{equation}
+    \fmoz = \frac{\pcorf m \rmzonei c_s^2 \fdni}{- \ionel} \fluidfrachyb
+\end{equation}
+pas op notatie, voeg samen
+\begin{equation}
+    \fmoz = \fmoz + \frac{2}{3} m (1-\recycm) \pt \fdni \vT \fluidfrachyb
+\end{equation}
+
+Pressure of recycled neutrals
+
+\begin{equation}
+    \pnc = \pcorf \frac{m}{3} \rponeonei c_s^2 \frac{\fdni}{-\ionel} \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \pnc = \pnc + \frac{2}{3} m (1-\recycm) \pt \fdni \vT \fluidfrachyb
+\end{equation}
+
+Density of recycled neutrals
+
+\begin{equation}
+    \nnrec = \pcorf \rptwoonei \frac{\fdni}{-\ionel} \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \nnrec = \nnrec + (1-\recycm) \pt \fdni \frac{2}{\vT} \fluidfrachyb
+\end{equation}
+
+Product of density and toroidal velocity
+\begin{equation}
+    \nnwnrec = \pcorf \rpthreeonei c_s \mathrm{sign}(1,\ux) \frac{\fdni}{-\ionel} \fluidfrachyb
+\end{equation}
+
+Recycled total energy flux density of neutrals
+\begin{equation}
+    \fenec = \frac{1}{2} \pcorf m \reonei c_s^3 \frac{\fdni}{-\ionel}
+\end{equation}
+
+\begin{equation}
+    \fenec = \fenec + \frac{1}{2} m (1-\recycm) \pt \fdni \vT^2 \fluidfrachyb
+\end{equation}
+
+Calculate recycled poloidal momentum flux of neutrals
+
+\begin{equation}
+\fmomrecp = - \isign (\fmoz \cosa + \fmoy \sina) A_f + \isign \pnc A_f \cosa
+\end{equation}
+
+\begin{equation}
+    \fmomrect = \fmoz A_f
+\end{equation}
+
+\begin{equation}
+    \fmomrect = \fmox A_f
+\end{equation}
+
+\begin{equation}
+    \fmomrec =  \pit \fmomrecp + \pitt \fmomrect
+\end{equation}
+
+Convert energy flux densities in energy fluxes
+
+\begin{equation}
+    \fenerec = \fenec A_f
+\end{equation}
+
+
+\subsection{\texttt{CalcIncidentFluxesDiffusion}}
+
+Incident particle flux. Corresponds to PhD N. Horsten Eq. 4.78.
+\begin{equation}
+          \fnni = \frac{\vcx}{(\vtot)^2}(\dnndy \uy \ionel + \dnndz \itwol) -         \nnf \frac{\vcx}{\vtot} \ionel
+\end{equation}
+
+fmox
+\begin{equation}
+          \fmox = m \frac{\vcx}{\vtot} (-\nn \ux \ionel +
+          \frac{1}{\vtot} (\dnndy \ux \uy \ionel +
+          \dnndz \ux \itwol))
+\end{equation}
+
+fmoy
+\begin{equation}
+          \fmoy = m  \frac{\vcx}{\vtot} (-\nn \uy \itwol +
+          \frac{1}{\vtot} (\dnndy (\frac{\Ti}{m} + \uy^2) \ionel +
+          \dnndz \uy \itwol))
+\end{equation}
+
+fmoz
+\begin{equation}
+          \fmoz= m \frac{\vcx}{\vtot}(-\nnf \itwol + \frac{1}{\vtot}(\dnndy \uy \itwol +
+          \dnndz \ithreel))
+\end{equation}
+
+
+TODO I0l
+
+Pressure of incident neutrals
+\begin{align}
+          \pn'= & \frac{m}{3} \frac{\vcx}{\vtot} (\nn ((\frac{2 \Ti}{m} + \ux^2 +
+          \uy^2) I0l + itwol)  \nonumber \\
+          & - \frac{1}{\vtot} (\dnndy (( \frac{4 \Ti}{m} \uy +
+          \ux^2 \uy + \uy^3) I0l + \uy \itwol) +
+          \dnndz*((\frac{2 \Ti}{m} + \ux^2 + \uy^2) \ionel +
+          \ithreel)))
+\end{align}
+
+Density of incident neutrals
+\begin{equation}
+          \nnip = \frac{\vcx}{\vtot} (\nn I0l -
+          \frac{1}{\vtot} (\dnndy \uy I0l + \dnndz I1l))
+\end{equation}
+
+\begin{equation}
+          \nnwwni = \nnip \ux
+\end{equation}
+
+Incident total energy flux density of neutrals
+\begin{align}
+          \feneni = & \frac{\vcx}{\vtot} \Bigg(-\nn \bigg( \Big( \Ti + \frac{m}{2}
+          \big( \ux^2 + \uy^2 \big) \Big)
+          I1l + \frac{m}{2} I3l \bigg) +  \nonumber \\
+          & \frac{1}{\vtot} \bigg(\dnndy \Big( \big(2 \Ti +
+          \frac{m}{2} (\ux^2 + \uy^2) \big) \uy I1l + \frac{m}{2} \uy I3l \Big) +
+         \dnndz \Big( \big( \Ti + \frac{m}{2}(\ux^2 + \uy^2) \big) I2l +
+         \frac{m}{2} I4l \Big) \bigg) \Bigg)
+\end{align}
+
+Calculate incident poloidal momentum flux of neutrals
+\begin{equation}
+\fmomnip = \isign(\Gamma_{\mathrm{m},||,\theta-}^{\mathrm{n,diff}} \cosa + \Gamma_{\mathrm{m},||,\tau-}^{\mathrm{n,diff}} \sina) + \Is \pn' \cosa
+\end{equation}
+
+Calculate incident toroidal momentum flux of neutrals
+
+\begin{equation}
+    \fmomnit = -\fmox
+\end{equation}
+
+Incident parallel momentum flux
+\begin{equation}
+    \Gamma_{\mathrm{m},||-}^{\mathrm{n,diff}} = b_\theta \Gamma_{\mathrm{m},||,\theta-}^{\mathrm{n,diff}} + b_\phi \Gamma_{\mathrm{m},||,\phi-}^{\mathrm{n,diff}}
+\end{equation}
+
+parallel? check with notation niels! notation with nu ?? only means incident? actually parallel?
+
+
+
+
+\subsection{\texttt{CalcIncidentFluxesMaxwellian}}
+
+\begin{equation}
+    \ux = u_{\mathrm{n},||} \pitt
+\end{equation}
+
+\begin{equation}
+    \uy = - \sina \isign u_{\mathrm{n},||} \pit
+\end{equation}
+
+\begin{equation}
+    \uz = - \cosa \isign u_{\mathrm{n},||} \pit
+\end{equation}
+
+Incident particle flux density
+
+\begin{equation}
+    \fnni = - \nn \ionel
+\end{equation}
+
+Incident momentum flux densities
+
+\begin{equation}
+    \fmox = - m \nn \ux \ionel
+\end{equation}
+
+\begin{equation}
+    \fmoy = - m \nn \uy \ionel
+\end{equation}
+
+\begin{equation}
+    \fmoz = -m \nn \itwol
+\end{equation}
+
+Pressure of incident neutrals
+
+\begin{equation}
+    \pn = \frac{m}{3} (\nn ((\frac{2 \Tn}{m} + \ux^2 + \uy^2) \ionel + \itwol))
+\end{equation}
+
+Density of incident neutrals
+
+\begin{equation}
+    \nni = \nn \ionel
+\end{equation}
+
+\begin{equation}
+    \nnwwni = \nni \ux
+\end{equation}
+
+Incident total energy flux density of neutrals
+
+\begin{equation}
+    \feneni = \nn (( \Tn + \frac{m}{2} (\ux^2 + \uy^2)) \ionel + \frac{m}{2} \ithreel)
+\end{equation}
+Convert particle flux densities in fluxes
+
+\begin{equation}
+    \fnni =  \fnni A_f
+\end{equation}
+
+Calculate incident poloidal momentum flux of neutrals
+
+\begin{equation}
+    \fmomnip =  \isign (\fmoz \cosa + \fmoy \sina ) A_f + \isign \pn A_f \cosa
+\end{equation}
+
+\begin{equation}
+    \fmomnit = - \fmox A_f
+\end{equation}
+
+\begin{equation}
+    \fmomni = \pit \fmomnip + \pitt \fmomnit
+\end{equation}
+
+Convert energy flux densities in net energy flux contributions
+
+\begin{equation}
+    \feneni = -\feneni A_f
+\end{equation}
+
+\subsection{\texttt{CalcReflectedFluxesDiffusion}}
+
+      upf = pl%ua(iCn,isi)!! We use iCn instead of iCv because EIRENE does not see the value in the guard cell and the difference can be large.
+\begin{equation}
+    \ux = u_{||} \pitt
+\end{equation}
+
+\begin{equation}
+    \uy = - \sina \isign u_{||} \pit
+\end{equation}
+
+\begin{equation}
+    \uz = -\cosa \isign  u_{||} \pit
+\end{equation}
+
+
+Calculate incident particle flux density
+
+\begin{equation}
+    \fnni = \frac{\vcx}{\vtot} (- \ionel \nn + \frac{\dnndz \itwol + \dnndy \uy \ionel}{\vtot})
+\end{equation}
+
+Calculate fast and thermal reflected parts
+
+\begin{equation}
+    \pf = \mathrm{min}( \frac{\vcx}{\vtot} ( \nn \rconei c_s + \frac{\dnndz \rctwoi c_s^2}{\vtot}) / \fnni, \recyczero) + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \pcorf = \frac{\mathrm{min}(\pf, \recyczero)}{\pf}
+\end{equation}
+
+\begin{equation}
+    \pt = \recyczero - \pf + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \vt = \sqrt{\frac{2 \efc }{m}}
+\end{equation}
+The reflection coefficients below already account for the probability of fast particle reflection. Like in Eirene, we will only pump fast particles once all thermal particles are pumped.
+
+Calculate the part of the reflected flux emitted as molecules. At the moment, the molecules are treated kinetically.
+
+\begin{equation}
+    \fnamolrefl = \recycm \pt \fnni A_f \frac{1}{2}
+\end{equation}
+
+\begin{equation}
+    \fnnrefl = \mathrm{max}(0,(\recyczero \fnni A_f - 2 \fnamolrefl
+\end{equation}
+if fnni ge 0 then
+\begin{equation}
+    \fnnrefl = \mathrm{max}(0,(\recyczero \fnni A_f- 2 \fnamolrefl) \fluidfrachyb
+\end{equation}
+else
+\begin{equation}
+    \fnnrefl = 0
+\end{equation}
+
+Reflected momentum flux densities
+
+\begin{equation}
+    \fmox = \pcorf m \frac{\vcx}{\vtot} (\nn \rmxonei c_s^2 + \frac{1}{\vtot} \dnndz \rmxtwoi \cs^3) \mathrm{sign}(1,\ux) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fmoy = -\pcorf  \mn \frac{\vcx}{(\vtot)^2} \dnndy \rmytwoi \cs^3 \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fmoz = - \pcorf m \frac{\vcx}{\vtot} ( \nn \rmzonei \cs^2 + \frac{1}{\vtot} \dnndz \rmztwoi \cs^3) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fmoz =  \fmoz + (1-\recycm) \pt \frac{2}{3} m \fnni \vt \fluidfrachyb
+\end{equation}
+
+Pressure of reflected neutrals
+
+\begin{equation}
+    \pn = \pcorf \frac{m}{3} \frac{\vcx}{\vtot} (\nn \rponeonei \cs^2 + \frac{1}{\vtot} \dnndz \rponetwoi \cs^3) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \pn = \pn + (1-\recycm) \pt \frac{2}{3} m \fnni \vt \fluidfrachyb
+\end{equation}
+
+Density of reflected neutrals
+
+\begin{equation}
+    \nnrefl = \pcorf \frac{\vcx}{\vtot} (\nn \rptwoonei + \frac{1}{\vtot} \dnndz \rptwotwoi \cs) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \nnrefl = \nnrefl + (1-\recycm) \pt \fnni \frac{2}{\vt} \fluidfrachyb
+\end{equation}
+
+Product of density and toroidal velocity
+
+\begin{equation}
+    \nnwwnrefl = \pcorf \frac{\vcx}{\vtot} ( \nn \rpthreeonei \cs + \frac{1}{\vtot} \dnndz \rpthreetwoi \cs^2) \mathrm{sign}(1,\ux) \fluidfrachyb
+\end{equation}
+
+Reflected total energy flux density of neutrals
+\begin{equation}
+    \fene = \frac{1}{2} \pcorf m \frac{\vcx}{\vtot} (\nn \reonei \cs^3 + \frac{1}{\vtot} \dnndz \retwoi \cs^4) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fene = \fene + (1-\recycm) \pt \fnni \efc \fluidfrachyb
+\end{equation}
+
+the Franck-Condon energy must at least be provided by the electrons.
+\begin{equation}
+    \feneel = - (1-\recycm) \pt \fnni \efc \fluidfrachyb
+\end{equation}
+
+Calculate reflected poloidal momentum flux of neutrals
+\begin{equation}
+    \fmomreflp = - \isign (\fmoz \cosa + \fmoy \sina ) A_f + \isign \pn A_f \cosa
+\end{equation}
+
+\begin{equation}
+    \fmomreflt = \fmox A_f
+\end{equation}
+
+\begin{equation}
+    \fmomrefl = \pit \fmomreflp + \pit2 \fmomreflt
+\end{equation}
+
+Convert energy flux densities in energy fluxes
+\begin{equation}
+    \fenerefl = \fene A_f
+\end{equation}
+
+\begin{equation}
+    \feneel = \feneel A_f
+\end{equation}
+
+\subsection{\texttt{CalcReflectedFluxesMaxwellian}}
+
+\begin{equation}
+    \ux = u_{\mathrm{n},||} \pitt
+\end{equation}
+
+\begin{equation}
+    \uz -\cosa \isign u_{\mathrm{n},||} \pit
+\end{equation}
+
+Calculate incident particle flux density
+
+\begin{equation}
+    \fnni = - \ionel \nn
+\end{equation}
+
+Calculate fast and thermal reflected parts
+
+\begin{equation}
+    \pf = \mathrm{min}(\nn \rconei \frac{\cs}{\fnni}, \recyczero) + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \pcorf = \frac{\mathrm{min}(\pf,\recyczero)}{\pf}
+\end{equation}
+
+\begin{equation}
+    \pt = \recyczero - \pf + 10^{-30}
+\end{equation}
+
+\begin{equation}
+    \vt = \sqrt{\frac{2 \efc}{m}}
+\end{equation}
+
+The reflection coefficients below already account for the probability of fast particle reflection. Like in Eirene, we will only pump fast particle once all thermal particles are pumped.
+
+Calculate the part of the reflected flux emitted as molecules. At the moment, the molecules are treated kinetically.
+
+\begin{equation}
+    \fnamolrefl = \recycm \pt \fnni A_f \frac{1}{2}
+\end{equation}
+
+\begin{equation}
+    \fnnrefl = \mathrm{max}(0,(\recyczero \fnni A_f - 2 \fnamolrefl ) \fluidfrachyb
+\end{equation}
+
+Reflected momentum flux densities
+
+\begin{equation}
+    \fmox = \pcorf m \nn \rmxonei \cs^2 \mathrm{sign}(1,\ux) \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fmoy = 0
+\end{equation}
+
+\begin{equation}
+    \fmoz = \pcorf m \nn \rmzonei \cs^2 \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fmox = \fmoz + (1-\recycm) \pt \frac{2}{3} m \fnni \vt \fluidfrachyb
+\end{equation}
+Pressure of reflected neutrals
+
+\begin{equation}
+    \pn = \pcorf \frac{m}{3} \nn \rponeonei \cs^2 \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \pn = \pn + (1-\recycm) \pt \frac{2}{3} m \fnni \vt \fluidfrachyb
+\end{equation}
+Density of reflected neutrals
+
+\begin{equation}
+    \nnrefl = \pcorf \nn \rptwoonei \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \nnrefl = \nnrefl + (1-\recycm) \pt \fnni \frac{2}{\vt} \fluidfrachyb
+\end{equation}
+Product of density and toroidal velocity
+
+\begin{equation}
+    \nnwwnrefl = \pcorf \nn \rpthreeonei \cs \mathrm{sign}(1,\ux) \fluidfrachyb
+\end{equation}
+
+Reflected total energy flux density of neutrals
+
+\begin{equation}
+    \fene = \frac{1}{2} \pcorf m \nn \reonei c_s^3 \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \fene = \fene + (1-\recycm) \pt \fnni \efc \fluidfrachyb
+\end{equation}
+
+The Franck-Condon energy is provided by the electrons
+\begin{equation}
+    \feneel = - (1-\recycm) \pt \fnni \efc \fluidfrachyb
+\end{equation}
+
+Calculate reflected poloidal momentum flux of neutrals
+
+\begin{equation}
+    \fmomreflp = \isign (\fmoz \cosa + \fmoy \sina) A_f + \isign \pn A_f \cosa
+\end{equation}
+
+\begin{equation}
+    \fmomreflt =  \fmox A_f
+\end{equation}
+
+\begin{equation}
+    \fmomrefl = \pit \fmomreflp + \pitt \fmomreflt
+\end{equation}
+
+\begin{equation}
+    \fenerefl =  \fene A_f
+\end{equation}
+
+\begin{equation}
+    \feneel = \feneel A_f
+\end{equation}
+
+\subsection{b2stbrphys}
+
+TODO
+
+\subsection{Worked out example}
+
+\begin{equation}
+    \pnc = \pcorf \frac{m}{3} \rponeonei c_s^2 \frac{\fdni}{-\ionel} \fluidfrachyb
+\end{equation}
+
+\begin{equation}
+    \mathrm{Rp11} =
+\end{equation}
+
+\begin{equation}
+ = \frac{m}{3} \int_{v'=0}^{\infty} \int_{\vartheta'=0}^{\pi/2} \int_{\varphi'=0}^{2\pi}
+ R_{p}(v',\vartheta') (v')^{2}  \frac{ \Ri \Gamma_{\nu-}^{\mathrm{i}}(v',\vartheta',\varphi')}{v' \cos \vartheta'}  \dd v' \dd \vartheta' \dd \varphi'  \label{eq:temp1}
+\end{equation}
+
+\begin{equation}
+    \Gamma_{\nu-}^{\mathrm{i}}(v',\vartheta',\varphi') =
+\end{equation}
+
+\begin{equation}
+\Gammaimin(v',\vartheta',\varphi') = \begin{cases} C^{\mathrm{i}} \finorm(v',\vartheta',\varphi';\dshpot) v' \sin \vartheta' \cos \vartheta' & \text{if} \quad v' \geq v_{\mathrm{min}}, \\
+& \hspace{0.6cm} \vartheta' \leq \vartheta_{\mathrm{max}}, \\
+0 & \text{else}, \end{cases} \label{eq:fib}
+\end{equation}
+with $\vartheta_{\mathrm{max}} = \arccos (v_{\mathrm{min}}/v')$ and
+\begin{multline}
+\finorm(v',\vartheta',\varphi';\dshpot) = \left (v' \right )^{2} \widetilde{M} \Bigg (-v' \sin \vartheta' \cos \varphi',-v' \sin \vartheta' \sin \varphi', \ldots \\
+\ldots -\sqrt{\left (v'\right )^{2} \cos^{2} \vartheta' -\frac{2}{m} \dshpot \Te};\Vi,\Ti \Bigg ). \label{eq:temp3}
+\end{multline}
+
+Retaining only $u_{\varphi}$ gives
+
+\begin{equation}
+\finorm(v',\vartheta',\varphi';\dshpot) = (v')^{2} \big( \frac{2}{m \Ti}\big)^{3/2} \mathrm{exp} \Bigg( - \frac{2}{m \Ti} \Big( (v'_{\phi} - u_\phi )^2 + (v'_\tau)^2 + (v'_\nu)^2 \Big)\Bigg)
+\label{eq:temp3}
+\end{equation}
+
+\begin{multline}
+ \finorm(v',\vartheta',\varphi';\dshpot)  = (v')^{2} \big( \frac{2}{m \Ti}\big)^{3/2} \\
+ \mathrm{exp} \Bigg( - \frac{2}{m \Ti} \Big( (-v' \mathrm{sin} \vartheta' \mathrm{cos} \varphi' - u_\phi )^2 + (-v' \mathrm{sin} \vartheta' \mathrm{sin} \varphi')^2 + (-\sqrt{\left (v'\right )^{2} \cos^{2} \vartheta' -\frac{2}{m} \dshpot \Te})^2 \Big)\Bigg)
+\label{eq:temp4}
+\end{multline}
+
+\begin{multline}
+ \finorm(v',\vartheta',\varphi';\dshpot)  = (v')^{2} \big( \frac{2}{m \Ti}\big)^{3/2} \\
+ \mathrm{exp} \Bigg( - \frac{2}{m \Ti} \Big( (v')^2 \mathrm{sin}^2 \vartheta' \mathrm{cos}^2 \varphi' + u_\phi^2 + 2 v' \mathrm{sin} \vartheta' \mathrm{cos} \varphi' u_\phi  + (v')^2 \mathrm{sin}^2 \vartheta' \mathrm{sin}^2 \varphi' +  (v')^{2} \cos^{2} \vartheta' -\frac{2}{m} \dshpot \Te \Big)\Bigg)
+\label{eq:temp5}
+\end{multline}
+
+\begin{multline}
+ \finorm(v',\vartheta',\varphi';\dshpot)  = (v')^{2} \big( \frac{2}{m \Ti}\big)^{3/2} \\
+ \mathrm{exp} \Bigg( - \frac{2}{m \Ti} \Big( (v')^2 \mathrm{sin}^2 \vartheta' + u_\phi^2 + 2 v' \mathrm{sin} \vartheta' \mathrm{cos} \varphi' u_\phi  +  (v')^{2} \cos^{2} \vartheta' -\frac{2}{m} \dshpot \Te \Big)\Bigg)
+\label{eq:temp6}
+\end{multline}
+
+\begin{multline}
+ \finorm(v',\vartheta',\varphi';\dshpot)  = (v')^{2} \big( \frac{2}{m \Ti}\big)^{3/2} \\
+ \mathrm{exp} \Bigg( - \frac{2}{m \Ti} \Big( (v')^2  + u_\phi^2 + 2 v' \mathrm{sin} \vartheta' \mathrm{cos} \varphi' u_\phi  -\frac{2}{m} \dshpot \Te \Big)\Bigg)
+\label{eq:temp7}
+\end{multline}
+
+\subsection{Definition of coefficients}
+superscript
+0 = recycled
+1 = reflected, scaling with nn
+2 = reflected, scaling with dnndz
+3 = reflected, scaliing with dnndy?
+
+subscript
+0 = particles
+1 = momentum
+2 = energy
+
+\begin{tabular}{L{3cm} L{4cm}}
+\underline{Manuscript} & \underline{Code} \\
+$A_0^0$ & $\cs$\\
+$A_{\Gamma^\mathrm{n}}^1$ & \\
+$A_{\Gamma^\mathrm{n}}^2$ & \\
+$A_{\Gamma^\mathrm{n}}^3$ & \\
+$A_{1,x}^0$ & $m \nni \cs^2$\\
+$A_{1,z}^0$ & $m \nni \cs^2$\\
+$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+$A_{Q^\mathrm{n}}^0$ & \\
+$A_{Q^\mathrm{n}}^1$ & \\
+$A_{Q^\mathrm{n}}^2$ & \\
+$A_{Q^\mathrm{n}}^3$ & \\
+$I_0^0$ & $\rconei$\\
+$I_{\Gamma^\mathrm{n}}^1$ & \\
+$I_{\Gamma^\mathrm{n}}^2$ & \\
+$I_{\Gamma^\mathrm{n}}^3$ & \\
+$I_{1,x}^0$ & $\rmxonei$\\
+$I_{1,z}^0$ & $\rmxonei$\\
+$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+$I_{Q^\mathrm{n}}^0$ & \\
+$I_{Q^\mathrm{n}}^1$ & \\
+$I_{Q^\mathrm{n}}^2$ & \\
+$I_{Q^\mathrm{n}}^3$ & \\
+$g_{\Gamma^\mathrm{n}}^0$ & \\
+$g_{\Gamma^\mathrm{n}}^1$ & \\
+$g_{\Gamma^\mathrm{n}}^2$ & \\
+$g_{\Gamma^\mathrm{n}}^3$ & \\
+$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^0$ & \\
+$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+$g_{Q^\mathrm{n}}^0$ & \\
+$g_{Q^\mathrm{n}}^1$ & \\
+$g_{Q^\mathrm{n}}^2$ & \\
+$g_{Q^\mathrm{n}}^3$ & \\
+\end{tabular}
+
+%$A_{\Gamma^\mathrm{n}}^0$ & $\cs$\\
+%$A_{\Gamma^\mathrm{n}}^1$ & \\
+%$A_{\Gamma^\mathrm{n}}^2$ & \\
+%$A_{\Gamma^\mathrm{n}}^3$ & \\
+%$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^0$ & \\
+%$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+%$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+%$A_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+%$A_{Q^\mathrm{n}}^0$ & \\
+%$A_{Q^\mathrm{n}}^1$ & \\
+%$A_{Q^\mathrm{n}}^2$ & \\
+%$A_{Q^\mathrm{n}}^3$ & \\
+%$I_{\Gamma^\mathrm{n}}^0$ & $\rconei$\\
+%$I_{\Gamma^\mathrm{n}}^1$ & \\
+%$I_{\Gamma^\mathrm{n}}^2$ & \\
+%$I_{\Gamma^\mathrm{n}}^3$ & \\
+%$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^0$ & \\
+%$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+%$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+%$I_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+%$I_{Q^\mathrm{n}}^0$ & \\
+%$I_{Q^\mathrm{n}}^1$ & \\
+%$I_{Q^\mathrm{n}}^2$ & \\
+%$I_{Q^\mathrm{n}}^3$ & \\
+%$g_{\Gamma^\mathrm{n}}^0$ & \\
+%$g_{\Gamma^\mathrm{n}}^1$ & \\
+%$g_{\Gamma^\mathrm{n}}^2$ & \\
+%$g_{\Gamma^\mathrm{n}}^3$ & \\
+%$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^0$ & \\
+%$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^1$ & \\
+%$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^2$ & \\
+%$g_{\Gamma^\mathrm{n}_\mathrm{m,||}}^3$ & \\
+%$g_{Q^\mathrm{n}}^0$ & \\
+%$g_{Q^\mathrm{n}}^1$ & \\
+%$g_{Q^\mathrm{n}}^2$ & \\
+%$g_{Q^\mathrm{n}}^3$ & \\
+
+%\begin{tabular}{L{3cm} L{8cm}}
+%\underline{Symbol} & \underline{Code} \\
+%$p_\mathrm{n}$ & \\
+%$p'_\mathrm{n}$ & \\
+%$n'_\mathrm{n}$ & \\
+%$\pn'$ & \texttt{pn} \\
+%$\frac{\partial n_\mathrm{n}}{\partial \tau}$ & \texttt{dnndy} \\
+%$\frac{\partial n_\mathrm{n}}{\partial \nu}$ & \texttt{dnndz} \\
+%$\Gamma^\mathrm{n}_{\nu-}$ & \texttt{fnni} \\
+%$\nnip$ & \texttt{nni} \\
+%$\nnwwni$ & \texttt{nnwwni} \\
+%$\fmomni$ & \texttt{fmomni} \\
+%$\fmomnit$ & \texttt{fmomnit} \\
+%$\fmomnip$ & \texttt{fmomnip} \\
+%$\Gamma^\mathrm{n}_{m,||,\nu-}$ & \texttt{fmox} \\
+%$\Gamma^\mathrm{n}_{m,||,\tau}$ & \texttt{fmoy} \\
+%$\Gamma^\mathrm{n}_{m,||,\phi}$ & \texttt{fmoz} \\
+%$Q^\mathrm{n}_{\nu-}$ & \texttt{feneni} \\
+%\end{tabular}
+
+%\begin{tabular}{L{3cm} L{8cm}}
+%\underline{Symbol} & \underline{Code} \\
+%$\tzero$ &  \texttt{t0}\\
+%$\fnamolrec$ & \texttt{fna\_mol\_rec}\\
+%$\fnamolrefl$ & \texttt{fna\_mol\_refl}\\
+%$\fdni$ & \texttt{fdni}\\
+%$\fnnrec$ & \texttt{fnnrec}\\
+%$\pnc$ & \texttt{pnc}\\
+%$\nnrec$ & \texttt{nnrec}\\
+%$\nnwnrec$ & \texttt{nnwnrec}\\
+%$\fenec$ & \texttt{fenec}\\
+%$\fenerec$ & \texttt{fenerec}\\
+%$\fmomrecp$ & \texttt{fmomrecp}\\
+%$\fmomrect$ & \texttt{fmomrect}\\
+%$\fmomrec$ & \texttt{fmomrec}\\
+%$\feneni$ & \texttt{feneni}\\
+%$\fnnrefl$ & \texttt{fnnrefl}\\
+%$\nnrefl$ & \texttt{nnrefl}\\
+%$\nnwwnrefl$ & \texttt{nnwwnrefl}\\
+%$\fene$ & \texttt{fene}\\
+%$\feneel$ & \texttt{fene\_el}\\
+%$\fmomreflp$ & \texttt{fmomreflp}\\
+%$\fmomreflt$ & \texttt{fmomreflt}\\
+%$\fmomrefl$ & \texttt{fmomrefl}\\
+%\end{tabular}
+
+%\noindent When using the AFN boundary conditions, two choices,  %$\Gamma_{\mu}^{\mathrm{diff}}$ and $\Gamma_{\mathrm{BC}}^{\mathrm{Maxw}}$, are currently available. The diffusion approximation has been proven to provide accurate results in high-recycling and detached regimes \cite{pet_wim_2020,nf_niels,pet_maarten}. However, unphysical results can occur when the mean free path at the boundary is not sufficiently short. In this case, it is preferable to use $\Gamma_{\mathrm{BC}}^{\mathrm{Maxw}}$.
+
+%In the first benchmark of the AFN models in SOLPS-ITER \cite{pet_maarten}, $\Gamma_{\mathrm{BC}}^{\mathrm{diff}}$ was used for the target boundary conditions, and $\Gamma_{\mathrm{BC}}^{\mathrm{Maxw}}$ was used for the radial boundary conditions. However, in realistic cases, plasma profiles and according mean free path of the atom particles can change drastically along the target plate. Hence, the optimal choice for modeling the incident atom distribution changes along the target. To deal with this, we propose an automated selection of the appropriate model, based on the local Knudsen number:
+
+%\newcommand{\fnnrefl}{fnnrefl}
+%\newcommand{\nnrefl}{nnrefl}
+%\newcommand{\nnwwnrefl}{nnwwnrefl}
+%\newcommand{\fene}{fene}
+%\newcommand{\feneel}{feneel}
+%\newcommand{\fmomreflp}{fmomreflp}
+%\newcommand{\fmomreflt}{fmomreflt}
+%\newcommand{\fmomrefl}{fmomrefl}
+%\newcommand{\fenerefl}{fenerefl}
+%\newcommand{\nnrec}{nnrec}
+%\newcommand{\nnwnrec}{nnwnrec}
+%\newcommand{\fenec}{fenec}
+%\newcommand{\fenerec}{fenerec}
+%\newcommand{\fnnrec}{fnnrec}
+%\newcommand{\fmomrec}{fmomrec}

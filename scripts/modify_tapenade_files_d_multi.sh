@@ -21,7 +21,8 @@ sed -i -e '/REAL(kind=r8), DIMENSION(mpg%cvvxp(icv, 2)) :: arg/d' b2us_geo_diffv
 sed -i -e '/arg.(:) = gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2)))/d' b2us_geo_diffv.F90
 sed -i -e 's/cvfpsi(icv) = SUM(arg10)\/mpg%cvvxp(icv, 2)/cvfpsi(icv) = SUM(gm%vxfpsi(verts))\/mpg%cvvxp(icv, 2)/g' b2us_geo_diffv.F90
 sed -i -e '/arg10 = gm%vxfpsi(verts)/d' b2us_geo_diffv.F90
-
+sed -i -e 's/DIMENSION(:) :: dabs0/DIMENSION(mpg%nFs) :: dabs0/g' b2us_geo_diffv.F90
+sed -i '/INTRINSIC DABS/d' b2us_geo_diffv.F90 b2stbr_bas_dv.F90 b2trcl_dv.F90
 sed -i -e 's/REAL(r8), DIMENSION(:, nfc, 0:1), ALLOCATABLE :: fne_he/REAL(r8), DIMENSION(:, :, :), ALLOCATABLE :: fne_he/g' b2us_plasma_diffv.F90
 
 sed -i -e 's/DIMENSION(SIZE(x1, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
@@ -32,6 +33,11 @@ sed -i -e 's/DIMENSION(SIZE(x5, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x6, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diffv.F90
 sed -i -e 's/DIMENSION(SIZE(x7, 1), SIZE(x7, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/mpg%nCv/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs0/DIMENSION(SIZE(rza0, 1), SIZE(rza0, 2)) :: dabs0/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs1/DIMENSION(SIZE(rz20, 1), SIZE(rz20, 2)) :: dabs1/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs2/DIMENSION(SIZE(rpt0, 1), SIZE(rpt0, 2)) :: dabs2/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs3/DIMENSION(SIZE(rpi0, 1), SIZE(rpi0, 2)) :: dabs3/g' b2mod_driver_diffv.F90
+sed -i -e 's/DIMENSION(:) :: dabs4/DIMENSION(mpg%nCv) :: dabs4/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE1OFarg1/nCv/g' b2npmo_dv.F90 b2stbr_phys_dv.F90 b2tqna_dv.F90 eirene_f30f31_dv.F90 b2mod_recycle_diffv.F90 b2sikt_dv.F90 b2trcl_dv.F90 b2tfhe__dv.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diffv.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diffv.F90
@@ -88,11 +94,14 @@ sed -i -e 's/ISIZE2OFcvla/0:1/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, ISIZE1OFdv%fna_52(:, :, isb), 0:1)/DIMENSION(nbdirsmax, nFc, 0:1)/g' b2tfnb_dv.F90
 sed -i -e 's/DIMENSION(:, SIZE(st_ext%za, 1), SIZE(st_ext%za, 2))/DIMENSION(nbdirsmax, SIZE(st_ext%za, 1), SIZE(st_ext%za, 2))/g' b2sral_dv.F90
 sed -i -e 's/ISIZE1OFfchc/nFc/g' b2tinnt_dv.F90
+sed -i -e 's/DIMENSION(:) :: dabs/DIMENSION(nCv) :: dabs/g' b2tinnt_dv.F90
 sed -i -e "s/cfdna(0, is), cfdnad(:, 0, is)/cfdna(0, is), cfdnad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfvla(0, is), cfvlad(:, 0, is)/cfvla(0, is), cfvlad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfhci(0, is), cfhcid(:, 0, is)/cfhci(0, is), cfhcid(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfdpa(0, is), cfdpad(:, 0, is)/cfdpa(0, is), cfdpad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
 sed -i -e "s/cfvsa(0, is), cfvsad(:, 0, is)/cfvsa(0, is), cfvsad(1:nbdirs, 0, is)/g" b2tqna_dv.F90
+sed -i -e 's/DIMENSION(:) :: dabs/DIMENSION(nCv) :: dabs/g' b2tqna_dv.F90 b2trcl_dv.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs/DIMENSION(nbdirsmax, nCv) :: dabs/g' b2tqna_dv.F90 b2trcl_dv.F90
 sed -i -e 's/ISIZE1OFcvbzb/nCv/g' b2tral_dv.F90
 sed -i -e 's/ISIZE1OFco%cthi/nFc/g' b2tral_dv.F90
 sed -i -e 's/ISIZE2OFco%cthi/0:ns-1/g' b2tral_dv.F90
@@ -179,6 +188,11 @@ sed -i '/PRGINI_DV/d' b2mod_main_diffv.F90
 sed -i 's/b2xvfy/b2xvfy_nodiff/g' b2xvff.F
 sed -i -e 's/B2WUZD_NODIFF/B2WUZD/g' b2mod_driver_diffv.F90 b2mnds_dv.F90 b2mod_running_average_diffv.F90 b2mod_batch_average_diffv.F90 b2wucp_dv.F90 profile_average_dv.F90
 
+sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diffv.F90
+sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diffv.F90
+sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_dv.F90
+sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_dv.F90
+
 sed -i '/MINVAL_DV/d' ./*.F90
 sed -i '/MAXVAL_DV/d' ./*.F90
 sed -i '/EXTERNAL XERRAB_DV/d' ./*.F90
@@ -187,8 +201,12 @@ sed -i '/COUNT_DV/d' ./*.F90
 sed -i '/ALLOCATED_DV/d' ./*.F90
 sed -i '/GET_B25_HASH_DV/d' b2mod_main_diffv.F90
 sed -i '/MINLOC_DV/d' b2mod_neutrals_namelist_diffv.F90
-
-sed -i -e 's/DOUBLE PRECISION/REAL(kind=r8)/g' b2siav_dv.F90 b2tvsq_dv.F90
+sed -i -e 's/DOUBLE PRECISION, DIM/REAL(kind=r8), DIM/g' b2mod_driver_diffv.F90 b2mod_feedback_diffv.F90 b2siav_dv.F90 b2sikt_dv.F90 b2srdt_dv.F90 b2srsm_dv.F90 b2stbr_bas_dv.F90 b2stcx_dv.F90 b2tdia_dv.F90 b2tinnt_dv.F90 b2tqna_dv.F90 b2trcl_dv.F90 b2tvsq_dv.F90 b2us_geo_diffv.F90
+sed -i -e 's/DOUBLE PRECISION :: res/REAL(kind=r8) :: res/g' b2mod_driver_diffv.F90 b2mod_feedback_diffv.F90 b2srdt_dv.F90 b2srsm_dv.F90 b2stbr_bas_dv.F90 b2stcx_dv.F90 b2tdia_dv.F90 b2us_geo_diffv.F90
+sed -i -e 's/DOUBLE PRECISION :: dab/REAL(kind=r8) :: dab/g' b2sikt_dv.F90 b2tqna_dv.F90
+sed -i -e 's/INTRINSIC DABS/INTRINSIC ABS/g' ./*.F90
+sed -i -e 's/REAL(kind=r8) :: result16/INTEGER :: result16/g' b2us_geo_diffv.F90
+sed -i -e 's/REAL(kind=r8) :: result10/INTEGER :: result10/g' b2srdt_dv.F90
 
 sed -i '/PUBLIC :: alloc_switches_dv/d' b2mod_switches_diffv.F90
 sed -i '/& check_values_switches_dv/d' b2mod_switches_diffv.F90
@@ -250,11 +268,6 @@ sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall
 sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n              CALL B2MWQT_DIFFv(nout(10), ncv, ns, itim, b2mndt_itcnt, \&/' b2mndt_dv.F90
 sed -i -e '0,/IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN/s//IF (MOD(ncall_b2mndt, ntim_step_out) .EQ. 0) THEN\n\!*      ..output differentiated residuals/' b2mndt_dv.F90
 
-sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diffv.F90
-sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diffv.F90
-sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_dv.F90
-sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_dv.F90
-
 sed -i -e "/END TYPE MAPPING_DIFFV/i\      INTEGER :: ncv(nbdirsmax), nfc(nbdirsmax), nvx(nbdirsmax), ncg(nbdirsmax), &" b2us_map_diffv.F90
 sed -i -e "/END TYPE MAPPING_DIFFV/i\&     nci(nbdirsmax), ncmxvx(nbdirsmax), ncmxfc(nbdirsmax), nvmxcv(nbdirsmax), nvmxfc(nbdirsmax),&" b2us_map_diffv.F90
 sed -i -e "/END TYPE MAPPING_DIFFV/i\&     nfs(nbdirsmax), nbc(nbdirsmax), mxnbc(nbdirsmax), nrc(nbdirsmax), mxnrc(nbdirsmax),&" b2us_map_diffv.F90
@@ -262,36 +275,33 @@ sed -i -e "/END TYPE MAPPING_DIFFV/i\&     ncmxnv(nbdirsmax), ncf(nbdirsmax), mx
 
 sed -i -e '/par_opt_physd(nd, 1:npar_opt) = 0.D0/a\        par_opt_physd(nd, nd) = 1.0_R8' b2mod_driver_diffv.F90
 
-sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_*.F*
-sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_*.F*
-sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_*.F*
-sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_*.F*
-sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_facdrift_exb_diff/b2mod_facdrift_exb_diffv/g" b2optim_*.F*
-sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_*.F* set_parameters.F
-sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_*.F* set_parameters.F
+sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_tao.F90 set_parameters.F
+sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_tao.F90
+sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_tao.F90
+sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_tao.F90
+sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2mod_facdrift_exb_diff/b2mod_facdrift_exb_diffv/g" b2optim_tao.F90
+sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_tao.F90 set_parameters.F
+sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_tao.F90 set_parameters.F
+sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_tao.F90 set_parameters.F
 sed -i -e "s/b2mod_switches_diff/b2mod_switches_diffv/g" set_parameters.F
 sed -i -e "s/b2mod_neutrals_namelist_diff/b2mod_neutrals_namelist_diffv/g" set_parameters.F
-sed -i -e "s/geodiff/geod/g" b2optim_*.F*
-sed -i -e "s/mpgdiff/mpgd/g" b2optim_*.F*
-sed -i -e "s/statediff/stated/g" b2optim_*.F*
-sed -i -e "s/state_extdiff/state_extd/g" b2optim_*.F*
-sed -i -e "s/state_avgdiff/state_avgd/g" b2optim_*.F*
-sed -i -e "s/switchdiff/switchd/g" b2optim_*.F*
-sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F*
-sed -i -e "s/state_avg, state_avgd)/state_avg, state_avgd, npar_opt)/g" b2optim_*.F*
-sed -i -e "s/state_avg, state_avgd, j, jdiff)/state_avg, state_avgd, j, jdiff,\n     \&   npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g" b2optim_ipopt.F
+sed -i -e "s/geodiff/geod/g" b2optim_tao.F90
+sed -i -e "s/mpgdiff/mpgd/g" b2optim_tao.F90
+sed -i -e "s/statediff/stated/g" b2optim_tao.F90
+sed -i -e "s/state_extdiff/state_extd/g" b2optim_tao.F90
+sed -i -e "s/state_avgdiff/state_avgd/g" b2optim_tao.F90
+sed -i -e "s/switchdiff/switchd/g" b2optim_tao.F90
+sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_tao.F90
+sed -i -e "s/state_avg, state_avgd)/state_avg, state_avgd, npar_opt)/g" b2optim_tao.F90
 sed -i -e "s/state_avg, state_avgd, j, jdiff)/state_avg, state_avgd, j, jdiff,\&\n     \&   npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g" b2optim_tao.F90
-sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F*
-sed -i -e "/subroutine EV_GRAD_F(/a\      use b2mod_diffsizes" b2optim_ipopt.F
+sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_tao.F90
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
 sed -i -e "s/g_v(ipar) = jdiff(1)/g_v(ipar) = jdiff(ipar,1)/g" b2optim_tao.F90
-sed -i -e "s/grad(ipar) = DBLE(jdiff(1))/grad(ipar) = DBLE(jdiff(ipar,1))/g" b2optim_ipopt.F
 
 
 # fixed point loop variables

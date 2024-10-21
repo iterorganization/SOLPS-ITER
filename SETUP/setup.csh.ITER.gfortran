@@ -72,6 +72,17 @@ else
 endif
 module load Fundamental-Constants/0.1.1
 
+if ($?PETSC_DIR) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
+  setenv PETSC_VERSION_MAJOR `grep -i PETSC_VERSION_MAJOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION_MINOR `grep -i PETSC_VERSION_MINOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION $PETSC_VERSION_MAJOR$PETSC_VERSION_MINOR
+  unsetenv PETSC_VERSION_MAJOR PETSC_VERSION_MINOR
+  if ($PETSC_VERSION > 316) then
+    setenv TAO_NEW yes
+  endif
+endif
+
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
 setenv QTDIR ${EBROOTQT5}
