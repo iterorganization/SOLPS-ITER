@@ -85,6 +85,7 @@ setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
+setenv LD_LIBRARY_PATH ${GKSDIR}/lib:${LD_LIBRARY_PATH}
 
 # Debugger (set environment variable DBX)
 module load TotalView/2023.4.16_linux_x86-64
