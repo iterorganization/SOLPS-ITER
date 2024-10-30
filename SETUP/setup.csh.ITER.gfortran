@@ -96,6 +96,7 @@ setenv DBX totalview
 # Compilers
 setenv CC gcc
 setenv FC gfortran
+setenv MPI_FC mpif90
 setenv CXX g++
 
 if (`where paraview-config` == "") then
