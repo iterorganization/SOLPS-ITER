@@ -156,6 +156,32 @@ c*** Create the b2us.dat file for triangulation
           print *,'    ... b2us.dat created'
       endif !}
 
+c*** Create the b2mn.dat.stencil file for vessel mode
+      inquire(file='b2mn.dat.stencil', exist=uex)
+      if(uex) then !{
+          print *,'    ... b2mn.dat.stencil file already present,'//
+     .      ' not created'
+      else !}{
+         open(2,file='b2mn.dat.stencil')
+         write(2,'(a)')
+     .     '*label          (lblmn: character*60)'
+          write(2,'(a)')
+     .     'Recommended switches for target/vessel mode grids'
+          write(2,'(a)') '*b2cmpa  basic parameters'
+          write(2,'(a)') '*b2cmpb  boundary conditions'
+          write(2,'(a)') '*b2cmpt  transport coefficients'
+          write(2,'(a)') '*endphy'
+          write(2,'(a)') '''b2tral_mode''                 ''2'''
+          write(2,'(a)') '''b2mndr_use_9pt_stencil''      ''1'''
+          write(2,'(a)') '''b2trcl_conductive_limit''     ''1'''
+          write(2,'(a)') '''b2tfhe_lim_flux''             ''0'''
+          write(2,'(a)') '''b2tfhi_lim_flux''             ''0'''
+          write(2,'(a)') '''b2stbc_boundary_namelist''    ''1'''
+          write(2,'(a)') '''b2stbr_neutrals_namelist''    ''1'''
+          close(2)
+          print *,'    ... b2mn.dat.stencil created'
+      endif !}
+
 c*** Create a b2ah.dat.stencil file
       inquire(file='b2ah.dat.stencil', exist=uex)
       if(uex) then
