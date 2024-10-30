@@ -6,10 +6,10 @@ module load texlive/2021
 # module load subversion  # use built in SVN
 module load arm_ddt/22.1
 module load doxygen/Release_1_9_7-190-g7df783537
-#module load mdsplus
+# module load mdsplus
 module load netcdf-serial/4.8.1
 module load hdf5-serial/1.14.1
-#module load nag_flib/intel/mk24
+# module load nag_flib/intel/mk24
 module load git/2.39
 module load impi/2021.9
 module load nag_flib/mk26
