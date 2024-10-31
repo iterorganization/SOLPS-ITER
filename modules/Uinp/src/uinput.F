@@ -173,6 +173,7 @@ c*** Create the b2mn.dat.stencil file for vessel mode
           write(2,'(a)') '*endphy'
           write(2,'(a)') '''b2tral_mode''                 ''2'''
           write(2,'(a)') '''b2mndr_use_9pt_stencil''      ''1'''
+          write(2,'(a)') '''b2sihs_style_visc''           ''1'''
           write(2,'(a)') '''b2trcl_conductive_limit''     ''1'''
           write(2,'(a)') '''b2tfhe_lim_flux''             ''0'''
           write(2,'(a)') '''b2tfhi_lim_flux''             ''0'''
