@@ -9,6 +9,9 @@ alias gmake make
 module load library/netcdf-c/4.5.0/icc library/netcdf-fortran/4.4.4/icc library/hdf5/1.10.1/icc
 module load dev/cmake/3.23.1
 
+# Compiler
+setenv FC ifort
+
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else

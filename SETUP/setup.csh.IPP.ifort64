@@ -30,6 +30,9 @@ if (! $?DEVICE) then
   setenv DEVICE upgrade
 endif
 
+# Compiler
+setenv FC ifort
+
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then
   setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER/${COMPILER}

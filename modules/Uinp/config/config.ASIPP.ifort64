@@ -3,15 +3,16 @@ ifndef LD_MSCL
   $(error LD_MSCL not defined)
 endif
 
+# MPI_FC      ?= mpiifort
+MPI_FC        ?= mpi_f90
 ifdef USE_MPI
-#FC            = mpiifort
-FC             = mpif90
+FC             = ${MPI_FC}
 COMPILER_REDEF = yes
 ifdef SOLPS_OPENMP
 FFLAGS         = -fopenmp
 endif
 else
-FC             = ifort
+FC            ?= ifort
 endif
 
 CPP            = /lib/cpp -C -traditional

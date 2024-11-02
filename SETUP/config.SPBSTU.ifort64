@@ -54,12 +54,13 @@ LIBZ       = /usr/lib64/libz.so
 # Provide compiler
 #
 
+MPI_FC    ?= mpiifort
 ifdef SOLPS_MPI
-FC         = mpiifort
+FC         = ${MPI_FC}
 else
-FC         = ifort
+FC        ?= ifort
 endif
-MPI_FC     = mpiifort
+CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

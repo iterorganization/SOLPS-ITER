@@ -8,7 +8,7 @@ EQUIV5 =
 
 CPP = /lib/cpp -traditional
 
-FC = ifort
+FC ?= ifort
 
 ifdef SOLPS_DEBUG
 FCOPTS += -traceback

@@ -35,6 +35,9 @@ export PATH=${pythondir}:$PATH
 # Debugger
 export DBX=totalview
 
+# Compiler
+export FC=ifort
+
 # ParaView compiling options
 
 if [ -z `type paraview-config 2> /dev/null` ]; then

@@ -10,10 +10,10 @@ CPPOPTS = -P -I${srcdir} ${EQUIVS}
 SED = sed s:\#PREC\#:d:g
 LINK_MOD =
 
-FC = nagfor
+FC ?= nagfor
 FCOPTS = -compatible
 ifdef SOLPS_DEBUG
-FCOPTS += -C -g
+FCOPTS += -g
 else
 FCOPTS += -O2
 endif

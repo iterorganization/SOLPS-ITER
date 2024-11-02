@@ -66,14 +66,15 @@ ADDLIBS    = -lXmu -ldl
 # Provide compiler
 #
 
+MPI_FC    ?= mpif90
 ifdef SOLPS_MPI
-FC         = mpif90
+FC         = ${MPI_FC}
 MPDIR     ?= ${I_MPI_ROOT}
 LD_MPI    ?= -L${MPDIR}/lib64
 else
-FC         = gfortran
+FC        ?= gfortran
 endif
-MPI_FC     = mpif90
+CC        ?= /usr/bin/gcc
 
 #
 # Preprocessor options

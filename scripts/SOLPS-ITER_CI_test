@@ -41,7 +41,7 @@ cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2time.nc.i b2time.nc
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2tallies.nc.i b2tallies.nc
 touch b2fstati
-setup_baserun_eirene_links
+setup_baserun_B25_links
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/ ./ || exit 2
 

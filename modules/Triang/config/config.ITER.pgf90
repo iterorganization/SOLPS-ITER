@@ -1,5 +1,5 @@
 # Test whether necessary variables are defined
-LD_GR    ?= -L/work/imas/opt/gr/0.0.94/lib -lgr
+LD_GR    ?= -L${EBROOTGR}/lib -lgr
 LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
 
 CPP = /lib/cpp -traditional

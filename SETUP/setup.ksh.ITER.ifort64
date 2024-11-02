@@ -37,6 +37,7 @@ export DBX="totalview"
 # Compilers
 export CC="icc"
 export FC="ifort"
+export MPI_FC="mpiifort"
 export CXX="icpc"
 
 [ -x paraview-config ] && {

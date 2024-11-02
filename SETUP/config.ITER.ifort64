@@ -57,16 +57,16 @@ ADDLIBS    = -lgfortran
 # Provide compiler
 #
 
+MPI_FC    ?= mpiifort
 ifdef SOLPS_MPI
-FC         = mpiifort
+FC         = ${MPI_FC}
 ifndef MPDIR
 MPDIR      = ${EBROOTIMPI}
 LD_MPI    += -Wl,-rpath,${MPDIR}/lib64
 endif
 else
-FC         = ifort
+FC        ?= ifort
 endif
-MPI_FC     = mpiifort
 
 #
 # Preprocessor options

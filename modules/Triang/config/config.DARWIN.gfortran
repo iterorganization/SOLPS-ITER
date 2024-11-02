@@ -8,7 +8,7 @@ LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
 #CPP      = -/lib/cpp -traditional
 CPP       = /usr/bin/cpp -traditional
 
-FC        = gfortran
+FC       ?= gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -debug all -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
