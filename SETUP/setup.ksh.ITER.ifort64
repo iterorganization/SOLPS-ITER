@@ -11,6 +11,7 @@ module load GGD/1.11.0-iccifort-2020.4.304-DD-3.40.1
 module load AMNS/1.5.0-iccifort-2020.4.304-DD-3.40.1
 module load makedepend/1.0.6-GCCcore-10.2.0
 module load MSCL/1.2.2-intel-2020b
+module load Ghostscript/9.53.3-GCCcore-10.2.0
 module load Doxygen/1.8.20-GCCcore-10.2.0
 module load ParaView/5.10.0-intel-2020b-mpi
 module load texlive/20210216-GCCcore-10.2.0
