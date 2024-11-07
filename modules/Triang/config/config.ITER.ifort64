@@ -3,7 +3,7 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 LD_GR    ?= -L${EBROOTGR}/lib -lgr
-LD_GKS   ?= -L/work/imas/opt/gks/4.4.74/lib -lgks -lgfortran -lX11 -lXt -lXmu
+LD_GKS   ?= -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 LD_NAG   ?= `pkg-config nag --libs`
 GLI_HOME ?= ${EBROOTGLI}
 

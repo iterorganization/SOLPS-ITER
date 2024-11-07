@@ -6,7 +6,7 @@ COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut 
 ifndef COMPILER_REDEF
  COMPILE   = ${FC} -c ${FFLAGS} -module ${OBJDIR}
  ifdef SOLPS_DEBUG
-  FFLAGS  += -g -C -traceback -debug all -check all -diag-disable:10440 -diag-disable:10182
+  FFLAGS  += -g -C -traceback -debug all -check all -diag-disable:10440,10182
   ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
    FFLAGS += -check nouninit
   endif

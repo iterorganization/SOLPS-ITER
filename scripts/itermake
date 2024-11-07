@@ -1,11 +1,16 @@
 #! /usr/bin/env tcsh
 
+set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
 set hours=2
 set mem=4GB
-set part="centos8.2"
+if ($os == "CentOS") then
+  set part="centos8.2"
+else
+  set part="gen11"
+endif
 set objects=""
 set options=""
 set chain="unset"

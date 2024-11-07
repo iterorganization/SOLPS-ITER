@@ -8,7 +8,9 @@ EQUIV5 =
 
 CPP = /lib/cpp -traditional
 
+ifdef SOLPS_DEBUG
 FCOPTS += -traceback
+endif
 
 SOLPSINCLUDE += `pkg-config libtirpc --cflags`
 LD_SONNET += `pkg-config libtirpc --libs`
