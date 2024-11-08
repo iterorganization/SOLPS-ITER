@@ -135,23 +135,19 @@ SCRIPTS_PATH=${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/$
 AMDS_PATH=${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-# Create mirror scripts directories
-[ -z "$NO_MPI" ] && {
-  [ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-  [ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-  [ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-  [ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
-  ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-  ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-  ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-  ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
-}
-[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-[ -d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug ] && rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+# Create mirror scripts directory links
+#   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
+link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
+if [ -z "$NO_MPI" ]; then
+  for suffix in ".mpi" ".mpi.debug" ".openmp.mpi" ".openmp.mpi.debug"; do
+    [ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
+    [ "`readlink ${link_scripts}${suffix}`" != "$link_scripts" ] && ln -sf $link_scripts ${link_scripts}${suffix}
+  done
+fi
+for suffix in ".openmp" ".debug" ".openmp.debug"; do
+  [ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
+  [ "`readlink ${link_scripts}${suffix}`" != "$link_scripts" ] && ln -sf $link_scripts ${link_scripts}${suffix}
+done
 
 # Note: in case of name clash between script and executable, script will be found first
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
