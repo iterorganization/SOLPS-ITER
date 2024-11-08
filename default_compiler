@@ -43,6 +43,7 @@ case "SURFSARA":
 case "SWIP":
   echo ifort64
   breaksw
+case "CONTAINER":
 case "DARWIN":
 case "IPPCR":
 case "JFRS":
