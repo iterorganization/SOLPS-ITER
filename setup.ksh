@@ -84,7 +84,7 @@ else
 fi
 
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
-[ -x `which gmake` ] && {
+[ -x "`which gmake`" ] && {
   export MAKE=`which gmake`
 } || {
   export MAKE=`which make`
@@ -266,7 +266,7 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
 # Check if Motif library is present
 
-[ -e `which mwm` ] || {
+[ -e "`which mwm`" ] || {
   export NO_MOTIF=1
 }
 [ -n "$NO_MOTIF" ] && {
@@ -278,14 +278,14 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 
 # Check if Manual can be built
 export LATEX=`${SOLPSTOP}/scripts/which_latex`
-[ $LATEX = "" ] && {
+[ "$LATEX" = "" ] && {
   export NO_MANUAL=true
   echo 'No LaTeX executable found: Manual will not be built'
 }
 
 # Check if CMake available for Eirene compilation
 export CMAKE=`which cmake`
-[ $CMAKE = "" ] && {
+[ "$CMAKE" = "" ] && {
   export NO_CMAKE=true
   echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
 }
