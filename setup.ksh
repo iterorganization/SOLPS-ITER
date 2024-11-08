@@ -1,5 +1,22 @@
 #! /bin/ksh
 
+# Logic of configuration overrides for SOLPSTOP, HOST_NAME, and COMPILER
+#
+# Variable SOLPSTOP is determined with decreasing priority from:
+#   1. $SOLPSTOP_FORCE
+#   2. Automatic detection, fallback to $PWD
+#
+# Variable HOST_NAME is determined with decreasing priority from:
+#   1. $SOLPS_HOST_NAME_FORCE
+#   2. SETUP/setup.ksh.HOST_NAME.local file (sourced if present)
+#   3. output of `whereami` script
+#
+# Variable COMPILER is determined with decreasing priority from:
+#   1. First argument to `source setup.ksh` command
+#   2. $SOLPS_COMPILER_FORCE
+#   3. output of `default_compiler` script
+#
+
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
@@ -13,23 +30,28 @@ echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.p
 echo or online at http://www.eirene.de/
 
 export LAST_COMMAND=`echo $_`
-[ $LAST_COMMAND = "" ] && {
+if [ "$SOLPSTOP_FORCE" != "" ]; then
+  setenv SOLPSTOP $SOLPSTOP_FORCE
+elif [ "$LAST_COMMAND" = "" ]; then
   export SETUP_FILE=`echo ${LAST_COMMAND} | cut -d " " -f 2`
   export REAL_FILE=`eval echo ${SETUP_FILE}`
   export REAL_PATH=`dirname ${REAL_FILE}`
   export SOLPSTOP=`cd ${REAL_PATH}; pwd -L`
-} || {
+else
   export SOLPSTOP=$PWD
-}
+fi
 export SOLPSWORK=$SOLPSTOP/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-[ -s ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local ] && {
+if [ "$SOLPS_HOST_NAME_FORCE" != "" ]; then
+  export HOST_NAME=$SOLPS_HOST_NAME_FORCE
+  echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
+elif [ -s "${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local" ]; then
   echo Loading SETUP/setup.ksh.HOST_NAME.local.
   . ${SOLPSTOP}/SETUP/setup.ksh.HOST_NAME.local
-} || {
+else
   [ -s ${SOLPSTOP}/whereami ] && {
     iamat=`${SOLPSTOP}/whereami|tail -1`
     echo Running at $iamat
@@ -44,21 +66,23 @@ export SOLPSWORK=$SOLPSTOP/runs
     export HOST_NAME=$iamat
     ;;
   esac
-}
+fi
 
 # COMPILER can also be the argument to setup.csh call
-[ "$1" = "" ] && {
-  [ -s ${SOLPSTOP}/default_compiler ] && {
-    export COMPILER=`${SOLPSTOP}/default_compiler|tail -1`
-    echo Using compiler $COMPILER.
-  } || {
-    export COMPILER=ifort64
-    echo Assuming default compiler ifort64.
-  }
-} || {
+if [ "$1" != "" ]; then
   export COMPILER=$1
-  echo Using specified compiler $1.
-}
+  echo "Using compiler $1 (set by command argument)."
+elif [ "$SOLPS_COMPILER_FORCE" != "" ]; then
+  export COMPILER=$SOLPS_COMPILER_FORCE
+  echo "Using compiler $COMPILER (set by SOLPS_COMPILER_FORCE)."
+elif [ -s ${SOLPSTOP}/default_compiler ]; then
+  export COMPILER=`${SOLPSTOP}/default_compiler|tail -1`
+  echo Using compiler $COMPILER.
+else
+  export COMPILER=ifort64
+  echo Assuming default compiler ifort64.
+fi
+
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
 [ -x `which gmake` ] && {
   export MAKE=`which gmake`

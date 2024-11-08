@@ -1,5 +1,22 @@
 #! /bin/tcsh -f
 
+# Logic of configuration overrides for SOLPSTOP, HOST_NAME, and COMPILER
+#
+# Variable SOLPSTOP is determined with decreasing priority from:
+#   1. $SOLPSTOP_FORCE
+#   2. Automatic detection, fallback to $PWD
+#
+# Variable HOST_NAME is determined with decreasing priority from:
+#   1. $SOLPS_HOST_NAME_FORCE
+#   2. SETUP/setup.csh.HOST_NAME.local file (sourced if present)
+#   3. output of `whereami` script
+#
+# Variable COMPILER is determined with decreasing priority from:
+#   1. First argument to `source setup.csh` call
+#   2. $SOLPS_COMPILER_FORCE
+#   3. output of `default_compiler` script
+#
+
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
@@ -35,7 +52,10 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 #------------------------------------------------------------------------
 
 if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
-  if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+  if ( $?SOLPS_HOST_NAME_FORCE ) then
+    setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
+    echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
+  else if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
     echo Loading SETUP/setup.csh.HOST_NAME.local.
     source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
   else
@@ -61,18 +81,20 @@ else   # Using MacOS, so assuming to work on a local device
 endif
 
 # COMPILER can also be the argument to setup.csh call
-if($1 == "") then
-  if (-s ${SOLPSTOP}/default_compiler) then
-    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
-    echo Using compiler $COMPILER.
-  else
-    setenv COMPILER ifort64
-    echo Assuming default compiler ifort64.
-  endif
-else
+if ($1 != "") then
   setenv COMPILER $1
   echo Using specified compiler $1.
+else if ( $?SOLPS_COMPILER_FORCE ) then
+  setenv COMPILER $SOLPS_COMPILER_FORCE
+  echo "Using compiler $COMPILER (set by SOLPS_COMPILER_FORCE)".
+else if (-s ${SOLPSTOP}/default_compiler) then
+  setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
+  echo Using compiler $COMPILER.
+else
+  setenv COMPILER ifort64
+  echo Assuming default compiler ifort64.
 endif
+
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
