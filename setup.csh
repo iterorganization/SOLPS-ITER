@@ -1,6 +1,11 @@
 #! /bin/tcsh -f
 
-# Logic of configuration overrides for SOLPSTOP, HOST_NAME, and COMPILER
+# This script sets up the environment for SOLPS-ITER (paths, env, aliases, etc.)
+# including the site identification via HOST_NAME and COMPILER variables.
+# It is intended to be sourced from the command line, not executed.
+#
+# The main variables SOLPSTOP, HOST_NAME, COMPILER are determined according
+# to a precedence logic described below.
 #
 # Variable SOLPSTOP is determined with decreasing priority from:
 #   1. $SOLPSTOP_FORCE
@@ -10,11 +15,13 @@
 #   1. $SOLPS_HOST_NAME_FORCE
 #   2. SETUP/setup.csh.HOST_NAME.local file (sourced if present)
 #   3. output of `whereami` script
+#   4. fallback to UNKNOWN
 #
 # Variable COMPILER is determined with decreasing priority from:
-#   1. First argument to `source setup.csh` call
+#   1. First argument to `source setup.csh` command
 #   2. $SOLPS_COMPILER_FORCE
 #   3. output of `default_compiler` script
+#   4. fallback to ifort64
 #
 
 echo Welcome to SOLPS-ITER!

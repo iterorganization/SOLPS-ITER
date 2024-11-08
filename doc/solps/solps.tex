@@ -394,11 +394,17 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[UNKNOWN] everywhere else
 \end{description}
 
-If your specific domain name is not on this list, please add it to {\tt whereami}. In cases where the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired {\tt HOST\_NAME} value, you can specify it explicitly by means of a {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.HOST\_NAME.local} file, which should contain:
-
-\begin{verbatim}
-setenv HOST_NAME <your_desired_HOST_NAME_value>
-\end{verbatim}
+If your specific domain name is not on this list, please add it to {\tt whereami}. If necessary, for example when the {\tt hostname} and {\tt nslookup} commands used by {\tt whereami} do not provide the desired {\tt HOST\_NAME} value, you bypass the default domain name recognition in one of two ways, listed in their order of precedence:
+\begin{enumerate}
+  \item set the {\tt SOLPS\_HOST\_NAME\_FORCE} environment variable in your current shell session, i.e.:
+  \begin{verbatim}
+    setenv SOLPS_HOST_NAME_FORCE <your_desired_HOST_NAME_value>
+  \end{verbatim}
+  \item create a {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.HOST\_NAME.local} file to bypass the {\tt whereami} script permanently, with contents like:
+  \begin{verbatim}
+    setenv HOST_NAME <your_desired_HOST_NAME_value>
+  \end{verbatim}
+\end{enumerate}
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
 \begin{description}\index{Platforms}
@@ -410,15 +416,17 @@ At the moment the following compiler platforms are supported, assuming a Linux w
   \item[nag\_f90] The NAG Fortran compiler
 \end{description}
 
-For each hostname domain, a default compiler can be defined by means of the {\tt default\_compiler}
-file. This default can be overridden by giving the desired compiler name as an argument following
-the {\tt setup.csh} command, i.e.:
-\begin{verbatim}
-  source setup.csh ifort64
-\end{verbatim}
-
-If your domain name does not yet have a default compiler associated with it or you want to change it,
-please edit the {\tt default\_compiler} script accordingly.
+For each hostname domain, a default compiler can be defined by means of the {\tt default\_compiler} file. If your domain name does not yet have a default compiler associated with it or you want to change it, please edit the {\tt default\_compiler} script accordingly. If necessary, the default compiler assignment can be bypassed in one of two ways, listed in their order of precedence:
+\begin{enumerate}
+  \item specify an argument to the {\tt source setup.csh} command, i.e.:
+  \begin{verbatim}
+    source setup.csh ifort64
+  \end{verbatim}
+  \item set the {\tt SOLPS\_COMPILER\_FORCE} environment variable in your shell
+  \begin{verbatim}
+    setenv SOLPS_HOST_NAME_FORCE <your_desired_HOST_NAME_value>
+  \end{verbatim}
+\end{enumerate}
 
 Then, if this is the first installation in your file space, please do:
 \begin{verbatim}
