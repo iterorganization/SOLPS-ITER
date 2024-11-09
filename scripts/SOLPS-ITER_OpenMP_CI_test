@@ -1,9 +1,11 @@
 # Set up SOLPS-ITER environment
-. $(dirname $0)/SOLPS-ITER_CI_env
+. $(dirname $0)/SOLPS-ITER_CI_GNU_env
 
 # Compile the code with OpenMP options activated
-echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
-echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+# Use gfortran toolchain
+echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
+echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 make listobj_nox depend_nox
 make divgeo_nox
 make MAKE_OPTIONS=-j8 b25_nox_openmp b25eirene_nox_openmp
