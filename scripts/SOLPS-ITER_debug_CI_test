@@ -2,8 +2,8 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
-echo 'add_library(called OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/energy_rate_coeff.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
-echo 'add_library(calling OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'add_library(called OBJECT ${PROJECT_SOURCE_DIR}/output/emissivity.f ${PROJECT_SOURCE_DIR}/volume-processes/energy_rate_coeff.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'add_library(calling OBJECT ${PROJECT_SOURCE_DIR}/output/find_emis_line.f ${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'add_dependencies(calling called)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 
 # Compile the code with debug options activated
