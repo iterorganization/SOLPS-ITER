@@ -3,6 +3,9 @@
 #   - identical translation of setup.csh.CONTAINER.gfortran
 #
 
+if [ ! -x "`which module 2>/dev/null`" ]; then
+  source /etc/profile.d/modules.sh
+fi
 
 # Modules needed by SOLPS-ITER
 #   - using a single `module load` call to speed-up the loading process

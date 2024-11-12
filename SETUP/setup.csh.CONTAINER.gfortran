@@ -4,6 +4,9 @@
 #   - removed SOLPS-GUI stuff (at least for now)
 #
 
+if ( `which module >& /dev/null; echo $?` != 0 ) then
+  source /etc/profile.d/modules.csh
+endif
 
 # Modules needed by SOLPS-ITER
 #   - using a single `module load` call to speed-up the loading process

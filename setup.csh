@@ -194,7 +194,6 @@ if (! $?NO_MPI) then
 endif
 foreach suffix ( ".openmp" ".debug" ".openmp.debug" )
   if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-  echo "`readlink ${link_scripts}${suffix}`"
   if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
 end
 
