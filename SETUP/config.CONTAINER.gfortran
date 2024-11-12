@@ -1,9 +1,9 @@
 #
-# config.*.* for IPP.CR Prague servers (Soroban cluster), using easybuild modules
+# config.*.* for CONTAINER installation, using easybuild modules
 #   - based on config.ITER.gfortran
 #
 
-    NODENAME ?= $(shell echo `hostname`)
+    NODENAME ?= "container"
    MSCL_ROOT ?= ${EBROOTMSCL}
      GR_ROOT ?= ${EBROOTGR}
     GLI_HOME ?= ${EBROOTGLI}
