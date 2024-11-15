@@ -76,9 +76,9 @@ ifdef SOLPS_MPI
   LD_MPI   += -Wl,-rpath,${MPDIR}/lib64
  endif
 else
-ifeq (,$(findstring CentOS,$(OS)))
-FC         = ifx
-endif
+ ifeq (,$(findstring CentOS,$(OS)))
+  FC         = ifx
+ endif
 endif
 
 #
