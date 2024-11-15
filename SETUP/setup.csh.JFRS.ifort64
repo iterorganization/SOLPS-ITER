@@ -45,6 +45,7 @@ setenv DBX gdb-ia
 
 # Compilers
 setenv FC ftn
+setenv MPI_FC ftn
 setenv CC cc
 setenv CXX cc
 
