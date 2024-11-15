@@ -55,7 +55,7 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    ifeq (,$(findstring al-,${IMAS_PKG_LIST}))
+    ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
       IMAS_PKG_LIST += al-fortran al-identifiers-fortran
     endif
   else
