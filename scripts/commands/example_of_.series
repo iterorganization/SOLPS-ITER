@@ -1,0 +1,35 @@
+# This is an example showing how to build the .series file used by the get_series script
+# Series file for KST03 with SOLPS4.3-like physics
+
+# keyword "series" : name of the series
+ series : KST03 :
+# keys can be put in the last column to apply scaling prescribed by command file
+# series : KST03 : scale
+# add units to the quantities in the title of the output file KST03.dat
+# series : KST03 : add_units
+# or both
+# series : KST03 : scale / add_units
+
+# now describe runs composing the series
+# keyword "run" : arbitrary name (will be put to the resulting KST03.dat under the run column : path to run data)
+ run :  001 : ./416
+ run :  002 : ./417
+ run :  003 : ./418
+ run :  004 : ./419
+ run :  005 : ./420
+ run :  006 : ./421
+ run :  007 : ./422
+ run :  008 : ./423
+ run :  009 : ./424
+ run :  010 : ./425
+ run :  011 : ./426
+
+# Several series can be described in one file, all of them will be processed sequentially
+
+ series : KST04 :
+ run :  001 : ./416
+ run :  002 : ./427
+ run :  003 : ./418
+ run :  004 : ./428
+ run :  005 : ./430
+

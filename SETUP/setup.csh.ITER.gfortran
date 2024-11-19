@@ -6,32 +6,70 @@ module use /work/imas/etc/modules/all
 
 # Modules needed by SOLPS-ITER
 set nodename=`hostname`
-module load IMAS/3.38.1-4.11.3-foss-2020b
-module load GGD/1.10.3-GCC-10.2.0-DD-3.38.1
-module load AMNS/1.4.0-foss-2020b-DD-3.38.1
-module load xarray/0.16.2-foss-2020b
-module load Viz/2.6.1-foss-2020b
-module load ToFu/1.5.0-foss-2020b-Python-3.8.6
-module load makedepend/1.0.6-GCCcore-10.2.0
-module load MSCL/1.2.3-GCCcore-10.2.0
-module load GR/0.0.94-GCCcore-10.2.0
-module load GLI/4.5.31-GCCcore-10.2.0
-module load NCL/6.6.2-foss-2020b
-module load flex/2.6.4-GCCcore-10.2.0
-module load Doxygen/1.8.20-GCCcore-10.2.0
-module load Ghostscript/9.53.3-GCCcore-10.2.0
-module load CMake/3.20.1-GCCcore-10.2.0
-module load ParaView/5.10.0-foss-2020b-mpi
-module load PyQt5/5.15.1-GCCcore-10.2.0
-module load netCDF-Fortran/4.5.3-gompi-2020b
-module load motif/2.3.8-GCCcore-10.2.0
-module load gnuplot/5.4.1-GCCcore-10.2.0
+if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "CentOS") then
+  module load IMAS-AL-Fortran/5.2.1-foss-2020b-DD-3.41.0
+  module load IMAS-AL-Python/5.2.1-foss-2020b-DD-3.41.0
+  module load IDStools/1.14.1-foss-2020b
+  module load GGD/1.11.0-foss-2020b-DD-3.41.0
+  module load AMNS/1.5.0-foss-2020b-DD-3.41.0
+  module load xarray/0.16.2-foss-2020b
+  module load Viz/2.8.0-foss-2020b
+  module load ToFu/1.5.1-foss-2020b
+  module load makedepend/1.0.6-GCCcore-10.2.0
+  module load MSCL/1.2.3-GCCcore-10.2.0
+  module load GR/0.0.94-GCCcore-10.2.0
+  module load GLI/4.5.31-GCCcore-10.2.0
+  module load NCL/6.6.2-foss-2020b
+  module load flex/2.6.4-GCCcore-10.2.0
+  module load Doxygen/1.8.20-GCCcore-10.2.0
+  module load Ghostscript/9.53.3-GCCcore-10.2.0
+  module load CMake/3.20.1-GCCcore-10.2.0
+  module load ParaView/5.10.0-foss-2020b-mpi
+  module load PyQt5/5.15.1-GCCcore-10.2.0
+  module load netCDF-Fortran/4.5.3-gompi-2020b
+  module load netcdf4-python/1.5.5.1-foss-2020b
+  module load motif/2.3.8-GCCcore-10.2.0
+  module load gnuplot/5.4.1-GCCcore-10.2.0
 # module load MATLAB/2020b-GCCcore-10.2.0-Java-11
-module load texlive/20210216-GCCcore-10.2.0
-module load libtirpc/1.3.1-GCCcore-10.2.0
-module load SimDB/0.7.1-foss-2020b
+  module load texlive/20210216-GCCcore-10.2.0
+  module load libtirpc/1.3.1-GCCcore-10.2.0
+  module load SimDB/0.7.1-foss-2020b
+  module load json-fortran/8.3.0-GCC-10.2.0
+  setenv SYSNAME amd64_sles15
+  setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0
+else
+  module load IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0
+  module load IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0
+  module load IDStools/2.0.0-gfbf-2023b
+  module load GGD/1.12.0-foss-2023b-DD-3.42.0
+  module load AMNS/1.5.1-foss-2023b-DD-3.42.0
+  module load Viz/2.8.0-foss-2023b
+  module load ToFu/1.7.9-gfbf-2023b
+  module load xarray/2024.5.0-gfbf-2023b
+  module load makedepend/1.0.9-GCCcore-13.2.0
+  module load MSCL/1.2.4-GCCcore-13.2.0
+  module load GR/0.0.94-GCCcore-13.2.0
+  module load GLI/4.5.31-GCCcore-13.2.0
+  module load NCL/6.6.2-foss-2023b
+# module load NAG/26-GCC-13.2.0
+  module load flex/2.6.4-GCCcore-13.2.0
+  module load Doxygen/1.9.8-GCCcore-13.2.0
+  module load netCDF/4.9.2-gompi-2023b
+  module load netCDF-Fortran/4.6.1-gompi-2023b
+  module load Ghostscript/10.02.1-GCCcore-13.2.0
+# module load CMake/3.27.6-GCCcore-13.2.0
+  module load ParaView/5.12.0-foss-2023b-Qt5
+  module load Qt5/5.15.13-GCCcore-13.2.0
+  module load netCDF-Fortran/4.6.1-gompi-2023b
+  module load netcdf4-python/1.6.5-foss-2023b
+  module load motif/2.3.8-GCCcore-13.2.0
+  module load texlive/20230313-GCC-13.2.0
+  module load SimDB/0.11.0-gfbf-2023b
+  module load json-fortran/8.5.2-GCC-13.2.0
+  setenv SYSNAME x86_64_rhel9
+  setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
+endif
 module load Fundamental-Constants/0.1.1
-module load PySide6/6.2.3-GCCcore-10.2.0
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
@@ -39,12 +77,13 @@ setenv QTDIR ${EBROOTQT5}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 
 # Debugger (set environment variable DBX)
-module load TotalView/2017.1.21_linux_x86-64
+module load TotalView/2023.4.16_linux_x86-64
 setenv DBX totalview
 
 # Compilers
 setenv CC gcc
 setenv FC gfortran
+setenv MPI_FC mpif90
 setenv CXX g++
 
 if (`where paraview-config` == "") then
@@ -74,9 +113,6 @@ if (! $?SOLPS_GUI_PREFIX) then
   end
 endif
 if ($?SOLPS_GUI_PREFIX) then
-  module load PySide6/6.2.3-GCCcore-10.2.0
-  module unload --force matplotlib
-  module load matplotlib/3.5.1-foss-2020b
   setenv QT_API PySide6
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/actors:${PYTHONPATH}"
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/gui:${PYTHONPATH}"
@@ -97,4 +133,3 @@ endif
 
 # Other environment variables
 setenv SOLPSWORK /work/projects/solps-iter/$USER
-

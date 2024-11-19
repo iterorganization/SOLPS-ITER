@@ -1,16 +1,22 @@
 # Set up SOLPS-ITER environment
-. $(dirname $0)/SOLPS-ITER_CI_env
+. $(dirname $0)/SOLPS-ITER_CI_GNU_env
 
 # Compile the code with OpenMP options activated
+# Use gfortran toolchain
+echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
+echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 make listobj_nox depend_nox
-make MAKE_OPTIONS=-j8 b25_nox_openmp
+make divgeo_nox
+make MAKE_OPTIONS=-j8 b25_nox_openmp b25eirene_nox_openmp
 
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh
 
 export DEVICE=upgrade
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 12 || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_coupled_omp_test.sh AUG_16151_D+C+He run_coupled_OpenMP_for_CI 10 4 || exit 2
 
 export DEVICE=iter
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 100 24 || exit 2
-${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 100 21 || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 100 6 || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 100 7 || exit 4

@@ -21,6 +21,9 @@ endif
 
 # module load itm-paraview
 
+# Compiler
+setenv FC ifort
+
 #for SURFsara (Snellius 2021)
 source /usr/share/lmod/lmod/init/tcsh
 module load 2021
@@ -61,8 +64,8 @@ endif
 ## Build with IMAS if imas module is loaded
 #ifdef IMAS_PREFIX
 #  SOLPS_CPP += -DIMAS
-#  LD_UAL     = `pkg-config imas-lowlevel imas-ifort --libs`
-#  export LD_UAL
+#  LD_AL      = `pkg-config imas-lowlevel imas-ifort --libs`
+#  export LD_AL
 #endif
 
 # compilers

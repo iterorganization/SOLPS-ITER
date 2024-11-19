@@ -2,10 +2,9 @@
 MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
 LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
 
-ifdef USE_MPI
-FC       = mpiifort
-else
-FC       = ifort
+MPI_FC  ?= mpiifort
+ifdef SOLPS_MPI
+FC       = ${MPI_FC}
 endif
 
 CPP      = /lib/cpp -C -traditional -ffreestanding

@@ -1,0 +1,377 @@
+#! /bin/ksh
+# ps_mac Version 980630
+# Usage: ps_mac <options> filenames
+# filenames should end with ".ps"
+# processes one or more multipage ps files produced by gnuplot or ncar for isnertion into Mac Word
+# options: -h or -H help to screen
+# option: -m or -M :
+#   for input file xxx.ps, output file is xxx_mac.ps
+#   for gnuplot files: convert landscape orientation produced by gnuplot to portrait orientation,
+#   scales to correct width for word
+#   follow on Mac by exchange with crop top: 6.8 inches, right 2.5 inches
+#   works for gmeta files:
+#   a) produced individually and then combined into one multipage filewith "psb2pl"
+#   b) multipage file produced from gmeta by "ctrans" and then postprocessed by "ps_GV"
+#     (to give correct page count in ghostview and to permit prduction of eps files)
+#   scales to correct width for word
+#   follow on Mac by exchange with crop top: 6.0 inches, right 2.2 inches
+# option: none or -e or -E (default option):
+#   same as above but produces single-page eps files in a subdirectory named
+#      xxx.ps_epsdir (for input file xxx.ps). These are numbered from xx01 to xx.. unless pagefile is used (see below)
+#   eps files can then be supplied with a preview on the mac using ps2eps+
+# option: -n or -N in addition:
+#   do not use pagefile
+# option: -b or -B (or alternatively both -[eE] and -[mM]
+#   produces both multipage file and separate eps files
+# pagefile used is filename with suffix ".legend" in same directory,
+#   i.e. file xxx.ps uses xxx.ps.legend
+#   one line per page in  the .ps file
+#   Name used for eps files is first word on each line, followed by ".eps"
+#   Lines beginning with hash are ignored
+#   File must contain the same number of unique names as the .ps file contains pages
+
+# version : 18.07.2008 20:20
+
+scriptname=`basename $0`
+scriptdir=`dirname $0`
+
+
+# Parse the parameters
+help=
+options=
+macps=
+eps=
+both=
+filelist=
+pagefile=yes
+pagefilesuffix=".legend"
+while true; do
+    case "$1" in
+        -h  )   help=yes;;
+        -H  )   help=yes;;
+        -n  )   pagefile=;;
+        -N  )   pagefile=;;
+        -e  )   eps=yes;;
+        -E  )   eps=yes;;
+        -m  )   macps=yes;;
+        -M  )   macps=yes;;
+        -b  )   both=yes;;
+        -B  )   both=yes;;
+        -*  )   options="${options} $1";;
+        *   )   filelist="${filelist} $1";;
+    esac
+    if [ "$2." = "." ]; then
+      break
+    else
+      shift
+    fi
+done
+
+#set default operation (mac file for acrobat or separate eps files) here
+if [ "${macps}." = "." ]; then
+  if [ "${eps}." = "." ]; then
+    eps=yes
+  fi
+fi
+
+#make sure that if both macps and eps are selected this is same as -b option
+if [ "${macps}." = "yes." ]; then
+  if [ "${eps}." = "yes." ]; then
+    both=yes
+  fi
+fi
+if [ "${macps}." = "yes." ]; then
+  mode=macps
+fi
+if [ "${eps}." = "yes." ]; then
+  mode=eps
+fi
+if [ "${both}." = "yes." ]; then
+  mode="eps macps"
+fi
+
+
+
+[ ! "${help}." = "." ] && { echo "$scriptname"; head -31 $0 | tail -n +3; exit 32; }
+
+
+for fmode in ${mode}; do
+
+if [ "${fmode}." = "macps." ]; then
+   macps=yes
+   eps=
+fi
+if [ "${fmode}." = "eps." ]; then
+   macps=
+   eps=yes
+fi
+
+
+
+startdir=$PWD
+filename=
+
+for f in ${filelist}; do
+
+    filename=$f
+
+[ "${filename}." = "." ] && { echo "$scriptname: no filename specified!!!" >&2; exit 33;}
+
+fileout=`echo $filename  | sed s/".ps$"/"_mac"/`
+fileout=${fileout}.ps
+if [ "${macps}." = "yes." ]; then
+  [ -r $fileout ] && rm -rf $fileout >/dev/null 2>&1
+fi
+fileout=`basename ${fileout}`
+fileout=../${fileout}
+[ ! -r "$filename" ] && { echo "$scriptname: filename=${filename} does not exist!!!" >&2; exit 33;}
+
+
+tempps_mac=`basename ${filename}`
+tempps_mac_dir=`dirname ${filename}`
+dirsuffix=_dir
+if [ "${eps}." = "yes." ]; then
+  dirsuffix=_epsdir
+fi
+tempps_mac=${tempps_mac_dir}/${tempps_mac}${dirsuffix}
+
+[ -a ${tempps_mac} ] && rm -rf ${tempps_mac} >/dev/null 2>&1
+
+mkdir ${tempps_mac}
+
+[ "${macps}." = "yes." ] && echo "$scriptname: creating $fileout"
+[ "${eps}." = "yes." ] && echo "$scriptname: creating eps files for ${filename} in ${tempps_mac}"
+
+#split out prolog and trailer
+cd ${tempps_mac}
+tempps_mac=`basename ${tempps_mac}`
+filename=`basename ${filename}`
+csplit -k -s ../$filename "/%%EndProlog/"+1 "/%%Trailer/"
+
+mv xx00 prolog
+mv xx01 file
+mv xx02 trailer
+
+# Assume that a file produced by gnuplot contains the word "gnudict", and that all other files
+# were produced by b2plot
+
+gnuplot=0
+grep -l 'gnudict' prolog >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+   gnuplot=1
+fi
+
+# Divide up the pages
+csplit -k -s file "/%%Page:/" "{100}" 2>/dev/null
+
+# file xx00 is empty. remove it. Pages are in files xx01 up to xx${pages}
+rm -f xx00
+
+pages=`ls -1 xx* | wc -l | awk '{print $1}'`
+
+#edit prolog to change line thickness
+rm -rf temp0 >/dev/null 2>&1
+cat prolog | sed -e s/"gnulinewidth 5"/"gnulinewidth 10"/  > temp0
+rm -rf prolog >/dev/null 2>&1
+mv temp0 prolog
+
+#edit prolog for eps file: Change header line, bounding box, and orientation
+#setting bounding box here to same value for ps file as for eps file ensures that ghostview has the right size
+if [ $gnuplot -eq 0 ]; then
+
+cat prolog | sed \
+-e '/^%!PS-Adobe/c\
+%!PS-Adobe-2.0 EPSF-2.0
+'  -e '/^%%BoundingBox:/c\
+%%BoundingBox: 0 0 430 410
+'  -e '/^%%Orientation:/c\
+%%Orientation: Portrait
+' > temp0
+
+else
+
+cat prolog | sed \
+-e '/^%!PS-Adobe/c\
+%!PS-Adobe-2.0 EPSF-2.0
+'  -e '/^%%BoundingBox:/c\
+%%BoundingBox: 0 0 430 304
+'  -e '/^%%Orientation:/c\
+%%Orientation: Portrait
+' > temp0
+
+fi
+
+mv temp0 prolog
+
+#for eps file: remove pages comment from both prolog and trailer
+#and remove lines concerned with paper size (otherwise word will print a blank page)
+if [ "${eps}." = "yes." ]; then
+  cat prolog | sed \
+    -e '/^%%DocumentPaperSizes:/d' \
+    -e '/^%%BeginPaperSize/,/^%%EndPaperSize/d' \
+    -e '/^%%Pages:/d' \
+    > temp0
+  rm -rf prolog_eps >/dev/null 2>&1
+  mv temp0 prolog_eps
+  cat trailer | sed \
+    -e '/^%%Pages:/d' \
+    > temp0
+  rm -rf trailer_eps >/dev/null 2>&1
+  mv temp0 trailer_eps
+fi
+
+
+
+
+# b2plot: first lines of each file are (without hash), 1 is actual pagenumber:
+#%%Page: 1 1
+#%Blankline
+#gsave
+#90 rotate
+#0 -695 translate
+
+#This becomes:
+#%%Page: 1 1
+#%Blankline
+#gsave
+#1.0 1.0 scale
+#0 rotate
+#0 0 translate
+
+# gnuplot: first lines of each file are (without hash), 1 is actual pagenumber:
+#%%Page: 1 1
+#gnudict begin
+#gsave
+#50 50 translate
+#0.100 0.100 scale
+#90 rotate
+#0 -5040 translate
+
+#This becomes:
+#%%Page: 1 1
+#gnudict begin
+#gsave
+#0.06 0.06 scale
+#0 rotate
+#0 0 translate
+
+
+if [ $gnuplot -eq 0 ]; then
+   deletelines=6
+   cat > pagesetup << Endcat0
+%Blankline
+gsave
+0.8 0.8 scale
+0 rotate
+-40 -140 translate
+Endcat0
+else
+   deletelines=8
+   cat > pagesetup << Endcat1
+gnudict begin
+gsave
+0.06 0.06 scale
+0 rotate
+0 0 translate
+Endcat1
+fi
+
+set -A name xxx `ls -1 xx*`
+namelist=${name[*]}
+
+#echo "namelist=$namelist
+
+if [ "${macps}." = "yes." ]; then
+  > ${fileout}
+  cat prolog >> ${fileout}
+  i=0
+  for ff in $namelist; do
+    if [ $i -gt 0 ]; then
+      head -1 $ff >> ${fileout}
+      cat pagesetup >> ${fileout}
+      tail -n +$deletelines $ff >> ${fileout}
+    fi
+    let "i=i+1"
+  done
+
+  cat trailer >> ${fileout}
+fi
+
+if [ "${eps}." = "yes." ]; then
+  fileout=temp0
+  cat prolog >> ${fileout}
+  i=0
+  for ff in $namelist; do
+    if [ $i -gt 0 ]; then
+      cp prolog_eps ${fileout}
+      cat pagesetup >> ${fileout}
+      tail -n +$deletelines $ff >> ${fileout}
+      cat trailer_eps >> ${fileout}
+      rm -rf ${ff} >/dev/null 2>&1
+      mv ${fileout} ${ff}
+    fi
+    let "i=i+1"
+  done
+fi
+
+
+# if pagefile is to be used to name eps files check to see whether it exists and later check to see whether
+# it has the same number of entries as the .ps file
+# also check to see if names are unique
+if [ "${eps}." = "yes." ]; then
+  if [ "${pagefile}." = "yes." ]; then
+    pagefilename=../${filename}${pagefilesuffix}
+    pagefileexist=yes
+    if [ ! -r "$pagefilename" ]; then
+      echo "$scriptname: pagefilename=${pagefilename} does not exist" >&2
+      pagefileexist=no
+    else
+      rm -rf temp0 temp1 >/dev/null 2>&1
+      cat ${pagefilename} | grep -v '^#' | cut -f1 > temp0
+      cat temp0 | sort -u > temp1
+      pagenames=`cat temp0`
+      pagenumber=`cat temp0 | wc -l`
+      pagenumberunique=`cat temp1 | wc -l`
+      if [ "${pagenumber}." != "${pagenumberunique}." ]; then
+        echo "$scriptname: pagefilename=${pagefilename} does not have unique names" >&2
+        pagefileexist=no
+      fi
+      if [ ${pagenumber} -ne ${pages} ]; then
+        echo "$scriptname: pagefilename=${pagefilename} does not have the same number of names as .ps file" >&2
+        pagefileexist=no
+      fi
+    fi
+  fi
+fi
+
+set -A pagename xxx ${pagenames}
+pagenamelist=${pagename[*]}
+
+
+#delete all except eps files for eps case and replace pagenames if desired and if file OK
+delfiles=`ls -1 | grep -v '^xx*'`
+if [ "${eps}." = "yes." ]; then
+  rm -f ${delfiles} >/dev/null 2>&1
+  j=0
+  if [ "${pagefileexist}." = "yes." ]; then
+    echo "$scriptname: file=${pagefilename} is being used for eps file names" >&2
+    for ff in $namelist; do
+      if [ $j -gt 0 ]; then
+        mv ${ff} ${pagename[j]}.eps
+      fi
+      let "j=j+1"
+    done
+  else
+    echo "$scriptname: eps file names will be xx01 etc." >&2
+  fi
+  cd ..
+fi
+if [ "${macps}." = "yes." ]; then
+  cd ..
+  [ -a ${tempps_mac} ] && rm -rf ${tempps_mac} >/dev/null 2>&1
+fi
+
+cd ${startdir}
+done
+
+done

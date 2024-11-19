@@ -16,34 +16,34 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
-#       NCDIR ?=
+        NCDIR ?= /usr/lib64
 #   MSCL_ROOT ?=
-#       H5DIR ?=
+        H5DIR ?= /usr/lib64
 #     GR_ROOT ?=
 #    GLI_HOME ?=
 #  NCARG_ROOT ?=
 #      NAGDIR ?=
-# MDSPLUS_DIR ?=
+  MDSPLUS_DIR ?= /usr/local/mdsplus
 
-       NCDIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
-   MSCL_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
-       H5DIR ?=
-     GR_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
-    GLI_HOME ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib
-  NCARG_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/NCARG/linux.ifort64
+#       NCDIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
+    MSCL_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
+#       H5DIR ?=
+      GR_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib/linux.ifort64
+     GLI_HOME ?= /home/sunny2216/solps5.0_old/solps5.0/solps5.0/src/lib
+   NCARG_ROOT ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/NCARG/linux.ifort64
 #      NAGDIR ?= /home/sunny2216/solps-iter-151022/lib/lapack-3.5.0
-      NAGDIR ?= /home/sunny2216/solps5.0_150821/solps5.0/src/lib/linux.ifort64
- MDSPLUS_DIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/MDSPLUS/linux.ifort64
+       NAGDIR ?= /home/sunny2216/solps5.0_150821/solps5.0/src/lib/linux.ifort64
+# MDSPLUS_DIR ?= /home/sunny2216/solps5.0_old/solps5.0/solps_other/MDSPLUS/linux.ifort64
 
 #
 # Variables for linking
 #
 
-LD_NETCDF  = -L${NCDIR} -lnetcdf
+LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
@@ -61,6 +61,20 @@ LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 #LD_NAG     = -L${NAGDIR}/lib -lnag
 #LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 #LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpiifort
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+endif
 
 #
 # Preprocessor options

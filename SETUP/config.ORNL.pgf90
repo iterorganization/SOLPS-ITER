@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR = /usr/lib64/openmpi/lib
@@ -42,6 +42,10 @@ LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgfortran 
 LD_NAG     = -lblas -llapack
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
 
 #
 # Preprocessor options

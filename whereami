@@ -19,6 +19,12 @@ if ("$mephi_check" == "head" || "$mephi_check" == "node") then
     set fullhost=$machine_location
   endsw
 endif
+# special handling for ITER SDCC cluster nodes
+set iter_check=`echo $machine_location | cut -d '.' -f 2-3`
+if ("$iter_check" == "iter.org") then
+  set fullhost=$machine_location
+endif
+# Assign location
 switch ($fullhost)
 case "*.iter.org":
   echo ITER
@@ -93,6 +99,12 @@ case "*.cm.cluster":
 case "*.ipp.cas.cn":
   echo ASIPP
   breaksw
+case "*.nscc-hf.cn":
+  echo NSCC
+  breaksw
+case "sms.hlsm.local":
+  echo DLUT
+  breaksw
 case "*.swip.ac.cn":
 case "mgmt":
   echo SWIP
@@ -121,6 +133,9 @@ case "*.mephi.ru":
   breaksw
 case "*.uni-lj.si":
   echo UL
+  breaksw
+case "*.tok.ipp.cas.cz":
+  echo "IPPCR"
   breaksw
 case "*.cn":
 case "*.hk":

@@ -7,6 +7,11 @@
 # specify the viewer for PostScript files
 
 GV="gv $GV_OPT"
+case "$(uname -s)" in
+    Darwin*)
+        GV="gs $GV_OPT"
+        ;;
+esac
 
 SOLPSTOP=`determine_SOLPSTOP`
 
@@ -126,7 +131,7 @@ toolchain=${HOST_NAME}.${COMPILER}
 TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
-EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
+EIRENE="${SOLPSTOP}/modules/Eirene/builds/standalone.$eirchain/eirobjx"
 
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
@@ -141,9 +146,9 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
   print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
 }
 [ -d $griddir ] && {
-  n=1
+  n=`ls -1 $griddir | grep -E "$carre_stem.v[0-9][0-9][0-9].geo" | wc -l`
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
-  [ -e $griddir/$carre_stem.v[0-9][0-9][0-9].geo ] && {
+  [ n -gt 0 ] && {
     n=`ls $griddir/$carre_stem.v[0-9][0-9][0-9].geo | tail -1`
     n=${n#*/$carre_stem.v}
     n=${n%.geo}
@@ -286,7 +291,7 @@ while true; do {
                 [ -r $eirout ] && rm $eirout
                 ln -sf "$eirinp" "$eirlink"
                 $EIRENE > "$eirlog"
-                rm $eirlink fort.85
+                rm $eirlink fort.85 user_data.input eirene*.input.json
                 [ -s "$eirout" ] && [ -r "$eirout" ] && {
                   [ -s "$eirhed" ] && [ -r "$eirhed" ] && {
                     (cat "$eirhed"; tail --lines=+2 "$eirout") > "$triain"

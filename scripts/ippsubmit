@@ -135,7 +135,7 @@ EOF
   endif
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
+  if (-s fort.1 && $standalone == "no") then
     echo Assuming run with Eirene
     echo No argument is specified. Looking for SLURM.ipp_coupled$compress
     set QSUB=`climb_and_look_for SLURM.ipp_coupled$compress`
@@ -147,7 +147,7 @@ if ($1 == "") then
       endif
     endif
   else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
+    if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
     echo No argument is specified. Looking for SLURM.ipp$compress
     set QSUB=`climb_and_look_for SLURM.ipp$compress`
     if ($QSUB == "//SLURM.ipp$compress") then
@@ -241,7 +241,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch --export=ALL $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch --export=ALL --dependency=afterok:${chain} $NAME
 endif

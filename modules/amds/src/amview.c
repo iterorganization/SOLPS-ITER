@@ -212,7 +212,6 @@ View CreateView(XApp xapp,Doc ss,View mainView) {
       CbRestrictType);
   }
 
-
   w->wList=Cmw(XmCreateScrolledList,w->wMain,"list",
     NULL);
   XtAddCallback(w->wList,XmNdefaultActionCallback,CbDisplayText,w);

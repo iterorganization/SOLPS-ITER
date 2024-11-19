@@ -9,7 +9,7 @@ THETA       =         4.2,    ! Toroidal strike angle of magnetic flux lines [de
 /
 
 &COOLANT  
-T_COOLANT   =        70.0,    ! Coolant inlet temperature [°C]
+T_COOLANT   =        70.0,    ! Coolant inlet temperature [degrees Celsius]
 M_FLOW      =       0.734,    ! Coolant mass flow rate [kg/s]
 CP_COOLANT  =      4.22e3,    ! Coolant specific heat capacity [J/kg/K]
 /  

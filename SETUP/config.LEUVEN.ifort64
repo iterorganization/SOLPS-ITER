@@ -28,8 +28,8 @@
 # Leave LD_MDSPLUS blank
 # Remove -DMDSPLUS from SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR ?= ${EBROOTNETCDFMINFORTRAN}
@@ -41,9 +41,8 @@
       NAGDIR ?=  
  MDSPLUS_DIR ?=
 
-
 #
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 
 LD_NETCDF  = `nf-config --flibs` 
@@ -51,9 +50,9 @@ LD_MSCL    = -L${STGDIR} -lmscl
 LD_GR      = -L${STGDIR} -lgr
 LD_GKS     = -L${STGDIR} -lgks -lX11 -lXt
 ifdef NCARG_ROOT
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
 endif
 LD_NAG     = -L${EBROOTIMKL}/mkl/lib  -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64  -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
 LD_MDSPLUS =
@@ -61,12 +60,23 @@ LD_MDSPLUS =
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
 LD_MPI     = 
 
+LIBGKS     = ${STGDIR}/libgks.a
+LIBGRS     = ${STGDIR}/libgr.a
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpiifort
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+endif
 
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNCAR4 -DF2003
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

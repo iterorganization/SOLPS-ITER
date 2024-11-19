@@ -15,21 +15,21 @@ endif
 MAKES = Makefile 
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  else
+    $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+  endif
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 else
-  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
-endif
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
-else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -39,8 +39,10 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ] && 
   MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 endif
 
+MAKETAGS ?= ctags -e -f
+
 # Extensions for object directories when various options are used
-ifdef USE_OPENMP
+ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
 endif
 ifdef SOLPS_DEBUG
@@ -49,7 +51,7 @@ endif
 ifdef USE_IMPGYRO
 EXT_IMPGYRO = .ig
 else
-ifdef USE_MPI
+ifdef SOLPS_MPI
 EXT_MPI = .mpi
 endif
 endif
@@ -91,19 +93,19 @@ all: $(RES2FBR) $(TARGET) $(CALC)
 .PHONY: VERSION clean neat all depend listobj force
 
 $(OBJDIR)/vacreate.o:
-	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
+	$(CC) $(CFLAGS) $(INCLUDES) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
 
 $(OBJDIR)/%.o : %.c
-	$(CC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(TARGET): $(DEST) $(MAKES)
-	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DEST) $(LIBS)
 
 src/x_~fbr.c: src/amds.xrs $(RES2FBR)
 	$(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
 
 $(RES2FBR): $(OBJDIR)/res2fbr.o $(MAKES)
-	cc -o $(RES2FBR) $(OBJDIR)/res2fbr.o
+	$(CC) $(CFLAGS) -o $(RES2FBR) $(OBJDIR)/res2fbr.o
 
 $(CALC): ${B2OBJ}/calc_atomic_data.exe $(MAKES)
 	cp ${B2OBJ}/calc_atomic_data.exe $(CALC)
@@ -124,10 +126,10 @@ clean:
 TAGS:	tags
 
 tags:
-	rm -f TAGS ; ctags -e -f TAGS src/*.c src/*.h || touch TAGS
+	rm -f TAGS ; ${MAKETAGS} TAGS src/*.c src/*.h || touch TAGS
 
 depend: ${OBJS:.o=.c}
-	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
+	@$(CC) $(INCLUDES) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
 	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 

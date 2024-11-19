@@ -6,6 +6,9 @@
       use b2mod_elements
       use b2mod_solpstop
       use b2mod_subsys
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 
 c======================================================================

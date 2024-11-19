@@ -4,6 +4,7 @@ setenv NCARG_ROOT /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK ${SOLPSTOP}/runs
 setenv FC gfortran
+setenv NO_MANUAL true
 
 # Load modules
 #module unload imasenv
@@ -17,6 +18,9 @@ module load hdf5/1.10.4--intel--pe-xe-2018--binary
 module load netcdf/4.6.1--intel--pe-xe-2018--binary
 module load netcdff/4.4.4--intel--pe-xe-2018--binary
 #module load nag/mark27--binary
+module load spack
+module load gcc/10.2.0-idk
+module load cmake/3.18.2
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
@@ -30,6 +34,9 @@ if (! $?DEVICE) then
     setenv DEVICE $TOKAMAKNAME
   endif
 endif
+
+# Compiler
+setenv FC gfortran
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

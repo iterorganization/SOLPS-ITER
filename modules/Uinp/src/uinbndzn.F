@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 15.03.2001 17:12
 c
@@ -30,14 +33,14 @@ c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
         write(0,*)
      .   'Current number of requested poloidal grid points: ',nx
          call xerrab
-     .    (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
       end if !}
       if(ny.gt.nyd) then !{
         write(0,*) 'Too many radial grid points: maximum ',nyd
         write(0,*)
      .   'Current number of requested radial grid points: ',ny
         call xerrab
-     .   (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
       end if !}
 
 c*** Find the divides positions for each kind of boundary.
@@ -76,7 +79,7 @@ c*** Radial divides (targets)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k,m,1)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           if(lrpbndt(k,m,2).gt.nxd+1) then !{
             write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
@@ -84,7 +87,7 @@ c*** Radial divides (targets)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k,m,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           if(lrrbndt(k,m,1).gt.nyd+1) then !{
             write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -92,7 +95,7 @@ c*** Radial divides (targets)
      .       'Current number of requested radial grid points: ',
      .        lrrbndt(k,m,1)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
           end if !}
           if(lrrbndt(k,m,2).gt.nyd+1) then !{
             write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -100,7 +103,7 @@ c*** Radial divides (targets)
      .       'Current number of requested radial grid points: ',
      .        lrrbndt(k,m,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
           end if !}
           if(ix.ge.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
      ,       iy.gt.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
@@ -115,7 +118,7 @@ c       print '(1x,100i1)',(i_tg(i,k),i=0,ny+1)
 c      end do !}
 c!###}
 
-c*** Poloidal divides (core and wall)     
+c*** Poloidal divides (core and wall)
       do i=n+1,mdvbndx !{
         k=ldvbndx(i)
         if(k.ge.0) then !{
@@ -135,7 +138,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested poloidal grid points: ',
      .          lrpbndt(k,m,1)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
             end if !}
             if(lrpbndt(k,m,2).gt.nxd+1) then !{
               write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
@@ -143,7 +146,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested poloidal grid points: ',
      .          lrpbndt(k,m,2)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
             end if !}
             if(lrrbndt(k,m,1).gt.nyd+1) then !{
               write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -151,7 +154,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested radial grid points: ',
      .          lrrbndt(k,m,1)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
             end if !}
             if(lrrbndt(k,m,2).gt.nyd+1) then !{
               write(0,*) 'Too many radial grid points: maximum ',nyd+1
@@ -159,7 +162,7 @@ c*** Poloidal divides (core and wall)
      .         'Current number of requested radial grid points: ',
      .          lrrbndt(k,m,2)
               call xerrab
-     .         (' ==> Check the DG model and DEF_NYD in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
             end if !}
             if(ix.gt.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
      ,         iy.ge.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
@@ -181,7 +184,7 @@ c        end do !}
 c      end if !}
 c!###}
 c*** Prepare the array which describes correspondence between the B2
-c*** and Eirene numbering in poloidal directions (extra surfaces at the 
+c*** and Eirene numbering in poloidal directions (extra surfaces at the
 c*** cuts)
       m=0
       k=0
@@ -194,7 +197,7 @@ c*** cuts)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k+1,3,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           do i=lrpbndt(k+1,3,1),lrpbndt(k+1,3,2) !{
             i_cr(i)=j
@@ -207,7 +210,7 @@ c*** cuts)
      .     'Current number of requested poloidal grid points: ',
      .      lrpbndt(l,1,2)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
         end if !}
         do i=lrpbndt(l,1,1),lrpbndt(l,1,2) !{
           i_cr(i)=j
@@ -220,7 +223,7 @@ c*** cuts)
      .       'Current number of requested poloidal grid points: ',
      .        lrpbndt(k+2,3,2)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NXD in DIMENSIONS.F')
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
           end if !}
           do i=lrpbndt(k+2,3,1),lrpbndt(k+2,3,2) !{
             i_cr(i)=j
@@ -232,11 +235,11 @@ c*** cuts)
 
 c      print '(8h  i_cr: ,100i1)',(i_cr(i),i=0,nx+1) !###
 
-      
+
 c*** Plan boundary zones between the divides
 
 c*** Targets
-      
+
       m=2
       iz=0
       do k=1,nrgbndt(m) !{
@@ -249,7 +252,7 @@ c*** divide found
               write(0,*) 'Too many boundary zones specified for targets'
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
      ,                   'model and parameter "nbndzon" in uinpcom.inc'
-              call xerrab 
+              call xerrab
      .         ('Too many boundary zones specified for targets')
             end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)
@@ -345,7 +348,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
       end do !}
       nznbndt(m)=iz
 
-c*** Sides. 
+c*** Sides.
 
       do l=1,n_hlp !{
         m=l_hlp(l)

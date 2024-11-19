@@ -54,8 +54,8 @@
       use ctrig, only : alloc_ctrig
       use braeir, only : alloc_braeir
       use eirdiag, only : alloc_eirdiag
+      use b2mod_dimensions
       implicit none
-#     include "DIMENSIONS.F"
 *   ..common blocks
 
 *-----------------------------------------------------------------------

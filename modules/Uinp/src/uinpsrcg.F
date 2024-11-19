@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 00:51
 c
@@ -36,7 +39,7 @@ c>>>
           write(0,*) 'Too many strata requested (gas puff ',istr,') : ',
      ,               nstrai
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,      'DEF_NSTRA in DIMENSIONS.F'
+     ,      'DEF_NSTRA in b2mod_dimensions.F'
           call xerrab ('Too many gas puff strata requested')
         end if !}
         if(kgpfstr(istr).gt.nsrfs) then !{
@@ -45,7 +48,7 @@ c>>>
           write(0,*) 'A gas puffing source cannot span over more than ',
      ,               nsrfs,' wall segments'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,         'DEF_NSRFS in DIMENSIONS.F'
+     ,         'DEF_NSRFS in b2mod_dimensions.F'
           call xerrab ('Too many gas puff segments requested')
         end if !}
         if(kgpfstr(istr).le.0) then !{

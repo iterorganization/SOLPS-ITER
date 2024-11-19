@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
     NODENAME ?= $(shell echo `hostname`)
@@ -30,28 +30,39 @@
  MDSPLUS_DIR ?=
 
 #
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 
 LD_NETCDF  =
 LD_MSCL    = `pkg-config mscl --libs` -lgfortran
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -lgfortran -lXmu -lX11 -lXt
+LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 LD_NAG     = `pkg-config openblas --libs`
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 NCDIR      =
 ifdef NCARG_ROOT
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz -lgfortran # for NCARG v6.x.x
 endif
+
+LIBGKS     = ${GKSDIR}/lib/libGKS.so
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lgfortran -lXmu
+
+#
+# Provide compiler
+#
+
+FC         = nagfor
+NO_MPI     = true
 
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNAG22 -DNO_F01AAF -DF2003
+SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNO_NAG -DNO_F01AAF
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -87,14 +98,35 @@ endif
 
 # Build with IMAS if imas module is loaded
 ifdef IMAS_VERSION
-  UAL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-  UAL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
-  UAL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  ifdef AL_VERSION
+    AL_MAJOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f1 )
+    AL_MINOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f2 )
+    AL_MICRO_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  else
+    AL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
+    AL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
+    AL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+  endif
   IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
-  IMAS_PKG_LIST += imas-gfortran
-  ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+  ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
+    ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += al-fortran al-identifiers-fortran
+    endif
+  else
+    ifeq (,$(findstring imas-,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += imas-gfortran
+      ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-gfortran
+      else
+        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+          IMAS_PKG_LIST += imas-identifiers-gfortran
+        endif
+      endif
+    endif
+  endif
+  ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
       GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
       GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
@@ -104,32 +136,60 @@ ifdef IMAS_VERSION
       GGD_MINOR_VERSION = 0
       GGD_MICRO_VERSION = 0
     endif
+  else
+    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+      ifdef GGD_VERSION
+        GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
+        GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
+        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
+      else
+        GGD_MAJOR_VERSION = 0
+        GGD_MINOR_VERSION = 0
+        GGD_MICRO_VERSION = 0
+      endif
+    else
+      GGD_MAJOR_VERSION = 1
+      GGD_MINOR_VERSION = 0
+      GGD_MICRO_VERSION = 0
+    endif
   endif
   ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
-    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-      IMAS_PKG_LIST += ggd
+    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+      ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+        IMAS_PKG_LIST += ggd
+      endif
     else
-      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-        LD_GGD = -lggd_fortran
+      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
+        ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+          IMAS_PKG_LIST += ggd
+        endif
       else
-        IMAS_PKG_LIST += imas-lowlevel
+        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
+          LD_GGD = -lggd_fortran
+        else
+          ifeq (,$(findstring lowlevel,${IMAS_PKG_LIST}))
+            IMAS_PKG_LIST += imas-lowlevel
+          endif
+        endif
       endif
     endif
   endif
   ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
+    ifeq (,$(findstring amns,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += amns
+    endif
     SOLPS_CPP += -DAMNS
   endif
-  LD_UAL = `pkg-config ${IMAS_PKG_LIST} --libs`
+  LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
   ifdef LD_GGD
-    LD_UAL += ${LD_GGD}
+    LD_AL += ${LD_GGD}
   endif
-  SOLPS_CPP += -DIMAS -DUAL_MAJOR_VERSION=${UAL_MAJOR_VERSION} -DUAL_MINOR_VERSION=${UAL_MINOR_VERSION} -DUAL_MICRO_VERSION=${UAL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
-  export LD_UAL
+  SOLPS_CPP += -DIMAS -DAL_MAJOR_VERSION=${AL_MAJOR_VERSION} -DAL_MINOR_VERSION=${AL_MINOR_VERSION} -DAL_MICRO_VERSION=${AL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
+  export LD_AL
 else
-  UAL_MAJOR_VERSION = 0
-  UAL_MINOR_VERSION = 0
-  UAL_MICRO_VERSION = 0
+  AL_MAJOR_VERSION = 0
+  AL_MINOR_VERSION = 0
+  AL_MICRO_VERSION = 0
   GGD_MAJOR_VERSION = 0
   GGD_MINOR_VERSION = 0
   GGD_MICRO_VERSION = 0
@@ -137,9 +197,9 @@ else
   IMAS_MINOR_VERSION = 0
   IMAS_MICRO_VERSION = 0
 endif
-export UAL_MAJOR_VERSION
-export UAL_MINOR_VERSION
-export UAL_MICRO_VERSION
+export AL_MAJOR_VERSION
+export AL_MINOR_VERSION
+export AL_MICRO_VERSION
 export GGD_MAJOR_VERSION
 export GGD_MINOR_VERSION
 export GGD_MICRO_VERSION
@@ -147,11 +207,6 @@ export IMAS_MAJOR_VERSION
 export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
-
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
 
 #
 # Export for use in sub-makefiles
@@ -175,10 +230,11 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
-export LD_UAL
 
 export NODENAME
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES

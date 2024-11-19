@@ -3,6 +3,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 18.08.2003 17:31
 c
@@ -26,8 +29,8 @@ c      integer nniprm(nmxprm,nkwrd,nblck)
       character ss*(mxslen),s(mxslen),us*(mxslen-mxkwln-1),
      ,  sss*(mxslen-1),ufi*24,ufc*24,ufa*20,ufg*24,s0
       character hlp_frm*30
-      integer len_of_digits, lnblnk
-      external len_of_digits, lnblnk
+      integer len_of_digits
+      external len_of_digits
       equivalence (ss,s),(s(mxkwln+3),us),(s(2),sss)
       data ss / ' ' /
 #ifdef DBG
@@ -127,7 +130,7 @@ c     ,         l,n,jvrb,jblk,lprdckw(l,n,jvrb,jblk),' : ',c,i,r !###
      .           '(',nmdpr(jvrb,jblk),'(1x,'''''''',a8,'''''',''))'
   710           format(a1,i3,a)
                 do i=1,m
-                  len=lnblnk(c8niprm(i,l,n,jvrb,jblk))
+                  len=len_trim(c8niprm(i,l,n,jvrb,jblk))
                   if (len.lt.8) then
                     c8niprm(i,l,n,jvrb,jblk)(len+1:8)=repeat(' ',8-len)
                   endif

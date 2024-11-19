@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 14:27
 c
@@ -18,7 +21,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, find_matching_species
+      external streql, xertst, xerrab, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations
@@ -149,6 +152,15 @@ c*** Take the data from the boundary default
             beebnds(izn,2,iknd)=beebndx(0,2,iknd)
             beibnds(izn,2,iknd)=beibndx(0,2,iknd)
             bpobnds(izn,2,iknd)=bpobndx(0,2,iknd)
+            if (nspcpls.gt.size(lcobnds,1)) then
+              write(*,*) ' Problem requires ',nspcpls,' ion species.'
+              write(*,*) ' But only ',DEF_NSD,' are declared!'
+#ifdef DIMENSIONS_MODULE
+              call xerrab('Increase DEF_NSD in b2mod_dimensions !')
+#else
+              call xerrab('Increase DEF_NSD in DIMENSIONS.F !')
+#endif
+            end if
             do isp=1,nspcpls !{
               l=spcsrnp(isp)
               ex=.true.
@@ -187,6 +199,7 @@ c*** Take the default for the generic species
           end if !}
         end do !}
       end do !}
+
 c*** Check for input data for generic species
       iknd=1
       n=nznbndt(iknd)
@@ -269,6 +282,9 @@ c=======================================================================
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_elements
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #     include "uinpcom.inc"
       character*2 name, str_name
@@ -306,14 +322,16 @@ c=======================================================================
      , , only: ntrack, nalloys
       use eirmod_solps
       use b2mod_elements
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
       implicit none
 #     include "uinpcom.inc"
       character*8 name, species_name
       integer i
       integer nplus
-      integer lnblnk
       logical streql, isplusorminus
-      external streql, lnblnk, isplusorminus, strip_spaces
+      external streql, isplusorminus, strip_spaces
 
       find_matching_reagent = 0
       do i = 1, nsrctd
@@ -331,7 +349,7 @@ c=======================================================================
         end do
       else if (index(name,'+').gt.0) then
         species_name=repeat(' ',8)
-        do i = 1, lnblnk(name)
+        do i = 1, len_trim(name)
           if (isplusorminus(name(i:i))) then
             if (nplus.eq.0) species_name(i:i) = ' '
             nplus=nplus+1

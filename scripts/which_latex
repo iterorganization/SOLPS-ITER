@@ -6,6 +6,8 @@ else
   if (-X pdflatex) then
     echo 'pdflatex'
   else
-    echo 'latex'
+    if (-X latex) then
+      echo 'latex'
+    endif
   endif
 endif

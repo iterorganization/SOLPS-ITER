@@ -1,0 +1,153 @@
+#! /bin/ksh
+# ps_GV Version 980422
+# Usage: ps_GV filename
+# filename should end with ".ps"
+# for input file xxx.ps, output file is xxx_GV.ps
+# legend file xxx.ps.legend, if it exists, also copied to xxx_GV.ps.legend
+# converts gmeta file converted by ctrans to ghostview-capable multipage file
+# which can be reprocessed same as the gnuplot files
+# options: -h or -H help to screen
+
+# version : 18.07.2008 20:20
+
+scriptname=`basename $0`
+scriptdir=`dirname $0`
+
+
+# Parse the parameters
+help=
+options=
+filelist=
+pagefilesuffix=".legend"
+while true; do
+    case "$1" in
+        -h  )   help=yes;;
+        -H  )   help=yes;;
+        -*  )   options="${options} $1";;
+        *   )   filelist="${filelist} $1";;
+    esac
+    if [ "$2." = "." ]; then
+      break
+    else
+      shift
+    fi
+done
+
+[ ! "${help}." = "." ] && { echo "$scriptname"; head -9 $0 | tail -n +3; exit 32; }
+
+startdir=$PWD
+filename=
+
+for f in ${filelist}; do
+
+    filename=$f
+
+[ "${filename}." = "." ] && { echo "$scriptname: no filename specified!!!" >&2; exit 33;}
+
+fileout=`echo $filename  | sed s/".ps$"/"_GV"/`
+fileout=${fileout}.ps
+[ -r $fileout ] && rm -rf $fileout >/dev/null 2>&1
+fileout=`basename ${fileout}`
+fileout=../${fileout}
+[ ! -r "$filename" ] && { echo "$scriptname: filename=${filename} does not exist!!!" >&2; exit 33;}
+echo "$scriptname: creating $fileout"
+
+
+tempps_GV=`basename ${filename}`
+tempps_GV_dir=`dirname ${filename}`
+tempps_GV=${tempps_GV_dir}/${tempps_GV}_dir
+[ -a ${tempps_GV} ] && rm -rf ${tempps_GV} >/dev/null 2>&1
+
+mkdir ${tempps_GV}
+
+#split out prolog and trailer
+
+cd ${tempps_GV}
+tempps_GV=`basename ${tempps_GV}`
+filename=`basename ${filename}`
+
+#Find line which ends prolog (last line starting with "/")
+prologend=`grep -n "^/" ../$filename | tail -1 | awk -F: '{print $1}'`
+let " prologend = prologend + 1"
+
+csplit -k -s ../$filename $prologend
+mv xx00 prolog
+mv xx01 file
+# Divide up the pages: last page is trailer, first page is different still
+# h is the code for showpage: put at the beginning of each file here but replace alter
+csplit -k -s file "/^ h/" "{100}" 2>/dev/null
+
+#Modify first page so it is the same as the others
+echo " h" > temp0
+echo "n" >> temp0
+mv xx00 temp1
+cat temp0 temp1 > xx00
+
+#remove trailer page and original file
+ftrailer=`ls -1 xx* | tail -1`
+rm -f ${ftrailer} file >/dev/null 2>&1
+
+
+set -A name xxx `ls -1 xx*`
+namelist=${name[*]}
+
+#echo "namelist=$namelist
+
+
+
+> ${fileout}
+cat >> ${fileout} << End0
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Helvetica
+%%BoundingBox: 50 50 554 770
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentPaperSizes: a4
+%%EndComments >>
+%%BeginPaperSize: a4
+a4
+%%EndPaperSize
+%%EndProlog
+End0
+
+i=0
+for ff in $namelist; do
+  if [ $i -gt 0 ]; then
+    cat >> ${fileout} << End1
+%%Page: $i $i
+%Blankline
+gsave
+0 rotate
+0 0 translate
+End1
+    cat prolog | tail -n +2 >> ${fileout}
+    cat $ff | tail -n +2 >> ${fileout}
+    cat >> ${fileout} << End2
+ r
+grestore
+%Blankline
+showpage
+End2
+  fi
+  let "i=i+1"
+done
+  let "i=i-1"
+
+cat >> ${fileout} << End3
+%%Trailer
+%%Pages: $i
+End3
+
+pagefilename=../${filename}${pagefilesuffix}
+fileout=`basename ${fileout}`
+pagefilenameout=../${fileout}${pagefilesuffix}
+[ -a ${pagefilename} ] && cp ${pagefilename} ${pagefilenameout}
+
+cd ..
+[ -a ${tempps_GV} ] && rm -rf ${tempps_GV} >/dev/null 2>&1
+
+cd ${startdir}
+
+
+done

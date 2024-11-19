@@ -1,0 +1,461 @@
+#! /bin/ksh
+
+#  VERSION : 20.04.2023 17:29
+
+# Universal script for b2plot.
+# Multiple boxes can be specified in box.b2p - if the first line there starts with #
+
+export B2PLOT_DEV=cgm
+
+STEM=b2pl_PS
+LK=bpl
+exedir=b2pl.exe.dir
+VARF=.VarID
+
+LN_FILES='box.b2p mesh.extra'
+
+for f in $LN_FILES; do {
+  [ -a $f ] || { [ -r ../baserun/$f ] && ln -s ../baserun/$f .; }
+}; done
+
+PS=-p
+NAME=${0##*/}
+Usage="$NAME - a script for producing a standard set of PS plots using b2plot. Usage:
+  $NAME [option]
+Options:
+  -p  produce PostScript files in directories $STEM/color and $STEM/mono
+  -m  produce the gmeta and legend files for subsequent conversion to PostScript
+  -c  only convert the gmeta and legend files to PostScript
+If no option is given, the gmeta files are created.
+"
+
+[ -n "$PS" ] && {
+  { case $PS in
+    ( -p | -ps ) print -- "$NAME: producing PostScript files ...";;
+    ( -m ) print -- "$NAME: preparing for PostScript files - don't forget to convert";;
+    ( -c ) print -- "$NAME: converting gmeta files ...";;
+    ( * )  print -- "$Usage"; exit 2;;
+  esac; }
+  true
+} || print -- "$NAME: producing gmeta files ..."
+
+
+[ -n "$PS" ] && {
+  [ -d ${STEM} ] && {
+    rm -rf ${STEM}/* >/dev/null 2>&1; true
+  } || mkdir ${STEM}
+  [ -d ${STEM}/mono ] || mkdir ${STEM}/mono
+  [ -d ${STEM}/color ] || mkdir ${STEM}/color
+}
+
+[ "$PS" = -c ] || {
+
+# First, determine the basic variables
+
+  [ -s "$VARF" ] && {
+      echo "reading parameters from $VARF"
+      cat "$VARF"
+      . "./$VARF"
+  } || {
+  . get_parm.bpl
+  }
+
+  B="'$LL' extl"
+  BBB="comp"
+  ST="lbof sep clvl vesl phys 1.2 lbsz"
+
+  rm -f gmeta color.${LK} mono.${LK} ${LK}_${L}[cm].ps.legend ${LK}.log b2plot.ps 2>/dev/null
+  ic=0
+  im=0
+  ib=0
+  echo "$ST" > color.${LK}
+  echo "$ST writ" > mono.${LK}
+
+  unset ss sf kw
+  [ -n "${BB[1]}" ] && ss=_b
+
+  for bb in " ${BB[@]}"; do {
+
+    [ -n "$ss" ] && {
+      let 'ib=ib+1'
+      sf="_${SB[$ib]:-${ib}}"
+      kw=${KW[$ib]}
+      [ -n "$kw" ] && {
+        [ -n "$PS" ] && {
+          [ "${kw#P}" = "$kw" ] || kw=
+          true
+        } || [ "${kw#g}" = "$kw" ] || kw=
+      }
+      [ -z "$kw" ] && {
+        echo "$bb" >> color.${LK}
+        echo "$bb" >> mono.${LK}
+      }
+    }
+
+    [ -z "$kw" ] && {
+
+      let "ic=ic+1"
+      echo "$B
+        te 1.0 2.0 3.0 5.0 7.0 10. 20. 30. 50. 70. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
+      echo -e "te_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        ti 1.0 2.0 3.0 5.0 7.0 10. 20. 30. 50. 70. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
+      echo -e "ti_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        ne -1 10 clvp surf drop" >> color.${LK}
+      echo -e "ne_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        dab2 0 zsel tab2 0 zsel m* dmb2 0 zsel tmb2 0 zsel m* m+ 1.6e-19 rm*
+        0 ' ' slbl 'Hydrogenic species neutral pressure [Pa]' glbl
+        0.02 0.05 0.1 0.2 0.5 1.0 2.0 5.0 10.0 20.0 50.0 100.0 200. 13 clvs surf drop" >> color.${LK}
+      echo -e "prn_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        pr 2. 5. 10. 20. 50. 100. 200. 500. 1000. 2000. 5000. 10000. 2.e4 13 clvs surf drop" >> color.${LK}
+      echo -e "pr_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        dmb2 0 zsel
+        -1 10 clvp surf drop" >> color.${LK}
+      echo -e "nm_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        tmb2 0 zsel
+        0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
+      echo -e "tm_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        dib2 0 zsel
+        -1 10 clvp surf drop" >> color.${LK}
+      echo -e "nim_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        tib2 0 zsel
+        0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
+      echo -e "tim_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      case " ${SPEC[*]} " in
+        ( *' He '* )
+            iHe=0; for f in ${SPEC[*]}; do
+              let "iHe=iHe+1"
+              [ $f = He ] && break
+            done
+            let "iHe=iHe-1"
+            let "ic=ic+1"
+            echo "$B
+              dab2 $iHe zsel tab2 $iHe zsel m* 1.6e-19 rm*
+              'Neutral pressure [Pa]' glbl
+              2.e-4 5.e-4 0.001 0.002 0.005 0.01 0.02 0.05 0.1 0.2 0.5 1.0 2. 13 clvs surf drop" >> color.${LK}
+            echo -e "prnhe${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend;;
+        ( * ) ;;
+      esac
+
+      let "ic=ic+1"
+      echo "$B
+        zeff 1.0 1.1 1.2 1.4 1.6 1.8 2.0 2.2 2.5 3.0 3.5 4.0 5.0 13 clvs surf drop" >> color.${LK}
+      echo -e "zeff_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+#        4 4 clvp surf drop" >> color.${LK}
+      let "ic=ic+1"
+      echo "$B
+        sna 1 1 sumz
+        -1 10 clvp surf drop" >> color.${LK}
+      echo -e "rci_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        mach 1 1 sumz
+        -1.0 -0.5 -0.2 -0.1 -0.05 0.0 0.05 0.1 0.2 0.5 1.0 11 clvs surf drop" >> color.${LK}
+      echo -e "mach_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        mach 1 1 sumz
+        -1.e8 -2.0 -1.0 -0.99999 -0.99998 0.0 0.99995 0.99996 0.99997 0.99998 0.99999 1.0 2.0 13 clvs surf drop" >> color.${LK}
+      echo -e "mach1_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      echo "$B
+        b2ra b2br m+ $SUMZ_ALL_I neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs pvol
+         0 ' ' slbl 'Total radiation loss (W/m^{3})' glbl
+        -1 10 clvp surf drop" >> color.${LK}
+      echo -e "rad_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      i=0; for f in ${SPEC[*]}; do {
+        ff=`echo $f | tr [A-Z] [a-z]`
+        let "ii=i+1"
+        let "ic=ic+1"
+        echo "$B
+          dab2 $i zsel
+          -1 10 clvp surf drop" >> color.${LK}
+        echo -e "na_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        let "ic=ic+1"
+        echo "$B
+          tab2 $i zsel
+          0.05 0.1 0.2 0.5 1.0 2.0 5.0 10. 20. 50. 100. 200. 300. 13 clvs surf drop" >> color.${LK}
+        echo -e "ta_${ff}_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+        [ ${SUMZ_1[$ii]} -eq ${SUMZ_N[$ii]} ] && {
+
+          let "ic=ic+1"
+          echo "$B
+            b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad 0 zsel m+ molrad 0 zsel m+ ionrad 0 zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation loss (W/m^{3})' glbl
+            -1 10 clvp surf drop " >> color.${LK}
+          echo -e "rd_nt${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+          true
+        } || {
+  # Impurity species
+
+          ((ns=${SUMZ_N[$ii]}-${SUMZ_1[$ii]}+1))
+          echo "Species ${f} : $ns"
+#         echo "ff=$ff"
+#         echo "ii=$ii"
+#         echo "SUMZ_1=${SUMZ_1[$ii]}"
+#         echo "SUMZ_N=${SUMZ_N[$ii]}"
+
+          let "ic=ic+1"
+          echo "$B
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ne m/
+            0 ' ' slbl 'n$f/ne' glbl
+            1.e-4 2.e-4 5.e-4 1.e-3 0.002 0.005 0.01 0.02 0.05 0.1 0.2 0.3 0.5 13 clvs surf drop" >> color.${LK}
+          echo -e "nr_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+          let "ic=ic+1"
+          echo "$B
+            na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
+            -1 10 clvp surf drop" >> color.${LK}
+          echo -e "ni_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+          let "ic=ic+1"
+          [ "$ns" -le 2 ] && {
+            l='1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 11 clvs'
+          } || {
+            [ "$ns" -le 4 ] && {
+              l='1.25 1.5 1.75 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 11 clvs'
+            } || {
+              [ "$ns" -le 7 ] && {
+                l='1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 6.5 11 clvs'
+              } || {
+                [ "$ns" -le 13 ] && {
+                  l='2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 11 clvs'
+                } || {
+                  [ "$ns" -le 18 ] && {
+                    l='2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 14.0 16.0 13 clvs'
+                  } || {
+                    l="1.0 $ns.0 13 clvn"
+                  }
+                }
+              }
+            }
+          }
+          echo "$B
+            na za m* ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz 1.e-12 rm+ m/
+            0 ' ' slbl 'Zi($f)' glbl
+            $l surf drop" >> color.${LK}
+          echo -e "Zi_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+          let "ic=ic+1"
+          echo "$B
+            b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
+            0 ' $f' slbl 'Radiation power loss from ions and atoms (W/m^{3})' glbl
+            -1 10 clvp surf drop" >> color.${LK}
+          echo -e "rd_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+        }
+        i=$ii
+      }; done
+
+      let "ic=ic+1"
+      echo "$B
+        rcxm $SUMZ_ALL_I
+        4 4 clvp surf drop" >> color.${LK}
+      echo -e "srcm${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+    }
+  }; done
+
+  # Plots invariant with respect to the bounding box
+
+  let "im=im+1"
+  echo "phys $B pr 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "prs_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B te 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "tes_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B ti 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "tis_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B ne 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "nes_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B pr 0.0 fmin 0.0 fmax $NMP_O f.y drop" >> mono.${LK}
+  echo -e "pr_OMP_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B te 0.0 fmin 0.0 fmax $NMP_O f.y drop" >> mono.${LK}
+  echo -e "te_OMP_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B ti 0.0 fmin 0.0 fmax $NMP_O f.y drop" >> mono.${LK}
+  echo -e "ti_OMP_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B ne 0.0 fmin 0.0 fmax $NMP_O f.y drop" >> mono.${LK}
+  echo -e "ne_OMP_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B neutrad 0 0 sumz b2ra $SUMZ_ALL_I m+ abs sumy intx
+  0 ' ' slbl 'Cumulative radiation loss total [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "ird_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  i=0; for f in ${SPEC[*]}; do {
+    ff=`echo $f | tr [A-Z] [a-z]`
+    let "ii=i+1"
+
+    [ ${SUMZ_1[$ii]} -eq ${SUMZ_N[$ii]} ] && {
+      let "im=im+1"
+      echo "phys $B
+        b2br ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz ionrad $i zsel molrad $i zsel m+ neutrad $i zsel m+ abs sumy intx
+        0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+      echo -e "ir_nt${L}\t$im" >> ${LK}_${L}m.ps.legend
+      true
+    } || {
+      let "im=im+1"
+      echo "phys $B
+        b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ abs sumy intx
+        0 ' $f' slbl 'Cumulative radiation loss [W]' glbl 0.0 fmin 0.0 fmax $NSEP f.x drop" >> mono.${LK}
+      echo -e "ir_${ff}${L}\t$im" >> ${LK}_${L}m.ps.legend
+    }
+    i=$ii
+  }; done
+
+  let "im=im+1"
+  echo "phys $B
+    rcxm $SUMZ_ALL_I sumy intx
+    0 ' ' slbl 'Cumulative neutral friction [N]' glbl 0. fmin 0. fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "ifrx_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B
+    p* fmox $SUMZ_ALL_I m+ sx m* pit m* sumy
+    0 ' ' slbl 'Integral ressure [N]' glbl 0. fmin 0. fmax $NSEP f.x drop" >> mono.${LK}
+  echo -e "iprx_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B
+    hx $NSEP f.x drop" >> mono.${LK}
+  echo -e "hx_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+  let "im=im+1"
+  echo "phys $B
+    b2ra b2br m+ $SUMZ_ALL_I neurtad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ abs sumy
+    0 ' ' slbl 'Radiation total, inegrated over Y [W]' glbl $NSEP f.x drop" >> mono.${LK}
+  echo -e "rdy_${L}\t$im" >> ${LK}_${L}m.ps.legend
+
+#  # Plots on the computational mesh
+
+#  [ -z "$PS" ] && {
+    i=0; for f in ${SPEC[*]}; do {
+      ff=`echo $f | tr [A-Z] [a-z]`
+      let "ii=i+1"
+
+      let "ic=ic+1"
+      echo "$BBB $B na ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz
+        -1 10 clvp surf drop" >> color.${LK}
+      echo -e "ni-c_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "ic=ic+1"
+      let "ii=i+1"
+      echo "$B
+        b2ra b2br m+ ${SUMZ_1[$ii]} ${SUMZ_N[$ii]} sumz neutrad $i zsel m+ pvol abs
+        0 ' $f' slbl 'Radiation loss from atoms and ions (W/m^{3})' glbl -1 10 clvp surf drop" >> color.${LK}
+      echo -e "rd-c_${ff}${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+      let "i=i+1"
+    }; done
+
+    let "ic=ic+1"
+    echo "$B
+       sna 1 1 sumz
+      -1 10 clvp surf drop" >> color.${LK}
+    echo -e "rci-c_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+    let "ic=ic+1"
+    echo "$BBB $B ne -1 10 clvp surf drop" >> color.${LK}
+    echo -e "ne-c_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+    let "ic=ic+1"
+    echo "$BBB $B ti 1. 2. 5. 10. 20. 50. 100. 200. 500. 1000. 10 clvs surf drop" >> color.${LK}
+    echo -e "Ti-c_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+    let "ic=ic+1"
+    echo "$BBB $B te 1. 2. 5. 10. 20. 50. 100. 200. 500. 1000. 10 clvs surf drop" >> color.${LK}
+    echo -e "Te-c_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+    let "ic=ic+1"
+    echo "$B
+      b2ra b2br m+ ${SUMZ_ALL_I} ionrad 0 0 sumz m+ molrad 0 0 sumz m+ neutrad 0 0 sumz m+ pvol abs
+      0 ' ' slbl 'Total radiation loss from atoms and ions (W/m^{3})' glbl -1 10 clvp surf drop" >> color.${LK}
+    echo -e "rd-c_tot_${L}${sf}\t$ic" >> ${LK}_${L}c.ps.legend
+
+#  }
+   true
+} && {
+
+# -c option - check for the presence of the legend files and extract the case No.
+
+#  echo "-c option" #!!!
+  set -A lfile -- ${LK}_*.ps.legend
+  f=${lfile#${LK}_}
+  f=${f%.ps.legend}
+  { case $f in
+    ( *c )  L=${f%c};;
+    ( *m )  L=${f%m};;
+    ( * )   print -u2 -- "$NAME: no legend file found - cannot proceed further"; exit 4;;
+  esac; }
+#  echo "L="$L #!!!
+}
+
+#[ -n "$PS" ] && export B2PLOT_DEV=PS
+
+S=mono
+for C in m c; do {
+  [ -s ${S}.${LK} ] && {
+    [ "$PS" = -c ] || {
+      b2plot < ${S}.${LK} >> ${LK}.log 2>&1
+      [ -s $exedir/gmeta ] && mv $exedir/gmeta gmeta.${LK}.${S}
+    }
+#    echo "PS="$PS #!!!
+    [ -n "$PS" ] && [ ! "$PS" = -m ] && {
+      ctrans -d ps.$S -outfile ${STEM}/${S}/${LK}_${L}${C}.ps gmeta.${LK}.${S} && {
+        mv ${LK}_${L}${C}.ps.legend ${STEM}/${S}
+        [ -s $exedir/b2plot.write ] && mv $exedir/b2plot.write ${STEM}/${S}
+        ln -s $PWD/VarID ${STEM}/${S}
+        (cd ${STEM}/${S}
+          ps_GV ${LK}_${L}${C}.ps && mv ${LK}_${L}${C}_GV.ps ${LK}_${L}${C}.ps && ps_mac ${LK}_${L}${C}.ps
+        )
+        rm gmeta.${LK}.${S}
+      }
+    }
+  }
+  S=color
+}; done
+

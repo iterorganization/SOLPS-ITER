@@ -1,6 +1,6 @@
 # Test whether necessary variables are defined
 LD_GR  ?= -L${GR_ROOT}/lib -lgr
-LD_GKS ?= -L${GLI_HOME} -lgks -lXmu -lX11 -lXt
+LD_GKS ?= -L${GKSDIR} -lGKS -lXmu -lX11 -lXt
 
 DEFINES += ${SOLPS_CPP}
 EQUIVS =
@@ -13,7 +13,7 @@ LINK_MOD =
 FC = nagfor
 FCOPTS = -compatible
 ifdef SOLPS_DEBUG
-FCOPTS += -C -g
+FCOPTS += -g
 else
 FCOPTS += -O2
 endif
@@ -26,7 +26,7 @@ INCMOD = -I
 MOD = mod
 OBJDEST = -o ${OBJDIR}/$*.o
 
-BLD = ar rcv
+BLD = ar rucv
 
 LD = ${FC}
 ifdef SOLPS_DEBUG

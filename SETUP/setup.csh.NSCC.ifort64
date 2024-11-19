@@ -1,0 +1,50 @@
+# Load modules
+# module load lapack
+# module load gnuplot
+# module load blas
+# module load globus
+# module load hdf5
+# module load MUMPS
+# module load netcdf
+# module load ncl
+# module load mdsplus
+# module load scalapack
+module load mathlib/netcdf/intel/4.4.1
+module load mathlib/hdf5/intel/1.8.20
+
+# Compiler
+setenv FC ifort
+
+# Environment variables
+if (! $?DEVICE) then
+  setenv DEVICE east
+endif
+setenv NO_MANUAL true
+
+# Debugger
+# setenv DBX totalview
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    if ($?LD_LIBRARY_PATH) then
+      setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    else
+      setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+    endif
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  endif
+endif
+
+setenv NCARG_ROOT ${SOLPSLIB}/linux.ifort64

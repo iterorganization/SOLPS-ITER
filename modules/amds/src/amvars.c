@@ -86,7 +86,6 @@ char* GetParticleVar(Doc ss,Reaction r,Particle p,VarDef vd) {
   v= p==NULL ? ss->data[r->number].reactionVars :
     GroupAt(ss->data[r->number].particleVars,GroupIndex(r->inputSet,p));
 
-  
   s=GetVar2(v,GetVar(vd->v,VDS_NAME),NULL);
   if (s==NULL) s=GetVar(r->vars,GetVar(vd->v,VDS_NAME));
 }

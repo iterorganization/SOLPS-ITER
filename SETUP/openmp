@@ -10,7 +10,7 @@ if ($?SOLPS_PATH) then
   endif
 
   # Pragmatic approach: assume only B2.5 and B2.5-Eirene will require OpenMP versions
-  setenv   OLD_SOLPS_PATH   $SOLPS_PATH
+  setenv   OLD_SOLPS_PATH $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.openmp||g'` # remove .openmp if already present
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.openmp|g"`
@@ -18,10 +18,22 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
-  setenv   USE_OPENMP -D_OPENMP
+  setenv   USE_OPENMP "-D_OPENMP -DUSE_OPENMP"
   setenv   SOLPS_OPENMP yes
-  setenv   KMP_STACKSIZE 48M
-  setenv   KMP_AFFINITY norespect,compact
+  if ( $COMPILER != 'ifort64') then
+    setenv OMP_STACKSIZE 256M
+  endif
+  setenv   KMP_STACKSIZE 256M
+  setenv   KMP_AFFINITY noverbose,respect,compact
+  setenv   OMP_WAIT_POLICY active
+  setenv   OMP_DYNAMIC false
+  if ($?SOLPS_DEBUG) then
+    setenv OMP_DISPLAY_AFFINITY true
+    setenv OMP_DISPLAY_ENV true
+  endif
+# The settings below can be used if KMP_AFFINITY is not set
+#  setenv   OMP_PLACES cores
+#  setenv   OMP_PROC_BIND true
   unsetenv OLD_SOLPS_PATH
   rehash
   echo "SOLPS-ITER OpenMP mode turned on"

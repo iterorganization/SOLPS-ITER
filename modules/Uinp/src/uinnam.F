@@ -5,6 +5,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 01:23
 c
@@ -97,7 +100,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (2)
         call rearre(p2,3*nlim,i)
@@ -107,7 +110,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (3,35)
         call vsend(jadch0,luwrk,luskel)
@@ -115,14 +118,14 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',luskel+1
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         if(maxval(jadch0).gt.nlim) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',
      .     maxval(jadch0)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         call rearri(luwrk(luskel+1),nlim-luskel,i)
         luskel=i+luskel
@@ -141,7 +144,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i+i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         if(i.lt.nlim) jadch1(i+1,lusgm)=0
       case (5)
@@ -151,7 +154,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (6)
         call rearri(jlside,nlim,i)
@@ -160,7 +163,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (7)
         call rearri(jadksw,nlim,i)
@@ -169,7 +172,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (8)
         call rearri(jadjsw,nlim,i)
@@ -178,7 +181,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (9)
         call rearri(jlcol,nlim,i)
@@ -187,7 +190,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (10)
         call rearri(jlacll,nlim,i)
@@ -196,7 +199,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (11)
         umtrl(1:nlim) = 'dummy'
@@ -206,7 +209,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         i=0
         call uinmtr(umtrl,i,nlimi)
@@ -217,7 +220,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .  (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (13)
         call rearre(rcycta,nlim,i)
@@ -228,7 +231,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .  (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (14)
         call rearre(trnspa(1,1),nlim,i)
@@ -237,7 +240,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .  (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (15)
         call rearre(trnspa(1,2),nlim,i)
@@ -246,7 +249,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nlimi
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .  (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (16)
         call resimi(lusgm)
@@ -271,7 +274,7 @@ c=======================================================================
             write(0,*) 'Too many wall elements: maximum ',nlim
             write(0,*) 'Current number of requested elements: ',luwrk(1)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .    (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
           end if !}
           jedgeo(luswch)=luwrk(1)
         end if !}
@@ -281,7 +284,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (24)
         call resimi(i)
@@ -295,14 +298,14 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',nnvsle
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         if(maxval(nmvsle).gt.nlim) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',
      .     maxval(nmvsle)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (28)
         call skipit
@@ -312,7 +315,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (30)
         call rearri(jlsptc,nlim,i)
@@ -320,7 +323,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (31)
         call rearri(jsrss,nlim,i)
@@ -328,7 +331,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (32)
         call rearri(jsrsg,nlim,i)
@@ -336,7 +339,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (33)
         call rearre(rcycsa,nlim,i)
@@ -344,7 +347,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (34)
         call rearre(rcycca,nlim,i)
@@ -352,7 +355,7 @@ c=======================================================================
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (36)
         call resimi(luswch)
@@ -368,7 +371,7 @@ c=======================================================================
             write(0,*) 'Current number of requested elements: ',
      .       jedgec(luswch)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
           end if !}
         end if !}
       case (38)
@@ -379,7 +382,7 @@ c=======================================================================
             write(0,*) 'Current number of requested elements: ',
      .       jedgep(luswch)
             call xerrab
-     .       (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
           end if !}
          end if !}
       case (39)
@@ -399,7 +402,7 @@ c=======================================================================
           write(0,*) 'Current number of requested elements: ',
      .     jedgec(luswch)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (41)
         call resimi(jedgep(luswch))
@@ -408,7 +411,7 @@ c=======================================================================
           write(0,*) 'Current number of requested elements: ',
      .     jedgep(luswch)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (42)
         i=lena
@@ -447,7 +450,7 @@ c=======================================================================
         if(nspigen.gt.natm) then !{
           write(0,*) 'Too many species: maximum ',natm
           call xerrab
-     .     (' ==> Check the DG model and DEF_NATM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NATM in b2mod_dimensions.F')
         end if !}
         call resimi(i)
         print *,'uinnam: species ',i,nspigen
@@ -472,7 +475,7 @@ c=======================================================================
         if(ngpfstr.gt.nstra) then !{
           write(0,*) 'Too many gas puffing strata specified'
           call xerrab
-     .     (' ==> Check the DG model and DEF_NSTRA in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NSTRA in b2mod_dimensions.F')
         end if !}
       case (58)
         if(ngpfstr.le.0) then !{
@@ -482,7 +485,7 @@ c=======================================================================
         if(lugpf.gt.nlim) then !{
           write(0,*) 'uinnam: too many slot surfaces for gas puff'
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         call rearri(lgpfstr(lugpf+1),nlim-lugpf,i)
         if(i.eq.0) then !{
@@ -494,14 +497,14 @@ c=======================================================================
         if(i.gt.nsrfs) then !{
           write(0,*) 'uinnam: too many segments for gas puff'
           call xerrab
-     .     (' ==> Check the DG model and DEF_NSRFS in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NSRFS in b2mod_dimensions.F')
         end if !}
         if(maxval(lgpfstr).gt.nlim) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',
      .     maxval(lgpfstr)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         kgpfstr(ngpfstr)=i
         lugpf=lugpf+i
@@ -548,6 +551,7 @@ c=======================================================================
           nprmul=(nprnli/nprnl)+1
           nprnli=nprnli/nprmul
         end if
+        usetmstr=usetmstr.or.nprnli.gt.0
       case (76)
         call resime(dtimv)
       case (77)
@@ -677,7 +681,7 @@ c*** Surface data transfer from B2 to Eirene
         if(n_spcsrf.gt.DEF_NSPCSRFG) then !{
           write(0,*) 'Too many "Surface special" groups specified'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,                                    'DEF_NSPCSRFG in DIMENSIONS.F'
+     ,                        'DEF_NSPCSRFG in b2mod_dimensions.F'
           call xerrab ('Too many "Surface special" groups specified')
         end if !}
         if(n_spcsrf.ne.i) then !{
@@ -741,12 +745,21 @@ c*** Surface data transfer from B2 to Eirene
           call xerrab (' ==> Corrupted DG output?')
         end if !}
         call rearri(ll_spcsrf(1,n_spcsrf),nlimps,k_spcsrf(n_spcsrf))
-        if(maxval(ll_spcsrf).gt.nlim) then !{
+        if(maxval(ll_spcsrf).gt.(nlim+nsts)) then !{
           write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Or non-standard surfaces: maximum ',nsts
           write(0,*) 'Current number of requested elements: ',
      .     maxval(ll_spcsrf)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .     (' ==> Check the DG model and '//
+     .      'DEF_NLIM and DEF_NSTS in b2mod_dimensions.F')
+        end if !}
+        if(minval(ll_spcsrf).lt.(-nsts)) then !{
+          write(0,*) 'Too many non-standard surfaces: maximum ',nsts
+          write(0,*) 'Current number of requested surfaces: ',
+     .     abs(minval(ll_spcsrf))
+          call xerrab
+     .   (' ==> Check the DG model and DEF_NSTS in b2mod_dimensions.F')
         end if !}
       case (105)
         if(n_spcsrf.le.0) then !{
@@ -947,7 +960,7 @@ c***  input elements indices for current rectangle
           write(0,*) 'Current number of requested elements: ',
      .     maxval(trirefel)
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
         lurefls=lurefls+trirefcn(ntriref)
       case (153)
@@ -962,7 +975,7 @@ c***  input elements indices for current rectangle
         pwrcrfri=max(0.,min(1.,pwrcrfri))
       case (157)
         call resimi(i)
-        usetmstr=i.ne.0
+        usetmstr=usetmstr.or.i.ne.0
       case (158)
         if(nspigen.le.0 .or. hlp_spc) then !{
           write(0,*) 'uinnam: species index undefined'
@@ -1095,7 +1108,7 @@ c***  input elements indices for current rectangle
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (176) ! refpress
         call rearre(refpress,nlim,i)
@@ -1103,7 +1116,7 @@ c***  input elements indices for current rectangle
           write(0,*) 'Too many wall elements: maximum ',nlim
           write(0,*) 'Current number of requested elements: ',i
           call xerrab
-     .     (' ==> Check the DG model and DEF_NLIM in DIMENSIONS.F')
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
         end if !}
       case (177) ! trefcell
         call resimi(trefcell(luswch))

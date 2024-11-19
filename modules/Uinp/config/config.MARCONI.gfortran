@@ -1,12 +1,10 @@
 # Test whether necessary variables are defined
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
-endif
+MSCL_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/mscl/1.2.3
+LD_MSCL   ?= -L${MSCL_ROOT}/lib -lmscl
 
-ifdef USE_MPI
-FC       = mpif90
-else
-FC       = gfortran
+MPI_FC  ?= mpif90
+ifdef SOLPS_MPI
+FC       = ${MPI_FC}
 endif
 
 CPP      = /lib/cpp -traditional

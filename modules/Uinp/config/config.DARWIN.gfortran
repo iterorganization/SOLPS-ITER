@@ -1,0 +1,16 @@
+# Test whether necessary variables are defined
+ifndef LD_MSCL
+  $(error LD_MSCL not defined)
+endif
+
+MPI_FC  ?= mpif90
+ifdef SOLPS_MPI
+FC       = ${MPI_FC}
+endif
+
+CPP      = /usr/bin/cpp -traditional
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

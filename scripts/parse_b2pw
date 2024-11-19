@@ -1,0 +1,151 @@
+#! /bin/ksh
+
+# version : 16.10.2014 20:45
+
+# Parse a b2plot.write file producing a set of multi-column files suitable for plotting
+# The output files are combined according to the x axis.
+# There are three possibilities       : Corresponding filenames
+#   (a) radial profile <ix = NN>      : L.r.NN
+#   (b) poloidal profile <iy = NN>    : L.p.NN
+#   (c) profile along a chord FNAME   : L.FNAME
+# The run idenitificator L can be provided with -L "$L" argument
+# Otherwise script tries to fetch L from the VarID, b2.parameters file or get_parm.bpl
+# The column names are: x for the abscissa and names taken either from *.ps.legend if it exists,
+# or from the b2plot.write in the opposite case, for the ordinates.
+
+NAME=${0##*/}
+
+legend=
+while true; do {
+  { case "$1" in
+    ( -l )  shift; [ -s "$1" ] && legend="$1"; shift;;
+    ( -L )  shift; L="$1"; shift;;
+    ( * )   break;;
+  esac; }
+}; done
+[ -n "$legend" ] && echo "legend: $legend"
+[ -n "$L" ] && echo "L :  $L"
+
+infile=b2plot.write
+[ -n "$1" ] && infile=$1
+{ [ ! -s "$infile" ] || [ ! -r "$infile" ]; } && {
+  print -- "$NAME: no readable input file $infile"
+  exit 4
+}
+
+[ -z "$L" ] && {
+  L=000
+#cat VarID #!!!
+  [ -s VarID ] && [ -r VarID ] && {
+    L=`cat VarID | cut -f1 -d_ | cut -f2 -d#`
+#echo "L from VarID: $L" #!!!
+    true
+  } || {
+    [ -s b2.parameters ] && [ -r b2.parameters ] && {
+      u=`grep -i 'label *=' b2.parameters | tr [A-Z] [a-z]`
+      u=${u#*label}
+      u=${u#*\'}
+      u=${u%%\'*}
+      L=`echo $u | cut -f1 -d_ | cut -f2 -d#`
+    }
+  } || {
+    . get_parm.bpl >/dev/null 2>&1
+#  echo "L from get_parm.bpl L=$L"
+  }
+}
+export L
+print -- $L
+
+
+[ -z "$legend" ] && {
+  set *.ps.legend
+  [ -s $1 ] && [ -r $1 ] && legend=$1
+}
+ii=0
+[ -s $legend ] && [ -r $legend ] && {
+  cat $legend |&
+  while read -p u; do {
+    set -- $u
+    [ -n "$1" ] && [ \# != "$1" ] && {
+      ((ii=ii+1))
+      nbl[ii]=$1
+    }
+  }; done
+}
+nbl[0]=$ii
+#set +x  #!!!
+print -- ${nbl[*]}
+
+cat $infile |&
+
+ii=0
+kf=0
+unset FFN FNS FN emsg
+while read -p u; do {
+  [ "$u" = "${u#\#}" ] && {
+    [ -n "$u" ] && print -u3 -- " $u"
+  } || {
+    [ -n "$FNS" ] && {
+#      echo "Pasting $FNS $FN"  #!!!
+      cat $L.$FN | sed 's/#//' | awk '{print $2}' | paste -d\  $L.$FNS - > tmp.$FN
+      mv tmp.$FN $L.$FNS
+      rm -f $L.$FN
+      FNS=
+    }
+    { case $u in
+      (*'<ix ='*) n=${u#*\<}
+                  n=${u#*=}
+                  n=${n%%\>*}
+                  set ${n}
+                  FN=r.$1
+#                  print -u2 "$u:$n:$FN" #!!!
+                  ;;
+      (*'<iy ='*) n=${u#*\<}
+                  n=${u#*=}
+                  n=${n%%\>*}
+                  set ${n}
+                  FN=p.$1
+#                  print -u2 "$u:$n:$FN" #!!!
+                  ;;
+      (    *   )  n=${u#*\)}
+                  set ${n}
+                  while [ -n "$2" ]; do shift; done
+                  FN=$1
+#                  print -u2 "$u:$n:$FN" #!!!
+                  ;;
+    esac; }
+    ((ii=ii+1))
+    { case " ${FFN[*]} " in
+      (*" $FN "*) FNS=$FN; FN=,,$$;;
+      (    *    ) ((kf=kf+1))
+                FNS=
+                FFN[kf]=$FN;;
+    esac; }
+    C=
+#    set -x #!!!
+    [ $ii -gt ${nbl[0]} ] && {
+#      set +x #!!!
+      [ -z "$emsg" ] && print -- "Legend file too short"
+      emsg=y
+      set -- ${u%%\(*}
+      while { shift; [ -n "$1" ]; }; do {
+        C=${C}_$1
+      }; done
+      true
+    }||{
+#      set +x #!!!
+      C=${nbl[ii]}
+    }
+    [ -z "$C" ] && C=Y
+    exec 3> $L.$FN
+    print -u3 -- "# x $C"
+  }
+}; done
+#print -u2 "FNS=$FNS"  #!!!
+[ -n "$FNS" ] && {
+#  echo "Pasting $FNS $FN" #!!!
+  cat $L.$FN | sed 's/#//' | awk '{print $2}' | paste -d\  $L.$FNS - > tmp.$FN
+  mv tmp.$FN $L.$FNS
+  rm -f $L.$FN
+  FNS=
+}

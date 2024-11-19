@@ -1,0 +1,131 @@
+#! /bin/tcsh -f
+set datapath=`echo $PWD/ | sed -e "s|$SOLPSTOP||" -e 's|[^/]*/|../|g' -e 's|$|modules/Eirene/Database|'`
+if (${COMPILER} == "HP") then
+  set filestem="ftn"
+else
+  set filestem="fort."
+endif
+if (! -s ${datapath}/PHOTON) then
+  set datapath=`canonical $SOLPSTOP`/modules/Eirene/Database
+  if (! -s ${datapath}/PHOTON) then
+    set datapath=$SOLPSTOP/modules/Eirene/Database
+  endif
+endif
+if ("X$1X" == "X-rX") then
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/methane.tex` METHANE
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/ammoniaex.tex` AMMONX
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` "$filestem"21
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` "$filestem"22
+else
+  ln -sf ${datapath}/AMdata/amjuel.tex AMJUEL
+  ln -sf ${datapath}/AMdata/h2vibr.tex H2VIBR
+  ln -sf ${datapath}/AMdata/hydhel.tex HYDHEL
+  ln -sf ${datapath}/AMdata/methane.tex METHANE
+  ln -sf ${datapath}/AMdata/ammoniaex.tex AMMONX
+  ln -sf ${datapath}/PHOTON
+  ln -sf ${datapath}/Surfacedata/SPUTER
+  ln -sf ${datapath}/Surfacedata/TRIM/trim.dat "$filestem"21
+  ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat "$filestem"22
+endif
+
+# ===================================================
+# Eirene main input file handling - JSON variant
+#
+# Look for eirene.input.json in standard locations
+set eirene_required = (\
+    "eirene.input.json"\
+    "user_data.input"\
+)
+foreach filename ($eirene_required)
+  if (! -s $filename) then
+    if (-s "../baserun/$filename") then
+      ln -s "../baserun/$filename" .
+    else
+      set filename_found=`climb_and_look_for $filename`
+      if (-s $filename_found) then
+        ln -s $filename_found .
+      else
+        echo "Warning: no $filename found!"
+      endif
+    endif
+  endif
+end
+# Look for additional eirene*.input.json files in ../baserun and link them
+if (-s eirene.input.json) then
+  set eirene_extra = `find ../baserun/ -maxdepth 1 -name 'eirene*.input.json'`
+  foreach file ($eirene_extra)
+    set filename = `basename $file`
+    if (! -s $filename) ln -s $file .
+  end
+endif
+# Update the fort.1 link to point to eirene.input.json
+if (-s eirene.input.json) then
+  set fort1_target=`readlink "$filestem"1`
+  if ("$fort1_target" != "eirene.input.json") then
+    if ( (-e "$filestem"1) && (! -l "$filestem"1) ) then
+      echo "Warning: Unable to select Eirene input, ${filestem}1 exists but not a link!"
+      echo "  - Please remove ${filestem}1 and run this script again."
+    else
+      ln -sf eirene.input.json "$filestem"1
+      echo "Selected JSON Eirene input (${filestem}1 -> eirene.input.json)."
+      # TODO: Remove this warning once JSON support is fully implemented
+      echo ""
+      echo "Warning: EXPERIMENTAL FEATURE: Eirene JSON workflow does not yet support 'Uinp', 'b2yt'."
+      echo "  - Running the main simulation ('b2mn') is supported."
+      echo "  - Tools 'Uinp', 'b2yt' will ignore the JSON files and output the FORMATTED file (input.dat)."
+      echo "  - Revert this run to the Eirene FORMATTED workflow by running 'setup_baserun_eirene_links'."
+      echo "  - Changes to JSON files are NOT carried over to input.dat and will be lost after reverting back."
+    endif
+  endif
+endif
+# ===================================================
+
+if (! -s input_for_refusr.dat) then
+  if (-s ../baserun/input_for_refusr.dat) ln -s ../baserun/input_for_refusr.dat .
+endif
+if (! -s "$filestem"33) then
+  if (-s ../TRIANG/"$filestem"33) then
+    ln -s ../TRIANG/"$filestem"33 .
+    ln -s ../TRIANG/"$filestem"34 .
+    ln -s ../TRIANG/"$filestem"35 .
+  else if (-s ../baserun/"$filestem"33) then
+    ln -s ../baserun/"$filestem"33 .
+    ln -s ../baserun/"$filestem"34 .
+    ln -s ../baserun/"$filestem"35 .
+  endif
+endif
+if (! -s "$filestem"30) then
+  if (-s ../baserun/"$filestem"30) then
+    ln -s ../baserun/"$filestem"30 .
+  endif
+endif
+if (! -s mesh.extra) then
+  if (-s ../baserun/mesh.extra) then
+    ln -s ../baserun/mesh.extra .
+  else
+    set meshxtra=`climb_and_look_for mesh.extra`
+    if (-s $meshxtra) then
+      ln -s $meshxtra .
+    endif
+  endif
+endif
+if (! -s param.dg) then
+  if (-s ../baserun/param.dg) then
+    ln -s ../baserun/param.dg .
+  else
+    set paramdg=`climb_and_look_for param.dg`
+    if (-s $paramdg) then
+      ln -s $paramdg .
+    endif
+  endif
+endif
+if (! -s b2.log) ln -sf run.log b2.log
+if (! -s b2.log.gz) ln -sf run.log.gz b2.log.gz
+if (! -d tracing) mkdir tracing
+if (! -d batch_av) mkdir batch_av
+if (! -d run_av) mkdir run_av

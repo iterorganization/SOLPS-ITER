@@ -3,6 +3,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 
 c  version : 01.04.2005 14:35
 
@@ -35,7 +38,7 @@ c*** General information
      , nwllmrk, nedgmrk  , ntrgmrk  ,   bliin    ,    bbliin      /
      /    0   ,nwllmrkd*0,nwllmrkd*0,nsts*.false.,luznknd*.false. /,
      , glb2read,usetmstr,pwrcrtte,pwrcrtti,pwrcrfri /
-     /  .false., .true. ,  50.   ,    50. ,   0.25  /,
+     /  .false., .false.,  50.   ,    50. ,   0.25  /,
      , spcscrk,spcicrk,spcsscn,spciscn /
      /  natm*0, natm*0, natm*1, natm*1 /,
      , nstrao,natmo,nmolo,niono,nphto,nplso /
@@ -147,17 +150,17 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /      -1  ,   1   ,  50  , 5006 ,   1   ,   1  ,   0   ,   1   /,
+     /      -1  ,   1   ,  50  , 5000 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
-     ,   nstoram, ngstal,nrtal1,nreac_add /
-     /       9  ,   1   ,   0  ,     1    /
+     ,   nstoram, ngstal,nrtal1 /
+     /       9  ,   1   ,   0   /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
+     ,     nlone ,nlmovie, nldfst,nlranmar,nlcascad,nloctree/
      /    .false.,.false.,.false., .true. , .false., .false./,
-     /    nlwrmsh, nexvs ,nltrimesh/
-     ,    .true. ,.false.,.false./
+     /    nlwrmsh, nexvs ,nltrimesh,nlsoledge/
+     ,    .true. ,.false.,.false., .true./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2
@@ -817,7 +820,9 @@ c*** 10e
      /    nals*' ', nals*' ', nals*' ', nals*' ' /
 c*** 10f
       data ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
-     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
+     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /,
+     ,     ispopt /
+     /     nasp*0 /
       data spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
      /    nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
       data spcvx , spcvy , spcvz /
@@ -853,8 +858,8 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen, trcrnf,trchktim /
-     /    .false.,.false.,.false.,.false.,.false. /,
+     ,     trctal, trcoct, trccen, trcrnf,trchktim,trcscl /
+     /    .false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc /
@@ -935,8 +940,8 @@ c*** 14
      /    lusg*0,lusg*7,   0  ,   0  ,    1   ,    1   ,   0  ,   0   /
       data fcte , bmass ,  chgsp ,  chgsee ,  chgsei , chgsmom /
      /   npls*1.,npls*0.,nstra*60.,nstra*60.,nstra*100.,nstra*50. /
-      data lsymet,lbalan,lcoarse, lfchgs,lsprcl /
-     /    .false.,.true.,.false.,.false.,.true. /
+      data lsymet,lbalan,lcoarse, lfchgs,lsprcl, lold31 /
+     /    .false.,.true.,.false.,.false.,.true.,.false. /
 
 c*** 15
 
@@ -958,8 +963,8 @@ c*** Data for Eirene test run
      / .true.,.true. ,.true.,.true.,.true. /,
      , ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs /
      / .true. ,.true. ,.true. ,.true. ,.true. ,.true.  /,
-     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim /
-     / .true. ,.true.   ,.true. , .false. /,
+     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcscl /
+     / .true. ,.true.   ,.true. , .false.,.true. /,
      , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
      / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /,
      , ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl /

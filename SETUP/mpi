@@ -30,7 +30,7 @@ if ($?SOLPS_PATH) then
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}:|couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}.mpi:|g"`
     setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.mpi|g"`
   endif
-  setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
   setenv   USE_MPI -DUSE_MPI
   setenv   SOLPS_MPI yes
   unsetenv OLD_SOLPS_PATH

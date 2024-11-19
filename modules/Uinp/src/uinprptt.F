@@ -3,6 +3,9 @@
       use b2mod_layer
      , , only: ntrack, nalloys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 00:25
 c
@@ -17,7 +20,8 @@ c=======================================================================
       real alloc_b
       logical trchst_b,trcint_b,trcamd_b,trcsou_b,trcbla_b,trcblm_b,
      ,  trcbli_b,trcblp_b,trcble_b,trcblph_b,trctal_b,
-     ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,trchktim_b,
+     ,  trcsrc_b,trcsur_b,trcoct_b,trccen_b,trcrnf_b,
+     ,  trchktim_b,trcscl_b,
      ,  trcdbg2_b,trcdbge_b,trcdbgm_b,trcdbgf_b,trcdbgl_b,
      ,  trcdbgs_b,trcdbgg_b,trcdbgmpi_b,trcdbgc_b,
      ,  pl1st_b,pl2nd_b,pladd_b,plhst_b,plcut_b(3),plnums_b,nltest_b,
@@ -57,6 +61,7 @@ c=======================================================================
         trccen_b=trccen
         trcrnf_b=trcrnf
         trchktim_b=trchktim
+        trcscl_b=trcscl
         trcdbg2_b=trcdbg2
         trcdbge_b=trcdbge
         trcdbgm_b=trcdbgm
@@ -118,6 +123,7 @@ c=======================================================================
         trccen=ttccen
         trcrnf=ttcrnf
         trchktim=ttchktim
+        trcscl=ttcscl
         trcdbg2=ttcdbg2
         trcdbge=ttcdbge
         trcdbgm=ttcdbgm
@@ -185,6 +191,7 @@ c*** Set the VSP data for test.eir
         trccen=trccen_b
         trcrnf=trcrnf_b
         trchktim=trchktim_b
+        trcscl=trcscl_b
         trcdbg2=trcdbg2_b
         trcdbge=trcdbge_b
         trcdbgm=trcdbgm_b

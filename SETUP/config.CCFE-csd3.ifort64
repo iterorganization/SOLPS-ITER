@@ -1,5 +1,4 @@
-# NCDIR     ?= /usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-fortran-4.4.4-cesnirf36s5woa3kex3oemvb5hfeutwn
-NCDIR       ?= /usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-4.4.1.1-zysrbqwgar43zq7pisurzuhnk6iix3bf
+NCDIR       ?= /usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-fortran-4.4.4-cesnirf36s5woa3kex3oemvb5hfeutwn
 MSCL_ROOT   ?= /home/ir-nunn1/solps-iter-dependencies
 GR_ROOT     ?= /home/ir-nunn1/solps-iter-dependencies/gr
 GLI_HOME    ?= /home/ir-nunn1/solps-iter-dependencies/gks
@@ -9,7 +8,7 @@ NAGDIR      ?= /home/ir-nunn1/solps-iter-dependencies/nag
 MDSPLUS_DIR ?=
 MPDIR ?= /usr/local/Cluster-Apps/intel/2017.7/compilers_and_libraries_2017.7.259/linux/mpi/intel64
 
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L/usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-fortran-4.4.4-cesnirf36s5woa3kex3oemvb5hfeutwn/lib -lnetcdff
+LD_NETCDF  = -L/usr/local/software/spack/spack-0.11.2/opt/spack/linux-rhel7-x86_64/intel-17.0.4/netcdf-4.4.1.1-zysrbqwgar43zq7pisurzuhnk6iix3bf/lib -lnetcdf -L${NCDIR}/lib -lnetcdff -I${NCDIR}/include
 LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 ifdef GR_ROOT
 LD_GR      = -L${GR_ROOT} -lgr
@@ -22,6 +21,24 @@ LD_NAG     = -L${NAGDIR} -lnag
 # LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 # LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+MPI_FC ?= mpif90
+ifdef SOLPS_MPI
+ FC     = ${MPI_FC}
+ COMPILER_TYPE = $(shell ${FC} --version | head -1 | cut -d ' ' -f 1)
+ ifeq (${COMPILER_TYPE},GNU)
+  COMPILER_REDEF = yes
+ endif
+endif
 
 #
 # Preprocessor options

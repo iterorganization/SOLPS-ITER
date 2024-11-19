@@ -14,9 +14,7 @@ ifndef LD_NAG
 endif
 
 #CPP      = -/lib/cpp -C -traditional
-CPP       = /lib/cpp -traditional
-
-FC        = ifort
+CPP       = /lib/cpp -traditional -ffreestanding
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 

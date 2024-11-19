@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 01.04.2005 00:12
 c
@@ -118,7 +121,7 @@ c*** ... and then the recycling source if specified
             if(nstrai.ge.nstra) then !{
               write(0,*) 'Too many strata requested: ',nstrai
               write(0,*) 'STOP ==> check the DG model and the value ',
-     ,                                 'of DEF_NSTRA in DIMENSIONS.F'
+     ,                            'of DEF_NSTRA in b2mod_dimensions.F'
               call xerrab ('Too many strata requested')
             end if !}
 

@@ -4,14 +4,14 @@
 
 # Test whether necessary variables are defined
 LD_GR    ?= -L${SOLPSLIB} -lgr
-ifdef USE_OPENMP
-ifdef USE_MPI
+ifdef SOLPS_OPENMP
+ifdef SOLPS_MPI
 LD_NAG    = `pkg-config sci_mpi_mp --libs`
 else
 LD_NAG    = `pkg-config sci_mp --libs`
 endif
 else
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LD_NAG    = `pkg-config sci_mpi --libs`
 else
 LD_NAG    = `pkg-config sci --libs`
@@ -49,7 +49,7 @@ INCMOD    = -p
 MOD       = mod
 OBJDEST   = -ef -em -J${OBJDIR}
 
-BLD       = ar rcv
+BLD       = ar rucv
 
 LD        = ${FC}
 

@@ -1,10 +1,9 @@
 # Test whether necessary variables are defined
 LD_MSCL ?= `pkg-config mscl --libs`
 
-ifdef USE_MPI
-FC       = mpif90
-else
-FC       = gfortran
+MPI_FC  ?= mpif90
+ifdef SOLPS_MPI
+FC       = ${MPI_FC}
 endif
 
 CPP      = /lib/cpp -traditional

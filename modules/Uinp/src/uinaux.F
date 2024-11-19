@@ -4,6 +4,9 @@
      , , only: ntrack, nalloys
       use b2mod_subsys
       use eirmod_solps
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
 c
 c  version : 03.01.2005 16:55
 c
@@ -57,6 +60,7 @@ c
           nprmul=(nprnli/nprnl)+1
           nprnli=nprnli/nprmul
         end if
+        usetmstr=usetmstr.or.nprnli.gt.0
       case (4)
         call resimi(ntimv)
       case (5)

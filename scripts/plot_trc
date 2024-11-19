@@ -1,0 +1,296 @@
+#!/bin/bash
+#
+# pshenoa version 2023/03/28
+# Governing script for the trancing plotting with plot_trc.py
+#
+#=======================================================================
+# USAGE:
+#
+# in the desired run directory:
+# plot_trc ntime ctime gtime
+#                if suppled ntime: cuts traces at given time,
+#                if ntime > 0 slices with time > ntime [s] are plotted
+#                if ntime < 0 slices witn time < ntime [s] are plotted
+#                if supplied ctime: cuts last ctime iterations
+#                if supplied gtime: decrease the number of points plotted
+#                if gtime >  1 every gtime-th point is plotted
+#                if gtime < -1 every gtime-th point is excluded
+#
+# by default the plot_trc.cmd file in the present directory is used
+# if absent plot_trc will search for it in the baserun directory above
+# and in the one from which the plot_trc script is called
+#========================================================================
+
+MARK=.TRC
+CMD_FILE=plot_trc.cmd
+PLT_SCRIPT=plot_trc.py
+TRC_DIR=tracing
+OUTPUT_FILE=trc
+OUTPUT_FMT=pdf
+ORIGIN_PDF=multipage.pdf
+LN_FILES='b2time.nc b2tallies.nc'
+
+B2EXE_DIR=b2mn.exe.dir
+CURRENT_DIR=${PWD##*/}
+BASERUN_DIR=../baserun
+if [ $CURRENT_DIR = $B2EXE_DIR ]
+then
+  BASERUN_DIR=../$BASERUN_DIR
+fi
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+PEXEC=plot_trc.trc.py
+PCMD=plot_trc.trc.cmd
+PLOG=plot_trc.trc.log
+PNTIME=.ntime
+WRK_DIR=wrk.trc
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+then
+  OUTPUT_FMT=$PLOT_TRC_FMT
+  echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
+else
+  echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file $OUTPUT_FILE.$OUTPUT_FMT will be used "
+fi
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$PLT_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$PLT_SCRIPT $PEXEC"
+  ln -sf "$SOURCE_DIR/$PLT_SCRIPT" "$PEXEC"
+else
+  echo "driver script $PLT_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $PCMD"
+  ln -sf "$CMD_FILE" "$PCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $BASERUN_DIR"
+  if [ -f "$BASERUN_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $BASERUN_DIR"
+    echo "ln -sf $BASERUN_DIR/$CMD_FILE $PCMD"
+    ln -sf "$BASERUN_DIR/$CMD_FILE" "$PCMD"
+  else
+    echo "no command file $CMD_FILE in $BASERUN_DIR"
+    echo "checking $CMD_LOCAL_DIR"
+    if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+      echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $PCMD"
+      ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$PCMD"
+    else
+      echo "checking $CMD_DIR"
+      if [ -f "$CMD_DIR/$CMD_FILE" ]
+      then
+        echo "command file $CMD_FILE spotted in $CMD_DIR"
+        echo "ln -sf $CMD_DIR/$CMD_FILE $PCMD"
+        ln -sf "$CMD_DIR/$CMD_FILE" "$PCMD"
+      else
+        echo "no command file $CMD_FILE found... plots wont be produced"
+      fi
+    fi
+  fi
+fi
+
+if [ -d "$WRK_DIR" ]
+then
+  echo "rm -rf $WRK_DIR"
+  rm -rf $WRK_DIR
+fi
+
+echo "mkdir $WRK_DIR"
+mkdir $WRK_DIR
+
+if [ -d "$TRC_DIR" ]
+then
+  echo "cp -rf $TRC_DIR/* $WRK_DIR"
+  cp -rf "$TRC_DIR"/* "$WRK_DIR"
+  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*.trc"
+  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*.trc
+  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*.trc
+  if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
+  then
+    for f in $LN_FILES; do {
+      if [ -f "$f" ]
+      then
+        echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
+      else
+        if [ -f "../$f" ]
+        then
+          echo "cp ../$f $WRK_DIR/$f" && cp "../$f" "$WRK_DIR/$f"
+        fi
+      fi
+    }; done
+  else
+    for f in $LN_FILES; do {
+      [ -f "$f" ] && echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
+    }; done
+  fi
+  for f in $LN_FILES; do {
+    [ ! -f "$WRK_DIR/$f" ] && echo "could not find $f file"
+    }; done
+fi
+
+ntime=0
+if [ $# -eq 0 ]
+then
+  echo "no argument given, no adjustment to $PNTIME will be done"
+else
+  ntime=$1
+  regex='^[+-]?[0-9]+([.][0-9]+|[.])?+([eE][+-][0-9]+|[eE][0-9]+)?$'
+  if [[ $ntime  =~ $regex ]]
+  then
+    ntimebc=`echo "$ntime" | cut -f 1 -d "e" | cut -f 1 -d "E"`
+    if (( $(echo "$ntimebc > 0." | bc -l)))
+    then
+      echo "positive first argument given, traces will be plotted for time > $ntime ms "
+      echo "echo $ntime > $PNTIME"
+      echo "$ntime" > "$PNTIME"
+    fi
+    if (( $(echo "$ntimebc < 0." | bc -l)))
+    then
+      echo "negative first argument given, traces will be plotted for last $ntime ms"
+      echo "echo $ntime > $PNTIME"
+      echo "$ntime" > "$PNTIME"
+    fi
+    if (( $(echo "$ntimebc == 0." | bc -l)))
+    then
+      echo "0 first argument provided, $PNTIME file will be removed"
+      echo "rm -rf $PNTIME"
+      rm -rf $PNTIME
+    fi
+  else
+    echo "WARNING: argument $ntime is not a number, skipping"
+  fi
+  shift
+  if [ $# -eq 0 ]
+  then
+    echo "only one argument given, no further adjustment to $PNTIME will be done"
+  else
+    [ ! -f "$PNTIME" ] && {
+      echo "echo 0.0 > $PNTIME"
+      echo 0.0 > $PNTIME
+    }
+    ctime=$1
+    regex='^[+-]?[0-9]+$'
+    if [[ $ctime  =~ $regex ]]
+    then
+      echo "$ctime last iterations will be cut off when plotting"
+      echo "echo $ctime >> $PNTIME"
+      echo "$ctime" >> "$PNTIME"
+    else
+      echo "WARNING: argument $ctime is not an integer number, skipping"
+    fi
+  fi
+  shift
+  if [ $# -eq 0 ]
+  then
+    echo "only two arguments given, no further adjustment to $PNTIME will be done"
+  else
+    [ ! -f "$PNTIME" ] && {
+      echo "echo 0.0 > $PNTIME"
+      echo 0.0 > $PNTIME
+      echo "echo 0 >> $PNTIME"
+      echo 0 >> $PNTIME
+    }
+    gtime=$1
+    regex='^[+-]?[0-9]+$'
+    if [[ $gtime  =~ $regex ]]
+    then
+      if (( $(echo "$gtime > 0." | bc -l)))
+      then
+        echo "positive third argument given, every $gtime-th point will be plotted "
+      fi
+      if (( $(echo "$gtime < 0." | bc -l)))
+      then
+        echo "negative third argument given, every $gtime-th point will be cut"
+      fi
+      if (( $(echo "$ntime == 0." | bc -l)))
+      then
+        echo "0 third argument provided, nothing will be done"
+      fi
+      echo "echo $gtime >> $PNTIME"
+      echo "$gtime" >> "$PNTIME"
+    else
+      echo "WARNING: argument $gtime is not an integer number, skipping"
+    fi
+  fi
+fi
+
+if [ -f "$PNTIME" ]
+then
+  echo "$PNTIME file present, containing:"
+  cat "$PNTIME"
+fi
+
+if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
+then
+  echo "workspace is set, start plotting..."
+  echo "python $PEXEC $PCMD $WRK_DIR $PLOG $PLOT_TRC_FMT"
+  python "$PEXEC" "$PCMD" "$WRK_DIR" "$PLOG" "$PLOT_TRC_FMT"
+  echo "cat $PLOG"
+  cat $PLOG
+  echo "rm -f $PLOG"
+  rm -f $PLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $PEXEC $PCMD $WRK_DIR/"
+  ls -l "$PEXEC" "$PCMD" "$WRK_DIR/"
+fi
+
+if [ "$OUTPUT_FMT" = "pdf" ]
+then
+  if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
+  then
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
+  else
+    echo "no $ORIGIN_PDF produced, trying .ps output instead"
+    OUTPUT_FMT=ps
+  fi
+fi
+
+if [ "$OUTPUT_FMT" = "ps" ]
+then
+  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ $count != 0 ]
+  then
+    echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
+    echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
+    gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+    echo "ps2pdf $OUTPUT_FILE.$OUTPUT_FMT $OUTPUT_FILE.pdf"
+    ps2pdf "$OUTPUT_FILE.$OUTPUT_FMT" "$OUTPUT_FILE.pdf"
+  else
+    echo "no *.ps produced, nothing to do"
+  fi
+fi
+
+echo "cleaning..."
+echo "rm -rf $PEXEC $PCMD $WRK_DIR $MARK"
+rm -rf "$PEXEC" "$PCMD" "$WRK_DIR" "$MARK"
+
+if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ]
+then
+  echo "plot_trc finished check $OUTPUT_FILE.$OUTPUT_FMT for the result"
+else
+  echo "no $OUTPUT_FILE.$OUTPUT_FMT produced, make sure proper $CMD_FILE is supplied"
+fi

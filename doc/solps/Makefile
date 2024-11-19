@@ -4,17 +4,39 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
+MAKES = Makefile
 LATEX ?= $(shell which_latex)
+LATEX_VERSION = $(shell ${LATEX} --version | head -1 | cut -d ' ' -f 5 | cut -c 1-4 )
 PDFTOPS ?= $(shell which_pdftops)
 PYTHON ?= python
-INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F DIMENSIONS.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex
+INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex Old_packages.tex
+ifeq ($(shell [ -s ${B25DIR}/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+FILE_DIM = b2mod_dimensions.F
+TARG_DIM = ${B25DIR}/src/modules/b2mod_dimensions.F
+else
+FILE_DIM = DIMENSIONS.F
+TARG_DIM = ${B25DIR}/src/include/DIMENSIONS.F
+endif
+INCLUDES += ${FILE_DIM}
 BIBFILES=aps.bib aug.bib divgas.bib extern.bib general.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
 STYFILES=fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
-FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat input_for_refusr_advanced.dat input_for_refusr_minimal.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py Makefile ${BIBFILES} ${STYFILES}
+FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat input_for_refusr_advanced.dat input_for_refusr_minimal.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py MacOS/compiler.darwin.gfortran MacOS/date2.c Makefile ${BIBFILES} ${STYFILES}
 
 ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   include Makefile.local
   FILES += Makefile.local
+  MAKES += Makefile.local
+endif
+
+# Include dependency on global SOLPS environment settings
+ifdef SOLPS_CPP
+  MAKES += ${SOLPSTOP}/Makefile
+endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+endif
+ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
 all: solps.pdf solps.ps
@@ -108,8 +130,8 @@ b2plot.commands: ${B25DIR}/src/b2plot/b2plot.F
 	-[ -e b2plot.commands ] && rm b2plot.commands || echo > /dev/null
 	sed 's:^     [^ ]:@@@:' ${B25DIR}/src/b2plot/b2plot.F | awk 'BEGIN{save=""}/^[^@][^@][^@]/&&save!=""{print save}/^[^@][^@][^@]/{save=$$0}/^@@@/{save=save" "$$0}END{print save}' | sed 's; *@@@ *;;g' | grep -v "IGNORE" | egrep "case *\( *'|description *=" | sed -e "s;.*case *('\(.*\)');cmd: \1;" -e "s; *description *= *'\(.*\)';desc: \1;" -e "s;' //';;" -e "s;'//';;" | awk -F: 'BEGIN{save=""}/^cmd/&&save!=""{print save}/^cmd:/{save=$$2}/^desc/{save=save"\t "$$2}END{print save}' | sed 's:\! ::' | sed "s:',':,:g" | sed "s:'':':g" | expand > b2plot.commands
 
-DIMENSIONS.F: ${B25DIR}/src/include/DIMENSIONS.F
-	ln -sf ${B25DIR}/src/include/DIMENSIONS.F .
+${FILE_DIM}: ${TARG_DIM}
+	ln -sf ${TARG_DIM} .
 
 B2_5.Makefile: ${B25DIR}/Makefile
 	ln -sf ${B25DIR}/Makefile B2_5.Makefile
@@ -120,11 +142,19 @@ B2_5.config.ITER.ifort64: ${B25DIR}/config/config.ITER.ifort64
 B2_5.config.common.ifort64: ${B25DIR}/config/config.common.ifort64
 	ln -sf ${B25DIR}/config/config.common.ifort64 B2_5.config.common.ifort64
 
-LICENSE.tex: ${SOLPSTOP}/LICENSE.md
-	pandoc ${SOLPSTOP}/LICENSE.md -o LICENSE.tex || cat ${SOLPSTOP}/LICENSE.md | sed -e "s:#::g" > LICENSE.tex
+LICENSE.tex: ${SOLPSTOP}/LICENSE.md ${MAKES}
+	( pandoc ${SOLPSTOP}/LICENSE.md -o /tmp/LICENSE.tex ; cat /tmp/LICENSE.tex | sed -e 's:©:\\copyright :g' > LICENSE.tex ; rm /tmp/LICENSE.tex ) || cat ${SOLPSTOP}/LICENSE.md | sed -e "s:#::g" -e 's:©:\\copyright :g' > LICENSE.tex
 
 CONTRIBUTING.tex: ${SOLPSTOP}/CONTRIBUTING.md
 	pandoc ${SOLPSTOP}/CONTRIBUTING.md -o CONTRIBUTING.tex || cat ${SOLPSTOP}/CONTRIBUTING.md | sed -e "s:#::g" -e "s:_:\\\_:g" -e 's:$$SOLPSTOP:\\$$SOLPSTOP:g' -e 's:$$:\\\\:' -e 's:\^:\\\^:g' > CONTRIBUTING.tex
+
+Old_packages.tex: ${MAKES}
+ifeq ($(shell test ${LATEX_VERSION} -lt 2015; echo $$?),0)
+	echo "\usepackage{fixltx2e}" > Old_packages.tex
+else
+	@- rm -f Old_packages.tex
+	touch Old_packages.tex
+endif
 
 SOLPS_versions: force
 	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
@@ -134,11 +164,10 @@ SOLPS_versions: force
 	@( cd ${SOLPSTOP}/modules/DivGeo ; git describe --tags --always | awk '{print "DivGeo version : ",$$1}' ) >> SOLPS_versions_new
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
-solps-iter_git.log:
-	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
+solps-iter_git.log: ${MAKES}
+	( cd ${SOLPSTOP} ; ${GIT} log --oneline | sed -e "s:ü:ue:g" -e "s:ö:oe:g" ) > solps-iter_git.log
 
-update_log:
-	( cd ${SOLPSTOP} ; ${GIT} log --oneline ) > solps-iter_git.log
+update_log: solps-iter_git.log
 
 update: ${INCLUDES}
 
@@ -152,7 +181,7 @@ complete:
 	${MAKE} solps.pdf
 
 clean:
-	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile DIMENSIONS.F SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps

@@ -1,5 +1,29 @@
 #! /bin/tcsh -f
 
+# This script sets up the environment for SOLPS-ITER (paths, env, aliases, etc.)
+# including the site identification via HOST_NAME and COMPILER variables.
+# It is intended to be sourced from the command line, not executed.
+#
+# The main variables SOLPSTOP, HOST_NAME, COMPILER are determined according
+# to a precedence logic described below.
+#
+# Variable SOLPSTOP is determined with decreasing priority from:
+#   1. $SOLPSTOP_FORCE
+#   2. Automatic detection, fallback to $PWD
+#
+# Variable HOST_NAME is determined with decreasing priority from:
+#   1. $SOLPS_HOST_NAME_FORCE
+#   2. SETUP/setup.csh.HOST_NAME.local file (sourced if present)
+#   3. output of `whereami` script
+#   4. fallback to UNKNOWN
+#
+# Variable COMPILER is determined with decreasing priority from:
+#   1. First argument to `source setup.csh` command
+#   2. $SOLPS_COMPILER_FORCE
+#   3. output of `default_compiler` script
+#   4. fallback to ifort64
+#
+
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
@@ -9,55 +33,75 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo or online at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMDesign/Code%20Documentation/solps-doc/solps.pdf
-echo The Eirene manual is located at http://www.eirene.de/
+echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
+echo or online at http://www.eirene.de/
 
-# Obtain the directory where setup.csh is located to use as SOLPSTOP
-setenv LAST_COMMAND `echo $_`
-if (`echo ${LAST_COMMAND}` == "") then
-  setenv SOLPSTOP $PWD
+( ps -p $$ | grep -Eq "tcsh|csh" ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
+
+# Obtain the directory where setup.csh is located to use as SOLPSTOP,
+# or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
+if ( $?SOLPSTOP_FORCE ) then
+  setenv SOLPSTOP $SOLPSTOP_FORCE
 else
-  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
-  setenv REAL_FILE `eval echo ${SETUP_FILE}`
-  setenv SETUP_PATH `dirname ${REAL_FILE}`
-  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  setenv LAST_COMMAND `echo $_`
+  if (`echo ${LAST_COMMAND}` == "") then
+    setenv SOLPSTOP $PWD
+  else
+    setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+    setenv REAL_FILE `eval echo ${SETUP_FILE}`
+    setenv SETUP_PATH `dirname ${REAL_FILE}`
+    setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  endif
 endif
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
-  echo Loading SETUP/setup.csh.HOST_NAME.local.
-  source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
-else
-  if (-s ${SOLPSTOP}/whereami) then
-    set iamat=`${SOLPSTOP}/whereami|tail -1`
-    echo Running at $iamat.
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  if ( $?SOLPS_HOST_NAME_FORCE ) then
+    setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
+    echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
+  else if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+    echo Loading SETUP/setup.csh.HOST_NAME.local.
+    source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
   else
-    set iamat="UNKNOWN"
+    if (-s ${SOLPSTOP}/whereami) then
+      set iamat=`${SOLPSTOP}/whereami|tail -1`
+      echo Running at $iamat.
+    else
+      set iamat="UNKNOWN"
+    endif
+    switch ($iamat)
+    case "*UNKNOWN":
+      setenv HOST_NAME UNKNOWN
+      breaksw
+    default:
+      setenv HOST_NAME ${iamat}
+    endsw
   endif
-  switch ($iamat)
-  case "*UNKNOWN":
-    setenv HOST_NAME UNKNOWN
-    breaksw
-  default:
-    setenv HOST_NAME ${iamat}
-  endsw
+else   # Using MacOS, so assuming to work on a local device
+  setenv SYSNAME `uname`_`arch`
+  setenv ARCH `arch`
+  echo Running on MacOS, architecture ${ARCH}.
+  setenv HOST_NAME 'DARWIN'
 endif
 
 # COMPILER can also be the argument to setup.csh call
-if($1 == "") then
-  if (-s ${SOLPSTOP}/default_compiler) then
-    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
-    echo Using compiler $COMPILER.
-  else
-    setenv COMPILER ifort64
-    echo Assuming default compiler ifort64.
-  endif
-else
+if ($1 != "") then
   setenv COMPILER $1
   echo Using specified compiler $1.
+else if ( $?SOLPS_COMPILER_FORCE ) then
+  setenv COMPILER $SOLPS_COMPILER_FORCE
+  echo "Using compiler $COMPILER (set by SOLPS_COMPILER_FORCE)".
+else if (-s ${SOLPSTOP}/default_compiler) then
+  setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
+  echo Using compiler $COMPILER.
+else
+  setenv COMPILER ifort64
+  echo Assuming default compiler ifort64.
 endif
+
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
@@ -65,19 +109,21 @@ endif
 limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
-set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
-if ((-f $setup.env.local.${USER}) && \
-    ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
-    ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
-    (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
-      ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
-    (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
-    echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
-    source $setup.env.local.${USER}
-    exit 0
-else
-    set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
-    env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+  if ((-f $setup.env.local.${USER}) && \
+      ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
+      ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+      (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
+        ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
+      (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
+      echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
+      source $setup.env.local.${USER}
+      exit 0
+  else
+      set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
+      env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+  endif
 endif
 
 if (-x `which gmake`) then
@@ -137,26 +183,24 @@ set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/
 set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-# Create mirror scripts directories
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+# Create mirror scripts directory links
+#   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
+set link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
+if (! $?NO_MPI) then
+  foreach suffix ( ".mpi" ".mpi.debug" ".openmp.mpi" ".openmp.mpi.debug" )
+    if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+    if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
+  end
+endif
+foreach suffix ( ".openmp" ".debug" ".openmp.debug" )
+  if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+  if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
+end
 
 # Note: in case of name clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
-setenv OLD_PATH    ${PATH}
-setenv PATH        ${SOLPS_PATH}:${PATH}
+setenv OLD_PATH    "${PATH}"
+setenv PATH        "${SOLPS_PATH}:${PATH}"
 if ($?LD_LIBRARY_PATH) then
   setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 else
@@ -191,8 +235,8 @@ setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) prin
 setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 
-setenv PATH_FOR_LOOP ${PATH}
-setenv MANPATH_FOR_LOOP ${MANPATH}
+setenv PATH_FOR_LOOP "${PATH}"
+setenv MANPATH_FOR_LOOP "${MANPATH}"
 
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
@@ -269,6 +313,19 @@ if ($?NO_MOTIF) then
   if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
 endif
 
+# Check if Manual can be built
+setenv LATEX `${SOLPSTOP}/scripts/which_latex`
+if ($LATEX == "") then
+  setenv NO_MANUAL true
+  echo 'No LaTeX executable found: Manual will not be built'
+endif
+
+# Check if CMake available for Eirene compilation
+if (! -x `which cmake`) then
+  setenv NO_CMAKE true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+endif
+
 # Add any local settings if present
 if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
   echo Loading SETUP/setup.csh.local.
@@ -276,16 +333,20 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-set setup_post = `mktemp`
-env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
-   -e '1i# Generated environment cache. Do not edit!' >! $setup_post
-grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
-sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
-grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
-alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
-    -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
-    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local.${USER}
-rm -f $setup_pre $setup_post $alias_pre
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  set setup_post = `mktemp`
+  env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
+     -e '1i# Generated environment cache. Do not edit!' >! $setup_post
+  grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
+  sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
+  grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
+  alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+      -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+      -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local.${USER}
+  rm -f $setup_pre $setup_post $alias_pre
+endif
 
-# List loaded modules
-module list
+# List loaded modules, assuming to work on some HPC cluster
+if (`uname` != "Darwin") then
+  module list
+endif

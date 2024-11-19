@@ -1,3 +1,6 @@
+ifeq (${FC},f77)
+FC = gfortran
+endif
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 EQUIVS    =
@@ -22,7 +25,7 @@ INCMOD    = -I
 MOD       = mod
 OBJDEST  += -o ${OBJDIR}/$*.o
 
-BLD       = ar rcv
+BLD       = ar rucv
 
 LD        = ${FC}
 

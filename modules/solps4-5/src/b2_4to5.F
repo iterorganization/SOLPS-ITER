@@ -1,8 +1,8 @@
       module b2_4to5
       use b2mod_types
       use b2mod_subsys
+      use b2mod_dimensions
       implicit none
-#     include "DIMENSIONS.F"
 
       real (kind=R8), allocatable ::
      *  fch_4(:,:,:),  fch_32_4(:,:,:), fch_52_4(:,:,:), fch_p_4(:,:,:),
@@ -297,6 +297,7 @@ cxpb
       use cinit
      , , only: indsrc
       use ceirsrt
+      use b2mod_dimensions
       implicit none
 #     include <KOPPLDIM.F>
 #     include <COMDIM.F>
@@ -679,8 +680,8 @@ cxpb
       use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_external
+      use b2mod_dimensions
       implicit none
-#     include "DIMENSIONS.F"
 
       integer nx, ny, ns
       character*120 lblgm
@@ -1552,7 +1553,7 @@ c Fill out b2mod_neutrals_namelist data
       end do
 
 c Fill out some b2mod_ma28 data
-      nltrsol = nltrsol_4
+      nltrsol_5p = nltrsol_4
 
 c Fill out b2mod_numerics_namelist data
       call alloc_b2mod_numerics(nx,ny,ns)
@@ -2249,9 +2250,9 @@ c
      .   '''b2tfhe_no_current'''//tab//tab//'''1'''
       endif
       write(99,'(a,i1,a)')
-     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol,''''
+     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol_5p,''''
       write(98,'(a,i1,a)')
-     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol,''''
+     . '''b2ux5p_nltrsol'''//tab//tab//'''',nltrsol_5p,''''
       write(99,'(a)')
      . '''b2ux5p_style'''//tab//tab//tab//'''2'''
       write(98,'(a)')
@@ -2971,7 +2972,7 @@ c
       write(34,'(a,1pe9.2,a)') 'NEUT_SCL_LIM=',neut_scl_lim,','
       if(n_spcsrf_4.gt.0) then !DPC
         write(34,'(a,i2,a)') 'N_SPCSRF=',n_spcsrf_4,','
-        ii=minloc(l_spcsrf_4)
+        ii=minloc(abs(l_spcsrf_4))
         if (ii(1).eq.1) then
           is = 0
         else if (l_spcsrf_4(ii(1)).eq.0) then
@@ -3091,25 +3092,33 @@ c
       do is = 1, nspecies_4
         todo = todo .or. ffb_cntr_4(is).ne.0 .or. cfb_cntr_4(is).ne.0
         if (ffb_cntr_4(is).eq.1) then
-          if (ffb_include_neutrals_4(is)) then
-            na_feedback_choice(is-1) = 4
+          if (ffb_include_core_4(is)) then
+            if (ffb_include_neutrals_4(is)) then
+              na_feedback_choice(is-1) = 4
+            else
+              na_feedback_choice(is-1) = 5
+            endif
+            na_feedback_ix1(is-1) = 0
+            na_feedback_ix2(is-1) = nx-1
+            na_feedback_iy1(is-1) = 0
+            na_feedback_iy2(is-1) = ny-1
           else
-            na_feedback_choice(is-1) = 5
-          endif
+            if (ffb_include_neutrals_4(is)) then
+              na_feedback_choice(is-1) = 11
+            else
+              na_feedback_choice(is-1) = 5
+              na_feedback_ix1(is-1) = 0
+              na_feedback_ix2(is-1) = nx-1
+              na_feedback_iy1(is-1) = jsep+1
+              na_feedback_iy2(is-1) = ny-1
+            endif
+          end if
           if (ffb_rate_4(is).ge.0.0_R8) then
             na_feedback_option(is-1) = 4
           else
             na_feedback_option(is-1) = 5
           endif
           na_feedback_actuator(is-1) = 1
-          na_feedback_ix1(is-1) = 0
-          na_feedback_ix2(is-1) = nx-1
-          if (ffb_include_core_4(is)) then
-            na_feedback_iy1(is-1) = 0
-          else
-            na_feedback_iy1(is-1) = jsep+1
-          endif
-          na_feedback_iy2(is-1) = ny-1
           na_feedback_target(is-1) = ffb_const_4(is)
           na_feedback_const(is-1) = ffb_const_4(is)
           na_feedback_alpha(is-1) = ffb_over_4(is)
@@ -3118,8 +3127,8 @@ c
           else
             na_feedback_beta(is-1) = 0.0_R8
           endif
-          na_feedback_puff_min(is-1) = 0.0_R8
-          na_feedback_puff_max(is-1) = ffb_smax_4(is)
+          na_feedback_actuator_min(is-1) = 0.0_R8
+          na_feedback_actuator_max(is-1) = ffb_smax_4(is)
           na_feedback_overshoot(is-1) = 0.0_R8
           na_feedback_time(is-1) = ffb_start_4(is)
         else if (ffb_cntr_4(is).eq.2) then
@@ -3134,8 +3143,8 @@ c
           na_feedback_const(is-1) = ffb_const_4(is)
           na_feedback_alpha(is-1) = ffb_over_4(is)
           na_feedback_beta(is-1) = 0.0_R8
-          na_feedback_puff_min(is-1) = 0.0_R8
-          na_feedback_puff_max(is-1) = ffb_smax_4(is)
+          na_feedback_actuator_min(is-1) = 0.0_R8
+          na_feedback_actuator_max(is-1) = ffb_smax_4(is)
           na_feedback_overshoot(is-1) = 0.0_R8
           na_feedback_time(is-1) = ffb_start_4(is)
         end if
@@ -3159,8 +3168,8 @@ c
             na_feedback_alpha(is-1) = 0.01_R8
           end if
           na_feedback_beta(is-1) = 0.0_R8
-          na_feedback_puff_min(is-1) = 0.0_R8
-          na_feedback_puff_max(is-1) = cfb_smax_4(is)
+          na_feedback_actuator_min(is-1) = 0.0_R8
+          na_feedback_actuator_max(is-1) = cfb_smax_4(is)
           na_feedback_overshoot(is-1) = 0.0_R8
         end if
       end do
@@ -3213,12 +3222,14 @@ c
      &    maxval(na_feedback_choice(0:nspecies-1)).gt.0)
      > write(36,hlp_frm)
      .     'NA_FEEDBACK_CONST=   ',na_feedback_const(0:nspecies-1)
-      if (maxval(na_feedback_puff_min(0:nspecies-1)).gt.0.0_R8)
+      if (maxval(na_feedback_actuator_min(0:nspecies-1)).gt.0.0_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_PUFF_MIN=',na_feedback_puff_min(0:nspecies-1)
-      if (maxval(na_feedback_puff_max(0:nspecies-1)).gt.0.0_R8)
+     .     'NA_FEEDBACK_ACTUATOR_MIN=',
+     .      na_feedback_actuator_min(0:nspecies-1)
+      if (maxval(na_feedback_actuator_max(0:nspecies-1)).gt.0.0_R8)
      > write(36,hlp_frm)
-     .     'NA_FEEDBACK_PUFF_MAX=',na_feedback_puff_max(0:nspecies-1)
+     .     'NA_FEEDBACK_ACTUATOR_MAX=',
+     .      na_feedback_actuator_max(0:nspecies-1)
       if (maxval(na_feedback_overshoot(0:nspecies-1)).gt.0.0_R8)
      > write(36,hlp_frm) 'NA_FEEDBACK_OVERSHOOT=',
      .     na_feedback_overshoot(0:nspecies-1)

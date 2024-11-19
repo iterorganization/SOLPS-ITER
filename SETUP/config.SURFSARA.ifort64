@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR ?= ${EBROOTNETCDF}
@@ -36,12 +36,26 @@
 #LD_NETCDF  = -L${NCDIR}/lib
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
-LD_GKS     = -L${GLI_HOME} -lgks -L${EBROOTZLIB}/lib/ -lz -lgfortran
+LD_GKS     = -L${GLI_HOME} -lgks -L${EBROOTZLIB}/lib -lz -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L${EBROOTCAIRO}/lib -lcairo -L${EBROOTFREETYPE}/lib -lfreetype -L${EBROOTX11}/lib -lX11 -lxcb -lgfortran
 LD_NAG     = -L${EBROOTIMKL}/mkl/lib/intel64/  -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64  -lmkl_intel_thread -lmkl_core -L${EBROOTIMKL}/lib/intel64/ -liomp5 -lpthread
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib64 -lMdsLib_client -lMdsIpShr -lMdsShr -l TreeShr
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = ${EBROOTX11}/lib/libX11.so
+LIBZ       = ${EBROOTZLIB}/lib/libz.so
+ADDLIBS    = -lgfortran
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpiifort
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+endif
 
 #
 # Preprocessor options

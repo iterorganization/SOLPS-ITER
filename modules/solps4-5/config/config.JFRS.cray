@@ -7,7 +7,7 @@ CPP5OPTS = 		# options for CPP (double precision)
 
 FC      = ftn
 FCOPTS  = -e0 -ez
-ifndef USE_OPENMP
+ifndef SOLPS_OPENMP
 FCOPTS += -hnoomp
 endif
 ifdef SOLPS_DEBUG

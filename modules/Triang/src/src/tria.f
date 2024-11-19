@@ -489,7 +489,7 @@ c      lhlp200=ihlp200.eq.281 !###
       print *
       print '(a,2i6,a,3i6)',' before *200: ',ihlp200,khlp200,
      ,                  '. npoin,npartfr,nfront=',npoin,npartfr,nfront
-      call ioflush
+      flush(6)
       if(lhlp200) then !{
         print *
         print *,'    i   ik'
@@ -507,7 +507,7 @@ c      lhlp200=ihlp200.eq.281 !###
         ib = ifront(2,npartfr)
         print '(1x,a,1p,4e12.4)','xa1,ya1,xa2,ya2=',
      .                            x(ia),y(ia),x(ib),y(ib)
-        call ioflush
+        flush(6)
         call filepltd(2,inodcon)  !###
         stop ': trap at *200' !###
       end if !}
@@ -520,7 +520,7 @@ c      lhlp200=ihlp200.eq.281 !###
       if(lhlp200) then !{
         print *,'*200: ',jhlp200,'. npartfr,frad,epsang=',
      ,                                              npartfr,frad,epsang
-        call ioflush
+        flush(6)
         if(jhlp200.gt.nhlp200) stop 'stopped at *200'
       end if !}
 !###}
@@ -548,7 +548,7 @@ C---- TREAT ONE FRONTIER PART
 !###{
       if(lhlp200) then !{
         print *,'after optc. ic,xc=',ic,xc
-        call ioflush
+        flush(6)
       end if !}
 !###}
 
@@ -560,7 +560,7 @@ C---- TREAT ONE FRONTIER PART
         write (*,hlp_frm)
      ,   'after canlist(',frad,',',epsang,
      ,   '). ncandi,icandi=',ncandi,icandi(1:ncandi)
-        call ioflush
+        flush(6)
       end if !}
 !###}
 
@@ -570,7 +570,7 @@ C---- TREAT ONE FRONTIER PART
         write (hlp_frm,'(a,i3,a)') '(1x,a,',ncandi+1,'i6)'
         write (*,hlp_frm) 'after addcan. ncandi,icandi=',
      ,                                   ncandi,icandi(1:ncandi)
-        call ioflush
+        flush(6)
       end if !}
 !###}
 
@@ -580,7 +580,7 @@ C----                      GRID POINTS
 !###{
       if(lhlp200) then !{
         print *,'after choice. found,inodcon=',found,inodcon
-        call ioflush
+        flush(6)
       end if !}
 !###}
 

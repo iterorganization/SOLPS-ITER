@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
        NCDIR ?= ${NETCDF_DIR}
@@ -34,7 +34,7 @@
 # Variables for linking
 #
 
-ifdef USE_MPI
+ifdef SOLPS_MPI
 LD_NETCDF  = `pkg-config pnetcdf --libs`
 else
 LD_NETCDF  = `pkg-config netcdf-fortran --libs`
@@ -50,11 +50,22 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 
+LIBGKS     = ${SOLPSLIB}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
+#
+# Provide compiler
+#
+
+FC         = ftn
+CC         = cc
+MPI_FC     = ${FC}
+
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNCAR4 -DF2003
+SOLPS_CPP      = -DNO_NAG -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =

@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
 #    NODENAME ?= $(shell echo `hostname`)
@@ -38,9 +38,8 @@
  MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
        MPDIR ?=
 
-
 #
-# Variables of linking, using pkg-config
+# Variables for linking, using pkg-config
 #
 LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 
@@ -58,6 +57,21 @@ ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
 endif
 #LD_MPI     = -lmpi2
+
+LIBGKS     = ${GLI_HOME}/lib/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lXmu -ldl
+
+#
+# Provide compiler
+#
+
+MPI_FC    ?= mpif90
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+MPDIR     ?= ${I_MPI_ROOT}
+LD_MPI    ?= -L${MPDIR}/lib64
+endif
 
 #
 # Preprocessor options

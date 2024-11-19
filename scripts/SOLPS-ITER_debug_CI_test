@@ -1,12 +1,16 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
+# Create additional Eirene dependencies file to avoid a recurring compiler timing error
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/emissivity.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+
 # Compile the code with debug options activated
-echo "LDOPTS += -mcmodel large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
-echo "FCOPTS += -mcmodel large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 make listobj_nox_debug depend_nox_debug
-make nc2text_simple
-make MAKE_OPTIONS=-j8 nox_build_debug
+make nc2text_simple nc_reduce
+make divgeo_nox_debug
+make MAKE_OPTIONS=-j8 solps_nox_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh
@@ -23,9 +27,8 @@ cd run_standalone_debug_new
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
 cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
-cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2*.nc .
 touch b2fstati
-setup_baserun_eirene_links
+setup_baserun_B25_links
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
-b2run b2mn
+b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone ./

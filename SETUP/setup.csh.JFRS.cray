@@ -16,6 +16,7 @@ setenv GLI_HOME ${SOLPSTOP}/lib
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
 setenv CRAYPE_LINK_TYPE dynamic
 setenv SYSNAME amd64_sles15
+setenv NO_MANUAL true
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -45,6 +46,7 @@ setenv DBX gdb4hpc
 
 # Compilers
 setenv FC ftn
+setenv MPI_FC ftn
 setenv CC cc
 setenv CXX CC
 

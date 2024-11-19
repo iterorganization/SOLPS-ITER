@@ -1,22 +1,12 @@
-#  VERSION : 16.12.2004 23:58
-
-# The version relying on Fujitsu Fortran installed on AFS
-
 # Test whether necessary variables are defined
-ifndef LD_GR
-  $(error LD_GR not defined)
-endif
-ifndef LD_GKS
-  $(error LD_GKS not defined)
-endif
-ifndef LD_NAG
-  $(error LD_NAG not defined)
-endif
+GLI_HOME ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gks
+GR_ROOT  ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gr
+NAGDIR   ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/nag
+LD_GR    ?= -L${GR_ROOT} -lgr
+LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
+LD_NAG   ?= -L${NAGDIR} -lnag -lstdc++
 
-#CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
-
-FC        = gfortran
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -fcheck=all -fbacktrace
@@ -24,7 +14,6 @@ endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
 
 #!!!Local Variables:

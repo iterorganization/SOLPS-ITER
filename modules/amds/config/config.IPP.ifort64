@@ -1,6 +1,8 @@
 #LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lXft -lpthread -lm
 LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXft -lpthread -lm
 
+MAKETAGS = etags -o
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
