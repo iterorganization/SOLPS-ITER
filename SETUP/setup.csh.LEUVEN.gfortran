@@ -38,7 +38,7 @@ module load motif/2.3.8-GCCcore-10.3.0
 module load Pango/1.48.5-GCCcore-10.3.0
 module load Emacs/28.1-GCCcore-10.3.0
 module load gnuplot/5.4.2-GCCcore-10.3.0
-# module load PETSc/3.15.1-intel-2021a
+module load PETSc/3.15.1-foss-2021a
 # Debugger (set environment variable DBX)
 module load ArmForge/22.1.2
 setenv DBX ddt
@@ -52,9 +52,17 @@ setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade_3.16_latest
 # module load Java/1.8.0_192
 ##setenv JAVA_HOME /staging/leuven/stg_00030/java
-# setenv IPOPTDIR /vsc-hard-mounts/leuven-data/321/vsc32100/Ipopt/install
 # setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
 # setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
-# setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPOPTDIR}/lib:${PETSC_DIR}/lib
+if ($?PETSC_DIR) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
+  setenv PETSC_VERSION_MAJOR `grep -i PETSC_VERSION_MAJOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION_MINOR `grep -i PETSC_VERSION_MINOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION $PETSC_VERSION_MAJOR$PETSC_VERSION_MINOR
+  unsetenv PETSC_VERSION_MAJOR PETSC_VERSION_MINOR
+  if ($PETSC_VERSION > 316) then
+    setenv TAO_NEW yes
+  endif
+endif
 alias set_d 'source $SOLPSTOP/scripts/diff_d'
 alias set_b 'source $SOLPSTOP/scripts/diff_b'
