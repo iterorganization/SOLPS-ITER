@@ -25,7 +25,7 @@ c*** The list of keywords to work on:
      ,  'bcene','bceni','bcpot','enepar','enipar',
      ,  'potpar','bccon','conpar','bcmom','mompar',
      ,  'lcbs','nniso','nxiso1','nxiso2','nyiso1',
-     ,  'nyiso2','niiso','teiso','tiiso',19*' '/
+     ,  'nyiso2','niiso','teiso','tiiso','bcenk','enkpar',17*' '/
       data (chrpl(i,3),i=1,nkwrd) /
      /  'nstrai','crcstra','','rcstart','rcend',
      ,  'species_start','species_end','eb2spcr','eb2atcr','b2espcr',
