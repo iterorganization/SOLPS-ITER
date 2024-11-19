@@ -147,12 +147,15 @@ c*** Take the data from the boundary default
             leebnds(izn,iknd)=leebndx(0,iknd)
             leibnds(izn,iknd)=leibndx(0,iknd)
             lpobnds(izn,iknd)=lpobndx(0,iknd)
+            lenkbnds(izn,iknd)=lenkbndx(0,iknd)
             beebnds(izn,1,iknd)=beebndx(0,1,iknd)
             beibnds(izn,1,iknd)=beibndx(0,1,iknd)
             bpobnds(izn,1,iknd)=bpobndx(0,1,iknd)
             beebnds(izn,2,iknd)=beebndx(0,2,iknd)
             beibnds(izn,2,iknd)=beibndx(0,2,iknd)
             bpobnds(izn,2,iknd)=bpobndx(0,2,iknd)
+            benkbnds(izn,1,iknd)=benkbndx(0,1,iknd)
+            benkbnds(izn,2,iknd)=benkbndx(0,2,iknd)
             if (nspcpls.gt.size(lcobnds,1)) then
               write(*,*) ' Problem requires ',nspcpls,' ion species.'
               write(*,*) ' But only ',DEF_NSD,' are declared!'

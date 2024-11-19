@@ -62,6 +62,7 @@ ifeq (,$(findstring CentOS,$(OS)))
  MPI_FC   ?= mpiifort -fc=mpiifx
  FCVOPTS   = -check nouninit
  FN        = ifx
+ CC        = icx
 else
  MPI_FC   ?= mpiifort
 endif
