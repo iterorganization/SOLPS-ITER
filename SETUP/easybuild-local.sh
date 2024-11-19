@@ -127,10 +127,10 @@ by putting them into easyconfigs.local
     SETUP/easybuild-local.sh # defaults to foss modules
     SETUP/easybuild-local.sh --imas-foss 
     SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.10.3-GCC-10.2.0-DD-3.38.1.eb
+    SETUP/easybuild-local.sh GGD-1.10.3-GCC-12.2.0-DD-3.38.1.eb
     sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
-    SETUP/easybuild-local.sh Viz-2.6.1-foss-2020b.eb --robot
-    SETUP/easybuild-local.sh SimDB-0.7.1-foss-2020b.eb --robot
+    SETUP/easybuild-local.sh Viz-2.6.1-foss-2022b.eb --robot
+    SETUP/easybuild-local.sh SimDB-0.7.1-foss-2022b.eb --robot
 
 ### SOLPS-ITER ifort64 modules
 
@@ -162,7 +162,7 @@ and forcing rebuild even if built succesfully with
 
     SETUP/easybuild-local.sh --force \
       --try-amend="configopts=--with-slurm --with-pmi=/usr --with-pmi-libdir=/usr/lib64" \
-      OpenMPI-4.1.2-GCC-10.2.0.eb
+      OpenMPI-4.1.4-GCC-12.2.0.eb
 
 ## HTTP authentication setup
 
@@ -215,7 +215,7 @@ and for that use lower threads or even `--parallel 1` for serial build.
 IMAS installer is needed to build IMAS modules. There is no EasyBuild
 for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
 that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.38.1-4.11.1-2020b`
+having toolchain in its name. For example `IMAS/3.38.1-4.11.1-2022b`
 module may or may not contain `ifort` modules. This means that
 `--imas-foss` will build only *foss* FORTRAN modules, while
 `--imas-intel` will build only *intel* FORTRAN modules.
@@ -230,7 +230,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.38.1-4.11.1-2020b', EXTERNAL_MODULE),
+    ('IMAS/3.38.1-4.11.1-2022b', EXTERNAL_MODULE),
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -243,7 +243,7 @@ or
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/GGD/* 
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/AMNS/*
 
-### Texlive 20210216-GCCcore-10.2.0
+### Texlive 20210216-GCCcore-12.2.0
 
 Incorrect EasyBuild file was corrected by changing version in install command
 
@@ -337,13 +337,13 @@ of PyQt5 too.
 
 ~~~ bash
 mkdir -p easyconfigs.local/p/PyQt5
-cp easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.2-GCCcore-10.2.0.eb  easyconfigs.local/p/PyQt5/
-sed -i -e s/--no-designer-plugin// easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-10.2.0.eb
-vi easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-10.2.0.eb # to Qt/5.15.2
-SETUP/easybuild-local.sh PyQt5-5.15.2-GCCcore-10.2.0.eb --force
+cp easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb  easyconfigs.local/p/PyQt5/
+sed -i -e s/--no-designer-plugin// easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb
+vi easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb # to Qt/5.15.2
+SETUP/easybuild-local.sh PyQt5-5.15.2-GCCcore-12.2.0.eb --force
 
 # INTEL toolchain
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-intel-2020b.eb --skip-test-step
+SETUP/easybuild-local.sh SciPy-bundle-2020.11-intel-2022b.eb --skip-test-step
 ~~~
 
 Note that there can be only slight version differences bewteen Qt5 and PyQt5.
@@ -352,11 +352,11 @@ Note that there can be only slight version differences bewteen Qt5 and PyQt5.
 #### Changing Qt5 version in gnuplot
 
      mkdir -p easyconfigs.local/g/gnuplot
-     cp easybuild.local/easybuild/easyconfigs/g/gnuplot/gnuplot-5.4.1-GCCcore-10.2.0.eb easyconfigs.local/g/gnuplot/
-     sed -i -e /Qt5/s/5.14.2/5.15.2/ easyconfigs.local/g/gnuplot/gnuplot-5.4.1-GCCcore-10.2.0.eb
-     SETUP/easybuild-local.sh gnuplot-5.4.1-GCCcore-10.2.0.eb --force
+     cp easybuild.local/easybuild/easyconfigs/g/gnuplot/gnuplot-5.4.1-GCCcore-12.2.0.eb easyconfigs.local/g/gnuplot/
+     sed -i -e /Qt5/s/5.14.2/5.15.2/ easyconfigs.local/g/gnuplot/gnuplot-5.4.1-GCCcore-12.2.0.eb
+     SETUP/easybuild-local.sh gnuplot-5.4.1-GCCcore-12.2.0.eb --force
 
-#### HDF5-1.10.7-iimpi-2020b.eb used by netCDF-4.7.4-iimpi-2020b.eb
+#### HDF5-1.10.7-iimpi-2022b.eb used by netCDF-4.7.4-iimpi-2022b.eb
 
 AMD processors fail building numpy as part of SciPy-bundle. Numpy
 fails on AMD processors due to disabled SSE message. With added extra
@@ -372,7 +372,7 @@ through modules works. However, Easybuild refuses build module if the
 same module is already loaded! We overcome this initilal problem by
 firstly installing everything and then hiding loaded Python with
 
-    module load Python/3.9.5-GCCcore-10.2.0-bare
+    module load Python/3.9.5-GCCcore-12.2.0-bare
     SETUP/easybuild-local.sh  --help | less
     tmp_path=$PATH tmp_llp=$LD_LIBRARY_PATH tmp_pp=$PYTHONPATH 
     module purge
@@ -546,8 +546,8 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.38.1}
-TAG_AL=${TAG_AL:-4.11.4}
+TAG_DD=${TAG_DD:-3.39.0}
+TAG_AL=${TAG_AL:-4.11.7}
 
 setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
     
