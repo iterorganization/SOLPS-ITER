@@ -1,5 +1,6 @@
 # Load modules
 module use /project/cscpub/modulefiles
+module use /project/IMASTEST/imas/etc/modules/all
 module switch PrgEnv-cray PrgEnv-gnu
 module load stat
 module load gdb4hpc
@@ -8,16 +9,29 @@ module load cray-parallel-netcdf/1.11.1.0
 module load cray-python/3.8.5.0
 module load mdsplus/7.96.12
 module load ncarg-gnu
+module load IMAS
+module load GGD
+module load Fundamental-Constants/0.1.1
 setenv PKG_CONFIG_PATH ${NETCDF_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 setenv PKG_CONFIG_PATH ${PARALLEL_NETCDF_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 setenv PKG_CONFIG_PATH /opt/cray/pe/libsci/19.06.1/GNU/8.1/x86_64/lib/pkgconfig:${PKG_CONFIG_PATH}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/opt/intel/lib/intel64
 
 # Set environment variables
+setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${SOLPSTOP}/lib
 setenv MDSPLUS_DIR /opt/mdsplus/7.96.12
 setenv SYSNAME amd64_sles15
 setenv NO_MANUAL true
+
+# Compilers
+setenv FC ftn
+setenv MPI_FC ftn
+setenv CC cc
+setenv CXX cc
+
+# Debugger (set environment variable DBX)
+setenv DBX gdb
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -41,12 +55,4 @@ else
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
 endif
-
-# Debugger (set environment variable DBX)
-setenv DBX gdb
-
-# Compilers
-setenv FC ftn
-setenv CC cc
-setenv CXX cc
 

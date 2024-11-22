@@ -1,0 +1,33 @@
+#
+# setup.ksh.*.* for IPP.CR Prague servers (Soroban cluster), using easybuild modules
+#   - identical translation of setup.csh.IPPCR.gfortran
+#
+
+
+# Path to the SOLPS easybuild modules
+module use /compass/Shared/Common/IT/projects/solps/libraries_eb/modules/all
+
+
+# Modules needed by SOLPS-ITER
+#   - using a single `module load` call to speed-up the loading process
+module load --no-pager \
+  CMake makedepend netCDF-Fortran \
+  GR GLI NCL MSCL motif gnuplot json-fortran \
+  flex Ghostscript ParaView xarray ToFu Doxygen \
+  libtirpc Fundamental-Constants netcdf4-python
+
+# Looking for NAG, falling back to OpenBLAS/LAPACK if not present
+if [ -n "$(module avail -t NAG)" ]; then
+  module load --no-pager NAG
+else
+  module load --no-pager OpenBLAS LAPACK
+fi
+
+export GLI_HOME=${EBROOTGLI}
+export QTDIR=${EBROOTQT5}
+export NCDIR=${EBROOTNETCDFMINFORTRAN}
+
+# Compilers
+export CC=gcc
+export FC=gfortran
+export CXX=g++

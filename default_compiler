@@ -38,17 +38,18 @@ case "SURFSARA":
 case "SWIP":
   echo ifort64
   breaksw
-case "ENEA":
-case "PPPL":
-  echo pgf90
-  breaksw
+case "IPPCR":
 case "JFRS":
 case "MARCONI":
 case "MEPHI":
 case "NERSC":
 case "ORNL":
+case "PPPL":
 case "WM":
   echo gfortran
+  breaksw
+case "ENEA":
+  echo pgf90
   breaksw
 default:
   echo ifort64

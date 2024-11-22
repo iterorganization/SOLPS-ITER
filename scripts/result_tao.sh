@@ -16,7 +16,7 @@
 
   set npar_opt=`grep -i npar_opt run.info | awk '{print $3}'`
 
-  rm -r tmp
+  [ -e tmp ] && rm tmp
   grep -i -B$npar_opt 'TAO,  Function value' run.info > tmp
   foreach jj ( `seq 1 $npar_opt` )
    grep -i "grad_F with x$jj=" tmp | awk '{print $5}' > parm$jj.dat

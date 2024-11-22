@@ -46,7 +46,7 @@ NO_MPI     = true
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DITM -DG95
+SOLPS_CPP      = -DNCAR4 -DITM -DG95 -DLEGACYCOMP
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -104,9 +104,20 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += al-fortran al-identifiers-fortran
+    endif
   else
-    IMAS_PKG_LIST += imas-g95
+    ifeq (,$(findstring imas-,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += imas-g95
+      ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-gfortran
+      else
+        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+          IMAS_PKG_LIST += imas-identifiers-gfortran
+        endif
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
@@ -137,21 +148,29 @@ ifdef IMAS_VERSION
   endif
   ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
     ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += ggd
+      ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+        IMAS_PKG_LIST += ggd
+      endif
     else
       ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-        IMAS_PKG_LIST += ggd
+        ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+          IMAS_PKG_LIST += ggd
+        endif
       else
         ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
           LD_GGD = -lggd_g95
         else
-          IMAS_PKG_LIST += imas-lowlevel
+          ifeq (,$(findstring lowlevel,${IMAS_PKG_LIST}))
+            IMAS_PKG_LIST += imas-lowlevel
+          endif
         endif
       endif
     endif
   endif
   ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
+    ifeq (,$(findstring amns,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += amns
+    endif
     SOLPS_CPP += -DAMNS
   endif
   LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
@@ -182,11 +201,6 @@ export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
 #
 # Export for use in sub-makefiles
 #
@@ -210,6 +224,8 @@ export LD_MDSPLUS
 export LD_SONNET
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES

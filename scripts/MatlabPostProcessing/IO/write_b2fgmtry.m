@@ -17,7 +17,7 @@ end
 
 %% Write a version header
 
-VERSION = 'VERSION03.000.000 Matlab';
+VERSION = 'VERSION03.000.006 Matlab';
 fprintf(fid,'%s\n',VERSION);
 
 

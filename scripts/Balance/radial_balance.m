@@ -1,10 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % radial_balance make balance plots with radial resolution (integrating in the %
 % poloidal direction) in a given region                                        %
-% flux:        An (nx*ny*nd) sized matrix, where nd is the number of different %
+% flux:        An (nFc*nd) sized matrix, where nd is the number of different   %
 %              fluxes into which the total flux is decomposed. Comprising      %
 %              the flux from each component in the entire grid                 %
-% src:         An (nx*ny*nd) sized matrix, where nd is the number of different %
+% src:         An (nCv*nd) sized matrix, where nd is the number of different   %
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
 % res:         The code residual                                               %
@@ -16,8 +16,10 @@
 % scrname:     A cell of length nd with strings stating the names of each      %
 %              source component                                                %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
-% indrad:      Logical matrix of size nx*ny that is true for cells where       %
+% indrad:      Logical matrix of size nCv that is true for cells where         %
 %              balance should be performed                                     %
+% facesup:     List of faces of the upstream boundary                          %
+% facesdown:   List of faces of the downstream boundary                        %
 % area:        The area by which each flux should be divided                   %
 % reverse:     True if the downstream surface is to the left of the upstream   %
 %              surface, otherwise false                                        %
@@ -30,102 +32,195 @@
 %              areas to give flux densities.                                   %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function rb = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,area,reverse,ismom,axbal,unitstr,makeplot,areaend)
+function rb = radial_balance(flux,src,res,totname,fluxname,srcname,comuse,indrad,facesup,facesdown,area,reverse,ismom,axbal,unitstr,makeplot,areaend)
 
-rightix = comuse.rightix+1; % Convert to one-based
-rightiy = comuse.rightiy+1;
-
-% Fluxes through the ends:
-fluxleft = [];
-fluxright = [];
-for i=1:size(flux,3)
-    fluxleft(:,i) = findlr(flux(:,:,i),indrad,'left');
-    fluxright(:,i) = findlr(flux(:,:,i),indrad,'right',rightix,rightiy);
+% Fluxes through the ends of each flux tube present in indrad:
+fluxup = zeros(comuse.nFt,size(flux,2));
+for i = 1:length(facesup)
+    iFc = facesup(i);
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if indrad(iCv1)
+        iFt = comuse.cvFt(iCv1);
+        fluxup(iFt,:) = fluxup(iFt,:) - flux(iFc,:);
+    else
+        iFt = comuse.cvFt(iCv2);
+        fluxup(iFt,:) = fluxup(iFt,:) + flux(iFc,:);
+    end
+end
+fluxdown = zeros(comuse.nFt,size(flux,2));
+for i = 1:length(facesdown)
+    iFc = facesdown(i);
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if indrad(iCv1)
+        iFt = comuse.cvFt(iCv1);
+        fluxdown(iFt,:) = fluxdown(iFt,:) + flux(iFc,:);
+    else
+        iFt = comuse.cvFt(iCv2);
+        fluxdown(iFt,:) = fluxdown(iFt,:) - flux(iFc,:);
+    end
 end
 
-% Integrated sources:
-srcint = [];
-for i=1:size(src,3)
-    srcint(:,i) = sumpol(src(:,:,i),indrad,comuse);
+% Integrated sources and residual:
+srcint = zeros(comuse.nFt,size(src,2));
+resint = zeros(comuse.nFt,1);
+for iFt = 1:comuse.nFt % integration in flux tube
+    iCv1 = comuse.ftCvP(iFt,1);
+    iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
+    for i = iCv1:iCv2
+        iCv = comuse.ftCv(i);
+        if indrad(iCv)
+            srcint(iFt,:) = srcint(iFt,:) + src(iCv,:);
+            resint(iFt) = resint(iFt) + res(iCv);
+        end
+    end
 end
-
-% Integrated residual:
-resint = sumpol(res,indrad,comuse);
 
 % Account for reversal (normally inner-to-outer fluxes are positive but if
 % reverse==true then outer-to-inner fluxes become positive):
 if ~reverse
-    reversefac = 1;
     momfac = 1;
 elseif ismom
-    reversefac = -1;
     momfac = -1;
 else
-    reversefac = -1;
     momfac = 1;
 end
 if ismom
-    momfac = momfac*-sign(mean(mean(comuse.bb(:,:,3))));
-end
-if ~reverse
-    fluxup = fluxleft;
-    fluxdown = fluxright;
-else
-    fluxup = fluxright;
-    fluxdown = fluxleft;
+    momfac = momfac*-sign(mean(comuse.cvEb(:,3)));
 end
 
-% Areas at the ends:
+% Areas at the ends of each flux tube present in indrad:
+rb.area_divide = zeros(comuse.nFt,1);
 switch areaend
     case 'left'
-        rb.area_divide = findlr(area,indrad,'left');
+        if reverse
+            faces = facesdown;
+        else
+            faces = facesup;
+        end
     case 'right'
-        rb.area_divide = findlr(area,indrad,'right',rightix,rightiy);
+        if reverse
+            faces = facesup;
+        else
+            faces = facesdown;
+        end
+end
+switch areaend
     case 'none'
-        rb.area_divide = ones(1,size(fluxleft,1));
+        for iFt = 1:comuse.nFt
+            iCv1 = comuse.ftCvP(iFt,1);
+            iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
+            if any(indrad(comuse.ftCv(iFt,iCv1:iCv2)))
+                rb.area_divide(iFt) = 1;
+            end
+        end
+    otherwise
+        for i = 1:length(faces)
+            iFc = faces(i);
+            iCv1 = comuse.fcCv(iFc,1);
+            iCv2 = comuse.fcCv(iFc,2);
+            if indrad(iCv1)
+                iFt = comuse.cvFt(iCv1);
+            else
+                iFt = comuse.cvFt(iCv2);
+            end
+            rb.area_divide(iFt) = rb.area_divide(iFt) + area(iFc);
+        end
 end
 
 % y - y_sep at outer mid-plane (cm):
-yomp = [0,cumsum(sqrt(diff(comuse.cr(comuse.omp,:)).^2+diff(comuse.cz(comuse.omp,:)).^2))];
-dys1 = sqrt(diff(comuse.cr_y(comuse.omp,comuse.sep+1:comuse.sep+2))^2+diff(comuse.cz_y(comuse.omp,comuse.sep+1:comuse.sep+2))^2);
-yomp = yomp-yomp(comuse.sep+2)+dys1/2;
-% psi:
-tmp = abs(comuse.dv./comuse.hx.*comuse.bb(:,:,1));
-psi = cumsum(tmp,2);
-for ix=1:comuse.nx
-    psi(ix,:)=psi(ix,:)-0.5*(psi(ix,comuse.sep+1)+psi(ix,comuse.sep+2))+1;
+yomp = comuse.cvX(comuse.omp);
+psiomp = zeros(size(comuse.omp));
+for i = 1:length(comuse.omp)
+    iCv = comuse.omp(i);
+    iVx1 = comuse.cvVxP(iCv,1);
+    iVx2 = iVx1 + comuse.cvVxP(iCv,2) - 1;
+    psiomp(i) = mean(comuse.vxFpsi(comuse.cvVx(iVx1:iVx2)));
 end
-% Ensure all SOL psis take outer target value:
-psi(:,comuse.sep+2:end)=repmat(psi(end,comuse.sep+2:end),comuse.nx,1);
-% psi at outer mid-plane:
-psiomp = psi(comuse.omp,:);
-% psi downstream:
-if ~reverse
-    psidown = findlr(psi,indrad,'right',rightix,rightiy);
-else
-    psidown = findlr(psi,indrad,'left');
+for i = 1:length(comuse.omp)
+    iCv = comuse.omp(i);
+    if comuse.cvFt(iCv) == comuse.ftSep(1)
+        break;
+    end
 end
-% Target distances mapped to OMP
+ysep = 0.5*(yomp(i-1) + yomp(i));
+yomp = yomp - ysep;
+psidown = zeros(comuse.nFt,1);
+ytot = zeros(comuse.nFt,1);
+for i = 1:length(facesdown)
+    iFc = facesdown(i);
+    iVx1 = comuse.fcVx(iFc,1);
+    iVx2 = comuse.fcVx(iFc,2);
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if indrad(iCv1)
+        iFt = comuse.cvFt(iCv1);
+    else
+        iFt = comuse.cvFt(iCv2);
+    end
+    psidown(iFt) = psidown(iFt) + 0.5*(comuse.vxFpsi(iVx1) + ...
+        comuse.vxFpsi(iVx2))*abs(comuse.vxX(iVx2) - comuse.vxX(iVx1));
+    ytot(iFt) = ytot(iFt) + abs(comuse.vxX(iVx2) - comuse.vxX(iVx1));
+end
+psidown = psidown./(ytot + 1.0e-30);
+
+% Target distances mapped to OMP:
 ymysep = 100*interp1(psiomp,yomp,psidown,'linear','extrap');
+
+% Eliminate the flux tubes that are absent in indrad:
+fluxup_old = fluxup;
+fluxdown_old = fluxdown;
+srcint_old = srcint;
+resint_old = resint;
+ymysep_old = ymysep;
+fluxup = zeros(sum(rb.area_divide ~= 0),size(fluxup_old,2));
+fluxdown = zeros(sum(rb.area_divide ~= 0),size(fluxdown_old,2));
+srcint = zeros(sum(rb.area_divide ~= 0),size(srcint_old,2));
+resint = zeros(sum(rb.area_divide ~= 0),1);
+ymysep = zeros(sum(rb.area_divide ~= 0),1);
+index = 0;
+for iFt = 1:comuse.nFt
+    if rb.area_divide(iFt) == 0
+        continue;
+    else
+        index = index + 1;
+        fluxup(index,:) = fluxup_old(iFt,:);
+        fluxdown(index,:) = fluxdown_old(iFt,:);
+        srcint(index,:) = srcint_old(iFt,:);
+        resint(index,1) = resint_old(iFt,1);
+        ymysep(index,1) = ymysep_old(iFt,1);
+    end
+end
+rb.area_divide = rb.area_divide(rb.area_divide ~= 0);
+
+% Sort the data according to increasing ymysep:
+[~,rb.index] = sort(ymysep);
+fluxup = fluxup(rb.index,:);
+fluxdown = fluxdown(rb.index,:);
+srcint = srcint(rb.index,:);
+resint = resint(rb.index,1);
+ymysep = ymysep(rb.index,1);
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-coderes = momfac*(resint./rb.area_divide)';
+coderes = momfac*resint./rb.area_divide;
 if makeplot
-    plot(ymysep,momfac*reversefac*sum(fluxup,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-    plot(ymysep,momfac*reversefac*sum(fluxdown,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-    plot(ymysep,momfac*sum(srcint,2)./rb.area_divide','marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:));
+    plot(ymysep,momfac*sum(fluxup,2)./rb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+    plot(ymysep,momfac*sum(fluxdown,2)./rb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+    plot(ymysep,momfac*sum(srcint,2)./rb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{3},'color',cmap(1,:));
     plot(ymysep,coderes,'-m','parent',axbal(1),'displayname',[totname{4},' (code)']);
 end
 rb.ymysep = ymysep;
-rb.totflxu = momfac*reversefac*sum(fluxup,2)./rb.area_divide';
-rb.totflxd = momfac*reversefac*sum(fluxdown,2)./rb.area_divide';
-rb.totsrc = momfac*sum(srcint,2)./rb.area_divide';
+rb.totflxu = momfac*sum(fluxup,2)./rb.area_divide;
+rb.totflxd = momfac*sum(fluxdown,2)./rb.area_divide;
+rb.totsrc = momfac*sum(srcint,2)./rb.area_divide;
 rb.coderes = coderes;
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
-postres = momfac*(reversefac*(sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./rb.area_divide';
+postres = momfac*((sum(fluxup,2)-sum(fluxdown,2))+sum(srcint,2))./rb.area_divide;
 rb.postres = postres;
 if makeplot
     plot(ymysep,postres,'-g','parent',axbal(1),'displayname',[totname{4},' (post-cal.)']);
@@ -146,10 +241,10 @@ for i=1:size(fluxup,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxup(:,i))
         if makeplot
-            plot(ymysep,momfac*reversefac*fluxup(:,i)./rb.area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+            plot(ymysep,momfac*fluxup(:,i)./rb.area_divide,'marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
         end
     end
-    rb.flxu_dcmp{i} = momfac*reversefac*fluxup(:,i)./rb.area_divide';
+    rb.flxu_dcmp{i} = momfac*fluxup(:,i)./rb.area_divide;
 end
 if makeplot
     legend(axbal(2),'show','location','best');
@@ -165,10 +260,10 @@ for i=1:size(fluxdown,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxdown(:,i))
         if makeplot
-            plot(ymysep,momfac*reversefac*fluxdown(:,i)./rb.area_divide','marker','.','parent',axbal(3),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+            plot(ymysep,momfac*fluxdown(:,i)./rb.area_divide,'marker','.','parent',axbal(3),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
         end
     end
-    rb.flxd_dcmp{i} = momfac*reversefac*fluxdown(:,i)./rb.area_divide';
+    rb.flxd_dcmp{i} = momfac*fluxdown(:,i)./rb.area_divide;
 end
 if makeplot
     legend(axbal(3),'show','location','best');
@@ -184,10 +279,10 @@ for i=1:size(srcint,2)
     % Only make the plot if the integrated source is non-zero somewhere
     if any(srcint(:,i))
         if makeplot
-            plot(ymysep,momfac*srcint(:,i)./rb.area_divide','marker','.','parent',axbal(4),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+            plot(ymysep,momfac*srcint(:,i)./rb.area_divide,'marker','.','parent',axbal(4),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
         end
     end
-    rb.src_dcmp{i} = momfac*srcint(:,i)./rb.area_divide';
+    rb.src_dcmp{i} = momfac*srcint(:,i)./rb.area_divide;
 end
 if makeplot
     legend(axbal(4),'show','location','best');

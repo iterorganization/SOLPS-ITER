@@ -25,7 +25,7 @@ end
 if isfield(rates,'version')
     version = rates.version;
 else
-    version = '03.000.000';
+    version = '03.002.000';
 end
 
 disp(['write_b2frates -- file version ',version]);
@@ -38,7 +38,6 @@ write_sfield(fid,'label',rates.label);
 %% Write dimensions
 
 write_ifield(fid,'ppout',rates.ppout);
-write_ifield(fid,'fix_recomb',rates.fix_recomb);
 rtnt = rates.rtnt;
 rtnn = rates.rtnn;
 rtns = rates.rtns;
@@ -59,7 +58,7 @@ write_rfield(fid,'rtln ',rates.rtln);
 write_rfield(fid,'rtlsa'    , rates.rtlsa);
 write_rfield(fid,'rtlra'    , rates.rtlra);
 write_rfield(fid,'rtlqa'    , rates.rtlqa);
-write_rfield(fid,'rtlqa_ra' , rates.rtlqa_ra);
+write_rfield(fid,'rtlqr'    , rates.rtlqr);
 write_rfield(fid,'rtlcx'    , rates.rtlcx);
 write_rfield(fid,'rtlrd'    , rates.rtlrd);
 write_rfield(fid,'rtlbr'    , rates.rtlbr);
@@ -68,6 +67,9 @@ write_rfield(fid,'rtlz2'    , rates.rtlz2);
 write_rfield(fid,'rtlpt'    , rates.rtlpt);
 write_rfield(fid,'rtlpi'    , rates.rtlpi);
 
+%% extra
+
+write_ifield(fid,'fix_recomb,zmax_recomb',[rates.fix_recomb,rates.zmax_recomb]);
 %% Close file
 
 fclose(fid);

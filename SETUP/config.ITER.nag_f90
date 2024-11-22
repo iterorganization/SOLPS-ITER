@@ -16,8 +16,8 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
     NODENAME ?= $(shell echo `hostname`)
@@ -37,23 +37,28 @@ LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -l
 LD_NETCDF  =
 LD_MSCL    = `pkg-config mscl --libs` -lgfortran
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L/work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib -lGKS -lgfortran -lX11 -lXt
+LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 LD_NAG     = `pkg-config openblas --libs`
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
 NCDIR      =
 ifdef NCARG_ROOT
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz -lgfortran # for NCARG v6.x.x
 endif
 
+#
+# Provide compiler
+#
+
+FC         = nagfor
 NO_MPI     = true
 
 #
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNAG22 -DNO_F01AAF -DF2003
+SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNO_NAG -DNO_F01AAF
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -112,9 +117,20 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += al-fortran al-identifiers-fortran
+    endif
   else
-    IMAS_PKG_LIST += imas-gfortran
+    ifeq (,$(findstring imas-,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += imas-gfortran
+      ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+        IMAS_PKG_LIST += imas-identifiers-gfortran
+      else
+        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+          IMAS_PKG_LIST += imas-identifiers-gfortran
+        endif
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
@@ -145,21 +161,29 @@ ifdef IMAS_VERSION
   endif
   ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
     ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += ggd
+      ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+        IMAS_PKG_LIST += ggd
+      endif
     else
       ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-        IMAS_PKG_LIST += ggd
+        ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+          IMAS_PKG_LIST += ggd
+        endif
       else
         ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
           LD_GGD = -lggd_fortran
         else
-          IMAS_PKG_LIST += imas-lowlevel
+          ifeq (,$(findstring lowlevel,${IMAS_PKG_LIST}))
+            IMAS_PKG_LIST += imas-lowlevel
+          endif
         endif
       endif
     endif
   endif
   ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
+    ifeq (,$(findstring amns,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += amns
+    endif
     SOLPS_CPP += -DAMNS
   endif
   LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
@@ -190,11 +214,6 @@ export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
 #
 # Export for use in sub-makefiles
 #
@@ -220,6 +239,8 @@ export LD_MPI
 
 export NODENAME
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES

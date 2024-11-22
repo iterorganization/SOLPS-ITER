@@ -1,4 +1,13 @@
 # Autodetected optional features...
+ifeq (${FC},f77)
+  FC = ifort
+  FN = ifort
+endif
+ifeq (${CC},cc)
+  ifneq (${FC},ftn)
+    CC = /usr/bin/gcc
+  endif
+endif
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
@@ -50,9 +59,31 @@ ifdef IMAS_VERSION
   IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
   IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
+    ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += al-fortran al-identifiers-fortran
+    endif
   else
-    IMAS_PKG_LIST += imas-ifort
+    ifeq (,$(findstring imas-,${IMAS_PKG_LIST}))
+      ifndef COMPILER_REDEF
+        IMAS_PKG_LIST += imas-ifort
+        ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+          IMAS_PKG_LIST += imas-identifiers-ifort
+        else
+          ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+            IMAS_PKG_LIST += imas-identifiers-ifort
+          endif
+        endif
+      else
+        IMAS_PKG_LIST += imas-gfortran
+        ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
+          IMAS_PKG_LIST += imas-identifiers-gfortran
+        else
+          ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 31; echo $$?),0)
+            IMAS_PKG_LIST += imas-identifiers-gfortran
+          endif
+        endif
+      endif
+    endif
   endif
   ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
     ifdef GGD_VERSION
@@ -83,21 +114,33 @@ ifdef IMAS_VERSION
   endif
   ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
     ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += ggd
+      ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+        IMAS_PKG_LIST += ggd
+      endif
     else
       ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-        IMAS_PKG_LIST += ggd
+        ifeq (,$(findstring ggd,${IMAS_PKG_LIST}))
+          IMAS_PKG_LIST += ggd
+        endif
       else
         ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-          LD_GGD = -lggd_ifort
+          ifndef COMPILER_REDEF
+            LD_GGD = -lggd_ifort
+          else
+            LD_GGD = -lggd_gfortran
+          endif
         else
-          IMAS_PKG_LIST += imas-lowlevel
+          ifeq (,$(findstring lowlevel,${IMAS_PKG_LIST}))
+            IMAS_PKG_LIST += imas-lowlevel
+          endif
         endif
       endif
     endif
   endif
   ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
+    ifeq (,$(findstring amns,${IMAS_PKG_LIST}))
+      IMAS_PKG_LIST += amns
+    endif
     SOLPS_CPP += -DAMNS
   endif
   LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
@@ -137,11 +180,6 @@ export IMAS_MINOR_VERSION
 export IMAS_MICRO_VERSION
 export IMAS_PKG_LIST
 
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
 #
 # Export for use in sub-makefiles
 #
@@ -166,11 +204,18 @@ export LD_SONNET
 export LD_MPI
 
 export SOLPS_CPP
+export SOLPS_MPI
+export SOLPS_OPENMP
 export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+
+export MPI_FC
+export FC
+export FN
+export CC
 
 #!!!Local Variables:
 #!!! mode: Makefile

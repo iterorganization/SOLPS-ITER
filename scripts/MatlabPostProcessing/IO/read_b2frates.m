@@ -37,9 +37,6 @@ rates.label = line(2:120);
 dim = read_ifield(fid,'ppout',ns);
 rates.ppout= dim;
 
-dim = read_ifield(fid,'fix_recomb',1);
-rates.fix_recomb = dim(1);
-
 dim = read_ifield(fid,'rtnt,rtnn,rtns',3);
 rates.rtnt = dim(1);
 rates.rtnn = dim(2);
@@ -61,7 +58,7 @@ rates.rtln    = read_rfield(fid,'rtln   ',rates.rtnn+1);
 rates.rtlsa     = read_rfield(fid,'rtlsa'    ,ratdims);
 rates.rtlra     = read_rfield(fid,'rtlra'    ,ratdims);
 rates.rtlqa     = read_rfield(fid,'rtlqa'    ,ratdims);
-rates.rtlqa_ra     = read_rfield(fid,'rtlqa_ra'    ,ratdims);
+rates.rtlqr     = read_rfield(fid,'rtlqr'    ,ratdims);
 rates.rtlcx     = read_rfield(fid,'rtlcx'    ,ratdims);
 rates.rtlrd     = read_rfield(fid,'rtlrd'    ,ratdims);
 rates.rtlbr     = read_rfield(fid,'rtlbr'    ,ratdims);
@@ -69,6 +66,12 @@ rates.rtlza     = read_rfield(fid,'rtlza'    ,ratdims);
 rates.rtlz2     = read_rfield(fid,'rtlz2'    ,ratdims);
 rates.rtlpt     = read_rfield(fid,'rtlpt'    ,ratdims);
 rates.rtlpi     = read_rfield(fid,'rtlpi'    ,ratdims);
+
+%% extra
+dim = read_ifield(fid,'fix_recomb,zmax_recomb',2);
+rates.fix_recomb = dim(1);
+rates.zmax_recomb = dim(1);
+
 %% Close file
 
 fclose(fid);

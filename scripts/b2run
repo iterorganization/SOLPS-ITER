@@ -45,7 +45,7 @@ endloop:
   if(! $?TAO) then
     set RUN_OPTIONS=""
   else
-    set RUN_OPTIONS="-tao_monitor -tao_view_solution -tao_ls_view ${TAO_OPT}"
+    set RUN_OPTIONS="-tao_monitor -tao_view_solution -tao_ls_view -tao_ls_type armijo ${TAO_OPT}"
   endif
   set KMP_AFFINITY=""
   set OMP_NUM_THREADS=1
@@ -71,6 +71,7 @@ argloop:
     echo ' -opt_adj: request a B2.5 parameter optimization with adjoint differentiated executable'
     echo ' '
     echo 'Executable: One of the following'
+    echo ' b2ab: Build tables for advanced fluid neutral (AFN) boundary conditions'
     echo ' b2ag: Build the geometry files b2fgmtry and fort.30'
     echo ' b2ah: Build the run parameters file b2fpardf'
     echo ' b2ai: Build the initial state file b2fstati'
@@ -97,7 +98,6 @@ argloop:
     echo ' b2mn_d: Main SOLPS-ITER run program differentiated in tangent mode'
     echo ' b2mn_b: Main SOLPS-ITER run program differentiated in adjoint mode'
     echo ' b2optim_tao: Parameter optimization with PETSc/TAO solver'
-    echo ' b2optim_ipopt: Parameter optimization with Ipopt solver'
     echo ' '
     exit
   endif
@@ -164,6 +164,18 @@ argloop:
     setenv OPT_ADJ yes
     goto argloop
   endif
+  if ("X${1}X" == "X-diff_ddX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv DIFF_DD yes
+    goto argloop
+  endif
+  if ("X${1}X" == "X-hess_tgtX") then
+    shift
+    setenv STAND_ALONE yes
+    setenv HESS_TGT yes
+    goto argloop
+  endif
   if ("X${1}X" == "X-mX") then
     shift
     if (! $?SOLPS_MPI) then
@@ -228,7 +240,7 @@ argloop:
         endif
       endif
     endif
-    goto argloop 
+    goto argloop
   endif
   if ("X${1}X" == "X-oX") then
     shift
@@ -252,4 +264,3 @@ argloop:
   if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi
   if ($?DEBUG_SET)  source $SOLPSTOP/SETUP/nodebug
   if ($?OPENMP_SET) source $SOLPSTOP/SETUP/noopenmp
-  

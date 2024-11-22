@@ -1,5 +1,29 @@
 #! /bin/tcsh -f
 
+# This script sets up the environment for SOLPS-ITER (paths, env, aliases, etc.)
+# including the site identification via HOST_NAME and COMPILER variables.
+# It is intended to be sourced from the command line, not executed.
+#
+# The main variables SOLPSTOP, HOST_NAME, COMPILER are determined according
+# to a precedence logic described below.
+#
+# Variable SOLPSTOP is determined with decreasing priority from:
+#   1. $SOLPSTOP_FORCE
+#   2. Automatic detection, fallback to $PWD
+#
+# Variable HOST_NAME is determined with decreasing priority from:
+#   1. $SOLPS_HOST_NAME_FORCE
+#   2. SETUP/setup.csh.HOST_NAME.local file (sourced if present)
+#   3. output of `whereami` script
+#   4. fallback to UNKNOWN
+#
+# Variable COMPILER is determined with decreasing priority from:
+#   1. First argument to `source setup.csh` command
+#   2. $SOLPS_COMPILER_FORCE
+#   3. output of `default_compiler` script
+#   4. fallback to ifort64
+#
+
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
 echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
@@ -9,12 +33,7 @@ echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual is located at http://www.eirene.de/
 
-if ( "$0" != "tcsh" ) then
-  if ( "$0" != "-tcsh" ) then
-    echo "\e[31mUse tcsh to source setup.csh!\e[m"
-    exit 1
-  endif
-endif
+( ps -p $$ | grep -Eq "tcsh|csh" ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
 # Obtain the directory where setup.csh is located to use as SOLPSTOP
 setenv LAST_COMMAND `echo $_`
@@ -31,7 +50,10 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+if ( $?SOLPS_HOST_NAME_FORCE ) then
+  setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
+  echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
+else if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
   echo Loading SETUP/setup.csh.HOST_NAME.local.
   source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
 else
@@ -51,18 +73,20 @@ else
 endif
 
 # COMPILER can also be the argument to setup.csh call
-if($1 == "") then
-  if (-s ${SOLPSTOP}/default_compiler) then
-    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
-    echo Using compiler $COMPILER.
-  else
-    setenv COMPILER ifort64
-    echo Assuming default compiler ifort64.
-  endif
-else
+if ($1 != "") then
   setenv COMPILER $1
   echo Using specified compiler $1.
+else if ( $?SOLPS_COMPILER_FORCE ) then
+  setenv COMPILER $SOLPS_COMPILER_FORCE
+  echo "Using compiler $COMPILER (set by SOLPS_COMPILER_FORCE)".
+else if (-s ${SOLPSTOP}/default_compiler) then
+  setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
+  echo Using compiler $COMPILER.
+else
+  setenv COMPILER ifort64
+  echo Assuming default compiler ifort64.
 endif
+
 if(! $?COMPILER) then
   echo COMPILER not defined!
 endif
@@ -142,21 +166,19 @@ set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/
 set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
 set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 
-# Create mirror scripts directories
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
-if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
-ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+# Create mirror scripts directory links
+#   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
+set link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
+if (! $?NO_MPI) then
+  foreach suffix ( ".mpi" ".mpi.debug" ".openmp.mpi" ".openmp.mpi.debug" )
+    if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+    if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
+  end
+endif
+foreach suffix ( ".openmp" ".debug" ".openmp.debug" )
+  if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+  if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
+end
 
 # Note: in case of name clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
@@ -269,8 +291,6 @@ alias   set_tgt    'source $SOLPSTOP/SETUP/tgt'
 alias unset_tgt    'source $SOLPSTOP/SETUP/notgt'
 alias   set_adj    'source $SOLPSTOP/SETUP/adj'
 alias unset_adj    'source $SOLPSTOP/SETUP/noadj'
-alias   set_ipopt  'source $SOLPSTOP/SETUP/ipopt'
-alias unset_ipopt  'source $SOLPSTOP/SETUP/noipopt'
 alias   set_tao    'source $SOLPSTOP/SETUP/tao'
 alias unset_tao    'source $SOLPSTOP/SETUP/notao'
 

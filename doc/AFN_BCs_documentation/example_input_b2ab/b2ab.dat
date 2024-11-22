@@ -1,0 +1,18 @@
+*incident
+  'D'
+*material
+  'C'
+'b2abdr_nT'  '134'
+'b2abdr_nM'  '11'
+'b2abdr_nSh'  '7'
+'b2abdr_Tmin'  '0.1'
+'b2abdr_Tmax'  '1000'
+'b2abdr_Mmin'  '0.1'
+'b2abdr_Mmax'  '1.1'
+'b2abdr_Shmin'  '0.0'
+'b2abdr_Shmax'  '6.0'
+'b2abdr_Eomin' '1e-6'
+'b2abdr_nv'   '100'
+'b2abdr_ntp'   '100000'
+'b2abdr_ntheta'  '100'
+'b2abdr_nphi'    '180'

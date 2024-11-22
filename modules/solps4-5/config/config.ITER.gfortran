@@ -6,13 +6,9 @@ NODENAME  ?= `hostname`
 
 CPP = /lib/cpp -traditional
 
-FC = gfortran
-ifndef SOLPS_DEBUG
-FCOPTS  += -fdefault-real-8
-endif
-
 SOLPSINCLUDE += `pkg-config libtirpc --cflags`
-LDLIBES  = `pkg-config libtirpc --libs`
+LDLIBES = `pkg-config libtirpc --libs`
+
 
 #!!!Local Variables:
 #!!! mode: Makefile

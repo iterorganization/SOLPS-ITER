@@ -32,6 +32,10 @@ ifdef DIFF_B
 EXT_DIFF = .diff_b
 DIFF=_b
 endif
+ifdef DIFF_DD
+EXT_DIFF = .diff_dd
+DIFF=_hess
+endif
 ifdef TGT
 EXT_DIFF = .tgt
 DIFF=_d
@@ -39,6 +43,10 @@ endif
 ifdef ADJ
 EXT_DIFF = .adj
 DIFF=_b
+endif
+ifdef HESS_TGT
+EXT_DIFF = .hess_tgt
+DIFF=_hess
 endif
 MNEXE=b2mn${DIFF}
 ifdef OPT_D
@@ -81,15 +89,16 @@ else
 fort_lc = ftn
 endif
 
-prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
+prints = b2ab.prt b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
+target_ab = b2ab.prt b2_afn_bcs
 target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced b2ftracedd
 target_opt = target_mn
 ifdef USE_IMPGYRO
 target_mn += restart_ext
@@ -186,6 +195,12 @@ $(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma
 	rm -f $(target_xd)
 	cd b2xd.exe.dir ; ${TIME} ${B2OBJ}/b2xd.exe ${RUN_OPTIONS} ; mv $(target_xd) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2xd.exe.dir
+
+$(target_ab) : b2ab.dat
+	rm -rf b2ab.exe.dir >& /dev/null ; mkdir b2ab.exe.dir ; cp $^ b2ab.exe.dir
+	rm -f $(target_ab)
+	cd b2ab.exe.dir ; ${TIME} ${B2OBJ}/b2ab.exe ${RUN_OPTIONS} ; mv $(target_ab) .. ; rm -f $(notdir $^) >& /dev/null
+	-rmdir b2ab.exe.dir
 
 $(target_ag) : b2ag.dat
 	rm -rf b2ag.exe.dir >& /dev/null ; mkdir b2ag.exe.dir ; cp $^ b2ag.exe.dir
@@ -710,6 +725,8 @@ testvars :
 
 help help.prt:
 	@echo "Available targets are:"
+	@echo "  ${target_ab} : "
+	@echo "     produce tables for advanced fluid neutral boundary conditions"
 	@echo "  ${target_ag} : "
 	@echo "     produce the geometry information"
 	@echo "  ${target_ah} : "

@@ -41,15 +41,18 @@ module load PETSc/3.15.1-intel-2021a
 # Debugger (set environment variable DBX)
 module load ArmForge/22.1.2
 setenv DBX ddt
+# Compiler
+setenv FC ifort
+
 module load MATLAB/2020a
 ###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
-setenv IPOPTDIR /vsc-hard-mounts/leuven-data/321/vsc32100/Ipopt/install
+module load Java/1.8.0_192
 # setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
 # setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPOPTDIR}/lib:${PETSC_DIR}/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
 alias set_d 'source $SOLPSTOP/scripts/diff_d'
 alias set_b 'source $SOLPSTOP/scripts/diff_b'

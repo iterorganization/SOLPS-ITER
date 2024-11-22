@@ -8,6 +8,7 @@
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
+      use carre_dimensions
 c
 c  version : 15.08.2003 18:26
 c
@@ -93,6 +94,8 @@ c*** Boundary
       do i=2,11 !{
         nmdpr(i,2)=nbc
       end do !}
+      nmdpr(25,2)=nbc !nh bcenk
+      nmdpr(26,2)=nbc !nh enkpar
       do i=9,11 !{
         nmdlr(i,2)=2
       end do !}
@@ -113,6 +116,7 @@ c*** Boundary
       lrrvr(11,2)=.true.
       lrrvr(13,2)=.true.
       lrrvr(15,2)=.true.
+      lrrvr(26,2)=.true.
 
       if(glb2read) then !{
         if(nznbndt(1).eq.1) then !{
@@ -138,7 +142,8 @@ c*** nbc
         do j=1,nbndknd !{
           do i=1,nznbndt(j) !{
             k=k+1
-c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
+c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, 
+c    enipar, enkpar, potpar
             cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
 cnh            iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
             iniprm(k,1,1, 4,2)=lc1bnds(i,j)
@@ -146,12 +151,15 @@ cnh            iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
             iniprm(k,1,1, 6,2)=leebnds(i,j)
             iniprm(k,1,1, 7,2)=leibnds(i,j)
             iniprm(k,1,1, 8,2)=lpobnds(i,j)
+            iniprm(k,1,1,25,2)=lenkbnds(i,j)
             rniprm(k,1,1, 9,2)=beebnds(i,1,j)
             rniprm(k,1,1,10,2)=beibnds(i,1,j)
             rniprm(k,2,1, 9,2)=beebnds(i,2,j)
             rniprm(k,2,1,10,2)=beibnds(i,2,j)
             rniprm(k,1,1,11,2)=bpobnds(i,1,j)
             rniprm(k,2,1,11,2)=bpobnds(i,2,j)
+            rniprm(k,1,1,26,2)=benkbnds(i,1,j)
+            rniprm(k,2,1,26,2)=benkbnds(i,2,j)
 c*** bccon, conpar, bcmom, mompar
             ispc = 0
             do l=1,nspcpls+nspcncl !{
@@ -191,7 +199,7 @@ c*** bccon, conpar, bcmom, mompar
           end do !}
         end do !}
       else ! vessel mode
-c*** bcchar, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
+c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
         cniprm(1:nbc,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
 !    first set the core regions
         iniprm(1:ncore,1,1, 4,2)=lc1bnds(1:ncore,1)
@@ -199,12 +207,15 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
         iniprm(1:ncore,1,1, 6,2)=leebnds(1:ncore,1)
         iniprm(1:ncore,1,1, 7,2)=leibnds(1:ncore,1)
         iniprm(1:ncore,1,1, 8,2)=lpobnds(1:ncore,1)
+        iniprm(1:ncore,1,1,25,2)=lenkbnds(1:ncore,1)
         rniprm(1:ncore,1,1, 9,2)=beebnds(1:ncore,1,1)
         rniprm(1:ncore,1,1,10,2)=beibnds(1:ncore,1,1)
         rniprm(1:ncore,2,1, 9,2)=beebnds(1:ncore,2,1)
         rniprm(1:ncore,2,1,10,2)=beibnds(1:ncore,2,1)
         rniprm(1:ncore,1,1,11,2)=bpobnds(1:ncore,1,1)
         rniprm(1:ncore,2,1,11,2)=bpobnds(1:ncore,2,1)
+        rniprm(1:ncore,1,1,26,2)=benkbnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1,26,2)=benkbnds(1:ncore,2,1)
 !     set the other components of the vessel
         do i=ncore+1,nbc
           iniprm(i,1,1, 4,2)=i-ncore
@@ -212,12 +223,15 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcpot, enepar, enipar, potpar
           iniprm(i,1,1, 6,2)=15
           iniprm(i,1,1, 7,2)=15
           iniprm(i,1,1, 8,2)=11
+          iniprm(i,1,1,25,2)=15
           rniprm(i,1,1, 9,2)=1.
           rniprm(i,1,1,10,2)=1.5
           rniprm(i,2,1, 9,2)=0.
           rniprm(i,2,1,10,2)=0.
           rniprm(i,1,1,11,2)=0.
           rniprm(i,2,1,11,2)=0.
+          rniprm(i,1,1,26,2)=1.
+          rniprm(i,2,1,26,2)=0.
         end do
 c*** bccon, conpar, bcmom, mompar
         ispc = 0

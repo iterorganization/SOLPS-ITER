@@ -18,5 +18,5 @@ setenv PLOT_FROM_FILE "gnuplot.temp"
 $ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
-  awk '{print $2,$21,$22,$23,$24}' >! ${tmpdir}PLOT_FROM_FILE
-  plot xlyplot4 momtot ee ei pot iteration 'norm of residual of non ns equations' $PWD
+  awk '{print $2,$21,$22,$23,$24,$25,$26,$27}' >! ${tmpdir}PLOT_FROM_FILE
+  plot xlyplot7 momtot ee ei en pot kt zt iteration 'norm of residual of non ns equations' $PWD

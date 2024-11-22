@@ -4,77 +4,113 @@
 % poloidal cells along which poloidal balance will be performed                % 
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024.  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function balgrid(comuse,indrad,indpol,axgrid,reverse)
+function balgrid(comuse,indrad,indpol,facesup,facesdown,axgrid)
 
 axis(axgrid,'image');
 xlabel(axgrid,'R (m)');
 ylabel(axgrid,'Z (m)');
 
-rbl = comuse.r(:,:,1);
-rbr = comuse.r(:,:,2);
-rtl = comuse.r(:,:,3);
-rtr = comuse.r(:,:,4);
-zbl = comuse.z(:,:,1);
-zbr = comuse.z(:,:,2);
-ztl = comuse.z(:,:,3);
-ztr = comuse.z(:,:,4);
-
-% Plot the grid (including ghost cells):
-patch([reshape(rbl,1,[]);...
-       reshape(rbr,1,[]);...
-       reshape(rtr,1,[]);...
-       reshape(rtl,1,[])],...
-      [reshape(zbl,1,[]);...
-       reshape(zbr,1,[]);...
-       reshape(ztr,1,[]);...
-       reshape(ztl,1,[])],'w','parent',axgrid,'handlevisibility','off');
-
-% Plot the radial balance volume:
-patch([reshape(rbl(indrad),1,[]);...
-       reshape(rbr(indrad),1,[]);...
-       reshape(rtr(indrad),1,[]);...
-       reshape(rtl(indrad),1,[])],...
-      [reshape(zbl(indrad),1,[]);...
-       reshape(zbr(indrad),1,[]);...
-       reshape(ztr(indrad),1,[]);...
-       reshape(ztl(indrad),1,[])],...
-      'y','parent',axgrid);
-
-% Plot the poloidal balance volume:
-patch([reshape(rbl(indpol),1,[]);...
-       reshape(rbr(indpol),1,[]);...
-       reshape(rtr(indpol),1,[]);...
-       reshape(rtl(indpol),1,[])],...
-      [reshape(zbl(indpol),1,[]);...
-       reshape(zbr(indpol),1,[]);...
-       reshape(ztr(indpol),1,[]);...
-       reshape(ztl(indpol),1,[])],...
-      'm','parent',axgrid);
-   
-% Plot the left- and right-most surfaces of the volume of interest
-rleft = [];
-zleft = [];
-rright = [];
-zright = [];
-for iy = 1:comuse.ny
-    first = find(indrad(:,iy),1,'first');
-    last = find(indrad(:,iy),1,'last');
-    if ~isempty(first)
-        rleft = [rleft,rbl(first,iy),rtl(first,iy)];
-        zleft = [zleft,zbl(first,iy),ztl(first,iy)];
-        rright = [rright,rbr(last,iy),rtr(last,iy)];
-        zright = [zright,zbr(last,iy),ztr(last,iy)];
+% Plot the grid (excluding guard cells):
+S = struct([]);
+for iCv = 1:comuse.nCi
+    iVx1 = comuse.cvVx(comuse.cvVxP(iCv,1));
+    S(iCv).XData = comuse.vxX(iVx1);
+    S(iCv).YData = comuse.vxY(iVx1);
+    iVx = iVx1;
+    nfaces = comuse.cvFcP(iCv,2);
+    face_treated = zeros(nfaces,1);
+    while sum(face_treated) < nfaces
+        for i = 1:nfaces
+            if (face_treated(i) == 0)
+                iFc = comuse.cvFc(comuse.cvFcP(iCv,1)+i-1);
+                if (comuse.fcVx(iFc,1)==iVx)
+                    S(iCv).XData = [S(iCv).XData;comuse.vxX(comuse.fcVx(iFc,2))];
+                    S(iCv).YData = [S(iCv).YData;comuse.vxY(comuse.fcVx(iFc,2))];
+                    face_treated(i)=1;
+                    iVx=comuse.fcVx(iFc,2);
+                elseif (comuse.fcVx(iFc,2)==iVx)
+                    S(iCv).XData = [S(iCv).XData;comuse.vxX(comuse.fcVx(iFc,1))];
+                    S(iCv).YData = [S(iCv).YData;comuse.vxY(comuse.fcVx(iFc,1))];
+                    face_treated(i)=1;
+                    iVx=comuse.fcVx(iFc,1);
+                end
+            end
+        end
     end
 end
 
+for i = 1:length(S)
+    patch(S(i).XData,S(i).YData,'w','parent',axgrid,...
+        'handlevisibility','off');
+end
+
+% Plot the radial balance volume:
+S2 = struct([]);
+for iCv = 1:comuse.nCv
+    if indrad(iCv)
+        S2(iCv).XData = S(iCv).XData;
+        S2(iCv).YData = S(iCv).YData;
+    end
+end
+first = true;
+for i = 1:length(S2)
+    if ~isempty(S2(i).XData)
+        if first
+            patch(S2(i).XData,S2(i).YData,'y','parent',axgrid);
+            first = false;
+        else
+            patch(S2(i).XData,S2(i).YData,'y','parent',axgrid,...
+                'handlevisibility','off');
+        end
+    end
+end
+
+% Plot the poloidal balance volume:
+S2 = struct([]);
+for iCv = 1:comuse.nCv
+    if indpol(iCv)
+        S2(iCv).XData = S(iCv).XData;
+        S2(iCv).YData = S(iCv).YData;
+    end
+end
+first = true;
+for i = 1:length(S2)
+    if ~isempty(S2(i).XData)
+        if first
+            patch(S2(i).XData,S2(i).YData,'m','parent',axgrid);
+            first = false;
+        else
+            patch(S2(i).XData,S2(i).YData,'m','parent',axgrid,...
+                'handlevisibility','off');
+        end
+    end
+end
+
+% Plot the upstream and downstream boundary
 cmap = comuse.cmap;
-if ~reverse
-    plot(rleft,zleft,'color',cmap(1,:),'parent',axgrid);
-    plot(rright,zright,'color',cmap(2,:),'parent',axgrid);
-else
-    plot(rright,zright,'color',cmap(2,:),'parent',axgrid);
-    plot(rleft,zleft,'color',cmap(1,:),'parent',axgrid);
+for i = 1:length(facesup)
+    iFc = facesup(i);
+    iVx1 = comuse.fcVx(iFc,1);
+    iVx2 = comuse.fcVx(iFc,2);
+    if i == 1
+        line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+            [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(1,:),...
+            'parent',axgrid);
+    else
+        line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+            [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(1,:),...
+            'parent',axgrid,'handlevisibility','off');
+    end
+end
+for i = 1:length(facesdown)
+    iFc = facesdown(i);
+    iVx1 = comuse.fcVx(iFc,1);
+    iVx2 = comuse.fcVx(iFc,2);
+    line([comuse.vxX(iVx1),comuse.vxX(iVx2)],...
+        [comuse.vxY(iVx1),comuse.vxY(iVx2)],'color',cmap(2,:),...
+        'parent',axgrid);
 end
     
 hl = legend(axgrid, 'radial balance volume',...

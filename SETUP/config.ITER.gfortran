@@ -16,10 +16,11 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 
+          OS ?= $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
     NODENAME ?= $(shell echo `hostname`)
    MSCL_ROOT ?= ${EBROOTMSCL}
      GR_ROOT ?= ${EBROOTGR}
@@ -34,9 +35,13 @@
 #
 LD_INTEL_LIBS= -lirc -lirc_s -liomp5 -lifcoremt_pic -lsvml -lifport -limf -lm -lifcore_pic -lpthread
 
+ifeq (,$(findstring CentOS,$(OS)))
+LD_NETCDF  = `pkg-config netcdf-fortran --libs`
+else
 LD_NETCDF  = `nf-config --flibs`
+endif
 LD_GR      = -L${GR_ROOT}/lib -lgr
-LD_GKS     = -L/work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib -lGKS -lgfortran -lX11 -lXt
+LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 #LD_NAG     = `pkg-config nag --libs`
 ifdef NAGDIR
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
@@ -54,10 +59,19 @@ endif
 # LD_MPI     = -lmpi2
 
 #
+# Provide compiler
+#
+
+MPI_FC    ?= mpif90
+ifdef SOLPS_MPI
+FC         = ${MPI_FC}
+endif
+
+#
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DF2003
+SOLPS_CPP      =
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
@@ -83,6 +97,7 @@ else
 endif
 
 export NODENAME
+export OS
 
 #!!!Local Variables:
 #!!! mode: Makefile

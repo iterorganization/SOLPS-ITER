@@ -2,13 +2,13 @@
 MSCL_ROOT ?= /global/project/projectdirs/atom/atom-install-cori/solps-libs/lib_gfortran
 LD_MSCL   ?= -L${MSCL_ROOT} -lmscl
 
-FC       = ftn
+FC         = ftn
 
 ifndef SOLPS_DEBUG
-FFLAGS   = -O
+FFLAGS     = -O
 endif
 
-CPP      = cpp -traditional
+CPP        = cpp -traditional
 
 #!!!Local Variables:
 #!!! mode: Makefile

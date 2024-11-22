@@ -1,10 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % poloidal_balance make balance plots with poloidal resolution (integrating in %
 % the radial direction) in a given region                                      %
-% flux:        An (nx*ny*nd) sized matrix, where nd is the number of different %
+% flux:        An (nCv*nd) sized matrix, where nd is the number of different   %
 %              fluxes into which the total flux is decomposed. Comprising      %
 %              the flux from each component in the entire grid                 %
-% src:         An (nx*ny*nd) sized matrix, where nd is the number of different %
+% src:         An (nCv*nd) sized matrix, where nd is the number of different   %
 %              sources into which the total source is decomposed. Comprising   %
 %              the source from each component in the entire grid               %
 % res:         The code residual                                               %
@@ -17,6 +17,8 @@
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % indpol:      Logical matrix of size nx*ny that is true for cells where       %
 %              balance should be performed                                     %
+% facesup_pol: List of faces of the upstream boundary of indpol                %
+% facesdown:   List of faces of the downstream boundary of indpol              %
 % area:        The area by which each flux should be divided                   %
 % reverse:     True if the downstream surface is to the left of the upstream   %
 %              surface, otherwise false                                        %
@@ -30,110 +32,67 @@
 % polbaldist:  Either 'parallel' or 'poloidal'. Defines the distance used      %
 %              on the x-axis of the poloidal balance plots. Distances are      %
 %              mapped to the first SOL ring.                                   %
+% len:         Optional argument to specify the number of fluxes that need     %
+%              to be used to correct the radial balance.                       %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) August 2024 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function area_divide = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist)
+function pb = poloidal_balance(flux,src,res,totname,fluxname,srcname,comuse,indpol,facesup_pol,facesdown_pol,area,reverse,ismom,axbal,unitstr,areaend,polbaldist,len)
 
-topix = comuse.topix+1;
-topiy = comuse.topiy+1;
-bottomix = comuse.bottomix+1;
-bottomiy = comuse.bottomiy+1;
-rightix = comuse.rightix+1;
-rightiy = comuse.rightiy+1;
-
-% Summed fluxes through the cell edges:
-fluxedge = [];
-for i=1:size(flux,3)
-    fluxedge(:,i) = sumradedge(flux(:,:,i),indpol,comuse);
+if nargin <= 17
+    len = size(flux,2);
 end
 
-% Integrated sources:
-srcint = [];
-for i=1:size(src,3)
-    srcint(:,i) = sumrad(src(:,:,i),indpol,comuse);
-end
+% Summed fluxes and integrated sources and residuals:
+[fluxedge,srcint,resint,xdata,xdatax,pbCv,pbCvP] = sumrad(flux,src,res,indpol,facesup_pol,facesdown_pol,comuse,polbaldist);
+pb.pbCv = pbCv;
+pb.pbCvP = pbCvP;
 
-% Integrated residual:
-resint = sumrad(res,indpol,comuse);
+% Correct the radial divergences for fluxes that are already in fluxedge
+for i = 1:size(srcint,1)
+    srcint(i,1:len) = srcint(i,1:len) - fluxedge(i,1:len) + fluxedge(i+1,1:len);
+end
 
 % Account for reversal (normally inner-to-outer fluxes are positive but if
 % reverse==true then outer-to-inner fluxes become positive):
 if ~reverse
-    reversefac = 1;
     momfac = 1;
 elseif ismom
-    reversefac = -1;
     momfac = -1;
 else
-    reversefac = -1;
     momfac = 1;
 end
 if ismom
-    momfac = momfac*-sign(mean(mean(comuse.bb(:,:,3))));
+    momfac = momfac*-sign(mean(comuse.cvEb(:,3)));
 end
 
 % Areas at the ends:
 switch areaend
     case 'left'
-        area_divide = sum(findlr(area,indpol,'left',rightix,rightiy));
+        if reverse
+            faces = facesdown_pol;
+        else
+            faces = facesup_pol;
+        end
     case 'right'
-        area_divide = sum(findlr(area,indpol,'right',rightix,rightiy));
-    case 'none'
-        area_divide = 1;
-end
-
-% Find the poloidal distance along the first SOL ring (for single- or double-
-% null cases), or along the first ring in indpol (for slab case)
-% Find the left end of the balance region:
-[ix0,iy0]=ind2sub(size(indpol),find(indpol,1));
-ixsep = ix0;
-iysep = iy0;
-% Step to the first SOL ring (if not a 1d case):
-if ~isempty(find(diff(comuse.leftix(:,1))<1,1))
-    if iysep<comuse.sep+2 % Step up
-        while iysep~=comuse.sep+2
-            ixsep = topix(ixsep,iysep);
-            iysep = topiy(ixsep,iysep);
+        if reverse
+            faces = facesup_pol;
+        else
+            faces = facesdown_pol;
         end
-    elseif iysep>comuse.sep+2 % Step down
-        while iysep~=comuse.sep+2
-            ixsep = bottomix(ixsep,iysep);
-            iysep = bottomiy(ixsep,iysep);
-        end
-    end
 end
-switch polbaldist
-    case 'parallel'
-        dist2D = comuse.dspar;
-        dist2Dx = comuse.dsparx;
-    case 'poloidal'
-        dist2D = comuse.dspol;
-        dist2Dx = comuse.dspolx;
-    otherwise
-        error('Poloidal balance distance ''%s'' not supported.',polbaldist);
-end
-xdata = dist2D(ixsep,iysep);
-xdatax = dist2Dx(ixsep,iysep);
-while indpol(rightix(ix0,iy0),rightiy(ix0,iy0))
-    ixsep = rightix(ixsep,iysep);
-    iysep = rightiy(ixsep,iysep);
-    ix0 = rightix(ix0,iy0);
-    iy0 = rightiy(ix0,iy0);
-    xdata = [xdata,dist2D(ixsep,iysep)];
-    xdatax = [xdatax,dist2Dx(ixsep,iysep)];
-end
-xdatax = [xdatax,dist2Dx(rightix(ixsep,iysep),iysep)];
+pb.area_divide = sum(area(faces));
 
 % Total balance with residuals:
 cmap = comuse.cmap;
-plot(xdatax,momfac*reversefac*sum(fluxedge,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
-plot(xdata,momfac*sum(srcint,2)/area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:));
-coderes = momfac*(resint/area_divide)';
+plot(xdatax,momfac*sum(fluxedge,2)/pb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{1},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+plot(xdata,momfac*sum(srcint,2)/pb.area_divide,'marker','.','parent',axbal(1),'displayname',totname{2},'color',cmap(1,:));
+coderes = momfac*(resint/pb.area_divide);
 plot(xdata,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
 
 % Check the level of agreement between post-calculated and code-calculated residuals agree:
-postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/area_divide;
+postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/pb.area_divide;
 plot(xdata,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
 plot(xdata,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{3},' (post-cal.-code)']);
 % fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
@@ -141,7 +100,7 @@ plot(xdata,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{3},' (p
 legend(axbal(1),'show','location','best');
 title(axbal(1),'Total poloidal balance','fontweight','normal');
 axis(axbal(1),'tight');
-xlabel(axbal(1),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
+xlabel(axbal(1),[polbaldist,' dist. from downstream boundary (m)']);
 ylabel(axbal(1),['(',unitstr,')']);
     
 % Decompose fluxes:
@@ -149,12 +108,12 @@ cmap = comuse.cmap;
 for i=1:size(fluxedge,2)
     % Only make the plot if the flux is non-zero somewhere
     if any(fluxedge(:,i))
-        plot(xdatax,momfac*reversefac*fluxedge(:,i)./area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdatax,momfac*fluxedge(:,i)./pb.area_divide','marker','.','parent',axbal(2),'displayname',fluxname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 legend(axbal(2),'show','location','best');
 ylabel(axbal(2),['(',unitstr,')']);
-xlabel(axbal(2),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
+xlabel(axbal(2),[polbaldist,' dist. from downstream boundary (m)']);
 title(axbal(2),['Decomp. of ',totname{1}],'fontweight','normal');
 set(axbal(2),'xlim',get(axbal(1),'xlim'));
 
@@ -163,13 +122,13 @@ cmap = comuse.cmap;
 for i=1:size(srcint,2)
     % Only make the plot if the source is non-zero somewhere
     if any(srcint(:,i))
-        plot(xdata,momfac*srcint(:,i)./area_divide','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
+        plot(xdata,momfac*srcint(:,i)./pb.area_divide','marker','.','parent',axbal(3),'displayname',srcname{i},'color',cmap(1,:)); cmap=circshift(cmap,-1);
     end
 end
 legend(axbal(3),'show','location','best');
 set(axbal(3),'xlim',get(axbal(1),'xlim'));
 ylabel(axbal(3),['(',unitstr,')']);
-xlabel(axbal(3),[polbaldist,' dist. from inn. tar. along 1st SOL ring (m)']);
+xlabel(axbal(3),[polbaldist,' dist. from downstream boundary (m)']);
 title(axbal(3),['Decomp. of ',totname{2}],'fontweight','normal');
 set(axbal(3),'xlim',get(axbal(1),'xlim'));
 

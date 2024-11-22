@@ -71,7 +71,7 @@ src/uinp/input.eir
 src/uinp/triang.eir
 src/uinp/triang.hed
 
-# auxiliary files for manual
+# auxiliary files for manuals
 doc/solps/solps_data_git.log
 doc/solps/solps-iter_git.log
 doc/solps/solps.*
@@ -90,6 +90,11 @@ doc/solps/texput.log
 doc/solps/LICENSE.tex
 doc/solps/CONTRIBUTING.tex
 doc/solps/Old_packages.tex
+doc/AFN_BCs_documentation/LaTeX_source_code/main.*
+doc/AFN_BCs_documentation/LaTeX_source_code/main-*.*
+!doc/AFN_BCs_documentation/LaTeX_source_code/main.tex
+doc/AFN_BCs_documentation/LaTeX_source_code/defs.aux
+doc/AFN_BCs_documentation.pdf
 
 # auxiliary files for AMDS
 modules/amds/src/x_~fbr.c

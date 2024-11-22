@@ -2,7 +2,6 @@ EQUIV5 =
 
 CPP = /lib/cpp -C -traditional -ffreestanding
 
-FC = ifort
 
 #!!!Local Variables:
 #!!! mode: Makefile

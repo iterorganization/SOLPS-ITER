@@ -36,6 +36,8 @@ module load motif/2.3.8-GCCcore-10.3.0
 # mpi-library from intel/2015a is used
 module load Pango/1.48.5-GCCcore-10.3.0
 module load Emacs/28.1-GCCcore-10.3.0
+module load gnuplot/5.4.2-GCCcore-10.3.0
+module load PETSc/3.15.1-intel-2021a
 # Debugger (set environment variable DBX)
 module load ArmForge/22.1.2
 setenv DBX ddt
@@ -45,9 +47,8 @@ setenv DBX ddt
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
-setenv IPOPTDIR /vsc-hard-mounts/leuven-data/321/vsc32100/Ipopt/install
-setenv PETSC_DIR /staging/leuven/stg_00030/petsc
-setenv PETSC_ARCH arch-linux-c-debug
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPOPTDIR}/lib:${PETSC_DIR}/lib
+# setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
+# setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
 alias set_d 'source $SOLPSTOP/scripts/diff_d'
 alias set_b 'source $SOLPSTOP/scripts/diff_b'
