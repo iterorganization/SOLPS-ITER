@@ -16,27 +16,33 @@ similar to `setup.csh.ITER.gfortran` and `setup.csh.ITER.ifort64`,
 respectively. Configs `config.UL.gfortran` and `config.UL.ifort64` can
 actually be symlinked to config.ITER versions.
 
-Essentially, this script extends functionality of
+Essentially, this script extends functionality of the
 [EasyBuild](http://easybuild.readthedocs.org/) tool by adding search
 paths to ITER-specific easyconfigs (`.eb`) for sources from ITER Git
 repositories. The only requirement for this script is recent version
 of Python 3 and modulesfiles or lmod support. The rest is being
-downloaded from internet and ITER Git website. Quick astart for
+downloaded from internet and ITER Git website. Quick start for
 building may be by creating Personal Access Token from
 https://git.iter.org/plugins/servlet/access-tokens/manage and entering
 
 ~~~ bash
+    export ITER_USERNAME=myusernameatiter # Replace
     export EASYBUILD_MODULES_TOOL=Lmod # EnvironmentModules are default
     export HTTP_AUTH_BEARER="ReplaceWithPersonalAccessToken"
+    ssh-copy-id ${ITER_USERNAME}@gpc-access.iter.org
     SETUP/easybuild-local.sh --help | more
     SETUP/easybuild-local.sh
-    SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh --imas-apps
 ~~~
 
-ssh-copy-id kosl@gpc-access.iter.org
+Some unpublished EasyBuild files are only available at ITER SDCC cluster
+or are still unmerged under pull request at 
+[EasyBuild Pull requests](https://github.com/easybuilders/easybuild-framework/pulls).
+To facilitate easy copy of such recipes for selected modules from 
+SDCC `--fetch module(s)` functionality is provided.
+In order for fetch to work a local SSH key needs to be copied to ITER cluster with
+`ssh-copy-id`.
 
-Note that above minimal example requires Python 3.8+, `lmod`, and
+Note that above minimal example requires Python 3.8+, `lmod`, `tcsh` and
 `ksh` to be installed on the system and functional. The rest is
 installed by the script under the `easybuild.local` directory or
 elsewhere if desired.
@@ -99,7 +105,7 @@ installed. For example
 
     export EASYBUILD_PREFIX=/opt/pkg/ITER
 
-before running this script. Otherwise modules will be installed under
+before running this script. Otherwise, modules will be installed under
 `easybuild.local/software` and `easybuild.local/modules/all`.
 
 To use build modules use
@@ -109,14 +115,14 @@ To use build modules use
 ### Site specific configuration
 
 Instead of exporting environment variables one can save site-specific
-configuration under `SETUP/setup-easybuild.local` that is sourced
+configuration under `SETUP/setup.easybuild.local` that is sourced
 if exists. For example:
 
     export EASYBUILD_PREFIX=/opt/pkg/ITER
     export EASYBUILD_MODULES_TOOL=Lmod
-    export INTEL_LICENSE_FILE=/opt/pkg/etc/intel.lic
     export HTTP_AUTH_BEARER=MTk1ODA1MzE1MTI3OoHVFKMpL/kn8BQKWBiLFNfrCTrU
     export EASYBUILD_BUILDPATH=/dev/shm/
+    export ITER_USERNAME=kosl
     module purge
     module load AlmaLinux/profile  python-3.8.12-gcc-8.5.0-bvu5tg4
 
@@ -441,7 +447,6 @@ command add the following function to this script
 module load python-3.8.8-gcc-6.4.0-ev3ryed
 setenv HTTP_AUTH_BEARER MTk1ODA1MzE1MTI3Oo......
 setenv EASYBUILD_MODULES_TOOL EnvironmentModulesC
-setenv INTEL_LICENSE_FILE /cineca/prod/opt/compilers/intel/pe-xe-2020/binary/server.lic
 SETUP/easybuild-local.sh --help | less
 sed -i -e "/configopts =/s|.*|= configopts = '--with-slurm --with-pmi=/opt/slurm/current --with-pmi-libdir=/opt/slurm/current/lib'|" \
  easyconfigs.local/o/OpenMPI/OpenMPI-4.1.2-GCC-13.2.0.eb
@@ -518,7 +523,7 @@ SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
   --help                prints and opens this manual, then EasyBuild help
   --imas-foss           builds IMAS with foss-2023b toolchain
   --imas-foss install   installs IMAS and module
-  --intel               build INTEL modules and toolchain
+  --intel               build INTEL toolchain and modules
   --imas-intel clean    cleans IMAS repository before rebuilding
   --imas-intel          builds IMAS with INTEL toolchain 
   --imas-intel install  installs IMAS and module built with INTEL
@@ -526,6 +531,7 @@ SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
   --imas install        installs IMAS CentOS-8 module built with GCC and INTEL
   --imas-apps           builds all IMAS applications
   --pull                pulls Git repos for IMAS and updates EasyBuild configs
+  --fetch module(s)	fetch EasyBuild files for listed modules from SDCC cluster
   --patch-imas-modules  fixes AMNS and GGD module by removing CPATH
 
 ENVIRONMENT variables:
@@ -536,10 +542,11 @@ ENVIRONMENT variables:
   EASYBUILD_MODULES_TOOL   Modules tool (Lmod, EnvironmentModules)
   EASYBUILD_MODULE_SYNTAX  Tcl or Lua syntax for modulefiles generated
   HTTP_AUTH_BEARER         Personal token for downloading of ITER GIT sources
+  ITER_USERNAME            Username at ITER SDCC cluster to be used for scp
 
 Files:
 
-  SETUP/setup-easybuild.local Site specific environment variables and modules
+  SETUP/setup.easybuild.local Site specific environment variables and modules
 
 ~~~
 EOF
@@ -552,7 +559,7 @@ EASYBUILD_LOCAL=${solps_top}/easybuild.local
 TAG_DD=${TAG_DD:-3.42.0}
 TAG_AL=${TAG_AL:-5.4.0}
 
-setup=${solps_top}/SETUP/setup-easybuild.local && test -f ${setup} && . ${setup}
+setup=${solps_top}/SETUP/setup.easybuild.local && test -f ${setup} && . ${setup}
     
 export EASYBUILD_PREFIX=${EASYBUILD_PREFIX:-${EASYBUILD_LOCAL}}
 export MODULEPATH=${EASYBUILD_PREFIX}/modules/all
@@ -580,11 +587,11 @@ if ! test -d ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs
 		-b SOLPS-ITER ${solps_top}/easyconfigs.local
 fi
 
-if ! command -v ksh 2>&1 >/dev/null
-then
-    echo "ksh (required by GR) could not be found! Install package."
-    exit 1
-fi
+#if ! command -v ksh 2>&1 >/dev/null
+#then
+#    echo "ksh (required by GR) could not be found! Install package."
+#    exit 1
+#fi
 if ! command -v csh 2>&1 >/dev/null
 then
     echo "csh (required by NCL and SOLPS) could not be found! Install tcsh."
@@ -594,8 +601,7 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
-	ToFu/1.7.9-gfbf-2023b
-	xarray/2024.5.0-gfbf-2023b
+	xarray/2024.5.0-gfbf-2023b --from-ITER-cluster
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0
@@ -621,6 +627,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	GGD/1.12.0-foss-2023b-DD-3.42.0
 	AMNS/1.5.1-foss-2023b-DD-3.42.0
 	Viz/2.8.0-foss-2023b
+	ToFu/1.7.9-gfbf-2023b --from-pr=20999
         "
 
 # Listed in SETUP/setup.csh.ITER.ifort64
