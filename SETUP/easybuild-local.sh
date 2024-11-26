@@ -621,8 +621,10 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b
 	json-fortran/8.5.2-GCC-13.2.0
-	IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0
-	IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0
+	Data-Dictionary/3.42.0-GCCcore-13.2.0 --from-ITER-cluster
+	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-3.42.0 --from-ITER-cluster
+	IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
+	IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
 	IDStools/2.0.0-gfbf-2023b
 	GGD/1.12.0-foss-2023b-DD-3.42.0
 	AMNS/1.5.1-foss-2023b-DD-3.42.0
