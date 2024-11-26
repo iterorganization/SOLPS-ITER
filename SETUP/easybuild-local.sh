@@ -644,15 +644,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	MSCL/1.2.4-iimkl-2023b --from-ITER-cluster
 	GR/0.0.94-GCCcore-13.2.0
 	GLI/4.5.31-GCCcore-13.2.0
-	ESMF/8.6.1-intel-2023b --from-ITER-cluster # for NCL
-	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-cluster # for NCL
-	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-cluster # for NCL
-	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-cluster # for Armadillo
-	HDF5/1.14.4.3-iimpi-2023b --from-ITER-cluster # for Armadillo
-	arpack-ng/3.9.0-intel-2023b --from-ITER-cluster # for Armadillo
-	Armadillo/12.8.0-intel-2023b --from-ITER-cluster # for NCL
-	GDAL/3.9.0-intel-2023b --from-ITER-cluster # for NCL
-	NCL/6.6.2-intel-2023b --from-ITER-cluster
+	NCL/6.6.2-intel-2023b --from-pr=20262 --from-pr=21176
 	netCDF/4.9.2-iimpi-2023b
 	netCDF-Fortran/4.6.1-iimpi-2023b
 	NAG/26-intel-compilers-2023.2.1
