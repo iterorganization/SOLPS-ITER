@@ -650,7 +650,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	arpack-ng/3.9.0-intel-2023b --from-ITER-cluster # for Armadillo
 	Armadillo/12.8.0-intel-2023b --from-ITER-cluster # for NCL
 	GDAL/3.9.0-intel-2023b --from-ITER-cluster # for NCL
-	NCL/6.6.2-intel-2023b --from-pr=21176 --from-ITER-cluster # for NCL
+	NCL/6.6.2-intel-2023b --from-ITER-cluster
 	netCDF/4.9.2-iimpi-2023b
 	netCDF-Fortran/4.6.1-iimpi-2023b
 	NAG/26-intel-compilers-2023.2.1
