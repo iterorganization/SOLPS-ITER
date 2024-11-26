@@ -605,7 +605,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	xarray/2024.5.0-gfbf-2023b --from-ITER-cluster
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
-	GR/0.0.94-GCCcore-13.2.0
+	GR/0.0.94-GCCcore-13.2.0 --from-ITER-cluster
 	GLI/4.5.31-GCCcore-13.2.0
 	NCL/6.6.2-foss-2023b
 	flex/2.6.4-GCCcore-13.2.0
