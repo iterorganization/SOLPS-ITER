@@ -823,6 +823,7 @@ function build_modules () {
 	module="${line%% *}"
 	test -z "${module}" && continue # skip empty line
 	optional_args=${line#* }
+	if [ "${optional_args}" = "${module}" ]; then optional_args=""; fi
         if test -f ${EASYBUILD_PREFIX}/modules/all/${module}
         then echo -e "\e[32mModule ${module} exists. Skipping build.\e[m"
         else echo -e "\e[34mBuilding required SOLPS-ITER module ${line}$ec\e[m"
