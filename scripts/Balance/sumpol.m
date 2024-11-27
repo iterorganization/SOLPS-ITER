@@ -11,34 +11,27 @@
 % end
 
 % Given a logical array specifying the balance volume, find radially-summed
-% values along each row of that volume
-function yout = sumpol(yin,indrad,geomb2)
-    rightix = geomb2.rightix+1;
-    rightiy = geomb2.rightiy+1;
-    topix = geomb2.topix+1;
-    topiy = geomb2.topiy+1;
-    yout = [];
-    % Go to the bottom left of indpol:
-    [ix,iy]=ind2sub(size(indrad),find(indrad,1));
-    % For radially consecutive points in indrad, sum poloidally:
-    yout = [];
-    iyout = 1;
-    while true
-        yout(iyout) = yin(ix,iy);
-        iyscan = iy;
-        ixscan = ix;
-        while indrad(rightix(ixscan,iyscan),rightiy(ixscan,iyscan))
-            ixscan = rightix(ixscan,iyscan);
-            iyscan = rightiy(ixscan,iyscan);
-            yout(iyout) = yout(iyout)+yin(ixscan,iyscan);
-        end
-        iyout = iyout+1;
-        if indrad(topix(ix,iy),topiy(ix,iy)) && ...
-           topiy(ixscan,iyscan)~=iyscan
-            ix = topix(ix,iy);
-            iy = topiy(ix,iy);
-        else
-            break;
+% values in each flux tube of that volume
+function yout = sumpol(yin,indrad,geomb2,index)
+
+    yout = zeros(geomb2.nFt,1);
+    nonzero = false(geomb2.nFt,1);
+    for iFt = 1:geomb2.nFt % integration in flux tube
+        iCv1 = geomb2.ftCvP(iFt,1);
+        iCv2 = iCv1 + geomb2.ftCvP(iFt,2) - 1;
+        for i = iCv1:iCv2
+            iCv = geomb2.ftCv(i);
+            if indrad(iCv)
+                yout(iFt) = yout(iFt) + yin(iCv);
+                nonzero(iFt) = true;
+            end
         end
     end
+
+    % Eliminate the flux tubes that are absent in indrad:
+    yout = yout(nonzero);
+
+    % Sort the data according to index:
+    yout = yout(index);
+
 end

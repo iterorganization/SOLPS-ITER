@@ -2,13 +2,15 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
-echo 'add_library(energy_rate_coeff OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/energy_rate_coeff.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
-echo 'add_library(feelei1 OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
-echo 'add_dependencies(feelei1 energy_rate_coeff)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+# echo 'add_library(called OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/energy_rate_coeff.f ${PROJECT_SOURCE_DIR}/interfaces/couple_SOLPS-ITER/couple_specific.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+# echo 'add_library(calling OBJECT ${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f ${PROJECT_SOURCE_DIR}/interfaces/couple_SOLPS-ITER/eirmod_wneutrals.f)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+# echo 'add_dependencies(calling called)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo '${OBJDIR}/rstern.o: ${OBJDIR}/rtsaf.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
+echo '${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
+echo '${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug
