@@ -27,7 +27,6 @@ https://git.iter.org/plugins/servlet/access-tokens/manage and entering
 
 ~~~ bash
     export ITER_USERNAME=myusernameatiter # Replace
-    export EASYBUILD_MODULES_TOOL=Lmod # EnvironmentModules are default
     export HTTP_AUTH_BEARER="ReplaceWithPersonalAccessToken"
     ssh-copy-id ${ITER_USERNAME}@gpc-access.iter.org
     SETUP/easybuild-local.sh --help | more
@@ -47,15 +46,17 @@ Note that above minimal example requires Python 3.8+, `lmod`, `tcsh` and
 installed by the script under the `easybuild.local` directory or
 elsewhere if desired.
 
+Lmod and Lua are default and recommended way to handle modules.
+You may need to export `EASYBUILD_MODULES_TOOL` and 
+`EASYBUILD_MODULE_SYNTAX` environment variable to match you cluster
+environment.
+
 Some knowledge of EasyBuild is needed to resolve possible compile
 problems. The script will need to be run several times with different
 arguments on the machine where local modules are being built. It may
 take a day to build everything from scratch. Script without arguments
-will by default build all non-IMAS modules and if fails it can be
-restarted. IMAS modules are built with IMAS installer and not with
-EasyBuild. After IMAS modules are being built then IMAS applications
-can be built using `--imas-apps` switch or explicitly naming `.eb`
-file that exists in search path.
+will by default build all foss modules and if fails it can be
+restarted until all modules are listed in green.
 
 Building `intel` toolchain and corresponding modules is optional and
 everyting can be built with `foss` toolchain.
@@ -564,8 +565,8 @@ setup=${solps_top}/SETUP/setup.easybuild.local && test -f ${setup} && . ${setup}
 export EASYBUILD_PREFIX=${EASYBUILD_PREFIX:-${EASYBUILD_LOCAL}}
 export MODULEPATH=${EASYBUILD_PREFIX}/modules/all
 export EASYBUILD_GITHUB_USER=${EASYBUILD_GITHUB_USER:-${USER}}
-export EASYBUILD_MODULES_TOOL=${EASYBUILD_MODULES_TOOL:-EnvironmentModules}
-export EASYBUILD_MODULE_SYNTAX=${EASYBUILD_MODULE_SYNTAX:-Tcl}
+export EASYBUILD_MODULES_TOOL=${EASYBUILD_MODULES_TOOL:-Lua}
+export EASYBUILD_MODULE_SYNTAX=${EASYBUILD_MODULE_SYNTAX:-Lua}
 export EASYBUILD_ALLOW_MODULES_TOOL_MISMATCH=1
 export PATH=${EASYBUILD_LOCAL}/bin:${PATH}
 ebrp=${EASYBUILD_LOCAL}/easybuild/easyconfigs
@@ -627,8 +628,15 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
 	IDStools/2.0.0-gfbf-2023b
 	GGD/1.12.0-foss-2023b-DD-3.42.0
+	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-cluster # For graphviz
+	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-cluster 
 	AMNS/1.5.1-foss-2023b-DD-3.42.0
+	build/1.0.3-GCCcore-13.2.0 --from-ITER-cluster 
+	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-cluster
+	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-cluster
+       	PyQtGraph/0.13.7-foss-2023b --from-ITER-cluster
 	Viz/2.8.0-foss-2023b
+	astropy/6.1.0-gfbf-2023b --from-ITER-cluster
 	ToFu/1.7.9-gfbf-2023b --from-pr=20999
         "
 
@@ -818,7 +826,7 @@ function build_modules () {
 	test -z "${module}" && continue # skip empty line
 	optional_args=${line#* }
 	if [ "${optional_args}" = "${module}" ]; then optional_args=""; fi
-        if test -f ${EASYBUILD_PREFIX}/modules/all/${module}
+        if test -f ${EASYBUILD_PREFIX}/modules/all/${module}*
         then echo -e "\e[32mModule ${module} exists. Skipping build.\e[m"
         else echo -e "\e[34mBuilding required SOLPS-ITER module ${line}$ec\e[m"
 	     if [[ "${optional_args}" == *"--from-ITER-cluster"* ]]
