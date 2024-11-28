@@ -19,7 +19,24 @@ actually be symlinked to config.ITER versions.
 Essentially, this script extends functionality of the
 [EasyBuild](http://easybuild.readthedocs.org/) tool by adding search
 paths to ITER-specific easyconfigs (`.eb`) for sources from ITER Git
-repositories. The only requirement for this script is recent version
+repositories. 
+
+The collection of the EasyBuild config files (with extension .eb), is done from
+various repositiories in the order of apperance:
+
+1. [EasyBuild easyconfigs latest release](https://github.com/easybuilders/easybuild-easyconfig)
+   from PyPi installed under `${SOLPS_TOP}/easybuild.local/easybuild/easyconfigs/`.
+2. [IMAS easybuild-easyconfigs Git repository](https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs/)
+   for ITER software installed under `${SOLPS_TOP}/easybuild.local/imas-easybuild-easyconfigs`
+3. [Easybuild easyconfigs from pull requests](https://github.com/easybuilders/easybuild-framework/pulls) for
+   unmerged software that should reside under EasyBuild easyconfigs. Location 
+   of these files obtained with `--from-pr` switch is under temporary build directories.
+4. As a last resort, unpublished EasyBuild config files are fetched from ITER SDCC cluster
+   with `--from-ITER` switch and stored under `${SOLPS_TOP}/easyconfigs.local/` that takes priority
+   in `--robot` search path. Sources for unpublished software is fetched too.
+   Note that ubpublished dependencies residing at ITER cluster are required to be fetched beforehand. 
+
+The only requirement for this script is recent version
 of Python 3 and modulesfiles or lmod support. The rest is being
 downloaded from internet and ITER Git website. Quick start for
 building may be by creating Personal Access Token from
@@ -606,8 +623,8 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-cluster
-	GLI/4.5.31-GCCcore-13.2.0
-	NCL/6.6.2-foss-2023b
+	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-cluster
+	NCL/6.6.2-foss-2023b --from-pr=20262 --from-pr=21176
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	netCDF/4.9.2-gompi-2023b
@@ -618,7 +635,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	Qt5/5.15.13-GCCcore-13.2.0
 	netCDF-Fortran/4.6.1-gompi-2023b
 	netcdf4-python/1.6.5-foss-2023b
-	motif/2.3.8-GCCcore-13.2.0
+	motif/2.3.8-GCCcore-13.2.0 --from-ITER-cluster
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b
 	json-fortran/8.5.2-GCC-13.2.0
