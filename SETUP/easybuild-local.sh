@@ -640,7 +640,11 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	SimDB/0.11.0-gfbf-2023b
 	json-fortran/8.5.2-GCC-13.2.0
 	Data-Dictionary/3.42.0-GCCcore-13.2.0 --from-ITER-cluster
+	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-cluster
 	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-3.42.0 --from-ITER-cluster
+	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-cluster
+       	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --inject-checksums --force
+	UDA/2.7.5-GCC-13.2.0 --from-ITER-cluster
 	IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
 	IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
 	IDStools/2.0.0-gfbf-2023b
@@ -666,10 +670,17 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	SciPy-bundle/2023.12-iimkl-2023b --from-pr=20262
 	xarray/2024.5.0-iimkl-2023b --from-ITER-cluster
 	makedepend/1.0.9-GCCcore-13.2.0
+	ESMF/8.6.1-intel-2023b --from-ITER-cluster
+	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC 
+	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC
+	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-cluster
+	HDF5/1.14.4.3-iimpi-2023b --from-ITER-cluster --optarch=GENERIC
+       	arpack-ng/3.9.0-intel-2023b --from-ITER-cluster
+	Armadillo/12.8.0-intel-2023b  --from-ITER-cluster
 	MSCL/1.2.4-iimkl-2023b --from-ITER-cluster
 	GR/0.0.94-GCCcore-13.2.0
 	GLI/4.5.31-GCCcore-13.2.0
-	NCL/6.6.2-intel-2023b --from-pr=20262 --from-pr=21176
+	NCL/6.6.2-intel-2023b --from-pr=20262 --from-pr=21176 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b
 	netCDF-Fortran/4.6.1-iimpi-2023b
 	NAG/26-intel-compilers-2023.2.1
@@ -848,7 +859,7 @@ function build_modules () {
         else echo -e "\e[34mBuilding required SOLPS-ITER module ${line}$ec\e[m"
 	     if [[ "${optional_args}" == *"--from-ITER-cluster"* ]]
 	     then fetch_from_iter_cluster ${module}
-		  optional_args=""
+		  optional_args="${optional_args#*--from-ITER-cluster}"
 	     fi
              easybuild_file=$(echo ${module}.eb | tr / -)
              eb --robot ${eb_auth} ${easybuild_file} ${optional_args}
