@@ -21,21 +21,6 @@ Essentially, this script extends functionality of the
 paths to ITER-specific easyconfigs (`.eb`) for sources from ITER Git
 repositories. 
 
-The collection of the EasyBuild config files (with extension .eb), is done from
-various repositiories in the order of apperance:
-
-1. [EasyBuild easyconfigs latest release](https://github.com/easybuilders/easybuild-easyconfig)
-   from PyPi installed under `${SOLPS_TOP}/easybuild.local/easybuild/easyconfigs/`.
-2. [IMAS easybuild-easyconfigs Git repository](https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs/)
-   for ITER software installed under `${SOLPS_TOP}/easybuild.local/imas-easybuild-easyconfigs`
-3. [Easybuild easyconfigs from pull requests](https://github.com/easybuilders/easybuild-framework/pulls) for
-   unmerged software that should reside under EasyBuild easyconfigs. Location 
-   of these files obtained with `--from-pr` switch is under temporary build directories.
-4. As a last resort, unpublished EasyBuild config files are fetched from ITER SDCC cluster
-   with `--from-ITER` switch and stored under `${SOLPS_TOP}/easyconfigs.local/` that takes priority
-   in `--robot` search path. Sources for unpublished software is fetched too.
-   Note that ubpublished dependencies residing at ITER cluster are required to be fetched beforehand. 
-
 The only requirement for this script is recent version
 of Python 3 and modulesfiles or lmod support. The rest is being
 downloaded from internet and ITER Git website. Quick start for
@@ -89,6 +74,22 @@ script:
  - easyconfigs.local/ is an overlay of site specific Easyconfigs that are
    different or missing from local EasyBuild or IMAS extra easyconfigs
 
+The collection of the EasyBuild config files (with extension .eb), is done from
+various repositiories in the order of apperance:
+
+1. [EasyBuild easyconfigs latest release](https://github.com/easybuilders/easybuild-easyconfig)
+   from PyPi installed under `${SOLPS_TOP}/easybuild.local/easybuild/easyconfigs/`.
+2. [IMAS easybuild-easyconfigs Git repository](https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs/)
+   for ITER software installed under `${SOLPS_TOP}/easybuild.local/imas-easybuild-easyconfigs`
+3. [Easybuild easyconfigs from pull requests](https://github.com/easybuilders/easybuild-framework/pulls) for
+   unmerged software that should reside under EasyBuild easyconfigs. Location 
+   of these files obtained with `--from-pr` switch is under temporary build directories.
+4. As a last resort, unpublished EasyBuild config files are fetched from ITER SDCC cluster
+   with `--from-ITER` switch and stored under `${SOLPS_TOP}/easyconfigs.local/` that takes priority
+   in `--robot` search path. Sources for unpublished software is fetched too.
+   Note that unpublished dependencies residing at ITER cluster are required to be fetched beforehand. 
+
+
 Quite some number of easyconfigs can only be found installed on ITER
 that are slight modification of toolchain. Missing `.eb` and `.patch`
 files can be copied manually from ITER cluster
@@ -99,15 +100,9 @@ into
 
     easyconfigs.local/<first_letter>/<module>/
 
-The `easyconfigs.local` is actually a SOLPS-ITER distribution of
-required easyconfigs from [ITER Git
-repository](https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs/browse?at=refs%2Fheads%2FSOLPS-ITER)
-including some general purpose or site-tailored easyconfigs that
-should rather be [pushed to
-upstream](https://github.com/easybuilders/easybuild-easyconfigs/pulls).
 
 For a large software distribution such as SOLPS-ITER it is important
-that all modules use the same parent modules. For example Qt and PyQt
+that all modules use the same parent modules. For example Qt and PySide
 should be aligned with only one version. Replacing with newer version
 might lead to crashes and symbol problems. Often problems occur with
 OpenSSL that should be the latest system provided one. Complete build
@@ -126,7 +121,7 @@ installed. For example
 before running this script. Otherwise, modules will be installed under
 `easybuild.local/software` and `easybuild.local/modules/all`.
 
-To use build modules use
+To use such build modules use
 
     module use ${PWD}/easybuild.local/modules/all
 
@@ -151,30 +146,15 @@ by putting them into easyconfigs.local
 
     SETUP/easybuild-local.sh --help | less
     SETUP/easybuild-local.sh # defaults to foss modules
-    SETUP/easybuild-local.sh --imas-foss 
-    SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh GGD-1.11.0-GCC-13.2.0-DD-3.38.1.eb
-    sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
     SETUP/easybuild-local.sh Viz-2.8.0-foss-2023b.eb --robot
-    SETUP/easybuild-local.sh SimDB-0.7.1-foss-2023b.eb --robot
+
 
 ### SOLPS-ITER ifort64 modules
 
-Before building INTEL modules EULA license is accepted with
-
-    SETUP/easybuild-local.sh intel-compilers-2023.2.1.eb --accept-eula-for=Intel-oneAPI
-    SETUP/easybuild-local.sh imkl-2023.2.0.eb --accept-eula-for=Intel-oneAPI
-
-Then remaining INTEL IMAS is being built
+Building INTEL modules assumes that EULA license is accepted.
+INTEL IMAS is being built with
 
     SETUP/easybuild-local.sh --intel
-    SETUP/easybuild-local.sh --imas-intel clean # optional
-    SETUP/easybuild-local.sh --imas-intel
-    SETUP/easybuild-local.sh --imas install
-    SETUP/easybuild-local.sh --imas-apps
-    sed -i -e /CPATH/d easybuild.local/modules/*/GGD/*
-    sed -i -e /CPATH/d easybuild.local/modules/*/AMNS/*
-
 
 ## GCC, foss, gompi and OpenMPI toolchains
 
@@ -189,7 +169,7 @@ and forcing rebuild even if built succesfully with
 
     SETUP/easybuild-local.sh --force \
       --try-amend="configopts=--with-slurm --with-pmi=/usr --with-pmi-libdir=/usr/lib64" \
-      OpenMPI-4.1.4-GCC-12.2.0.eb
+      OpenMPI-4.1.6-GCC-13.2.0.eb
 
 ## HTTP authentication setup
 
@@ -216,15 +196,30 @@ and then usual rebuild of new packages with
 
     SETUP/easybuild-local.sh
     SETUP/easybuild-local.sh --intel
-    SETUP/easybuild-local.sh --imas-foss install
-    SETUP/easybuild-local.sh --imas-intel install
-    SETUP/easybuild-local.sh --imas install
-    SETUP/easybuild-local.sh --imas-apps
     SETUP/easybuild-local.sh --patch-imas-modules
 
 ## Package notes
 
+### Invalid source checksums
 
+Often there are some checksum problems at ITER easyconfigs due to
+improper source tag specifications. To remedy this situation a quick
+refresh can be used after config and source files fetched:
+
+   SETUP/easybuild-local.sh SimDB-0.11.0-gfbf-2023b.eb --inject-checksums
+   SETUP/easybuild-local.sh SimDB-0.11.0-gfbf-2023b.eb
+   SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb --inject-checksums --force 
+   SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb
+
+### MSCL,ESMF,GSL,... on cluster with AMD processors and Intel toolchain
+
+Due to Intel libries dependent packages requires disabled architecture
+optimisation flags with
+
+   SETUP/easybuild-local.sh MSCL-1.2.4-iimkl-2023b.eb --optarch=GENERIC
+   SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb --optarch=GENERIC --robot
+   SETUP/easybuild-local.sh GSL-2.7-intel-compilers-2023.2.1.eb --optarch=GENERIC
+   
 ### OpenSSL
 
 Qt5 and Qt6 should have OpenSSL version 1.1.1 installed on the system
@@ -237,20 +232,6 @@ of OpenSSL module and symbol incompatibility.
 Building ParaView can run out of memory or crashes on some machines
 and for that use lower threads or even `--parallel 1` for serial build.
 
-### IMAS
-
-IMAS installer is needed to build IMAS modules. There is no EasyBuild
-for IMAS! After IMAS is built AMNS, GGD, and Viz can be built. Note
-that by default IMAS module name assumes "some" compilers without
-having toolchain in its name. For example `IMAS/3.40.1-4.11.9-2023b`
-module may or may not contain `ifort` modules. This means that
-`--imas-foss` will build only *foss* FORTRAN modules, while
-`--imas-intel` will build only *intel* FORTRAN modules.
-`--imas` will build all compiler versions and is usually used by 
-`setup.csh.ITER.ifort64` and some `--imas-apps`. So, in principle 
-all 3 IMAS variants needs to be built. For 'foss-only' IMAS apps some
-prerequisites will need to be adapted to exclude INTEL dependencies.
-
 ### AMNS, GGD, Viz
 
 AMNS requires system to having latexmk package installed on the system.
@@ -258,6 +239,21 @@ AMNS requires system to having latexmk package installed on the system.
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
     ('IMAS/3.40.1-4.11.9-2023b', EXTERNAL_MODULE),
+
+If IMAS-AL MATLAB is not required it can be removed from AMNS with 
+~~~ diff
+diff --git a/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb b/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
+index 9ebb3bc..0a64acd 100644
+--- a/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
++++ b/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
+@@ -31,7 +31,7 @@ builddependencies = [
+     ('IMAS-AL-Fortran', '5.3.0', versionsuffix),
+     ('IMAS-AL-Java', '5.3.0', versionsuffix),
+     ('IMAS-AL-Python', '5.3.0', versionsuffix),
+-    ('IMAS-AL-Matlab', '5.3.0', versionsuffix),
++#    ('IMAS-AL-Matlab', '5.3.0', versionsuffix),
+ ]
+~~~
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -270,49 +266,6 @@ or
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/GGD/* 
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/AMNS/*
 
-### Texlive 20230313-GCC-12.2.0
-
-Incorrect EasyBuild file was corrected by changing version in install command
-
-    %(builddir)s/install-tl-20210324/install-tl
-
-and a historic CTAN repository from Erlangen-Nürnberg was necessary to build 
-the package.
-
-### NAGfor
-
-Incorrect checksum when building was updated with computing
-
-    sha256sum easybuild.local/sources/n/NAGfor/NAGfor-6.2.14.tgz
-
-and replaciing checksum with
-
-    mkdir -p easyconfigs.local/n/NAGfor/
-    cp easybuild.local/easybuild/easyconfigs/n/NAGfor/NAGfor-6.2.14.eb \
-     easyconfigs.local/n/NAGfor/
-    vi easyconfigs.local/n/NAGfor/NAGfor-6.2.14.eb
-
-
-### NVHPC required by IMAS installer
-
-PGI FORTRAN compiler is provided inside NVHPC for building IMAS
-modules. Build manually with
-
-    SETUP/easybuild-local.sh NVHPC-21.2.eb --accept-eula-for=NVHPC \
-        --cuda-compute-capabilities=8.0
-
-
-### MDSplus
-
-IMAS Installer actually requires jTraverse.jar provided by
-MDSplus-Java module that is then used in `setup.csh.HOST.toolchain`
-too!
-
-### SimDB
-
-Requires OpenLDAP to be installed on the system.
-
-    yum install openldap-devel
 
 ## Setting up local SOLPS-ITER setup.csh
 
@@ -364,13 +317,13 @@ of PyQt5 too.
 
 ~~~ bash
 mkdir -p easyconfigs.local/p/PyQt5
-cp easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb  easyconfigs.local/p/PyQt5/
-sed -i -e s/--no-designer-plugin// easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb
-vi easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-12.2.0.eb # to Qt/5.15.2
-SETUP/easybuild-local.sh PyQt5-5.15.2-GCCcore-12.2.0.eb --force
+cp easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.2-GCCcore-13.2.0.eb  easyconfigs.local/p/PyQt5/
+sed -i -e s/--no-designer-plugin// easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-13.2.0.eb
+vi easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-13.2.0.eb # to Qt/5.15.2
+SETUP/easybuild-local.sh PyQt5-5.15.2-GCCcore-13.2.0.eb --force
 
 # INTEL toolchain
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-intel-2022b.eb --skip-test-step
+SETUP/easybuild-local.sh SciPy-bundle-2020.11-intel-2023b.eb --skip-test-step
 ~~~
 
 Note that there can be only slight version differences bewteen Qt5 and PyQt5.
@@ -379,11 +332,11 @@ Note that there can be only slight version differences bewteen Qt5 and PyQt5.
 #### Changing Qt5 version in gnuplot
 
      mkdir -p easyconfigs.local/g/gnuplot
-     cp easybuild.local/easybuild/easyconfigs/g/gnuplot/gnuplot-5.4.1-GCCcore-12.2.0.eb easyconfigs.local/g/gnuplot/
-     sed -i -e /Qt5/s/5.14.2/5.15.2/ easyconfigs.local/g/gnuplot/gnuplot-5.4.1-GCCcore-12.2.0.eb
-     SETUP/easybuild-local.sh gnuplot-5.4.1-GCCcore-12.2.0.eb --force
+     cp easybuild.local/easybuild/easyconfigs/g/gnuplot/gnuplot-5.4.1-GCCcore-13.2.0.eb easyconfigs.local/g/gnuplot/
+     sed -i -e /Qt5/s/5.14.2/5.15.2/ easyconfigs.local/g/gnuplot/gnuplot-5.4.1-GCCcore-13.2.0.eb
+     SETUP/easybuild-local.sh gnuplot-5.4.1-GCCcore-13.2.0.eb --force
 
-#### HDF5-1.10.7-iimpi-2022b.eb used by netCDF-4.7.4-iimpi-2022b.eb
+#### HDF5-1.10.7-iimpi-2023b.eb used by netCDF-4.7.4-iimpi-2023b.eb
 
 AMD processors fail building numpy as part of SciPy-bundle. Numpy
 fails on AMD processors due to disabled SSE message. With added extra
@@ -391,21 +344,20 @@ toolchain fortran AVX options
 
      toolchainopts = {'pic': True, 'usempi': True, 'extra_fcflags': '-march=core-avx2'}
 
-### ITER cluster with CentOS 8.2 and GPFS
+### ITER SDCC cluster with RHEL9
 
-System python version 3.6.8 is too old and causes "permission denied"
-when copytree in vityual environment Python is running. Newer version
-through modules works. However, Easybuild refuses build module if the
-same module is already loaded! We overcome this initilal problem by
-firstly installing everything and then hiding loaded Python with
+OpenMPI with Slurm and PMI requires rebuild for dependent packages
+such as NetCDF, HDF5, ... 
 
-    module load Python/3.9.5-GCCcore-12.2.0-bare
-    SETUP/easybuild-local.sh  --help | less
-    tmp_path=$PATH tmp_llp=$LD_LIBRARY_PATH tmp_pp=$PYTHONPATH 
-    module purge
-    export PATH=$tmp_path LD_LIBRARY_PATH=$tmp_llp PYTHONPATH=$tmp_pp
-    export INTEL_LICENSE_FILE=27010@io-ws-ls1  
 
+    SETUP/easybuild-local.sh --force --skip-test-step \
+      --try-amend="configopts=--with-slurm --with-pmi" \
+      OpenMPI-4.1.6-GCC-13.2.0.eb
+
+
+Several processor generations in compute nodes (gen9, gen10, gen11)
+exists and for building the oldest (gen9) should be in order to run
+modules on all nodes without crashes due to binary incompatibility.
 
 ITER Organization is using "Forward Trust SSL Proxy" and `--help` does
 not work due to intermediate self-signed certificate. To overcome this
@@ -419,14 +371,6 @@ to existing Python CA certificates trust with
 This manual will then show correctly in local browser too
 
     SETUP/easybuild-local.sh  --help
-
-Binutils easyblock *sanity check* incorrectly assumes that no static
-linking was done as `ldd` shows zlib loaded in LD_LIBRARY_PATH.
-However, this is comming from our EasyBuild Python. We skip the sanity
-check step by adding a line at end of all binutils easyconfigs
-
-    sed -i -e '$askipsteps = ["sanitycheck"]' \
-      easybuild.local/easybuild/easyconfigs/b/binutils/*.eb
 
 Since building on ITER cluster is unnecessary and this is just proof
 of concept, useful for testing, one might consider to build everything
@@ -443,7 +387,7 @@ Do not forget to remove /dev/shm/$USER imediately after testing! We
 can build even faster with number of processors doubled on compute
 nodes
 
-    srun -N1 -n36 -p gen10_ib --pty bash -i
+    srun -N1 -n36 -p gen10 --pty bash -i
 
 ### EU IM Gateway cluster eufus.eu
 
@@ -498,22 +442,6 @@ sed -i -e s/ENABLE_JAVA=ON/ENABLE_JAVA=OFF/ \
 SETUP/easybuild-local.sh ParaView-5.10.0-intel-2023b-mpi.eb --parallel 16
 ~~~
 
-### Marconi 100 
-
-Red Hat Enterprise Linux release 8.1 with POWER9 CPU ppc64le 
-
-SLURM PMI2 is not available on M100. 
-~~~ bash
-module load python/3.8.2
-export EASYBUILD_MODULES_TOOL=EnvironmentModules
-sed -i -e "/configopts =.*slurm/s|.*|configopts = '--with-slurm'|" \
- easyconfigs.local/o/OpenMPI/OpenMPI-4.1.2-GCC-13.2.0.eb
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-foss-2023b.eb --skip-test-step
-SETUP/easybuild-local.sh ParaView-5.10.0-foss-2023b-mpi.eb --parallel 2
-~~~
-
-Python 3.8.6 requires newer `setuptools` or to be removed from Python bundle.
-
 ### Debian 11 workstation
 
 Python 3.9.2 provided by the system is sufficient for building the
@@ -539,15 +467,7 @@ sed -i -e "/configopts/s/'$/ --enable-qt-help=no'/" \
 SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
 
   --help                prints and opens this manual, then EasyBuild help
-  --imas-foss           builds IMAS with foss-2023b toolchain
-  --imas-foss install   installs IMAS and module
   --intel               build INTEL toolchain and modules
-  --imas-intel clean    cleans IMAS repository before rebuilding
-  --imas-intel          builds IMAS with INTEL toolchain 
-  --imas-intel install  installs IMAS and module built with INTEL
-  --imas                builds default CentOS-8 IMAS built with GCC and INTEL
-  --imas install        installs IMAS CentOS-8 module built with GCC and INTEL
-  --imas-apps           builds all IMAS applications
   --pull                pulls Git repos for IMAS and updates EasyBuild configs
   --fetch module(s)	fetch EasyBuild files for listed modules from SDCC cluster
   --patch-imas-modules  fixes AMNS and GGD module by removing CPATH
@@ -575,7 +495,7 @@ solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
 TAG_DD=${TAG_DD:-3.42.0}
-TAG_AL=${TAG_AL:-5.4.0}
+TAG_AL=${TAG_AL:-5.3.0}
 
 setup=${solps_top}/SETUP/setup.easybuild.local && test -f ${setup} && . ${setup}
     
@@ -639,19 +559,18 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b
 	json-fortran/8.5.2-GCC-13.2.0
-	Data-Dictionary/3.42.0-GCCcore-13.2.0 --from-ITER-cluster
+	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-cluster
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-cluster
-	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-3.42.0 --from-ITER-cluster
+	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-cluster
 	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-cluster
        	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --inject-checksums --force
-	UDA/2.7.5-GCC-13.2.0 --from-ITER-cluster
-	IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
-	IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0 --from-ITER-cluster
+	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
+	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
 	IDStools/2.0.0-gfbf-2023b
-	GGD/1.12.0-foss-2023b-DD-3.42.0
+	GGD/1.12.0-foss-2023b-DD-${TAG_DD}
 	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-cluster # For graphviz
 	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-cluster 
-	AMNS/1.5.1-foss-2023b-DD-3.42.0
+	AMNS/1.5.1-foss-2023b-DD-${TAG_DD}
 	build/1.0.3-GCCcore-13.2.0 --from-ITER-cluster 
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-cluster
 	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-cluster
@@ -666,11 +585,12 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI 
   	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
 	impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
+	iimpi/2023b --accept-eula-for=Intel-oneAPI
 	CMake/3.27.6-GCCcore-13.2.0
 	SciPy-bundle/2023.12-iimkl-2023b --from-pr=20262
 	xarray/2024.5.0-iimkl-2023b --from-ITER-cluster
 	makedepend/1.0.9-GCCcore-13.2.0
-	ESMF/8.6.1-intel-2023b --from-ITER-cluster
+	ESMF/8.6.1-intel-2023b --from-ITER-cluster --optarch=GENERIC
 	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC 
 	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC
 	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-cluster
@@ -694,90 +614,14 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	ToFu/1.7.9-iimkl-2023b
 	netcdf4-python/1.6.5-intel-2023b
 	json-fortran/8.5.2-intel-compilers-2023.2.1
-  	IMAS-AL-Fortran/5.3.0-intel-2023b-DD-3.42.0
-  	IMAS-AL-Python/5.3.0-intel-2023b-DD-3.42.0
+  	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+  	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IDStools/2.0.0-iimkl-2023b
-  	GGD/1.12.0-intel-2023b-DD-3.42.0
-  	AMNS/1.5.1-intel-2023b-DD-3.42.0
+  	GGD/1.12.0-intel-2023b-DD-${TAG_DD}
+  	AMNS/1.5.1-intel-2023b-DD-${TAG_DD}
   	load Viz/2.8.0-intel-2023b
         "
-  
-# Listed in imas-installer/site-config/Makefile.ITER.HPC.foss-2023b
-# with addition to Saxon, NVHPC modules required to build IMAS
-IMAS_FOSS_2023b_MODULES="
-        Saxon-HE/11.4-Java-11
-        Doxygen/1.9.8-GCCcore-13.2.0
-        texlive/20230313-GCC-13.2.0
-        Java/11.0.20
-        ant/1.10.8-Java-11
-        GCC/13.2.0
-        Blitz++/1.0.2-GCCcore-13.2.0
-        libMemcached/1.0.18-GCCcore-13.2.0
-        Python/3.11.5-GCCcore-13.2.0
-        PyAL/1.4.3-GCCcore-13.2.0
-        PyYAML/6.0.1-GCCcore-13.2.0
-	MDSplus/7.132.0-GCCcore-13.2.0
-        foss/2023b
-	Boost/1.83.0-GCC-13.2.0
-	HDF5/1.14.3-gompi-2023b
-        SciPy-bundle/2023.11-gfbf-2023b
-	cython-cmake/0.2.0-GCCcore-13.2.0
-	UDA/2.8.0-GCC-13.2.0
-        "
-#        matplotlib/3.3.3-foss-2023b
-#        IDStools/1.14.1-foss-2023b
-#        PyHDC/0.17.3-foss-2023b
-#        HDF5/1.10.7-gompi-2023b
-#        NAGfor/6.2.14
-
-#        libtirpc/1.3.1-GCCcore-13.2.0
-#        UDA/2.7.1-GCCcore-13.2.0
-#        NVHPC/21.2
-#        MDSplus/7.96.17-GCCcore-13.2.0
-
-# Listed in imas-installer/site-config/Makefile.ITER.HPC.intel-2023b
-# MDSplus must be with Java
-IMAS_INTEL_2023b_MODULES="
-     Doxygen/1.9.8-GCCcore-13.2.0
-     texlive/20230313-intel-compilers-2023.2.1
-     Java/11
-     ant/1.10.8-Java-11
-     GCC/13.2.0
-     Blitz++/1.0.2-GCCcore-13.2.0
-     libMemcached/1.0.18-GCCcore-13.2.0
-     Python/3.11.5-GCCcore-13.2.0
-     PyAL/1.4.3-GCCcore-13.2.0
-     PyYAML/6.0.1-GCCcore-13.2.0
-     MDSplus-Java/7.132.0-GCCcore-13.2.0-Java-11
-     intel/2023b
-     HDF5/1.14.3-iimpi-2023b
-     SciPy-bundle/2023.12-iimkl-2023b
-     IMAS-AL-Fortran/5.3.0-intel-2023b-DD-4.0.0
-     IMAS-AL-Python/5.3.1-intel-2023b-DD-4.0.0
-     "
-#     UDA/2.7.1-GCCcore-13.2.0
-#     matplotlib/3.3.3-intel-2023b
-#     IDStools/1.10.0-intel-2023b
-#     PyHDC/0.17.3-intel-2023b
-#     HDF5/1.10.7-iimpi-2023b
-#     NVHPC/21.2
-#     NAGfor/6.2.14
-#     Saxon-HE/10.3-Java-11
-#     libtirpc/1.3.1-GCCcore-13.2.0
-
-# IMAS modules are built separately and listed here for check only
-IMAS_2023b_APPLICATIONS="
-    IMAS/${TAG_DD}-${TAG_AL}-2023b
-    AMNS/1.5.0-GCC-13.2.0-DD-${TAG_DD}
-    GGD/1.11.0-GCC-13.2.0-DD-${TAG_DD}
-    Viz/2.8.0-foss-2023b
-    SimDB/0.7.1-foss-2023b
-    IMAS/${TAG_DD}-${TAG_AL}-2023b
-    GGD/1.11.0-iccifort-2020.4.304-DD-${TAG_DD}
-    AMNS/1.5.0-iccifort-2020.4.304-DD-${TAG_DD}
-    Viz/2.8.0-intel-2023b
-    SimDB/0.7.1-intel-2023b
-    "
+#pr=20262 --from-pr=21176 --optarch=GENERIC
 
 # Creating authentication for download from http://git.iter.org/ 
 if [ -n "${HTTP_AUTH_BEARER}" ]; then
@@ -870,36 +714,10 @@ function build_modules () {
 case "${1##--}" in
     "") # No argument given. Build all gfortran
         build_modules "${SOLPS_ITER_FOSS_2023b_MODULES}"
-	#${IMAS_FOSS_2023b_MODULES}
         ;;
     intel)
         shift
         build_modules "${SOLPS_ITER_INTEL_2023b_MODULES}"
-	#${IMAS_INTEL_2023b_MODULES}
-        ;;
-    imas-foss)
-        shift
-        module load ${IMAS_FOSS_2023b_MODULES}
-        export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.foss-2023b
-        build_imas IMAS_IFORT=no TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
-        add_imas_lite foss-2023b
-        ;;
-    imas-intel)
-        shift
-        module load ${IMAS_INTEL_2023b_MODULES}
-        export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.intel-2023b
-        build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
-        add_imas_lite intel-2023b
-        ;;
-    imas)
-        shift
-        module load ${IMAS_INTEL_2023b_MODULES}
-        export IMAS_CONFIG_FILE=site-config/Makefile.ITER.HPC.CentOS-8
-        build_imas TAG_DD=${TAG_DD} TAG_AL=${TAG_AL} $*
-        add_imas_lite 2023b
-        ;;    
-    imas-apps)
-        build_modules ${IMAS_2023b_APPLICATIONS}
         ;;
     pull)
         set -x
