@@ -563,7 +563,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-cluster
 	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-cluster
 	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-cluster
-       	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --inject-checksums --force
+       	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --ignore-checksums
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
 	IDStools/2.0.0-gfbf-2023b
