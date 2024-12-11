@@ -12,9 +12,9 @@ else
 endif
 echo '#timesa nesepm tesepm tisepm nesepi nemxip nesepa nemxap tesepi temxip tesepa temxap tisepi timxip tisepa timxap fnixip fnixap feexip feexap feixip feixap fniyip fniyap feeyip feeyap feiyip feiyap pwmxip pwmxap tmne tmte tmti' >! 2d.data
 if ($no_nc2text == 1) then
-    echo `ncdump $source -v 'timesa(-0)' 'nesepm(-0)' 'tesepm(-0)' 'tisepm(-0)' 'nesepi(-0)' 'nemxip(-0)' 'nesepa(-0)' 'nemxap(-0)' 'tesepi(-0)' 'temxip(-0)' 'tesepa(-0)' 'temxap(-0)' 'tisepi(-0)' 'timxip(-0)' 'tisepa(-0)' 'timxap(-0)' 'fnixip(-0)' 'fnixap(-0)' 'feexip(-0)' 'feexap(-0)' 'feixip(-0)' 'feixap(-0)' 'fniyip(-0)' 'fniyap(-0)' 'feeyip(-0)' 'feeyap(-0)' 'feiyip(-0)' 'feiyap(-0)' 'pwmxip(-0)' 'pwmxap(-0)' 'tmne(-0)' 'tmte(-0)' 'tmti(-0)' | sed -n 'x;$p' | sed 's/;//g'`
+  echo `ncdump $source -v 'timesa(-0)' 'nesepm(-0)' 'tesepm(-0)' 'tisepm(-0)' 'nesepi(-0)' 'nemxip(-0)' 'nesepa(-0)' 'nemxap(-0)' 'tesepi(-0)' 'temxip(-0)' 'tesepa(-0)' 'temxap(-0)' 'tisepi(-0)' 'timxip(-0)' 'tisepa(-0)' 'timxap(-0)' 'fnixip(-0)' 'fnixap(-0)' 'feexip(-0)' 'feexap(-0)' 'feixip(-0)' 'feixap(-0)' 'fniyip(-0)' 'fniyap(-0)' 'feeyip(-0)' 'feeyap(-0)' 'feiyip(-0)' 'feiyap(-0)' 'pwmxip(-0)' 'pwmxap(-0)' 'tmne(-0)' 'tmte(-0)' 'tmti(-0)' | sed -n 'x;$p' | sed 's/;//g'`
 else
-echo `nc2text $source 'timesa(-0)' 'nesepm(-0)' 'tesepm(-0)' 'tisepm(-0)' 'nesepi(-0)' 'nemxip(-0)' 'nesepa(-0)' 'nemxap(-0)' 'tesepi(-0)' 'temxip(-0)' 'tesepa(-0)' 'temxap(-0)' 'tisepi(-0)' 'timxip(-0)' 'tisepa(-0)' 'timxap(-0)' 'fnixip(-0)' 'fnixap(-0)' 'feexip(-0)' 'feexap(-0)' 'feixip(-0)' 'feixap(-0)' 'fniyip(-0)' 'fniyap(-0)' 'feeyip(-0)' 'feeyap(-0)' 'feiyip(-0)' 'feiyap(-0)' 'pwmxip(-0)' 'pwmxap(-0)' 'tmne(-0)' 'tmte(-0)' 'tmti(-0)'` >> 2d.data
+  echo `nc2text $source 'timesa(-0)' 'nesepm(-0)' 'tesepm(-0)' 'tisepm(-0)' 'nesepi(-0)' 'nemxip(-0)' 'nesepa(-0)' 'nemxap(-0)' 'tesepi(-0)' 'temxip(-0)' 'tesepa(-0)' 'temxap(-0)' 'tisepi(-0)' 'timxip(-0)' 'tisepa(-0)' 'timxap(-0)' 'fnixip(-0)' 'fnixap(-0)' 'feexip(-0)' 'feexap(-0)' 'feixip(-0)' 'feixap(-0)' 'fniyip(-0)' 'fniyap(-0)' 'feeyip(-0)' 'feeyap(-0)' 'feiyip(-0)' 'feiyap(-0)' 'pwmxip(-0)' 'pwmxap(-0)' 'tmne(-0)' 'tmte(-0)' 'tmti(-0)'` >> 2d.data
 endif
 if ($netcdf4 == 1) then
   rm $source
