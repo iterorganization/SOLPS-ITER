@@ -430,6 +430,7 @@ CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 
 ~~~ bash
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
+export EASYBUILD_MODULE_SYNTAX=Tcl
 SETUP/easybuild-local.sh SciPy-bundle-2020.11-foss-2023b.eb --skip-test-step
 sed -i -e "/^configopts/s/'"'$'"/ -skip qtwebengine'/" \
   -e /check_qtwebengine/s/True/False/ \
