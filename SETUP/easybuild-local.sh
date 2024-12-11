@@ -297,9 +297,25 @@ The following notes are guides for builders with similar setup. ITER
 site notes are just proof of concept and guide for other sites that
 already have EasyBuild modules in place and want to install complete
 SOLPS-ITER toolchain, including IMAS. Confer notes below with your
-machine on how to resolve similar problems.
+machine on how to resolve similar problems. Some of them are marked (outdated)
+but can be still usefulf for recipes with similar problems that might
+occur in newer packages build too.
 
-### AMD compute cluster with Lustre 2.14
+### AMD processors with Intel toolchain
+
+Many packages require `--optarch=GENERIC` to be built when runnning
+Intel toolchain for AMD processors. Messages such as
+
+    Please verify that both the operating system and the processor support 
+    Intel(R) X87, CMOV, MMX, SSE, SSE2, SSE3, SSSE3, SSE4_1, SSE4_2, MOVBE,
+    POPCNT, AVX, F16C, FMA, BMI, LZCNT, AVX2 and ADX instructions.
+
+indicate such requirement. To address the issue the affected Intel based
+packages have this flag added in the script and might affect performance
+to some extent. If having Intel CPU, you may remove these flags in the
+script or rebuild the packages without it.
+
+### AMD compute cluster with Lustre 2.14 (outdated)
 
 Building on Lustre 2.14 requires Python 3.8
 Using system Python 3.6.8 fails within shutil.copytree() function.
@@ -389,7 +405,7 @@ nodes
 
     srun -N1 -n36 -p gen10 --pty bash -i
 
-### EU IM Gateway cluster eufus.eu
+### EU IM Gateway cluster eufus.eu (outdated)
 
 CentOS Linux release 7.4 with tcsh as a default shell with SLURM 21 on
 GPFS. One NumPy test out of 20000 fails in SciPy-bundle.
@@ -443,7 +459,7 @@ sed -i -e s/ENABLE_JAVA=ON/ENABLE_JAVA=OFF/ \
 SETUP/easybuild-local.sh ParaView-5.10.0-intel-2023b-mpi.eb --parallel 16
 ~~~
 
-### Debian 11 workstation
+### Debian 11 workstation (outdated)
 
 Python 3.9.2 provided by the system is sufficient for building the
 modules. No SLURM or PMI can be found by OpenMPI. DBus falsely finds
@@ -608,7 +624,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	Doxygen/1.9.8-GCCcore-13.2.0
 	Qt5/5.15.13-GCCcore-13.2.0
 	motif/2.3.8-GCCcore-13.2.0
-	texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701
+	texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701 --optarch=GENERIC
 	libtirpc/1.3.4-GCCcore-13.2.0
 	SimDB/0.11.0-iimkl-2023b --ignore-checksums
 	matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC
