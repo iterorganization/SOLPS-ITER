@@ -238,7 +238,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS/3.40.1-4.11.9-2023b', EXTERNAL_MODULE),
+    ('IMAS-AL-Python', '5.3.0', '-DD-3.42.0')
 
 If IMAS-AL MATLAB is not required it can be removed from AMNS with 
 ~~~ diff
@@ -539,12 +539,12 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
-	xarray/2024.5.0-gfbf-2023b --from-ITER-cluster
+	xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
-	GR/0.0.94-GCCcore-13.2.0 --from-ITER-cluster
-	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-cluster
-	NCL/6.6.2-foss-2023b --from-pr=20262 --from-pr=21176
+	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
+	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
+	NCL/6.6.2-foss-2023b --from-pr=21176 
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	netCDF/4.9.2-gompi-2023b
@@ -555,28 +555,28 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	Qt5/5.15.13-GCCcore-13.2.0
 	netCDF-Fortran/4.6.1-gompi-2023b
 	netcdf4-python/1.6.5-foss-2023b
-	motif/2.3.8-GCCcore-13.2.0 --from-ITER-cluster
+	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b
 	json-fortran/8.5.2-GCC-13.2.0
-	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-cluster
-	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-cluster
-	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-cluster
-	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-cluster
+	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
+	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
+	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-SDCC
+	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-SDCC
        	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --ignore-checksums
-	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
-	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-cluster
+	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
+	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IDStools/2.0.0-gfbf-2023b
 	GGD/1.12.0-foss-2023b-DD-${TAG_DD}
-	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-cluster # For graphviz
-	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-cluster 
+	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC 
+	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC 
 	AMNS/1.5.1-foss-2023b-DD-${TAG_DD}
-	build/1.0.3-GCCcore-13.2.0 --from-ITER-cluster 
-	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-cluster
-	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-cluster
-       	PyQtGraph/0.13.7-foss-2023b --from-ITER-cluster
+	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC 
+	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
+	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
+       	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
 	Viz/2.8.0-foss-2023b
-	astropy/6.1.0-gfbf-2023b --from-ITER-cluster
+	astropy/6.1.0-gfbf-2023b --from-ITER-SDCC
 	ToFu/1.7.9-gfbf-2023b --from-pr=20999
         "
 
@@ -588,40 +588,44 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	iimpi/2023b --accept-eula-for=Intel-oneAPI
 	CMake/3.27.6-GCCcore-13.2.0
 	SciPy-bundle/2023.12-iimkl-2023b --from-pr=20262
-	xarray/2024.5.0-iimkl-2023b --from-ITER-cluster
+	xarray/2024.5.0-iimkl-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
-	ESMF/8.6.1-intel-2023b --from-ITER-cluster --optarch=GENERIC
-	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC 
-	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-cluster --optarch=GENERIC
-	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-cluster
-	HDF5/1.14.4.3-iimpi-2023b --from-ITER-cluster --optarch=GENERIC
-       	arpack-ng/3.9.0-intel-2023b --from-ITER-cluster
-	Armadillo/12.8.0-intel-2023b  --from-ITER-cluster
-	MSCL/1.2.4-iimkl-2023b --from-ITER-cluster
+	ESMF/8.6.1-intel-2023b --from-ITER-SDCC --optarch=GENERIC
+	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC 
+	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
+	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
+	HDF5/1.14.4.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
+       	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
+	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
+	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0
 	GLI/4.5.31-GCCcore-13.2.0
-	NCL/6.6.2-intel-2023b --from-pr=20262 --from-pr=21176 --optarch=GENERIC
+	NCL/6.6.2-intel-2023b --from-pr=21176 --include-easyblocks-from-pr=3409 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b
 	netCDF-Fortran/4.6.1-iimpi-2023b
-	NAG/26-intel-compilers-2023.2.1
 	Ghostscript/10.02.1-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	Qt5/5.15.13-GCCcore-13.2.0
 	motif/2.3.8-GCCcore-13.2.0
-	texlive/20230313-intel-compilers-2023.2.1
+	texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701
 	libtirpc/1.3.4-GCCcore-13.2.0
-	SimDB/0.11.0-iimkl-2023b
-	ToFu/1.7.9-iimkl-2023b
-	netcdf4-python/1.6.5-intel-2023b
+	SimDB/0.11.0-iimkl-2023b --ignore-checksums
+	matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC
+	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC
+	ToFu/1.7.9-iimkl-2023b --from-pr=20999
+	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
+	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
 	json-fortran/8.5.2-intel-compilers-2023.2.1
+	UDA/2.7.5-intel-compilers-2023.2.1 --from-ITER-SDCC --ignore-checksums
   	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-  	IDStools/2.0.0-iimkl-2023b
+  	IDStools/2.0.0-iimkl-2023b --ignore-checksums
   	GGD/1.12.0-intel-2023b-DD-${TAG_DD}
   	AMNS/1.5.1-intel-2023b-DD-${TAG_DD}
-  	load Viz/2.8.0-intel-2023b
+	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
+  	Viz/2.8.0-intel-2023b
         "
-#pr=20262 --from-pr=21176 --optarch=GENERIC
+#	NAG/26-intel-compilers-2023.2.1 --from-ITER-SDCC
 
 # Creating authentication for download from http://git.iter.org/ 
 if [ -n "${HTTP_AUTH_BEARER}" ]; then
@@ -701,9 +705,9 @@ function build_modules () {
         if test -f ${EASYBUILD_PREFIX}/modules/all/${module}*
         then echo -e "\e[32mModule ${module} exists. Skipping build.\e[m"
         else echo -e "\e[34mBuilding required SOLPS-ITER module ${line}$ec\e[m"
-	     if [[ "${optional_args}" == *"--from-ITER-cluster"* ]]
+	     if [[ "${optional_args}" == *"--from-ITER-SDCC"* ]]
 	     then fetch_from_iter_cluster ${module}
-		  optional_args="${optional_args#*--from-ITER-cluster}"
+		  optional_args="${optional_args#*--from-ITER-SDCC}"
 	     fi
              easybuild_file=$(echo ${module}.eb | tr / -)
              eb --robot ${eb_auth} ${easybuild_file} ${optional_args}
