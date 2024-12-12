@@ -254,6 +254,8 @@ index 9ebb3bc..0a64acd 100644
 +#    ('IMAS-AL-Matlab', '5.3.0', versionsuffix),
  ]
 ~~~
+or 
+	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-3.42.0.eb
 
 GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
 amns --cflags` will not have GGD include path
@@ -627,8 +629,8 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701 --optarch=GENERIC
 	libtirpc/1.3.4-GCCcore-13.2.0
 	SimDB/0.11.0-iimkl-2023b --ignore-checksums
-	matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC
-	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC
+	matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
+	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
 	ToFu/1.7.9-iimkl-2023b --from-pr=20999
 	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
 	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
