@@ -35,7 +35,7 @@ https://git.iter.org/plugins/servlet/access-tokens/manage and entering
     SETUP/easybuild-local.sh
 ~~~
 
-Some unpublished EasyBuild files are only available at ITER SDCC cluster
+Some unpublished EasyBuild config files are only available at ITER SDCC cluster
 or are still unmerged under pull request at 
 [EasyBuild Pull requests](https://github.com/easybuilders/easybuild-framework/pulls).
 To facilitate easy copy of such recipes for selected modules from 
@@ -197,6 +197,22 @@ and then usual rebuild of new packages with
     SETUP/easybuild-local.sh
     SETUP/easybuild-local.sh --intel
     SETUP/easybuild-local.sh --patch-imas-modules
+
+## Compiling SOLPS-ITER with locally installed modules
+
+Setup from the University of Ljubljana (UL) provides ITER
+modules compatibility and therefore it is universal to 
+be used with local builds (residing under easybuild.local/software).
+To load the modules and compile SOLPS-ITER use the following recipe:
+
+~~~ csh
+tcsh
+setenv SOLPS_HOST_NAME_FORCE UL
+module use ${PWD}/easybuild.local/modules/all
+source setup.csh gfortran
+make depend
+make
+~~~
 
 ## Package notes
 
