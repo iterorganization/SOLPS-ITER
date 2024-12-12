@@ -562,6 +562,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
 	NCL/6.6.2-foss-2023b --from-pr=21176 
 	flex/2.6.4-GCCcore-13.2.0
@@ -617,7 +618,8 @@ SOLPS_ITER_INTEL_2023b_MODULES="
        	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
 	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
-	GR/0.0.94-GCCcore-13.2.0
+	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0
 	NCL/6.6.2-intel-2023b --from-pr=21176 --include-easyblocks-from-pr=3409 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b

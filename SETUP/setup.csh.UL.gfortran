@@ -37,8 +37,10 @@ setenv HOST_NAME ITER
   module load SimDB/0.11.0-gfbf-2023b
   module load json-fortran/8.5.2-GCC-13.2.0
   setenv SYSNAME x86_64_rhel9
-  setenv GKSDIR ${EBROOTGR}
+  setenv GKSDIR `(module show GR/0.73.6-GCCcore-13.2.0)|& grep EBROOTGR|grep -o '/[^"]*'`
   module load Fundamental-Constants/0.1.1
+
+module load OpenBLAS/0.3.24-GCC-13.2.0
   
 #module load PySide6/6.2.3-GCCcore-10.2.0
 
