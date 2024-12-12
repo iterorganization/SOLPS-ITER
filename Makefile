@@ -176,6 +176,8 @@ all_openmp_mpi_nox: all_nox_openmp_mpi
 
 all_mpi_openmp_nox: all_nox_openmp_mpi
 
+carre2: carre
+
 carre:
 	cd modules/Carre2; ${MAKE}
 
