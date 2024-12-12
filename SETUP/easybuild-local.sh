@@ -428,7 +428,7 @@ setenv EASYBUILD_MODULES_TOOL EnvironmentModulesC
 SETUP/easybuild-local.sh --help | less
 sed -i -e "/configopts =/s|.*|= configopts = '--with-slurm --with-pmi=/opt/slurm/current --with-pmi-libdir=/opt/slurm/current/lib'|" \
  easyconfigs.local/o/OpenMPI/OpenMPI-4.1.2-GCC-13.2.0.eb
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-foss-2023b.eb --skip-test-step
+SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
 SETUP/easybuild-local.sh NVHPC-21.2.eb --accept-eula-for=NVHPC --cuda-compute-capabilities=7.0
 SETUP/easybuild-local.sh Qt6-6.2.3-GCCcore-13.2.0.eb --robot
 ~~~
@@ -447,7 +447,7 @@ CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 ~~~ bash
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
 export EASYBUILD_MODULE_SYNTAX=Tcl
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-foss-2023b.eb --skip-test-step
+SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
 sed -i -e "/^configopts/s/'"'$'"/ -skip qtwebengine'/" \
   -e /check_qtwebengine/s/True/False/ \
   easyconfigs.local/q/Qt5/Qt5-5.15.2-GCCcore-13.2.0.eb
