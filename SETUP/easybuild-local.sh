@@ -196,7 +196,6 @@ and then usual rebuild of new packages with
 
     SETUP/easybuild-local.sh
     SETUP/easybuild-local.sh --intel
-    SETUP/easybuild-local.sh --patch-imas-modules
 
 ## Compiling SOLPS-ITER with locally installed modules
 
@@ -273,16 +272,11 @@ index 9ebb3bc..0a64acd 100644
 or 
 	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-3.42.0.eb
 
-GGD and AMNS modules must not have CPATH otherwise `pkg-config ggd
-amns --cflags` will not have GGD include path
-
-    sed -i -e /CPATH/d easybuild.local/modules/*/GGD/* 
-    sed -i -e /CPATH/d easybuild.local/modules/*/AMNS/*
-
-or 
-
-    sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/GGD/* 
-    sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/AMNS/*
+GGD and AMNS, json-fortran modules must not have CPATH otherwise
+`pkg-config ggd amns --cflags` will not have include paths printed and
+SOLPS-ITER will fail to find includes listed in CPATH.
+As a post process there is `--patch-modules-cpath` switch that can be
+used to fix incorrectly built module files.
 
 
 ## Setting up local SOLPS-ITER setup.csh
@@ -450,8 +444,6 @@ SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
 SETUP/easybuild-local.sh NVHPC-21.2.eb --accept-eula-for=NVHPC --cuda-compute-capabilities=7.0
 SETUP/easybuild-local.sh Qt6-6.2.3-GCCcore-13.2.0.eb --robot
 ~~~
-Fix GGD and AMNS modules for CPATH. 
-
 
 ParaView should be run with 
 
@@ -505,7 +497,7 @@ SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
   --intel               build INTEL toolchain and modules
   --pull                pulls Git repos for IMAS and updates EasyBuild configs
   --fetch module(s)	fetch EasyBuild files for listed modules from SDCC cluster
-  --patch-imas-modules  fixes AMNS and GGD module by removing CPATH
+  --patch-modules-cpath fixes json-fortran, AMNS and GGD modules by removing CPATH
 
 ENVIRONMENT variables:
 
@@ -578,7 +570,6 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
-	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
 	NCL/6.6.2-foss-2023b --from-pr=21176 
 	flex/2.6.4-GCCcore-13.2.0
@@ -594,7 +585,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b
-	json-fortran/8.5.2-GCC-13.2.0
+	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
 	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-SDCC
@@ -603,12 +594,13 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IDStools/2.0.0-gfbf-2023b
-	GGD/1.12.0-foss-2023b-DD-${TAG_DD}
+	GGD/1.12.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC 
 	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC 
-	AMNS/1.5.1-foss-2023b-DD-${TAG_DD}
+	AMNS/1.5.1-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC 
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
        	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
 	Viz/2.8.0-foss-2023b
@@ -635,7 +627,6 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
-	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0
 	NCL/6.6.2-intel-2023b --from-pr=21176 --include-easyblocks-from-pr=3409 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b
@@ -652,15 +643,17 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	ToFu/1.7.9-iimkl-2023b --from-pr=20999
 	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
 	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
-	json-fortran/8.5.2-intel-compilers-2023.2.1
+	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
 	UDA/2.7.5-intel-compilers-2023.2.1 --from-ITER-SDCC --ignore-checksums
   	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IDStools/2.0.0-iimkl-2023b --ignore-checksums
-  	GGD/1.12.0-intel-2023b-DD-${TAG_DD}
-  	AMNS/1.5.1-intel-2023b-DD-${TAG_DD}
+  	GGD/1.12.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+  	AMNS/1.5.1-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
   	Viz/2.8.0-intel-2023b
+	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
         "
 #	NAG/26-intel-compilers-2023.2.1 --from-ITER-SDCC
 
@@ -766,9 +759,10 @@ case "${1##--}" in
         cd ${solps_top}/easyconfigs.local && git pull --autostash
         cd ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs && git pull
         ;;
-    patch-imas-modules)
+    patch-modules-cpath)
         sed -i -e /CPATH/d ${MODULEPATH}/GGD/*
         sed -i -e /CPATH/d ${MODULEPATH}/AMNS/*
+        sed -i -e /CPATH/d ${MODULEPATH}/json-fortran/*	
         ;;
     fetch)
 	shift
