@@ -20,8 +20,18 @@ if ($?SOLPS_PATH) then
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   USE_OPENMP "-D_OPENMP -DUSE_OPENMP"
   setenv   SOLPS_OPENMP yes
-  if ( $COMPILER != 'ifort64') then
+  if ( $COMPILER != 'ifort64' ) then
     setenv OMP_STACKSIZE 256M
+  else
+    setenv OLD_COMPILER ${FC}
+    setenv OLD_MPI_COMPILER "${MPI_FC}"
+    if ( $FC == 'ifx' ) then
+      setenv FC ifort
+      echo "Reverting to ifort compiler as ifx is unsafe with OpenMP"
+    endif
+    if ( "$MPI_FC" == "mpiifort -fc=mpiifx" ) then
+      setenv MPI_FC mpiifort
+    endif
   endif
   setenv   KMP_STACKSIZE 256M
   setenv   KMP_AFFINITY noverbose,respect,compact
