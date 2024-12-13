@@ -466,6 +466,7 @@ CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
 export EASYBUILD_MODULE_SYNTAX=Tcl
 SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
+SETUP/easybuild-local.sh netCDF-4.9.2-gompi-2023b.eb --skip-test-step
 sed -i -e "/^configopts/s/'"'$'"/ -skip qtwebengine'/" \
   -e /check_qtwebengine/s/True/False/ \
   easyconfigs.local/q/Qt5/Qt5-5.15.2-GCCcore-13.2.0.eb
