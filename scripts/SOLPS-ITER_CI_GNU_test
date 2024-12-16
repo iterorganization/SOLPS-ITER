@@ -5,6 +5,7 @@
 echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
 echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+export NO_MANUAL="true"
 make listobj_nox depend_nox
 make divgeo_nox
 make MAKE_OPTIONS=-j8 solps_nox b25_nox
