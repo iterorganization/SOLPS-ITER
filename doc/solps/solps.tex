@@ -21090,6 +21090,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
 \item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
+\item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -21291,6 +21292,46 @@ NO\_JSON & startup-routines/read\_reaclines.F \\
 NO\_JSON & startup-routines/write\_json\_amdata.f \\
 NO\_JSON & startup-routines/write\_json\_file.F \\
 NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
+OPEN\_MPI & broadcast/broad\_iestr.F \\
+OPEN\_MPI & broadcast/broadcast.F \\
+OPEN\_MPI & broadcast/broadsput.F \\
+OPEN\_MPI & broadcast/calstr.F \\
+OPEN\_MPI & broadcast/collect\_census.F \\
+OPEN\_MPI & broadcast/collect\_coutau.F \\
+OPEN\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
+OPEN\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_cadgeo.F \\
+OPEN\_MPI & modules/eirmod\_cai.F \\
+OPEN\_MPI & modules/eirmod\_ccona.F \\
+OPEN\_MPI & modules/eirmod\_cestim.F \\
+OPEN\_MPI & modules/eirmod\_cgeom.F \\
+OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
+OPEN\_MPI & modules/eirmod\_clgin.F \\
+OPEN\_MPI & modules/eirmod\_clogau.F \\
+OPEN\_MPI & modules/eirmod\_comnnl.F \\
+OPEN\_MPI & modules/eirmod\_comsig.F \\
+OPEN\_MPI & modules/eirmod\_comsou.F \\
+OPEN\_MPI & modules/eirmod\_comspl.F \\
+OPEN\_MPI & modules/eirmod\_comusr.F \\
+OPEN\_MPI & modules/eirmod\_comxs.F \\
+OPEN\_MPI & modules/eirmod\_coutau.F \\
+OPEN\_MPI & modules/eirmod\_cpes.F \\
+OPEN\_MPI & modules/eirmod\_cpolyg.F \\
+OPEN\_MPI & modules/eirmod\_cref.F \\
+OPEN\_MPI & modules/eirmod\_csdvi.F \\
+OPEN\_MPI & modules/eirmod\_cstep.F \\
+OPEN\_MPI & modules/eirmod\_ctetra.F \\
+OPEN\_MPI & modules/eirmod\_ctext.F \\
+OPEN\_MPI & modules/eirmod\_ctrcei.F \\
+OPEN\_MPI & modules/eirmod\_ctrig.F \\
+OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_parmmod.F \\
+OPEN\_MPI & photons/eirmod\_photon.F \\
+OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
+OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 PGF90 & assistant/exit\_own.F \\
 PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\
