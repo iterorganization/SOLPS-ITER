@@ -185,6 +185,9 @@ include ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 endif
 ifdef SOLPS_MPI
 OPT_MPI += -DMPI_VERSION=${MPI_VERSION}
+ifdef OPEN_MPI
+OPT_MPI += -DOPEN_MPI=${OPEN_MPI}
+endif
 endif
 CMAKE_STEM = cmake ../../src -DEIRENE_INTERFACE=SOLPS-ITER -DEIRENE_USER-ROUTINES=iter ${DEFLIBS} ${DEFOPTS} ${DEFMAKES}
 CMAKX_STEM = ${CMAKE_STEM} -DGRAPHICS=OFF -DLibGRS="" -DLibGKS=""
@@ -192,6 +195,10 @@ MAKEC = FC=${FC} ${CMAKE_STEM} ${DEGLIBS}
 MAKEM = FC="${MPI_FC}" ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
 MAKEX = FC=${FC} ${CMAKX_STEM}
 MAKEY = FC="${MPI_FC}" ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
+ifdef OPEN_MPI
+MAKEM += -DOPEN_MPI=${OPEN_MPI}
+MAKEY += -DOPEN_MPI=${OPEN_MPI}
+endif
 # Special treatment to avoid using ifx with OpenMP options
 ifneq (${FC},ifx)
 MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
@@ -203,6 +210,10 @@ MAKEN = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=OFF -DOPENMP=ON
 MAKEP = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
 MAKEZ = FC=mpiifort ${CMAKX_STEM} -DMPI=OFF -DOPENMP=ON
 MAKEA = FC=mpiifort ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
+ifdef OPEN_MPI
+MAKEP += -DOPEN_MPI=${OPEN_MPI}
+MAKEA += -DOPEN_MPI=${OPEN_MPI}
+endif
 endif
 endif
 
@@ -828,7 +839,7 @@ ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
 ifdef NO_MPI
 	echo 'MPI_VERSION=0' > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 else
-	printf "use mpi\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
+	printf "use mpi\ninteger OPEN_MPI\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nif (OPEN_MPI.ne.0) WRITE(*,fmt='(A10)') 'OPEN_MPI=1'\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
 	( ${MPI_FC} ${FCOPTS} ${FCVOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
 	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
 	( ${MPI_FC} ${FCOPTS} ${FCVOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || ( echo MPI_VERSION=0 ) ) ) ) > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
