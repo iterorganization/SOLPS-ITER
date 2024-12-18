@@ -225,6 +225,16 @@ refresh can be used after config and source files fetched:
    SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb --inject-checksums --force 
    SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb
 
+### CPATH problems with pkg-config
+
+GGD and AMNS, json-fortran modules must not have CPATH otherwise
+`pkg-config ggd amns --cflags` will not have include paths printed and
+SOLPS-ITER will fail to find includes listed in CPATH.  As a post
+process there is `--patch-modules-cpath` switch that can be used to
+fix incorrectly built module files. Another way can be to unset CPATH
+in `setup.csh.*.*` files.
+
+
 ### MSCL,ESMF,GSL,... on cluster with AMD processors and Intel toolchain
 
 Due to Intel libries dependent packages requires disabled architecture
@@ -283,11 +293,6 @@ index 9ebb3bc..0a64acd 100644
 or 
 	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-3.42.0.eb
 
-GGD and AMNS, json-fortran modules must not have CPATH otherwise
-`pkg-config ggd amns --cflags` will not have include paths printed and
-SOLPS-ITER will fail to find includes listed in CPATH.
-As a post process there is `--patch-modules-cpath` switch that can be
-used to fix incorrectly built module files.
 
 
 ## Setting up local SOLPS-ITER setup.csh
@@ -619,12 +624,11 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	netCDF/4.9.2-gompi-2023b
-	netCDF-Fortran/4.6.1-gompi-2023b
+	netCDF-Fortran/4.6.1-gompi-2023b --filter-env-vars=CPATH
 	Ghostscript/10.02.1-GCCcore-13.2.0
 	CMake/3.27.6-GCCcore-13.2.0
 	ParaView/5.12.0-foss-2023b-Qt5
 	Qt5/5.15.13-GCCcore-13.2.0
-	netCDF-Fortran/4.6.1-gompi-2023b
 	netcdf4-python/1.6.5-foss-2023b
 	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
@@ -672,9 +676,9 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0
-	NCL/6.6.2-intel-2023b --from-pr=21176 --include-easyblocks-from-pr=3409 --optarch=GENERIC
+	NCL/6.6.2-intel-2023b --from-ITER-SDCC --include-easyblocks-from-pr=3409 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b
-	netCDF-Fortran/4.6.1-iimpi-2023b
+	netCDF-Fortran/4.6.1-iimpi-2023b --filter-env-vars=CPATH
 	Ghostscript/10.02.1-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	Qt5/5.15.13-GCCcore-13.2.0
@@ -806,7 +810,8 @@ case "${1##--}" in
     patch-modules-cpath)
         sed -i -e /CPATH/d ${MODULEPATH}/GGD/*
         sed -i -e /CPATH/d ${MODULEPATH}/AMNS/*
-        sed -i -e /CPATH/d ${MODULEPATH}/json-fortran/*	
+        sed -i -e /CPATH/d ${MODULEPATH}/json-fortran/*
+	sed -i -e /CPATH/d ${MODULEPATH}/netCDF-Fortran/*
         ;;
     fetch)
 	shift
