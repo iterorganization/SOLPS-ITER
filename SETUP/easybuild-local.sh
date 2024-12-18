@@ -207,7 +207,6 @@ To load the modules and compile SOLPS-ITER use the following recipe:
 ~~~ csh
 tcsh
 setenv SOLPS_HOST_NAME_FORCE UL
-module use ${PWD}/easybuild.local/modules/all
 source setup.csh gfortran
 make depend
 make
@@ -234,7 +233,14 @@ optimisation flags with
    SETUP/easybuild-local.sh MSCL-1.2.4-iimkl-2023b.eb --optarch=GENERIC
    SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb --optarch=GENERIC --robot
    SETUP/easybuild-local.sh GSL-2.7-intel-compilers-2023.2.1.eb --optarch=GENERIC
-   
+
+### NCL
+
+NCL from PR #21176 introduces higher HDF5 version that fixed by the
+toolchain and thus modification of the EB config is fetched from ITER
+SDCC. The problem is exhibited at Tcl version of modules only.
+
+
 ### OpenSSL
 
 Qt5 and Qt6 should have OpenSSL version 1.1.1 installed on the system
@@ -246,6 +252,11 @@ of OpenSSL module and symbol incompatibility.
 
 Building ParaView can run out of memory or crashes on some machines
 and for that use lower threads or even `--parallel 1` for serial build.
+
+### GR 
+
+Hiden dependency for GKS libraries (modules GR) is library `pixman-devel`
+that needs to be installed system-wide.
 
 ### AMNS, GGD, Viz
 
@@ -454,17 +465,49 @@ ParaView should be run with
 CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 (skylake)
 
+- Old Tcl style Environment moules used
+- Boost/1.8.3 and Imath/3.1.9 does not compile on CentOS 7.2 so we fake it with older version.
+- GTK depending on Mesa can only be built without Wayland
+- Qt5 and Qt6 must disable qtwebclient and MySQL support
+- MKL requires newer binutils to link the library
+
 ~~~ bash
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
 export EASYBUILD_MODULE_SYNTAX=Tcl
+sed -i -e  "s/%(version)s/1.82.0/" -e "s/%s.tar.*)/1_82_0.tar.gz'/"  \
+  easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
+SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb --inject-checksums --force
+SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb
+
+sed -i -e 's/%(version)s/3.1.0/' easybuild.local/easybuild/easyconfigs/i/Imath/Imath-3.1.9-GCCcore-13.2.0.eb
+SETUP/easybuild-local.sh Imath-3.1.9-GCCcore-13.2.0.eb --inject-checksums --force
+
+sed -i -e /Wayland/d easybuild.local/easybuild/easyconfigs/g/GTK3/GTK3-3.24.39-GCCcore-13.2.0.eb
+sed -i -e /Wayland/d -e s/,wayland// -e "/FTPGNOME_SOURCE/a 'configopts' : '-Dwayland_backend=false'," \
+ easybuild.local/easybuild/easyconfigs/m/Mesa/Mesa-23.1.9-GCCcore-13.2.0.eb
+
 SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
 SETUP/easybuild-local.sh netCDF-4.9.2-gompi-2023b.eb --skip-test-step
+
 sed -i -e "/^configopts/s/'"'$'"/ -skip qtwebengine'/" \
   -e /check_qtwebengine/s/True/False/ \
-  easyconfigs.local/q/Qt5/Qt5-5.15.2-GCCcore-13.2.0.eb
+  easybuild.local/easybuild/easyconfigs/q/Qt5/Qt5-5.15.13-GCCcore-13.2.0.eb
 sed -i -e "/('PyQtWebEngine'/,/})/d" -e "/('Qt5Webkit'/d" \
-   easyconfigs.local/p/PyQt5/PyQt5-5.15.2-GCCcore-13.2.0.eb
-SETUP/easybuild-local.sh SciPy-bundle-2020.11-intel-2023b.eb  --skip-test-step
+   easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.13-GCCcore-13.2.0.eb
+sed -i -e -e "/configopts/s/'"'$'"/ -no-sql-mysql'/" \
+   easybuild.local/easybuild/easyconfigs/p/PyQt5/PyQt5-5.15.13-GCCcore-13.2.0.eb
+
+sed -i -e "s/qtwayland=OFF/& -DBUILD_qtwebengine=OFF/" -e "s,'lib/libQt6WebEngine.*SHLIB_EXT,," \
+  -e "s,'include/QtWebEngineCore',,"  easybuild.local/easybuild/easyconfigs/q/Qt6/Qt6-6.6.3-GCCcore-13.2.0.eb
+
+SETUP/easybuild-local.sh netcdf4-python-1.6.5-foss-2023b.eb --skip-test-step
+
+
+sed -i -e "/checksums/abuilddependencies = [('binutils', '2.40')]" \
+  easybuild.local/easybuild/easyconfigs/i/imkl/imkl-2023.2.0.eb
+
+SETUP/easybuild-local.sh SciPy-bundle-2023.12-iimkl-2023b.eb  --from-pr=20262 --ignore-test-failure
+
 sed -i -e s/ENABLE_JAVA=ON/ENABLE_JAVA=OFF/ \
     easyconfigs.local/h/HDC/HDC-0.17.3-GCCcore-13.2.0-Java-11.eb
 SETUP/easybuild-local.sh ParaView-5.10.0-intel-2023b-mpi.eb --parallel 16
@@ -572,7 +615,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
-	NCL/6.6.2-foss-2023b --from-pr=21176 
+	NCL/6.6.2-foss-2023b --from-ITER-SDCC
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
 	netCDF/4.9.2-gompi-2023b

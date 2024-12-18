@@ -2,7 +2,12 @@
 if ( -d $HOME/privatemodules ) then
   module use $HOME/privatemodules
 endif
-module use /opt/pkg/ITER/modules/all
+if ( -d ${PWD}/easybuild.local/modules/all ) then
+  module use ${PWD}/easybuild.local/modules/all
+endif
+if ( -d  ${PWD}/easybuild.local/modules/all ) then
+  module use ${PWD}/easybuild.local/modules/all
+endif
 
 # Use the same configs as ITER
 setenv HOST_NAME ITER
