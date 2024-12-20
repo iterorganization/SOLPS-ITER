@@ -244,11 +244,14 @@ optimisation flags with
    SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb --optarch=GENERIC --robot
    SETUP/easybuild-local.sh GSL-2.7-intel-compilers-2023.2.1.eb --optarch=GENERIC
 
-### NCL
+### NCL and HDF5
 
-NCL from PR #21176 introduces higher HDF5 version that fixed by the
-toolchain and thus modification of the EB config is fetched from ITER
-SDCC. The problem is exhibited at Tcl version of modules only.
+NCL from PR #21176 introduces higher HDF5 version that is fixed by the
+official toolchain to HDF5/1.14.3 and thus modification of (Armadillo,
+NCL, netCDF) EB configs if fetched from the ITER SDCC is required
+too. The problem is exhibited at Tcl version of modules only while at
+Lua the replacement is silently ignored. See Marconi subsection below
+on how to address this correctly.
 
 
 ### OpenSSL
@@ -433,7 +436,7 @@ nodes
 
     srun -N1 -n36 -p gen10 --pty bash -i
 
-### EU IM Gateway cluster eufus.eu (outdated)
+### EU IM Gateway cluster eufus.eu (not tested)
 
 CentOS Linux release 7.4 with tcsh as a default shell with SLURM 21 on
 GPFS. One NumPy test out of 20000 fails in SciPy-bundle.
@@ -475,12 +478,12 @@ CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 - GTK depending on Mesa can only be built without Wayland
 - Qt5 and Qt6 must disable qtwebclient and MySQL support
 - MKL requires newer binutils to link the library
+- Long compilations at the login node (more that 3h) are killed and batch is required instead
 
 ~~~ bash
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
 export EASYBUILD_MODULE_SYNTAX=Tcl
-sed -i -e  "s/%(version)s/1.82.0/" -e "s/%s.tar.*)/1_82_0.tar.gz'/"  \
-  easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
+sed   -e "s/%%(namelower)s_%s.tar.gz.*)/boost_1_82_0.tar.gz'/" -e s/_1.83/_1_82/   easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
 SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb --inject-checksums --force
 SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb
 
@@ -507,15 +510,29 @@ sed -i -e "s/qtwayland=OFF/& -DBUILD_qtwebengine=OFF/" -e "s,'lib/libQt6WebEngin
 
 SETUP/easybuild-local.sh netcdf4-python-1.6.5-foss-2023b.eb --skip-test-step
 
-
 sed -i -e "/checksums/abuilddependencies = [('binutils', '2.40')]" \
   easybuild.local/easybuild/easyconfigs/i/imkl/imkl-2023.2.0.eb
 
 SETUP/easybuild-local.sh SciPy-bundle-2023.12-iimkl-2023b.eb  --from-pr=20262 --ignore-test-failure
 
-sed -i -e s/ENABLE_JAVA=ON/ENABLE_JAVA=OFF/ \
-    easyconfigs.local/h/HDC/HDC-0.17.3-GCCcore-13.2.0-Java-11.eb
-SETUP/easybuild-local.sh ParaView-5.10.0-intel-2023b-mpi.eb --parallel 16
+SETUP/easybuild-local.sh --fetch Armadillo/12.8.0-intel-2023b 
+sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/a/Armadillo/Armadillo-12.8.0-intel-2023b.eb
+SETUP/easybuild-local.sh Armadillo-12.8.0-intel-2023b.eb --force
+
+SETUP/easybuild-local.sh --fetch Boost/1.83.0-intel-compilers-2023.2.1
+sed   -e "s/%%(namelower)s_%s.tar.gz.*)/boost_1_82_0.tar.gz'/" -e s/_1.83/_1_82/  easyconfigs.local/b/Boost/Boost-1.83.0-intel-compilers-2023.2.1.eb
+SETUP/easybuild-local.sh Boost-1.83.0-intel-compilers-2023.2.1.eb --inject-checksums --force
+SETUP/easybuild-local.sh Boost-1.83.0-intel-compilers-2023.2.1.eb
+
+SETUP/easybuild-local.sh --fetch GDAL/3.9.0-intel-2023b
+sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/g/GDAL/GDAL-3.9.0-intel-2023b.eb
+SETUP/easybuild-local.sh GDAL-3.9.0-intel-2023b.eb
+
+SETUP/easybuild-local.sh --fetch NCL/6.6.2-intel-2023b
+sed -i -e s/1.14.4.3/1.14.3/  easyconfigs.local/n/NCL/NCL-6.6.2-intel-2023b.eb
+SETUP/easybuild-local.sh NCL-6.6.2-intel-2023b.eb
+
+SETUP/easybuild-local.sh ParaView-5.12.0-intel-2023b-mpi.eb --parallel 16
 ~~~
 
 ### Debian 11 workstation (outdated)
@@ -632,13 +649,15 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	netcdf4-python/1.6.5-foss-2023b
 	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
-	SimDB/0.11.0-gfbf-2023b
+	SimDB/0.11.0-gfbf-2023b --ignore-checksums
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
 	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-SDCC
 	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-SDCC
        	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --ignore-checksums
+        cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
+        UDA/2.8.0-GCC-13.2.0 --from-ITER-SDCC --ignore-checksums
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IDStools/2.0.0-gfbf-2023b
