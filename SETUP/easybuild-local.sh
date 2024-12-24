@@ -277,7 +277,7 @@ AMNS requires system to having latexmk package installed on the system.
 
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
-    ('IMAS-AL-Python', '5.3.0', '-DD-3.42.0')
+    ('IMAS-AL-Python', '5.4.0', '-DD-4.0.0')
 
 If IMAS-AL MATLAB is not required it can be removed from AMNS with 
 ~~~ diff
@@ -294,7 +294,7 @@ index 9ebb3bc..0a64acd 100644
  ]
 ~~~
 or 
-	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-3.42.0.eb
+	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-4.0.0.eb
 
 
 
@@ -436,27 +436,32 @@ nodes
 
     srun -N1 -n36 -p gen10 --pty bash -i
 
-### EU IM Gateway cluster eufus.eu (not tested)
+### EU IM Gateway cluster eufus.eu
 
 CentOS Linux release 7.4 with tcsh as a default shell with SLURM 21 on
-GPFS. One NumPy test out of 20000 fails in SciPy-bundle.
+GPFS. 
 
-Qt5 and PyQt5 fails to build with QtWebEngine and should be disabled.
- 
-Since tcsh, spawning bash in this shell. fails to inherit module
-command add the following function to this script
-
-    module ()
-    {
-        eval `/usr/bin/modulecmd bash $*`
-    }
-
+- kOne NumPy test out of 20000 fails in SciPy-bundle.
+- Qt5 and PyQt5 fails to build with QtWebEngine and should be disabled.
+- Since tcsh, spawning bash in this shell. fails to inherit module
+  command add module function to the `SETUP/setup.easybuild.local`
 
 ~~~ csh
-module load python-3.8.8-gcc-6.4.0-ev3ryed
-setenv HTTP_AUTH_BEARER MTk1ODA1MzE1MTI3Oo......
-setenv EASYBUILD_MODULES_TOOL EnvironmentModulesC
-SETUP/easybuild-local.sh --help | less
+cat SETUP/setup.easybuild.local << __EOF__
+module ()
+{
+    eval `/usr/bin/modulecmd bash $*`
+}
+export EASYBUILD_MODULES_TOOL=EnvironmentModulesC
+export EASYBUILD_MODULE_SYNTAX=Tcl
+export HTTP_AUTH_BEARER=MTk1ODA1MzE1MTI3OoHVFKMpL/kn8BQKWBiLFNfrCT...
+export EASYBUILD_BUILDPATH=/dev/shm/
+export ITER_USERNAME=kosl
+module load itm-python/3.11.5
+__EOF__
+
+sed -i -e /OpenSSL/d easybuild.local/easybuild/easyconfigs/c/cURL/cURL-8.3.0-GCCcore-13.2.0.eb
+
 sed -i -e "/configopts =/s|.*|= configopts = '--with-slurm --with-pmi=/opt/slurm/current --with-pmi-libdir=/opt/slurm/current/lib'|" \
  easyconfigs.local/o/OpenMPI/OpenMPI-4.1.2-GCC-13.2.0.eb
 SETUP/easybuild-local.sh SciPy-bundle-2023.11-gfbf-2023b.eb --skip-test-step
@@ -587,8 +592,9 @@ trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
 
-TAG_DD=${TAG_DD:-3.42.0}
-TAG_AL=${TAG_AL:-5.3.0}
+TAG_AL=${TAG_AL:-5.4.0}
+TAG_DD=${TAG_DD:-4.0.0}
+
 
 setup=${solps_top}/SETUP/setup.easybuild.local && test -f ${setup} && . ${setup}
     
@@ -738,11 +744,6 @@ Use https://git.iter.org/plugins/servlet/access-tokens/manage to create
 Personal access token aka Bearer password and export it in the command line.
 EOF
 fi
-
-#module () 
-#{ 
-#    eval `/usr/bin/modulecmd bash $*` 
-#}
 
 function fetch_from_iter_cluster()
 {
