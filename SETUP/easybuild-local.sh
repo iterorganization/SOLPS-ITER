@@ -280,21 +280,8 @@ Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
     ('IMAS-AL-Python', '5.4.0', '-DD-4.0.0')
 
 If IMAS-AL MATLAB is not required it can be removed from AMNS with 
-~~~ diff
-diff --git a/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb b/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
-index 9ebb3bc..0a64acd 100644
---- a/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
-+++ b/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-foss-2023b-DD-3.42.0.eb
-@@ -31,7 +31,7 @@ builddependencies = [
-     ('IMAS-AL-Fortran', '5.3.0', versionsuffix),
-     ('IMAS-AL-Java', '5.3.0', versionsuffix),
-     ('IMAS-AL-Python', '5.3.0', versionsuffix),
--    ('IMAS-AL-Matlab', '5.3.0', versionsuffix),
-+#    ('IMAS-AL-Matlab', '5.3.0', versionsuffix),
- ]
-~~~
-or 
-	sed -i -e /Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.5.1-intel-2023b-DD-4.0.0.eb
+
+   sed -i -e /IMAS-AL-Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.6.0*.eb
 
 
 
@@ -659,18 +646,19 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-	IMAS-AL-MDSplus-models/5.2.2-GCCcore-13.2.0-DD-${TAG_DD} --from-ITER-SDCC
+	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-SDCC
        	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
         UDA/2.8.0-GCC-13.2.0 --from-ITER-SDCC --ignore-checksums
+	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC 
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IDStools/2.0.0-gfbf-2023b
-	GGD/1.12.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	GGD/1.13.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC 
 	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC 
-	AMNS/1.5.1-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	AMNS/1.6.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC 
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
@@ -717,12 +705,12 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
 	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
 	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
-	UDA/2.7.5-intel-compilers-2023.2.1 --from-ITER-SDCC --ignore-checksums
+	UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
   	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
   	IDStools/2.0.0-iimkl-2023b --ignore-checksums
-  	GGD/1.12.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-  	AMNS/1.5.1-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+  	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+  	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
   	Viz/2.8.0-intel-2023b
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
