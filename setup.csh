@@ -105,7 +105,9 @@ if ((-f $setup.env.local.${USER}) && \
     source $setup.env.local.${USER}
     exit 0
 else
-    set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
+    # Black magic with sed:
+    #   sed ':a;N;$\!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
+    set setup_pre = `mktemp` alias_pre = `mktemp` && alias | sed 's/a;N;$\!ba//g' >! $alias_pre
     env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
 endif
 
@@ -323,9 +325,14 @@ env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
 grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
 sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
 grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
-alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+# Black magic with sed:
+#   sed ':a;N;$!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
+#   sed 's/^/alias /' = prepend "alias " for all lines
+#   sed 's/!/\\!/' = properly escape "!" characters ("!" is special in tcsh)
+alias | sed ':a;N;$\!ba;s/\\\n//g' | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
     -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
-    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local.${USER}
+    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' \
+    -e 's/\!/\\\!/' >> $setup.env.local.${USER}
 rm -f $setup_pre $setup_post $alias_pre
 
 # List loaded modules
