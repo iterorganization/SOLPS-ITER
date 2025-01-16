@@ -1,141 +1,11 @@
 setenv SYSNAME `uname`_`arch`
 alias gmake make
 
-# Define here the paths to the libraries installed on your Mac
-# Packages installed via Homebrew are usually located in
-# /opt/homebrew/Cellar/{LIBRARY}/{VERSION} for ARM64 architecture
-# (i.e. devices with Apple Silicon CPU), or in
-# /usr/local/homebrew/Cellar/{LIBRARY}/{VERSION} for x86_64
-# architecture (i.e. devices with Intel CPU). So, the home
-# directories must be declared, e.g., as:
-# setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
-# Packages installed via MacPorts are usually located in
-# /opt/local, with all packages in one same directory.
-# So, the home directories must be declared, e.g., as:
-# setenv NCARG_ROOT /opt/local
-# In any case, the user should carefully check the actual
-# installation folders before linking any library.
+# User-defined directories
 
-# XQuartz
-# The XQuartz package can be installed from
-# https://www.xquartz.org/
-# Usually, the home directory is /opt/X11
-setenv XQUARTZ_HOME /opt/X11
-
-# GCC
-# This library must be installed via Homebrew
-# via "brew install gcc"
-setenv GCC_HOME /opt/homebrew/Cellar/gcc/13.2.0
-
-# cmake
-# This library must be installed via Homebrew
-# via "brew install cmake"
-setenv CMAKE_HOME /opt/homebrew/Cellar/cmake/3.28.3
-
-# ctags
-# This library must be installed via Homebrew
-# via "brew install ctags"
-setenv CTAGS_HOME /opt/homebrew/Cellar/ctags/5.8_2
-
-# anaconda
-# Insert here the local home directory of your python installation
-setenv ANACONDA_HOME
-
-# doxygen
-# This library must be installed via Homebrew
-# via "brew install doxygen"
-setenv DOXYGEN_HOME /opt/homebrew/Cellar/doxygen/1.10.0
-
-# freetype
-# This library must be installed via Homebrew
-# via "brew install freetype"
-setenv FREETYPE_HOME /opt/homebrew/Cellar/freetype/2.13.2
-
-# ghostscript
-# This library must be installed via Homebrew
-# via "brew install ghostscript"
-setenv GS_HOME /opt/homebrew/Cellar/ghostscript/10.02.1
-
-# gli
-# This library must be manually downloaded and built from
-# https://pgi-jcns.fz-juelich.de/portal/pages/gli.html
-setenv GLI_HOME
-
-# gnuplot
-# This library must be installed via Homebrew
-# via "brew install gnuplot"
-setenv GNUPLOT_HOME /opt/homebrew/Cellar/gnuplot/6.0.0
-
-# gr
-# Prebuilt versions for this library can be found at
-# https://gr-framework.org/downloads/
-# Download a version corresponding to
-# the device architecture (x86-64 or ARM64).
-setenv GR_HOME
-
-# hdf5
-# This library must be installed via Homebrew
-# via "brew install hdf5"
-setenv HDF5_HOME /opt/homebrew/Cellar/hdf5/1.14.3
-
-# json
-# This library must be installed via MacPorts
-# via "sudo port install fortran-json"
-setenv JSON_HOME /opt/local
-
-# lapack
-# This library must be installed via Homebrew
-# via "brew install lapack"
-setenv LAPACK_DIR /opt/homebrew/Cellar/lapack/3.12.0
-
-# libpng
-# This library must be installed via Homebrew
-# via "brew install libpng"
-setenv LIBPNG_HOME /opt/homebrew/Cellar/libpng/1.6.43
-
-# libxp
-# This library must be installed via Homebrew
-# via "brew install libxp"
-setenv LIBXP_HOME /opt/homebrew/Cellar/libxp/1.0.4
-
-# mscl
-# This library must be manually downloaded and built from
-# https://git.iter.org/projects/LIB/repos/mscl/browse
-# Install the version corresponding to the commit a64eba15137
-setenv MSCL_HOME
-
-# ncl
-# This library must be installed via MacPorts
-# via "sudo port install ncarg"
-setenv NCARG_ROOT /opt/local
-
-# netcdf
-# This library must be installed via Homebrew
-# via "brew install netcdf"
-setenv NETCDF_HOME /opt/homebrew/Cellar/netcdf/4.9.2_1
-
-# netcdf-fortran
-# This library must be installed via Homebrew
-# via "brew install netcdf-fortran"
-setenv NETCDF_FORTRAN_HOME /opt/homebrew/Cellar/netcdf-fortran/4.6.1
-
-# openmotif
-# This library must be installed via MacPorts
-# via "sudo port install openmotif"
-setenv MOTIF_HOME /opt/local
-
-# open-mpi
-# This library must be installed via Homebrew
-# via "brew install open-mpi"
-setenv OPENMPI_HOME /opt/homebrew/Cellar/open-mpi/5.0.2
-
-# texlive
-setenv TEXLIVE_HOME /usr/local/texlive/2022
-
-
-
-###################### DO NOT EDIT BELOW THIS LINE! ######################
-##########################################################################
+setenv PYTHON_HOME /opt/homebrew/Caskroom/miniforge/base
+setenv MSCL_HOME /Users/antonello/Work/Libraries/mscl
+setenv GLI_HOME /Users/antonello/Work/Libraries/gks
 
 # Initialize the path collections, if they do not exist already
 
@@ -148,149 +18,118 @@ endif
 
 # Add directories of compiled libraries, include directives, etc.
 
-setenv PATH "${PATH}:$GCC_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$GCC_HOME/lib/gcc/current"
+setenv PATH "${PATH}:`brew --prefix`/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
 
-setenv PATH "${PATH}:$CMAKE_HOME/bin"
+setenv PATH "${PATH}:/opt/local/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/opt/local/lib"
 
-setenv PATH "${PATH}:$CTAGS_HOME/bin"
+setenv PATH "${PATH}:$PYTHON_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$PYTHON_HOME/lib"
 
-setenv PATH "${PATH}:$ANACONDA_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$ANACONDA_HOME/lib"
-
-setenv PATH "${PATH}:$DOXYGEN_HOME/bin"
-
-setenv PATH "${PATH}:$FREETYPE_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$FREETYPE_HOME/lib"
-
-setenv PATH "${PATH}:$GS_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$GS_HOME/lib"
-
-setenv PATH "${PATH}:$GNUPLOT_HOME/bin"
-
-setenv PATH "${PATH}:$HDF5_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$HDF5_HOME/lib"
-
-setenv JSON_LIB_DIR $JSON_HOME/lib
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$JSON_LIB_DIR"
-setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$JSON_LIB_DIR/pkgconfig"
-
-setenv LAPACK_LIB_DIR $LAPACK_DIR/lib
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LAPACK_LIB_DIR"
-
-setenv PATH "${PATH}:$LIBPNG_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBPNG_HOME/lib"
-
-setenv PATH "${PATH}:$LIBXP_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$LIBXP_HOME/lib"
-
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MSCL_HOME/darwin.gfortran"
-
-setenv PATH "${PATH}:$NCARG_ROOT/bin"
-
-setenv PATH "${PATH}:$NETCDF_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$NETCDF_HOME/lib"
-
-setenv PATH "${PATH}:$NETCDF_FORTRAN_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$NETCDF_FORTRAN_HOME/lib"
-
-setenv PATH "${PATH}:$MOTIF_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$MOTIF_HOME/lib"
-
-setenv PATH "${PATH}:$OPENMPI_HOME/bin"
-setenv MANPATH "${MANPATH}:$OPENMPI_HOME/share/man"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OPENMPI_HOME/lib"
-setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:$OPENMPI_HOME/lib/pkgconfig"
-
-setenv PATH "${PATH}:$TEXLIVE_HOME/bin/universal-darwin"
-setenv MANPATH "${MANPATH}:$TEXLIVE_HOME/texmf-dist/doc/man"
-setenv INFOPATH "${INFOPATH}:$TEXLIVE_HOME/texmf-dist/doc/info"
+setenv FREETYPE_HOME `brew --prefix freetype`
+setenv HDF5_HOME `brew --prefix hdf5`
+setenv LAPACK_DIR `brew --prefix lapack`
+setenv LIBPNG_HOME `brew --prefix libpng`
+setenv LIBXP_HOME `brew --prefix libxp`
+setenv NETCDF_HOME `brew --prefix netcdf`
+setenv NETCDF_FORTRAN_HOME `brew --prefix netcdf-fortran`
+setenv NCARG_ROOT /opt/local
+setenv MOTIF_HOME /opt/local
+setenv XQUARTZ_HOME /opt/X11
 
 setenv DBX ddt
 setenv DBX idb
 
-# Check if the installation directories of the libraries exist
+# Check if external libraries are correctly installed
 
 if ( ! -d "$XQUARTZ_HOME" ) then
-    echo "Warning: XQuartz not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
 endif
 
-if ( ! -d "$GCC_HOME" ) then
-    echo "Warning: gcc not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( ! -d "$PYTHON_HOME" ) then
+    echo "Warning: Python installation not found or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
 endif
 
-if ( ! -d "$CMAKE_HOME" ) then
-    echo "Warning: cmake not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^gcc$'` == 0 ) then
+    echo "Warning: gcc not installed. Install it via 'brew install gcc'."
 endif
 
-if ( ! -d "$CTAGS_HOME" ) then
-    echo "Warning: ctags not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^cmake$'` == 0 ) then
+    echo "Warning: cmake not installed. Install it via 'brew install cmake'."
 endif
 
-if ( ! -d "$ANACONDA_HOME" ) then
-    echo "Warning: Anaconda not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^ctags$'` == 0 ) then
+    echo "Warning: ctags not installed. Install it via 'brew install ctags'."
 endif
 
-if ( ! -d "$DOXYGEN_HOME" ) then
-    echo "Warning: doxygen not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^doxygen$'` == 0 ) then
+    echo "Warning: doxygen not installed. Install it via 'brew install doxygen'."
 endif
 
-if ( ! -d "$FREETYPE_HOME" ) then
-    echo "Warning: freetype not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^freetype$'` == 0 ) then
+    echo "Warning: freetype not installed. Install it via 'brew install freetype'."
 endif
 
-if ( ! -d "$GS_HOME" ) then
-    echo "Warning: ghostscript not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^ghostscript$'` == 0 ) then
+    echo "Warning: ghostscript not installed. Install it via 'brew install ghostscript'."
 endif
 
-if ( ! -d "$GNUPLOT_HOME" ) then
-    echo "Warning: gnuplot not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^gnuplot$'` == 0 ) then
+    echo "Warning: gnuplot not installed. Install it via 'brew install gnuplot'."
 endif
 
-if ( ! -d "$HDF5_HOME" ) then
-    echo "Warning: hdf5 not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^hdf5$'` == 0 ) then
+    echo "Warning: hdf5 not installed. Install it via 'brew install hdf5'."
 endif
 
-if ( ! -d "$JSON_HOME" ) then
-    echo "Warning: json-fortran not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^lapack$'` == 0 ) then
+    echo "Warning: lapack not installed. Install it via 'brew install lapack'."
 endif
 
-if ( ! -d "$LAPACK_DIR" ) then
-    echo "Warning: lapack not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^libpng$'` == 0 ) then
+    echo "Warning: libpng not installed. Install it via 'brew install libpng'."
 endif
 
-if ( ! -d "$LIBPNG_HOME" ) then
-    echo "Warning: libpng not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^libxp$'` == 0 ) then
+    echo "Warning: libxp not installed. Install it via 'brew install libxp'."
 endif
 
-if ( ! -d "$LIBXP_HOME" ) then
-    echo "Warning: libxp not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( `brew list | grep -c '^netcdf$'` == 0 ) then
+    echo "Warning: netcdf not installed. Install it via 'brew install netcdf'."
+endif
+
+if ( `brew list | grep -c '^netcdf-fortran$'` == 0 ) then
+    echo "Warning: netcdf-fortran not installed. Install it via 'brew install netcdf-fortran'."
+endif
+
+if ( `brew list | grep -c '^open-mpi$'` == 0 ) then
+    echo "Warning: open-mpi not installed. Install it via 'brew install open-mpi'."
+endif
+
+if ( `brew list | grep -c '^texlive$'` == 0 ) then
+    echo "Warning: texlive not installed. Install it via 'brew install texlive'."
+endif
+
+if ( ! -e /opt/local/lib/libjsonfortran.a ) then
+    echo "Warning: json-fortran not installed. Install it via 'sudo port install fortran-json'"
+endif
+
+if ( ! -e /opt/local/lib/libncarg.a ) then
+    echo "Warning: ncarg not installed. Install it via 'sudo port install ncarg'"
+endif
+
+if ( ! -e /opt/local/lib/libXm.a ) then
+    echo "Warning: openmotif not installed. Install it via 'sudo port install openmotif'"
 endif
 
 if ( ! -d "$MSCL_HOME" ) then
-    echo "Warning: mscl not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Warning: mscl library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Install from https://git.iter.org/projects/LIB/repos/mscl/browse,"
+    echo "commit a64eba15137 (follow the instructions from the manual)."
 endif
 
-if ( ! -d "$NCARG_ROOT" ) then
-    echo "Warning: ncarg not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-endif
-
-if ( ! -d "$NETCDF_HOME" ) then
-    echo "Warning: netcdf not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-endif
-
-if ( ! -d "$NETCDF_FORTRAN_HOME" ) then
-    echo "Warning: netcdf-fortran not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-endif
-
-if ( ! -d "$MOTIF_HOME" ) then
-    echo "Warning: openmotif not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-endif
-
-if ( ! -d "$OPENMPI_HOME" ) then
-    echo "Warning: open-mpi not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-endif
-
-if ( ! -d "$TEXLIVE_HOME" ) then
-    echo "Warning: texlive not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+if ( ! -d "$GLI_HOME" ) then
+    echo "Warning: gli library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Install from https://pgi-jcns.fz-juelich.de/portal/pages/gli.html"
 endif

@@ -22,7 +22,6 @@
        NCFDIR ?= ${NETCDF_FORTRAN_HOME}
     MSCL_ROOT ?= ${MSCL_HOME}
         H5DIR ?= ${HDF5_HOME}
-      GR_ROOT ?= ${GR_HOME}
      GLI_HOME ?= ${GLI_HOME}
    NCARG_ROOT ?= ${NCARG_ROOT}
        NAGDIR ?= ${LAPACK_DIR}

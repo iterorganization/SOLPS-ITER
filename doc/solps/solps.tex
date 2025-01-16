@@ -636,35 +636,44 @@ The code can be compiled also on devices with Apple MacOS systems (Darwin OS), u
 
 First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
-The minimum set of required libraries for using SOLPS on MacOS is the following. Please install the various packages exactly from the sources specified in this list.
+The absolute path of the home directory (i.e.\ the one containing the subfolders lib and bin) of a Python installation (e.g.\ through Anaconda or Miniforge) must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt PYTHON\_HOME}.
+
+The following external libraries must be then installed using Homebrew:
 
 \begin{description}
-\item[GNU compiler collection] It can be installed from Homebrew (formula: {\tt brew install gcc}).
-\item[Cross-platform make] It can be installed from Homebrew (formula: {\tt brew install cmake}).
-\item[ctags] It can be installed from Homebrew (formula: {\tt brew install ctags}).
-\item[Doxygen] It can be installed from Homebrew (formula: {\tt brew install doxygen}).
-\item[Freetype] It can be installed from Homebrew (formula: {\tt brew install freetype}).
-\item[Ghostscript] It can be installed from Homebrew (formula: {\tt brew install ghostscript}).
-\item[Graphics Language Interpreter] It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}.
-\item[GNU plotting library] It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
-\item[GR framework] Prebuilt binaries can be downloaded at (\href{https://gr-framework.org/downloads/}{https://gr-framework.org/downloads/}) Download a version corresponding to the device architecture (x86-64 or ARM64).
-\item[HDF5 data management and storage library] It can be installed from Homebrew (formula: {\tt brew install hdf5}).
-\item[Fortran JSON API] It can be installed from MacPorts (formula: {\tt sudo port install fortran-json}).
-\item[Blas/Lapack linear algebra library] It can be installed from Homebrew (formula: {\tt brew install lapack}).
-\item[PNG library] It can be installed from Homebrew (formula: {\tt brew install libpng}).
-\item[XPrint client library] It can be installed from Homebrew (formula: {\tt brew install libxp}).
-\item[MSCL utility library] It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}.
-\item[NCAR plotting library] It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
-\item[NETCDF data access library] It can be installed from Homebrew (formula: {\tt brew install netcdf}).
-\item[NETCDF data access library (Fortran version)] It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
-\item[MPI parallel computing library] It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
-\item[MOTIF graphical user interface] It can be installed from MacPorts (formula: {\tt sudo port install openmotif}).
-\item[TeX typesetting system distrubtion TeXLive] It can be installed from Homebrew (formula: {\tt brew install texlive}).
+\item[GNU compiler collection], using the formula: {\tt brew install gcc}.
+\item[Cross-platform make], using the formula: {\tt brew install cmake}.
+\item[ctags], using the formula: {\tt brew install ctags}.
+\item[Doxygen], using the formula: {\tt brew install doxygen}.
+\item[Freetype], using the formula: {\tt brew install freetype}.
+\item[Ghostscript], using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library], using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library], using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library], using the formula: {\tt brew install lapack}.
+\item[PNG library], using the formula: {\tt brew install libpng}.
+\item[XPrint client library], using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library], using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)], using the formula: {\tt brew install netcdf-fortran}.
+\item[MPI parallel computing library], using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive], using the formula: {\tt brew install texlive}.
 \end{description}
 
-After the installation of the libraries, the user must manually indicate the corresponding local home directories in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}. There the home directory of a Python installation (e.g.\ through Anaconda) must be also declared.
+Further external libraries must be instead installed using MacPorts:
 
-It is important to note that, currently, only a particular old version of the MSCL library, namely referred to the commit a64eba15137, allows to properly compile the code on MacOS. For a correct linking, the user should download such version of the library, at this (\href{https://git.iter.org/rest/api/latest/projects/LIB/repos/mscl/archive?at=a64eba151377b96091758d0d78e6c0d1cd37b623&format=zip}{link}). In the folder extracted from the downloaded .zip archive, the user must then create the file {\tt config/compiler.darwin.gfortran}, with content:
+\begin{description}
+\item[Fortran JSON API], using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library], using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface], using the formula: {\tt sudo port install openmotif}.
+\end{description}
+
+Finally, the additional external libraries must be also manually downloaded and built:
+
+\begin{description}
+\item[MSCL utility library]: from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}. After being built, the absolute path of its home directory must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt MSCL\_HOME}.
+\item[Graphics Language Interpreter]: from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}. After being built, the absolute path of its home directory must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt GLI\_HOME}.
+\end{description}
+
+Currently, only a particular old version of the MSCL library, namely referred to the commit a64eba15137, allows to properly compile the code on MacOS. For a correct linking, the user should download such version of the library, at this (\href{https://git.iter.org/rest/api/latest/projects/LIB/repos/mscl/archive?at=a64eba151377b96091758d0d78e6c0d1cd37b623&format=zip}{link}). In the folder extracted from the downloaded .zip archive, the user must then create the file {\tt config/compiler.darwin.gfortran}, with content:
 
 \VerbatimInput[fontsize=\footnotesize]{MacOS/compiler.darwin.gfortran}
 
@@ -677,8 +686,6 @@ After that, the library can be finally built executing, from the top of the down
 \begin{verbatim}
     make -e OBJECTCODE=darwin.gfortran
 \end{verbatim}
-
-The linking can be now finally done specifying the absolute path of the downloadad mscl folder in {\tt \$\{SOLPSTOP\}\allowbreak/SETUP/setup.csh.DARWIN.gfortran} as the variable {\tt MSCL\_HOME}.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -21304,6 +21311,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
 \item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
+\item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -21505,6 +21513,46 @@ NO\_JSON & startup-routines/read\_reaclines.F \\
 NO\_JSON & startup-routines/write\_json\_amdata.f \\
 NO\_JSON & startup-routines/write\_json\_file.F \\
 NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
+OPEN\_MPI & broadcast/broad\_iestr.F \\
+OPEN\_MPI & broadcast/broadcast.F \\
+OPEN\_MPI & broadcast/broadsput.F \\
+OPEN\_MPI & broadcast/calstr.F \\
+OPEN\_MPI & broadcast/collect\_census.F \\
+OPEN\_MPI & broadcast/collect\_coutau.F \\
+OPEN\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
+OPEN\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_cadgeo.F \\
+OPEN\_MPI & modules/eirmod\_cai.F \\
+OPEN\_MPI & modules/eirmod\_ccona.F \\
+OPEN\_MPI & modules/eirmod\_cestim.F \\
+OPEN\_MPI & modules/eirmod\_cgeom.F \\
+OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
+OPEN\_MPI & modules/eirmod\_clgin.F \\
+OPEN\_MPI & modules/eirmod\_clogau.F \\
+OPEN\_MPI & modules/eirmod\_comnnl.F \\
+OPEN\_MPI & modules/eirmod\_comsig.F \\
+OPEN\_MPI & modules/eirmod\_comsou.F \\
+OPEN\_MPI & modules/eirmod\_comspl.F \\
+OPEN\_MPI & modules/eirmod\_comusr.F \\
+OPEN\_MPI & modules/eirmod\_comxs.F \\
+OPEN\_MPI & modules/eirmod\_coutau.F \\
+OPEN\_MPI & modules/eirmod\_cpes.F \\
+OPEN\_MPI & modules/eirmod\_cpolyg.F \\
+OPEN\_MPI & modules/eirmod\_cref.F \\
+OPEN\_MPI & modules/eirmod\_csdvi.F \\
+OPEN\_MPI & modules/eirmod\_cstep.F \\
+OPEN\_MPI & modules/eirmod\_ctetra.F \\
+OPEN\_MPI & modules/eirmod\_ctext.F \\
+OPEN\_MPI & modules/eirmod\_ctrcei.F \\
+OPEN\_MPI & modules/eirmod\_ctrig.F \\
+OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_parmmod.F \\
+OPEN\_MPI & photons/eirmod\_photon.F \\
+OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
+OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 PGF90 & assistant/exit\_own.F \\
 PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\

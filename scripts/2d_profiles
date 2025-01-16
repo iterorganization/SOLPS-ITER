@@ -59,7 +59,7 @@ if ($no_nc2text == 1) then
   endif
 #  echo $jstart $jend
 else
-  set nt = `ncdump $source -f f -v fn3dl | sed -n 'x;$p' | awk -F '[,)]' '{print $2;}'`
+  set nt = `nc2text $source "ntstep" | awk '{printf "%d", $1}'`
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
   if ($jstart < 0) then
