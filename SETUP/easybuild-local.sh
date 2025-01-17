@@ -39,7 +39,7 @@ Some unpublished EasyBuild config files are only available at ITER SDCC cluster
 or are still unmerged under pull request at 
 [EasyBuild Pull requests](https://github.com/easybuilders/easybuild-framework/pulls).
 To facilitate easy copy of such recipes for selected modules from 
-SDCC `--fetch module(s)` functionality is provided.
+SDCC `--fetch-sdcc module(s)` functionality is provided.
 In order for fetch to work a local SSH key needs to be copied to ITER cluster with
 `ssh-copy-id`.
 
@@ -507,20 +507,20 @@ sed -i -e "/checksums/abuilddependencies = [('binutils', '2.40')]" \
 
 SETUP/easybuild-local.sh SciPy-bundle-2023.12-iimkl-2023b.eb  --from-pr=20262 --ignore-test-failure
 
-SETUP/easybuild-local.sh --fetch Armadillo/12.8.0-intel-2023b 
+SETUP/easybuild-local.sh --fetch-sdcc Armadillo/12.8.0-intel-2023b 
 sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/a/Armadillo/Armadillo-12.8.0-intel-2023b.eb
 SETUP/easybuild-local.sh Armadillo-12.8.0-intel-2023b.eb --force
 
-SETUP/easybuild-local.sh --fetch Boost/1.83.0-intel-compilers-2023.2.1
+SETUP/easybuild-local.sh --fetch-sdcc Boost/1.83.0-intel-compilers-2023.2.1
 sed   -e "s/%%(namelower)s_%s.tar.gz.*)/boost_1_82_0.tar.gz'/" -e s/_1.83/_1_82/  easyconfigs.local/b/Boost/Boost-1.83.0-intel-compilers-2023.2.1.eb
 SETUP/easybuild-local.sh Boost-1.83.0-intel-compilers-2023.2.1.eb --inject-checksums --force
 SETUP/easybuild-local.sh Boost-1.83.0-intel-compilers-2023.2.1.eb
 
-SETUP/easybuild-local.sh --fetch GDAL/3.9.0-intel-2023b
+SETUP/easybuild-local.sh --fetch-sdcc GDAL/3.9.0-intel-2023b
 sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/g/GDAL/GDAL-3.9.0-intel-2023b.eb
 SETUP/easybuild-local.sh GDAL-3.9.0-intel-2023b.eb
 
-SETUP/easybuild-local.sh --fetch NCL/6.6.2-intel-2023b
+SETUP/easybuild-local.sh --fetch-sdcc NCL/6.6.2-intel-2023b
 sed -i -e s/1.14.4.3/1.14.3/  easyconfigs.local/n/NCL/NCL-6.6.2-intel-2023b.eb
 SETUP/easybuild-local.sh NCL-6.6.2-intel-2023b.eb
 
@@ -546,16 +546,78 @@ sed -i -e "/configopts/s/'$/ --enable-qt-help=no'/" \
   easybuild.local/easybuild/easyconfigs/d/DBus/DBus-1.13.18-GCCcore-13.2.0.eb
 ~~~
 
+### SUSE Linux Enterprise Server 15 SP1 at IFERC cluster behind a firewall
+
+Requires dynamic local SOCKS5 proxy to be created before connecting to
+IFERC and then remotely redirect SOCKS5 trafic to local machine.  For
+python3, required by Easybuild, bootstrapping PySocks wheel is needed
+to install the virtual environment manually. Since Easybuild does not
+support SOCKS5 the easiest is to rsync local or ITER installation
+sources to IFERC before starting of building packages.  Replace
+username `kosl` and bearer pasword in the example below.
+
+~~~ bash
+python3 -m pip download pysocks # Dowload the wheel
+scp PySocks-*-py3-none-any.whl kosl@jfrs.iferc-csc.jp: # Copy the wheel to JFRS
+ssh -D 1080 -C -N -f localhost # Creates SOCKS5 proxy on a local machine 
+ssh -R 1080:localhost:1080 kosl@jfrs.iferc-csc.jp # Login and tunel SOCKS5 to my local proxy
+ssh-keygen -t ed25519 # generate key for remote access
+cat .ssh/id_ed25519.pub # paste key to  https://git.iter.org/plugins/servlet/ssh/account/key
+cat > ~/.ssh/config << __EOF__
+Host git.iter.org
+HostName git.iter.org
+User git
+ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
+
+Host gpc-access.iter.org
+HostName gpc-access.iter.org
+User git
+ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
+__EOF__
+ssh-copy-id kosl@gpc-access.iter.org
+
+git config --global core.sshCommand 'ssh -o ProxyCommand="nc -v -x 127.0.0.1:1080 %h %p"'
+git config --global http.proxy 'socks5://127.0.0.1:1080'
+git config --global https.proxy 'socks5://127.0.0.1:1080'
+
+git clone --recursive ssh://git@git.iter.org/bnd/solps-iter.git
+
+rsync -rv easybuild.local/sources/ kosl@jfrs.iferc-csc.jp:solps-iter/easybuild.local/sources/ # copy sources # on a local machine
+
+cd solps-iter
+cat > SETUP/setup.easybuild.local << __EOF__
+export EASYBUILD_MODULES_TOOL=EnvironmentModulesC
+export EASYBUILD_MODULE_SYNTAX=Tcl
+export HTTP_AUTH_BEARER=MTk1ODA1MzE1MTI3OoHVFKMpL/kn8BQKWBiLFNfrC....
+export EASYBUILD_BUILDPATH=/tmp
+export ITER_USERNAME=kosl
+export http_proxy=socks5://127.0.0.1:1080
+export https_proxy=socks5://127.0.0.1:1080
+module purge
+module load modules
+__EOF__
+
+export http_proxy=socks5://127.0.0.1:1080
+export https_proxy=socks5://127.0.0.1:1080
+python3 -m venv easybuild.local
+easybuild.local/bin/python install ~/PySocks-*-py3-none-any.whl
+easybuild.local/bin/python install --upgrade  pip wheel
+easybuild.local/bin/python -m pip install setuptools grip keyring GitPython keyrings.alt easybuild
+git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
+            -b develop easybuild.local/imas-easybuild-easyconfigs
+mkdir  easyconfigs.local
+~~~~
+
 ## Usage
 
 ~~~ 
 SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
 
-  --help                prints and opens this manual, then EasyBuild help
-  --intel               build INTEL toolchain and modules
-  --pull                pulls Git repos for IMAS and updates EasyBuild configs
-  --fetch module(s)	fetch EasyBuild files for listed modules from SDCC cluster
-  --patch-modules-cpath fixes json-fortran, AMNS and GGD modules by removing CPATH
+  --help                  prints and opens this manual, then EasyBuild help
+  --intel                 build INTEL toolchain and modules
+  --pull                  pulls Git repos for IMAS and updates EasyBuild configs
+  --fetch-sdcc module(s)  fetch EasyBuild files for listed modules from SDCC cluster
+  --patch-modules-cpath   fixes json-fortran, AMNS and GGD modules by removing CPATH
 
 ENVIRONMENT variables:
 
@@ -606,9 +668,7 @@ if ! test -d ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs
                 keyring GitPython keyrings.alt easybuild
        git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
             -b develop ${EASYBUILD_LOCAL}/imas-easybuild-easyconfigs
-       test -d ${solps_top}/easyconfigs.local || \
-	    git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
-		-b SOLPS-ITER ${solps_top}/easyconfigs.local
+       test -d ${solps_top}/easyconfigs.local || mkdir -p ${solps_top}/easyconfigs.local
 fi
 
 #if ! command -v ksh 2>&1 >/dev/null
@@ -821,7 +881,7 @@ case "${1##--}" in
         sed -i -e /CPATH/d ${MODULEPATH}/json-fortran/*
 	sed -i -e /CPATH/d ${MODULEPATH}/netCDF-Fortran/*
         ;;
-    fetch)
+    fetch-sdcc)
 	shift
 	fetch_from_iter_cluster $*
 	;;
