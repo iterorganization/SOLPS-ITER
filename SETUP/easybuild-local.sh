@@ -703,7 +703,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
-	g2clib/1.9.0-foss-2023b --from-ITER-SDCC
+	g2clib/1.9.0-GCCcore-13.2.0 --from-ITER-SDCC
 	NCL/6.6.2-foss-2023b --from-ITER-SDCC
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
