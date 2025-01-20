@@ -553,36 +553,27 @@ IFERC and then remotely redirect SOCKS5 trafic to local machine.  For
 python3, required by Easybuild, bootstrapping PySocks wheel is needed
 to install the virtual environment manually. Since Easybuild does not
 support SOCKS5 the easiest is to rsync local or ITER installation
-sources to IFERC before starting of building packages.  Replace
-username `kosl` and bearer pasword in the example below.
+sources to IFERC before starting of building packages or redirect all
+`urllib.requests` in `filetool.py` to default SOCKS5 proxy tunel as
+shown in the commands below. Note that this approach does not use 
+`http_proxy` or `https_proxy`. Replace username `kosl` and bearer
+password (`HTTP_AUTH_BEARER`).
 
 ~~~ bash
 python3 -m pip download pysocks # Dowload the wheel
 scp PySocks-*-py3-none-any.whl kosl@jfrs.iferc-csc.jp: # Copy the wheel to JFRS
-ssh -D 1080 -C -N -f localhost # Creates SOCKS5 proxy on a local machine 
+ssh -D 1080 -C -N -f `hostname` # Creates SOCKS5 proxy on a local machine 
 ssh -R 1080:localhost:1080 kosl@jfrs.iferc-csc.jp # Login and tunel SOCKS5 to my local proxy
-ssh-keygen -t ed25519 # generate key for remote access
-cat .ssh/id_ed25519.pub # paste key to  https://git.iter.org/plugins/servlet/ssh/account/key
+ssh-keygen -t ed25519 # generate a key for remote access
+cat .ssh/id_ed25519.pub # paste the key to  https://git.iter.org/plugins/servlet/ssh/account/key
 cat > ~/.ssh/config << __EOF__
-Host git.iter.org
-HostName git.iter.org
-User git
-ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
-
 Host gpc-access.iter.org
 HostName gpc-access.iter.org
-User git
 ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
 __EOF__
 ssh-copy-id kosl@gpc-access.iter.org
-
 git config --global core.sshCommand 'ssh -o ProxyCommand="nc -v -x 127.0.0.1:1080 %h %p"'
-git config --global http.proxy 'socks5://127.0.0.1:1080'
-git config --global https.proxy 'socks5://127.0.0.1:1080'
-
 git clone --recursive ssh://git@git.iter.org/bnd/solps-iter.git
-
-rsync -rv easybuild.local/sources/ kosl@jfrs.iferc-csc.jp:solps-iter/easybuild.local/sources/ # copy sources # on a local machine
 
 cd solps-iter
 cat > SETUP/setup.easybuild.local << __EOF__
@@ -591,14 +582,10 @@ export EASYBUILD_MODULE_SYNTAX=Tcl
 export HTTP_AUTH_BEARER=MTk1ODA1MzE1MTI3OoHVFKMpL/kn8BQKWBiLFNfrC....
 export EASYBUILD_BUILDPATH=/tmp
 export ITER_USERNAME=kosl
-export http_proxy=socks5://127.0.0.1:1080
-export https_proxy=socks5://127.0.0.1:1080
 module purge
 module load modules
 __EOF__
 
-export http_proxy=socks5://127.0.0.1:1080
-export https_proxy=socks5://127.0.0.1:1080
 python3 -m venv easybuild.local
 easybuild.local/bin/python install ~/PySocks-*-py3-none-any.whl
 easybuild.local/bin/python install --upgrade  pip wheel
@@ -606,7 +593,33 @@ easybuild.local/bin/python -m pip install setuptools grip keyring GitPython keyr
 git clone ssh://git@git.iter.org/imex/easybuild-easyconfigs.git \
             -b develop easybuild.local/imas-easybuild-easyconfigs
 mkdir  easyconfigs.local
+
+cat > filetools.diff << __EOF__
+--- easybuild.local/lib64/python3.6/site-packages/easybuild/tools/filetools.py.orig     2025-01-19 04:38:15.609982000 +0900
++++ easybuild.local/lib64/python3.6/site-packages/easybuild/tools/filetools.py  2025-01-19 04:39:53.207489000 +0900
+@@ -59,6 +59,10 @@
+ import time
+ import zlib
+ from functools import partial
++import socks
++import socket
++socks.set_default_proxy(socks.SOCKS5, '127.0.0.1', 1080)
++socket.socket = socks.socksocket
+
+ from easybuild.base import fancylogger
+ from easybuild.tools import LooseVersion, run
+__EOF__
+patch < filetools.diff
+
+echo "proxy = socks5://127.0.0.1:1080" > ~/.curlrc
+
+SETUP/easybuild-local.sh
 ~~~~
+
+- Package `Perl-bundle-CPAN-5.38.0-GCCcore-13.2.0.eb` requires package
+  `Term::ReadLine::Gnu` to be commented out due to missing
+  `libtermcap`.
+
 
 ## Usage
 
@@ -690,6 +703,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	MSCL/1.2.4-GCCcore-13.2.0
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
+	g2clib/1.9.0-foss-2023b --from-ITER-SDCC
 	NCL/6.6.2-foss-2023b --from-ITER-SDCC
 	flex/2.6.4-GCCcore-13.2.0
 	Doxygen/1.9.8-GCCcore-13.2.0
