@@ -2,15 +2,10 @@
 # If not, attempt to determine them automatically
 
 UNAME := $(shell uname)
-ifeq ($(UNAME),Darwin)
-  MACOS := 1
-else
-  MACOS := 0
-endif
 
 # Identify HOST_NAME
 ifndef HOST_NAME
-  ifeq ($(MACOS),false)
+  ifneq ($(UNAME),Darwin)
   # Assuming to work on some HPC cluster
     ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
       # Identify host from whereami-script
@@ -156,14 +151,7 @@ CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
 ifeq ($(UNAME),Darwin)
-  ifneq (,$(filter eirene%,$(MAKECMDGOALS)))
-    # Automatically not use cmake only for compiling Eirene standalone (bug?)
-    NO_CMAKE := 1
-  endif
-  ifneq (,$(filter triang%,$(MAKECMDGOALS)))
-    # Same for triang, which requires eirene_nox
-    NO_CMAKE := 1
-  endif
+	NO_CMAKE := 1
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
