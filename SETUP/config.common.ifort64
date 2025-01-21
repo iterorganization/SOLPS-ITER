@@ -8,6 +8,14 @@ ifeq (${CC},cc)
     CC = /usr/bin/gcc
   endif
 endif
+# Use of ifx OpenMP is unsafe at the moment
+ifeq (${FC},ifx)
+  ifdef SOLPS_OPENMP
+    FC = ifort
+    FN = ifort
+    MPI_FC = mpiifort
+  endif
+endif
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF

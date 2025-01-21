@@ -1,5 +1,14 @@
 # files ignored in git repository
 
+# any folders except for the official ones
+/*/
+!doc/
+!lib/
+!modules/
+!runs/
+!scripts/
+!SETUP/
+
 # backup files
 *~
 *.bak

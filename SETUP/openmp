@@ -20,8 +20,30 @@ if ($?SOLPS_PATH) then
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   USE_OPENMP -D_OPENMP
   setenv   SOLPS_OPENMP yes
-  setenv   KMP_STACKSIZE 128M
-  setenv   KMP_AFFINITY norespect,compact
+  setenv   OLD_COMPILER ${FC}
+  setenv   OLD_MPI_COMPILER "${MPI_FC}"
+  if ( $COMPILER != 'ifort64' ) then
+    setenv OMP_STACKSIZE 256M
+  else
+    if ( $FC == 'ifx' ) then
+      setenv FC ifort
+      echo "Reverting to ifort compiler as ifx is unsafe with OpenMP"
+    endif
+    if ( "$MPI_FC" == "mpiifort -fc=mpiifx" ) then
+      setenv MPI_FC mpiifort
+    endif
+  endif
+  setenv   KMP_STACKSIZE 256M
+  setenv   KMP_AFFINITY noverbose,respect,compact
+  setenv   OMP_WAIT_POLICY active
+  setenv   OMP_DYNAMIC false
+  if ($?SOLPS_DEBUG) then
+    setenv OMP_DISPLAY_AFFINITY true
+    setenv OMP_DISPLAY_ENV true
+  endif
+# The settings below can be used if KMP_AFFINITY is not set
+#  setenv   OMP_PLACES cores
+#  setenv   OMP_PROC_BIND true
   unsetenv OLD_SOLPS_PATH
   rehash
   echo "SOLPS-ITER OpenMP mode turned on"
