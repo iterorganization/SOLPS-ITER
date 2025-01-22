@@ -475,7 +475,7 @@ CentOS Linux release 7.2 with Intel Xeon CPU E5-2697 v4 @ 2.30GHz
 ~~~ bash
 export EASYBUILD_MODULES_TOOL=EnvironmentModules
 export EASYBUILD_MODULE_SYNTAX=Tcl
-sed   -e "s/%%(namelower)s_%s.tar.gz.*)/boost_1_82_0.tar.gz'/" -e s/_1.83/_1_82/   easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
+sed -i  -e "s/%%(namelower)s_%s.tar.gz.*)/boost_1_82_0.tar.gz'/" -e s/_1.83/_1_82/   easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
 SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb --inject-checksums --force
 SETUP/easybuild-local.sh Boost-1.83.0-GCC-13.2.0.eb
 
@@ -572,6 +572,8 @@ HostName gpc-access.iter.org
 ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
 __EOF__
 ssh-copy-id kosl@gpc-access.iter.org
+git config --global http.proxy 'socks5://127.0.0.1:1080' 
+git config --global https.proxy 'socks5://127.0.0.1:1080'
 git config --global core.sshCommand 'ssh -o ProxyCommand="nc -v -x 127.0.0.1:1080 %h %p"'
 git clone --recursive ssh://git@git.iter.org/bnd/solps-iter.git
 
@@ -612,13 +614,25 @@ __EOF__
 patch < filetools.diff
 
 echo "proxy = socks5://127.0.0.1:1080" > ~/.curlrc
-
+ESMF_OS=Linux SETUP/easybuild-local.sh ESMF-8.6.1-foss-2023b.eb
+sed -i -e "/source_urls/s|'.*'|'https://archives.boost.io/release/1.83.0/source'|"  easybuild.local/easybuild/easyconfigs/b/Boost/Boost-1.83.0-GCC-13.2.0.eb
+sed -i -e "/source_urls/s|'.*'|'http://sources.buildroot.net/qhull'|" easybuild.local/easybuild/easyconfigs/q/Qhull/Qhull-2020.2-GCCcore-13.2.0.eb
+sed -i -e "/'GTK+', version/a'configopts': '-Dprint_backends=file'," easybuild.local/easybuild/easyconfigs/g/GTK3/GTK3-3.24.39-GCCcore-13.2.0.eb
+OMPI_MCA_btl=self,vader SETUP/easybuild-local.sh netcdf4-python-1.6.5-foss-2023b.eb --skip-test-step
 SETUP/easybuild-local.sh
 ~~~~
 
 - Package `Perl-bundle-CPAN-5.38.0-GCCcore-13.2.0.eb` requires package
   `Term::ReadLine::Gnu` to be commented out due to missing
-  `libtermcap`.
+  `libtermcap`.  
+- Package `ESMF-8.6.1-foss-2023b.eb` incorrectly identified Cray as 
+  Unicos and requires `ESMF_OS=Linux` preset before NCL build stage.
+- Boost archive not anymore JFrog landing requires source change
+- Qhull source download fails short unless `source_url` changed
+- GTK3 must be compiled without CUPS for Ghostscript
+- netcdf4-python should not do sanity checks with limited locked memory
+- Qt6 without QtWebEngine
+- gnupg-bundle without gpgme and poppler with `-DENABLE_GPGME=OFF`
 
 
 ## Usage
@@ -720,11 +734,11 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-SDCC
-       	UDA/2.7.5-GCC-13.2.0 --from-pr=19765 --ignore-checksums
+       	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
         UDA/2.8.0-GCC-13.2.0 --from-ITER-SDCC --ignore-checksums
+	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC 
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
