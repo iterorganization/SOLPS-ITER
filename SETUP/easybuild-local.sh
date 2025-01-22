@@ -734,15 +734,13 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-	cython-cmake/0.1.0-GCCcore-13.2.0 --from-ITER-SDCC
        	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
-        UDA/2.8.0-GCC-13.2.0 --from-ITER-SDCC --ignore-checksums
 	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC 
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
-	IDStools/2.0.0-gfbf-2023b
+	IDStools/2.0.0-gfbf-2023b --ignore-checksums
 	GGD/1.13.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC 
 	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC 
