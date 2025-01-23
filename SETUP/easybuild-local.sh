@@ -619,7 +619,18 @@ sed -i -e "/source_urls/s|'.*'|'https://archives.boost.io/release/1.83.0/source'
 sed -i -e "/source_urls/s|'.*'|'http://sources.buildroot.net/qhull'|" easybuild.local/easybuild/easyconfigs/q/Qhull/Qhull-2020.2-GCCcore-13.2.0.eb
 sed -i -e "/'GTK+', version/a'configopts': '-Dprint_backends=file'," easybuild.local/easybuild/easyconfigs/g/GTK3/GTK3-3.24.39-GCCcore-13.2.0.eb
 OMPI_MCA_btl=self,vader SETUP/easybuild-local.sh netcdf4-python-1.6.5-foss-2023b.eb --skip-test-step
+sed -i -e "s/qtwayland=OFF/& -DBUILD_qtwebengine=OFF/" -e "s,'lib/libQt6WebEngine.*SHLIB_EXT,," \
+  -e "s,'include/QtWebEngineCore',,"  easybuild.local/easybuild/easyconfigs/q/Qt6/Qt6-6.6.3-GCCcore-13.2.0.eb
+sed -i -e /IMAS-AL-Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.6.0*.eb
 SETUP/easybuild-local.sh
+CPATH=/usr/include/netpbm SETUP/easybuild-local.sh GTS-0.7.6-GCCcore-13.2.0.eb
+sed -i -e '/sanity_check_commands/a"module load GCC && "' easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/f/Fundamental-Constants/Fundamental-Constants-0.1.1.eb
+sed -i -e s/5.2.1/5.4.0/ -e s/3.41.0/4.0.0/  easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-foss-2023b.eb
+sed -i -e "/dependencies/askipsteps = ['sanitycheck']" easybuild.local/easybuild/easyconfigs/i/impi/impi-2021.10.0-intel-compilers-2023.2.1.eb
+SETUP/easybuild-local.sh --intel
+SETUP/easybuild-local.sh netCDF-4.9.2-iimpi-2023b.eb  --skip-test-step
+ESMF_OS=Linux SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb
+SETUP/easybuild-local.sh --intel
 ~~~~
 
 - Package `Perl-bundle-CPAN-5.38.0-GCCcore-13.2.0.eb` requires package
@@ -631,8 +642,13 @@ SETUP/easybuild-local.sh
 - Qhull source download fails short unless `source_url` changed
 - GTK3 must be compiled without CUPS for Ghostscript
 - netcdf4-python should not do sanity checks with limited locked memory
-- Qt6 without QtWebEngine
-- gnupg-bundle without gpgme and poppler with `-DENABLE_GPGME=OFF`
+- Qt6 should be patched for build without Wayland and QtWebEngine
+- Build `gnupg-bundle` without gpgme and poppler with `-DENABLE_GPGME=OFF`
+- GTS fails to find `pgm.h` and we suggest `CPATH=/usr/include/netpbm` to build it.
+- AMNS built without MATLAB
+- Fundamental-Constants assumes gfortran to be installed in system path for sanity checks.
+- Viz requires alignment with newer IMAS to build against. AL_VERSION can be fixed in alias.
+- Intel compilers do not have enough locked memory to do sanity checks
 
 
 ## Usage
@@ -775,6 +791,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
 	GLI/4.5.31-GCCcore-13.2.0
+	GDAL/3.9.0-intel-2023b --from-ITER-SDCC
 	NCL/6.6.2-intel-2023b --from-ITER-SDCC --include-easyblocks-from-pr=3409 --optarch=GENERIC
 	netCDF/4.9.2-iimpi-2023b
 	netCDF-Fortran/4.6.1-iimpi-2023b --filter-env-vars=CPATH
