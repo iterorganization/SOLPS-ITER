@@ -4659,10 +4659,10 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently five possible choices supported. They are:
+There are currently six possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
-  \item[IMPROVED] An improved strategy from the {\bf BALANCED} strategy for stable and better parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
+  \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
   \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
@@ -21525,6 +21525,7 @@ OPEN\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
 OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
 OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
 OPEN\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 OPEN\_MPI & modules/eirmod\_cadgeo.F \\
 OPEN\_MPI & modules/eirmod\_cai.F \\
 OPEN\_MPI & modules/eirmod\_ccona.F \\
@@ -21564,6 +21565,7 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+TRACE & modules/eirmod\_improved\_strategy.F90 \\
 USE\_EXT\_OPENMP & assistant/exit\_own.F \\
 USE\_EXT\_OPENMP & diagno/eirmod\_linint.F \\
 USE\_EXT\_OPENMP & geometry/eirmod\_learc1.F \\
