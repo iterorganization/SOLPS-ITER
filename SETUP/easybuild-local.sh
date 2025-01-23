@@ -43,10 +43,10 @@ SDCC `--fetch-sdcc module(s)` functionality is provided.
 In order for fetch to work a local SSH key needs to be copied to ITER cluster with
 `ssh-copy-id`.
 
-Note that above minimal example requires Python 3.8+, `lmod`, `tcsh` and
-`ksh` to be installed on the system and functional. The rest is
-installed by the script under the `easybuild.local` directory or
-elsewhere if desired.
+Note that above minimal example requires Python 3.8+, `lmod` or
+`modules`, `tcsh` and `ksh` to be installed on the system and
+functional. The rest is installed by the script under the
+`easybuild.local` directory or elsewhere (system-wide) if desired.
 
 Lmod and Lua are default and recommended way to handle modules.
 You may need to export `EASYBUILD_MODULES_TOOL` and 
@@ -248,10 +248,12 @@ optimisation flags with
 
 NCL from PR #21176 introduces higher HDF5 version that is fixed by the
 official toolchain to HDF5/1.14.3 and thus modification of (Armadillo,
-NCL, netCDF) EB configs if fetched from the ITER SDCC is required
-too. The problem is exhibited at Tcl version of modules only while at
-Lua the replacement is silently ignored. See Marconi subsection below
-on how to address this correctly.
+GDAL, NCL, netCDF) EB configs if fetched from the ITER SDCC is
+required too. NCL for Intel requires to `--include-easyblocks-from-pr=3409`. 
+
+The problem is exhibited at Tcl version of modules only while at Lua
+the replacement is silently ignored. See Marconi or IFERC subsection
+below on how to address this correctly.
 
 
 ### OpenSSL
@@ -626,10 +628,23 @@ SETUP/easybuild-local.sh
 CPATH=/usr/include/netpbm SETUP/easybuild-local.sh GTS-0.7.6-GCCcore-13.2.0.eb
 sed -i -e '/sanity_check_commands/a"module load GCC && "' easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/f/Fundamental-Constants/Fundamental-Constants-0.1.1.eb
 sed -i -e s/5.2.1/5.4.0/ -e s/3.41.0/4.0.0/  easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-foss-2023b.eb
+SETUP/easybuild-local.sh
+# INTEL toolchain
 sed -i -e "/dependencies/askipsteps = ['sanitycheck']" easybuild.local/easybuild/easyconfigs/i/impi/impi-2021.10.0-intel-compilers-2023.2.1.eb
 SETUP/easybuild-local.sh --intel
 SETUP/easybuild-local.sh netCDF-4.9.2-iimpi-2023b.eb  --skip-test-step
 ESMF_OS=Linux SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb
+SETUP/easybuild-local.sh --intel
+SETUP/easybuild-local.sh --fetch-sdcc GDAL/3.9.0-intel-2023b
+sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/g/GDAL/GDAL-3.9.0-intel-2023b.eb
+sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/a/Armadillo/Armadillo-12.8.0-intel-2023b.eb
+SETUP/easybuild-local.sh Armadillo-12.8.0-intel-2023b.eb --force
+SETUP/easybuild-local.sh GDAL-3.9.0-intel-2023b.eb
+sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/n/NCL/NCL-6.6.2-intel-2023b.eb
+SETUP/easybuild-local.sh NCL-6.6.2-intel-2023b.eb  --include-easyblocks-from-pr=3409
+SETUP/easybuild-local.sh --fetch-sdcc poppler/24.04.0-intel-compilers-2023.2.1
+sed -i  -e 's/LCMS=OFF/& -DENABLE_GPGME=OFF/' easyconfigs.local/p/poppler/poppler-24.04.0-intel-compilers-2023.2.1.eb
+SETUP/easybuild-local.sh  poppler-24.04.0-intel-compilers-2023.2.1.eb
 SETUP/easybuild-local.sh --intel
 ~~~~
 
@@ -649,7 +664,9 @@ SETUP/easybuild-local.sh --intel
 - Fundamental-Constants assumes gfortran to be installed in system path for sanity checks.
 - Viz requires alignment with newer IMAS to build against. AL_VERSION can be fixed in alias.
 - Intel compilers do not have enough locked memory to do sanity checks
-
+- Armadillo, GDAL require HDF5 version fix for NCL consistency in Intel toolchain
+- OpenSSL requires `setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so` when building
+  (with `make`) or running SOLPS-ITER!
 
 ## Usage
 
@@ -785,7 +802,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC 
 	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
 	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
-	HDF5/1.14.4.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
+	HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
        	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
 	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
