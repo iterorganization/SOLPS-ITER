@@ -45,7 +45,7 @@ setenv HOST_NAME ITER
 
 module load Fundamental-Constants/0.1.1
 
-#module load OpenBLAS/0.3.24-GCC-13.2.0
+module load OpenBLAS/0.3.24-GCC-13.2.0
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
