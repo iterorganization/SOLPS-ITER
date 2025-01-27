@@ -137,7 +137,6 @@ if exists. For example:
     export EASYBUILD_BUILDPATH=/dev/shm/
     export ITER_USERNAME=kosl
     module purge
-    module load AlmaLinux/profile  python-3.8.12-gcc-8.5.0-bvu5tg4
 
 ### SOLPS-ITER gfortran modules
 
@@ -240,9 +239,9 @@ in `setup.csh.*.*` files.
 Due to Intel libries dependent packages requires disabled architecture
 optimisation flags with
 
-   SETUP/easybuild-local.sh MSCL-1.2.4-iimkl-2023b.eb --optarch=GENERIC
-   SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb --optarch=GENERIC --robot
-   SETUP/easybuild-local.sh GSL-2.7-intel-compilers-2023.2.1.eb --optarch=GENERIC
+    SETUP/easybuild-local.sh MSCL-1.2.4-iimkl-2023b.eb --optarch=GENERIC
+    SETUP/easybuild-local.sh ESMF-8.6.1-intel-2023b.eb --optarch=GENERIC --robot
+    SETUP/easybuild-local.sh GSL-2.7-intel-compilers-2023.2.1.eb --optarch=GENERIC
 
 ### NCL and HDF5
 
@@ -263,10 +262,22 @@ and not by the EasyBuild module. This resolves problems when compiling
 ParaView and PySide6 (shiboken6) since system /lib64 might be in place
 of OpenSSL module and symbol incompatibility.
 
-### ParaView
+### ParaView and Catalyst
 
 Building ParaView can run out of memory or crashes on some machines
 and for that use lower threads or even `--parallel 1` for serial build.
+
+
+ParaView Catalyst configuration does not work correctly with CMake/3.26 or higher.
+For that the recommended way is to backport to CMake/3.20 with the following commands:
+
+~~~ bash
+mkdir -p easyconfigs.local/c/CMake
+cp easybuild.local/easybuild/easyconfigs/c/CMake/CMake-3.27.6-GCCcore-13.2.0.eb easyconfigs.local/c/CMake/CMake-3.20.1-GCCcore-13.2.0.eb
+sed -i -e s/3.27.6/3.20.1/ easyconfigs.local/c/CMake/CMake-3.20.1-GCCcore-13.2.0.eb
+SETUP/easybuild-local.sh CMake-3.20.1-GCCcore-13.2.0.eb --inject-checksums --force
+SETUP/easybuild-local.sh CMake-3.20.1-GCCcore-13.2.0.eb
+~~~
 
 ### GR 
 
@@ -280,6 +291,9 @@ AMNS requires system to having latexmk package installed on the system.
 Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
     ('IMAS-AL-Python', '5.4.0', '-DD-4.0.0')
+or
+
+    sed -i -e '/IMAS-AL/{s/5.2.1/5.4.0/;s/3.41/4.0/}' easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-*.eb 
 
 If IMAS-AL MATLAB is not required it can be removed from AMNS with 
 
@@ -292,7 +306,7 @@ If IMAS-AL MATLAB is not required it can be removed from AMNS with
 For new HPC sites that `./wheremai` returns `UNKNOWN` it is
 recommended to update this script. Otherwise, local setup can be
 created from ITER template, retaining only SDCC modules. Similar setup
-from *UL* can be used as template by using short `hostname` as local
+from *UL* can be used as a template by using short `hostname` as local
 setup host name for each compiler. 
 
 ~~~ bash
@@ -342,7 +356,6 @@ Using system Python 3.6.8 fails within shutil.copytree() function.
 
    module load python-3.8.12-gcc-8.5.0-bvu5tg4
    export EASYBUILD_MODULES_TOOL=Lmod
-
 
 ParaView requires Qt/5.15.2 for qhelpgenerator to work on Trinity
 desktop. To avoid clashes it is required to change all Qt dependent
@@ -646,6 +659,25 @@ SETUP/easybuild-local.sh --fetch-sdcc poppler/24.04.0-intel-compilers-2023.2.1
 sed -i  -e 's/LCMS=OFF/& -DENABLE_GPGME=OFF/' easyconfigs.local/p/poppler/poppler-24.04.0-intel-compilers-2023.2.1.eb
 SETUP/easybuild-local.sh  poppler-24.04.0-intel-compilers-2023.2.1.eb
 SETUP/easybuild-local.sh --intel
+SETUP/easybuild-local.sh matplotlib-3.8.2-iimkl-2023b.eb
+cd easyconfigs.local/m/matplotlib
+curl -o qhull-2020-src-8.0.2.tgz http://sources.buildroot.net/qhull/qhull-2020-src-8.0.2.tgz
+mkdir -p easyconfigs.local/q/Qhull
+cp easybuild.local/easybuild/easyconfigs/q/Qhull/Qhull-2020.2-GCCcore-13.2.0.eb easyconfigs.local/q/Qhull/Qhull-2020.2-intel-2023b.eb
+sed -i -e s/GCCcore/intel/ -e s/13.2.0/2023b/ easyconfigs.local/q/Qhull/Qhull-2020.2-intel-2023b.eb # change toolchain
+SETUP/easybuild-local.sh Qhull-2020.2-intel-2023b.eb
+vi easyconfigs.local/m/matplotlib/matplotlib-3.8.2-iimkl-2023b.eb # change Qhull 
+SETUP/easybuild-local.sh matplotlib-3.8.2-iimkl-2023b.eb
+sed -i  -e "/dependencies/iskipsteps = ['sanitycheck']" easyconfigs.local/n/netcdf4-python/netcdf4-python-1.6.5-intel-2023b.eb
+SETUP/easybuild-local.sh netcdf4-python-1.6.5-intel-2023b.eb  --skip-test-step
+sed -i -e s/5.2.1/5.4.0/ -e s/3.41.0/4.0.0/ -e s/2.7.5/2.8.0/ easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-intel-2023b.eb
+SETUP/easybuild-local.sh Viz-2.8.0-intel-2023b.eb
+# Compiling SOLPS-ITER
+setenv SOLPS_HOST_NAME_FORCE UL
+source setup.csh
+setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so 
+make depend
+make
 ~~~~
 
 - Package `Perl-bundle-CPAN-5.38.0-GCCcore-13.2.0.eb` requires package
@@ -667,6 +699,7 @@ SETUP/easybuild-local.sh --intel
 - Armadillo, GDAL require HDF5 version fix for NCL consistency in Intel toolchain
 - OpenSSL requires `setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so` when building
   (with `make`) or running SOLPS-ITER!
+- Matplotlib for Intel requires Qhull to be built separately 
 
 ## Usage
 
@@ -745,6 +778,7 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
+	gnuplot/5.4.8-GCCcore-12.3.0
 	xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
