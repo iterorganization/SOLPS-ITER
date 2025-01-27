@@ -159,8 +159,8 @@ c*** 1
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone ,nlmovie, nldfst,nlranmar,nlcascad,nloctree/
      /    .false.,.false.,.false., .true. , .false., .false./,
-     /    nlwrmsh, nexvs ,nltrimesh,nlsoledge/
-     ,    .true. ,.false.,.false., .true./
+     /    nlwrmsh, nexvs ,nltrimesh,nlsoledge,nlspcspt/
+     ,    .true. ,.false.,.false., .true. , .false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2
