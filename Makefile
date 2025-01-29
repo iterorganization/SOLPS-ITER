@@ -176,6 +176,8 @@ all_openmp_mpi_nox: all_nox_openmp_mpi
 
 all_mpi_openmp_nox: all_nox_openmp_mpi
 
+carre2: carre
+
 carre:
 	cd modules/Carre2; ${MAKE}
 
@@ -406,17 +408,17 @@ uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
 
 uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
-triang: eirene_nox
+triang:
 	cd modules/Triang; ${MAKE}
 
-triang_mpi: eirene_nox_mpi
+triang_mpi:
 	cd modules/Triang; ${MAKE} ${MPI_OPTS}
 
-triang_nox: eirene_nox
+triang_nox:
 	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
 	cd modules/Triang; ${MAKE} ${OPT_NOX}
 
-triang_nox_mpi: eirene_nox_mpi
+triang_nox_mpi:
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
 
@@ -490,7 +492,7 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
-	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre2/src90/*/*.[Ff]90 modules/Carre2/src90/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/*.tex || touch TAGS
+	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre2/src90/*/*.[Ff]90 modules/Carre2/src90/include/*.* modules/Eirene/src.local/*.f modules/Eirene/src/*/*.[Ffc] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.f modules/Eirene/src/user-routines/user_iter/*.f modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/*.tex doc/AFN_BCs_documentation/LaTeX_source_code/*.tex || touch TAGS
 
 listobj:
 	cd modules/Carre2;         ${MAKE} listobj

@@ -4,6 +4,7 @@
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+export NO_MANUAL="true"
 make listobj_nox depend_nox
 make divgeo_nox
 make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_tgt b25_adj b25_hess_tgt
@@ -21,7 +22,6 @@ cp ../run_kin_CI/b2.*.parameters .
 cp ../run_kin_CI/b2mn.dat .
 cp ../run_kin_CI/b2fstati .
 cp ../run_kin_CI/b2time.nc.i b2time.nc
-cp ../run_kin_CI/b2batch.nc.i b2batch.nc
 cp ../run_kin_CI/input.dat .
 cp ../run_kin_CI/fort.11.i fort.11
 cp ../run_kin_CI/fort.13.i fort.13

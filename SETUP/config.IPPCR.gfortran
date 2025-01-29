@@ -3,7 +3,7 @@
 #   - based on config.ITER.gfortran
 #
 
-    NODENAME ?= "container-easy"
+    NODENAME ?= $(shell echo `hostname`)
    MSCL_ROOT ?= ${EBROOTMSCL}
      GR_ROOT ?= ${EBROOTGR}
     GLI_HOME ?= ${EBROOTGLI}

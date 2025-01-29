@@ -1,7 +1,0 @@
-if ($?SOLPS_PATH) then
-  unsetenv OPT IPOPT
-  echo "Ipopt compilation and optimization turned off"
-else
-  echo "SOLPS_PATH not set. Exiting."
-endif
-

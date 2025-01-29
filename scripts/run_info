@@ -7,7 +7,6 @@ if ( -s run.log ) then
   grep -i 'stopping' run.log | tail >> run.info
   grep -i -w 'Calculating gradient of' run.log >> run.info
   grep -i -w 'OPTIM' run.log >> run.info
-  grep -i -w 'IPOPT' run.log >> run.info
   grep -i -w 'TAO' run.log >> run.info
   set npar_opt=`grep -i npar_opt run.log | awk '{print $3}' | awk -F"," '{print $1}'`
   echo npar_opt = $npar_opt >> run.info

@@ -2,58 +2,76 @@
 % get_comuse gets commonly used variables for a simulation and puts them in a  %
 % single structure. By calling functions with this structure this function     %
 % works similarly to a module in fortran.                                      %
-%                                                                              %
+% The variable ftSep has been added to comuse and contains the flux tube       %
+% number(s) of the flux tubes in the SOL adjacent to the separatrix.           %
+% The variable ftSeppf contains the flux tube number(s) of the flux tubes in   %
+% the PF adjacent to the separatrix.                                           %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function comuse = get_comuse(filename)
 
-% Obtain dimensions from netcdf file
+% Obtain dimensions from netcdf file:
 finfo = ncinfo(filename);
 dimNames = {finfo.Dimensions.Name};
-% NB nx_these_scripts = nx_b2 + 2, ny_these_scripts = ny_b2 + 2
-dimMatch = strcmp(dimNames,'nx_plus2');
-comuse.nx = finfo.Dimensions(dimMatch).Length;
-dimMatch = strcmp(dimNames,'ny_plus2');
-comuse.ny = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCv');
+comuse.nCv = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCi');
+comuse.nCi = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nFc');
+comuse.nFc = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nVx');
+comuse.nVx = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nFt');
+comuse.nFt = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCmxFc');
+comuse.nCmxFc = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nCmxVx');
+comuse.nCmxVx = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'ns');
 comuse.ns = finfo.Dimensions(dimMatch).Length;
 dimMatch = strcmp(dimNames,'nstra');
 comuse.nstra = finfo.Dimensions(dimMatch).Length;
-% Get crx, cry:
-comuse.r = ncread(filename,'crx');
-comuse.z = ncread(filename,'cry');
-% cr, cz, cr_x, cz_x, cr_y, cz_y calculated as in b2mds.F:
-comuse.cr = mean(comuse.r,3);
-comuse.cz = mean(comuse.z,3);
-comuse.cr_x = zeros(comuse.nx-1,comuse.ny);
-comuse.cz_x = zeros(comuse.nx-1,comuse.ny);
-comuse.cr_y = zeros(comuse.nx,comuse.ny-1);
-comuse.cz_y = zeros(comuse.nx,comuse.ny-1);
-for iy = 1:comuse.ny
-    for ix = 1:comuse.nx-1
-        comuse.cr_x(ix,iy)=(comuse.r(ix+1,iy,1)+comuse.r(ix+1,iy,3))/2;
-        comuse.cz_x(ix,iy)=(comuse.z(ix+1,iy,1)+comuse.z(ix+1,iy,3))/2;
-    end
-end
-for iy = 1:comuse.ny-1
-    for ix = 1:comuse.nx
-        comuse.cr_y(ix,iy)=(comuse.r(ix,iy+1,1)+comuse.r(ix,iy+1,2))/2;
-        comuse.cz_y(ix,iy)=(comuse.z(ix,iy+1,1)+comuse.z(ix,iy+1,2))/2;
-    end
-end
-% Neighbouring indices (apply same indexing as is done on MDSPlus server)
-comuse.rightix = ncread(filename,'rightix')+1;
-comuse.leftix = ncread(filename,'leftix')+1;
-comuse.rightiy = ncread(filename,'rightiy')+1;
-comuse.leftiy = ncread(filename,'leftiy')+1;
-comuse.topix = ncread(filename,'topix')+1;
-comuse.bottomix = ncread(filename,'bottomix')+1;
-comuse.topiy = ncread(filename,'topiy')+1;
-comuse.bottomiy = ncread(filename,'bottomiy')+1;
-% OMP and sep indices (again, same indexing as MDSPlus server)
-comuse.imp = ncread(filename,'jxi')+1;
-comuse.omp = ncread(filename,'jxa')+1;
-comuse.sep = ncread(filename,'jsep')+1;
+dimMatch = strcmp(dimNames,'nXpt');
+comuse.nXpt = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nimp');
+comuse.nimp = finfo.Dimensions(dimMatch).Length;
+dimMatch = strcmp(dimNames,'nomp');
+comuse.nomp = finfo.Dimensions(dimMatch).Length;
+% Get grid information:
+comuse.cvX = ncread(filename,'cvX');
+comuse.cvY = ncread(filename,'cvY');
+comuse.cvHx = ncread(filename,'cvHx');
+comuse.cvHz = ncread(filename,'cvHz');
+comuse.vxX = ncread(filename,'vxX');
+comuse.vxY = ncread(filename,'vxY');
+comuse.cvFc = ncread(filename,'cvFc');
+comuse.cvFcP = ncread(filename,'cvFcP');
+comuse.cvVx = ncread(filename,'cvVx');
+comuse.cvVxP = ncread(filename,'cvVxP');
+comuse.fcCv = ncread(filename,'fcCv');
+comuse.fcVx = ncread(filename,'fcVx');
+% Face areas and angles
+comuse.fcS = ncread(filename,'fcS');
+comuse.fcHz = ncread(filename,'fcHz');
+comuse.fcQalf = ncread(filename,'fcQalf');
+% Face labels
+comuse.fcLbl = ncread(filename,'fcLbl');
+% Magnetic field
+comuse.cvBb = ncread(filename,'cvBb');
+comuse.cvEb = ncread(filename,'cvEb');
+comuse.fcBb = ncread(filename,'fcBb');
+% Magnetic psi
+comuse.vxFpsi = ncread(filename,'vxFpsi');
+% Regions, flux tubes, imp and omp:
+comuse.cvReg = ncread(filename,'cvReg');
+comuse.cvFt = ncread(filename,'cvFt');
+comuse.ftCv = ncread(filename,'ftCv');
+comuse.ftCvP = ncread(filename,'ftCvP');
+comuse.imp = ncread(filename,'imp');
+comuse.omp = ncread(filename,'omp');
+% Cell volumes
+comuse.cvVol = ncread(filename,'cvVol');
 % Species string:
 tmp = ncread(filename,'species');
 comuse.species = {};
@@ -70,34 +88,6 @@ comuse.za = ncread(filename,'za');
 comuse.am = ncread(filename,'am');
 comuse.mp = ncread(filename,'mp');
 comuse.ev = ncread(filename,'ev');
-% Derive dspol as in b2mds.F:
-hx = ncread(filename,'hx');
-bb = ncread(filename,'bb');
-comuse.dspolx = zeros(comuse.nx,comuse.ny);
-comuse.dsparx = zeros(comuse.nx,comuse.ny);
-for iy=1:comuse.ny
-    comuse.dspolx(1,iy)=-hx(1,iy);
-    comuse.dsparx(1,iy)=-hx(1,iy)*abs(bb(1,iy,4)/bb(1,iy,1)); %FIX OM 18/4/2019 from bb(ix-1,iy,3)->bb(ix-1,iy,4)
-    for ix=2:comuse.nx
-      comuse.dspolx(ix,iy)=comuse.dspolx(ix-1,iy)+hx(ix-1,iy);
-      comuse.dsparx(ix,iy)=comuse.dsparx(ix-1,iy)+hx(ix-1,iy)*abs(bb(ix-1,iy,4)/bb(ix-1,iy,1)); %FIX OM 18/4/2019 from bb(ix-1,iy,3)->bb(ix-1,iy,4)
-    end
-end
-
-comuse.dspol = zeros(comuse.nx,comuse.ny);
-comuse.dspar = zeros(comuse.nx,comuse.ny);
-
-comuse.dspol(1:end-1,:) = 0.5*(comuse.dspolx(1:end-1,:)+comuse.dspolx(2:end,:));
-comuse.dspol(end,:) = comuse.dspolx(end,:)+0.5*hx(end,:);
-comuse.dspar(1:end-1,:) = 0.5*(comuse.dsparx(1:end-1,:)+comuse.dsparx(2:end,:));
-comuse.dspar(end,:) = comuse.dsparx(end,:)+0.5*hx(end,:)*abs(bb(end,:,4)/bb(end,:,1)); %FIX OM 18/4/2019 from bb(ix-1,iy,3)->bb(ix-1,iy,4)
-% Save dv, hx, bb, gs:
-comuse.dv = ncread(filename,'vol');
-comuse.hx = hx;
-% comuse.hy = ncread(filename,'hy');
-% comuse.hz = ncread(filename,'hz');
-comuse.bb = bb;
-comuse.gs = ncread(filename,'gs');
 % Set plotting colormap:
 comuse.cmap = ([0.0000    0.4470    0.7410;...
                 0.8500    0.3250    0.0980;...
@@ -106,4 +96,166 @@ comuse.cmap = ([0.0000    0.4470    0.7410;...
                 0.4660    0.6740    0.1880;...
                 0.3010    0.7450    0.9330;...
                 0.6350    0.0780    0.1840]);
+
+% Find flux tubes in SOL near separatrix
+if comuse.nXpt == 1 
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 1
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
+        if ((comuse.cvReg(comuse.omp(i)) == 2) || ...
+                (comuse.cvReg(comuse.omp(i)) == 6))
+            comuse.ftSep = comuse.cvFt(comuse.omp(i));
+            break;
+        end
+    end
+elseif comuse.nXpt == 2
+    warning(['Only connected double null is fully supported. '...
+        'Errors might occur for disconnected double null.'])
+    comuse.ftSep = zeros(2,1);
+    % Check in which direction imp is defined
+    if comuse.cvReg(comuse.imp(1)) == 1
+        istart = 1;
+        iend = comuse.nimp;
+        step = 1;
+    else
+        istart = comuse.nimp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
+        if (comuse.cvReg(comuse.imp(i)) == 2)
+            comuse.ftSep(1) = comuse.cvFt(comuse.imp(i));
+            break;
+        end
+    end
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 5
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
+        if (comuse.cvReg(comuse.omp(i)) == 6)
+            comuse.ftSep(2) = comuse.cvFt(comuse.omp(i));
+            break;
+        end
+    end
+elseif comuse.nXpt == 0
+    % Check in which direction omp is defined
+    if comuse.cvReg(comuse.omp(1)) == 1
+        istart = 1;
+        iend = comuse.nomp;
+        step = 1;
+    else
+        istart = comuse.nomp;
+        iend = 1;
+        step = -1;
+    end
+    for i = istart:step:iend
+        if (comuse.cvReg(comuse.omp(i) == 2))
+            comuse.ftSep = comuse.cvFt(comuse.omp(i));
+            break;
+        end
+    end
+end
+
+% Find flux tubes in PF near separatrix
+if comuse.nXpt == 1 
+    found = false;
+    for iFt = 1:comuse.nFt
+        iCv1 = comuse.ftCvP(iFt,1);
+        iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
+        if any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 1) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 2) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 5) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 6) 
+            % Flux tube not in PF ==> do nothing
+        else
+            for i = iCv1:iCv2
+                iCv = comuse.ftCv(i);
+                iFc1 = comuse.cvFcP(iCv,1);
+                iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
+                for j = iFc1:iFc2
+                    iFc = comuse.cvFc(j);
+                    if (comuse.cvFt(comuse.fcCv(iFc,1)) == comuse.ftSep) || ...
+                        (comuse.cvFt(comuse.fcCv(iFc,2)) == comuse.ftSep)
+                        found = true;
+                        break;
+                    end
+                end
+                if found
+                    break;
+                end
+            end
+        end
+        if found
+            break;
+        end
+    end
+    comuse.ftSeppf = iFt;
+elseif comuse.nXpt == 2
+    found = false;
+    comuse.ftSeppf = zeros(2,1);
+    for iFt = 1:comuse.nFt
+        iCv1 = comuse.ftCvP(iFt,1);
+        iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
+        if any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 1) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 2) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 5) || ...
+            any(comuse.cvReg(comuse.ftCv(iCv1:iCv2)) == 6) 
+            % Flux tube not in PF ==> do nothing
+        else
+            for i = iCv1:iCv2
+                iCv = comuse.ftCv(i);
+                iFc1 = comuse.cvFcP(iCv,1);
+                iFc2 = iFc1 + comuse.cvFcP(iCv,2) - 1;
+                for j = iFc1:iFc2
+                    iFc = comuse.cvFc(j);
+                    if (comuse.cvFt(comuse.fcCv(iFc,1)) == comuse.ftSep(1)) || ...
+                       (comuse.cvFt(comuse.fcCv(iFc,1)) == comuse.ftSep(2)) || ...
+                        (comuse.cvFt(comuse.fcCv(iFc,2)) == comuse.ftSep(1)) || ...
+                        (comuse.cvFt(comuse.fcCv(iFc,2)) == comuse.ftSep(2))
+                        found = true;
+                        break;
+                    end
+                end
+                if found
+                    break;
+                end
+            end
+        end
+        if found
+            if (comuse.cvReg(iCv) == 3) || (comuse.cvReg(iCv) == 8)
+                comuse.ftSeppf(1) = iFt;
+            else
+                comuse.ftSeppf(2) = iFt;
+            end
+            found = false;
+        end
+    end
+elseif comuse.nXpt == 0
+    for i = 1:comuse.nomp
+        if (comuse.cvFt(comuse.omp(i)) == comuse.ftSep)
+            break;
+        end
+    end
+    comuse.ftSeppf = comuse.cvFt(comuse.omp(i-1));
+end
+
+
+
+
+
 

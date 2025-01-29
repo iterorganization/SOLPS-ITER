@@ -8,7 +8,7 @@ echo "      implicit none" >> b2mod_diffsizes.F
 echo "      integer ,parameter :: nbdirsmax=20" >> b2mod_diffsizes.F
 echo "      end module b2mod_diffsizes" >> b2mod_diffsizes.F
 
-sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(npar_opt.le.nbdirsmax, 'Increase size of nbdirsmax in diffsizes.F')" b2mn_d.F90
+sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(npar_opt.le.nbdirsmax, 'Increase size of nbdirsmax in b2mod_diffsizes.F')" b2mn_d.F90
 sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(switch%b2optim_namelist.eq.1, 'Sensitivity calculation needs b2optim_namelist=1!')" b2mn_d.F90
 sed -i -e "/CALL B2MN_STEP_DV/i\  call set_tgt_perturbation(switchd)" b2mn_d.F90
 sed -i -e 's/state_avgd, nbdirs/state_avgd, npar_opt/g' b2mn_d.F90

@@ -32,7 +32,7 @@ FCOPTS += -vec_report0
 endif
 
 DBLFC = ${FC}
-DDBLOPTION = -r8
+DBLOPTION = -r8
 DBLSED = sed -e s:\#PREC\#:d:g
 DBLSED = 
 

@@ -25,15 +25,16 @@
 %                 poloidal end of the cell surface (e.g. the target if the     %
 %                 balance region ends at the target)                           %
 % POLBALDIST:     Either 'parallel' or 'poloidal'. Defines the distance used   %
-%                 on the x-axis of the poloidal balance plots. Distances are   %
-%                 mapped to the first SOL ring.                                %
+%                 on the x-axis of the poloidal balance plots.                 %
 % STRATA_PLOT:    If true then divide the EIRENE source into components from   %
 %                 each stratum (in a new figure).                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
+% Widegrid adaptation by Niels Horsten (niels.horsten@kuleuven.be) July 2024   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-BALFILE = '/tmp/balance2317.nc';
+
+BALFILE = '../../runs/examples/COMPASS_16515_1150ms_D_drift_AFN/run_AFN_drift/balance.nc';
 BAL_QUANT = 'momentum';
-SPECIES_INDEX = 7:16;
+SPECIES_INDEX = 2:2;
 DEFAULT_REGION = 'user';
 AREAEND = 'right';
 AREATYPE = 'none';
@@ -44,12 +45,12 @@ STRATA_PLOT = false;
 comuse = get_comuse(BALFILE);
     
 % Specify the volumes where radial and poloidal balance is to be performed by
-% creating a matrix of size nx*ny which is true inside the volumes:
+% creating a matrix of size nCv which is true inside the volumes:
 if ismember(DEFAULT_REGION(1:2),{'li','ui','uo','lo'})
-    [indrad,indpol,reverse] = set_region(DEFAULT_REGION,comuse);
+    [indrad,indpol,reverse,facesup,facesdown,facesup_pol,facesdown_pol] = set_region(DEFAULT_REGION,comuse);
 else
     display('Default region not used. Balance region set in user_set_region');
-    [indrad,indpol,reverse] = user_set_region(comuse);
+    [indrad,indpol,reverse,facesup,facesdown,facesup_pol,facesdown_pol] = user_set_region(comuse);
 end
 
 % Lay out the window into which plots will go:
@@ -61,7 +62,7 @@ else
 end
 
 % Plot the grid showing where balance will be performed:
-balgrid(comuse,indrad,indpol,axgrid,reverse);
+balgrid(comuse,indrad,indpol,facesup,facesdown,axgrid);
 
 % Calculate the area which fluxes and sources will be divided by:
 area_divide = calc_area(comuse,AREATYPE);
@@ -69,21 +70,21 @@ area_divide = calc_area(comuse,AREATYPE);
 % Plot balance of the required quantity
 switch BAL_QUANT
     case 'particles'
-        balpart(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        balpart(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'momentum'
-        balmom(BALFILE,indrad,indpol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        balmom(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'totpress'
         warning('Use total pressure balance with caution. Balance not currently perfect.');
-        baltotpress(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,POLBALDIST);
+        baltotpress(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,POLBALDIST);
     case 'elheat'
-        baleht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        baleht(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'ionheat'
-        baliht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        baliht(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'totheat'
-        baltotht(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        baltotht(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'toten'
         warning('Use total energy balance with caution. Balance not currently perfect.');
-        baltoten(BALFILE,indrad,indpol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
+        baltoten(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     otherwise
         error('Balance quantity ''%s'' not supported.',BAL_QUANT);
 end
