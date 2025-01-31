@@ -11,6 +11,7 @@ echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.IT
 echo '${OBJDIR}/rstern.o: ${OBJDIR}/rtsaf.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
 echo '${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
 echo '${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
+export NO_MANUAL="true"
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug

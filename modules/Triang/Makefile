@@ -476,7 +476,7 @@ tags:
 ifeq ($(LOCAL),yes)
 	rm -f ${SRCTRI}/TAGS ; ${MAKETAGS} ${SRCTRI}/TAGS ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.f || touch ${SRCTRI}/TAGS
 else
-	rm -f ${SRCTRI}/TAGS ; ${MAKETAGS} ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SCRTRI}/TAGS
+	rm -f ${SRCTRI}/TAGS ; ${MAKETAGS} ${SRCTRI}/TAGS ${SRCDIR}/*/*.f || touch ${SRCTRI}/TAGS
 endif
 
 ${OBJDIR}/LISTOBJ: listobj
