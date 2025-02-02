@@ -3,9 +3,9 @@ alias gmake make
 
 # User-defined directories
 
-setenv PYTHON_HOME /opt/homebrew/Caskroom/miniforge/base
-setenv MSCL_HOME /Users/antonello/Work/Libraries/mscl
-setenv GLI_HOME /Users/antonello/Work/Libraries/gks
+setenv PYTHON_HOME  # Insert here the home directory of your Python installation
+setenv MSCL_HOME  # Insert here the home directory of your mscl installation (read manual)
+setenv GLI_HOME  # Insert here the home directory of your gks installation (read manual)
 
 # Initialize the path collections, if they do not exist already
 
@@ -40,6 +40,8 @@ setenv XQUARTZ_HOME /opt/X11
 
 setenv DBX ddt
 setenv DBX idb
+
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:/opt/local/lib/pkgconfig"
 
 # Check if external libraries are correctly installed
 
