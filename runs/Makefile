@@ -397,7 +397,7 @@ endif
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE
-$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 input.dat AMJUEL
+$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}1 AMJUEL
 else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
@@ -567,8 +567,8 @@ endif
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
 endif
@@ -586,8 +586,8 @@ endif
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
 endif
@@ -598,7 +598,7 @@ endif
 	-rmdir b2yt.exe.dir
 
 ifndef STAND_ALONE
-$(target_ual) : input.dat AMJUEL
+$(target_ual) : ${fort_lc}1 AMJUEL
 else
 $(target_ual) :
 endif
@@ -610,7 +610,7 @@ endif
 	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
 	cp b2fplasma b2_ual_write.exe.dir/
 ifndef STAND_ALONE
-	cp input.dat b2_ual_write.exe.dir/
+	cp ${fort_lc}1 b2_ual_write.exe.dir/
 	cp AMJUEL b2_ual_write.exe.dir/
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
@@ -637,7 +637,7 @@ endif
 	rm -rf b2_ual_write.exe.dir
 
 ifndef STAND_ALONE
-$(target_rew) : input.dat AMJUEL
+$(target_rew) : ${fort_lc}1 AMJUEL
 else
 $(target_rew) :
 endif
@@ -649,7 +649,7 @@ endif
 	[ -s b2frates ] && cp b2frates b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_rewrite.exe.dir/ )
 	cp b2fplasma b2_ual_rewrite.exe.dir/
 ifndef STAND_ALONE
-	cp input.dat b2_ual_rewrite.exe.dir/
+	cp ${fort_lc}1 b2_ual_rewrite.exe.dir/
 	cp AMJUEL b2_ual_rewrite.exe.dir/
 endif
 	-cd b2_ual_rewrite.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
