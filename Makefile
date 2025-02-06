@@ -657,7 +657,7 @@ nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
-b2sxdr: sonnet-light
+b2sxdr: b25eirene sonnet-light
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
