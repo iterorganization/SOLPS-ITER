@@ -151,16 +151,16 @@ b2run b2ar
 b2run b2mn > run.log
 [ "$DEVICE" = 'iter' ] && {
   [ $AL_MAJOR_VERSION = 5 ] && {
-    uri_destination='imas:mdsplus?shot=${shotnumber};run=1;user=${USER};database=${DATABASE};version=3'
+    uri_destination='imas:mdsplus?shot='${shotnumber}';run=1;user='${USER}';database='${DATABASE}';version='${IMAS_MAJOR_VERSION}
     uri_source='imas:mdsplus?shot=116000;run=1;user=public;database=ITER_MD;version=3'
-    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} wall
+    idscp --set-dataset-version -s ${uri_source} -d ${uri_destination} --dd-update wall
 # For full-field cases, use:
     uri_source='imas:mdsplus?shot=131035;run=124;user=bonninx;database=iter;version=3'
 # For half-field cases, use:
 #   uri_source='imas:mdsplus?shot=131035;run=125;user=bonninx;database=iter;version=3'
 # For third-field cases, use:
 #   uri_source='imas:mdsplus?shot=131035;run=126;user=bonninx;database=iter;version=3'
-    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} equilibrium
+    idscp --set-dataset-version -s ${uri_source} -d ${uri_destination} equilibrium
   } || {
     idscp --setDatasetVersion -si 116000 -ri 1 -so ${shotnumber} -ro 1 -u public -d ITER_MD -do ${DATABASE} wall
 # For full-field cases, use:
@@ -171,7 +171,7 @@ b2run b2mn > run.log
 #   idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
   }
 }
-create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
+create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1 -v ${IMAS_MAJOR_VERSION}
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`
