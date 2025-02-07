@@ -16,6 +16,7 @@ set compress=""
 set MPIOPTS=""
 set standalone="no"
 set LOOP_OPTS=""
+set exclusive=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -40,6 +41,7 @@ Available options are:
   -j <<JOB NAME>>    set the job name (default $JOB_NAME)
   -z                 compress run.log using gzip
   -s                 specify a standalone B2.5 run
+  -x                 requests an exclusive job allocation
   -c <<JOB_ID>>      job ID of the previous job in a chain submission
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
@@ -157,6 +159,12 @@ EOF
     shift
     goto argloop
   endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
+    goto argloop
+  endif
 
 @ TASKS = ( $PROCS / $NODES )
 if ($1 == "") then
@@ -247,7 +255,7 @@ update_solps_run_status -n "Submitted at `date`"
 
 echo $NAME
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch ${exclusive} $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --dependency=afterok:${chain} $NAME
 endif
