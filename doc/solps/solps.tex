@@ -2961,9 +2961,6 @@ which contains
   {\tt BCPOT}
 \item[GAMMAI]\index{GAMMAI} {\tt real}, ratio of specific heats (adiabatic coefficient)
 \item[GAMMAE]\index{GAMMAE} {\tt real}, secondary electron emission coefficient
-\item[LBNDUSR]\index{LBNDUSR} {\tt logical}, if true will also
-  call Braams boundary condition routine after the end of the physics
-  boundary condition routine
 \item[LFEEDBACK]\index{LFEEDBACK} {\tt logical}, if true enables various
   feedback mechanisms (needed for any feedback mechanisms)
 \item[NNISO]\index{NNISO} {\tt integer}, number of dead (or isolated)
@@ -3390,10 +3387,8 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
      number of data points where the strength of the source is given.
   \item[sdata(1,m,i,j)]\index{sdata} are the radial positions (measured in metres) of the
      {\tt nsdata(1,i,j)} points,
-     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. By default, the radial positions are
-     measured from the separatrix outward, along the outer midplane, but this can be changed by
-     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
-     location of the profile and the radial position from which the distances are measured.
+     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. The radial positions are
+     measured from the separatrix outward, along the outer midplane.
   \item[sdata(2,m,i,j)] are the corresponding strengths of the sources.
   \item[nxdata(k,i,j)]\index{nxdata} where {\tt i} is an index for the type of source
      being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
@@ -3402,15 +3397,13 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
      number of data points where the value of the axial multiplier to the source is given.
      If {\tt k} is equal to {\tt 1}, the data is to be understood as function of normalized
      connection length. If {\tt k} is equal to {\tt 2}, then the axial profile is given in terms
-     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} as {\tt ix} runs from
-     {\tt -1} to {\tt nx}).
-  \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total length)
+     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} along the flux tube).
+  \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total flux tube length)
      of the {\tt nxdata(1,i,j)} points,
-     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. By default, the connection length
+     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. The connection length
      used is the one measured just inside the separatrix, with the origin
      located at the outer midplane, but this can be changed by
-     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
-     location of the origin and the radial position along which the distances are measured.
+     making use of the {\tt iyref} switch, respectively, to modify the radial position along which the distances are measured.
      In case the reference location is chosen inside a closed field line region, the axial
      multiplier is set to zero everywhere on the open field lines.
   \item[xdata(2,m,i,j)] are the corresponding values of the source strengths.
@@ -13195,7 +13188,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 
 \chapter{Quantities stored in b2time.nc}
 \label{cha:b2time}\index{b2time.nc, quantities stored
-  in}\index{time-dependent quantities, b2time.nc}\index{b2time.nc}
+  in}\index{time-dependent quantities, b2time.nc}\index{b2time.nc}\index{b2.user.parameters}
 
 The following scalar time-dependent quantities are stored in
 {\tt b2time.nc} and can be plotted by
@@ -13213,13 +13206,11 @@ If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPS
 
 In the case of double-null runs, the divertor and separatrix quantities are given in pairs. For the midplane quantities,
 the first value is for the outer midplane, and the second value for the inner midplane. Divertor quantities show
-first the bottom then the top divertor.
+first the bottom then the top divertor. The midplane locations are given {\it via} the {\tt b2.user.parameters} file, using the {\tt RZOMP} and {\tt RZIMP} variables, for the outer and inner midplane positions respectively.
 
 For double-null (DN) and lower single-null (LSN) topologies, the Western edge refers to the inboard divertor, while it points to the outboard divertor for upper single-null (USN) topologies. Conversely, the Eastern edge is the outboard divertor for DN and LSN cases, but the inboard divertor for USN cases.
 
 In the case of linear runs, the midplane refers, by default, to the midpoint of the domain. The divertor throat quantities are not defined.
-
-In all cases, the point of reference of the midplane quantities can be adjusted by changing the value of $jxa$\index{jxa} (and $jxi$\index{jxi} for double-null runs) by assigning it an explicit value in the {\tt b2mn.dat} file.
 
 The total internal energy flux quantities {\tt fet...} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
@@ -13328,9 +13319,9 @@ The following are vector time-dependent quantities stored in
 (inner for LSN, outer for USN, and lower inner for DN configurations),
 inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
 (outer for LSN, inner for USN, and lower outer for DN configurations).  The
-positions of the inner and outer midplanes can be selected by
-{\tt b2mwti\_jxi} and {\tt b2mwti\_jxa}, respectively, in
-{\tt b2mn.dat}.
+positions of the inner and outer midplanes are defined by the
+{\tt RZIMP} and {\tt RZOMP} vraiables, respectively, in
+{\tt b2.user.parameters}.
 
 Again, the total internal energy flux quantities {\tt ft3d..} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
@@ -15572,7 +15563,6 @@ are indicated in the table.
     idrop \index{b2plot, idrop}    & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idrop}  & Drop top element from the integer stack \\
     idup \index{b2plot, idup}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idup}   & Duplicate top element from the \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} integer stack \\
-    imp \index{b2plot, imp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:imp}    & Set $jxi$ (inner midplane coordinate) \\
     iover \index{b2plot, iover}    & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iover}  & Copy over second element from the \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} integer stack to top \\
     iprt \index{b2plot, iprt}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iprt}   & Outputs the integer stack \\
@@ -15608,7 +15598,6 @@ are indicated in the table.
     noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
     nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
     ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
-    omp \index{b2plot, omp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:omp}    & Set $jxa$ (outer midplane coordinate) \\
     outl \index{b2plot, outl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:outl}   & Plot outline \\
     owid \index{b2plot, owid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:owid}   & Outline line width \\
     page \index{b2plot, page}      & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:page}   & Number of graphs per page \\
@@ -17535,12 +17524,9 @@ Sets number of decades to $\langle${\tt n}$\rangle$ for logarithmic plots (defau
 If $n = 0$, restores the default value.
 
 \subsubsection{mmid}\index{b2plot, mmid}\label{sec:mmid}
-Toggles mapping to midplane coordinate for 2-D plots. The midplane
-is assumed to be located at $ix=jxa$. See commands {\bf omp} (section \ref{sec:omp}) and
-{\bf jxa} (section \ref{sec:omp}) for setting and knowing its value.
-Special cases: For double-null cases, HFS data is mapped to the inner midplane
-$ix=jxi$, and for private flux data, it is mapped to the distance below the
-X-point.
+Toggles mapping to midplane coordinate for 2-D plots. The midplane location
+is given by the {\tt RZIMP} and {\tt RZOMP} variables, defined in {\tt b2.user.parameters}, for the inner and outer midplane respectively. Use commands {\bf iomp} and {\bf iimp} for showing the cells that the midplane traverses.
+Special cases: For double-null cases, HFS data is mapped to the inner midplane, and for private flux data, it is mapped to the distance below the X-point.
 
 \subsubsection{fpsi}\index{b2plot, fpsi}\label{sec:fpsi}
 Toggles plotting 2-D radial plots against the full poloidal flux coordinate $\Psi$.
@@ -18125,16 +18111,6 @@ Overwrites the $n_e$ array with the top of the matrix stack.
 \subsubsection{tese}\index{b2plot, tese}\label{sec:tese}
 Overwrites the $T_e$ array with the top of the matrix stack.
 
-\subsubsection{$<$ix,{\bf I}$>$ imp}\index{b2plot, imp}\label{sec:imp}
-Overwrites the inner midplane location index {\em jxi} with $\langle${\tt ix}$\rangle$.
-See description of {\tt b2mwti\_jxi} switch (see Appendix \ref{lis:b2cdci}) for the
-computation of its default value.
-
-\subsubsection{$<$ix,{\bf I}$>$ omp}\index{b2plot, omp}\label{sec:omp}
-Overwrites the outer midplane location index {\em jxa} with $\langle${\tt ix}$\rangle$.
-See description of {\tt b2mwti\_jxa} switch (see Appendix \ref{lis:b2cdci}) for the
-computation of its default value.
-
 \subsubsection{$<$iy,{\bf I}$>$ yref}\index{b2plot, yref}\label{sec:yref}
 Overwrites the radial reference location index {\em iyref} with $\langle${\tt iy}$\rangle$.
 See description of {\tt set\_transport\_iyref} switch (see Appendix \ref{lis:b2cdci})
@@ -18177,7 +18153,7 @@ Currently coded functions are:
   \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
-  \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle${\tt ig}$\rangle$
+  \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic flux tube with index $\langle${\tt ig}$\rangle$
   \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
   \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle${\tt ig}$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
@@ -19396,6 +19372,7 @@ IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_interp.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_grid.F90 \\
