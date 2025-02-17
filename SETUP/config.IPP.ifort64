@@ -39,9 +39,12 @@ LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/tokp/work/software/TOK_2019/software/cairo/1.16.0/lib -lcairo -L/tokp/work/software/TOK_2019/software/freetype/2.11.1/lib -lfreetype -L/usr/lib64 -lX11 -lm
 LD_NAG     = -L${NAGDIR}/ -lnag -L/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/mkl/2023.1.0/lib/intel64 -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64  -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
-LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client -lMdsIpShr
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/lib64/libX11.so
 
 #
 # Provide compiler
@@ -69,4 +72,3 @@ MAKETAGS = etags -o
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
