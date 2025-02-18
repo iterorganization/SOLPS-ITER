@@ -3,9 +3,9 @@ alias gmake make
 
 # User-defined directories
 
-setenv PYTHON_HOME /opt/homebrew/Caskroom/miniforge/base
-setenv MSCL_HOME /Users/azito/Work/Libraries/mscl
-setenv GLI_HOME /Users/azito/Work/Libraries/gli/src/gks
+setenv PYTHON_HOME  # Insert here the home directory of your Python installation
+setenv MSCL_HOME  # Insert here the home directory of your mscl installation (read manual)
+setenv GLI_HOME  # Insert here the home directory of your gks installation (read manual)
 
 # Initialize the path collections, if they do not exist already
 
