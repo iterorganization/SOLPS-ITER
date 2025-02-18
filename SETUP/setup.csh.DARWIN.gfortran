@@ -1,0 +1,144 @@
+setenv SYSNAME `uname`_`arch`
+alias gmake make
+
+# User-defined directories
+
+setenv PYTHON_HOME /opt/homebrew/Caskroom/miniforge/base
+setenv MSCL_HOME /Users/azito/Work/Libraries/mscl
+setenv GLI_HOME /Users/azito/Work/Libraries/gli/src/gks
+
+# Initialize the path collections, if they do not exist already
+
+if ( ! $?LD_LIBRARY_PATH ) then
+    setenv LD_LIBRARY_PATH
+endif
+if ( ! $?PKG_CONFIG_PATH ) then
+    setenv PKG_CONFIG_PATH
+endif
+
+# Add directories of compiled libraries, include directives, etc.
+
+setenv PATH "${PATH}:`brew --prefix`/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
+
+setenv PATH "${PATH}:/opt/local/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/opt/local/lib"
+
+setenv PATH "${PATH}:$PYTHON_HOME/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$PYTHON_HOME/lib"
+
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix openblas`/lib"
+
+setenv OPENBLAS_HOME `brew --prefix openblas`
+setenv FREETYPE_HOME `brew --prefix freetype`
+setenv HDF5_HOME `brew --prefix hdf5`
+setenv LAPACK_DIR `brew --prefix lapack`
+setenv LIBPNG_HOME `brew --prefix libpng`
+setenv LIBXP_HOME `brew --prefix libxp`
+setenv NETCDF_HOME `brew --prefix netcdf`
+setenv NETCDF_FORTRAN_HOME `brew --prefix netcdf-fortran`
+setenv NCARG_ROOT /opt/local
+setenv MOTIF_HOME /opt/local
+setenv XQUARTZ_HOME /opt/X11
+
+setenv DBX ddt
+setenv DBX idb
+
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:/opt/local/lib/pkgconfig"
+
+# Check if external libraries are correctly installed
+
+if ( ! -d "$XQUARTZ_HOME" ) then
+    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
+endif
+
+if ( ! -d "$PYTHON_HOME" ) then
+    echo "Warning: Python installation not found or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+endif
+
+if ( `brew list | grep -c '^gcc$'` == 0 ) then
+    echo "Warning: gcc not installed. Install it via 'brew install gcc'."
+endif
+
+if ( `brew list | grep -c '^cmake$'` == 0 ) then
+    echo "Warning: cmake not installed. Install it via 'brew install cmake'."
+endif
+
+if ( `brew list | grep -c '^ctags$'` == 0 ) then
+    echo "Warning: ctags not installed. Install it via 'brew install ctags'."
+endif
+
+if ( `brew list | grep -c '^doxygen$'` == 0 ) then
+    echo "Warning: doxygen not installed. Install it via 'brew install doxygen'."
+endif
+
+if ( `brew list | grep -c '^freetype$'` == 0 ) then
+    echo "Warning: freetype not installed. Install it via 'brew install freetype'."
+endif
+
+if ( `brew list | grep -c '^ghostscript$'` == 0 ) then
+    echo "Warning: ghostscript not installed. Install it via 'brew install ghostscript'."
+endif
+
+if ( `brew list | grep -c '^gnuplot$'` == 0 ) then
+    echo "Warning: gnuplot not installed. Install it via 'brew install gnuplot'."
+endif
+
+if ( `brew list | grep -c '^hdf5$'` == 0 ) then
+    echo "Warning: hdf5 not installed. Install it via 'brew install hdf5'."
+endif
+
+if ( `brew list | grep -c '^lapack$'` == 0 ) then
+    echo "Warning: lapack not installed. Install it via 'brew install lapack'."
+endif
+
+if ( `brew list | grep -c '^libpng$'` == 0 ) then
+    echo "Warning: libpng not installed. Install it via 'brew install libpng'."
+endif
+
+if ( `brew list | grep -c '^libxp$'` == 0 ) then
+    echo "Warning: libxp not installed. Install it via 'brew install libxp'."
+endif
+
+if ( `brew list | grep -c '^netcdf$'` == 0 ) then
+    echo "Warning: netcdf not installed. Install it via 'brew install netcdf'."
+endif
+
+if ( `brew list | grep -c '^netcdf-fortran$'` == 0 ) then
+    echo "Warning: netcdf-fortran not installed. Install it via 'brew install netcdf-fortran'."
+endif
+
+if ( `brew list | grep -c '^openblas$'` == 0 ) then
+    echo "Warning: openblas not installed. Install it via 'brew install openblas'."
+endif
+
+if ( `brew list | grep -c '^open-mpi$'` == 0 ) then
+    echo "Warning: open-mpi not installed. Install it via 'brew install open-mpi'."
+endif
+
+if ( `brew list | grep -c '^texlive$'` == 0 ) then
+    echo "Warning: texlive not installed. Install it via 'brew install texlive'."
+endif
+
+if ( ! -e /opt/local/lib/libjsonfortran.a ) then
+    echo "Warning: json-fortran not installed. Install it via 'sudo port install fortran-json'"
+endif
+
+if ( ! -e /opt/local/lib/libncarg.a ) then
+    echo "Warning: ncarg not installed. Install it via 'sudo port install ncarg'"
+endif
+
+if ( ! -e /opt/local/lib/libXm.a ) then
+    echo "Warning: openmotif not installed. Install it via 'sudo port install openmotif'"
+endif
+
+if ( ! -d "$MSCL_HOME" ) then
+    echo "Warning: mscl library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Install from https://git.iter.org/projects/LIB/repos/mscl/browse,"
+    echo "commit a64eba15137 (follow the instructions from the manual)."
+endif
+
+if ( ! -d "$GLI_HOME" ) then
+    echo "Warning: gli library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
+    echo "Install from https://pgi-jcns.fz-juelich.de/portal/pages/gli.html"
+endif

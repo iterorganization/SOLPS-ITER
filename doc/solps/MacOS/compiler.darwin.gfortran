@@ -1,0 +1,7 @@
+FC	 = gfortran -fsecond-underscore
+NFLAGS	 = -O0 -fallow-argument-mismatch
+FFLAGS	 = -O3 -fallow-argument-mismatch
+COMPILE  = ${FC} -c ${FFLAGS}
+COMPILENO  = ${FC} -c ${NFLAGS}
+CPP = /usr/bin/cpp -traditional
+

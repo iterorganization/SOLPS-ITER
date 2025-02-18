@@ -1,17 +1,22 @@
 #! /bin/csh -f
 
-# If HOST_NAME isn't defined yet, do it here...
-if (! $?HOST_NAME ) then
-  if (-e whereami) then
-    set HOST_NAME=`./whereami|tail -1`
-  else
-    set HOST_NAME="UNKNOWN"
+if (`uname` != "Darwin") then
+  # Assuming to work on some HPC cluster
+  # If HOST_NAME isn't defined yet, do it here...
+  if (! $?HOST_NAME ) then
+    if (-e whereami) then
+      set HOST_NAME=`./whereami|tail -1`
+    else
+      set HOST_NAME="UNKNOWN"
+    endif
+    if ( $HOST_NAME == "*UNKNOWN*" ) then
+      set HOST_NAME=default
+    endif
+    echo "Using HOST_NAME = $HOST_NAME"
   endif
-
-  if ( $HOST_NAME == "*UNKNOWN*" ) then
-    set HOST_NAME=default
-  endif
-  echo "Using HOST_NAME = $HOST_NAME"
+else
+  # Using MacOS, so assuming to work on a local device
+  set HOST_NAME="DARWIN"
 endif
 
 # List of default compilers per HOST_NAME
@@ -38,6 +43,7 @@ case "SURFSARA":
 case "SWIP":
   echo ifort64
   breaksw
+case "DARWIN":
 case "IPPCR":
 case "JFRS":
 case "MARCONI":
