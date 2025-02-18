@@ -44,7 +44,7 @@ setenv DBX ddt
 # Compiler
 setenv FC ifort
 
-module load MATLAB/2020a
+module load MATLAB/2023b-r1
 ###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
