@@ -21,7 +21,7 @@ sed -i -e "/  LOGICAL, SAVE :: b2news_solving(4)=.true./a\  LOGICAL, SAVE :: las
 
 sed -i -e 's/ipgtmx=4/ipgtmx=40/g' b2mod_ipmain.F
 
-sed -i -e "/CALL B2MNDR_1/i\    call set_parameters(switch)" b2mod_main_diff.F90
+sed -i -e "/CALL B2MNDT_NODIFF/i\    call set_parameters(switch)" b2mod_driver_diff.F90
 
 sed -i -e "/CALL ADSTACK_RESETREPEAT/i\      call set_adj_gradient(npar_opt,dummygrad,switchb)" b2mod_driver_diff.F90
 sed -i -e "/END SUBROUTINE B2MNDR_1_B/i\    call set_adj_gradient(npar_opt,dummygrad,switchb)" b2mod_driver_diff.F90

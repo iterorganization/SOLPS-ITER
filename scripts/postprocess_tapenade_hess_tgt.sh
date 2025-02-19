@@ -13,8 +13,10 @@ sed -i -e '/ADCONTEXT/d' b2mn_hess.F90
 sed -i -e 's/state_avg, state_avgd, npar_opt, nbdirs0/state_avg, state_avgd, npar_opt, npar_opt/g' b2mn_hess.F90
 sed -i -e '/CALL B2MN_STEP_DV_DV/i\  CALL SET_TGT_TGT_PERTURBATION(switchd,switchd0)' b2mn_hess.F90
 sed -i -e 's/jd, jdd, arg1, nbdirs0)/jd, jdd, arg1, arg1)/g' b2mn_hess.F90
+sed -i -e 's/nbdirs0)/npar_opt)/g' b2mn_hess.F90
 
-sed -i -e 's/jdd, arg10, nbdirs0)/jdd, arg10, arg10)/g' b2mod_driver_diffv_diffv.F90
+sed -i -e 's/arg10, nbdirs0)/arg10, arg10)/g' b2mod_driver_diffv_diffv.F90
+sed -i -e 's/\&                            nbdirs0)/\&                            arg10)/g' b2mod_driver_diffv_diffv.F90
 sed -i -e '0,/CALL PRINT_TGT_GRADIENT_NODIFF(jd)/s/CALL PRINT_TGT_GRADIENT_NODIFF(jd)/CALL PRINT_TGT_HESSIAN(jd,jdd)/g' b2mod_driver_diffv_diffv.F90
 sed -i -e '0,/CALL PRINT_TGT_GRADIENT_NODIFF(jd)/s/CALL PRINT_TGT_GRADIENT_NODIFF(jd)/CALL PRINT_TGT_HESSIAN(jd,jdd)/g' b2mod_driver_diffv_diffv.F90
 sed -i -e '/CALL PRINT_TGT_GRADIENT_NODIFF(jd)/d' b2mod_driver_diffv_diffv.F90

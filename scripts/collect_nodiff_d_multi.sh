@@ -49,6 +49,7 @@ cp $SOLPSTOP/modules/B2.5/src/b2plot/isaletter.F .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
 cp $SOLPSTOP/modules/B2.5/src/convert/find_faces.F .
+cp $SOLPSTOP/modules/B2.5/src/driver/b2mwmv.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_constants.F90 .
@@ -89,6 +90,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo2.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_stack.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirsrt.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_chord_shift.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
 cp $SOLPSTOP/modules/B2.5/src/solvers/b2uxus.F .

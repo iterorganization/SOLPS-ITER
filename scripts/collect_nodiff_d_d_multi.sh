@@ -23,6 +23,8 @@ cp $SOLPSTOP/modules/B2.5/src/b2plot/isaletter.F .
 
 cp $SOLPSTOP/modules/B2.5/src/b2plot/lower_case.F .
 
+cp $SOLPSTOP/modules/B2.5/src/driver/b2mwmv.F .
+
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .
 
@@ -61,6 +63,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2us_debug.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_solpstop.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_stack.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_eirsrt.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ranges.F .
 
 cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
 
