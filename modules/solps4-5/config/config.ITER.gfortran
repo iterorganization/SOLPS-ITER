@@ -7,7 +7,7 @@ NODENAME  ?= `hostname`
 CPP = /lib/cpp -traditional
 
 SOLPSINCLUDE += `pkg-config libtirpc --cflags`
-LDLIBES  = `pkg-config libtirpc --libs`
+LDLIBES = `pkg-config libtirpc --libs`
 
 
 #!!!Local Variables:
