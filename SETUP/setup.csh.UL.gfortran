@@ -5,48 +5,43 @@ endif
 if ( -d ${PWD}/easybuild.local/modules/all ) then
   module use ${PWD}/easybuild.local/modules/all
 endif
-if ( -d  ${PWD}/easybuild.local/modules/all ) then
-  module use ${PWD}/easybuild.local/modules/all
-endif
 
 # Use the same configs as ITER
 setenv HOST_NAME ITER
 
 # Modules needed by SOLPS-ITER
-  module load IMAS-AL-Fortran/5.4.0-foss-2023b-DD-4.0.0
-  module load IMAS-AL-Python/5.4.0-foss-2023b-DD-4.0.0
-  module load IDStools/2.0.0-gfbf-2023b
-  module load GGD/1.13.0-foss-2023b-DD-4.0.0
-  module load AMNS/1.6.0-foss-2023b-DD-4.0.0
-  module load Viz/2.8.0-foss-2023b
-  module load ToFu/1.7.9-gfbf-2023b
-  module load xarray/2024.5.0-gfbf-2023b
-  module load makedepend/1.0.9-GCCcore-13.2.0
-  module load MSCL/1.2.4-GCCcore-13.2.0
-  module load GR/0.0.94-GCCcore-13.2.0
-  module load GLI/4.5.31-GCCcore-13.2.0
-  module load NCL/6.6.2-foss-2023b
+module load IMAS-AL-Fortran/5.4.0-foss-2023b-DD-4.0.0
+module load IMAS-AL-Python/5.4.0-foss-2023b-DD-4.0.0
+module load IDStools/2.0.0-gfbf-2023b
+module load GGD/1.13.0-foss-2023b-DD-4.0.0
+module load AMNS/1.6.0-foss-2023b-DD-4.0.0
+module load Viz/2.8.0-foss-2023b
+module load ToFu/1.7.9-gfbf-2023b
+module load xarray/2024.5.0-gfbf-2023b
+module load makedepend/1.0.9-GCCcore-13.2.0
+module load MSCL/1.2.4-GCCcore-13.2.0
+module load GR/0.0.94-GCCcore-13.2.0
+module load GLI/4.5.31-GCCcore-13.2.0
+module load NCL/6.6.2-foss-2023b
 # module load NAG/26-GCC-13.2.0
-  module load flex/2.6.4-GCCcore-13.2.0
-  module load Doxygen/1.9.8-GCCcore-13.2.0
-  module load netCDF/4.9.2-gompi-2023b
-  module load netCDF-Fortran/4.6.1-gompi-2023b
-  module load Ghostscript/10.02.1-GCCcore-13.2.0
-  module load CMake/3.20.1-GCCcore-13.2.0
-  module load ParaView/5.12.0-foss-2023b-Qt5
-  module load Qt5/5.15.13-GCCcore-13.2.0
-  module load netCDF-Fortran/4.6.1-gompi-2023b
-  module load netcdf4-python/1.6.5-foss-2023b
-  module load motif/2.3.8-GCCcore-13.2.0
-  module load texlive/20230313-GCC-13.2.0
-  module load SimDB/0.11.0-gfbf-2023b
-  module load json-fortran/8.5.2-GCC-13.2.0
-  setenv SYSNAME x86_64_rhel9
-  setenv GKSDIR `(module show GR/0.73.6-GCCcore-13.2.0)|& grep EBROOTGR|grep -o '/[^"]*'`
-  module load Fundamental-Constants/0.1.1
-
+module load flex/2.6.4-GCCcore-13.2.0
+module load Doxygen/1.9.8-GCCcore-13.2.0
+module load netCDF/4.9.2-gompi-2023b
+module load netCDF-Fortran/4.6.1-gompi-2023b
+module load Ghostscript/10.02.1-GCCcore-13.2.0
+module load CMake/3.20.1-GCCcore-13.2.0
+module load ParaView/5.12.0-foss-2023b-Qt5
+module load Qt5/5.15.13-GCCcore-13.2.0
+module load netCDF-Fortran/4.6.1-gompi-2023b
+module load netcdf4-python/1.6.5-foss-2023b
+module load motif/2.3.8-GCCcore-13.2.0
+module load texlive/20230313-GCC-13.2.0
+module load SimDB/0.11.0-gfbf-2023b
+module load json-fortran/8.5.2-GCC-13.2.0
+setenv SYSNAME x86_64_rhel9
+setenv GKSDIR `(module show GR/0.73.6-GCCcore-13.2.0)|& grep EBROOTGR|grep -o '/[^"]*'`
+module load Fundamental-Constants/0.1.1
 module load OpenBLAS/0.3.24-GCC-13.2.0
-  
 #module load PySide6/6.2.3-GCCcore-10.2.0
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
