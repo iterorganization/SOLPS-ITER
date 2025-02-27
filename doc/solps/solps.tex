@@ -491,6 +491,8 @@ changes are required that should not be archived in the repository, then users s
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
 
+As a general rule, a {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} file should not be a modified copy of the original {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} file, but instead {\em only} contain those variable definitions that need to be locally modified.
+
 \begin{sloppypar}\index{easybuild}\label{sec:easybuild}
 For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
 
