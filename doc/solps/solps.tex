@@ -350,14 +350,19 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \end{description}
 \end{sloppypar}
 
-For all the various libraries, it is recommended that they be installed as modules, so that they
-may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
-centralize their management. Most, but not all, of these libraries are publicly available from the
-Internet.
+Most of the required libraries should be, in principle, already available in the various HPC clusters as modules. It is recommended for these to be loaded as modules rather than be locally re-built, so that they may be shared amongst multiple users on the same machine, so as not to duplicate large files and to centralize their management.
 
 \begin{sloppypar}
 If one uses local copies of these libraries, a copy or link to them should be put in the
 {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
+\end{sloppypar}
+
+\begin{sloppypar}
+Those libraries which are not available in a cluster must be necessarily locally built to be used. By running the script:
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
+it is possible to automatically build the MSCL, GKS and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -657,60 +662,42 @@ and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 \subsection{MacOS support}
 \index{MacOS support}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also DivGeo, Carre, Triang (only no graphics version), Uinp and amds can be successfully compiled. Sonnet-Light, at the moment, is not compatible yet with MacOS.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of {\tt B2.5} and {\tt Eirene} (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of {\tt B2.5} and the coupled {\tt B2.5-Eirene} code can be compiled with graphics, while the standalone version of {\tt Eirene} can be currently compiled only without graphics. Also {\tt DivGeo}, {\tt Carre}, {\tt Triang} (only the no graphics version), {\tt Uinp} and {\tt amds} can be successfully compiled. {\tt Sonnet-light}, at the moment, is not compatible yet with MacOS.
 
-First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
-
-The absolute path of the home directory (i.e.\ the one containing the subfolders lib and bin) of a Python installation (e.g.\ through Anaconda or Miniforge) must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt PYTHON\_HOME}.
+First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
 The following external libraries must be then installed using Homebrew:
 
 \begin{description}
-\item[GNU compiler collection], using the formula: {\tt brew install gcc}.
-\item[Cross-platform make], using the formula: {\tt brew install cmake}.
-\item[ctags], using the formula: {\tt brew install ctags}.
-\item[Doxygen], using the formula: {\tt brew install doxygen}.
-\item[Freetype], using the formula: {\tt brew install freetype}.
-\item[Ghostscript], using the formula: {\tt brew install ghostscript}.
-\item[GNU plotting library], using the formula: {\tt brew install gnuplot}.
-\item[HDF5 data management and storage library], using the formula: {\tt brew install hdf5}.
-\item[Blas/Lapack linear algebra library], using the formula: {\tt brew install lapack}.
-\item[PNG library], using the formula: {\tt brew install libpng}.
-\item[XPrint client library], using the formula: {\tt brew install libxp}.
-\item[NETCDF data access library], using the formula: {\tt brew install netcdf}.
-\item[NETCDF data access library (Fortran version)], using the formula: {\tt brew install netcdf-fortran}.
-\item[OpenBlas], using the formula: {\tt brew install openblas}.
-\item[MPI parallel computing library], using the formula: {\tt brew install open-mpi}.
-\item[TeX typesetting system distrubtion TeXLive], using the formula: {\tt brew install texlive}.
+\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
+\item[Cross-platform make] using the formula: {\tt brew install cmake}.
+\item[ctags] using the formula: {\tt brew install ctags}.
+\item[Doxygen] using the formula: {\tt brew install doxygen}.
+\item[Freetype] using the formula: {\tt brew install freetype}.
+\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
+\item[PNG library] using the formula: {\tt brew install libpng}.
+\item[XPrint client library] using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
+\item[OpenBlas] using the formula: {\tt brew install openblas}.
+\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
 \end{description}
 
 Further external libraries must be instead installed using MacPorts:
 
 \begin{description}
-\item[Fortran JSON API], using the formula: {\tt sudo port install fortran-json}.
-\item[NCAR plotting library], using the formula: {\tt sudo port install ncarg}.
-\item[MOTIF graphical user interface], using the formula: {\tt sudo port install openmotif}.
+\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
 \end{description}
 
-Finally, the additional external libraries must be also manually downloaded and built:
-
-\begin{description}
-\item[MSCL utility library]: from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}. After being built, the absolute path of its home directory must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt MSCL\_HOME}.
-\item[Graphics Language Interpreter]: from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}. After being built, the absolute path of its home directory must be declared in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}, as the variable {\tt GLI\_HOME}.
-\end{description}
-
-Currently, only a particular old version of the MSCL library, namely referred to the commit a64eba15137, allows to properly compile the code on MacOS. For a correct linking, the user should download such version of the library, at this (\href{https://git.iter.org/rest/api/latest/projects/LIB/repos/mscl/archive?at=a64eba151377b96091758d0d78e6c0d1cd37b623&format=zip}{link}). In the folder extracted from the downloaded .zip archive, the user must then create the file {\tt config/compiler.darwin.gfortran}, with content:
-
-\VerbatimInput[fontsize=\footnotesize]{MacOS/compiler.darwin.gfortran}
-
-and then motify the content of the source file {\tt src/util/date2.c} to the following:
-
-\VerbatimInput[fontsize=\footnotesize]{MacOS/date2.c}
-
-After that, the library can be finally built executing, from the top of the downloaded mscl folder, the command
-
+The additional libraries MSCL, GKS and GR can be automatically downloaded and build running the script
 \begin{verbatim}
-    make -e OBJECTCODE=darwin.gfortran
+> install_dependencies
 \end{verbatim}
 
 \section{Before every \SOLPSITER session}
