@@ -1,0 +1,150 @@
+#! /usr/bin/env tcsh
+
+# Create local config file, where to append the new library paths
+
+if (! -e "${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+endif
+
+# Create local libraries folder if it does not exist
+
+if (! -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}" ) then
+  mkdir -p "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}"
+endif
+
+# Assign shortcuts to compilers if they do not exists
+
+if (! $?CC ) then
+  if ( "$COMPILER" == "ifort64" ) then
+      set CC=icc
+  else if ( "$COMPILER" == "gfortran" || "$COMPILER" == "pgf90" || "$COMPILER" == "g95" || "$COMPILER" == "nag_f90") then
+      set CC=gcc
+  endif
+endif
+
+if (! $?FC ) then
+  if ( "$COMPILER" == "ifort64" ) then
+      set FC=ifort
+  else if ( "$COMPILER" == "gfortran" ) then
+      set FC=gfortran
+  else if ( "$COMPILER" == "pgf90" ) then
+      set FC=pgf90
+  else if ( "$COMPILER" == "g95" ) then
+      set FC=g95
+  else if ( "$COMPILER" == "nag_f90" ) then
+      set FC=nagfor
+  endif
+endif
+
+# Clone and compile mscl library
+
+if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version of the library
+
+  if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/lib/libmscl.a" ) then   # Check if the compiled library already exists locally
+    cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+    git clone ssh://git@git.iter.org/lib/mscl.git mscl
+    cd mscl
+    ./bootstrap
+    ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl F77=${FC} CC=${CC}
+    make all
+    make install
+    echo "MSCL_ROOT  = ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/lib" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo "LD_MSCL    = -L${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    cd $SOLPSTOP
+  else
+    echo "mscl library already installed."
+  endif
+
+else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresponding to the commit a64eba15137 (most recent version does not work)
+
+  if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran/libmscl.a" ) then   # Check if the compiled library already exists locally
+    cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+    git clone ssh://git@git.iter.org/lib/mscl.git mscl
+    cd mscl
+    git checkout a64eba15137
+    cat << EOT > config/compiler.darwin.gfortran
+FC = gfortran -fsecond-underscore
+NFLAGS = -O0 -fallow-argument-mismatch
+FFLAGS = -O3 -fallow-argument-mismatch
+COMPILE = \${FC} -c \${FFLAGS}
+COMPILENO = \${FC} -c \${NFLAGS}
+CPP = /usr/bin/cpp -traditional
+EOT
+    sed -i '' '/^CC=cc -c$/d' Makefile
+    sed -i '' 's/$(CC) -o ${OBJECTCODE}\/\$\*.o \$</$(CC) -c -o ${OBJECTCODE}\/\$\*.o \$</' Makefile
+    cat << EOT > src/util/date2.c
+/*  VERSION : 28.05.95 19:11  */
+#include <stdio.h>
+#include <time.h>
+
+int date2(char *dt) {
+    struct tm *t;
+    time_t s;
+    int y;
+    time(&s);
+    t = localtime(&s);
+    y = t->tm_year;
+    sprintf(dt, "%02d.%02d.%02d", t->tm_mday, (t->tm_mon) + 1, y);
+    return 0; // Return value indicating success
+}
+
+int date2_(char *dt) {
+    return date2(dt);
+}
+EOT
+    make -e OBJECTCODE=darwin.gfortran
+    echo "MSCL_ROOT  = ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo "LD_MSCL    = -L${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    cd $SOLPSTOP
+  else
+    echo "mscl library already installed."
+  endif
+
+endif
+
+# Clone and compile gks library
+
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks/libgks.a" ) then   # Check if the compiled library already exists locally
+  cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+  wget -P /tmp/ http://iffwww.iff.kfa-juelich.de/pub/gli/gli-4.5.31.tar.gz
+  tar xvf /tmp/gli-4.5.31.tar.gz
+  cd gli/src/gks
+  sed -i.bak 's/F77="g77" SEGLD="g77"/F77=$(FC) SEGLD=$(FC)/' Makefile
+  make
+  echo "GLI_HOME    = ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  echo "LD_GKS     = -L${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  cd $SOLPSTOP
+else
+  echo "gks library already installed."
+endif
+
+# Clone and compile gr library
+
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check if the compiled library already exists locally
+  cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+  git clone ssh://git@git.iter.org/lib/gr-software.git gr
+  cd gr
+  if ("$OSTYPE" == "linux") then
+    make linux.${COMPILER}
+  else if ("$OSTYPE" == "darwin") then
+    cat <<EOF >> Makefile
+darwin.gfortran :
+	@make all F77="gfortran" \\
+	CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
+	F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+	F90="gfortran" \\
+	F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+	F90OBJS="" \\
+	RANLIB="echo" \\
+	BLDFLAG="ar cr"
+EOF
+    make darwin.gfortran
+  endif
+  echo "GR_ROOT    = ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  echo "LD_GR      = -L${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr -lgr" >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+  cd $SOLPSTOP
+else
+  echo "gr library already installed."
+endif
+
+source SETUP/setup.csh.${HOST_NAME}.${COMPILER}   # Re-initialize the variables

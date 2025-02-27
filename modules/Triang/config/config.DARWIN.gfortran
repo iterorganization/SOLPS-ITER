@@ -1,6 +1,4 @@
 GR_ROOT ?= ${GR_HOME}
-LD_GR      = 
-LD_GKS     = 
 
 NAGDIR ?= ${LAPACK_DIR}
 LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
