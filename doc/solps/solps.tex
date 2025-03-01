@@ -1667,7 +1667,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
-  \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables \$\{CC\} and \$\{FC\} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main \$\{COMPILER\} variable.
+  \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -1676,7 +1676,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
-  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST_NAME\}.\$\{COMPILER\}.local} file.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
   \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
