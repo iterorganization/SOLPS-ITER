@@ -3,9 +3,6 @@
 # File compiler.macro for IBM xlf
 
 # Test whether necessary variables are defined
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
-endif
 ifndef LD_SONNET
   $(error LD_SONNET not defined)
 endif
