@@ -1,3 +1,11 @@
+ifndef LD_MSCL
+  ifndef SOLPS_CPP
+    $(error LD_MSCL not defined)
+  else
+    $(error LD_MSCL not defined. Run the install_dependencies script first)
+  endif
+endif
+
 ifeq (${FC},f77)
 FC = gfortran
 endif
