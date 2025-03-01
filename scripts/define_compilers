@@ -1,0 +1,27 @@
+#! /usr/bin/env tcsh
+
+if (! $?CC ) then
+    if ( "$COMPILER" == "ifort64" ) then
+        set CC=icc
+    else if ( "$COMPILER" == "gfortran" || "$COMPILER" == "pgf90" || "$COMPILER" == "g95" || "$COMPILER" == "nag_f90" ) then
+        set CC=gcc
+    else if ( "$COMPILER" == "cray" ) then
+        set CC=cc
+    endif
+endif
+
+if (! $?FC ) then
+    if ( "$COMPILER" == "ifort64" ) then
+        set FC=ifort
+    else if ( "$COMPILER" == "gfortran" ) then
+        set FC=gfortran
+    else if ( "$COMPILER" == "pgf90" ) then
+        set FC=pgf90
+    else if ( "$COMPILER" == "g95" ) then
+        set FC=g95
+    else if ( "$COMPILER" == "nag_f90" ) then
+        set FC=nagfor
+    else if ( "$COMPILER" == "cray" ) then
+        set FC=ftn
+    endif
+endif

@@ -1,3 +1,11 @@
+ifndef LD_MSCL
+  ifndef SOLPS_CPP
+    $(error LD_MSCL not defined)
+  else
+    $(error LD_MSCL not defined. Run the install_dependencies script first)
+  endif
+endif
+
 EQUIV4 = ${SOLPS_CPP} -DGRREAL=1
 EQUIV5 = ${SOLPS_CPP} ${USE_EIRENE} -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=1 -Dsmin=dmin
 DEFINES += -DS2SUM=D2SUM -DS2MIN=D2MIN -DSASUM=DASUM -DSAXPY=DAXPY -DSDOT=DDOT -DSSCAL=DSCAL -DS2ASUM=D2ASUM -DS2SCAL=D2SCAL -DS2DOT=D2DOT -DSCOPY=DCOPY -DS2COPY=D2COPY
