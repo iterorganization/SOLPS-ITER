@@ -124,9 +124,14 @@ ifeq ($(shell [ -e ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local ] && e
 include ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
 MAKES += ${S45DIR}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
+
+# Verify that some needed variables are defined
 SOLPS4 ?= ${SOLPSTOP}/../[sS][oO][lL][pP][sS]4.3
 ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
 $(error Invalid SOLPS4 directory address)
+endif
+ifndef LD_MSCL
+$(error LD_MSCL not defined. Run the install_dependencies script first.)
 endif
 
 ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)
