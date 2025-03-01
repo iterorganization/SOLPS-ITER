@@ -7,6 +7,9 @@ if (! $?CC ) then
         set CC=gcc
     else if ( "$COMPILER" == "cray" ) then
         set CC=cc
+    else
+        echo "Compiler not supported! Please define a CC environment variable!"
+        exit
     endif
 endif
 
@@ -23,5 +26,8 @@ if (! $?FC ) then
         set FC=nagfor
     else if ( "$COMPILER" == "cray" ) then
         set FC=ftn
+    else
+        echo "Compiler not supported! Please define an FC environment variable!"
+        exit
     endif
 endif
