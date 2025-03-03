@@ -46,6 +46,15 @@ else
   cp ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local.bak
 endif
 
+# Carre2
+if (-d "${SOLPSTOP}/modules/Carre2") then
+ if (! -e "${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+ else
+  cp ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local.bak
+ endif
+endif
+
 # Triang
 if (! -e "${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local") then
   touch ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
@@ -117,6 +126,10 @@ if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version o
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      if (-d "${SOLPSTOP}/modules/Carre2") then
+        echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+        echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      endif
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -169,6 +182,10 @@ else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresp
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      if (-d "${SOLPSTOP}/modules/Carre2") then
+        echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+        echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      endif
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
       echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -217,6 +234,10 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks/libgks.a" ) then
     echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
     echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
     echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    if (-d "${SOLPSTOP}/modules/Carre2") then
+      echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+    endif
     echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
     echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
     cd $SOLPSTOP
@@ -275,6 +296,10 @@ EOF
     echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
     echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
     echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    if (-d "${SOLPSTOP}/modules/Carre2") then
+      echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+    endif
     echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
     echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
     cd $SOLPSTOP
