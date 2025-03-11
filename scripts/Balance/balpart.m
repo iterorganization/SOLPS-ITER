@@ -5,7 +5,8 @@
 %              balance should be performed                                     %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
-% isplot:      Species index to be plotted                                     %
+% isplot:      Array of species indices to be plotted. If length(isplot)>1,    %
+%              then balance is summed over those species                       %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % axbal:       Array of axes into which balance plots will be placed           %
 % reverse:     True if the right-most end of the balance volume is upstream of %
