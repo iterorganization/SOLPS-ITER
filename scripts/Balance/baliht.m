@@ -11,7 +11,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of axes into which strata plots will be placed            %
 %                                                                              %
 % David Moulton (david.moulton@ccfe.ac.uk) January 2017.                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,7 +213,7 @@ if strata_plot
                       {'Strata decomp. of (\int_d^uS_{iIE}^{EIR}dV)/dA_{||d}$ in radial direction',...
                        'Strata decomp. of S_{iIE}^{EIR}dV/dA_{||d} in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,btp.areadown,areadownpol,reverse,false);
-end              
+end
 %%
 end
 
