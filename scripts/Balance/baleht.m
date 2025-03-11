@@ -12,7 +12,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            %
+% axstrat:     Array of axes into which strata plots will be placed            %
 % makeplot:    Decides whether to make plots or just pass back the values in   %
 %              the radial balance plots                                        %
 % areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
@@ -39,29 +39,29 @@ topiy = comuse.topiy+1;
 %% Obtain required arrays from the simulation...
 % Fluxes:
 tmp = ncread(balfile,'fhe_32');
-fhex_32 = tmp(:,:,1);
-fhey_32 = tmp(:,:,2);
+fhex_32 = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_32 = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_52');
-fhex_52 = tmp(:,:,1);
-fhey_52 = tmp(:,:,2);
+fhex_52 = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_52 = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_thermj');
-fhex_thermj = tmp(:,:,1);
-fhey_thermj = tmp(:,:,2);
+fhex_thermj = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_thermj = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_cond');
-fhex_cond = tmp(:,:,1);
-fhey_cond = tmp(:,:,2);
+fhex_cond = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_cond = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_dia');
-fhex_dia = tmp(:,:,1);
-fhey_dia = tmp(:,:,2);
+fhex_dia = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_dia = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_ecrb');
-fhex_ecrb = tmp(:,:,1);
-fhey_ecrb = tmp(:,:,2);
+fhex_ecrb = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_ecrb = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_strange');
-fhex_strange = tmp(:,:,1);
-fhey_strange = tmp(:,:,2);
+fhex_strange = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_strange = tmp(:,:,2,1)+tmp(:,:,2,2);
 tmp = ncread(balfile,'fhe_pschused');
-fhex_pschused = tmp(:,:,1);
-fhey_pschused = tmp(:,:,2);
+fhex_pschused = tmp(:,:,1,1)+tmp(:,:,1,2);
+fhey_pschused = tmp(:,:,2,1)+tmp(:,:,2,2);
 % Sources:
 b2stbr_phys_she = ncread(balfile,'b2stbr_phys_she_bal');
 b2stbr_bas_she = ncread(balfile,'b2stbr_bas_she_bal');

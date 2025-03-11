@@ -12,7 +12,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of axes into which strata plots will be placed            %
 % resaccuracy: The maximum acceptable percentage difference between the code-  %
 %              calculated and post-calculated residual that will not throw a   %
 %              warning                                                         %
@@ -35,7 +35,7 @@ if ~isnumeric(SIMID)
     dv = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'vol'),nx,ny); % Cell volume
     hx = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'hx'),nx,ny); % hx
     B = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'bb'),nx,ny,4);
-    
+
     b2stbc_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbc_she'),nx,ny);
     eirene_mc_t0_eael = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_eael'),nx,ny,nstra);
     eirene_mc_t0_emel = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_emel'),nx,ny,nstra);
@@ -44,43 +44,43 @@ if ~isnumeric(SIMID)
     b2stbm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbm_she'),nx,ny);
     ext_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'ext_she'),nx,ny);
     b2stel_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_she'),nx,ny);
-    
+
     b2srsm_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srsm_she'),nx,ny);
     b2srdt_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srdt_she'),nx,ny);
     b2srst_she = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srst_she'),nx,ny);
-    
+
     b2sihs_diae = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_diae'),nx,ny);
-    
+
     b2sihs_divue = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_divue'),nx,ny);
     b2sihs_exbe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_exbe'),nx,ny);
     b2sihs_joule = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_joule'),nx,ny);
-    
+
     b2npht_shei = -reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2npht_shei'),nx,ny);
 
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_32'),nx,ny,2);
-    fhex_32 = tmp(:,:,1);
-    fhey_32 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_52'),nx,ny,2);
-    fhex_52 = tmp(:,:,1);
-    fhey_52 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_thermj'),nx,ny,2);
-    fhex_thermj = tmp(:,:,1);
-    fhey_thermj = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_cond'),nx,ny,2);
-    fhex_cond = tmp(:,:,1);
-    fhey_cond = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_dia'),nx,ny,2);
-    fhex_dia = tmp(:,:,1);
-    fhey_dia = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_ecrb'),nx,ny,2);
-    fhex_ecrb = tmp(:,:,1);
-    fhey_ecrb = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_strange'),nx,ny,2);
-    fhex_strange = tmp(:,:,1);
-    fhey_strange = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_pschused'),nx,ny,2);
-    fhex_pschused = tmp(:,:,1);
-    fhey_pschused = tmp(:,:,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_32'),nx,ny,2,2);
+    fhex_32 = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_32 = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_52'),nx,ny,2,2);
+    fhex_52 = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_52 = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_thermj'),nx,ny,2,2);
+    fhex_thermj = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_thermj = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_cond'),nx,ny,2,2);
+    fhex_cond = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_cond = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_dia'),nx,ny,2,2);
+    fhex_dia = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_dia = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_ecrb'),nx,ny,2,2);
+    fhex_ecrb = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_ecrb = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_strange'),nx,ny,2,2);
+    fhex_strange = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_strange = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhe_pschused'),nx,ny,2,2);
+    fhex_pschused = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhey_pschused = tmp(:,:,2,1)+tmp(:,:,2,2);
 
     reshe = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'reshe'),nx,ny);
 else
@@ -177,7 +177,7 @@ if strata_plot
                       {'Strata decomp. of $\left(\int_d^u S_{e\rm{IE}}^{\rm{EIR}}dV\right)/dA_{\parallel d}$ in radial direction',...
                        'Strata decomp. of $S_{e\rm{IE}}^{\rm{EIR}}dV/dA_{\parallel d}$ in poloidal direction'},...
                       {''},geomb2,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
-end              
+end
 %%
 end
 

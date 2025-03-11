@@ -11,7 +11,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of axes into which strata plots will be placed            %
 % resaccuracy: The maximum acceptable percentage difference between the code-  %
 %              calculated and post-calculated residual that will not throw a   %
 %              warning                                                         %
@@ -34,7 +34,7 @@ if ~isnumeric(SIMID)
     dv = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'vol'),nx,ny); % Cell volume
     hx = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'hx'),nx,ny); % hx
     B = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'bb'),nx,ny,4);
-    
+
     b2stbc_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stbc_shi'),nx,ny);
     eirene_mc_t0_eapl = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_eapl'),nx,ny,nstra);
     eirene_mc_t0_empl = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'eirene_mc_t0_empl'),nx,ny,nstra);
@@ -45,41 +45,41 @@ if ~isnumeric(SIMID)
     b2stel_shi_ion = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_shi_ion'),nx,ny);
     b2stel_shi_rec = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stel_shi_rec'),nx,ny);
     b2stcx_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2stcx_shi'),nx,ny);
-    
+
     b2srsm_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srsm_shi'),nx,ny);
     b2srdt_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srdt_shi'),nx,ny);
     b2srst_shi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2srst_shi'),nx,ny);
-    
+
     b2sihs_diaa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_diaa'),nx,ny);
-    
+
     b2sihs_divua = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_divua'),nx,ny);
     b2sihs_exba = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_exba'),nx,ny);
     b2sihs_visa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_visa'),nx,ny);
     b2sihs_fraa = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2sihs_fraa'),nx,ny);
-    
+
     b2npht_shei = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'b2npht_shei'),nx,ny);
 
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_32'),nx,ny,2);
-    fhix_32 = tmp(:,:,1);
-    fhiy_32 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_52'),nx,ny,2);
-    fhix_52 = tmp(:,:,1);
-    fhiy_52 = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_cond'),nx,ny,2);
-    fhix_cond = tmp(:,:,1);
-    fhiy_cond = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_dia'),nx,ny,2);
-    fhix_dia = tmp(:,:,1);
-    fhiy_dia = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_ecrb'),nx,ny,2);
-    fhix_ecrb = tmp(:,:,1);
-    fhiy_ecrb = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_strange'),nx,ny,2);
-    fhix_strange = tmp(:,:,1);
-    fhiy_strange = tmp(:,:,2);
-    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_pschused'),nx,ny,2);
-    fhix_pschused = tmp(:,:,1);
-    fhiy_pschused = tmp(:,:,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_32'),nx,ny,2,2);
+    fhix_32 = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_32 = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_52'),nx,ny,2,2);
+    fhix_52 = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_52 = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_cond'),nx,ny,2,2);
+    fhix_cond = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_cond = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_dia'),nx,ny,2,2);
+    fhix_dia = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_dia = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_ecrb'),nx,ny,2,2);
+    fhix_ecrb = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_ecrb = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_strange'),nx,ny,2,2);
+    fhix_strange = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_strange = tmp(:,:,2,1)+tmp(:,:,2,2);
+    tmp = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'fhi_pschused'),nx,ny,2,2);
+    fhix_pschused = tmp(:,:,1,1)+tmp(:,:,1,2);
+    fhiy_pschused = tmp(:,:,2,1)+tmp(:,:,2,2);
 
     reshi = reshape(getdata(b2fpstr,[SIMID,'b2fplasma'],'reshi'),nx,ny);
 else
@@ -178,7 +178,7 @@ if strata_plot
                       {'Strata decomp. of $\left(\int_d^u S_{i\rm{IE}}^{\rm{EIR}}dV\right)/dA_{\parallel d}$ in radial direction',...
                        'Strata decomp. of $S_{i\rm{IE}}^{\rm{EIR}}dV/dA_{\parallel d}$ in poloidal direction'},...
                       {'el','ion'},geomb2,indrad,indpol,nstra,axstrat,axbal,areadownrad,areadownpol,reverse,false);
-end              
+end
 %%
 end
 

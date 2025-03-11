@@ -5,14 +5,15 @@
 %              balance should be performed                                     %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
-% isplot:      Species index to be plotted                                     %
+% isplot:      Array of species indices to be plotted. If length(isplot)>1,    %
+%              then balance is summed over those species                       %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % axbal:       Array of axes into which balance plots will be placed           %
 % reverse:     True if the right-most end of the balance volume is upstream of %
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            %
+% axstrat:     Array of axes into which strata plots will be placed            %
 % makeplot:    Decides whether to make plots or just pass back the values in   %
 %              the radial balance plots                                        %
 % areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
@@ -39,21 +40,21 @@ topiy = comuse.topiy+1;
 %% Obtain required arrays from the simulation...
 % Fluxes:
 tmp = ncread(balfile,'fna_tot');
-fnbx_tot = sum(tmp(:,:,1,isplot),4);
+fnbx_tot = sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_pinch');
-fnbx_tot_compare = sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_pll');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_drift');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_ch');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_nanom');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_panom');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 tmp = ncread(balfile,'fna_pschused');
-fnbx_tot_compare = fnbx_tot_compare+sum(tmp(:,:,1,isplot),4);
+fnbx_tot_compare = fnbx_tot_compare+sum(sum(tmp(:,:,1,:,isplot),5),3);
 
 figure; hold on;
 plot(fnbx_tot(:,comuse.sep+2));

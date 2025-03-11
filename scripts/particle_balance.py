@@ -41,7 +41,7 @@ if vreg == 5: # SN topology
     FULL_X = numpy.array([0,1,0,0,-1,0,0])
     FULL_Y = numpy.array([0,1,1,1,0,-1,-1,-1])
 elif vreg == 3: # Limiter topology
-    FULL_X = numpy.array([0,1,-1])
+    FULL_X = numpy.array([0,1,-1,0])
     FULL_Y = numpy.array([0,1,0,-1])
 elif vreg == 2: # Linear topology
     FULL_X = numpy.array([0,1,-1])

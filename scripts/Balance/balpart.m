@@ -5,14 +5,15 @@
 %              balance should be performed                                     %
 % iyplot:      Array of y indices along which poloidal balance will be plotted %
 %              (within the volume specified by indbal)                         %
-% isplot:      Species index to be plotted                                     %
+% isplot:      Array of species indices to be plotted. If length(isplot)>1,    %
+%              then balance is summed over those species                       %
 % comuse:      Structure containing commonly-used variables (from get_comuse)  %
 % axbal:       Array of axes into which balance plots will be placed           %
 % reverse:     True if the right-most end of the balance volume is upstream of %
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            %
+% axstrat:     Array of axes into which strata plots will be placed            %
 % makeplot:    Decides whether to make plots or just pass back the values in   %
 %              the radial balance plots                                        %
 % areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %
@@ -39,26 +40,26 @@ topiy = comuse.topiy+1;
 %% Obtain required arrays from the simulation...
 % Fluxes:
 tmp = ncread(balfile,'fna_pinch');
-fnbx_pinch = sum(tmp(:,:,1,isplot),4);
-fnby_pinch = sum(tmp(:,:,2,isplot),4);
+fnbx_pinch = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_pinch = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_pll');
-fnbx_pll = sum(tmp(:,:,1,isplot),4);
-fnby_pll = sum(tmp(:,:,2,isplot),4);
+fnbx_pll = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_pll = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_drift');
-fnbx_drift = sum(tmp(:,:,1,isplot),4);
-fnby_drift = sum(tmp(:,:,2,isplot),4);
+fnbx_drift = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_drift = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_ch');
-fnbx_ch = sum(tmp(:,:,1,isplot),4);
-fnby_ch = sum(tmp(:,:,2,isplot),4);
+fnbx_ch = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_ch = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_nanom');
-fnbx_nanom = sum(tmp(:,:,1,isplot),4);
-fnby_nanom = sum(tmp(:,:,2,isplot),4);
+fnbx_nanom = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_nanom = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_panom');
-fnbx_panom = sum(tmp(:,:,1,isplot),4);
-fnby_panom = sum(tmp(:,:,2,isplot),4);
+fnbx_panom = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_panom = sum(sum(tmp(:,:,2,:,isplot),5),3);
 tmp = ncread(balfile,'fna_pschused');
-fnbx_pschused = sum(tmp(:,:,1,isplot),4);
-fnby_pschused = sum(tmp(:,:,2,isplot),4);
+fnbx_pschused = sum(sum(tmp(:,:,1,:,isplot),5),3);
+fnby_pschused = sum(sum(tmp(:,:,2,:,isplot),5),3);
 % Sources:
 tmp = ncread(balfile,'b2stbr_phys_sna_bal');
 b2stbr_phys_sna = sum(tmp(:,:,isplot),3);
