@@ -12,7 +12,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of axes into which strata plots will be placed            % 
 % resaccuracy: The maximum acceptable percentage difference between the code-  %
 %              calculated and post-calculated residual that will not throw a   %
 %              warning                                                         %
