@@ -1,12 +1,6 @@
 setenv SYSNAME `uname`_`arch`
 alias gmake make
 
-# User-defined directories
-
-setenv PYTHON_HOME  # Insert here the home directory of your Python installation
-setenv MSCL_HOME  # Insert here the home directory of your mscl installation (read manual)
-setenv GLI_HOME  # Insert here the home directory of your gks installation (read manual)
-
 # Initialize the path collections, if they do not exist already
 
 if ( ! $?LD_LIBRARY_PATH ) then
@@ -24,8 +18,8 @@ setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
 setenv PATH "${PATH}:/opt/local/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/opt/local/lib"
 
-setenv PATH "${PATH}:$PYTHON_HOME/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$PYTHON_HOME/lib"
+setenv PATH "${PATH}:`which python | xargs dirname`"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`which python | xargs dirname`/../lib"
 
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix openblas`/lib"
 
@@ -46,14 +40,15 @@ setenv DBX idb
 
 setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:/opt/local/lib/pkgconfig"
 
+setenv CC gcc
+setenv FC gfortran
+setenv MPI_FC mpif90
+setenv CXX g++
+
 # Check if external libraries are correctly installed
 
 if ( ! -d "$XQUARTZ_HOME" ) then
     echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
-endif
-
-if ( ! -d "$PYTHON_HOME" ) then
-    echo "Warning: Python installation not found or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
 endif
 
 if ( `brew list | grep -c '^gcc$'` == 0 ) then
@@ -132,13 +127,14 @@ if ( ! -e /opt/local/lib/libXm.a ) then
     echo "Warning: openmotif not installed. Install it via 'sudo port install openmotif'"
 endif
 
-if ( ! -d "$MSCL_HOME" ) then
-    echo "Warning: mscl library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-    echo "Install from https://git.iter.org/projects/LIB/repos/mscl/browse,"
-    echo "commit a64eba15137 (follow the instructions from the manual)."
+if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/mscl/darwin.gfortran/libmscl.a" ) then
+    echo "Warning: mscl library not installed. Installing running 'install_dependencies'."
 endif
 
-if ( ! -d "$GLI_HOME" ) then
-    echo "Warning: gli library not installed or wrong path in /SETUP/setup.csh.DARWIN.gfortran."
-    echo "Install from https://pgi-jcns.fz-juelich.de/portal/pages/gli.html"
+if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/gli/src/gks/libgks.a" ) then
+    echo "Warning: gks library not installed. Installing running 'install_dependencies'."
+endif
+
+if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/gr/libgr.a" ) then
+    echo "Warning: gr library not installed. Installing running 'install_dependencies'."
 endif

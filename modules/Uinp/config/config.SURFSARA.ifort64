@@ -1,10 +1,5 @@
 #  VERSION : 28.07.99 20:34
 
-# Test whether necessary variables are defined
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
-endif
-
 MPI_FC      ?= mpiifort
 ifdef SOLPS_MPI
 FC 	     = ${MPI_FC}
