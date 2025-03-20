@@ -37,6 +37,7 @@ cp ../convert_orig/b2fpardf .
 cp ../convert_orig/b2fstati .
 cp ../convert_orig/fort.* .
 b2run b2us
+diff ./b2us.boundary.parameters ../convert_orig/b2us.boundary.parameters
 ${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig/ ./ || exit 1
 cd ..
 
