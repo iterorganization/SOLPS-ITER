@@ -66,7 +66,7 @@ echo "'b2mndr_ntim' '10'" >> b2mn.dat
 b2run -s b2mn
 rm b2mn.prt
 mv b2fstate b2fstati
-b2run b2mn
+b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 2
 
 # Now test the coupled code
