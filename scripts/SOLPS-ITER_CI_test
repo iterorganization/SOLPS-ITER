@@ -68,6 +68,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 2
+cd ..
 
 # Now test the coupled code
 mkdir run_CI_test_20
