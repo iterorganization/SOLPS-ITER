@@ -9,11 +9,12 @@ EQUIV5 =
 CPP = /lib/cpp -traditional
 
 OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
-ifeq (,$(findstring CentOS,$(OS)))
-ifndef SOLPS_DEBUG
-FC = ifx
-endif
-endif
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+# ifndef SOLPS_DEBUG
+# FC = ifx
+# endif
+# endif
 
 ifdef SOLPS_DEBUG
 FCOPTS += -traceback

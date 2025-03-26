@@ -151,7 +151,7 @@ CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
 ifeq ($(UNAME),Darwin)
-	NO_CMAKE := 1
+NO_CMAKE := 1
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
@@ -214,27 +214,27 @@ DEFAULT: solps
 #----------------------
 
 
-solps:       carre divgeo b25eirene     uinp     triang amds manual
+solps: carre divgeo b25eirene uinp triang amds manual
 
 solps_nox: nox
 
 solps_openmp: carre divgeo b25eirene_openmp uinp_openmp triang amds_openmp manual
 
-solps_mpi:   carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
 
 solps_openmp_mpi: carre divgeo b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
 
 solps_mpi_openmp: solps_openmp_mpi
 
-nox:         carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
+nox: carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
 
-nox_openmp:  carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+nox_openmp: carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
 solps_nox_openmp: nox_openmp
 
 solps_openmp_nox: nox_openmp
 
-nox_mpi:     carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+nox_mpi: carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
 
 solps_nox_mpi: nox_mpi
 
@@ -252,13 +252,13 @@ solps_nox_openmp_mpi: nox_openmp_mpi
 
 solps_nox_mpi_openmp: nox_openmp_mpi
 
-all:         carre divgeo b25     eirene     b25eirene     uinp     triang amds manual
+all: carre divgeo b25 eirene b25eirene uinp triang amds manual
 
-all_nox:     carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+all_nox: carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
 
-all_openmp:  carre divgeo b25_openmp eirene_openmp b25eirene_openmp uinp_openmp triang amds_openmp manual
+all_openmp: carre divgeo b25_openmp eirene_openmp b25eirene_openmp uinp_openmp triang amds_openmp manual
 
-all_mpi:     carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
 
 all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox_openmp b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
 
@@ -848,9 +848,9 @@ debug: solps_debug
 
 # Dependencies are not duplicated across build targets
 
-nox_build:     clean_build     listobj_nox depend_nox carre_nox divgeo_nox b25eirene_nox     uinp_nox     triang_nox
+nox_build:     clean_build listobj_nox depend_nox carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox
 
-nox_build_mpi: clean_build_mpi listobj_nox depend_nox           divgeo_nox b25eirene_nox_mpi uinp_nox_mpi
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi
 
 nox_build_openmp: clean_build_openmp listobj_nox depend_nox b25eirene_nox_openmp uinp_nox_openmp
 
@@ -863,7 +863,7 @@ nox_build_mpi_openmp: nox_build_openmp_mpi
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_manual clean_amds
+clean_solps: clean_carre clean_divgeo clean_b25eirene clean_uinp clean_triang clean_manual clean_amds
 
 clean_solps_nox: clean_nox
 
