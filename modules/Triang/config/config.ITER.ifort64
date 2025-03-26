@@ -11,9 +11,10 @@ GLI_HOME ?= ${EBROOTGLI}
 CPP       = /lib/cpp -traditional
 
 OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
-ifeq (,$(findstring CentOS,$(OS)))
-FC        = ifx
-endif
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+# FC        = ifx
+# endif
 
 ifdef SOLPS_DEBUG
 FCOPTS    = -traceback -check all

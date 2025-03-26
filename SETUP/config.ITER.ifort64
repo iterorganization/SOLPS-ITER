@@ -62,24 +62,25 @@ ADDLIBS    = -lgfortran
 # Provide compiler
 #
 
-ifeq (,$(findstring CentOS,$(OS)))
- MPI_FC    = mpiifort -fc=mpiifx
- FCVOPTS   = -check nouninit
- FN        = ifx
- CC        = icx
-else
- MPI_FC   ?= mpiifort
-endif
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+#  MPI_FC    = mpiifort -fc=mpiifx
+#  FCVOPTS   = -check nouninit
+#  FN        = ifx
+#  CC        = icx
+# else
+#  MPI_FC   ?= mpiifort
+# endif
 ifdef SOLPS_MPI
  FC        = ${MPI_FC}
  ifndef MPDIR
   MPDIR    = ${EBROOTIMPI}
   LD_MPI  += -Wl,-rpath,${MPDIR}/lib64
  endif
-else
- ifeq (,$(findstring CentOS,$(OS)))
-  FC       = ifx
- endif
+# else
+#  ifeq (,$(findstring CentOS,$(OS)))
+#   FC       = ifx
+#  endif
 endif
 
 #
