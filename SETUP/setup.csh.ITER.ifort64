@@ -92,17 +92,18 @@ module load TotalView/2023.4.16_linux_x86-64
 setenv DBX totalview
 
 # Compilers
-if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "CentOS") then
+# Avoid usage of ifx compiler until its many issues are fixed
+# if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "CentOS") then
   setenv FC ifort
   setenv MPI_FC mpiifort
   setenv CXX icpc
   setenv CC icc
-else
-  setenv FC ifx
-  setenv MPI_FC "mpiifort -fc=mpiifx"
-  setenv CXX icpx
-  setenv CC icx
-endif
+# else
+#   setenv FC ifx
+#   setenv MPI_FC "mpiifort -fc=mpiifx"
+#   setenv CXX icpx
+#   setenv CC icx
+# endif
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
