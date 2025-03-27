@@ -15096,7 +15096,7 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ fluxes, p
     \endlastfoot
     \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
     \hline
-    na \index{na}\index{b2movies.nc, na} & Density of atomic species (for each species) & $m^{-3}$ \\
+    na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
     ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
     te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
     ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
@@ -15108,32 +15108,34 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ fluxes, p
     \hline
     \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
     \hline
-    fnax \index{fnax}\index{b2movies.nc, fnax} & Poloidal particle flux (for each species) & $s^{-1}$ \\
-    fnay \index{fnay}\index{b2movies.nc, fnay} & Radial particle flux (for each species) & $s^{-1}$ \\
+    fnax \index{fnax}\index{b2movies.nc, fnax} & Poloidal particle flux (for each fluid species) & $s^{-1}$ \\
+    fnay \index{fnay}\index{b2movies.nc, fnay} & Radial particle flux (for each fluid species) & $s^{-1}$ \\
     fhex \index{fhex}\index{b2movies.nc, fhex} & Poloidal electron heat flux & $W$ \\
     fhey \index{fhey}\index{b2movies.nc, fhey} & Radial electron heat flux & $W$ \\
     fhix \index{fhix}\index{b2movies.nc, fhix} & Poloidal ion heat flux & $W$ \\
     fhiy \index{fhiy}\index{b2movies.nc, fhiy} & Radial ion heat flux & $W$ \\
     fchx \index{fchx}\index{b2movies.nc, fchx} & Poloidal electric current & $A$ \\
     fchy \index{fchy}\index{b2movies.nc, fchy} & Radial electric current & $A$ \\
-    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each species) & $m^{-3} s^{-1}$ \\
-    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each species) & $W m^{-3}$ \\
+    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
     rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
-    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each species) & $m^{-3} s^{-1}$ \\
-    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each species) & $W m^{-3}$ \\
+    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
     rrahisum \index{rrahisum}\index{b2movies.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
-    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each species) & $m^{-3} s^{-1}$ \\
-    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each species) & $W m^{-3}$ \\
+    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
     rcxhisum \index{rcxhisum}\index{b2movies.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
-    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each species) & $W m^{-3}$ \\
+    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
-    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each species) & $W m^{-3}$ \\
+    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
     \hline
     \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
     \label{tab:b2moviesarrays}
   \end{longtable}
 \end{center}
+
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
 
 \clearpage
 
