@@ -1379,6 +1379,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
+  \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
@@ -1996,6 +1997,7 @@ are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
+  \item[darwinsubmit]\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -13618,6 +13620,73 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
     \label{tab:b2timeav}
   \end{longtable}
 \end{center}
+
+\clearpage
+
+\chapter{Quantities stored in b2movies.nc}
+\label{cha:b2movies}\index{b2movies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc}\index{b2movies.nc}
+
+The following multi-dimensional arrays, i.e.\ covering the entire B2.5 grid, are stored in {\tt b2movies.nc}.
+The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
+
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} file, otherwise the file is created anew.
+
+The number of arrays outputted to {\tt b2movies.nc} is controlled by the {\tt cdfmovie\_fields} switch.
+If greater than or equal to {\tt 1} (default value), then only the main state variables ($n_a$, $n_e$, $T_e$, $T_i$, etc.) are written with each write to {\tt b2movies.nc}.
+If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle and energy sources, radiation rates) are also included, see below Table
+\ref{tab:b2moviesarrays}.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
+    \hline
+    na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
+    ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
+    te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
+    ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
+    po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species, if {\tt Eirene} is used) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species, if {\tt Eirene} is used) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
+    \hline
+    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
+    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rrahisum \index{rrahisum}\index{b2movies.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
+    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rcxhisum \index{rcxhisum}\index{b2movies.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
+    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
+    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms (for each atom species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules (for each molecules species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
+    \label{tab:b2moviesarrays}
+  \end{longtable}
+\end{center}
+
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
 
 \clearpage
 
