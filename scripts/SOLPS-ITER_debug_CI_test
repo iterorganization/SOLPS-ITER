@@ -2,6 +2,7 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/file-handling/wrplam.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/file-handling/wrplam_long.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/emissivity.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/scoring/update.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/scoring/updphot.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
