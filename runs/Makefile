@@ -228,7 +228,7 @@ $(target_ai) : b2ai.dat b2fgmtry
 	-[ -s b2ai.exe.dir/b2fplasmf_st ] && rm b2ai.exe.dir/b2fplasmf_st   || echo > /dev/null
 	-rmdir b2ai.exe.dir
 
-$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry AMJUEL HYDHEL
+$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf AMJUEL HYDHEL
 	rm -rf b2ar.exe.dir >& /dev/null ; mkdir b2ar.exe.dir ; cp $^ b2ar.exe.dir
 	rm -f $(target_ar)
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
