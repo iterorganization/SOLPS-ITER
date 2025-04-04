@@ -1,4 +1,4 @@
-##! /usr/bin/env tcsh
+#! /usr/bin/env tcsh
 
 set standalone='no'
 set compress='no'
