@@ -16,7 +16,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.openmp:|${HOST_NAME}.${COMPILER}.openmp.debug:|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}.mpi:|${HOST_NAME}.${COMPILER}.mpi.debug:|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|${HOST_NAME}.${COMPILER}:|${HOST_NAME}.${COMPILER}.debug:|g"`
-  setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
   setenv   IMAS_AMNS_DEBUG yes
   setenv   SOLPS_DEBUG yes
   setenv   I_MPI_DEBUG 5
