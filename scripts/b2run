@@ -166,7 +166,7 @@ argloop:
         endif
       endif
     endif
-    goto argloop 
+    goto argloop
   endif
   if ("X${1}X" == "X-oX") then
     shift
@@ -190,4 +190,3 @@ argloop:
   if ($?MPI_SET)    source $SOLPSTOP/SETUP/nompi
   if ($?DEBUG_SET)  source $SOLPSTOP/SETUP/nodebug
   if ($?OPENMP_SET) source $SOLPSTOP/SETUP/noopenmp
-  

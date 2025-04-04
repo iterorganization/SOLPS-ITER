@@ -778,99 +778,99 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
-        gnuplot/5.4.8-GCCcore-12.3.0
-        xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
-        makedepend/1.0.9-GCCcore-13.2.0
-        MSCL/1.2.4-GCCcore-13.2.0
-        GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
-        GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
-        g2clib/1.9.0-GCCcore-13.2.0 --from-ITER-SDCC
-        NCL/6.6.2-foss-2023b --from-ITER-SDCC
-        flex/2.6.4-GCCcore-13.2.0
-        Doxygen/1.9.8-GCCcore-13.2.0
-        netCDF/4.9.2-gompi-2023b
-        netCDF-Fortran/4.6.1-gompi-2023b --filter-env-vars=CPATH
-        Ghostscript/10.02.1-GCCcore-13.2.0
-        CMake/3.27.6-GCCcore-13.2.0
-        ParaView/5.12.0-foss-2023b-Qt5
-        Qt5/5.15.13-GCCcore-13.2.0
-        netcdf4-python/1.6.5-foss-2023b
-        motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
-        texlive/20230313-GCC-13.2.0
-        SimDB/0.11.0-gfbf-2023b --ignore-checksums
-        json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
-        Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
-        MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-        UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
+	gnuplot/5.4.8-GCCcore-12.3.0
+	xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
+	makedepend/1.0.9-GCCcore-13.2.0
+	MSCL/1.2.4-GCCcore-13.2.0
+	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
+	GLI/4.5.31-GCCcore-13.2.0 --from-ITER-SDCC
+	g2clib/1.9.0-GCCcore-13.2.0 --from-ITER-SDCC
+	NCL/6.6.2-foss-2023b --from-ITER-SDCC
+	flex/2.6.4-GCCcore-13.2.0
+	Doxygen/1.9.8-GCCcore-13.2.0
+	netCDF/4.9.2-gompi-2023b
+	netCDF-Fortran/4.6.1-gompi-2023b --filter-env-vars=CPATH
+	Ghostscript/10.02.1-GCCcore-13.2.0
+	CMake/3.27.6-GCCcore-13.2.0
+	ParaView/5.12.0-foss-2023b-Qt5
+	Qt5/5.15.13-GCCcore-13.2.0
+	netcdf4-python/1.6.5-foss-2023b
+	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
+	texlive/20230313-GCC-13.2.0
+	SimDB/0.11.0-gfbf-2023b --ignore-checksums
+	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
+	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
+	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
+	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
-        IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
-        IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC
-        IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
-        IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
-        IDStools/2.0.0-gfbf-2023b --ignore-checksums
-        GGD/1.13.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-        GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC
-        Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC
-        AMNS/1.6.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-        build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC
-        PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
-        GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
-        PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
-        PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
-        Viz/2.8.0-foss-2023b
-        astropy/6.1.0-gfbf-2023b --from-ITER-SDCC
-        ToFu/1.7.9-gfbf-2023b --from-pr=20999
+	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
+	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC
+	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
+	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
+	IDStools/2.0.0-gfbf-2023b --ignore-checksums
+	GGD/1.13.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC
+	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC
+	AMNS/1.6.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC
+	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
+	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
+	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
+	Viz/2.8.0-foss-2023b
+	astropy/6.1.0-gfbf-2023b --from-ITER-SDCC
+	ToFu/1.7.9-gfbf-2023b --from-pr=20999
         "
 
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2023b_MODULES="
-        intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI
-        imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
-        impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
-        iimpi/2023b --accept-eula-for=Intel-oneAPI
-        CMake/3.27.6-GCCcore-13.2.0
-        SciPy-bundle/2023.12-iimkl-2023b --from-pr=20262
-        xarray/2024.5.0-iimkl-2023b --from-ITER-SDCC
-        makedepend/1.0.9-GCCcore-13.2.0
-        ESMF/8.6.1-intel-2023b --from-ITER-SDCC --optarch=GENERIC
-        GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
-        GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
-        Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
-        HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
-        arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
-        Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
-        MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
-        GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
-        GLI/4.5.31-GCCcore-13.2.0
-        GDAL/3.9.0-intel-2023b --from-ITER-SDCC
-        NCL/6.6.2-intel-2023b --from-ITER-SDCC --include-easyblocks-from-pr=3409 --optarch=GENERIC
-        netCDF/4.9.2-iimpi-2023b
-        netCDF-Fortran/4.6.1-iimpi-2023b --filter-env-vars=CPATH
-        Ghostscript/10.02.1-GCCcore-13.2.0
-        Doxygen/1.9.8-GCCcore-13.2.0
-        Qt5/5.15.13-GCCcore-13.2.0
-        motif/2.3.8-GCCcore-13.2.0
-        texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701 --optarch=GENERIC
-        libtirpc/1.3.4-GCCcore-13.2.0
-        SimDB/0.11.0-iimkl-2023b --ignore-checksums
-        matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
-        astropy/6.1.0-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
-        ToFu/1.7.9-iimkl-2023b --from-pr=20999
-        mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
-        netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
-        json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
-        UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
-        IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-        IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-        IDStools/2.0.0-iimkl-2023b --ignore-checksums
-        GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-        AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-        PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
-        Viz/2.8.0-intel-2023b
-        PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
-        GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
+	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI
+	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
+	impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
+	iimpi/2023b --accept-eula-for=Intel-oneAPI
+	CMake/3.27.6-GCCcore-13.2.0
+	SciPy-bundle/2023.12-iimkl-2023b --from-pr=20262
+	xarray/2024.5.0-iimkl-2023b --from-ITER-SDCC
+	makedepend/1.0.9-GCCcore-13.2.0
+	ESMF/8.6.1-intel-2023b --from-ITER-SDCC --optarch=GENERIC
+	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
+	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
+	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
+	HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
+	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
+	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
+	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
+	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
+	GLI/4.5.31-GCCcore-13.2.0
+	GDAL/3.9.0-intel-2023b --from-ITER-SDCC
+	NCL/6.6.2-intel-2023b --from-ITER-SDCC --include-easyblocks-from-pr=3409 --optarch=GENERIC
+	netCDF/4.9.2-iimpi-2023b
+	netCDF-Fortran/4.6.1-iimpi-2023b --filter-env-vars=CPATH
+	Ghostscript/10.02.1-GCCcore-13.2.0
+	Doxygen/1.9.8-GCCcore-13.2.0
+	Qt5/5.15.13-GCCcore-13.2.0
+	motif/2.3.8-GCCcore-13.2.0
+	texlive/20230313-intel-compilers-2023.2.1  --from-pr=20701 --optarch=GENERIC
+	libtirpc/1.3.4-GCCcore-13.2.0
+	SimDB/0.11.0-iimkl-2023b --ignore-checksums
+	matplotlib/3.8.2-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
+	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
+	ToFu/1.7.9-iimkl-2023b --from-pr=20999
+	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
+	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
+	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
+	UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
+	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IDStools/2.0.0-iimkl-2023b --ignore-checksums
+	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
+	Viz/2.8.0-intel-2023b
+	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
+	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
         "
-#       NAG/26-intel-compilers-2023.2.1 --from-ITER-SDCC
+#	NAG/26-intel-compilers-2023.2.1 --from-ITER-SDCC
 
 # Creating authentication for download from http://git.iter.org/
 if [ -n "${HTTP_AUTH_BEARER}" ]; then
@@ -938,17 +938,17 @@ function add_imas_lite() { # IMAS without matplotlib as a dependency
 
 function build_modules () {
     echo "$@" | while read -r line  ; do
-        module="${line%% *}"
-        test -z "${module}" && continue # skip empty line
-        optional_args=${line#* }
-        if [ "${optional_args}" = "${module}" ]; then optional_args=""; fi
+	module="${line%% *}"
+	test -z "${module}" && continue # skip empty line
+	optional_args=${line#* }
+	if [ "${optional_args}" = "${module}" ]; then optional_args=""; fi
         if test -f ${EASYBUILD_PREFIX}/modules/all/${module}*
         then echo -e "\e[32mModule ${module} exists. Skipping build.\e[m"
         else echo -e "\e[34mBuilding required SOLPS-ITER module ${line}$ec\e[m"
-             if [[ "${optional_args}" == *"--from-ITER-SDCC"* ]]
-             then fetch_from_iter_cluster ${module}
-                  optional_args="${optional_args#*--from-ITER-SDCC}"
-             fi
+	     if [[ "${optional_args}" == *"--from-ITER-SDCC"* ]]
+	     then fetch_from_iter_cluster ${module}
+		  optional_args="${optional_args#*--from-ITER-SDCC}"
+	     fi
              easybuild_file=$(echo ${module}.eb | tr / -)
              eb --robot ${eb_auth} ${easybuild_file} ${optional_args}
         fi
@@ -973,12 +973,12 @@ case "${1##--}" in
         sed -i -e /CPATH/d ${MODULEPATH}/GGD/*
         sed -i -e /CPATH/d ${MODULEPATH}/AMNS/*
         sed -i -e /CPATH/d ${MODULEPATH}/json-fortran/*
-        sed -i -e /CPATH/d ${MODULEPATH}/netCDF-Fortran/*
+	sed -i -e /CPATH/d ${MODULEPATH}/netCDF-Fortran/*
         ;;
     fetch-sdcc)
-        shift
-        fetch_from_iter_cluster $*
-        ;;
+	shift
+	fetch_from_iter_cluster $*
+	;;
     help)
         help | grip --title="EasyBuild for SOLPS-ITER modules" \
                     --export -> ${EASYBUILD_LOCAL}/README.html
