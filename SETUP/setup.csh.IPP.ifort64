@@ -32,6 +32,7 @@ endif
 
 # Compiler
 setenv FC ifort
+setenv MPI_FC mpiifort
 
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then

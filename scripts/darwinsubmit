@@ -1,4 +1,4 @@
-#! /usr/bin/env tcsh
+##! /usr/bin/env tcsh
 
 set standalone='no'
 set compress='no'
@@ -65,12 +65,13 @@ EOF
 
 if (! $?PAR_STRING) then
   echo Asking for serial run
+  set PAR_STRING = ''
 endif
 
 if (-s fort.1 && ${standalone} == "no") then
   echo Assuming run with Eirene
   if (${compress} == "-gz") then
-	(b2run $PAR_STRING b2mn < fort.1 | gzip -9 >& run.log.gz) &
+    (b2run $PAR_STRING b2mn < fort.1 | gzip -9 >& run.log.gz) &
   else
     (b2run $PAR_STRING b2mn < fort.1 >& run.log) &
   endif
