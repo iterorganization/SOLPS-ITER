@@ -232,7 +232,17 @@ do {
 #            carre.exe; q=s; break;;
             $CARRE_PATH/carre.exe 2>carre.log
             [ -s carre.out ] && {
-              q=$qqs
+              nfields=`grep -c -E 'fin|end' carre.out`
+              [ $nfields -lt 2 ] && {
+                if [ "$(uname)" = "Darwin" ]; then
+                  printf 'Carre output appears incomplete. Check the carre.out and carre.log files\n'
+                else
+                  /bin/echo -e "Carre output appears incomplete. Check the carre.out and carre.log files"
+                fi
+                q=q
+              } || {
+                q=$qqs
+              }
             } || {
               if [ "$(uname)" = "Darwin" ]; then
                 printf 'Carre output was not produced. Check the carre.log file\n'
