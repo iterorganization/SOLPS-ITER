@@ -110,9 +110,9 @@ c<<<
       if(k.gt.0) then !{
         if(locphep.eq.1) then !{
           if((luwrk(1).gt.nxcut1(1).and.luwrk(1).le.nxcut1(nncut)) .or.
-     .      (luind(1).gt.nxcut1(1).and.luind(1).le.nxcut1(nncut)) .or.
-     .      (luind(k).gt.nxcut1(1).and.luind(k).le.nxcut1(nncut)) .or.
-     .      (luwrk(k).gt.nxcut1(1).and.luwrk(k).le.nxcut1(nncut))) then !{
+     .       (luind(1).gt.nxcut1(1).and.luind(1).le.nxcut1(nncut)) .or.
+     .       (luind(k).gt.nxcut1(1).and.luind(k).le.nxcut1(nncut)) .or.
+     .       (luwrk(k).gt.nxcut1(1).and.luwrk(k).le.nxcut1(nncut))) then !{
             write(0,*) 'Wrong cell range specified for PFR pumping: ',
      ,        'must not extend beyond the cuts'
             call xerrab ('==> Check the DG model')
