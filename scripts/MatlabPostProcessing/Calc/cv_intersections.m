@@ -6,8 +6,8 @@ if ~exist('meth','var') || isempty(meth)
 end
 
 nn = 1;
-listcv = zeros(100,1);
-listfc = zeros(100,1);
+listcv = zeros(10000,1);
+listfc = zeros(10000,1);
 
 p1=[segm(1,1) segm(2,1)];
 q1=[segm(1,2) segm(2,2)];

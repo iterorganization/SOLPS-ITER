@@ -9,6 +9,8 @@ function gmtry = read_b2fgmtry_us(file)
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
 
+disp(['Attempting read_b2fgmtry_us.'])
+
 [fid,msg] = fopen(file);
 if (fid == -1)
    error(msg);
@@ -20,10 +22,9 @@ end
 line    = fgetl(fid);
 version = line(8:17);
 
-disp(['read_b2fgmtry -- file version ',version]);
+gmtry.version = version;
 
-
-%% Read dimensions nx, ny, and symmetry
+%% Read dimensions nCi, nCg, nCv, nFc, nVx, nFs, nFt
 
 
 dim = read_ifield(fid,'nCi,nCg,nCv,nFc,nVx,nFs,nFt',7);
@@ -71,8 +72,6 @@ gmtry.nncut=nncut;
 %% Read symmetry information
 
 gmtry.isymm = read_ifield(fid,'isymm',1);
-
-
 
 
 %% Read Mapping
@@ -153,6 +152,8 @@ gmtry.fsPsi  = read_rfield(fid,'fsPsi',[nFs] );
 %% Close file
 
 fclose(fid);
+
+disp(['Done read_b2fgmtry_us with no errors.'])
 
 end
 
