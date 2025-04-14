@@ -1,5 +1,5 @@
-function [gmtry,state] = read_b2fplasmf_st(file,nx,ny,ns)
-% [gmtry,state] = read_b2fplasmf(file,nx,ny,ns)
+function [state,gmtry] = read_b2fplasmf_st(file)
+% [state,gmtry] = read_b2fplasmf_st(file,nx,ny,ns)
 %
 % Read formatted b2fplasmf file created by B2.5.
 %
@@ -8,6 +8,8 @@ function [gmtry,state] = read_b2fplasmf_st(file,nx,ny,ns)
 % Author: Wouter Dekeyser
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
+
+disp(['Attempting read_b2fplasmf_st.'])
 
 [fid,msg] = fopen(file);
 if (fid == -1)
@@ -23,8 +25,12 @@ state = [];
 line    = fgetl(fid);
 version = line(8:17);
 
-disp(['read_b2fplasmf -- file version ',version]);
+%% Read dimensions nx, ny, ns
 
+dim = read_ifield(fid,'nx,ny,ns',3);
+nx  = dim(1);
+ny  = dim(2);
+ns  = dim(3);
 
 % Expected array sizes, gmtry
 qcdim = [nx+2,ny+2];
@@ -250,4 +256,10 @@ nstra              = read_ifield(fid,'nstra'       ,[1]);
 state.sclstra      = read_rfield(fid,'sclstra'     ,[ns+1,nstra]);
 state.sclrtio      = read_rfield(fid,'sclrtio'     ,[ns+1,nstra]);
 
+%% Close file
+
 fclose(fid);
+
+disp(['Done read_b2fplasmf_st with no errors.'])
+
+end
