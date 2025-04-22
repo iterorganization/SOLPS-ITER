@@ -350,14 +350,19 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \end{description}
 \end{sloppypar}
 
-For all the various libraries, it is recommended that they be installed as modules, so that they
-may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
-centralize their management. Most, but not all, of these libraries are publicly available from the
-Internet.
+Most of the required libraries should be, in principle, already available in the various HPC clusters as modules. It is recommended for these to be loaded as modules rather than be locally re-built, so that they may be shared amongst multiple users on the same machine, so as not to duplicate large files and to centralize their management.
 
 \begin{sloppypar}
 If one uses local copies of these libraries, a copy or link to them should be put in the
 {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
+\end{sloppypar}
+
+\begin{sloppypar}
+Those libraries which are not available in a cluster must be necessarily locally built for the code to be used. By running the script:
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
+it is possible to automatically build the MSCL, GKS, and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -485,6 +490,8 @@ changes are required that should not be archived in the repository, then users s
 {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
+
+As a general rule, a {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} file should not be a modified copy of the original {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} file, but instead {\em only} contain those variable definitions that need to be locally modified.
 
 \begin{sloppypar}\index{easybuild}\label{sec:easybuild}
 For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
@@ -653,6 +660,47 @@ For compilation of the {\tt Sonnet} library, the user should first do:
 fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
+
+\subsection{MacOS support}
+\index{MacOS support}
+
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of {\tt B2.5} and {\tt Eirene} (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of {\tt B2.5} and the coupled {\tt B2.5-Eirene} code can be compiled with graphics, while the standalone version of {\tt Eirene} can be currently compiled only without graphics. Also {\tt DivGeo}, {\tt Carre}, {\tt Triang} (only the no graphics version), {\tt Uinp} and {\tt amds} can be successfully compiled. {\tt Sonnet-light}, at the moment, is not compatible yet with MacOS.
+
+First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
+
+The following external libraries must be then installed using Homebrew:
+
+\begin{description}
+\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
+\item[Cross-platform make] using the formula: {\tt brew install cmake}.
+\item[ctags] using the formula: {\tt brew install ctags}.
+\item[Doxygen] using the formula: {\tt brew install doxygen}.
+\item[Freetype] using the formula: {\tt brew install freetype}.
+\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
+\item[PNG library] using the formula: {\tt brew install libpng}.
+\item[XPrint client library] using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
+\item[OpenBlas] using the formula: {\tt brew install openblas}.
+\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
+\end{description}
+
+Further external libraries must be instead installed using MacPorts:
+
+\begin{description}
+\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
+\end{description}
+
+The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -1171,9 +1219,6 @@ relies on to compute things such as backscattering coefficients, atomic reaction
 As with {\tt B2.5}, a {\tt local} directory for the user that wishes to make code
 changes sheltered from GIT updates. The same procedures apply.
 
-Note that if you want to use the coupled version of the code, you
-should compile {\tt Eirene} first.
-
 If routines have been added or removed, if the dependencies have been
 altered or if this is the first compilation in a new tree, and you are not
 compiling using the \SOLPSITER master {\tt Makefile}, you should do
@@ -1334,6 +1379,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
+  \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
@@ -1639,6 +1685,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
+  \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -1646,6 +1693,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
@@ -1949,6 +1997,7 @@ are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
+  \item[darwinsubmit]\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -13574,6 +13623,73 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 
 \clearpage
 
+\chapter{Quantities stored in b2movies.nc}
+\label{cha:b2movies}\index{b2movies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc}\index{b2movies.nc}
+
+The following multi-dimensional arrays, i.e.\ covering the entire B2.5 grid, are stored in {\tt b2movies.nc}.
+The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
+
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} file, otherwise the file is created anew.
+
+The number of arrays outputted to {\tt b2movies.nc} is controlled by the {\tt cdfmovie\_fields} switch.
+If greater than or equal to {\tt 1} (default value), then only the main state variables ($n_a$, $n_e$, $T_e$, $T_i$, etc.) are written with each write to {\tt b2movies.nc}.
+If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle and energy sources, radiation rates) are also included, see below Table
+\ref{tab:b2moviesarrays}.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
+    \hline
+    na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
+    ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
+    te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
+    ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
+    po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species, if {\tt Eirene} is used) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species, if {\tt Eirene} is used) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
+    \hline
+    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
+    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rrahisum \index{rrahisum}\index{b2movies.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
+    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rcxhisum \index{rcxhisum}\index{b2movies.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
+    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
+    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms (for each atom species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules (for each molecules species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
+    \label{tab:b2moviesarrays}
+  \end{longtable}
+\end{center}
+
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
+
+\clearpage
+
 \chapter{Quantities stored in b2tallies.nc}
 \label{cha:b2tallies}\index{b2tallies.nc, quantities stored
   in}\index{time-dependent quantities, b2tallies.nc}\index{b2tallies.nc}
@@ -19372,6 +19488,7 @@ IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_interp.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_grid.F90 \\

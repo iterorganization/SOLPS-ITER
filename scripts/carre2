@@ -177,7 +177,13 @@ do {
 #            carre.exe; q=s; break;;
             $CARRE2_PATH/carre.exe 2>carre.log
             [ -s carre.out ] && {
-              q=$qqs
+              nfields=`grep -c -E 'fin|end' carre.out`
+              [ $nfields -lt 2 ] && {
+                /bin/echo -e "Carre output appears incomplete. Check the carre.out and carre.log files"
+                q=q
+              } || {
+                q=$qqs
+              }
             } || {
               /bin/echo -e "Carre output was not produced. Check the carre.log file"
               q=q

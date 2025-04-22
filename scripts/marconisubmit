@@ -18,6 +18,7 @@ set standalone="no"
 set LOOP_OPTS=""
 set OPTOPTS=""
 setenv SOLPS_OPT ""
+set exclusive=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -41,6 +42,7 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
+  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
@@ -221,6 +223,12 @@ EOF
     shift
     goto argloop
   endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
+    goto argloop
+  endif
 
 # Determine Tasks
 @ TASKS = ( $PROCS / $NODES  )
@@ -324,7 +332,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch ${exclusive} $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --dependency=afterok:${chain} $NAME
 endif

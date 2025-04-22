@@ -2,9 +2,6 @@
 
 # File compiler.macro for IBM xlf
 
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
-endif
 ifndef SOLPSLIB
   $(error SOLPSLIB not defined)
 endif

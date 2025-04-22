@@ -7,6 +7,11 @@
 # specify the viewer for PostScript files
 
 GV="gv $GV_OPT"
+case "$(uname -s)" in
+    Darwin*)
+        GV="gs $GV_OPT"
+        ;;
+esac
 
 SOLPSTOP=`determine_SOLPSTOP`
 
