@@ -1,5 +1,5 @@
 #!/bin/bash -e
- 
+
 function help() { cat << 'EOF'
 
 EasyBuild for SOLPS-ITER modules
@@ -19,7 +19,7 @@ actually be symlinked to config.ITER versions.
 Essentially, this script extends functionality of the
 [EasyBuild](http://easybuild.readthedocs.org/) tool by adding search
 paths to ITER-specific easyconfigs (`.eb`) for sources from ITER Git
-repositories. 
+repositories.
 
 The only requirement for this script is recent version
 of Python 3 and modulesfiles or lmod support. The rest is being
@@ -36,9 +36,9 @@ https://git.iter.org/plugins/servlet/access-tokens/manage and entering
 ~~~
 
 Some unpublished EasyBuild config files are only available at ITER SDCC cluster
-or are still unmerged under pull request at 
+or are still unmerged under pull request at
 [EasyBuild Pull requests](https://github.com/easybuilders/easybuild-framework/pulls).
-To facilitate easy copy of such recipes for selected modules from 
+To facilitate easy copy of such recipes for selected modules from
 SDCC `--fetch-sdcc module(s)` functionality is provided.
 In order for fetch to work a local SSH key needs to be copied to ITER cluster with
 `ssh-copy-id`.
@@ -49,7 +49,7 @@ functional. The rest is installed by the script under the
 `easybuild.local` directory or elsewhere (system-wide) if desired.
 
 Lmod and Lua are default and recommended way to handle modules.
-You may need to export `EASYBUILD_MODULES_TOOL` and 
+You may need to export `EASYBUILD_MODULES_TOOL` and
 `EASYBUILD_MODULE_SYNTAX` environment variable to match you cluster
 environment.
 
@@ -68,7 +68,7 @@ everyting can be built with `foss` toolchain.
 There are two directories under SOLPS top being created/used by this
 script:
 
- - easybuild.local/ contains local Python and EasyBuild install including 
+ - easybuild.local/ contains local Python and EasyBuild install including
    https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs
 
  - easyconfigs.local/ is an overlay of site specific Easyconfigs that are
@@ -82,12 +82,12 @@ various repositiories in the order of apperance:
 2. [IMAS easybuild-easyconfigs Git repository](https://git.iter.org/projects/IMEX/repos/easybuild-easyconfigs/)
    for ITER software installed under `${SOLPS_TOP}/easybuild.local/imas-easybuild-easyconfigs`
 3. [Easybuild easyconfigs from pull requests](https://github.com/easybuilders/easybuild-framework/pulls) for
-   unmerged software that should reside under EasyBuild easyconfigs. Location 
+   unmerged software that should reside under EasyBuild easyconfigs. Location
    of these files obtained with `--from-pr` switch is under temporary build directories.
 4. As a last resort, unpublished EasyBuild config files are fetched from ITER SDCC cluster
    with `--from-ITER` switch and stored under `${SOLPS_TOP}/easyconfigs.local/` that takes priority
    in `--robot` search path. Sources for unpublished software is fetched too.
-   Note that unpublished dependencies residing at ITER cluster are required to be fetched beforehand. 
+   Note that unpublished dependencies residing at ITER cluster are required to be fetched beforehand.
 
 
 Quite some number of easyconfigs can only be found installed on ITER
@@ -199,7 +199,7 @@ and then usual rebuild of new packages with
 ## Compiling SOLPS-ITER with locally installed modules
 
 Setup from the University of Ljubljana (UL) provides ITER
-modules compatibility and therefore it is universal to 
+modules compatibility and therefore it is universal to
 be used with local builds (residing under easybuild.local/software).
 To load the modules and compile SOLPS-ITER use the following recipe:
 
@@ -221,7 +221,7 @@ refresh can be used after config and source files fetched:
 
    SETUP/easybuild-local.sh SimDB-0.11.0-gfbf-2023b.eb --inject-checksums
    SETUP/easybuild-local.sh SimDB-0.11.0-gfbf-2023b.eb
-   SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb --inject-checksums --force 
+   SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb --inject-checksums --force
    SETUP/easybuild-local.sh UDA-2.7.5-GCC-13.2.0.eb
 
 ### CPATH problems with pkg-config
@@ -248,7 +248,7 @@ optimisation flags with
 NCL from PR #21176 introduces higher HDF5 version that is fixed by the
 official toolchain to HDF5/1.14.3 and thus modification of (Armadillo,
 GDAL, NCL, netCDF) EB configs if fetched from the ITER SDCC is
-required too. NCL for Intel requires to `--include-easyblocks-from-pr=3409`. 
+required too. NCL for Intel requires to `--include-easyblocks-from-pr=3409`.
 
 The problem is exhibited at Tcl version of modules only while at Lua
 the replacement is silently ignored. See Marconi or IFERC subsection
@@ -279,7 +279,7 @@ SETUP/easybuild-local.sh CMake-3.20.1-GCCcore-13.2.0.eb --inject-checksums --for
 SETUP/easybuild-local.sh CMake-3.20.1-GCCcore-13.2.0.eb
 ~~~
 
-### GR 
+### GR
 
 Hiden dependency for GKS libraries (modules GR) is library `pixman-devel`
 that needs to be installed system-wide.
@@ -293,9 +293,9 @@ Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
     ('IMAS-AL-Python', '5.4.0', '-DD-4.0.0')
 or
 
-    sed -i -e '/IMAS-AL/{s/5.2.1/5.4.0/;s/3.41/4.0/}' easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-*.eb 
+    sed -i -e '/IMAS-AL/{s/5.2.1/5.4.0/;s/3.41/4.0/}' easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/v/Viz/Viz-2.8.0-*.eb
 
-If IMAS-AL MATLAB is not required it can be removed from AMNS with 
+If IMAS-AL MATLAB is not required it can be removed from AMNS with
 
    sed -i -e /IMAS-AL-Matlab/d easybuild.local/imas-easybuild-easyconfigs/easybuild/easyconfigs/a/AMNS/AMNS-1.6.0*.eb
 
@@ -307,7 +307,7 @@ For new HPC sites that `./wheremai` returns `UNKNOWN` it is
 recommended to update this script. Otherwise, local setup can be
 created from ITER template, retaining only SDCC modules. Similar setup
 from *UL* can be used as a template by using short `hostname` as local
-setup host name for each compiler. 
+setup host name for each compiler.
 
 ~~~ bash
 host_name=`hostname --short | tr a-z A-Z`
@@ -340,7 +340,7 @@ occur in newer packages build too.
 Many packages require `--optarch=GENERIC` to be built when runnning
 Intel toolchain for AMD processors. Messages such as
 
-    Please verify that both the operating system and the processor support 
+    Please verify that both the operating system and the processor support
     Intel(R) X87, CMOV, MMX, SSE, SSE2, SSE3, SSSE3, SSE4_1, SSE4_2, MOVBE,
     POPCNT, AVX, F16C, FMA, BMI, LZCNT, AVX2 and ADX instructions.
 
@@ -396,7 +396,7 @@ toolchain fortran AVX options
 ### ITER SDCC cluster with RHEL9
 
 OpenMPI with Slurm and PMI requires rebuild for dependent packages
-such as NetCDF, HDF5, ... 
+such as NetCDF, HDF5, ...
 
 
     SETUP/easybuild-local.sh --force --skip-test-step \
@@ -414,7 +414,7 @@ issue we need to download intermediate CA certificates and append them
 to existing Python CA certificates trust with
 
     openssl s_client -showcerts -connect api.github.com:443 \
-    | sed -n -e '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' \ 
+    | sed -n -e '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' \
     >> easybuild.local/lib/python3.*/site-packages/certifi/cacert.pem
 
 This manual will then show correctly in local browser too
@@ -441,7 +441,7 @@ nodes
 ### EU IM Gateway cluster eufus.eu
 
 CentOS Linux release 7.4 with tcsh as a default shell with SLURM 21 on
-GPFS. 
+GPFS.
 
 - kOne NumPy test out of 20000 fails in SciPy-bundle.
 - Qt5 and PyQt5 fails to build with QtWebEngine and should be disabled.
@@ -471,9 +471,9 @@ SETUP/easybuild-local.sh NVHPC-21.2.eb --accept-eula-for=NVHPC --cuda-compute-ca
 SETUP/easybuild-local.sh Qt6-6.2.3-GCCcore-13.2.0.eb --robot
 ~~~
 
-ParaView should be run with 
+ParaView should be run with
 
-    /usr/NX/scripts/vgl/vglrun paraview 
+    /usr/NX/scripts/vgl/vglrun paraview
 
 ### Marconi Fusion
 
@@ -522,7 +522,7 @@ sed -i -e "/checksums/abuilddependencies = [('binutils', '2.40')]" \
 
 SETUP/easybuild-local.sh SciPy-bundle-2023.12-iimkl-2023b.eb  --from-pr=20262 --ignore-test-failure
 
-SETUP/easybuild-local.sh --fetch-sdcc Armadillo/12.8.0-intel-2023b 
+SETUP/easybuild-local.sh --fetch-sdcc Armadillo/12.8.0-intel-2023b
 sed -i -e s/1.14.4.3/1.14.3/ easyconfigs.local/a/Armadillo/Armadillo-12.8.0-intel-2023b.eb
 SETUP/easybuild-local.sh Armadillo-12.8.0-intel-2023b.eb --force
 
@@ -570,14 +570,14 @@ to install the virtual environment manually. Since Easybuild does not
 support SOCKS5 the easiest is to rsync local or ITER installation
 sources to IFERC before starting of building packages or redirect all
 `urllib.requests` in `filetool.py` to default SOCKS5 proxy tunel as
-shown in the commands below. Note that this approach does not use 
+shown in the commands below. Note that this approach does not use
 `http_proxy` or `https_proxy`. Replace username `kosl` and bearer
 password (`HTTP_AUTH_BEARER`).
 
 ~~~ bash
 python3 -m pip download pysocks # Dowload the wheel
 scp PySocks-*-py3-none-any.whl kosl@jfrs.iferc-csc.jp: # Copy the wheel to JFRS
-ssh -D 1080 -C -N -f `hostname` # Creates SOCKS5 proxy on a local machine 
+ssh -D 1080 -C -N -f `hostname` # Creates SOCKS5 proxy on a local machine
 ssh -R 1080:localhost:1080 kosl@jfrs.iferc-csc.jp # Login and tunel SOCKS5 to my local proxy
 ssh-keygen -t ed25519 # generate a key for remote access
 cat .ssh/id_ed25519.pub # paste the key to  https://git.iter.org/plugins/servlet/ssh/account/key
@@ -587,7 +587,7 @@ HostName gpc-access.iter.org
 ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
 __EOF__
 ssh-copy-id kosl@gpc-access.iter.org
-git config --global http.proxy 'socks5://127.0.0.1:1080' 
+git config --global http.proxy 'socks5://127.0.0.1:1080'
 git config --global https.proxy 'socks5://127.0.0.1:1080'
 git config --global core.sshCommand 'ssh -o ProxyCommand="nc -v -x 127.0.0.1:1080 %h %p"'
 git clone --recursive ssh://git@git.iter.org/bnd/solps-iter.git
@@ -666,7 +666,7 @@ mkdir -p easyconfigs.local/q/Qhull
 cp easybuild.local/easybuild/easyconfigs/q/Qhull/Qhull-2020.2-GCCcore-13.2.0.eb easyconfigs.local/q/Qhull/Qhull-2020.2-intel-2023b.eb
 sed -i -e s/GCCcore/intel/ -e s/13.2.0/2023b/ easyconfigs.local/q/Qhull/Qhull-2020.2-intel-2023b.eb # change toolchain
 SETUP/easybuild-local.sh Qhull-2020.2-intel-2023b.eb
-vi easyconfigs.local/m/matplotlib/matplotlib-3.8.2-iimkl-2023b.eb # change Qhull 
+vi easyconfigs.local/m/matplotlib/matplotlib-3.8.2-iimkl-2023b.eb # change Qhull
 SETUP/easybuild-local.sh matplotlib-3.8.2-iimkl-2023b.eb
 sed -i  -e "/dependencies/iskipsteps = ['sanitycheck']" easyconfigs.local/n/netcdf4-python/netcdf4-python-1.6.5-intel-2023b.eb
 SETUP/easybuild-local.sh netcdf4-python-1.6.5-intel-2023b.eb  --skip-test-step
@@ -675,15 +675,15 @@ SETUP/easybuild-local.sh Viz-2.8.0-intel-2023b.eb
 # Compiling SOLPS-ITER
 setenv SOLPS_HOST_NAME_FORCE UL
 source setup.csh
-setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so 
+setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so
 make depend
 make
 ~~~~
 
 - Package `Perl-bundle-CPAN-5.38.0-GCCcore-13.2.0.eb` requires package
   `Term::ReadLine::Gnu` to be commented out due to missing
-  `libtermcap`.  
-- Package `ESMF-8.6.1-foss-2023b.eb` incorrectly identified Cray as 
+  `libtermcap`.
+- Package `ESMF-8.6.1-foss-2023b.eb` incorrectly identified Cray as
   Unicos and requires `ESMF_OS=Linux` preset before NCL build stage.
 - Boost archive not anymore JFrog landing requires source change
 - Qhull source download fails short unless `source_url` changed
@@ -699,11 +699,11 @@ make
 - Armadillo, GDAL require HDF5 version fix for NCL consistency in Intel toolchain
 - OpenSSL requires `setenv LD_PRELOAD ${EBROOTOPENSSL}/lib/libcrypto.so` when building
   (with `make`) or running SOLPS-ITER!
-- Matplotlib for Intel requires Qhull to be built separately 
+- Matplotlib for Intel requires Qhull to be built separately
 
 ## Usage
 
-~~~ 
+~~~
 SETUP/easybuild-local.sh [OPTION... | easybuild_command...]
 
   --help                  prints and opens this manual, then EasyBuild help
@@ -729,7 +729,7 @@ Files:
 ~~~
 EOF
 }
-trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT 
+trap 'ec=$?; ((ec != 0)) && echo -e "\e[31mExited with failure: $ec\e[m"' EXIT
 
 solps_top=$(git rev-parse --show-toplevel)
 EASYBUILD_LOCAL=${solps_top}/easybuild.local
@@ -739,7 +739,7 @@ TAG_DD=${TAG_DD:-4.0.0}
 
 
 setup=${solps_top}/SETUP/setup.easybuild.local && test -f ${setup} && . ${setup}
-    
+
 export EASYBUILD_PREFIX=${EASYBUILD_PREFIX:-${EASYBUILD_LOCAL}}
 export MODULEPATH=${EASYBUILD_PREFIX}/modules/all
 export EASYBUILD_GITHUB_USER=${EASYBUILD_GITHUB_USER:-${USER}}
@@ -804,15 +804,15 @@ SOLPS_ITER_FOSS_2023b_MODULES="
        	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
 	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
-	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC 
+	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC
 	IMAS-AL-Fortran/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Python/${TAG_AL}-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IDStools/2.0.0-gfbf-2023b --ignore-checksums
 	GGD/1.13.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC 
-	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC 
+	GTS/0.7.6-GCCcore-13.2.0 --from-ITER-SDCC
+	Graphviz/9.0.0-GCCcore-13.2.0 --from-ITER-SDCC
 	AMNS/1.6.0-foss-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC 
+	build/1.0.3-GCCcore-13.2.0 --from-ITER-SDCC
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
@@ -824,7 +824,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2023b_MODULES="
-	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI 
+	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI
   	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
 	impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
 	iimpi/2023b --accept-eula-for=Intel-oneAPI
@@ -833,7 +833,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	xarray/2024.5.0-iimkl-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
 	ESMF/8.6.1-intel-2023b --from-ITER-SDCC --optarch=GENERIC
-	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC 
+	GEOS/3.12.1-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
 	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
 	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
 	HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
@@ -872,7 +872,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
         "
 #	NAG/26-intel-compilers-2023.2.1 --from-ITER-SDCC
 
-# Creating authentication for download from http://git.iter.org/ 
+# Creating authentication for download from http://git.iter.org/
 if [ -n "${HTTP_AUTH_BEARER}" ]; then
     echo "iter.org::Authorization: Bearer ${HTTP_AUTH_BEARER}" \
          > ${EASYBUILD_LOCAL}/http-headers.txt
@@ -911,7 +911,6 @@ function fetch_from_iter_cluster()
        mkdir -p ${sources}
        cmd="scp -r ${proxy} ${site}:${iter_ebprefix}/sources/${subdir}/${name}/* ${sources}"
        /bin/sh -c "${cmd} || echo Failed command ${cmd}"
-       
     done
 }
 
