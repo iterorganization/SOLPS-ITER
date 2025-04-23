@@ -2,13 +2,6 @@
 #LD_GR  ?= -L/p/solps/solps_other/grsource -lgr
 #LD_GKS ?= -L/p/solps/solps_other/gligks -lgks
 
-#ifndef LD_GR
-#  $(error LD_GR not defined)
-#endif
-#ifndef LD_GKS
-#  $(error LD_GKS not defined)
-#endif
-
 DEFINES =
 EQUIVS =
 

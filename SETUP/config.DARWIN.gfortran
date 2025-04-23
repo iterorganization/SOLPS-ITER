@@ -1,0 +1,63 @@
+# Specify paths to root-directories of following libraries on your system
+#
+# Special notes:
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Use LD_NAG to link to the BLASLAPACK library instead
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 17 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
+
+        NCDIR ?= ${NETCDF_HOME}
+       NCFDIR ?= ${NETCDF_FORTRAN_HOME}
+    MSCL_ROOT ?= ${MSCL_HOME}
+        H5DIR ?= ${HDF5_HOME}
+     GLI_HOME ?= ${GLI_HOME}
+   NCARG_ROOT ?= ${NCARG_ROOT}
+       NAGDIR ?= ${LAPACK_DIR}
+   NCARG_ROOT ?= ${NCARG_ROOT}
+  LIBPNG_HOME ?= ${LIBPNG_HOME}
+FREETYPE_HOME ?= ${FREETYPE_HOME}
+
+#
+# Variables for linking
+#
+
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L${NCFDIR}/lib -lnetcdff
+LD_MSCL    = 
+LD_GR      = 
+LD_GKS     = 
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_HOME}/lib -lfreetype -L${LIBPNG_HOME}/lib -lpng
+LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
+LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
+
+#
+# Provide compiler
+#
+
+FC         = gfortran
+MPI_FC     = mpif90
+
+#
+# Preprocessor options
+#
+
+SOLPS_CPP      = -DNCAR4 -DNO_NAG
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:

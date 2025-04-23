@@ -57,17 +57,18 @@ module load TotalView/2023.4.16_linux_x86-64
 export DBX="totalview"
 
 # Compilers
-[ $OS = "CentOS" ] && {
-  export CC="icc"
-  export FC="ifort"
-  export MPI_FC="mpiifort"
+# Avoid using ifx compiler for now until it is fixed
+# [ $OS = "CentOS" ] && {
+   export CC="icc"
+   export FC="ifort"
+   export MPI_FC="mpiifort"
   export CXX="icpc"
-} || {
-  export CC="icx"
-  export FC="ifx"
-  export MPI_FC="mpiifort -fc=mpiifx"
-  export CXX="icpx"
-}
+# } || {
+#   export CC="icx"
+#   export FC="ifx"
+#   export MPI_FC="mpiifort -fc=mpiifx"
+#   export CXX="icpx"
+# }
 
 [ -x paraview-config ] && {
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...

@@ -161,6 +161,7 @@
 \SNAPSHOT::TOP:FNIY_32 "Radial total ion flux (3/2 piece)"
 \SNAPSHOT::TOP:FNIY_52 "Radial total ion flux (5/2 piece)"
 \SNAPSHOT::TOP:HX "Length of cell"
+\SNAPSHOT::TOP:HY "Radial width of cell"
 \SNAPSHOT::TOP:KINRGY "Total kinetic energy"
 \SNAPSHOT::TOP:KYE "kye"
 \SNAPSHOT::TOP:KYI "kyi"

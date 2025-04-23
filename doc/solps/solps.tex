@@ -350,14 +350,19 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \end{description}
 \end{sloppypar}
 
-For all the various libraries, it is recommended that they be installed as modules, so that they
-may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
-centralize their management. Most, but not all, of these libraries are publicly available from the
-Internet.
+Most of the required libraries should be, in principle, already available in the various HPC clusters as modules. It is recommended for these to be loaded as modules rather than be locally re-built, so that they may be shared amongst multiple users on the same machine, so as not to duplicate large files and to centralize their management.
 
 \begin{sloppypar}
 If one uses local copies of these libraries, a copy or link to them should be put in the
 {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
+\end{sloppypar}
+
+\begin{sloppypar}
+Those libraries which are not available in a cluster must be necessarily locally built for the code to be used. By running the script:
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
+it is possible to automatically build the MSCL, GKS, and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -485,6 +490,8 @@ changes are required that should not be archived in the repository, then users s
 {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
+
+As a general rule, a {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} file should not be a modified copy of the original {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} file, but instead {\em only} contain those variable definitions that need to be locally modified.
 
 \begin{sloppypar}\index{easybuild}\label{sec:easybuild}
 For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
@@ -653,6 +660,47 @@ For compilation of the {\tt Sonnet} library, the user should first do:
 fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
+
+\subsection{MacOS support}
+\index{MacOS support}
+
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of {\tt B2.5} and {\tt Eirene} (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of {\tt B2.5} and the coupled {\tt B2.5-Eirene} code can be compiled with graphics, while the standalone version of {\tt Eirene} can be currently compiled only without graphics. Also {\tt DivGeo}, {\tt Carre}, {\tt Triang} (only the no graphics version), {\tt Uinp} and {\tt amds} can be successfully compiled. {\tt Sonnet-light}, at the moment, is not compatible yet with MacOS.
+
+First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
+
+The following external libraries must be then installed using Homebrew:
+
+\begin{description}
+\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
+\item[Cross-platform make] using the formula: {\tt brew install cmake}.
+\item[ctags] using the formula: {\tt brew install ctags}.
+\item[Doxygen] using the formula: {\tt brew install doxygen}.
+\item[Freetype] using the formula: {\tt brew install freetype}.
+\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
+\item[PNG library] using the formula: {\tt brew install libpng}.
+\item[XPrint client library] using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
+\item[OpenBlas] using the formula: {\tt brew install openblas}.
+\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
+\end{description}
+
+Further external libraries must be instead installed using MacPorts:
+
+\begin{description}
+\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
+\end{description}
+
+The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -1171,9 +1219,6 @@ relies on to compute things such as backscattering coefficients, atomic reaction
 As with {\tt B2.5}, a {\tt local} directory for the user that wishes to make code
 changes sheltered from GIT updates. The same procedures apply.
 
-Note that if you want to use the coupled version of the code, you
-should compile {\tt Eirene} first.
-
 If routines have been added or removed, if the dependencies have been
 altered or if this is the first compilation in a new tree, and you are not
 compiling using the \SOLPSITER master {\tt Makefile}, you should do
@@ -1334,6 +1379,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
+  \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
@@ -1639,6 +1685,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
+  \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -1646,6 +1693,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
@@ -1949,6 +1997,7 @@ are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
+  \item[darwinsubmit]\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -2961,9 +3010,6 @@ which contains
   {\tt BCPOT}
 \item[GAMMAI]\index{GAMMAI} {\tt real}, ratio of specific heats (adiabatic coefficient)
 \item[GAMMAE]\index{GAMMAE} {\tt real}, secondary electron emission coefficient
-\item[LBNDUSR]\index{LBNDUSR} {\tt logical}, if true will also
-  call Braams boundary condition routine after the end of the physics
-  boundary condition routine
 \item[LFEEDBACK]\index{LFEEDBACK} {\tt logical}, if true enables various
   feedback mechanisms (needed for any feedback mechanisms)
 \item[NNISO]\index{NNISO} {\tt integer}, number of dead (or isolated)
@@ -3390,10 +3436,8 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
      number of data points where the strength of the source is given.
   \item[sdata(1,m,i,j)]\index{sdata} are the radial positions (measured in metres) of the
      {\tt nsdata(1,i,j)} points,
-     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. By default, the radial positions are
-     measured from the separatrix outward, along the outer midplane, but this can be changed by
-     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
-     location of the profile and the radial position from which the distances are measured.
+     where {\tt m} runs from {\tt 1} to {\tt nsdata(1,i,j)}. The radial positions are
+     measured from the separatrix outward, along the outer midplane.
   \item[sdata(2,m,i,j)] are the corresponding strengths of the sources.
   \item[nxdata(k,i,j)]\index{nxdata} where {\tt i} is an index for the type of source
      being defined (see table above) and {\tt j} is a species index ({\tt 0} for atoms and {\tt 1}
@@ -3402,15 +3446,13 @@ The description of the variables found in {\tt b2.sources.profile} is as follows
      number of data points where the value of the axial multiplier to the source is given.
      If {\tt k} is equal to {\tt 1}, the data is to be understood as function of normalized
      connection length. If {\tt k} is equal to {\tt 2}, then the axial profile is given in terms
-     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} as {\tt ix} runs from
-     {\tt -1} to {\tt nx}).
-  \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total length)
+     of the normalized computational coordinate (running from {\tt 0} to {\tt 1} along the flux tube).
+  \item[xdata(1,m,i,j)]\index{xdata} are the axial positions (normalised to the total flux tube length)
      of the {\tt nxdata(1,i,j)} points,
-     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. By default, the connection length
+     where {\tt m} runs from {\tt 1} to {\tt nxdata(1,i,j)}. The connection length
      used is the one measured just inside the separatrix, with the origin
      located at the outer midplane, but this can be changed by
-     making use of the {\tt ixref} and {\tt iyref} switches, respectively, to modify the poloidal
-     location of the origin and the radial position along which the distances are measured.
+     making use of the {\tt iyref} switch, respectively, to modify the radial position along which the distances are measured.
      In case the reference location is chosen inside a closed field line region, the axial
      multiplier is set to zero everywhere on the open field lines.
   \item[xdata(2,m,i,j)] are the corresponding values of the source strengths.
@@ -13195,7 +13237,7 @@ S_{ch3}=C_{ch1}\frac{e^{2}v_{th,e}S_{0}}{T_{e}}+C_{ch3}
 
 \chapter{Quantities stored in b2time.nc}
 \label{cha:b2time}\index{b2time.nc, quantities stored
-  in}\index{time-dependent quantities, b2time.nc}\index{b2time.nc}
+  in}\index{time-dependent quantities, b2time.nc}\index{b2time.nc}\index{b2.user.parameters}
 
 The following scalar time-dependent quantities are stored in
 {\tt b2time.nc} and can be plotted by
@@ -13213,13 +13255,11 @@ If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPS
 
 In the case of double-null runs, the divertor and separatrix quantities are given in pairs. For the midplane quantities,
 the first value is for the outer midplane, and the second value for the inner midplane. Divertor quantities show
-first the bottom then the top divertor.
+first the bottom then the top divertor. The midplane locations are given {\it via} the {\tt b2.user.parameters} file, using the {\tt RZOMP} and {\tt RZIMP} variables, for the outer and inner midplane positions respectively.
 
 For double-null (DN) and lower single-null (LSN) topologies, the Western edge refers to the inboard divertor, while it points to the outboard divertor for upper single-null (USN) topologies. Conversely, the Eastern edge is the outboard divertor for DN and LSN cases, but the inboard divertor for USN cases.
 
 In the case of linear runs, the midplane refers, by default, to the midpoint of the domain. The divertor throat quantities are not defined.
-
-In all cases, the point of reference of the midplane quantities can be adjusted by changing the value of $jxa$\index{jxa} (and $jxi$\index{jxi} for double-null runs) by assigning it an explicit value in the {\tt b2mn.dat} file.
 
 The total internal energy flux quantities {\tt fet...} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
@@ -13328,9 +13368,9 @@ The following are vector time-dependent quantities stored in
 (inner for LSN, outer for USN, and lower inner for DN configurations),
 inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
 (outer for LSN, inner for USN, and lower outer for DN configurations).  The
-positions of the inner and outer midplanes can be selected by
-{\tt b2mwti\_jxi} and {\tt b2mwti\_jxa}, respectively, in
-{\tt b2mn.dat}.
+positions of the inner and outer midplanes are defined by the
+{\tt RZIMP} and {\tt RZOMP} vraiables, respectively, in
+{\tt b2.user.parameters}.
 
 Again, the total internal energy flux quantities {\tt ft3d..} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
@@ -13580,6 +13620,73 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
     \label{tab:b2timeav}
   \end{longtable}
 \end{center}
+
+\clearpage
+
+\chapter{Quantities stored in b2movies.nc}
+\label{cha:b2movies}\index{b2movies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc}\index{b2movies.nc}
+
+The following multi-dimensional arrays, i.e.\ covering the entire B2.5 grid, are stored in {\tt b2movies.nc}.
+The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
+
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} file, otherwise the file is created anew.
+
+The number of arrays outputted to {\tt b2movies.nc} is controlled by the {\tt cdfmovie\_fields} switch.
+If greater than or equal to {\tt 1} (default value), then only the main state variables ($n_a$, $n_e$, $T_e$, $T_i$, etc.) are written with each write to {\tt b2movies.nc}.
+If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle and energy sources, radiation rates) are also included, see below Table
+\ref{tab:b2moviesarrays}.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
+    \hline
+    na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
+    ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
+    te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
+    ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
+    po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species, if {\tt Eirene} is used) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species, if {\tt Eirene} is used) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species, if {\tt Eirene} is used) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
+    \hline
+    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
+    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rrahisum \index{rrahisum}\index{b2movies.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
+    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rcxhisum \index{rcxhisum}\index{b2movies.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
+    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
+    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms (for each atom species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules (for each molecules species, if {\tt Eirene} is used) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
+    \label{tab:b2moviesarrays}
+  \end{longtable}
+\end{center}
+
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
 
 \clearpage
 
@@ -15572,7 +15679,6 @@ are indicated in the table.
     idrop \index{b2plot, idrop}    & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idrop}  & Drop top element from the integer stack \\
     idup \index{b2plot, idup}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:idup}   & Duplicate top element from the \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} integer stack \\
-    imp \index{b2plot, imp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:imp}    & Set $jxi$ (inner midplane coordinate) \\
     iover \index{b2plot, iover}    & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iover}  & Copy over second element from the \\
      &  &  &  &  &  &  &  &  & \hspace{1cm} integer stack to top \\
     iprt \index{b2plot, iprt}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:iprt}   & Outputs the integer stack \\
@@ -15608,7 +15714,6 @@ are indicated in the table.
     noax \index{b2plot, noax}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:noax}   & No axes \\
     nocp \index{b2plot, nocp}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:nocp}   & No contour plot \\
     ocol \index{b2plot, ocol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:ocol}   & Outline colour \\
-    omp \index{b2plot, omp}        & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:omp}    & Set $jxa$ (outer midplane coordinate) \\
     outl \index{b2plot, outl}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:outl}   & Plot outline \\
     owid \index{b2plot, owid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:owid}   & Outline line width \\
     page \index{b2plot, page}      & 2 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:page}   & Number of graphs per page \\
@@ -17535,12 +17640,9 @@ Sets number of decades to $\langle${\tt n}$\rangle$ for logarithmic plots (defau
 If $n = 0$, restores the default value.
 
 \subsubsection{mmid}\index{b2plot, mmid}\label{sec:mmid}
-Toggles mapping to midplane coordinate for 2-D plots. The midplane
-is assumed to be located at $ix=jxa$. See commands {\bf omp} (section \ref{sec:omp}) and
-{\bf jxa} (section \ref{sec:omp}) for setting and knowing its value.
-Special cases: For double-null cases, HFS data is mapped to the inner midplane
-$ix=jxi$, and for private flux data, it is mapped to the distance below the
-X-point.
+Toggles mapping to midplane coordinate for 2-D plots. The midplane location
+is given by the {\tt RZIMP} and {\tt RZOMP} variables, defined in {\tt b2.user.parameters}, for the inner and outer midplane respectively. Use commands {\bf iomp} and {\bf iimp} for showing the cells that the midplane traverses.
+Special cases: For double-null cases, HFS data is mapped to the inner midplane, and for private flux data, it is mapped to the distance below the X-point.
 
 \subsubsection{fpsi}\index{b2plot, fpsi}\label{sec:fpsi}
 Toggles plotting 2-D radial plots against the full poloidal flux coordinate $\Psi$.
@@ -18125,16 +18227,6 @@ Overwrites the $n_e$ array with the top of the matrix stack.
 \subsubsection{tese}\index{b2plot, tese}\label{sec:tese}
 Overwrites the $T_e$ array with the top of the matrix stack.
 
-\subsubsection{$<$ix,{\bf I}$>$ imp}\index{b2plot, imp}\label{sec:imp}
-Overwrites the inner midplane location index {\em jxi} with $\langle${\tt ix}$\rangle$.
-See description of {\tt b2mwti\_jxi} switch (see Appendix \ref{lis:b2cdci}) for the
-computation of its default value.
-
-\subsubsection{$<$ix,{\bf I}$>$ omp}\index{b2plot, omp}\label{sec:omp}
-Overwrites the outer midplane location index {\em jxa} with $\langle${\tt ix}$\rangle$.
-See description of {\tt b2mwti\_jxa} switch (see Appendix \ref{lis:b2cdci}) for the
-computation of its default value.
-
 \subsubsection{$<$iy,{\bf I}$>$ yref}\index{b2plot, yref}\label{sec:yref}
 Overwrites the radial reference location index {\em iyref} with $\langle${\tt iy}$\rangle$.
 See description of {\tt set\_transport\_iyref} switch (see Appendix \ref{lis:b2cdci})
@@ -18177,7 +18269,7 @@ Currently coded functions are:
   \item[ig = -3] Prints out the particle flux integrals onto the targets in file {\tt particle.flx}
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
-  \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic field along flux surface index $\langle${\tt ig}$\rangle$
+  \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic flux tube with index $\langle${\tt ig}$\rangle$
   \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
   \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle${\tt ig}$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
@@ -19396,6 +19488,7 @@ IMAS\_MINOR\_VERSION & ids/b2\_ual\_write\_b2mod.F90 \\
 ITM & preprocessing/b2ardr.F \\
 ITM & preprocessing/b2arin.F \\
 ITM & utility/ratadas.F \\
+ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_interp.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_data.F90 \\
 ITM\_ENVIRONMENT\_LOADED & ids/b2mod\_ual\_io\_grid.F90 \\

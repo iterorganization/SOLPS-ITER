@@ -2,7 +2,7 @@ if ($?SOLPS_PATH) then
   setenv   OLD_SOLPS_PATH $SOLPS_PATH
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.mpi||g'`
-  setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
   unsetenv OLD_SOLPS_PATH SOLPS_MPI USE_MPI
   rehash
   echo "SOLPS-ITER MPI mode turned off"

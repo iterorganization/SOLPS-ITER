@@ -22,7 +22,6 @@
       use b2_4to5
       use b2mod_b2cmpa
      , , only : am, zamin, zamax, zn
-      use b2mod_b2cmpb
       use b2mod_b2cmpt
       use b2mod_b2cmfs
       use parmmod
