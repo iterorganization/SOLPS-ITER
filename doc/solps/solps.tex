@@ -8333,7 +8333,7 @@ D_{p,a}, & \ z_a \neq 0 \\
 \begin{matrix}
 \frac{D_{p,a}}
 {\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac{1}{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_y} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma_1}\right)^{\frac{1}{\gamma_1}}},
-& \ V_{T_i}=\sqrt{\frac{8T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
+& \ V_{T_i}=\sqrt{\frac{8 T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
 D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -10849,6 +10849,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
@@ -10861,7 +10863,28 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_W
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}
+\begin{matrix}
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W & =
+& \left\{ 
+\begin{matrix}
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_W, & \text{mdf\_fnb = 0}
+\\
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} \left( V^{(E)}_{ax} + \widetilde{\widetilde{V}}^{(dia)}_{ax} \right) n_a \right) + \tilde\Gamma^{(PSch)}_{ax} \right] \right|_W, & \text{mdf\_fnb = 1}
+\end{matrix}
+\right.
+\end{matrix}
+\end{equation}
+
+where $\alpha_{\max}$ is given by {\tt Qalfmax}.
+
+Both {\tt Qalfmin} and {\tt Qalfmax} are provided in the {\tt b2fgmtry} file or through the {\tt b2us\_prep\_Qalfmin} and {\tt b2us\_prep\_Qalfmax} switches, respectively. Default value for both is $10^{-3}$.
 
 \subsubsection{East}
 
@@ -10912,6 +10935,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
+If the sine of the incident field line angle is larger {\tt Qalfmin}:
+
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
@@ -10924,7 +10949,24 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_E
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}
+\begin{matrix}
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E & =
+& \left\{ 
+\begin{matrix}
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_E, & \text{mdf\_fnb = 0}
+\\
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} \left( V^{(E)}_{ax} + \widetilde{\widetilde{V}}^{(dia)}_{ax} \right) n_a \right) + \tilde\Gamma^{(PSch)}_{ax} \right] \right|_E, & \text{mdf\_fnb = 1}
+\end{matrix}
+\right.
+\end{matrix}
+\end{equation}
 
 \subsection{Parallel momentum balance for ions}
 
@@ -11123,13 +11165,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 
 
 with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 V_{West} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
+\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+For nearly tangent field lines, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11195,13 +11242,18 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 \right]
 \right|_E$
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 V_{East} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
+\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+For nearly tangent field lines, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11376,25 +11428,23 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
-                p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
+                p_{n,a,1} b_\alpha \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
+        \left( 1 - \gamma_e \right) b_\alpha n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
 \end{equation*}\normalsize
 
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+with
 
 \begin{equation*}
-\left. \frac{\sqrt g}{h_x} j_x \right|_W =
-\frac{\sqrt g}{h_x} e \left. \left[
-        \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
-        \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W
+b_\alpha = \left\{
+\begin{matrix}
+|b_x| & , \text{if} \ |b_x| \ge \alpha_{\min} \\
+\alpha_{\max} & , \text{if} \ |b_x| < \alpha_{\min}  
+\end{matrix}
+\right.
 \end{equation*}
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -11416,25 +11466,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
-                p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
+                p_{n,a,1} b_\alpha \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
+        \left( 1 - \gamma_e \right) b_\alpha n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
 \end{equation*}\normalsize
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
-
-\begin{equation*}
-\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
-\frac{\sqrt g}{h_x} e \left. \left[
-        - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
-        \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E
-\end{equation*}
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -11620,7 +11657,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
-        -\frac{\sqrt g}{h_x} |b_x| \left(
+        -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
@@ -11695,7 +11732,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
-        -\frac{\sqrt g}{h_x} |b_x| \left(
+        -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
@@ -11949,7 +11986,9 @@ $c_{h_i,a,2} = -10^{-2}$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-\begin{equation*}
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
+\begin{equation}\label{eq:sheath_ion_bc_West}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
@@ -11957,9 +11996,20 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_W
-\end{equation*}
+\end{equation}
 
 $p_{h_i,1} = +1.5$
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_West}).
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}\label{eq:sheath_ion_bc_tangent_West}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+- \frac{3}{2} \frac{\sqrt g}{h_x} \alpha_{\max} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_i \right|_W
+\end{equation}
+
+If $\text{mdf\_fhi} \ne 0$, a term $-\frac{\sqrt g}{h_x} \left( q_{ix}^{P.Sch} + \frac{3}{2} \sum \limits_b V^{\exb}_{bx} n_b T_i \right)$ is added to the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_tangent_West}).
 
 For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
 
@@ -12039,7 +12089,9 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-\begin{equation*}
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
+\begin{equation}\label{eq:sheath_ion_bc_East}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
@@ -12047,9 +12099,20 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 +
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_E
-\end{equation*}
+\end{equation}
 
 $p_{h_i,1} = +1.5$
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included inside the species summation on the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_East}).
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}\label{eq:sheath_ion_bc_tangent_East}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+- \frac{3}{2} \frac{\sqrt g}{h_x} \alpha_{\max} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_i \right|_E
+\end{equation}
+
+If $\text{mdf\_fhi} \ne 0$, a term $\frac{\sqrt g}{h_x} \left( q_{ix}^{P.Sch} + \frac{3}{2} \sum \limits_b V^{\exb}_{bx} n_b T_i \right)$ is added to the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_tangent_East}).
 
 For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
 
