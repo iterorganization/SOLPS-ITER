@@ -15366,6 +15366,7 @@ coordinate index.
     ni       & \index{b2plot, ni} Ion density $(m^{-3})$ (\SOLPSfour runs) \\
     ni0      & \index{b2plot, ni0} Density {\em ni} at previous time step $(m^{-3})$ \\
     niso     & \index{b2plot, niso} Isolating region number \\
+    npcl     & \index{b2plot, npcl} Neutral pressure cells \\
     nreg     & \index{b2plot, nreg} Region number \\
     nua      & \index{b2plot, nua} Total collision frequency $(s^{-1})$ \\
     nuab     & \index{b2plot, nuab} Two species collision frequency $(s^{-1})$ \\
@@ -18334,7 +18335,7 @@ Currently coded functions are:
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
   \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic flux tube with index $\langle${\tt ig}$\rangle$
-  \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
+  \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots. The cells used for the neutral pressure calculation are those defined in the {\tt PFR\_CVS} list in {\tt b2.user.parameters} and can be plotted by means of the {\tt npcl} command.
   \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle${\tt ig}$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
 \end{sloppypar}
@@ -19331,6 +19332,7 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_transport\_models.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_transport\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
+ALLOCATE\_AND\_NAMELIST & modules/b2us\_prep.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
 AMNS & preprocessing/b2ardr.F \\
