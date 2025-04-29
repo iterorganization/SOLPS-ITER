@@ -31,6 +31,8 @@
 \usepackage{longtable}
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
+\usepackage{exscale}
+\usepackage{bigints}
 \usepackage{dsfont}
 \usepackage{tocbibind}
 \ifpdf
@@ -8717,6 +8719,18 @@ c_{\eta_{ax}^{(CL)}} & =
 V_{m_a}^{(\max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \end{equation}
 
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\eta_{ax}^{(CL)}} = \frac{1}{1 + \frac{1}{c_{flim_2} N_{coll,i}}}
+\end{equation*}
+
+where $N_{coll,i}$ is the number of ion collisions along the field line:
+
+\begin{equation*}
+N_{coll,i} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{a} c_s} \right) dl
+\end{equation*}
+
 \begin{align}\label{eq:mom_veta}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
 \end{align}
@@ -9116,6 +9130,18 @@ c_{\kappa_{ex}}^{F \lim} & =
 \begin{equation}\label{eq:ene_vhemax}
 V_{h_e}^{(\max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
 \end{equation}
+
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\kappa_{ex}}^{F \lim} = \frac{1}{1 + \frac{1}{c_{flim_0} N_{coll,e}}}
+\end{equation*}
+
+where $N_{coll,e}$ is the number of electron collisions along the field line:
+
+\begin{equation*}
+N_{coll,e} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{e} \sqrt{\frac{T_e}{m_e}}} \right) dl
+\end{equation*}
 
 \begin{equation}\label{eq:ene_mkapexcl}
 \widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2
@@ -9567,7 +9593,7 @@ $Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-mod
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:eni_qix}\begin{split}
+\begin{multline}\label{eq:eni_qix}
 q_{ix} = \left[
         \frac{3}{2} \Gamma_{ix} +
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
@@ -9575,8 +9601,7 @@ q_{ix} = \left[
         \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
-\end{split}
-\end{equation}
+\end{multline}
 
 \begin{equation}\label{eq:eni_gammahix}
 \Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
@@ -9678,6 +9703,12 @@ V_{h_i}^{(\max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 \end{equation} % nirm
 
 $c_{flim_1} = 0.15$ is the ion heat flux limiter coefficient.
+
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\kappa_{ix}}^{F \lim} = \frac{1}{1 + \frac{1}{c_{flim_1} N_{coll,i}}}
+\end{equation*}
 
 \begin{equation}\label{eq:eni_tikapixCL}
 \widetilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
