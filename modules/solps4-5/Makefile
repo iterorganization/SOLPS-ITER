@@ -401,6 +401,9 @@ ${OBJDIR}/eirmod_comxs.o:
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
+${OBJDIR}/eirmod_eirbra.o:
+	ln -sf ${EIRDIR}/eirmod_eirbra.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
 
@@ -659,6 +662,9 @@ ${OBJDIR}/eirmod_comxs.${MOD}:
 
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_eirbra.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_eirbra.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
