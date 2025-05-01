@@ -19280,7 +19280,6 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code {\tt ASTRA}
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
-\item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
 \item[FIXED\_POINT] \index{FIXED\_POINT} Compiles the {\tt B2.5} code such that the time-stepping loop is turned into a fixed-point form for an efficient checkpointing strategy of {\tt Tapenade} adjoint AD
 \item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database in ITM environment
@@ -19423,7 +19422,6 @@ B25\_EIRENE & modules/b2us\_feedback.F \\
 B25\_EIRENE & output/b2wdat.F \\
 B25\_EIRENE & postprocessing/b2ytdr.F \\
 B25\_EIRENE & sources/b2mod\_eirene.F \\
-B25\_EIRENE & sources/b2stbc\_fb.F \\
 B25\_EIRENE & sources/b2stbc\_phys.F \\
 B25\_EIRENE & sources/b2stbm.F \\
 B25\_EIRENE & sources/b2stbr.F \\
@@ -19449,7 +19447,6 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
-COMPLICATED & sources/b2stbc\_fb.F \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
