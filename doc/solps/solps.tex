@@ -2634,12 +2634,8 @@ which contains
   \item[11] should not be used for feedbacks anymore, not converted to WG code.
   \item[12] should not be used for feedbacks anymore, not converted to WG code.
   \item[13] particle density to achieve specified total flux,
-    {\tt CONPAR(,,1)} is the specified radial flux crossing the surface
-    {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
-    the returning flux of ionised neutrals that crossed into the plasma core
-    ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
-    {\tt 'ionising\_core'} switch is used,
-    {\tt CONPAR(,,2)} is the strength of the feedback.
+    {\tt CONPAR(,,1)} is the specified radial flux crossing the boundary surface, to which is added the returning flux of ionised neutrals that crossed into the plasma core ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the {\tt 'ionising\_core'} switch is used,
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[14] sound speed velocity flux,
     {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
     If {\tt CONPAR(,,2).gt.0}, an additional decay length loss is added, where {\tt CONPAR(,,2)} is the decay length.
@@ -2647,42 +2643,41 @@ which contains
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[18] prescribe total main ion particle flux, used with {\tt ASTRA} coupling.
     Not yet available for WG.
   \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with {\tt ASTRA}. The total desired flux is summed over all {\tt BCCON=19} core boundaries. This boundary condition applies to ions in their highest ionisation stage.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[20] constant density feedback condition,
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
     Not yet available for WG.
   \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-    Not yet available for WG.
-  \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
+  \item[22] feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
-  \item[23] Feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
+  \item[23] feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-    {\tt CONPAR(,,2)} is the strength of the feedback.
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
     Not yet available for WG.
   \item[25] feedback boundary condition: prescribe the average value of the density and add the poloidal density variation from neighbouring radial ring. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
     {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[26] feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[27] feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[28] prescribe the flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain. Only intended for core boundaries.
     {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
   \item[29] feedback on the total particle flux, by imposing a flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    {\tt CONPAR(,,2)} is the strength of the feedback. Intended for core boundaries only.
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used). Intended for core boundaries only.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
   the type of parallel momentum or velocity boundary condition for each segment
@@ -2709,18 +2704,14 @@ which contains
   \item[7] prescribe the parallel momentum as given by {\tt bv\_ua} from {\tt b2mod\_boundary\_sources}.
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
     [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the gradient of the Mach number in $m^{-1}$]]].
-    Not yet available for WG.
   \item[9] prescribe the total parallel momentum flux with constant flux
     density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
-    Not yet available for WG.
   \item[10] prescribe the decay length for the parallel momentum,
     {\tt MOMPAR(,,1)} specifies the decay length in $m$.
-    Not yet available for WG.
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
     Not yet available for WG.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-    Not yet available for WG.
   \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
@@ -2751,7 +2742,6 @@ which contains
     {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the electron energy flux per unit area,
     {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-    Not yet available for WG.
   \item[6] prescribe the total electron energy flux for a constant
     electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
     in $W$ (no longer supported, use types [16] or [17] instead).
@@ -2765,38 +2755,31 @@ which contains
   \item[12] sheath conditions, electron energy transmission coefficient,
     {\tt ENEPAR(,1)} specifies an energy transmission factor,
     $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$.
-    {\tt BCENE = 12} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENE = 15}.
   \item[13] prescribe the electron energy flux per unit area proportional to temperature,
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
-    Not yet available for WG.
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
   \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
   \item[16] feedback boundary condition with constant temperature,
-    {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
-    If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
-    summed over all core boundaries with {\tt BCENE=16}.
+    {\tt ENEPAR(,1)} specifies the power flux in $W$ across the boundary surface,
+    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+    Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
+    If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$, summed over all core boundaries with {\tt BCENE=16}.
   \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, with {\tt ENEPAR(,1) + ENIPAR(,1)} giving
-    the total power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Replaces [16] for high densities and large values of
-    {\tt b2stbc\_type16\_ref}.
-    Not yet available for WG.
-  \item[18] fractional drop condition. Not yet working. Not yet available for WG.
+    the total power flux in $W$ across the boundary surface,
+    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback.
+    Replaces [16] for high densities.
+  \item[18] fractional drop condition. Experimental. Attempts to set the guard cell temperature to be $(1 - ENEPAR(,1))$ times the boundary cell temperature.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
     Not yet available for WG.
   \item[20] feedback boundary condition with constant temperature,
-    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
-    Not yet available for WG.
+    as per type [16] but with a different feedback scheme.
+    {\tt ENEPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[21] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away.
    {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$.
-   {\tt ENEPAR(,2)} is the strength of the feedback.
-    Not yet available for WG.
+   {\tt ENEPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[22] radial leakage condition for the electron temperature.
     {\tt ENEPAR(,1)} specifies the leakage velocity in units of the electron thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
   \item[23] prescribe the value of the electron temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -2804,7 +2787,7 @@ which contains
     Intended only for core boundaries.
   \item[24] Feedback on the total electron energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENEPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENEPAR(,2)} specifies the strength of the feedback.
+    {\tt ENEPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
     Intended only for core boundaries.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
@@ -2824,10 +2807,8 @@ which contains
   \item[4] prescribe the value of the ion temperature, weakly a mixed boundary condition,
     {\tt ENIPAR(,1)} specifies the temperature in $eV$ and
     {\tt ENIPAR(,2)} specifies the "strength" of the boundary condition.
-    Not yet available for WG.
   \item[5] prescribe the ion energy flux per unit area,
     {\tt ENIPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-    Not yet available for WG.
   \item[6] prescribe the total ion energy flux for a constant ion temperature,
     {\tt ENIPAR(,1)} specifies the energy flux in $W$
     (no longer supported, use types [16] or [17] instead).
@@ -2844,52 +2825,46 @@ which contains
   \item[12] sheath conditions, ion energy transmission coefficient,
     {\tt ENIPAR(,1)} specifies an energy transmission factor,
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
-   {\tt BCENI = 12} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENI = 15}.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
-    Not yet available for WG.
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
-    {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
+    {\tt ENIPAR(,1)} specifies the power flux in $W$ across the boundary surface,
+    {\tt ENIPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
     If {\tt bceni\_16\_style=1}, integrated ion heat flux with constant $T_i$, summed over all core boundaries with {\tt BCENI=16}.
   \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, see {\tt BCENE=17} above for description.
-    Not yet available for WG.
-  \item[18] fractional drop condition. Not yet working. Not yet available for WG.
+  \item[18] fractional drop condition. Experimental. Attempts to set the guard cell temperature to be $(1 - ENIPAR(,1))$ times the boundary cell temperature.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
     Not yet available for WG.
   \item[20] feedback boundary condition with constant temperature,
-    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
-    Not yet available for WG.
+    as per type [16] but with a different feedback scheme.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[21] from {\tt b2stbc\_spb}. Not yet available for WG.
   \item[22] radial leakage velocity for the ion temperature.
     {\tt ENIPAR(,1)} specifies the leakage velocity in units of the collective ion thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
   \item[23] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The average is taken over all core boundaries with {\tt BCENI=23}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-    Not yet available for WG.
   \item[24] feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    Not yet available for WG.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
     {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback.
-    Not yet available for WG.
+    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-    Not yet available for WG.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
-  {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    Not yet available for WG.
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
+    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[28] prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the average temperature in $eV$.
   \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENIPAR(,2)} specifies the strength of the feedback.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
   type of electric potential or current boundary condition for each
@@ -2909,36 +2884,34 @@ which contains
     {\tt POTPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the current flux density per unit area,
     {\tt POTPAR(,1)} specifies the electric current flux density in $A.m^{-2}$.
-    Not yet available for WG.
   \item[6] prescribe the total current flux density for a constant potential [not yet available].
   \item[7] prescribe the potential as given by {\tt bv\_po} from {\tt b2mod\_boundary\_sources}.
   \item[8] prescribe the total electric current with constant flux
     density, {\tt POTPAR(,1)} specifies the electric current in $A$.
   \item[9] prescribe the decay length for the potential,
     {\tt POTPAR(,1)} specifies the decay length in $m$.
-    Not yet available for WG.
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$.
   \item[12] imposes the currents due to drifts for the core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
   \item[13] imposes the currents due to drifts for the private flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
   \item[14] prescribe the total current without imposing a specific profile. Follow the profile of the first flux tube inside.
     Intended use: core boundary, total PF boundary,... For testing purposes, use with care!
-  \item[15] feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$.
-    {\tt POTPAR(,2)} specifies the strength of the feedback.
-  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases. Not yet available for WG.
+  \item[15] feedback boundary condition on total current with constant potential.
+    {\tt POTPAR(,1)} specifies the electric current in $A$.
+    {\tt POTPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[17] feedback boundary condition on total current by imposing the potential, with same profile as neighbouring flux tube.
     {\tt POTPAR(,1)} specifies the electric current in $A$. {\tt POTPAR(,2)} specifies the under-relaxation factor for the feedback mechanism.
-    If not specified by the user, {\tt POTPAR(,2)} = $10^{-2}$.
+    {\tt POTPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
     {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
-    {\tt POTPAR(,,2)} is the strength of the feedback.
-    Not yet available for WG.
-  \item[22]  Prescribe the value of the potential, with a perturbation taken from the first flux tube in the domain. Intended for core boundaries only.
+    {\tt POTPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+  \item[22] prescribe the value of the potential, with a perturbation taken from the first flux tube in the domain. Intended for core boundaries only.
     {\tt POTPAR(,1)} specifies the average potential.
   \item[23] Feedback on the total current for the core boundary, by imposing a flux surface averaged potential, with poloidal perturbation taken from flux
      tube just inside domain. The feedback is scaled with the ion temperature.
     {\tt POTPAR(,1)} specifies the desired integral current through flux surfaces in $A$.
-    {\tt POTPAR(,2)} is the strength of the feedback.
+    {\tt POTPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \end{description}
 \item[BCENK]\index{BCENK} {\tt integer array, length NBC}, specifying the
   type of boundary condition for the turbulent kinetic energy for each
@@ -2972,7 +2945,7 @@ which contains
   \item[17]  Feedback on the turbulent kinetic energy flux, by imposing a flux surface
     averaged $\kappa$, with a poloidal perturbation taken from the flux tube just inside the domain.
     Intended for core boundaries only. {\tt ENKPAR(,1)} specifies the flux in $W$.
-    {\tt ENKPAR(,2)} specifies the strength of the feedback.
+    {\tt ENKPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \end{description}
 \item[BCENZ]\index{BCENZ} {\tt integer array, length NBC}, specifying the
   type of boundary condition for the turbulent enstrophy for each
