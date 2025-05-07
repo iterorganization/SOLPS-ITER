@@ -279,6 +279,7 @@ endif
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
@@ -378,6 +379,7 @@ endif
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
@@ -426,6 +428,7 @@ endif
 	-[ -e b2co.exe.dir/b2wall.nc ] && rm b2co.exe.dir/b2wall.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2batch.nc ] && rm b2co.exe.dir/b2batch.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2movies.nc ] && rm b2co.exe.dir/b2movies.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/eirenemovies.nc ] && rm b2co.exe.dir/eirenemovies.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
@@ -442,27 +445,13 @@ $(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
 	-rmdir b2fu.exe.dir
 
 ifndef STAND_ALONE
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL ${fort_lc}33 ${fort_lc}34 ${fort_lc}35
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}44 ${fort_lc}46
 else
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates b2ftrack AMJUEL
+$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL
 endif
 	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	[ -e param.dg ] && cp param.dg b2pl.exe.dir/ || ( [ -e ../baserun/param.dg ] && cp ../baserun/param.dg b2pl.exe.dir/ || echo > /dev/null )
-ifndef STAND_ALONE
-	-cp ${fort_lc}44 ${fort_lc}46 b2pl.exe.dir/
-	-cd b2pl.exe.dir
-endif
-ifeq (${NCAR_VERSION},3)
-	rm -f $(target_pl) gmeta
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e gmeta ] && mv -f gmeta .. ) ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit param.dg >& /dev/null
-else
-	rm -f $(target_pl) b2plot.ps
-	cd b2pl.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; ( [ -e b2plot.ps ] && mv -f b2plot.ps .. ) ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit param.dg >& /dev/null
-endif
-ifndef STAND_ALONE
-	-rm b2pl.exe.dir/${fort_lc}44 b2pl.exe.dir/${fort_lc}46 b2pl.exe.dir/${fort_lc}85
-endif
-	-cd b2pl.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22
+	rm -f $(target_pl)
+	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit >& /dev/null
 	-rmdir b2pl.exe.dir
 
 $(target_rd) : shotnumber.history
