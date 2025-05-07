@@ -666,7 +666,7 @@ and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 \subsection{MacOS support}
 \index{MacOS support}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of {\tt B2.5} and {\tt Eirene} (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of {\tt B2.5} and the coupled {\tt B2.5-Eirene} code can be compiled with graphics, while the standalone version of {\tt Eirene} can be currently compiled only without graphics. Also {\tt DivGeo}, {\tt Carre}, {\tt Triang} (only the no graphics version), {\tt Uinp} and {\tt amds} can be successfully compiled. {\tt Sonnet-light}, at the moment, is not compatible yet with MacOS.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
 
 First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
@@ -2704,8 +2704,8 @@ which contains
   \item[7] prescribe the parallel momentum as given by {\tt bv\_ua} from {\tt b2mod\_boundary\_sources}.
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
     [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the gradient of the Mach number in $m^{-1}$]]].
-  \item[9] prescribe the total parallel momentum flux with constant flux
-    density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
+  \item[9] prescribe the total parallel momentum flux with constant flux density,
+    {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
   \item[10] prescribe the decay length for the parallel momentum,
     {\tt MOMPAR(,,1)} specifies the decay length in $m$.
   \item[11] Rozhansky viscosity condition for the parallel momentum,
@@ -2742,9 +2742,9 @@ which contains
     {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the electron energy flux per unit area,
     {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-  \item[6] prescribe the total electron energy flux for a constant
-    electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
-    in $W$ (no longer supported, use types [16] or [17] instead).
+  \item[6] prescribe the total electron energy flux for a constant electron temperature,
+    {\tt ENEPAR(,1)} specifies the energy flux in $W$
+    (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the electron temperature based on {\tt bv\_te} from {\tt b2mod\_boundary\_sources}.
   \item[8] prescribe the total electron heat flux with constant flux density,
     {\tt ENEPAR(,1)} specifies the energy flux in $W$.
@@ -2814,7 +2814,7 @@ which contains
     (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the ion temperature based on {\tt bv\_ti} from {\tt b2mod\_boundary\_sources}.
   \item[8] prescribe the total ion heat flux with constant flux density,
-    {\tt ENIPAR(,1)} specifies the energy flux in $W$
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[9] prescribe the decay length for the ion temperature,
     {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
@@ -2886,8 +2886,8 @@ which contains
     {\tt POTPAR(,1)} specifies the electric current flux density in $A.m^{-2}$.
   \item[6] prescribe the total current flux density for a constant potential [not yet available].
   \item[7] prescribe the potential as given by {\tt bv\_po} from {\tt b2mod\_boundary\_sources}.
-  \item[8] prescribe the total electric current with constant flux
-    density, {\tt POTPAR(,1)} specifies the electric current in $A$.
+  \item[8] prescribe the total electric current with constant flux density,
+    {\tt POTPAR(,1)} specifies the electric current in $A$.
   \item[9] prescribe the decay length for the potential,
     {\tt POTPAR(,1)} specifies the decay length in $m$.
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
@@ -4227,7 +4227,7 @@ omissions to the developer team are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{eirenemovies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
 
 \begin{sloppypar}
 In case of a computer crash during a run, it may be possible to recover
@@ -4252,7 +4252,7 @@ a crash, the user should then:
 
 If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
-This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, and {\tt b2movies.nc}, as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
+This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, {\tt b2movies.nc} and {\tt eirenemovies.nc} (the last one only for runs with {\tt Eirene}) , as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
 
 \begin{sloppypar}
 It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run. However, to do this and not overwrite the current tracing files, {\tt b2co} {\em must} be invoked as follows:
@@ -10874,7 +10874,7 @@ For nearly tangent field lines, we use instead:
 \begin{equation}
 \begin{matrix}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W & =
-& \left\{ 
+& \left\{
 \begin{matrix}
 \left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
    \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_W, & \text{mdf\_fnb = 0}
@@ -10960,7 +10960,7 @@ For nearly tangent field lines, we use instead:
 \begin{equation}
 \begin{matrix}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E & =
-& \left\{ 
+& \left\{
 \begin{matrix}
 \left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
    \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_E, & \text{mdf\_fnb = 0}
@@ -11445,7 +11445,7 @@ with
 b_\alpha = \left\{
 \begin{matrix}
 |b_x| & , \text{if} \ |b_x| \ge \alpha_{\min} \\
-\alpha_{\max} & , \text{if} \ |b_x| < \alpha_{\min}  
+\alpha_{\max} & , \text{if} \ |b_x| < \alpha_{\min}
 \end{matrix}
 \right.
 \end{equation*}
@@ -13690,18 +13690,16 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 
 \clearpage
 
-\chapter{Quantities stored in b2movies.nc}
-\label{cha:b2movies}\index{b2movies.nc, quantities stored
-  in}\index{movie frames, b2movies.nc}\index{b2movies.nc}
+\chapter{Quantities stored in b2movies.nc and eirenemovies.nc}
+\label{cha:b2movies}\index{b2movies.nc and eirenemovies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc, eirenemovies.nc}\index{b2movies.nc, eirenemovies.nc}
 
-The following multi-dimensional arrays, i.e.\ covering the entire B2.5 grid, are stored in {\tt b2movies.nc}.
+Several relevant multi-dimensional arrays, i.e.\ covering the entire {\tt B2.5} grid, are stored in {\tt b2movies.nc}. Similarly, several relevant multi-dimensional arrays covering the entire {\tt Eirene} triangular grid, in case of runs with {\tt Eirene}, are stored in {\tt eirenemovies.nc}.
 The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
 
-If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} file, otherwise the file is created anew.
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} and {\tt eirenemovies.nc} files, otherwise the files are created anew.
 
-The number of arrays outputted to {\tt b2movies.nc} is controlled by the {\tt cdfmovie\_fields} switch.
-If greater than or equal to {\tt 1} (default value), then only the main state variables ($n_a$, $n_e$, $T_e$, $T_i$, etc.) are written with each write to {\tt b2movies.nc}.
-If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle and energy sources, radiation rates) are also included, see below Table
+The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of switches (which can be simultaneously used) as described in the below Table
 \ref{tab:b2moviesarrays}.
 
 \begin{center}
@@ -13716,19 +13714,15 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle 
     \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1} \\
     \hline
     na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
     ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
     te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
     ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
     po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
-    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species, if {\tt Eirene} is used) & $m^{-3}$ \\
-    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species, if {\tt Eirene} is used) & $eV$ \\
-    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species, if {\tt Eirene} is used) & $m^{-3}$ \\
-    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species, if {\tt Eirene} is used) & $eV$ \\
     \hline
-    \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_sources} $\ge$ 1} \\
     \hline
     rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
     rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
@@ -13743,17 +13737,92 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle 
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
     rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
-    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms (for each atom species, if {\tt Eirene} is used) & $W m^{-3}$ \\
-    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms (if {\tt Eirene} is used) & $W m^{-3}$ \\
-    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules (for each molecules species, if {\tt Eirene} is used) & $W m^{-3}$ \\
-    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    eirene\_papl\_sna \index{eirene\_papl\_sna}\index{b2movies.nc, eirene\_papl\_sna} & Particle source density from atom-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pmpl\_sna \index{eirene\_pmpl\_sna}\index{b2movies.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pppl\_sna \index{eirene\_pppl\_sna}\index{b2movies.nc, eirene\_pppl\_sna} & Particle source density from recombinations & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_eael\_she \index{eirene\_eael\_she}\index{b2movies.nc, eirene\_eael\_she} & Electron energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_emel\_she \index{eirene\_emel\_she}\index{b2movies.nc, eirene\_emel\_she} & Electron energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_epel\_she \index{eirene\_epel\_she}\index{b2movies.nc, eirene\_epel\_she} & Electron energy source density from recombinations & $W m^{-3}$ \\
+    eirene\_eapl\_shi \index{eirene\_eapl\_shi}\index{b2movies.nc, eirene\_eapl\_shi} & Ion energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_empl\_shi \index{eirene\_empl\_shi}\index{b2movies.nc, eirene\_empl\_shi} & Ion energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_eppl\_shi \index{eirene\_eppl\_shi}\index{b2movies.nc, eirene\_eppl\_shi} & Ion energy source density from recombinations & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms & \\
+                                                           & \hspace{0.5cm} (for each atom species) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules & \\
+                                                        & \hspace{0.5cm} (for each molecule species) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules & $W m^{-3}$ \\
     \hline
     \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
     \label{tab:b2moviesarrays}
   \end{longtable}
 \end{center}
 
-Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. The following list summarizes the additional filesize which can be roughly expected, on a $96 \times 36 = 3456$ control volumes grid, for each of the requested data groups:
+\begin{itemize}
+\item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1: 120 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_sources} $\ge$ 1: 100 kB per {\tt B2.5} fluid species + 45 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\end{itemize}
+Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (12 {\tt B2.5} fluid species, 3 {\tt Eirene} atom species, and 1 {\tt Eirene} molecule species):
+\begin{itemize}
+\item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
+\end{itemize}
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 6.5 GB can be expected after 1000 outputted timesteps.
+
+The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
+\ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    pdena \index{pdena}\index{eirenemovies.nc, pdena} & Atom particle density (for each atom species) & $m^{-3}$ \\
+    pdenm \index{pdenm}\index{eirenemovies.nc, pdenm} & Molecule particle density (for each molecule species) & $m^{-3}$ \\
+    edena \index{edena}\index{eirenemovies.nc, edena} & Atom energy density (for each atom species) & $eV m^{-3}$ \\
+    edenm \index{edenm}\index{eirenemovies.nc, edenm} & Molecule energy density (for each molecule species) & $eV m^{-3}$ \\
+    vxdena \index{vxdena}\index{eirenemovies.nc, vxdena} & Atom x-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vxdenm \index{vxdenm}\index{eirenemovies.nc, vxdenm} & Molecule x-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vydena \index{vydena}\index{eirenemovies.nc, vydena} & Atom y-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vydenm \index{vydenm}\index{eirenemovies.nc, vydenm} & Molecule y-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vzdena \index{vzdena}\index{eirenemovies.nc, vzdena} & Atom z-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vzdenm \index{vzdenm}\index{eirenemovies.nc, vzdenm} & Molecule z-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in eirenemovies.nc}
+    \label{tab:eirenemoviesarrays}
+  \end{longtable}
+\end{center}
+
+Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy. For example, on a grid consisting of 10000 triangles, the filesize can be roughly expected to be 360 kB per {\tt Eirene} atom/molecule species per outputted timestep. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (3 {\tt Eirene} atom species and 1 {\tt Eirene} molecule species), a filesize of roughly 1.4 GB can be expected.
 
 \clearpage
 
