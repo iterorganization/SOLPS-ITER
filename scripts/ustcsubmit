@@ -8,6 +8,7 @@ set hours=36
 set mem=4GB
 set part="long"
 set chain="unset"
+set job_count=0
 echo Your email is $EMAIL
 
 set compress=""
@@ -134,8 +135,12 @@ EOF
   endif
   if ("X${1}X" == "X-cX") then
     shift
-    set chain="$1"
-    echo Chain submission following job number ${chain}
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
     shift
     goto argloop
   endif
@@ -196,6 +201,10 @@ endif
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
 endif
 
 sed \
