@@ -29,7 +29,7 @@ endif
 	case $< in \
 		${S45DIR}/src/solps4_*/* ) ${DBLFC} ${DBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f ;; \
 		${S45DIR}/local_4/* ) ${DBLFC} ${DBLOPTION} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f ;; \
-                * ) ${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f  ;; \
+                * ) ${FC} ${FCOPTS} ${FFLAGSEXTRA} ${DEFINES} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/$*.o -c ${OBJDIR}/$*.f ;; \
         esac
 endif
 	@- if [ -f $*.o ] ; then /bin/mv $*.o ${OBJDIR}/ ; fi

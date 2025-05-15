@@ -4,7 +4,7 @@
 
 mkdir $USER.work.$$
 if (${COMPILER} == "HP") then
-mv b2.*.parameters b2.*.inputfile b2.*.profile input.dat eirene*.input.json eirene_AMData.json user_data.input eirene_input_json.out input_for_refusr.dat conbe.dat b2mn.dat b2fgmtry b2fpardf b2fstati b2faveri b2frates b2mn.prt b2fparam b2fstate b2favere b2ftrace b2fplasma *.nc ftn13 ftn15 ftn3[01] ftn3[3-5] ftn44 ftn46 ftn44_aver ftn46_aver run.log ds* output.* ??3d*.last10 $USER.work.$$/
+mv b2.*.parameters b2.*.inputfile b2.*.profile input.dat eirene*.input.json eirene_AMData.json user_data.input eirene_input_json.out input_for_refusr.dat conbe.dat b2mn.dat b2fgmtry b2fpardf b2fstati b2faveri b2frates b2mn.prt b2fparam b2fstate b2favere b2ftrace b2fplasma *.nc ftn1 ftn13 ftn15 ftn3[01] ftn3[3-5] ftn44 ftn46 ftn44_aver ftn46_aver run.log ds* output.* ??3d*.last10 $USER.work.$$/
 else
 mv b2.*.parameters b2.*.inputfile b2.*.profile input.dat eirene*.input.json eirene_AMData.json user_data.input eirene_input_json.out input_for_refusr.dat conbe.dat b2mn.dat b2fgmtry b2fpardf b2fstati b2faveri b2frates b2mn.prt b2fparam b2fstate b2favere b2ftrace b2fplasma *.nc fort.13 fort.15 fort.3[01] fort.3[3-5] fort.44 fort.46 fort.44_aver fort.46_aver run.log ds* output.* ??3d*.last10 $USER.work.$$/
 endif
