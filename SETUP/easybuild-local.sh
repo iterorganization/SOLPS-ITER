@@ -854,7 +854,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-       	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
+	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
 	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC
@@ -869,7 +869,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
-       	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
+	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
 	Viz/2.8.0-foss-2023b
 	astropy/6.1.0-gfbf-2023b --from-ITER-SDCC
 	ToFu/1.7.9-gfbf-2023b --from-pr=20999
@@ -890,7 +890,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
 	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
 	HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
-       	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
+	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
 	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
@@ -913,13 +913,13 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
 	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
 	UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
-  	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-  	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-  	IDStools/2.0.0-iimkl-2023b --ignore-checksums
-  	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-  	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IDStools/2.0.0-iimkl-2023b --ignore-checksums
+	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
-  	Viz/2.8.0-intel-2023b
+	Viz/2.8.0-intel-2023b
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
         "
