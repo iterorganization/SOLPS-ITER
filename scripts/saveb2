@@ -74,6 +74,8 @@ shift
     echo "ERROR: No argument provided, nothing to save"
     } || {
     for run in "$@"; do { 
+      hlp=`echo $run | rev`
+      [ "${hlp:0:1}" == "/" ] && run=`echo ${hlp:1} | rev`
       echo "b2save -s $run"
       if [ -d $run ] && [ ! -z "$(ls -A "$run")" ]
       then
