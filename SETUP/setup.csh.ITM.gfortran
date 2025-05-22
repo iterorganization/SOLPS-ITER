@@ -66,11 +66,6 @@ else
     setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
   endif
 endif
-if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
-else
-  setenv LD_LIBRARY_PATH "/usr/lib64"
-endif
 
 # Debugger (set environment variable DBX)
 setenv DBX totalview
