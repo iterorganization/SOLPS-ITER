@@ -69,5 +69,6 @@ else
 endif
 
 # Debugger (set environment variable DBX)
+module load totalview/2023.2
 setenv DBX totalview
 
