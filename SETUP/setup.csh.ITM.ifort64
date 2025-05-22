@@ -63,3 +63,4 @@ setenv DBX totalview
 #setenv CC gcc
 #setenv FC ifort
 #setenv CXX g++
+setenv MPI_FC mpiifort

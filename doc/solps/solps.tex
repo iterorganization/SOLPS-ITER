@@ -639,36 +639,36 @@ and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 \subsection{MacOS support}
 \index{MacOS support}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
 
-First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
+First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
 The following external libraries must be then installed using Homebrew:
 
 \begin{description}
-\item[GNU compiler collection], using the formula: {\tt brew install gcc}.
-\item[Cross-platform make], using the formula: {\tt brew install cmake}.
-\item[ctags], using the formula: {\tt brew install ctags}.
-\item[Doxygen], using the formula: {\tt brew install doxygen}.
-\item[Freetype], using the formula: {\tt brew install freetype}.
-\item[Ghostscript], using the formula: {\tt brew install ghostscript}.
-\item[GNU plotting library], using the formula: {\tt brew install gnuplot}.
-\item[HDF5 data management and storage library], using the formula: {\tt brew install hdf5}.
-\item[Blas/Lapack linear algebra library], using the formula: {\tt brew install lapack}.
-\item[PNG library], using the formula: {\tt brew install libpng}.
-\item[XPrint client library], using the formula: {\tt brew install libxp}.
-\item[NETCDF data access library], using the formula: {\tt brew install netcdf}.
-\item[NETCDF data access library (Fortran version)], using the formula: {\tt brew install netcdf-fortran}.
-\item[MPI parallel computing library], using the formula: {\tt brew install open-mpi}.
-\item[TeX typesetting system distrubtion TeXLive], using the formula: {\tt brew install texlive}.
+\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
+\item[Cross-platform make] using the formula: {\tt brew install cmake}.
+\item[ctags] using the formula: {\tt brew install ctags}.
+\item[Doxygen] using the formula: {\tt brew install doxygen}.
+\item[Freetype] using the formula: {\tt brew install freetype}.
+\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
+\item[PNG library] using the formula: {\tt brew install libpng}.
+\item[XPrint client library] using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
+\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
 \end{description}
 
 Further external libraries must be instead installed using MacPorts:
 
 \begin{description}
-\item[Fortran JSON API], using the formula: {\tt sudo port install fortran-json}.
-\item[NCAR plotting library], using the formula: {\tt sudo port install ncarg}.
-\item[MOTIF graphical user interface], using the formula: {\tt sudo port install openmotif}.
+\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
 \end{description}
 
 The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
@@ -2672,9 +2672,9 @@ which contains
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-  \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
+  \item[22] feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[23] Feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
+  \item[23] feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
@@ -8343,7 +8343,7 @@ D_{p,a}, & \ z_a \neq 0 \\
 \begin{matrix}
 \frac{D_{p,a}}
 {\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac{1}{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_y} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma_1}\right)^{\frac{1}{\gamma_1}}},
-& \ V_{T_i}=\sqrt{\frac{8T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
+& \ V_{T_i}=\sqrt{\frac{8 T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
 D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8831,9 +8831,9 @@ $
 $
 \nu_{\ast} = \frac{c \left( y \right)}
 {2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
-$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
-$\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
-{\mathlarger{\oint} \sqrt g /h_y dx}$,\ \ \ \ $
+$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \
+$\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
+{\mathlarger{\oint} \sqrt g / h_y dx}$,\ \ \ \ $
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
 \left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
@@ -9652,7 +9652,7 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde f_{ix} $ i
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:eni_qix}\begin{split}
+\begin{multline}\label{eq:eni_qix}
 q_{ix} = \left[
         \frac{3}{2} \Gamma_{ix} +
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
@@ -9660,8 +9660,7 @@ q_{ix} = \left[
         \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
-\end{split}
-\end{equation}
+\end{multline}
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix} $ is applied according to section \ref{sec:Zhdanov}.
 
@@ -10735,7 +10734,7 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_W
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
 
 \subsubsection{East}
 
@@ -10798,7 +10797,7 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_E
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
 
 \subsection{Parallel momentum balance for ions}
 
@@ -15154,7 +15153,7 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     eirene\_pmpl\_sna \index{eirene\_pmpl\_sna}\index{b2movies.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
                                                                                 & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
     eirene\_pppl\_sna \index{eirene\_pppl\_sna}\index{b2movies.nc, eirene\_pppl\_sna} & Particle source density from recombinations & \\
-                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\                                       
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
     eirene\_eael\_she \index{eirene\_eael\_she}\index{b2movies.nc, eirene\_eael\_she} & Electron energy source density from atom-plasma collisions & $W m^{-3}$ \\
     eirene\_emel\_she \index{eirene\_emel\_she}\index{b2movies.nc, eirene\_emel\_she} & Electron energy source density from molecule-plasma collisions & $W m^{-3}$ \\
     eirene\_epel\_she \index{eirene\_epel\_she}\index{b2movies.nc, eirene\_epel\_she} & Electron energy source density from recombinations & $W m^{-3}$ \\
@@ -21716,6 +21715,7 @@ TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
 TRACE & modules/eirmod\_improved\_strategy.F90 \\
 USE\_EXT\_OPENMP & assistant/exit\_own.F \\
+USE\_EXT\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
 USE\_EXT\_OPENMP & diagno/eirmod\_linint.F \\
 USE\_EXT\_OPENMP & geometry/eirmod\_learc1.F \\
 USE\_EXT\_OPENMP & geometry/learc2.F \\
@@ -21831,6 +21831,7 @@ USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 USE\_OPENMP & assistant/eirmod\_second\_own.F \\
 USE\_OPENMP & assistant/exit\_own.F \\
+USE\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
 USE\_OPENMP & diagno/eirmod\_linint.F \\
 USE\_OPENMP & geometry/eirmod\_learc1.F \\
 USE\_OPENMP & geometry/learc2.F \\

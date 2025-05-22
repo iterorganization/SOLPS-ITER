@@ -36,6 +36,7 @@ module load paraview/5.10.0
 
 # Compiler
 setenv FC gfortran
+setenv MPI_FC mpifort
 
 # Set environment variables
 if (! $?DEVICE) then

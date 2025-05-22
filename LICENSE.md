@@ -1,7 +1,7 @@
 # European Union Public Licence v. 1.1
 EUPL © the European Community 2007
 
-This European Union Public Licence (the “EUPL”) applies to the Work or Software (as defined below) which is provided under the terms of this Licence. Any use of the Work, other than as authorised under this Licence is prohibited (to the extent such use is covered by a right of the copyright holder of the Work).
+This European Union Public Licence (the "EUPL") applies to the Work or Software (as defined below) which is provided under the terms of this Licence. Any use of the Work, other than as authorised under this Licence is prohibited (to the extent such use is covered by a right of the copyright holder of the Work).
 The Original Work is provided under the terms of this Licence when the Licensor (as defined below) has placed the following notice immediately following the copyright notice for the Original Work:
 
 Licensed under the EUPL v.1.1
@@ -18,7 +18,7 @@ In this Licence, the following terms have the following meaning:
 - *The Executable Code*: any code which has generally been compiled and which is meant to be interpreted by a computer as a program.
 - *The Licensor*: the natural or legal person that distributes and/or communicates the Work under the Licence.
 - *Contributor(s)*: any natural or legal person who modifies the Work under the Licence, or otherwise contributes to the creation of a Derivative Work.
-- *The Licensee* or “*You*”: any natural or legal person who makes any usage of the Software under the terms of the Licence.
+- *The Licensee* or "*You*": any natural or legal person who makes any usage of the Software under the terms of the Licence.
 - *Distribution and/or Communication*: any act of selling, giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, on-line or off-line, copies of the Work or providing access to its essential functionalities at the disposal of any other natural or legal person.
 
 ## 2. Scope of the rights granted by the Licence
@@ -50,7 +50,7 @@ The grant of the rights mentioned above is subject to some restrictions and obli
 
 **Copyleft clause**: If the Licensee distributes and/or communicates copies of the Original Works or Derivative Works based upon the Original Work, this Distribution and/or Communication will be done under the terms of this Licence or of a later version of this Licence unless the Original Work is expressly distributed only under this version of the Licence. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the Licence.
 
-**Compatibility clause**: If the Licensee Distributes and/or Communicates Derivative Works or copies thereof based upon both the Original Work and another work licensed under a Compatible Licence, this Distribution and/or Communication can be done under the terms of this Compatible Licence. For the sake of this clause, “Compatible Licence” refers to the licences listed in the appendix attached to this Licence. Should the Licensee’s obligations under the Compatible Licence conflict with his/her obligations under this Licence, the obligations of the Compatible Licence shall prevail.
+**Compatibility clause**: If the Licensee Distributes and/or Communicates Derivative Works or copies thereof based upon both the Original Work and another work licensed under a Compatible Licence, this Distribution and/or Communication can be done under the terms of this Compatible Licence. For the sake of this clause, "Compatible Licence" refers to the licences listed in the appendix attached to this Licence. Should the Licensee's obligations under the Compatible Licence conflict with his/her obligations under this Licence, the obligations of the Compatible Licence shall prevail.
 
 **Provision of Source Code**: When distributing and/or communicating copies of the Work, the Licensee will provide a machine-readable copy of the Source Code or indicate a repository where this Source will be easily and freely available for as long as the Licensee continues to distribute and/or communicate the Work.
 
@@ -64,9 +64,9 @@ Each Contributor warrants that the copyright in the modifications he/she brings 
 Each time You accept the Licence, the original Licensor and subsequent Contributors grant You a licence to their contributions to the Work, under the terms of this Licence.
 
 ## 7. Disclaimer of Warranty
-The Work is a work in progress, which is continuously improved by numerous contributors. It is not a finished work and may therefore contain defects or “bugs” inherent to this type of software development.
+The Work is a work in progress, which is continuously improved by numerous contributors. It is not a finished work and may therefore contain defects or "bugs" inherent to this type of software development.
 
-For the above reason, the Work is provided under the Licence on an “as is” basis and without warranties of any kind concerning the Work, including without limitation merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this Licence.
+For the above reason, the Work is provided under the Licence on an "as is" basis and without warranties of any kind concerning the Work, including without limitation merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this Licence.
 
 This disclaimer of warranty is an essential part of the Licence and a condition for the grant of any rights to the Work.
 
@@ -77,7 +77,7 @@ Except in the cases of wilful misconduct or damages directly caused to natural p
 While distributing the Original Work or Derivative Works, You may choose to conclude an additional agreement to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or services consistent with this Licence. However, in accepting such obligations, You may act only on your own behalf and on your sole responsibility, not on behalf of the original Licensor or any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact You have accepted any such warranty or additional liability.
 
 ## 10. Acceptance of the Licence
-The provisions of this Licence can be accepted by clicking on an icon “I agree” placed under the bottom of a window displaying the text of this Licence or by affirming consent in any other similar way, in accordance with the rules of applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this Licence and all of its terms and conditions.
+The provisions of this Licence can be accepted by clicking on an icon "I agree" placed under the bottom of a window displaying the text of this Licence or by affirming consent in any other similar way, in accordance with the rules of applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this Licence and all of its terms and conditions.
 
 Similarly, you irrevocably accept this Licence and all of its terms and conditions by exercising any rights granted to You by Article 2 of this Licence, such as the use of the Work, the creation by You of a Derivative Work or the Distribution and/or Communication by You of the Work or copies thereof.
 
@@ -112,7 +112,7 @@ This licence shall be governed by the Belgian law if:
 - the Licensor, other than the European Commission, has no residence or registered office inside a European Union country.
 
 ## Appendix
-“Compatible Licences” according to article 5 EUPL are:
+"Compatible Licences" according to article 5 EUPL are:
 - *GNU General Public License (GNU GPL) v. 2 - Open Software License (OSL) v. 2.1, v. 3.0*
 - *Common Public License v. 1.0*
 - *Eclipse Public License v. 1.0*
