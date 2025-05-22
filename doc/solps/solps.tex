@@ -2659,8 +2659,10 @@ which contains
     ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
     {\tt 'ionising\_core'} switch is used,
     {\tt CONPAR(,,2)} is the strength of the feedback.
-  \item[14] sound speed velocity flux,
-    {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+  \item[14] if MOMPAR(,,2) $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt CONPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$; 
+    to be used in conjunction with BCENE/I=15, BCPOT=11, and BCMOM=13. \\
+    If MOMPAR(,,2) $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,i}$;
+    to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[15] prescribe a radial leakage velocity,
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2688,7 +2690,6 @@ which contains
   \item[28] density profile is read from file specified in {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum density of the profile.
   \item[29] constant pressure prescribed by {\tt CONPAR(,,1)} in units of $Pa$. Density is calculated by dividing the pressure by the temperature.
   \item[30] the particle flux per unit area profile is read from the file {\tt CON\_FN}. If {\tt CONPAR(IS,IB,2)} is positive, the profile is scaled such that {\tt CONPAR(IS,IB,1)} gives the maximum value of the profile. Only applicable to E and W boundaries.
-  \item[31] drift compatible, non-marginal, imposition of Bohm-Chodura sheath entrance condition. {\tt CONPAR(,,1)} is a multiplier to the outgoing, species-dependent, sound speed $C_{s, a}$, and should be equal to {\tt MOMPAR(,,1)}; the typical value is 1. Alternative sheath boundary condition for use with drifts, in conjunction with {\tt BCENI=29}, {\tt BCENE=24}, {\tt BCPOT=3}, and {\tt BCMOM=22}.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
   the type of parallel momentum or velocity boundary condition for each segment
@@ -2721,7 +2722,10 @@ which contains
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[13] if MOMPAR(,,2) $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$; 
+    to be used in conjunction with BCENE/I=15, BCPOT=11, and BCMOM=13. \\
+    If MOMPAR(,,2) $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,i}$;
+    to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
   \item[16] prescribe the average value of the parallel velocity,
@@ -2732,7 +2736,6 @@ which contains
   \item[19] prescribe the momentum flux profile in units of $m^{-2}.s^{-1}$, read from {\tt MOM\_FN}. This has to be used in combination with {\tt BCCON = 1}, {\tt 28} , or {\tt 30} and {\tt BCENI = 15}. Only available for E and W boundaries.
   \item[20] the parallel velocity is based on the temperature and the Mach number read from the {\tt MOM\_FN} file. It is assumed that $\gamma_i = 1$. Only available for E and W boundaries.
   \item[21] prescribe the radial parallel velocity gradient profile in units of $s^{-1}$, read from file specified in {\tt MOM\_FN}. If {\tt MOMPAR(IS,IB,2) > 0.0}, the profile is scaled such that the maximum parallel velocity gradient is given by {\tt MOMPAR(IS,IB,1)} in $s^{-1}$. Only available for E and W boundaries.
-  \item[22] drift compatible, non-marginal, imposition of Bohm-Chodura sheath entrance condition. {\tt MOMPAR(,,1)} is a multiplier to the outgoing, species-dependent, sound speed $C_{s, a}$, and should be equal to {\tt CONPAR(,,1)}; the typical value is 1. Alternative sheath boundary condition for use with drifts, in conjunction with {\tt BCENI=29}, {\tt BCENE=24}, {\tt BCPOT=3}, and {\tt BCCON=31}.
   \end{description}
 \item[BCENE]\index{BCENE} {\tt integer array, length NBC}, specifying
   the type of electron energy or temperature boundary condition for
@@ -2771,7 +2774,8 @@ which contains
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. Linked to using BCCON=14 and BCMOM=13 for all ion species, BCENI=15, and BCPOT=11. 
+    When {\tt bcene\_15\_style=1}, the electron flux is computed via the exponential of the sheath potential drop, and {\tt ENEPAR(:,1)} is used to artificially increase or decrease the sheath transmission coefficient for electrons (default = 0).
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
@@ -2798,7 +2802,6 @@ which contains
   \item[23] prescribe electron temperature profile in $eV$, read from file {\tt ENE\_FN}.
     If {\tt ENEPAR(IB,2)} is positive, the profile is scaled such that {\tt ENEPAR(IB,1)} is the maximum electron temperature of the profile in $eV$.
     Only available for E and W boundaries.
-  \item[24] drift compatible, non-marginal, imposition of Bohm-Chodura sheath entrance condition. {\tt ENEPAR(,1)} is summed to the electron sheath transmission coefficient, to artificially increase it or decrease it; the typical value is 0. An error is raised if the total electron sheath transmission coefficient becomes negative. Alternative sheath boundary condition for use with drifts, in conjunction with {\tt BCENI=29}, {\tt BCMOM=22}, {\tt BCPOT=3}, and {\tt BCCON=31}.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
   type of ion energy or temperature boundary condition for each
@@ -2837,7 +2840,10 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. If MOMPAR(,,2) $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; 
+    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (def: 1.5); to be used in conjunction with BCENE/I=15, BCPOT=11, and BCMOM=13. \\
+    If MOMPAR(,,2) $\geq 0.5$ single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; the ion heat flux is computed using the target particle flux and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (def: 1.5); 
+    to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
@@ -2867,7 +2873,6 @@ which contains
   \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}.
     If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$.
     Only available for E and W boundaries.
-  \item[29] drift compatible, non-marginal, imposition of Bohm-Chodura sheath entrance condition. {\tt ENIPAR(,1)} sets the ion sheath transmission coefficient; the typical value is 1.5. Alternative sheath boundary condition for use with drifts, in conjunction with {\tt BCENE=24}, {\tt BCMOM=22}, {\tt BCPOT=3}, and {\tt BCCON=31}.
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
   type of electric potential or current boundary condition for each
@@ -10722,7 +10727,11 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \right|_W
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+\bigskip
+
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
+
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10740,13 +10749,13 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 
 $p_{n,a,1} = +1$
 
-\bigskip
+\smallskip
 
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCCON = 31}
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
 
-To be used in conjunction with {\tt BCMOM=22}, {\tt BCENI=29}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
-The parameter $p_{n,a,1}$ is set by {\tt CONPAR(:,:,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (restricted to $\pm 2 c_s \left| b_x \right|$, and reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
@@ -10761,10 +10770,10 @@ U_{out} n_a
 \end{equation*}
 
 \begin{equation*}
-  U_{out} = \max \left(-u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|}-\frac{V_{E \times B}}{|b_x|},p_{n,a,1}\cdot\sqrt{\frac{\chi T_i + z_a^2 \frac{n_a}{n_e}T_e}{m_a}} \right)
+  U_{out} = \max \left(-u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|}-\frac{V_{E \times B}^{restr}}{|b_x|},p_{m,a,1}\cdot\sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{E \times B}^{restr}$ is the poloidal $E \times B$ velocity restricted to $\pm 2 c_s \left| b_x \right|$.
 
 \subsubsection{East}
 
@@ -10811,7 +10820,11 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \right|_E
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+\bigskip
+
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
+
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10829,13 +10842,13 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 
 $p_{n,a,1} = +1$
 
-\bigskip
+\smallskip
 
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCCON = 31}
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
 
-To be used in conjunction with {\tt BCMOM=22}, {\tt BCENI=29}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
-The parameter $p_{n,a,1}$ is set by {\tt CONPAR(:,:,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (restricted to $\pm 2 c_s \left| b_x \right|$, and reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
@@ -10850,10 +10863,10 @@ U_{out} n_a
 \end{equation*}
 
 \begin{equation*}
-  U_{out} = \max \left(u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|}+\frac{V_{E \times B}}{|b_x|}, p_{n,a,1} \cdot \sqrt{\frac{\chi T_i + z_a^2 \frac{n_a}{n_e}T_e}{m_a}} \right)
+  U_{out} = \max \left(u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|}+\frac{V_{E \times B}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{E \times B}^{restr}$ is the poloidal $E \times B$ velocity restricted to $\pm 2 c_s \left| b_x \right|$.
 
 \subsection{Parallel momentum balance for ions}
 
@@ -11038,9 +11051,13 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
+\bigskip
 
-To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
+
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON=14}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
 \left. h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
@@ -11060,13 +11077,14 @@ V_{West} =
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
 
-\bigskip
+\smallskip
 
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCMOM = 22}
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
 
-To be used in conjunction with {\tt BCCON=31}, {\tt BCENI=29}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
-The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(:,:,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+to be used in conjunction with BCCON=14, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (restricted to $\pm 2 c_s \left| b_x \right|$, and reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
 \begin{equation*}
   \left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
           -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} U_{out} \frac{B_x}{|B_x|}
@@ -11076,10 +11094,10 @@ The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(:,:,1)}. The parameter $\chi$ is
   \end{equation*}
 
 \begin{equation*}
-  U_{out} = \max \left(-u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|},p_{m,a,1}\cdot\sqrt{\frac{\chi T_i + z_a^2 \frac{n_a}{n_e}T_e}{m_a}}+\frac{V_{E \times B}}{|b_x|} \right)
+  U_{out} = \max \left(-u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|},p_{m,a,1}\cdot\sqrt{\frac{\chi T_i + z_a T_e}{m_a}}+\frac{V_{E \times B}^{restr}}{|b_x|} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{E \times B}^{restr}$ is the poloidal $E \times B$ velocity restricted to $\pm 2 c_s \left| b_x \right|$.
 
 \underline{If $z_a = 0$}
 
@@ -11135,9 +11153,13 @@ $u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+\bigskip
 
-To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
+
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON=14}, and {\tt BCPOT = 11}.
 
 $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
         p_{m,a,1} \frac{u_{big}}{\epsilon^2} V_{East} m_a n_a -
@@ -11153,13 +11175,13 @@ V_{East} =
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
 
-\bigskip
+\smallskip
 
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCMOM = 22}
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
 
-To be used in conjunction with {\tt BCCON=31}, {\tt BCENI=29}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
-The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(:,:,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+to be used in conjunction with BCCON=14, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the sum of the parallel velocity and the $E \times B$ velocity (restricted to $\pm 2 c_s \left| b_x \right|$, and reprojected in the parallel direction) equals \textit{at least} the specific species sound speed $c_{s,a}$. \\
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
 \begin{equation*}
   -\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
@@ -11170,10 +11192,10 @@ The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(:,:,1)}. The parameter $\chi$ is
   \end{equation*}
 
 \begin{equation*}
-  U_{out} = \max \left(u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|},p_{m,a,1}\cdot\sqrt{\frac{\chi T_i + z_a^2 \frac{n_a}{n_e}T_e}{m_a}}-\frac{V_{E \times B}}{|b_x|} \right)
+  U_{out} = \max \left(u_{\parallel,a}^{extrap}\frac{B_x}{|B_x|},p_{m,a,1}\cdot\sqrt{\frac{\chi T_i + z_a T_e}{m_a}}-\frac{V_{E \times B}^{restr}}{|b_x|} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{E \times B}^{restr}$ is the poloidal $E \times B$ velocity restricted to $\pm 2 c_s \left| b_x \right|$.
 
 \underline{If $z_a = 0$}
 
@@ -11593,7 +11615,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11602,30 +11624,9 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_W
 \end{equation*}
 
+with $p_{e,1}$ set by {\tt ENEPAR(:,:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,:,2)}.
+
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
-
-\bigskip
-
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCENE = 24}
-
-To be used in conjunction with {\tt BCCON=31}, {\tt BCMOM=22}, {\tt BCENI=29}, and {\tt BCPOT=3}. \\
-This condition imposes that the electron heat flux, minus its Pfirsch-Schlueter component, is equal to the electron convective particle flux times the electron sheath transmission coefficient. \\
-The parameter $p_{e,1}$ is set by {\tt ENEPAR(:,:,1)}. The parameter $\gamma_e$ is set by {\tt GAMMAE}. The parameter $p_{\Phi,2}$ is set by {\tt POTPAR(:,:,2)}.
-
-\begin{equation*}
-  \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \frac{\sqrt g}{h_x} \left. \left[
-          - |b_x| \left(
-                  \left( 1 + \gamma_e + p_{e,1} \right) T_e +
-                  \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
-          \right) n_e \frac{1}{\sqrt{2 \pi}}
-          \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
-          -
-         q_{ex}^{P.Sch}
-  \right] \right|_W
-  \end{equation*}
-
-  In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
-
 
 \bigskip
 
@@ -11693,7 +11694,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1}\right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11702,27 +11703,11 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_E
 \end{equation*}
 
+with $p_{e,1}$ set by {\tt ENEPAR(:,:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,:,2)}.
+
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCENE = 24}
-
-To be used in conjunction with {\tt BCCON=31}, {\tt BCMOM=22}, {\tt BCENI=29}, and {\tt BCPOT=3}. \\
-This condition imposes that the electron heat flux, minus its Pfirsch-Schlueter component, is equal to the electron convective particle flux times the electron sheath transmission coefficient. \\
-The parameter $p_{e,1}$ is set by {\tt ENEPAR(:,:,1)}. The parameter $\gamma_e$ is set by {\tt GAMMAE}. The parameter $p_{\Phi,2}$ is set by {\tt POTPAR(:,:,2)}.
-
-\begin{equation*}
-   \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \frac{\sqrt g}{h_x} \left. \left[
-          - |b_x| \left(
-                  \left( 1 + \gamma_e + p_{e,1} \right) T_e +
-                  \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
-          \right) n_e \frac{1}{\sqrt{2 \pi}}
-          \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
-          +
-           q_{ex}^{P.Sch}
-  \right] \right|_E
-  \end{equation*}
-
-  In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+\bigskip
 
 {\em Imposing the sheath boundary condition for electron temperature:} {\tt BCENE = 3}
 
@@ -11962,9 +11947,11 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
-To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCMOM = 13}, {\tt BCCON=14}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
@@ -11980,6 +11967,27 @@ $p_{h_i,1} = +1.5$
 
 In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
+\smallskip
+
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
+
+to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCCON=14, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient. \\
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,:,1)}.
+
+\begin{equation*}
+  \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( -\widetilde{\Gamma}_{ax} - D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  -
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_W
+\end{equation*}
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+\bigskip
+
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
 $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
@@ -11994,25 +12002,6 @@ $\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W =
         -
         \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right] \right|_W$
-
-\bigskip
-
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCENI = 29}
-
-To be used in conjunction with {\tt BCCON=31}, {\tt BCMOM=22}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient. \\
-The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,:,1)}.
-
-\begin{equation*}
-  \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
-  - p_{i,1} \frac{\sqrt g}{h_x}
-  \sum_a \left( -\widetilde{\Gamma}_{ax} - D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
-  -
-  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-  \right|_W
-  \end{equation*}
-
-  In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 \bigskip
 
@@ -12069,9 +12058,11 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
-To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
+{\em - marginal imposition, with collective sound speed:} MOMPAR(,,2) = $p_{m,a,2} < 0.5 $
+
+To be used in conjunction with {\tt BCENE = 15}, {\tt BCMOM = 13}, {\tt BCCON=14}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
@@ -12086,6 +12077,27 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 $p_{h_i,1} = +1.5$
 
 In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+\smallskip
+
+{\em - non-marginal imposition, with individual species sound speed:} MOMPAR(,,2) = $p_{m,a,2} \geq 0.5 $
+
+to be used in conjunction with BCMOM=13, BCENE=15 with {\tt bcene\_15\_style=1}, BCCON=14, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}. \\
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient. \\
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,:,1)}.
+
+\begin{equation*}
+  -\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( \widetilde{\Gamma}_{ax} + D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  +
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_E
+\end{equation*}
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+\bigskip
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -12103,25 +12115,6 @@ In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_st
         \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right] \right|_E
 \end{equation*}
-
-\bigskip
-
-{\em Drift-compatible, non-marginal imposition of Bohm-Chodura sheath entrance condition:} {\tt BCENI = 29}
-
-To be used in conjunction with {\tt BCCON=31}, {\tt BCMOM=22}, {\tt BCENE=24}, and {\tt BCPOT=3}. \\
-This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient. \\
-The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,:,1)}.
-
-\begin{equation*}
-  -\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
-  - p_{i,1} \frac{\sqrt g}{h_x}
-  \sum_a \left( \widetilde{\Gamma}_{ax} + D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
-  +
-  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
-  \right|_E
-  \end{equation*}
-
-  In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 \bigskip
 
