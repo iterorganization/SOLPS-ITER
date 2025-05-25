@@ -252,7 +252,7 @@ def READ_CMD(cmd_file):
                 continue;
             tmp_scl = tmp[:s].strip()
             try:
-                tmp_scl = np.float(tmp_scl)
+                tmp_scl = np.float64(tmp_scl)
             except:
                 logging.error('error number expected (%s read) for argument C, line %s of the command file %s... will be replaced by 1.0', line.strip(), k, cmd_file)
                 tmp_scl = 1.0
@@ -342,12 +342,12 @@ def READ_L2D(raw_file):
     elif ( l2d_size == 1):
         l2d_files = np.append(l2d_files,str(l2d_files_tmp).strip())
         l2d_header = np.append(l2d_header,str(l2d_header_tmp).strip())
-        l2d_data = np.append(l2d_data,np.float(l2d_data_tmp))
+        l2d_data = np.append(l2d_data,np.float64(l2d_data_tmp))
     else:
         for i in range(0,l2d_size):
             l2d_files = np.append(l2d_files,str(l2d_files_tmp[i]).strip())
             l2d_header = np.append(l2d_header,str(l2d_header_tmp[i]).strip())
-            l2d_data = np.append(l2d_data,np.float(l2d_data_tmp[i]))
+            l2d_data = np.append(l2d_data,np.float64(l2d_data_tmp[i]))
 
     logging.info('%s read',raw_file)
 
@@ -438,7 +438,7 @@ def GRAB_DATA(cmd_fle, cmd_quan, l2d_files, l2d_header, l2d_data):
         found, ind = match_raw(l2d_files, cmd_fle[i], l2d_header, cmd_quan[i])
         if ( found == True ):
             logging.info('fetching the value for quantity %s of origin %s',cmd_quan[i],cmd_fle[i])
-            val = np.float(l2d_data[ind])
+            val = np.float64(l2d_data[ind])
         else:
             logging.warning('quantity %s of origin %s was not found',cmd_quan[i],cmd_fle[i])
             val = 0.
