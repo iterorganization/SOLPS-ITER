@@ -23,7 +23,7 @@ module load json-fortran/8.5.2-GCC-13.2.0
 module unload cmake
 module load cmake/3.18.2
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
-setenv EBVERSIONMSCL `pkg-config mscl --modversion`
+setenv EBVERSIONMSCL "1.2.4"
 module load itm-nag
 module load netCDF/4.9.2-gompi-2023b netCDF-Fortran/4.6.1-gompi-2023b
 setenv SYSNAME `fs sysname | cut -d "'" -f 2`

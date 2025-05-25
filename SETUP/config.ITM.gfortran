@@ -21,7 +21,7 @@
 #
 
        NCDIR ?= /cineca/prod/opt/libraries/netcdff/4.4.4/intel--pe-xe-2017--binary
-   MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
+   MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl_1.2.4
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
     GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
@@ -35,7 +35,7 @@
 #
 
 LD_NETCDF  = `pkg-config netcdf-fortran --libs` -Wl,-rpath,/cineca/prod/opt/libraries/netcdff/4.4.4/intel--pe-xe-2017--binary/lib
-LD_MSCL    = `pkg-config mscl --libs`
+LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm
