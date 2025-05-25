@@ -911,7 +911,6 @@ function fetch_from_iter_cluster()
        mkdir -p ${sources}
        cmd="scp -r ${proxy} ${site}:${iter_ebprefix}/sources/${subdir}/${name}/* ${sources}"
        /bin/sh -c "${cmd} || echo Failed command ${cmd}"
-
     done
 }
 
