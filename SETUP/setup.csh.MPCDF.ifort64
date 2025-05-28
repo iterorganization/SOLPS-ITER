@@ -1,16 +1,16 @@
 # Load modules
 setenv MODULEPATH /afs/ipp/common/usr/modules.2014/@sys/modulefiles/mpi:$MODULEPATH
-module load intel/21.5.0
+module load intel/2023.1.0.x
 module load texlive/2021
 # module load subversion  # use built in SVN
-module load arm_ddt/22.0
-module load doxygen/1.8
+module load arm_ddt/22.1
+module load doxygen/1.10.0
 #module load mdsplus
-module load netcdf-serial/4.7.0
-module load hdf5-serial/1.8.22
+module load netcdf-serial/4.8.1
+module load hdf5-serial/1.14.1
 #module load nag_flib/intel/mk24
-module load git/2.31
-module load impi/2021.5
+module load git/2.39
+module load impi/2021.9
 module load nag_flib/mk26
 module load gnuplot/5.4
 module load paraview/5.9
@@ -25,6 +25,7 @@ setenv SYSNAME `fs sysname | cut -d "'" -f 2`
 
 # Compiler
 setenv FC ifort
+setenv MPI_FC mpiifort
 
 # Environment variables
 if (! $?DEVICE) then
@@ -48,6 +49,8 @@ setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 [ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
