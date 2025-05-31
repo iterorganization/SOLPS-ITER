@@ -1,14 +1,17 @@
-#! /bin/tcsh
+#! /bin/tcsh -f
 
 #SBATCH --nodes=#NODES#
-#SBATCH --ntasks-per-node=#TASKS#
+#SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH --partition=#PART#
+#SBATCH --qos=#QOS#
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
+#SBATCH -o SLURM-%j.out
+#SBATCH -e SLURM-%j.err
 #SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -19,20 +22,19 @@ set COMPRESS_ARG="#COMPRESS_ARG#"
 set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 set USE_MPI=""
-set nodename=`hostname`
 if ($?SOLPS_MPI) then
-  set MPI_OPTS=#MPIOPTS#
-  set MPI_EXEC=mpiexec
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
-  set TIME="srun --mpi=pmi2"
+  set MPI_PREFLAGS="--mpi=mpi2"
+  set USE_MPI="-m srun"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+else
+  set MPI_PREFLAGS=""
 endif
+set TIME="time srun ${MPI_PREFLAGS}"
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv KMP_AFFINITY disabled
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -47,7 +49,7 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
-time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
 
