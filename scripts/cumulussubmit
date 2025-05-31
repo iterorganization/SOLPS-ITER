@@ -3,20 +3,24 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
+set NODES=1
 set PROCS=1
 set THREADS=1
 set hours=48
 set mem=8GB
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
 set MPIOPTS=""
 set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set LOOP_OPTS=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
 argloop:
@@ -56,7 +60,8 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     echo run.log will be compressed
     shift
     set LOOP_OPTS="-z ${LOOP_OPTS}"
@@ -64,6 +69,8 @@ EOF
   endif
   if ("X${1}X" == "X-sX") then
     set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
@@ -91,10 +98,10 @@ EOF
     shift
     if (! $?SOLPS_OPENMP) then
       source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
     endif
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
-    set LOOP_OPTS="-t ${THREADS} ${LOOP_OPTS}"
     shift
     set HELP_STRING=\"${THREADS}\"
 #    echo $HELP_STRING
@@ -127,27 +134,13 @@ EOF
   endif
 
 if ($1 == "") then
-  if (-s fort.1 && $standalone == "no") then
-    echo Assuming run with Eirene
-    echo No argument is specified. Looking for QSUB.cumulus_coupled$compress
-    set QSUB=`climb_and_look_for QSUB.cumulus_coupled$compress`
-    if ($QSUB == "//QSUB.cumulus_coupled$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.cumulus_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.cumulus_coupled$compress"
-      else
-        set QSUB=""
-      endif
-    endif
-  else
-    if ($standalone == "no") echo Assuming standalone run
-    echo No argument is specified. Looking for QSUB.cumulus$compress
-    set QSUB=`climb_and_look_for QSUB.cumulus$compress`
-    if ($QSUB == "//QSUB.cumulus$compress") then
-      if (-s $SOLPSTOP/runs/QSUB.cumulus$compress) then
-        set QSUB="$SOLPSTOP/runs/QSUB.cumulus$compress"
-      else
-        set QSUB=""
-      endif
+  echo No argument is specified. Looking for QSUB.cumulus
+  set QSUB=`climb_and_look_for QSUB.cumulus`
+  if ($QSUB == "//QSUB.cumulus") then
+    if (-s $SOLPSTOP/runs/QSUB.cumulus) then
+      set QSUB="$SOLPSTOP/runs/QSUB.cumulus"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -173,6 +166,7 @@ if($QSUB == "") then
   echo No CUMULUS submission file $1 found. Exiting.
   exit 1
 endif
+
 echo Using submission file template $QSUB
 echo For loop resubmission following options will be used: $LOOP_OPTS
 
@@ -181,6 +175,7 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#NODES#:'$NODES':g' \
   -e 's:#PROCS#:'$PROCS':g' \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
@@ -188,6 +183,10 @@ sed \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
   < $QSUB > $NAME
 
 update_solps_run_status -n "Submitted at `date`"
