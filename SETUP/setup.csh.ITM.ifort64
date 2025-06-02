@@ -55,8 +55,7 @@ else
 endif
 
 # Debugger (set environment variable DBX)
-module unload totalview
-module load totalview/2023.2
+module switch totalview/2023.2
 setenv DBX totalview
 
 # compilers
