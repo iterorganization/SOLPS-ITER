@@ -3,10 +3,8 @@
 #SBATCH --nodes=#NODES#
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
-#SBATCH --partition=#PART#
-#SBATCH --qos=#QOS#
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem-per-cpu=#MEM#
+#SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
