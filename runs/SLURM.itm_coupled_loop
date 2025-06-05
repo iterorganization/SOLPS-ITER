@@ -1,5 +1,6 @@
 #! /bin/tcsh
 
+#SBATCH --nodes=#NODES#
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
@@ -10,7 +11,7 @@
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
-#SBATCH  --no-requeue
+#SBATCH --no-requeue
 
 ### This script submits the job, which launches the SOLPS-ITER code, to the ITM cluster,
 ### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
@@ -29,6 +30,11 @@
 setenv PATH ${PATH_FOR_LOOP}
 setenv MANPATH ${MANPATH_FOR_LOOP}
 
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
 set USE_MPI=""
 if ($?SOLPS_MPI) then
   module load intelmpi
@@ -45,8 +51,8 @@ set TIME="time srun ${MPI_PREFLAGS}"
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -55,9 +61,9 @@ update_solps_run_status "Started on `hostname` at `date`"
 
 rm -f run.KAPUTT
 
-b2run ${USE_MPI} ${USE_OMP} b2mn >& run.log
+b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess_coupled
+QSUB.postprocess${COUPLED_SUFFIX}
 
 preserve_scratch_to_work
 
@@ -102,7 +108,7 @@ if ("$Break_loop" == "no") then
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
     update_solps_run_status "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
-    set NOW = `date +"%d.%m.%Y_%T"`  
+    set NOW = `date +"%d.%m.%Y_%T"`
     mv b2fstati b2fstati_$NOW
     if (-e fort.13.i) mv fort.13.i fort.13.i_$NOW
     if (-e fort.14.i) mv fort.14.i fort.14.i_$NOW

@@ -18,6 +18,11 @@ source setup.csh
 echo Using SOLPSTOP = $SOLPSTOP
 popd
 
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
 set USE_MPI=""
 if ($?SOLPS_MPI) then
   set MPI_EXEC=mpiexec
@@ -29,8 +34,9 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run -s ${USE_MPI} b2mn >! run.log
+time b2run ${STANDALONE_ARG} ${USE_MPI} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess
+QSUB.postprocess${COUPLED_SUFFIX}
 
 update_solps_run_status "Finished on `hostname` at `date`"
+b2fstate_OK_bool

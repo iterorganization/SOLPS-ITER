@@ -1,8 +1,8 @@
 #! /bin/tcsh -f
 
-#SBATCH --nodes=1
+#SBATCH --nodes=#NODES#
 #SBATCH --ntasks-per-node=#PROCS#
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=#THREADS#
 #SBATCH --partition=#PART#
 #SBATCH --qos=#QOS#
 #SBATCH --time=#HOURS#:00:00
@@ -12,16 +12,18 @@
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
-#SBATCH  --no-requeue
+#SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
 set USE_MPI=""
 if ($?SOLPS_MPI) then
-  # set MPI_EXEC=mpirun
-  # set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
-  # set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI="-m srun"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 else
@@ -29,12 +31,18 @@ else
 endif
 set TIME="time srun ${MPI_PREFLAGS}"
 
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
+endif
+
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-b2run -s ${USE_MPI} >! run.log
+b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess
+QSUB.postprocess${COUPLED_SUFFIX}
 
 preserve_scratch_to_work
 
