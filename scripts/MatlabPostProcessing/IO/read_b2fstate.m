@@ -1,5 +1,5 @@
 function state = read_b2fstate(file)
-% gmtry = read_b2fgmtry(file)
+% state = read_b2fstate(file)
 %
 % Read b2fgmtry file created by B2.5.
 %
