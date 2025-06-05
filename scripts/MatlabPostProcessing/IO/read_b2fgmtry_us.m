@@ -149,6 +149,11 @@ gmtry.vxFpsi = read_rfield(fid,'vxFpsi',[nVx]    );
 gmtry.cvConn = read_rfield(fid,'cvConn',[nCv] );
 gmtry.fsPsi  = read_rfield(fid,'fsPsi',[nFs] );
 
+% Qalfmin
+gmtry.Qalfmin = read_rfield(fid,'Qalfmin',1);
+gmtry.Qalfmax = read_rfield(fid,'Qalfmax',1);
+
+
 %% Close file
 
 fclose(fid);

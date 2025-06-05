@@ -120,6 +120,10 @@ write_rfield(fid,'vxFpsi', gmtry.vxFpsi  );
 write_rfield(fid,'cvConn', gmtry.cvConn );
 write_rfield(fid,'fsPsi', gmtry.fsPsi );
 
+% Qalfmin
+write_rfield(fid,'Qalfmin',gmtry.Qalfmin);
+write_rfield(fid,'Qalfmax',gmtry.Qalfmax);
+
 
 %% Close file
 
