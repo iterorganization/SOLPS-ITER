@@ -1393,6 +1393,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
   \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
+  \item[mpcdfsubmit]\index{mpcdfsubmit} Command file to launch runs on the MPCDF clusters Raven and Viper. See Section~\ref{b2run} for details.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to update a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to archive a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
@@ -2007,11 +2008,12 @@ are provided:
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
+  \item{mpcdfsubmit}\index{mpcdfsubmit} for submissions on the MPCDF clusters Raven and Viper
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt mpcdf}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 
 Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH\_FOR\_LOOP} and {\tt \$MANPATH\_FOR\_LOOP}, see scripts {\tt \$\{SOLPSTOP\}/setup.csh} and {\tt \$\{SOLPSTOP\}/runs/SLURM.itm*\_loop}.
 
@@ -2104,6 +2106,12 @@ A listing of the available options for each submission script can be obtained by
 itersubmit -h
 \end{verbatim}
 command. All options (except {\tt -h}) can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
+
+Some submission scripts (currently only {\tt ippsubmit} and {\tt mpcdfsubmit}) also allow to lunch several runs within one single SLURM job, by means of the {\tt -b} option, if the runs share the same {\tt baserun}. This is done executing the script from the directory above the run and {\tt baserun} directories, specifying the names of the run directories from which the jobs should be launched through a comma-separated list. For example:
+\begin{verbatim}
+ippsubmit -b 'run1,run2'
+\end{verbatim}
+This option should be used with careful consideration, in order to request CPU resources in a reasonable way. The ideal situation in which such option could be used is in case of reasonably similar runs, and with all launched runs asked to be stopped after the same wallclock time, so that no allocated CPUs end up being in idle state. Users are encouraged to refer to the possible options, within the above mentioned submission scripts, for the specification of the requested job properties (e.g.\ requested number of CPUs per run and memory).
 
 The {\tt SLURM.iter} script first of all changes directory to
 {\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file
