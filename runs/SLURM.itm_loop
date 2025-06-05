@@ -22,7 +22,7 @@
 ### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
 ### the loop breaks, i.e. the job is not resubmitted again.
 ###
-### Usage: 
+### Usage:
 ###   Submit the job:     `itmsubmit -s -j "JobName" SLURM.itm_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
