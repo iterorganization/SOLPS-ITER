@@ -88,6 +88,6 @@ if ("$Break_loop" == "no") then
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    itersubmit #LOOPOPTS# SLURM.iter_loop
+    marconisubmit #LOOPOPTS# SLURM.marconi_loop
   endif
 endif

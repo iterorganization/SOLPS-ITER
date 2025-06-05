@@ -23,7 +23,7 @@
 ### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
 ### the loop breaks, i.e. the job is not resubmitted again.
 ###
-### Usage: 
+### Usage:
 ###   Submit the job:     `csd3submit -T 48 SLURM.csd3_coupled_loop`
 ###               or      `csd3submit -m "-np 36" -j "JobName" -T 48 -M 24G SLURM.csd3_coupled_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
