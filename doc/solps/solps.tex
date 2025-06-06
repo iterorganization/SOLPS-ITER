@@ -1950,13 +1950,13 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
+in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*},
 or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
-  \item[darwinsubmit]\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
+  \item{darwinsubmit}\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -1968,23 +1968,11 @@ are provided:
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts})
-and adapt them to their local environment, along
-with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
-Each submission command file can handle several possible cases:
-\index{QSUB files}\index{SLURM files}
-\begin{description}
-  \item{QSUB.*, SLURM.*} Runs a standalone {\tt B2.5} case.
-  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
-\end{description}
-where {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. The {\tt \_coupled} scripts are used when the presence of an {\tt Eirene} input file {\tt fort.1} (which should be a symbolic link pointing to either {\tt input.dat} or {\tt eirene.input.json}) is detected in the run directory.
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 
-Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH} and {\tt \$MANPATH}, see scripts {\tt SETUP/SETUP.itm\_*} and {\tt SLURM.itm*\_loop}.
-All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
-outside the {\tt \$\{SOLPSTOP\}} file space is available.
+Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH\_FOR\_LOOP} and {\tt \$MANPATH\_FOR\_LOOP}, see scripts {\tt \$\{SOLPSTOP\}/setup.csh} and {\tt \$\{SOLPSTOP\}/runs/SLURM.itm*\_loop}.
+
+All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from outside the {\tt \$\{SOLPSTOP\}} file space is available.
 
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
@@ -2007,10 +1995,7 @@ where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_fil
 %% $
 or stops if the submission file is not found.
 
-\begin{sloppypar}
-If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
-for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the {\tt -s} option. Otherwise, the script will assume a coupled run is requested if a {\tt fort.1} file (symbolic link to either {\tt input.dat} or {\tt eirene.input.json}) for {\tt Eirene} input is present in the run directory, and a standalone run otherwise.
-\end{sloppypar}
+If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter}. To request a {\tt B2.5} standalone run explicitly, the user should use the {\tt -s} option. By default, the script will assume a run using the coupled code.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the {\tt -m} option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
