@@ -36,12 +36,8 @@ endif
 setenv DBX ddt
 if ($cluster == "raven") then
   setenv SYSNAME `fs sysname | cut -d "'" -f 2`
-  setenv FCOPTS_B25 "-O2 -xHost"
-  setenv FCOPTS_EIRENE "-O3"
 else if ($cluster == "viper") then
   setenv SYSNAME `uname -m`_`lsb_release -is | tr '[:upper:]' '[:lower:]'``lsb_release -rs | cut -d. -f1`
-  setenv FCOPTS_B25 "-O2 -march=core-avx2 -diag-disable=10448"
-  setenv FCOPTS_EIRENE "-O3 -diag-disable=10448"
 endif
 
 # Compiler
