@@ -82,6 +82,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_tgtX") then
     shift
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
@@ -98,6 +99,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_adjX") then
     shift
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/adj
@@ -113,6 +115,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
+    set standalone_arg="-s"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
     endif
@@ -122,6 +125,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-adjX") then
+    set standalone_arg="-s"
     if (! $?SOLPS_ADJ) then
       source $SOLPSTOP/SETUP/adj
     endif
