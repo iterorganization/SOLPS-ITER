@@ -15,7 +15,6 @@ echo Your email is $EMAIL
 set compress_arg=""
 set compress_suffix=""
 set MPIOPTS=""
-set standalone="no"
 set standalone_arg=""
 set coupled_suffix="_coupled"
 set LOOP_OPTS=""
@@ -73,7 +72,6 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
     set standalone_arg="-s"
     set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
