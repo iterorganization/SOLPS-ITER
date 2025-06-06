@@ -442,7 +442,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER, IPP and MPCDF
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
   \item[g95] The g95 compiler, in use on the Marconi Gateway
   \item[nag\_f90] The NAG Fortran compiler
@@ -2107,11 +2107,11 @@ itersubmit -h
 \end{verbatim}
 command. All options (except {\tt -h}) can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
 
-Some submission scripts (currently only {\tt ippsubmit} and {\tt mpcdfsubmit}) also allow to lunch several runs within one single SLURM job, by means of the {\tt -b} option, if the runs share the same {\tt baserun}. This is done executing the script from the directory above the run and {\tt baserun} directories, specifying the names of the run directories from which the jobs should be launched through a comma-separated list. For example:
+Some submission scripts (currently only {\tt ippsubmit} and {\tt mpcdfsubmit}) also allow to launch several runs within one single SLURM job, by means of the {\tt -b} option, if the runs share the same {\tt baserun}. This is done executing the script from the directory above the run and {\tt baserun} directories, specifying the names of the run directories from which the jobs should be launched through a comma-separated list. For example:
 \begin{verbatim}
 ippsubmit -b 'run1,run2'
 \end{verbatim}
-This option should be used with careful consideration, in order to request CPU resources in a reasonable way. The ideal situation in which such option could be used is in case of reasonably similar runs, and with all launched runs asked to be stopped after the same wallclock time, so that no allocated CPUs end up being in idle state. Users are encouraged to refer to the possible options, within the above mentioned submission scripts, for the specification of the requested job properties (e.g.\ requested number of CPUs per run and memory).
+This option should be used with careful consideration, in order to request CPU resources in an appropriate way. The ideal situation in which such option could be used is in case of reasonably similar runs, and with all launched runs asked to be stopped after the same wallclock time, so that no allocated CPUs end up being in idle state. Users are encouraged to refer to the possible options, within the above mentioned submission scripts, for the specification of the requested job properties (e.g.\ requested number of CPUs per run and memory).
 
 The {\tt SLURM.iter} script first of all changes directory to
 {\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file

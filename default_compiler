@@ -37,6 +37,7 @@ case "JET":
 case "KEIO":
 case "KSTAR":
 case "LEUVEN":
+case "MPCDF":
 case "NSCC":
 case "SPBSTU":
 case "SURFSARA":
