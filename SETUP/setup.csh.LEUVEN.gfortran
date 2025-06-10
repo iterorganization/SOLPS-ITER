@@ -1,60 +1,40 @@
 # General
 
-# Note: need to do command below, but from bash!
-# source switch_to_2015a
-
-module load git/2.32.0-GCCcore-10.3.0-nodocs
-
 # Modules needed by SOLPS-ITER
-module load GCC/12.3.0
+module load intel/2021a
+module load ScaLAPACK/2.1.0-gompi-2021a-fb
+module load git/2.32.0-GCCcore-10.3.0-nodocs
 module load makedepend/1.0.6-GCCcore-10.3.0
-# module load mscl/1.0.0-intel-12.0.2
-module load netCDF/4.9.0-gompi-2022b
-module load netCDF-Fortran/4.6.0-gompi-2022b
-# module load gr/0.0.94
-# module load gks/4.4.74
-# module load NCL/6.6.2-intel-2021a
-# module load nag/15
-module load OpenBLAS/0.3.23-GCC-12.3.0
-# module load LAPACK/3.5.0-intel-2014a
-# module load HDF5/1.8.12-intel-2014a-serial
-# module load flex
+module load netCDF/4.8.0-iimpi-2021a
+module load netCDF-Fortran/4.5.3-iimpi-2021a
 module load Doxygen/1.9.1-GCCcore-10.3.0
-# module load texlive
-# module load ghostscript
 module load libxml2/2.9.10-GCCcore-10.3.0
-# module load fontconfig
-# module load cairo
-# module load mdsplus
-# module load make
-# module load matplotlib/3.4.2-intel-2021a
-module load Python/3.10.8-GCCcore-10.3.0-bare
-# module load totalview
-# module load libX11/1.6.3-intel-2015a-Python-2.7.9
-# module load libXt/1.1.4-intel-2015a-libX11-1.6.3
+module load matplotlib/3.4.2-intel-2021a
 module load motif/2.3.8-GCCcore-10.3.0
-# module load libXp/1.0.3-intel-2015a
-# mpi-library from intel/2015a is used
 module load Pango/1.48.5-GCCcore-10.3.0
-module load Emacs/28.1-GCCcore-10.3.0
-module load gnuplot/5.4.2-GCCcore-10.3.0
-# module load PETSc/3.15.1-intel-2021a
-# Debugger (set environment variable DBX)
+module load PETSc/3.15.1-intel-2021a
 module load ArmForge/22.1.2
+module load gnuplot/5.4.2-GCCcore-10.3.0
+module load MATLAB/2020a-r3
+
+# Debugger env var
 setenv DBX ddt
-# Compiler
+# Compiler env var
 setenv FC gfortran
-module load MATLAB/2020a
-###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
+
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.gfortran
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade_3.16_latest
-# module load Java/1.8.0_192
-##setenv JAVA_HOME /staging/leuven/stg_00030/java
-# setenv IPOPTDIR /vsc-hard-mounts/leuven-data/321/vsc32100/Ipopt/install
-# setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
-# setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
-# setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPOPTDIR}/lib:${PETSC_DIR}/lib
+if ($?PETSC_DIR) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
+  setenv PETSC_VERSION_MAJOR `grep -i PETSC_VERSION_MAJOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION_MINOR `grep -i PETSC_VERSION_MINOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION $PETSC_VERSION_MAJOR$PETSC_VERSION_MINOR
+  unsetenv PETSC_VERSION_MAJOR PETSC_VERSION_MINOR
+  if ($PETSC_VERSION > 316) then
+    setenv TAO_NEW yes
+  endif
+endif
 alias set_d 'source $SOLPSTOP/scripts/diff_d'
 alias set_b 'source $SOLPSTOP/scripts/diff_b'
