@@ -10745,7 +10745,7 @@ $p_{n,a,1} = +1$
 
 to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
 
-This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a}$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
 
 The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
@@ -10765,7 +10765,7 @@ U_{out} n_a
   U_{out} = \max \left( -u_{\parallel,a}^{extrap}- \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a}$.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \subsubsection{East}
 
@@ -10836,7 +10836,7 @@ $p_{n,a,1} = +1$
 
 to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
 
-This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a}$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
 
 The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
@@ -10856,7 +10856,7 @@ U_{out} n_a
   U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a}$.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \subsection{Parallel momentum balance for ions}
 
@@ -11069,7 +11069,7 @@ V_{West} =
 
 to be used in conjunction with {\tt BCCON = 14}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
 
-This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a}$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
 
 The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
@@ -11085,7 +11085,7 @@ The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is s
   U_{out} = \max \left( -u_{\parallel,a}^{extrap} - \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a}$.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \underline{If $z_a = 0$}
 
@@ -11165,7 +11165,7 @@ V_{East} =
 
 to be used in conjunction with BCCON=14, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}.
 
-This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a}$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
 
 The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
 
@@ -11181,7 +11181,7 @@ The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is s
   U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
 \end{equation*}
 
-where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a}$.
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \underline{If $z_a = 0$}
 
