@@ -1,0 +1,115 @@
+#! /bin/tcsh -f
+
+#SBATCH --nodes=#NODES#
+#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --cpus-per-task=#THREADS#
+#SBATCH --time=#HOURS#:00:00
+#SBATCH --mem=#MEM#
+#SBATCH --job-name=#JOBNAME#
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=#EMAIL#
+#SBATCH -o SLURM-%j.out
+#SBATCH -e SLURM-%j.err
+#SBATCH  --no-requeue
+
+### This script submits the job, which launches the B2.5 code, to the MPCDF clusters Raven and Viper,
+### and resubmits the job again after successful finish of B2.5 in a loop manner.
+###
+### Successful finish means that either the prescribed (by 'b2mndr_ntim') number of steps is reached
+### or the prescribed (by 'b2mndr_cpu' or 'b2mndr_elapsed') time of run is elapsed.
+###
+### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
+### the loop breaks, i.e. the job is not resubmitted again.
+###
+### Usage: 
+###   Submit the job:     `mpcdfsubmit -s -j "JobName" SLURM.mpcdf_loop`
+###   Stop the run:       `touch b2mn.exe.dir/.quit`
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+#echo $MANPATH
+#echo $PATH
+#echo $OLD_PATH
+#echo $LD_LIBRARY_PATH
+#echo $PYTHONPATH
+
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  set MPI_OPTS=#MPIOPTS#
+  set MPI_PREFLAGS="--mpi=mpi2"
+  set USE_MPI="-m srun"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+else
+  set MPI_PREFLAGS=""
+endif
+set TIME="time srun ${MPI_PREFLAGS}"
+
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+update_solps_run_status "Started on `hostname` at `date`"
+
+b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+
+QSUB.postprocess${COUPLED_SUFFIX}
+
+preserve_scratch_to_work
+
+update_solps_run_status "Finished on `hostname` at `date`"
+
+set Break_loop = "no"
+if (`grep "stopping because" run.log.last10` == "") then
+  update_solps_run_status "run KAPUTT at `date`"
+  echo KAPUTT > run.KAPUTT
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because .quit" run.log.last10`
+if (`grep "stopping because .quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by .quit at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because _quit" run.log.last10`
+if (`grep "stopping because _quit" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop by _quit at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because tim >= etim" run.log.last10`
+if (`grep "stopping because tim >= etim" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because the end time is reached at `date`"
+  set Break_loop = "yes"
+endif
+#set NORMAL_FINISH=`grep "stopping because min_residual" run.log.last10`
+if (`grep "stopping because min_residual" run.log.last10` != "") then
+  update_solps_run_status "Breaking the loop because required residual is reached at `date`"
+  set Break_loop = "yes"
+endif
+
+if ("$Break_loop" == "no") then
+  set End_by_ntim = `grep "stopping because itim" run.log.last10`
+  set End_by_cputime = `grep "stopping because cpu" run.log.last10`
+  set End_by_walltime = `grep "stopping because elapsed" run.log.last10`
+
+#  echo $End_by_ntim
+#  echo $End_by_cputime
+#  echo $End_by_walltime
+
+  if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
+    update_solps_run_status "Resubmitting inside the loop at `date`"
+    rm -f run.log* b2mn.prt b2.log*;
+    set NOW = `date +"%d.%m.%Y_%T"`
+    mv b2fstati b2fstati_$NOW
+    mv b2fstate b2fstati
+    if (-s b2faveri) mv b2faveri b2faveri_$NOW
+    if (-s b2favere) mv b2favere b2faveri
+    mpcdfsubmit #LOOPOPTS# SLURM.mpcdf_loop
+  endif
+endif
