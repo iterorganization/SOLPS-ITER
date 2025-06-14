@@ -2686,7 +2686,7 @@ which contains
     {\tt MOMPAR(,,2)} $< \frac{1}{2}$, then the velocity is set to exactly
     {\tt MOMPAR(,,1)} $\times C_{s, \mbox{collective}}$, otherwise the
     velocity is set to be at least {\tt MOMPAR(,,1)} $\times C_{s,\mbox{species}}$.
-    {\tt BCMOM = 3} was not adapted for WG. Replace with drift-compatible {\tt BCMOM = 13}.
+    {\tt BCMOM=3} was not adapted for WG. Replace with drift-compatible {\tt BCMOM=13}.
   \item[4] prescribe the value of the velocity, weakly a mixed boundary condition,
     {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$ and
     {\tt MOMPAR(,,2)} specifies the "strength" of the boundary condition.
@@ -2729,7 +2729,7 @@ which contains
     {\tt ENEPAR(,1)} specifies an additional contribution to the energy
     transmission coefficient in addition to that of the potential
     difference [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-    {\tt BCENE = 3} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
+    {\tt BCENE=3} not adapted for WG. Replace with drift-compatible {\tt BCENE=15}.
   \item[4] prescribe the value of the electron temperature, weakly a mixed boundary condition,
     {\tt ENEPAR(,1)} specifies the temperature in $eV$ and
     {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
@@ -2748,7 +2748,7 @@ which contains
   \item[12] sheath conditions, electron energy transmission coefficient,
     {\tt ENEPAR(,1)} specifies an energy transmission factor,
     $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$.
-    Obsolete. Replace with drift-compatible {\tt BCENE = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENE=15}.
   \item[13] prescribe the electron energy flux per unit area proportional to temperature,
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
@@ -2796,7 +2796,7 @@ which contains
   \item[3] sheath conditions, ion energy transmission,
     {\tt ENIPAR(,1)} specifies the contribution to the energy transmission coefficient
     [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-    {\tt BCENI = 3} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
+    {\tt BCENI=3} not adapted for WG. Replace with drift-compatible {\tt BCENI=15}.
   \item[4] prescribe the value of the ion temperature, weakly a mixed boundary condition,
     {\tt ENIPAR(,1)} specifies the temperature in $eV$ and
     {\tt ENIPAR(,2)} specifies the "strength" of the boundary condition.
@@ -2818,7 +2818,7 @@ which contains
   \item[12] sheath conditions, ion energy transmission coefficient,
     {\tt ENIPAR(,1)} specifies an energy transmission factor,
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
-    Obsolete. Replace with drift-compatible {\tt BCENI = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENI=15}.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
@@ -2848,9 +2848,9 @@ which contains
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
     {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
     {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
-  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
+  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
+  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
     {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[28] prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -2871,7 +2871,7 @@ which contains
     {\tt POTPAR(,1)} specifies the potential gradient in $V.m^{-1}$.
   \item[3] sheath conditions,
     {\tt POTPAR(,2)} used for biasing [see code for details].
-    {\tt BCPOT = 3} not adapted for WG. Replace with drift-compatible {\tt BCPOT = 11}.
+    {\tt BCPOT=3} not adapted for WG. Replace with drift-compatible {\tt BCPOT=11}.
   \item[4] prescribe the value of the potential weakly a mixed boundary condition,
     {\tt POTPAR(,1)} specifies the potential in $V$ and
     {\tt POTPAR(,2)} specifies the "strength" of the boundary condition.
@@ -2927,7 +2927,7 @@ which contains
     {\tt ENKPAR(,1)} specifies the flux in $W$.
   \item[14] leakage option for turbulent kinetic energy, {\tt ENKPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \kappa$.
-  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON=14} is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENKPAR(,2)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,2)}.
   \item[16] Prescribe the value of the turbulent kinetic energy, with a poloidal
@@ -2952,7 +2952,7 @@ which contains
     {\tt ENZPAR(,1)} specifies the gradient of the turbulent enstrophy in $s^{-2}.m^{-1}$.
   \item[14] leakage option for turbulent enstrophy, {\tt ENZPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \zeta$
-  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON=14} is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENZPAR(,2)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,2)}.
   \item[16] Prescribe the value of the turbulent enstrophy, with a poloidal
@@ -5117,13 +5117,11 @@ several values of $\Delta_t$.
 \section{Dynamic ("Time-dependent") mode}
 \label{sec:dynamic}\index{Dynamic mode}
 
-{\em This feature is experimental and should be used with caution!}
-
-There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. The traditional time-dependent solution method is based on a $1^{st}$ order Euler scheme, but a more accurate $2^{nd}$ order Crank-Nicolson scheme is also available. These are chosen using the switch {\tt b2mndt\_ckn}, with values {\tt 1} (default) and {\tt 2} respectively. The Crank-Nicolson scheme can also be used for the "false time-stepping" done in steady-state runs if desired. 
 
 The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
 
-When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
+When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
 More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
 
@@ -11633,7 +11631,7 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_West_style0}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -11648,11 +11646,11 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
-\end{equation*}
+\end{equation}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_West_style1}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
@@ -11662,7 +11660,9 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
-\end{equation*}
+\end{equation}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_West_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_West_style1}).
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11708,7 +11708,7 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_East_style0}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -11723,11 +11723,11 @@ If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
-\end{equation*}
+\end{equation}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_East_style1}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
@@ -11737,7 +11737,9 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
-\end{equation*}
+\end{equation}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_East_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_East_style1}).
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
