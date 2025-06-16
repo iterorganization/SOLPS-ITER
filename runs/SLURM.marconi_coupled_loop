@@ -5,10 +5,11 @@
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH --partition=#PART#
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem-per-cpu=#MEM#
+#SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
+#SBATCH --account=FUA34_ADC
 #SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -19,13 +20,13 @@ set COMPRESS_ARG="#COMPRESS_ARG#"
 set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 set USE_MPI=""
-set nodename=`hostname`
 if ($?SOLPS_MPI) then
-  set MPI_OPTS=#MPIOPTS#
   set MPI_EXEC=mpiexec
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set MPI_OPTS=#MPIOPTS#
   set TIME="srun --mpi=pmi2"
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+  setenv I_MPI_PIN_PROCESSOR_LIST 0-27
 endif
 
 set USE_OMP=""
@@ -38,6 +39,8 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
+rm -f run.KAPUTT
+
 set STANDALONE=${STANDALONE_ARG}
 if ($?SOLPS_TGT) then
   set STANDALONE=-${SOLPS_OPT}tgt
@@ -47,7 +50,7 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
-time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
 
@@ -92,13 +95,22 @@ if ("$Break_loop" == "no") then
 #  echo $End_by_walltime
 
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
-    update_solps_run_status     "Resubmitting inside the loop at `date`"
+    update_solps_run_status "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`
     mv b2fstati b2fstati_$NOW
+    if (-e fort.13.i) mv fort.13.i fort.13.i_$NOW
+    if (-e fort.14.i) mv fort.14.i fort.14.i_$NOW
+    if (-e fort.15.i) mv fort.15.i fort.15.i_$NOW
+    if (-e fort.44.i) mv fort.44.i fort.44.i_$NOW
+    if (-e fort.46.i) mv fort.46.i fort.46.i_$NOW
+    if (-e fort.44_aver.i) mv fort.44_aver.i fort.44_aver.i_$NOW
+    if (-e fort.46_aver.i) mv fort.46_aver.i fort.46_aver.i_$NOW
+    if (-e conbe.dat.i) mv conbe.dat.i conbe.dat.i_$NOW
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    itersubmit #LOOPOPTS# SLURM.iter_loop
+    echo marconisubmit #LOOPOPTS# SLURM.marconi_coupled_loop
+    marconisubmit #LOOPOPTS# SLURM.marconi_coupled_loop
   endif
 endif

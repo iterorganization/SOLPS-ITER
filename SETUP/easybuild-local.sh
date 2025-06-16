@@ -825,7 +825,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2023b_MODULES="
 	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI
-  	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
+	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
 	impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
 	iimpi/2023b --accept-eula-for=Intel-oneAPI
 	CMake/3.27.6-GCCcore-13.2.0
@@ -911,7 +911,6 @@ function fetch_from_iter_cluster()
        mkdir -p ${sources}
        cmd="scp -r ${proxy} ${site}:${iter_ebprefix}/sources/${subdir}/${name}/* ${sources}"
        /bin/sh -c "${cmd} || echo Failed command ${cmd}"
-
     done
 }
 

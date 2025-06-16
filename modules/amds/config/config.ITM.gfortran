@@ -1,4 +1,4 @@
-LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXp -lXft -lpthread -lm
+LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lpthread -lm
 
 #!!!Local Variables:
 #!!! mode: Makefile

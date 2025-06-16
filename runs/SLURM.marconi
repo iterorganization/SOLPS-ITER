@@ -5,10 +5,11 @@
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH --partition=#PART#
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem-per-cpu=#MEM#
+#SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
+#SBATCH --account=FUA34_ADC
 #SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -19,20 +20,18 @@ set COMPRESS_ARG="#COMPRESS_ARG#"
 set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 set USE_MPI=""
-set nodename=`hostname`
 if ($?SOLPS_MPI) then
-  set MPI_OPTS=#MPIOPTS#
   set MPI_EXEC=mpiexec
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set MPI_OPTS=#MPIOPTS#
   set TIME="srun --mpi=pmi2"
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 endif
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv KMP_AFFINITY disabled
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

@@ -52,10 +52,12 @@ else
 endif
 
 # Debugger (set environment variable DBX)
+module switch totalview/2023.2
 setenv DBX totalview
 
 # compilers
 
 setenv CC icc
 setenv FC ifort
+setenv MPI_FC mpiifort
 setenv CXX icpc

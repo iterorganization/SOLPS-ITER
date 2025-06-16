@@ -31,6 +31,8 @@
 \usepackage{longtable}
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
+\usepackage{exscale}
+\usepackage{bigints}
 \usepackage{dsfont}
 \usepackage{tocbibind}
 \ifpdf
@@ -440,7 +442,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER, IPP and MPCDF
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
   \item[g95] The g95 compiler, in use on the Marconi Gateway
   \item[nag\_f90] The NAG Fortran compiler
@@ -664,7 +666,7 @@ and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 \subsection{MacOS support}
 \index{MacOS support}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of {\tt B2.5} and {\tt Eirene} (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of {\tt B2.5} and the coupled {\tt B2.5-Eirene} code can be compiled with graphics, while the standalone version of {\tt Eirene} can be currently compiled only without graphics. Also {\tt DivGeo}, {\tt Carre}, {\tt Triang} (only the no graphics version), {\tt Uinp} and {\tt amds} can be successfully compiled. {\tt Sonnet-light}, at the moment, is not compatible yet with MacOS.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
 
 First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
@@ -1391,6 +1393,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
   \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
+  \item[mpcdfsubmit]\index{mpcdfsubmit} Command file to launch runs on the MPCDF clusters Raven and Viper. See Section~\ref{b2run} for details.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to update a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to archive a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
@@ -1991,13 +1994,13 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
+in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*},
 or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
-  \item[darwinsubmit]\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
+  \item{darwinsubmit}\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -2005,27 +2008,16 @@ are provided:
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
+  \item{mpcdfsubmit}\index{mpcdfsubmit} for submissions on the MPCDF clusters Raven and Viper
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts})
-and adapt them to their local environment, along
-with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
-Each submission command file can handle several possible cases:
-\index{QSUB files}\index{SLURM files}
-\begin{description}
-  \item{QSUB.*, SLURM.*} Runs a standalone {\tt B2.5} case.
-  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
-\end{description}
-where {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. The {\tt \_coupled} scripts are used when the presence of an {\tt Eirene} input file {\tt input.dat} is detected in the run directory.
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt mpcdf}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 
-Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH} and {\tt \$MANPATH}, see scripts {\tt SETUP/SETUP.itm\_*} and {\tt SLURM.itm*\_loop}.
-All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
-outside the {\tt \$\{SOLPSTOP\}} file space is available.
+Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH\_FOR\_LOOP} and {\tt \$MANPATH\_FOR\_LOOP}, see scripts {\tt \$\{SOLPSTOP\}/setup.csh} and {\tt \$\{SOLPSTOP\}/runs/SLURM.itm*\_loop}.
+
+All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from outside the {\tt \$\{SOLPSTOP\}} file space is available.
 
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
@@ -2048,10 +2040,7 @@ where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_fil
 %% $
 or stops if the submission file is not found.
 
-\begin{sloppypar}
-If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
-for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the {\tt -s} option. Otherwise, the script will assume a coupled run is requested if an {\tt Eirene} {\tt input.dat} file is present in the run directory, and a standalone run otherwise.
-\end{sloppypar}
+If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter}. To request a {\tt B2.5} standalone run explicitly, the user should use the {\tt -s} option. By default, the script will assume a run using the coupled code.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the {\tt -m} option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -2117,6 +2106,12 @@ A listing of the available options for each submission script can be obtained by
 itersubmit -h
 \end{verbatim}
 command. All options (except {\tt -h}) can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
+
+Some submission scripts (currently only {\tt ippsubmit} and {\tt mpcdfsubmit}) also allow to launch several runs within one single SLURM job, by means of the {\tt -b} option, if the runs share the same {\tt baserun}. This is done executing the script from the directory above the run and {\tt baserun} directories, specifying the names of the run directories from which the jobs should be launched through a comma-separated list. For example:
+\begin{verbatim}
+ippsubmit -b 'run1,run2'
+\end{verbatim}
+This option should be used with careful consideration, in order to request CPU resources in an appropriate way. The ideal situation in which such option could be used is in case of reasonably similar runs, and with all launched runs asked to be stopped after the same wallclock time, so that no allocated CPUs end up being in idle state. Users are encouraged to refer to the possible options, within the above mentioned submission scripts, for the specification of the requested job properties (e.g.\ requested number of CPUs per run and memory).
 
 The {\tt SLURM.iter} script first of all changes directory to
 {\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file
@@ -2632,12 +2627,8 @@ which contains
   \item[11] should not be used for feedbacks anymore, not converted to WG code.
   \item[12] should not be used for feedbacks anymore, not converted to WG code.
   \item[13] particle density to achieve specified total flux,
-    {\tt CONPAR(,,1)} is the specified radial flux crossing the surface
-    {\tt b2stbc\_type13\_ref} steps away from the boundary, to which is added
-    the returning flux of ionised neutrals that crossed into the plasma core
-    ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
-    {\tt 'ionising\_core'} switch is used,
-    {\tt CONPAR(,,2)} is the strength of the feedback.
+    {\tt CONPAR(,,1)} is the specified radial flux crossing the boundary surface, to which is added the returning flux of ionised neutrals that crossed into the plasma core ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the {\tt 'ionising\_core'} switch is used,
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[14] sound speed velocity flux,
     {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
     If {\tt CONPAR(,,2).gt.0}, an additional decay length loss is added, where {\tt CONPAR(,,2)} is the decay length.
@@ -2645,42 +2636,41 @@ which contains
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[18] prescribe total main ion particle flux, used with {\tt ASTRA} coupling.
     Not yet available for WG.
   \item[19] particle flux feedback boundary condition, flux is summed over neutrals and ions, for coupling with {\tt ASTRA}. The total desired flux is summed over all {\tt BCCON=19} core boundaries. This boundary condition applies to ions in their highest ionisation stage.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[20] constant density feedback condition,
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
     Not yet available for WG.
   \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-    Not yet available for WG.
-  \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
+  \item[22] feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
-  \item[23] Feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
+  \item[23] feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-    {\tt CONPAR(,,2)} is the strength of the feedback.
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
     Not yet available for WG.
   \item[25] feedback boundary condition: prescribe the average value of the density and add the poloidal density variation from neighbouring radial ring. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=21} fails). It is recommended to use this boundary condition together with the corresponding condition on ion temperature ({\tt BCENI=26,27}).
     {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[26] feedback boundary condition: prescribe the total ion flux and find the average density. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. This boundary condition is suitable for any species of a multi-species plasma (i.e. in the case when the condition used in {\tt BCCON=22} fails). It is recommended to use this boundary condition together with a corresponding condition on the ion temperature ({\tt BCENI=26,27}). The total desired flux is summed over all {\tt BCCON=26} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[27] feedback boundary condition: prescribe the particle flux sum for all neutrals and ions belonging to a given isonuclear sequence and find the average density of the highest ionization stage. The poloidal density variation from the neighbouring radial ring is applied on top of the average density. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=25,26}). The total desired flux is summed over all {\tt BCCON=27} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    Not yet available for WG.
+    {\tt CONPAR(,,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
   \item[28] prescribe the flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain. Only intended for core boundaries.
     {\tt CONPAR(,,1)} specifies the desired average density in $m^{-3}$.
   \item[29] feedback on the total particle flux, by imposing a flux surface averaged density, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-    {\tt CONPAR(,,2)} is the strength of the feedback. Intended for core boundaries only.
+    {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used). Intended for core boundaries only.
   \end{description}
 \item[BCMOM]\index{BCMOM} {\tt integer array, length NS * NBC}, specifying
   the type of parallel momentum or velocity boundary condition for each segment
@@ -2696,7 +2686,7 @@ which contains
     {\tt MOMPAR(,,2)} $< \frac{1}{2}$, then the velocity is set to exactly
     {\tt MOMPAR(,,1)} $\times C_{s, \mbox{collective}}$, otherwise the
     velocity is set to be at least {\tt MOMPAR(,,1)} $\times C_{s,\mbox{species}}$.
-    {\tt BCMOM = 3} was not adapted for WG. Replace with drift-compatible {\tt BCMOM = 13}.
+    {\tt BCMOM=3} was not adapted for WG. Replace with drift-compatible {\tt BCMOM=13}.
   \item[4] prescribe the value of the velocity, weakly a mixed boundary condition,
     {\tt MOMPAR(,,1)} specifies the parallel velocity in $m.s^{-1}$ and
     {\tt MOMPAR(,,2)} specifies the "strength" of the boundary condition.
@@ -2707,18 +2697,14 @@ which contains
   \item[7] prescribe the parallel momentum as given by {\tt bv\_ua} from {\tt b2mod\_boundary\_sources}.
   \item[8] special : limited shear, imposes zero gradient for the Mach number.
     [[[Eventually intended to have {\tt MOMPAR(,,1)} specify the gradient of the Mach number in $m^{-1}$]]].
-    Not yet available for WG.
-  \item[9] prescribe the total parallel momentum flux with constant flux
-    density, {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
-    Not yet available for WG.
+  \item[9] prescribe the total parallel momentum flux with constant flux density,
+    {\tt MOMPAR(,,1)} specifies the parallel momentum flux in $N$.
   \item[10] prescribe the decay length for the parallel momentum,
     {\tt MOMPAR(,,1)} specifies the decay length in $m$.
-    Not yet available for WG.
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
     Not yet available for WG.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-    Not yet available for WG.
   \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
@@ -2743,16 +2729,15 @@ which contains
     {\tt ENEPAR(,1)} specifies an additional contribution to the energy
     transmission coefficient in addition to that of the potential
     difference [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-    {\tt BCENE = 3} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
+    {\tt BCENE=3} not adapted for WG. Replace with drift-compatible {\tt BCENE=15}.
   \item[4] prescribe the value of the electron temperature, weakly a mixed boundary condition,
     {\tt ENEPAR(,1)} specifies the temperature in $eV$ and
     {\tt ENEPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the electron energy flux per unit area,
     {\tt ENEPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-    Not yet available for WG.
-  \item[6] prescribe the total electron energy flux for a constant
-    electron temperature, {\tt ENEPAR(,1)} specifies the energy flux
-    in $W$ (no longer supported, use types [16] or [17] instead).
+  \item[6] prescribe the total electron energy flux for a constant electron temperature,
+    {\tt ENEPAR(,1)} specifies the energy flux in $W$
+    (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the electron temperature based on {\tt bv\_te} from {\tt b2mod\_boundary\_sources}.
   \item[8] prescribe the total electron heat flux with constant flux density,
     {\tt ENEPAR(,1)} specifies the energy flux in $W$.
@@ -2763,38 +2748,31 @@ which contains
   \item[12] sheath conditions, electron energy transmission coefficient,
     {\tt ENEPAR(,1)} specifies an energy transmission factor,
     $\delta_e$ in $Q_e = \delta_e \Gamma_e T_e$.
-    {\tt BCENE = 12} not adapted for WG. Replace with drift-compatible {\tt BCENE = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENE=15}.
   \item[13] prescribe the electron energy flux per unit area proportional to temperature,
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
-    Not yet available for WG.
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
   \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
   \item[16] feedback boundary condition with constant temperature,
-    {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
-    If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$,
-    summed over all core boundaries with {\tt BCENE=16}.
+    {\tt ENEPAR(,1)} specifies the power flux in $W$ across the boundary surface,
+    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+    Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
+    If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$, summed over all core boundaries with {\tt BCENE=16}.
   \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, with {\tt ENEPAR(,1) + ENIPAR(,1)} giving
-    the total power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default=-1), {\tt ENEPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Replaces [16] for high densities and large values of
-    {\tt b2stbc\_type16\_ref}.
-    Not yet available for WG.
-  \item[18] fractional drop condition. Not yet working. Not yet available for WG.
+    the total power flux in $W$ across the boundary surface,
+    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback.
+    Replaces [16] for high densities.
+  \item[18] fractional drop condition. Experimental. Attempts to set the guard cell temperature to be $(1 - ENEPAR(,1))$ times the boundary cell temperature.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
     Not yet available for WG.
   \item[20] feedback boundary condition with constant temperature,
-    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
-    Not yet available for WG.
+    as per type [16] but with a different feedback scheme.
+    {\tt ENEPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[21] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away.
    {\tt ENEPAR(,1)} specifies the desired electron temperature in $eV$.
-   {\tt ENEPAR(,2)} is the strength of the feedback.
-    Not yet available for WG.
+   {\tt ENEPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[22] radial leakage condition for the electron temperature.
     {\tt ENEPAR(,1)} specifies the leakage velocity in units of the electron thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
   \item[23] prescribe the value of the electron temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -2802,7 +2780,7 @@ which contains
     Intended only for core boundaries.
   \item[24] Feedback on the total electron energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENEPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENEPAR(,2)} specifies the strength of the feedback.
+    {\tt ENEPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
     Intended only for core boundaries.
   \end{description}
 \item[BCENI]\index{BCENI} {\tt integer array, length NBC}, specifying the
@@ -2818,20 +2796,18 @@ which contains
   \item[3] sheath conditions, ion energy transmission,
     {\tt ENIPAR(,1)} specifies the contribution to the energy transmission coefficient
     [the sound speed used depends on settings of {\tt MOMPAR(,ISMAIN,2)} and the {\tt \allowbreak b2stbc\_sound\_model} switch].
-    {\tt BCENI = 3} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
+    {\tt BCENI=3} not adapted for WG. Replace with drift-compatible {\tt BCENI=15}.
   \item[4] prescribe the value of the ion temperature, weakly a mixed boundary condition,
     {\tt ENIPAR(,1)} specifies the temperature in $eV$ and
     {\tt ENIPAR(,2)} specifies the "strength" of the boundary condition.
-    Not yet available for WG.
   \item[5] prescribe the ion energy flux per unit area,
     {\tt ENIPAR(,1)} specifies the energy flux density in $W.m^{-2}$.
-    Not yet available for WG.
   \item[6] prescribe the total ion energy flux for a constant ion temperature,
     {\tt ENIPAR(,1)} specifies the energy flux in $W$
     (no longer supported, use types [16] or [17] instead).
   \item[7] prescribe the ion temperature based on {\tt bv\_ti} from {\tt b2mod\_boundary\_sources}.
   \item[8] prescribe the total ion heat flux with constant flux density,
-    {\tt ENIPAR(,1)} specifies the energy flux in $W$
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[9] prescribe the decay length for the ion temperature,
     {\tt ENIPAR(,1)} specifies the decay length in $m$ (can also use type [19] instead).
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
@@ -2842,52 +2818,46 @@ which contains
   \item[12] sheath conditions, ion energy transmission coefficient,
     {\tt ENIPAR(,1)} specifies an energy transmission factor,
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
-   {\tt BCENI = 12} not adapted for WG. Replace with drift-compatible {\tt BCENI = 15}.
+    Obsolete. Replace with drift-compatible {\tt BCENI=15}.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
-    Not yet available for WG.
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
-    {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
-    with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
-    should be something like {\tt 0.1} and specifies the strength of the
-    feedback. Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
+    {\tt ENIPAR(,1)} specifies the power flux in $W$ across the boundary surface,
+    {\tt ENIPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
     If {\tt bceni\_16\_style=1}, integrated ion heat flux with constant $T_i$, summed over all core boundaries with {\tt BCENI=16}.
   \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, see {\tt BCENE=17} above for description.
-    Not yet available for WG.
-  \item[18] fractional drop condition. Not yet working. Not yet available for WG.
+  \item[18] fractional drop condition. Experimental. Attempts to set the guard cell temperature to be $(1 - ENIPAR(,1))$ times the boundary cell temperature.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
     Not yet available for WG.
   \item[20] feedback boundary condition with constant temperature,
-    as per type [16] but with {\tt type20\_} switches and a different feedback scheme.
-    Not yet available for WG.
+    as per type [16] but with a different feedback scheme.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[21] from {\tt b2stbc\_spb}. Not yet available for WG.
   \item[22] radial leakage velocity for the ion temperature.
     {\tt ENIPAR(,1)} specifies the leakage velocity in units of the collective ion thermal velocity. A temperature gradient such that the diffusive flux is set to match this leakage is imposed.
   \item[23] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The average is taken over all core boundaries with {\tt BCENI=23}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-    Not yet available for WG.
   \item[24] feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    Not yet available for WG.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
     {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback.
-    Not yet available for WG.
-  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
+    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-    Not yet available for WG.
-  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
-  {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    Not yet available for WG.
+  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
+    {\tt ENIPAR(,1)} specifies the energy flux in $W$.
+    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[28] prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the average temperature in $eV$.
   \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENIPAR(,2)} specifies the strength of the feedback.
+    {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \end{description}
 \item[BCPOT]\index{BCPOT} {\tt integer array, length NBC}, specifying the
   type of electric potential or current boundary condition for each
@@ -2901,42 +2871,40 @@ which contains
     {\tt POTPAR(,1)} specifies the potential gradient in $V.m^{-1}$.
   \item[3] sheath conditions,
     {\tt POTPAR(,2)} used for biasing [see code for details].
-    {\tt BCPOT = 3} not adapted for WG. Replace with drift-compatible {\tt BCPOT = 11}.
+    {\tt BCPOT=3} not adapted for WG. Replace with drift-compatible {\tt BCPOT=11}.
   \item[4] prescribe the value of the potential weakly a mixed boundary condition,
     {\tt POTPAR(,1)} specifies the potential in $V$ and
     {\tt POTPAR(,2)} specifies the "strength" of the boundary condition.
   \item[5] prescribe the current flux density per unit area,
     {\tt POTPAR(,1)} specifies the electric current flux density in $A.m^{-2}$.
-    Not yet available for WG.
   \item[6] prescribe the total current flux density for a constant potential [not yet available].
   \item[7] prescribe the potential as given by {\tt bv\_po} from {\tt b2mod\_boundary\_sources}.
-  \item[8] prescribe the total electric current with constant flux
-    density, {\tt POTPAR(,1)} specifies the electric current in $A$.
+  \item[8] prescribe the total electric current with constant flux density,
+    {\tt POTPAR(,1)} specifies the electric current in $A$.
   \item[9] prescribe the decay length for the potential,
     {\tt POTPAR(,1)} specifies the decay length in $m$.
-    Not yet available for WG.
   \item[10] should not be used for feedbacks anymore, not converted to WG code.
   \item[11] sheath conditions, electron energy transmission from {\tt b2stbc\_spb}, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, and {\tt BCENE/I=15}. {\tt POTPAR(,2)} specifies the bias potential in $V$.
   \item[12] imposes the currents due to drifts for the core boundary. Must be used in conjunction with the switch setting {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
   \item[13] imposes the currents due to drifts for the private flux and main chamber boundaries. Must be used in conjunction with {\tt \allowbreak istyle\_cur\_contr\_on\_S\_and\_N=2}.
   \item[14] prescribe the total current without imposing a specific profile. Follow the profile of the first flux tube inside.
     Intended use: core boundary, total PF boundary,... For testing purposes, use with care!
-  \item[15] feedback boundary condition on total current with constant potential. {\tt POTPAR(,1)} specifies the electric current in $A$.
-    {\tt POTPAR(,2)} specifies the strength of the feedback.
-  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases. Not yet available for WG.
+  \item[15] feedback boundary condition on total current with constant potential.
+    {\tt POTPAR(,1)} specifies the electric current in $A$.
+    {\tt POTPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+  \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[17] feedback boundary condition on total current by imposing the potential, with same profile as neighbouring flux tube.
     {\tt POTPAR(,1)} specifies the electric current in $A$. {\tt POTPAR(,2)} specifies the under-relaxation factor for the feedback mechanism.
-    If not specified by the user, {\tt POTPAR(,2)} = $10^{-2}$.
+    {\tt POTPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
     {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
-    {\tt POTPAR(,,2)} is the strength of the feedback.
-    Not yet available for WG.
-  \item[22]  Prescribe the value of the potential, with a perturbation taken from the first flux tube in the domain. Intended for core boundaries only.
+    {\tt POTPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+  \item[22] prescribe the value of the potential, with a perturbation taken from the first flux tube in the domain. Intended for core boundaries only.
     {\tt POTPAR(,1)} specifies the average potential.
   \item[23] Feedback on the total current for the core boundary, by imposing a flux surface averaged potential, with poloidal perturbation taken from flux
      tube just inside domain. The feedback is scaled with the ion temperature.
     {\tt POTPAR(,1)} specifies the desired integral current through flux surfaces in $A$.
-    {\tt POTPAR(,2)} is the strength of the feedback.
+    {\tt POTPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
   \end{description}
 \item[BCENK]\index{BCENK} {\tt integer array, length NBC}, specifying the
   type of boundary condition for the turbulent kinetic energy for each
@@ -2959,7 +2927,7 @@ which contains
     {\tt ENKPAR(,1)} specifies the flux in $W$.
   \item[14] leakage option for turbulent kinetic energy, {\tt ENKPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \kappa$.
-  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON=14} is used. {\tt ENKPAR(,1)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENKPAR(,2)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,2)}.
   \item[16] Prescribe the value of the turbulent kinetic energy, with a poloidal
@@ -2970,7 +2938,7 @@ which contains
   \item[17]  Feedback on the turbulent kinetic energy flux, by imposing a flux surface
     averaged $\kappa$, with a poloidal perturbation taken from the flux tube just inside the domain.
     Intended for core boundaries only. {\tt ENKPAR(,1)} specifies the flux in $W$.
-    {\tt ENKPAR(,2)} specifies the strength of the feedback.
+    {\tt ENKPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \end{description}
 \item[BCENZ]\index{BCENZ} {\tt integer array, length NBC}, specifying the
   type of boundary condition for the turbulent enstrophy for each
@@ -2984,7 +2952,7 @@ which contains
     {\tt ENZPAR(,1)} specifies the gradient of the turbulent enstrophy in $s^{-2}.m^{-1}$.
   \item[14] leakage option for turbulent enstrophy, {\tt ENZPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i \zeta$
-  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON = 14} is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to
+  \item[15] Sheath loss boundary condition. For now it assumes that {\tt BCCON=14} is used. {\tt ENZPAR(,1)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,1)} and {\tt ENZPAR(,2)} specifies the sheath transmission factor corresponding to
     the particle fluxes dictated by {\tt CONPAR(,,2)}.
   \item[16] Prescribe the value of the turbulent enstrophy, with a poloidal
@@ -4252,7 +4220,7 @@ omissions to the developer team are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{eirenemovies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
 
 \begin{sloppypar}
 In case of a computer crash during a run, it may be possible to recover
@@ -4277,7 +4245,7 @@ a crash, the user should then:
 
 If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
-This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, and {\tt b2movies.nc}, as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
+This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, {\tt b2movies.nc} and {\tt eirenemovies.nc} (the last one only for runs with {\tt Eirene}) , as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
 
 \begin{sloppypar}
 It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run. However, to do this and not overwrite the current tracing files, {\tt b2co} {\em must} be invoked as follows:
@@ -5149,13 +5117,11 @@ several values of $\Delta_t$.
 \section{Dynamic ("Time-dependent") mode}
 \label{sec:dynamic}\index{Dynamic mode}
 
-{\em This feature is experimental and should be used with caution!}
-
-There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. The traditional time-dependent solution method is based on a $1^{st}$ order Euler scheme, but a more accurate $2^{nd}$ order Crank-Nicolson scheme is also available. These are chosen using the switch {\tt b2mndt\_ckn}, with values {\tt 1} (default) and {\tt 2} respectively. The Crank-Nicolson scheme can also be used for the "false time-stepping" done in steady-state runs if desired. 
 
 The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
 
-When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered.
+When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
 More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
 
@@ -8333,7 +8299,7 @@ D_{p,a}, & \ z_a \neq 0 \\
 \begin{matrix}
 \frac{D_{p,a}}
 {\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac{1}{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_y} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma_1}\right)^{\frac{1}{\gamma_1}}},
-& \ V_{T_i}=\sqrt{\frac{8T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
+& \ V_{T_i}=\sqrt{\frac{8 T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
 D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8716,6 +8682,18 @@ c_{\eta_{ax}^{(CL)}} & =
 \begin{equation}\label{eq:vma_max}
 V_{m_a}^{(\max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \end{equation}
+
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\eta_{ax}^{(CL)}} = \frac{1}{1 + \frac{1}{c_{flim_2} N_{coll,i}}}
+\end{equation*}
+
+where $N_{coll,i}$ is the number of ion collisions along the field line:
+
+\begin{equation*}
+N_{coll,i} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{a} c_s} \right) dl
+\end{equation*}
 
 \begin{align}\label{eq:mom_veta}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
@@ -9116,6 +9094,18 @@ c_{\kappa_{ex}}^{F \lim} & =
 \begin{equation}\label{eq:ene_vhemax}
 V_{h_e}^{(\max)} = c_{flim_0} \frac{\sqrt g}{h_x}|b_x| \sqrt{\frac{T_e}{m_e}}
 \end{equation}
+
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\kappa_{ex}}^{F \lim} = \frac{1}{1 + \frac{1}{c_{flim_0} N_{coll,e}}}
+\end{equation*}
+
+where $N_{coll,e}$ is the number of electron collisions along the field line:
+
+\begin{equation*}
+N_{coll,e} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{e} \sqrt{\frac{T_e}{m_e}}} \right) dl
+\end{equation*}
 
 \begin{equation}\label{eq:ene_mkapexcl}
 \widetilde{\kappa}_{ex}^{(CL)} = c_{\kappa_{ex}^{(CL)}}^{(Luciani)} \kappa_{ex}^{(CL)} b_x^2
@@ -9567,7 +9557,7 @@ $Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-mod
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:eni_qix}\begin{split}
+\begin{multline}\label{eq:eni_qix}
 q_{ix} = \left[
         \frac{3}{2} \Gamma_{ix} +
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
@@ -9575,8 +9565,7 @@ q_{ix} = \left[
         \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
-\end{split}
-\end{equation}
+\end{multline}
 
 \begin{equation}\label{eq:eni_gammahix}
 \Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
@@ -9678,6 +9667,12 @@ V_{h_i}^{(\max)} = c_{flim_1} \frac{\sqrt g}{h_x} |b_x| \sqrt{\frac{T_i}{m_p}}
 \end{equation} % nirm
 
 $c_{flim_1} = 0.15$ is the ion heat flux limiter coefficient.
+
+If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
+
+\begin{equation*}
+c_{\kappa_{ix}}^{F \lim} = \frac{1}{1 + \frac{1}{c_{flim_1} N_{coll,i}}}
+\end{equation*}
 
 \begin{equation}\label{eq:eni_tikapixCL}
 \widetilde{\kappa}_{ix}^{(CL)} = c_{\kappa_{ix}^{(CL)}}^{(Luciani)} \kappa_{ix}^{(CL)}
@@ -10849,6 +10844,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
 =
@@ -10861,7 +10858,28 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_W
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}
+\begin{matrix}
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W & =
+& \left\{
+\begin{matrix}
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_W, & \text{mdf\_fnb = 0}
+\\
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} \left( V^{(E)}_{ax} + \widetilde{\widetilde{V}}^{(dia)}_{ax} \right) n_a \right) + \tilde\Gamma^{(PSch)}_{ax} \right] \right|_W, & \text{mdf\_fnb = 1}
+\end{matrix}
+\right.
+\end{matrix}
+\end{equation}
+
+where $\alpha_{\max}$ is given by {\tt Qalfmax}.
+
+Both {\tt Qalfmin} and {\tt Qalfmax} are provided in the {\tt b2fgmtry} file or through the {\tt b2us\_prep\_Qalfmin} and {\tt b2us\_prep\_Qalfmax} switches, respectively. Default value for both is $10^{-3}$.
 
 \subsubsection{East}
 
@@ -10912,6 +10930,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
+If the sine of the incident field line angle is larger {\tt Qalfmin}:
+
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
 =
@@ -10924,7 +10944,24 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_E
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}
+\begin{matrix}
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E & =
+& \left\{
+\begin{matrix}
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} V^{(E)}_{ax} n_a \right) \right] \right|_E, & \text{mdf\_fnb = 0}
+\\
+\left. \left[ \frac{\sqrt g}{h_x} p_{n,a,1} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a \alpha_{\max} +
+   \max \left( 0, \frac{\sqrt g}{h_x} \left( V^{(E)}_{ax} + \widetilde{\widetilde{V}}^{(dia)}_{ax} \right) n_a \right) + \tilde\Gamma^{(PSch)}_{ax} \right] \right|_E, & \text{mdf\_fnb = 1}
+\end{matrix}
+\right.
+\end{matrix}
+\end{equation}
 
 \subsection{Parallel momentum balance for ions}
 
@@ -11123,13 +11160,18 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 
 
 with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 V_{West} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
+\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+For nearly tangent field lines, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11195,13 +11237,18 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 \right]
 \right|_E$
 
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
 \begin{equation*}
 V_{East} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} V_{ax}^{(\exb)}
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
+\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+For nearly tangent field lines, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11376,25 +11423,23 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \left. \frac{\sqrt g}{h_x} j_x \right|_W =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
-                p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
+                p_{n,a,1} b_\alpha \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
+        \left( 1 - \gamma_e \right) b_\alpha n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_W
 \end{equation*}\normalsize
 
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
+with
 
 \begin{equation*}
-\left. \frac{\sqrt g}{h_x} j_x \right|_W =
-\frac{\sqrt g}{h_x} e \left. \left[
-        \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
-        \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_W
+b_\alpha = \left\{
+\begin{matrix}
+|b_x| & , \text{if} \ |b_x| \ge \alpha_{\min} \\
+\alpha_{\max} & , \text{if} \ |b_x| < \alpha_{\min}
+\end{matrix}
+\right.
 \end{equation*}
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -11416,25 +11461,12 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \left. -\frac{\sqrt g}{h_x} j_x \right|_E =
 \frac{\sqrt g}{h_x} e \left. \left[
         - \sum \limits_{a=0}^{ns-1} z_a \left(
-                p_{n,a,1} |b_x| \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
+                p_{n,a,1} b_\alpha \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_a
         \right) +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
+        \left( 1 - \gamma_e \right) b_\alpha n_e \frac{1}{\sqrt{2\pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
 \end{equation*}\normalsize
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '1'}, or
-
-\begin{equation*}
-\left. -\frac{\sqrt g}{h_x} j_x \right|_E =
-\frac{\sqrt g}{h_x} e \left. \left[
-        - \sum \limits_{a=0}^{ns-1} z_a \Gamma_{ax} +
-        \left( 1 - \gamma_e \right) |b_x| n_e \frac{1}{\sqrt{2\pi}}
-        \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi -p_{\Phi,2} \right)}{T_e} \right)
-\right] \right|_E
-\end{equation*}
-
-if {\tt 'b2stbc\_istyle\_fchi'} is {\tt '0'}.
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
@@ -11599,7 +11631,7 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_West_style0}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -11614,13 +11646,13 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '0'}
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
-\end{equation*}
+\end{equation}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_West_style1}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
-        -\frac{\sqrt g}{h_x} |b_x| \left(
+        -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
@@ -11628,7 +11660,9 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         -
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
-\end{equation*}
+\end{equation}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_West_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_West_style1}).
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11674,7 +11708,7 @@ To be used in conjunction with {\tt BCENI = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 
 If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_East_style0}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\left(
                 \frac{1 + \gamma_e}{1 -\gamma_e} T_e + e\Phi
@@ -11689,13 +11723,13 @@ If {\tt 'bcene\_15\_style} is set to {\tt '0'}:
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
-\end{equation*}
+\end{equation}
 
 If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, default):
 
-\begin{equation*}
+\begin{equation}\label{eq:sheath_electron_bc_East_style1}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
-        -\frac{\sqrt g}{h_x} |b_x| \left(
+        -\frac{\sqrt g}{h_x} b_\alpha \left(
                 \left( 1 + \gamma_e \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
@@ -11703,7 +11737,9 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         +
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
-\end{equation*}
+\end{equation}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_East_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_East_style1}).
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11949,7 +11985,9 @@ $c_{h_i,a,2} = -10^{-2}$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-\begin{equation*}
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
+\begin{equation}\label{eq:sheath_ion_bc_West}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
@@ -11957,9 +11995,20 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 -
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_W
-\end{equation*}
+\end{equation}
 
 $p_{h_i,1} = +1.5$
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_West}).
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}\label{eq:sheath_ion_bc_tangent_West}
+\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+- \frac{3}{2} \frac{\sqrt g}{h_x} \alpha_{\max} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_i \right|_W
+\end{equation}
+
+If $\text{mdf\_fhi} \ne 0$, a term $-\frac{\sqrt g}{h_x} \left( q_{ix}^{P.Sch} + \frac{3}{2} \sum \limits_b V^{\exb}_{bx} n_b T_i \right)$ is added to the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_tangent_West}).
 
 For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
 
@@ -12039,7 +12088,9 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
-\begin{equation*}
+If the sine of the incident field line angle is larger than {\tt Qalfmin}:
+
+\begin{equation}\label{eq:sheath_ion_bc_East}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
 - p_{h_i,1} \frac{\sqrt g}{h_x} |b_x|
 \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} T_i
@@ -12047,9 +12098,20 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 +
 \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
 \right|_E
-\end{equation*}
+\end{equation}
 
 $p_{h_i,1} = +1.5$
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included inside the species summation on the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_East}).
+
+For nearly tangent field lines, we use instead:
+
+\begin{equation}\label{eq:sheath_ion_bc_tangent_East}
+\left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+- \frac{3}{2} \frac{\sqrt g}{h_x} \alpha_{\max} \sqrt{\frac{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} p_b}{\sum \limits_{\substack{b = 0 \\ z_b \neq 0}}^{ns-1} m_b n_b}} n_i \right|_E
+\end{equation}
+
+If $\text{mdf\_fhi} \ne 0$, a term $\frac{\sqrt g}{h_x} \left( q_{ix}^{P.Sch} + \frac{3}{2} \sum \limits_b V^{\exb}_{bx} n_b T_i \right)$ is added to the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_tangent_East}).
 
 For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default is {\tt 0}), then $p_{h,i,1}$ above is replaced with the value deduced from the truncated drifting Maxwellian sampling in {\tt Eirene} (see Section 1.5.1 in the {\tt Eirene} manual for the full derivation):
 
@@ -13623,18 +13685,16 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
 
 \clearpage
 
-\chapter{Quantities stored in b2movies.nc}
-\label{cha:b2movies}\index{b2movies.nc, quantities stored
-  in}\index{movie frames, b2movies.nc}\index{b2movies.nc}
+\chapter{Quantities stored in b2movies.nc and eirenemovies.nc}
+\label{cha:b2movies}\index{b2movies.nc and eirenemovies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc, eirenemovies.nc}\index{b2movies.nc, eirenemovies.nc}
 
-The following multi-dimensional arrays, i.e.\ covering the entire B2.5 grid, are stored in {\tt b2movies.nc}.
+Several relevant multi-dimensional arrays, i.e.\ covering the entire {\tt B2.5} grid, are stored in {\tt b2movies.nc}. Similarly, several relevant multi-dimensional arrays covering the entire {\tt Eirene} triangular grid, in case of runs with {\tt Eirene}, are stored in {\tt eirenemovies.nc}.
 The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
 
-If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} file, otherwise the file is created anew.
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} and {\tt eirenemovies.nc} files, otherwise the files are created anew.
 
-The number of arrays outputted to {\tt b2movies.nc} is controlled by the {\tt cdfmovie\_fields} switch.
-If greater than or equal to {\tt 1} (default value), then only the main state variables ($n_a$, $n_e$, $T_e$, $T_i$, etc.) are written with each write to {\tt b2movies.nc}.
-If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle and energy sources, radiation rates) are also included, see below Table
+The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of switches (which can be simultaneously used) as described in the below Table
 \ref{tab:b2moviesarrays}.
 
 \begin{center}
@@ -13649,19 +13709,15 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle 
     \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_fields} $\ge$ 1} \\
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1} \\
     \hline
     na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
     ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
     te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
     ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
     po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
-    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species, if {\tt Eirene} is used) & $m^{-3}$ \\
-    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species, if {\tt Eirene} is used) & $eV$ \\
-    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species, if {\tt Eirene} is used) & $m^{-3}$ \\
-    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species, if {\tt Eirene} is used) & $eV$ \\
     \hline
-    \multicolumn{3}{|c|}{and if {\tt cdfmovie\_fields} $\ge$ 2} \\
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_sources} $\ge$ 1} \\
     \hline
     rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
     rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
@@ -13676,17 +13732,92 @@ If greater than or equal to {\tt 2}, then additional quantities (e.g.\ particle 
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
     rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
-    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms (for each atom species, if {\tt Eirene} is used) & $W m^{-3}$ \\
-    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms (if {\tt Eirene} is used) & $W m^{-3}$ \\
-    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules (for each molecules species, if {\tt Eirene} is used) & $W m^{-3}$ \\
-    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules (if {\tt Eirene} is used) & $W m^{-3}$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    eirene\_papl\_sna \index{eirene\_papl\_sna}\index{b2movies.nc, eirene\_papl\_sna} & Particle source density from atom-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pmpl\_sna \index{eirene\_pmpl\_sna}\index{b2movies.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pppl\_sna \index{eirene\_pppl\_sna}\index{b2movies.nc, eirene\_pppl\_sna} & Particle source density from recombinations & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_eael\_she \index{eirene\_eael\_she}\index{b2movies.nc, eirene\_eael\_she} & Electron energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_emel\_she \index{eirene\_emel\_she}\index{b2movies.nc, eirene\_emel\_she} & Electron energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_epel\_she \index{eirene\_epel\_she}\index{b2movies.nc, eirene\_epel\_she} & Electron energy source density from recombinations & $W m^{-3}$ \\
+    eirene\_eapl\_shi \index{eirene\_eapl\_shi}\index{b2movies.nc, eirene\_eapl\_shi} & Ion energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_empl\_shi \index{eirene\_empl\_shi}\index{b2movies.nc, eirene\_empl\_shi} & Ion energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_eppl\_shi \index{eirene\_eppl\_shi}\index{b2movies.nc, eirene\_eppl\_shi} & Ion energy source density from recombinations & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms & \\
+                                                           & \hspace{0.5cm} (for each atom species) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules & \\
+                                                        & \hspace{0.5cm} (for each molecule species) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules & $W m^{-3}$ \\
     \hline
     \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
     \label{tab:b2moviesarrays}
   \end{longtable}
 \end{center}
 
-Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. As an example, on a $96 \times 36$ grid, the resulting filesize can be roughly expected to be 40 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 1, or 400 kB per fluid species per timestep if {\tt cdfmovie\_fields} is set to 2. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case, the file at the end of run will weight 480 MB if {\tt cdfmovie\_fields} is set to 1, or 4.8 GB if {\tt cdfmovie\_fields} is set to 2.
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. The following list summarizes the additional filesize which can be roughly expected, on a $96 \times 36 = 3456$ control volumes grid, for each of the requested data groups:
+\begin{itemize}
+\item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1: 120 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_sources} $\ge$ 1: 100 kB per {\tt B2.5} fluid species + 45 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\end{itemize}
+Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (12 {\tt B2.5} fluid species, 3 {\tt Eirene} atom species, and 1 {\tt Eirene} molecule species):
+\begin{itemize}
+\item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
+\end{itemize}
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 6.5 GB can be expected after 1000 outputted timesteps.
+
+The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
+\ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    pdena \index{pdena}\index{eirenemovies.nc, pdena} & Atom particle density (for each atom species) & $m^{-3}$ \\
+    pdenm \index{pdenm}\index{eirenemovies.nc, pdenm} & Molecule particle density (for each molecule species) & $m^{-3}$ \\
+    edena \index{edena}\index{eirenemovies.nc, edena} & Atom energy density (for each atom species) & $eV m^{-3}$ \\
+    edenm \index{edenm}\index{eirenemovies.nc, edenm} & Molecule energy density (for each molecule species) & $eV m^{-3}$ \\
+    vxdena \index{vxdena}\index{eirenemovies.nc, vxdena} & Atom x-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vxdenm \index{vxdenm}\index{eirenemovies.nc, vxdenm} & Molecule x-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vydena \index{vydena}\index{eirenemovies.nc, vydena} & Atom y-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vydenm \index{vydenm}\index{eirenemovies.nc, vydenm} & Molecule y-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vzdena \index{vzdena}\index{eirenemovies.nc, vzdena} & Atom z-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vzdenm \index{vzdenm}\index{eirenemovies.nc, vzdenm} & Molecule z-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in eirenemovies.nc}
+    \label{tab:eirenemoviesarrays}
+  \end{longtable}
+\end{center}
+
+Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy. For example, on a grid consisting of 10000 triangles, the filesize can be roughly expected to be 360 kB per {\tt Eirene} atom/molecule species per outputted timestep. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (3 {\tt Eirene} atom species and 1 {\tt Eirene} molecule species), a filesize of roughly 1.4 GB can be expected.
 
 \clearpage
 
@@ -15052,6 +15183,7 @@ coordinate index.
     bcmo     & \index{b2plot, bcmo} Boundary parallel momentum source {\em b2stbc\_smo} $(N)$ \\
     bcna     & \index{b2plot, bcna} Boundary particle source {\em b2stbc\_sna} $(particles.s^{-1})$ \\
     bczt     & \index{b2plot, bczt} Boundary $\exb$ turbulent enstrophy source {\em b2stbc\_szt} $(s^{-3}?)$ \\
+    bdcl     & \index{b2plot, bdcl} Boundary cells \\
     bix      & \index{b2plot, bix} Bottom neighbour {\em ix} coordinate \\
     biy      & \index{b2plot, biy} Bottom neighbour {\em iy} coordinate  \\
     brch     & \index{b2plot, brch} Recycling charge source {\em b2stbr\_sch} $(A)$ \\
@@ -15302,6 +15434,7 @@ coordinate index.
     ni       & \index{b2plot, ni} Ion density $(m^{-3})$ (\SOLPSfour runs) \\
     ni0      & \index{b2plot, ni0} Density {\em ni} at previous time step $(m^{-3})$ \\
     niso     & \index{b2plot, niso} Isolating region number \\
+    npcl     & \index{b2plot, npcl} Neutral pressure cells \\
     nreg     & \index{b2plot, nreg} Region number \\
     nua      & \index{b2plot, nua} Total collision frequency $(s^{-1})$ \\
     nuab     & \index{b2plot, nuab} Two species collision frequency $(s^{-1})$ \\
@@ -18270,7 +18403,7 @@ Currently coded functions are:
   \item[ig = -2] Produces a file {\tt horton.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density, and so on) in these points
   \item[ig = -1] Produces a file {\tt abramov.dat} with coordinates of the grid cell centers and the plasma parameters (density, temperatures, neutral density) in these points
   \item[0 $\le$ ig $\le$ DEF\_NYD] Produces a file {\tt oleg.dat} with plasma parameters (density, temperature, parallel flow velocity, parallel heat flux) against the distance along the magnetic flux tube with index $\langle${\tt ig}$\rangle$
-  \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots
+  \item[DEF\_NYD $<$ ig $<$ 1000] Produces two files with estimated helium concentration ({\tt fraction.he}) and neutral pressure ({\tt pressure.ntr}) in the PFR for summary plots. The cells used for the neutral pressure calculation are those defined in the {\tt PFR\_CVS} list in {\tt b2.user.parameters} and can be plotted by means of the {\tt npcl} command.
   \item[ig $\ge$ 1000] Adds a line to the file {\tt ../sum\_tmp/spec\_pwr.dat} with the power entering both divertors, power radiated along the divertor legs, power radiated near the targets, areas of the separatrix branches and mean specific power radiated along the divertor legs per square meter. $\langle${\tt ig}$\rangle$ -1000 cells are treated as "close to the targets"
 \end{description}
 \end{sloppypar}
@@ -19184,7 +19317,6 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[ASTRA] \index{ASTRA} To be used if one wishes to run in coupled mode with the core transport code {\tt ASTRA}
 \item[CDF\_MOVIE] \index{CDF\_MOVIE} To be used if {\tt CDF} movie output is desired (turned on by default if the NetCDF library is present)
 \item[CLASSICAL\_CURRENT] \index{CLASSICAL\_CURRENT} Turns on classical current drift term
-\item[COMPLICATED] \index{COMPLICATED} Uses a more "complicated" model for feedback schemes
 \item[EASY] \index{EASY} Uses the "easy" model for chord integration
 \item[FIXED\_POINT] \index{FIXED\_POINT} Compiles the {\tt B2.5} code such that the time-stepping loop is turned into a fixed-point form for an efficient checkpointing strategy of {\tt Tapenade} adjoint AD
 \item[GOT\_AMNSPROTO] \index{GOT\_AMNSPROTO} Links to AMNS database in ITM environment
@@ -19267,6 +19399,7 @@ ALLOCATE\_AND\_NAMELIST & modules/b2mod\_transport\_models.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_transport\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_user\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_wall.F \\
+ALLOCATE\_AND\_NAMELIST & modules/b2us\_prep.F \\
 ALLOCATE\_AND\_NAMELIST & postprocessing/b2yt\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & sources/b2stbr.F \\
 AMNS & preprocessing/b2ardr.F \\
@@ -19317,6 +19450,9 @@ B25\_EIRENE & convert/b2us.F \\
 B25\_EIRENE & driver/b2co.F \\
 B25\_EIRENE & driver/b2mod\_driver.F \\
 B25\_EIRENE & driver/b2mod\_main.F \\
+B25\_EIRENE & ids/b2\_ual\_rewrite.F90 \\
+B25\_EIRENE & ids/b2\_ual\_write.F90 \\
+B25\_EIRENE & ids/b2\_ual\_write\_b2mod.F90 \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
@@ -19326,7 +19462,6 @@ B25\_EIRENE & modules/b2us\_feedback.F \\
 B25\_EIRENE & output/b2wdat.F \\
 B25\_EIRENE & postprocessing/b2ytdr.F \\
 B25\_EIRENE & sources/b2mod\_eirene.F \\
-B25\_EIRENE & sources/b2stbc\_fb.F \\
 B25\_EIRENE & sources/b2stbc\_phys.F \\
 B25\_EIRENE & sources/b2stbm.F \\
 B25\_EIRENE & sources/b2stbr.F \\
@@ -19352,7 +19487,6 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
-COMPLICATED & sources/b2stbc\_fb.F \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
@@ -19725,6 +19859,7 @@ SOLPS4\_3 & modules/b2mod\_cdf.F90 \\
 SOLPS4\_3 & modules/b2mod\_diag.F \\
 SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
+SOLPS4\_3 & modules/b2us\_feedback.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
 TAO\_NEW & differentiation/b2optim\_tao.F90 \\
 TAO\_NEW & differentiation/adjoint/b2optim\_tao.F90 \\

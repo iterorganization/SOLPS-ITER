@@ -1,0 +1,512 @@
+#! /bin/tcsh -f
+
+set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set EMAIL=`get_git_email`
+set JOB_NAME="SOLPS-ITER"
+set NODES=1
+set PROCS=1
+set PROCS_TOT=1
+set PROCS_PER_NODE=1
+set THREADS=1
+set THREADS_TOT=1
+set CPU_TOT=1
+set hours=24
+set mem=4096
+set total_mem=4096
+set chain="unset"
+set job_count=0
+echo Your email is $EMAIL
+
+set compress_arg=""
+set compress_suffix=""
+set MPIOPTS=""
+set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
+set LOOP_OPTS=""
+set exclusive=""
+set run_dirs=""
+set run_number = 1
+set mpi_flag = 0
+set openmp_flag = 0
+set batch_flag = 0
+set manual_nodes_flag = 0
+
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP == "") then
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
+argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the MPCDF clusters Raven and Viper.
+
+Usage:
+
+  `basename $0` {options} {<<SCRIPT>>}
+
+where the optional <<SCRIPT>> is the SLURM submission file to be used
+
+Available options are:
+  -j <<JOB NAME>>      set the job name (default $JOB_NAME)
+  -z                   compress run.log using gzip
+  -s                   specify a standalone B2.5 run
+  -x                   requests an exclusive job allocation
+  -c <<JOB_ID>>        job ID of the previous job in a chain submission
+  -m <<MPI OPTIONS>>   use the MPI options specified (default serial version)
+  -t <<THREADS>>       use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
+  -T <<HOURS>>         number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>      memory size per CPU, in MB (default $mem)
+  -N <<NODES>>         number of nodes requested (default $NODES)
+  -b <<RUN_DIRS_LIST>> ask for a batch submission of multiple runs from the folders in <<RUN_DIRS_LIST>>
+                       the comma-separated list <<RUN_DIRS_LIST>> (e.g. -b 'run1,run2')
+
+Available per-job resources on the Raven cluster:
+  Shared jobs:    Up to 36 CPUs per node, on 1 node.
+                  Maximum memory per node: 120000 MB
+                  Maximum run time: 24.00.00 h.
+  Exclusive jobs: Up to 72 CPUs per node, on 1 or multiple nodes.
+                  Maximum memory per node: 240000 MB for standard nodes (up to 360 nodes)
+                                           500000 MB for large memory nodes (up to 64 nodes)
+                                           2048000 MB for very large memory nodes (up to 4 nodes)
+                  Maximum run time: 24.00.00 h.   
+
+Available per-job resources on the Viper cluster:
+  Shared jobs:    Up to 64 CPUs per node, on 1 node.
+                  Maximum memory per node: 250000 MB
+                  Maximum run time: 24.00.00 h.
+  Exclusive jobs: Up to 128 CPUs per node, on 1 or multiple nodes.
+                  Maximum memory per node: 480000 MB for standard nodes (up to 256 nodes)
+                                           730000 MB for large memory nodes (up to 128 nodes)
+                                           2250000 MB for very large memory nodes (up to 3 nodes)
+                  Maximum run time: 24.00.00 h.   
+
+EOF
+    exit
+  endif
+  if ("X${1}X" == "X-jX") then
+    shift
+    set JOB_NAME="$1"
+    echo Job name is ${JOB_NAME}
+    shift
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-zX") then
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
+    shift
+    set LOOP_OPTS="-z ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
+    shift
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    if (! $?SOLPS_MPI) then
+      source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
+    endif
+    set MPIOPTS="$1"
+    set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+    shift
+    set HELP_STRING=`echo \"$MPIOPTS\"`
+#    echo $HELP_STRING
+    set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}"
+    set mpi_flag = 1
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set THREADS="$1"
+    shift
+    set HELP_STRING=\"${THREADS}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}"
+    set openmp_flag = 1
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    shift
+    set HELP_STRING="${NODES}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${HELP_STRING} ${LOOP_OPTS}"
+    set manual_nodes_flag = 1
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    if ( $hours == 1) then
+      echo Requested time is ${hours} hour
+    else
+      echo Requested time is ${hours} hours
+    endif
+    shift
+    set HELP_STRING=\"${hours}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    shift
+    set HELP_STRING=\"${mem}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-cX") then
+    shift
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
+    goto argloop
+  endif
+  if ("X${1}X" == "X-bX") then
+    shift
+    set batch_flag = 1
+    set run_dirs=(`echo $1 | sed 's/,/ /g'`)
+    @ run_number = $run_number * $#run_dirs
+    echo Submitting $run_number batch runs from directories: $run_dirs
+    shift
+    goto argloop
+  endif
+
+if ($mpi_flag == 1) then
+  @ PROCS_TOT = $run_number * $PROCS
+endif
+if ($openmp_flag == 1) then
+  @ THREADS_TOT = $run_number * $THREADS
+endif
+@ CPU_TOT = $run_number * $PROCS * $THREADS
+
+@ total_mem = $run_number * $mem * $PROCS * $THREADS
+
+if ($batch_flag == 0) then
+  if ($mpi_flag == 0 && $openmp_flag == 0) then
+    echo Asking for serial run
+    echo Total number of CPU requested: 1
+  else if ($mpi_flag == 1 && $openmp_flag == 0) then
+    echo Asking for MPI run with $PROCS processors
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $PROCS_TOT
+  else if ($mpi_flag == 0 && $openmp_flag == 1) then
+    echo Asking for OpenMP run with $THREADS threads
+    echo Total number of CPU requested: $THREADS
+  else if ($mpi_flag == 1 && $openmp_flag == 1) then
+    echo Asking for hybrid MPI+OpenMP run with $PROCS processors and $THREADS threads
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $CPU_TOT
+  endif
+else if ($batch_flag == 1) then
+  if ($mpi_flag == 0 && $openmp_flag == 0) then
+    echo Asking for serial batch runs
+    echo Total number of CPU requested: $run_number
+  else if ($mpi_flag == 1 && $openmp_flag == 0) then
+    echo Asking for MPI batch runs with $PROCS processors each one
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $PROCS_TOT
+  else if ($mpi_flag == 0 && $openmp_flag == 1) then
+    echo Asking for OpenMP batch runs with $THREADS threads each one
+    echo Total number of CPU requested: $THREADS_TOT
+  else if ($mpi_flag == 1 && $openmp_flag == 1) then
+    echo Asking for hybrid MPI+OpenMP batch runs with $PROCS processors and $THREADS threads each one
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $CPU_TOT
+  endif
+endif
+
+set cluster = `scontrol show config | grep ClusterName | awk '{print $3}'`
+
+if ($manual_nodes_flag == 0) then
+  if ($cluster == "raven") then
+    if ($exclusive == "--exclusive") then
+      if ($CPU_TOT > 72) then
+        set NODES = `echo $CPU_TOT | awk '{print ($1 % 72 == 0) ? int($1/72) : int($1/72) + 1}'`
+      endif
+    else
+      if ($CPU_TOT > 36 && $CPU_TOT <= 72) then
+        set exclusive="--exclusive"
+        echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
+      else if ($CPU_TOT > 72) then  
+        set exclusive="--exclusive"
+        echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
+        set NODES = `echo $CPU_TOT | awk '{print ($1 % 72 == 0) ? int($1/72) : int($1/72) + 1}'`
+      endif
+    endif
+  else if ($cluster == "viper") then
+    if ($exclusive == "--exclusive") then
+      if ($CPU_TOT > 128) then
+        set NODES = `echo $CPU_TOT | awk '{print ($1 % 128 == 0) ? int($1/128) : int($1/128) + 1}'`
+      endif
+    else
+      if ($CPU_TOT > 64 && $CPU_TOT <= 128) then
+        set exclusive="--exclusive"
+        echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
+      else if ($CPU_TOT > 128) then  
+        set exclusive="--exclusive"
+        echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
+        set NODES = `echo $CPU_TOT | awk '{print ($1 % 128 == 0) ? int($1/128) : int($1/128) + 1}'`
+      endif
+    endif
+  endif
+else 
+  echo Manually requested ${NODES} nodes
+  if ($cluster == "raven") then
+    if ($exclusive == "--exclusive") then
+      if ($CPU_TOT > `expr $NODES \* 72`) then
+        echo Error: maximum number of CPUs per node is 72. Request more nodes.
+        exit 1
+      endif
+    else
+      if ($CPU_TOT <= 36) then
+        if ($NODES > 1) then  
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
+          exit 1
+        endif
+      else if ($CPU_TOT > 36 && $CPU_TOT <= 72) then
+        if ($NODES == 1) then  
+          set exclusive="--exclusive"
+          echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
+        else
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
+          exit 1
+        endif
+      else if ($CPU_TOT > 72) then  
+        if ($CPU_TOT > `expr $NODES \* 72`) then
+          echo Error: maximum number of CPUs per node is 72. Request more nodes.
+          exit 1
+        else if (`echo "$CPU_TOT $NODES" | awk '{print ($1 / $2 < 36) ? 1 : 0}'`) then
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request less nodes -- node fill grade must be at least 50%.
+          exit 1
+        else
+          set exclusive="--exclusive"
+          echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
+        endif
+      endif
+    endif
+  else if ($cluster == "viper") then
+    if ($exclusive == "--exclusive") then
+      if ($CPU_TOT > `expr $NODES \* 128`) then
+        echo Error: maximum number of CPUs per node is 128. Request more nodes.
+        exit 1
+      endif
+    else
+      if ($CPU_TOT <= 64) then
+        if ($NODES > 1) then  
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
+          exit 1
+        endif
+      else if ($CPU_TOT > 64 && $CPU_TOT <= 128) then
+        if ($NODES == 1) then  
+          set exclusive="--exclusive"
+          echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
+        else
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
+          exit 1
+        endif
+      else if ($CPU_TOT > 128) then  
+        if ($CPU_TOT > `expr $NODES \* 128`) then
+          echo Error: maximum number of CPUs per node is 128. Request more nodes.
+          exit 1
+        else if (`echo "$CPU_TOT $NODES" | awk '{print ($1 / $2 < 64) ? 1 : 0}'`) then
+          echo Error: too many nodes requested for $CPU_TOT CPUs. Request less nodes -- node fill grade must be at least 50%.
+          exit 1
+        else
+          set exclusive="--exclusive"
+          echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
+        endif
+      endif
+    endif
+  endif
+endif
+
+echo Requested memory per CPU is ${mem} MB
+
+if ($cluster == "raven" && $exclusive == "") then
+  if (`echo "$total_mem $NODES" | awk '{print ($1 / $2 > 120000) ? 1 : 0}'`) then
+      set exclusive="--exclusive"
+      echo Requested memory per node is greater than 120000 MB: forcing exclusive job allocation
+  endif
+else if ($cluster == "viper" && $exclusive == "") then
+  if (`echo "$total_mem $NODES" | awk '{print ($1 / $2 > 250000) ? 1 : 0}'`) then
+      set exclusive="--exclusive"
+      echo Requested memory per node is greater than 250000 MB: forcing exclusive job allocation
+  endif
+endif
+
+if ($cluster == "raven") then
+  if (`echo "$total_mem $NODES" | awk '{print ($1 / $2 > 240000) ? 1 : 0}'`) then
+      echo Warning: requested memory per node is greater than 240000 MB: running on high memory nodes
+      echo Consider asking less CPUs or less memory per CPU for running on standard nodes
+  endif
+else if ($cluster == "viper") then
+  if (`echo "$total_mem $NODES" | awk '{print ($1 / $2 > 480000) ? 1 : 0}'`) then
+      echo Warning: requested memory per node is greater than 480000 MB: running on high memory nodes
+      echo Consider asking less CPUs or less memory per CPU for running on standard nodes
+  endif
+endif
+
+if ($batch_flag == 0) then
+  if ($standalone == "yes") then
+    echo Asking for a B2.5 standalone run
+  else if (-s fort.1 && $standalone == "no") then
+    echo Assuming run with Eirene
+  else 
+    echo Asking run with Eirene but no fort.1 file found: reverting to a standalone run
+    set standalone_arg="-s"
+    set coupled_suffix=""
+  endif
+else if ($batch_flag == 1) then
+  if ($standalone == "yes") then
+    echo Asking for B2.5 standalone runs
+  else if ($standalone == "no") then
+    set all_have_fort1 = 1
+    foreach dir ($run_dirs)
+      if (! -s $dir/fort.1) then
+        set all_have_fort1 = 0
+        break
+      endif
+    end
+    if ($all_have_fort1) then
+      echo Assuming runs with Eirene
+    else
+      echo Asking runs with Eirene but no fort.1 file found in some run directories: reverting to standalone runs
+      set standalone_arg="-s"
+      set coupled_suffix=""
+    endif
+  endif
+endif
+
+if ($compress_suffix == ".gz") then
+  echo run.log files will be compressed
+endif
+
+if ($1 == "") then
+  echo No argument is specified. Looking for SLURM.mpcdf
+  set QSUB=`climb_and_look_for SLURM.mpcdf`
+  if ($QSUB == "//SLURM.mpcdf") then
+    if (-s $SOLPSTOP/runs/SLURM.mpcdf) then
+      set QSUB="$SOLPSTOP/runs/SLURM.mpcdf"
+    else
+      set QSUB=""
+    endif
+  endif
+else if (-s $1) then
+  echo Submission file $1 is specified as an argument.
+  echo Submission file $1 is found in current directory
+  set QSUB=$1
+else
+  echo Submission file $1 is specified as an argument.
+  echo Looking for submission file $1
+  set QSUB=`climb_and_look_for $1`
+  if ($QSUB == "//"$1) then
+    if (-s $SOLPSTOP/runs/$1) then
+      set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
+    else
+      set QSUB=""
+    endif
+  else
+    echo Submission file $QSUB is found
+  endif
+endif
+if($QSUB == "") then
+  echo No MPCDF submission file $1 found. Exiting.
+  exit 1
+endif
+
+echo Using submission file template $QSUB
+if ($chain == "unset") then
+  echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
+endif
+
+if ($NODES == 1) then
+  echo Running on 1 node
+  set PROCS_PER_NODE=$PROCS_TOT
+else if ($NODES > 1) then
+  echo Running on ${NODES} nodes
+  set PROCS_PER_NODE = `echo "$PROCS_TOT $NODES" | awk '{print ($1 % $2 == 0) ? int($1/$2) : int($1/$2)+1}'`
+endif
+
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#NODES#:'$NODES':g' \
+  -e 's:#PROCS#:'$PROCS_PER_NODE':g' \
+  -e 's:#THREADS#:'$THREADS_TOT':g' \
+  -e 's:#MEM#:'$total_mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e 's:#JOBNAME#:'$JOB_NAME':g' \
+  -e 's:#USER#:'$USER':g' \
+  -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
+  -e 's:#RUN_NUMBER#:'$run_number':g' \
+  -e 's:#RUN_DIRS#:'"$run_dirs"':g' \
+  < $QSUB > $NAME
+
+if ($chain != "unset") then
+  set b2run_line=`grep -n "b2run" $NAME | cut -d ':' -f 1`
+  @ before_line = $b2run_line - 1
+  head -n ${before_line} $NAME > SLURM.mpcdf.after_$chain
+  echo "mv run.log.gz run.log.$chain.gz" >> SLURM.mpcdf.after_$chain
+  echo "mv b2mn.prt b2mn.prt.$chain" >> SLURM.mpcdf.after_$chain
+  echo "mv b2fstate b2fstati" >> SLURM.mpcdf.after_$chain
+  echo "if (-e b2favere) mv b2favere b2faveri" >> SLURM.mpcdf.after_$chain
+  set all_lines=`cat $NAME | wc -l`
+  @ tail_lines = $all_lines - $before_line
+  tail -n $tail_lines $NAME >> SLURM.mpcdf.after_$chain
+  set NAME=SLURM.mpcdf.after_$chain
+endif
+
+update_solps_run_status -n "Submitted at `date`"
+
+if ($exclusive == "--exclusive") then
+
+endif
+
+if ($chain == "unset") then
+  sbatch ${exclusive} --export=ALL $NAME
+else
+  sbatch ${exclusive} --export=ALL --dependency=afterok:${chain} $NAME
+endif
