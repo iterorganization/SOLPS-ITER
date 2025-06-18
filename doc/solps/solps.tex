@@ -120,6 +120,7 @@ This is the combined work of many authors. Started by D.P.~Coster, it includes c
 \item M.~Stanojevic, Appendix~\ref{cha:Mladen} on boundary conditions
 \item X.~Bonnin, for many contributions and the \SOLPSITER updates
 \item S.~Voskoboynikov, E.~Kaveeva, and I.~Senichenkov, for the \SOLPSITER model equations (Appendix~\ref{cha:equations}) and output quantities information (Appendix~\ref{cha:b2wdat_iout_4})
+\item S.~Makarov, for the Zhdanov-Grad closure description
 \item S.~Carli, for the Algorithmic Differentiation chapters (Chapter~\ref{cha:ad_optim} and Appendix~\ref{cha:ad_expert})
 \item W.~Van~Uytven, for updates regarding the switch to the unstructured grid format and additional documentation on the advanced fluid neutral models.
 \end{itemize}
@@ -7736,6 +7737,15 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 \vspace*{1cm}
 \end{figure}
 
+\section{Classical ion transport: Zhdanov-Grad module}
+\label{sec:zhdanovgrad}
+
+{\em This code feature is still experimental.}
+
+\begin{sloppypar}
+Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Zhdanov-Grad module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Zhdanov-Grad closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
+\end{sloppypar}
+
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
@@ -8028,7 +8038,7 @@ V_a^{corr\_dpc} = \frac{c^{corr\_dpc}}{16} \left| b_x \right| \sqrt{ \frac{p_a}{
 
 The ion densities $n_i$ and $\widetilde{n}_i$ are stored in the {\tt ni(:,0)} and {\tt ni(:,1)} array components respectively.
 
-$\delta_{a,b}$ is the Kronecker delta (1 if $a=b$, 0 otherwise). Here, it is used as shortcut to identify the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$. If the code contains multiple hydrogenic species, an error will be reported to avoid double-counting of the current contributions.
+Which speciated $j_{a}$ current contributions are non-zero depends on the physics model switches {\tt b2tanml\_anml\_all\_ions} for $j_a^{(AN)}$, {\tt b2tiner\_inert\_all\_ions} for $j_a^{(in)}$, and {\tt b2tvspr\_visper\_all\_ions} for $j_a^{(vis \perp)}$, respectively. If the Zhdanov-Grad closure is applied, then all ion species contribute to the $\widetilde{j}_a^{(vis \parallel)}$ and $\widetilde{j}_a^{(visq)}$ currents. Otherwise, only the one hydrogenic species with $z_a = 1$ and $z_{n,a} = 1$ will. If the code contains multiple hydrogenic species and the Zhdanov closure scheme is not activated, an error will be reported to avoid double-counting. Overall, the assignment of these current contributions to the ion instead of to the electron fluxes is governed by the switches {\tt b2tfnb\_xcur} and {\tt b2tfnb\_ycur} for the poloidal and radial directions, respectively.
 
 \subsection{Source terms in density equations}
 
@@ -8362,11 +8372,41 @@ S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel
 \end{matrix}
 \end{equation}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{a \parallel}^m $ is applied according to section \ref{sec:Zhdanov}.
+
+\begin{equation}\label{eq:mom_visres}
+\begin{matrix}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} & =
+& \left\{
+\begin{aligned}
+- \frac{1}{h_z\sqrt g} \frac{\partial}{\partial x}
+\left(\frac{h_z\sqrt g}{h_x} \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x}\right)
+B^{\frac{1}{2}} V_{\parallel a},
+& \qquad  a=a_{main} \\
+0, & \qquad \mbox{otherwise} \\
+\end{aligned} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_visq}
+\begin{matrix}
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{q_\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+-B^{\frac{3}{2}} b_x \frac{\partial}{h_x \partial x}
+\left( \alpha^{NEO} \frac{b_x \tilde {\tau}_a}{B^2} \frac{\partial \left(B^{\frac{1}{2}} \tilde q_a^{(0)} \right)}{h_x \partial x}\right),
+& \ a=a_{main} \\
+0, & \mbox{otherwise} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
 \begin{equation}\label{eq:mom_sorcf}
 S_{CF_a}^m = m_a b_x n_a V_{\parallel a}^2 \frac{1}{h_z h_x} \frac{\partial h_z}{\partial x}
 \end{equation}
 
-$S_{AN_a}^m$ is a correcting source due to the radial anomalous current (here assumed to be carried by hydrogenic ions only):
+$S_{AN_a}^m$ is a correcting source due to the radial anomalous current:
 
 \begin{equation}\label{eq:mom_soran}
 S_{AN_a}^m = \left\{
@@ -8473,9 +8513,13 @@ and the ion contributions are:
 S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(F \lim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{1}{h_x} \frac{\partial T_i}{\partial x}, ~z_a \ne 0
 \end{equation}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{Therm,ia}^m $ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:mom_sorfri}
 S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)
 \end{equation}
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{fr,ia}^m $ is applied according to section \ref{sec:Zhdanov}.
 
 where
 
@@ -8499,6 +8543,8 @@ c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0 \\
 \right.
 $
 
+If {\tt 'b2npmo\_impr\_form\_tf'} is set to {\tt '1'} , $K_{rs}^{(Therm)}$ is applied according to section \ref{sec:Zhdanov}.
+
 $K_{rs}^{(V_\parallel)} = \left\{
 \begin{matrix}
 c_{imp}^{(1)}, & r = r_{main}, & s \ne r, & z_r \ne 0, & z_s \ne 0 \\
@@ -8508,6 +8554,8 @@ c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0 \\
 \end{matrix}
 \right.
 $
+
+If {\tt 'b2npmo\_impr\_form\_fr'} is set to {\tt '1'} , $K_{rs}^{(V_\parallel)}$ is applied according to section \ref{sec:Zhdanov}.
 
 $c_{imp}^{(1)} = \frac{\left( 1 + 0.24 z_{eff\_imp} \right) \left( 1 + 0.93 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$, ~ $c_{imp}^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff\_imp} \right) \left( 1 + 0.52 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$
 
@@ -8630,6 +8678,8 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \right.
 \end{equation}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\Gamma^m_{ax} $ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
 m_a V_{\parallel a} \Gamma_{ay}^{Cor} -
@@ -8696,13 +8746,13 @@ N_{coll,i} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{a} c_s} \right) dl
 \end{equation*}
 
 \begin{align}\label{eq:mom_veta}
-\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
 \end{align}
 
 If {\tt 'b2trcl\_lluciani'} is set to {\tt '1'}, the Luciani flux limiter is given by:
 
 $\begin{matrix}
-c_{\eta_{ax}^{(CL)}}^{Luciani} & =
+c_{\eta^{(CL)}}^{Luciani} & =
 & \left\{
 \begin{matrix}
 \frac{1}{1 + \frac{7.5 \cdot 10^{16} \left( \frac{T_i}{e} \right)^2}
@@ -8716,10 +8766,31 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 For the plateau and banana transport regimes, the correction, with {\tt 'b2trcl\_lluciani'} set to {\tt '3'} (default), is given by:
 
 %-------- end of 7th page -------------
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '1'}(default):
 
 $
 \begin{matrix}
-c_{\eta_{ax}^{(CL)}}^{Luciani} & =
+c_{\eta^{(CL)}}^{Luciani} & =
+& \left\{
+\begin{matrix}
+\frac{1}{1 +
+\frac{1}
+{\varepsilon^{3/2}\nu_{\ast}}}
+\cdot
+\frac{1}{1 +
+\frac{1}
+{\nu_{\ast}}}
+, & \text{for ions on inner flux surfaces} \\
+1, & \text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '0'} (only valid for hydrogen-majority plasmas):
+
+$
+\begin{matrix}
+c_{\eta^{(CL)}}^{Luciani} & =
 & \left\{
 \begin{matrix}
 \frac{1}{1 +
@@ -8735,7 +8806,18 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}{\mathlarger{\oint} \sqrt g / h_y dx}$
+$
+\nu_{\ast} = \frac{c \left( y \right)}
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
+$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \
+$\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
+{\mathlarger{\oint} \sqrt g / h_y dx}$,\ \ \ \ $
+\tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
+\frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
+$
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -8840,7 +8922,7 @@ $\alpha^{NEO} = \frac{8}{15}
 the temperature gradient in the neoclassical electric field in the plateau and banana regime
 
 $\nu_{\ast} = \frac{c \left( y \right)}
-{2 \pi \varepsilon^{3/2} \tau_a^{(Br)} \sqrt{T_i/m_a}}$,\ \ \ \
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
 $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g /h_y dx}$
@@ -8924,6 +9006,8 @@ Q_{Fei} = \left\{
 j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is activated}
 \end{aligned}\right.
 \end{equation}
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{Fei} $ is applied according to section \ref{sec:Zhdanov}.
 
 $Q_e^{\kappa,\mathrm{inter}}$ and $Q_e^{\kappa,\parallel}$ are interchange terms related to the $\kappa$-model, see Eqs.~(\ref{eq:sikt_t1}) and (\ref{eq:sikt_t3}).
 
@@ -9458,6 +9542,8 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 \right)
 \end{equation}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{vis} $ is applied according to section \ref{sec:Zhdanov}.
+
 When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
 \begin{equation}\label{eq:eni_Qfabnew}
@@ -9474,6 +9560,8 @@ Q_{F_{ab}} =
 \sqrt{ \frac{\frac{m_a}{m_p} \frac{m_b}{m_p}} {\frac{m_a}{m_p} + \frac{m_b}{m_p}} }
 z_a^2 z_b^2 n_a n_b \left( V_{a \parallel} - V_{b \parallel} \right)^2
 \end{equation}
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{F_{ab}} $ is applied according to section \ref{sec:Zhdanov}.
 
 Atom heat source due to ionisation
 
@@ -9553,6 +9641,8 @@ $Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-mod
 \widetilde f_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x }{e} \right)
 \end{equation*}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde f_{ix} $ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:eni_qixPSch}
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
@@ -9567,6 +9657,8 @@ q_{ix} = \left[
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix} $ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:eni_gammahix}
 \Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
 \end{equation}
@@ -9576,6 +9668,8 @@ q_{ix}^{(Eir)} =
 \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
 \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{equation}
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix}^{(Eir)} $ is applied according to section \ref{sec:Zhdanov}.
 
 \subsection{Poloidal ion energy transport coefficients}
 
@@ -9641,6 +9735,8 @@ If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is
 \begin{equation}\label{eq:eni_dtkapixCL}
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
 \end{equation}
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} $ is applied according to section \ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_cflim}
 \begin{matrix}
@@ -9916,6 +10012,8 @@ $j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species
 
 $\widetilde{j}_{ax}^{(vis \parallel)}$ is the component of the poloidal current due to parallel viscosity from species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(vis \parallel)}$ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:pot_jxvisper}
 j_x^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} j_{ax}^{(vis \perp)}
 \end{equation}
@@ -9941,6 +10039,8 @@ $j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity 
 \end{equation}
 
 $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(visq)}$ is applied according to section \ref{sec:Zhdanov}.
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
@@ -9977,7 +10077,7 @@ The ion-neutral conductivity is given by:
 \sigma_{aa_0} =
 \left\{
 \begin{matrix}\label{eq:pot_sigaa0}
-\frac{m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
+\frac{\tilde\mu_{aa_0} m_p n_a \left\langle V_{aa_0} \sigma_{ex} \right\rangle n_{a_0}}{B^2}, &
 z_{a_0} = 0 ~ \& ~ z_{n,a_0} = 1, z_a \ne 0 ~ \& ~z_{n_a} = 1 \\
 0, & \text{otherwise}
 \end{matrix}
@@ -9990,10 +10090,9 @@ If {\tt 'b2tqin\_csigin\_style'} is {\tt '0'} the diffusivity of room-temperatur
 \left\langle V_{aa_0} \sigma_{ex} \right\rangle = 3.2 \cdot 10^{-15} \sqrt{\frac{T_i}{0.026e}}\sqrt{\frac{1}{\tilde\mu_{aa_0}}}
 \end{equation}
 
-% This factor probably has to do with CX between particles of unlike mass, but it doesn't seem to be implemented in this code version.
-%\begin{equation}
-%\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
-%\end{equation}
+\begin{equation}
+\tilde\mu_{aa_0}= \frac{\frac{m_a}{m_p} \frac{m_{a_0}}{m_p}}{\frac{m_a}{m_p} + \frac{m_{a_0}}{m_p}}
+\end{equation}
 
 If {\tt 'b2tqin\_csigin\_style'} is {\tt '1'} the local B2.5 CX rate is used.
 
@@ -10068,6 +10167,8 @@ $j_{ay}^{(in)}$ is the component of the radial inertial current due to species $
 
 $\widetilde{j}_{ay}^{(vis \parallel)}$ is the radial component of the current due to parallel viscosity of species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(vis \parallel)} $ is applied according to section \ref{sec:Zhdanov}.
+
 \begin{equation}\label{eq:pot_jyvisper}
 \widetilde j_y^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde j_{ay}^{(vis \perp)}
 \end{equation}
@@ -10121,6 +10222,8 @@ V_{a \perp} =
 \end{equation}
 
 $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(visq)} $ is applied according to section \ref{sec:Zhdanov}.
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
@@ -12460,7 +12563,7 @@ Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 
 -\frac{4}{3} b_x B^{\frac{3}{2}} \frac{\partial}{h_x \partial x} \left(
         \frac{
-                c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x
+                c_{\eta_{ax}^{(CL)}} c_{\eta^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x
         }{B^2}
         \frac{
                 \partial \left(
@@ -12488,7 +12591,7 @@ Because of $\eta^{(AN)}_a \ll \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$, $\eta_{
 
 \begin{equation}\begin{matrix}
 -\frac{4}{3} b_x B^{\frac{3}{2}} & \frac{\partial}{h_x \partial x} \left(
-        \frac{c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x}{B^2}
+        \frac{c_{\eta_{ax}^{(CL)}} c_{\eta^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x}{B^2}
         \frac{ \partial \left( B^{\frac{1}{2}} V_{a \parallel} \right)}{h_x \partial x}
 \right)
 & = \\
@@ -12583,7 +12686,1592 @@ New form of $\left( \nabla \pi_a^{\parallel} \right)_{\parallel}$
 }
 \end{equation}
 
+\section{Zhdanov-Grad closure}\label{sec:Zhdanov}
 
+\subsection{Introduction}
+
+{\em The closure scheme described in this Section is still experimental.}
+
+This section describes the equations and switches that are used when the switch {\tt b2tral\_Zhdanov\_closure} is equal to {\tt 1} in {\tt b2mn.dat}. It enables a more detailed calculation of the ion transport coefficients instead of the standard ion transport coefficients described above. By default {\tt b2tral\_Zhdanov\_closure} is equal to {\tt 0}.
+
+The relevant switches for the Zhdanov closure are:
+\begin{description}
+  \item[b2tral\_Zhdanov\_closure] The main switch that turns on the Zhdanov closure calculation, if set to {\tt '1'}. Default is {\tt '0'}.
+  \item[b2sifr\_Zhdanov\_test] If {\tt '1'}, the Zhdanov closure calculation takes place, but the results are not used and the standard calculation is applied. Default is {\tt '0'}. Meant for testing purposes.
+  \item[b2sifr\_Zhdanov\_tf\_fr] If {\tt '1'} (default), the Zhdanov thermal and friction forces formulations are applied.
+  \item[b2tral\_zhd\_corr] Multiplier to the corrections due to the difference in definition for temperature and Joule heating between Zhdanov and Braginskii. Default is {\tt '1'}.
+  \item[b2tral\_zhd\_corrT] Multiplier to the corrections due to the difference in definition for temperature between Zhdanov and Braginskii in the thermal force calculation. Default is {\tt '1'}.
+  \item[b2tral\_zhcscorr] If {\tt '1'} (default), the corrections for each individual ion charge state from the isonuclear sequence value are applied.
+  \item[b2tral\_zhcscorr\_vq] If {\tt '0'}, the corrections for each individual ion charge state from the isonuclear sequence value is not applied for the heat stress viscosity. Default is {\tt '1'}.
+  \item[b2tral\_zh\_imp\_analyt] If {\tt '1'}, the matrix inversion method is not used. Instead, the improved analytical expressions from \cite{MAKAROV2021} are applied. Default is {\tt '0'}.
+  \item[b2tral\_zh\_analyt\_mdf] If {\tt '1'}, the MDF friction force calculation is applied (see \cite{MAKAROV2021}). Default is {\tt '0'}.
+  \item[b2tral\_zhflcorr] Flux-limiting coefficient multiplier. Default is {\tt '3.0'}.
+  \item[b2tral\_Zhdanov\_cond] If {\tt '1'} (default), the Zhdanov ion conductivity formulation is applied instead of the Braginskii expression.
+  \item[b2tral\_zhflcorrh] Additional flux-limiting coefficient multiplier for the heat flux. Default is {\tt '0.4'}.
+  \item[b2tfhi\_Zhdanov\_vel\_heat] If {\tt '1'} (default), the Zhdanov velocity-dependent ion heat flux is added.
+  \item[b2tral\_Zhdanov\_visu] If {\tt '1'} (default), the Zhdanov velocity-dependent viscous stress formulation is applied instead of the Braginskii expression.
+  \item[b2tral\_Zhdanov\_vish] If {\tt '1'} (default), the Zhdanov heat flux dependent viscous stress formulation is applied instead of the Braginskii expression.
+  \item[b2tral\_zh\_tf\_toff] String of integers with (nspecies*(nspecies+1))/2-nspecies digits. If a digit is {\tt 1}, turn off the thermal force between corresponding species starting from 1 and 2; 1 and 3;....; up to nspecies-1 and nspecies. Default is {\tt '0'}.
+  \item[b2tral\_zh\_vis\_type] If {\tt '0'} (default), the Braginskii-like velocity-dependent stress-viscosity is used.  If {\tt '1'}, the Zhdanov-like velocity-dependent stress-viscosity is used. If {\tt '2'}, the Makarov-like velocity-dependent stress-viscosity is used \cite{MakarovPhD}.
+  \item[b2npmo\_smbvi\_factor] This switch defines the fraction of the cross-ion part of the stress-viscosity term (Eq.~(\ref{eq:mom_zh_visai})) which is applied. The cross-ion part of the stress-viscosity term can lead to numerical problems. If so, it is recommended to start from {\tt '0.0'} and increase it step by step. Default is {\tt '1.0'}.
+   \item[b2tral\_amfact\_on] If {\tt '1'}, the mass correction for the thermal and friction force calculation is applied (for details see \cite{Makarov2023}). Default is {\tt '0'}.
+   \item[b2tral\_amfact\_***] If {\tt b2tral\_amfact\_on.eq.1}, this multiplier is applied for the mass of the isonuclear sequence with number {\tt '***'}. Recall the numbering of the isonuclear sequences starts at zero (e.g. {\tt b2tral\_amfact\_000}, {\tt b2tral\_amfact\_001}, ...). Default is {\tt '1.0'}.
+\end{description}
+
+\begin{sloppypar}
+Legacy switches (using the reduced improved analytical expressions that were included in earlier 3.0.7 code versions; they can be applied, if {\tt b2tral\_Zhdanov\_closure.eq.0} or {\tt b2sifr\_Zhdanov\_test.eq.1} or {\tt b2sifr\_Zhdanov\_tf\_fr.eq.}0; details in subsection \ref{subsec:zh_legacy_tf_fr}):
+\begin{description}
+  \item[b2npmo\_impr\_form\_tf] If {\tt '1'}, the thermal force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
+  \item[b2npmo\_impr\_form\_fr] If {\tt '1'}, the friction force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
+  \item[b2npmo\_mass\_multiplicator] Using this number the impurity mass can be artificialy increased. Default is {\tt '1.0'}.
+\end{description}
+\end{sloppypar}
+
+\subsection{Notation}\label{subsec:zh_notation}
+
+Latin letters correspond to the indexing of the ion charge states:
+\begin{align*}
+\underbrace{D^{0}}_{a=0},\underbrace{D^{+1}}_{a=1},\underbrace{T^{0}}_{a=2},\underbrace{T^{+1}}_{a=3},\underbrace{He^{0}}_{a=4},\underbrace{He^{+1}}_{a=5},\underbrace{He^{+2}}_{a=6}...
+\end{align*}
+Greek letters correspond to the indexing of the isonuclear sequences:
+\begin{align*}
+\underbrace{D}_{\alpha=0},\underbrace{T}_{\alpha=1},\underbrace{He}_{\alpha=2}...
+\end{align*}
+For isonuclear sequence $\alpha$ and charge state $Z$, there is a one-to-one match with the Latin notation: $a(\alpha,Z)$.
+
+\subsection{Ion heat conductivity}
+
+If {\tt Zhdanov\_cond.eq.1}, then:
+
+\textbf{In the transport part of B2.5:}
+
+\begin{align}\label{eq:eni_zh_ddkapixCL}
+\tilde{\tilde{\kappa}}^{CL}_{ix} = c^{(Luciani)}_{\kappa_{ix}} \tilde{\kappa}^{CL}_{ix}
+\end{align}
+
+\begin{align}
+\overline{\tilde{\tilde{\kappa}}^{CL}_{\alpha x}} = c^{(Luciani)}_{\kappa_{ix}} \overline{\tilde{\kappa}^{CL}_{\alpha x}},\ \ \ \left(\frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted}\right)
+\end{align}
+
+\begin{align}\label{eq:eni_zh_ddkapaxCL}
+\tilde{\tilde{\kappa}}^{CL}_{a x} = c^{(Luciani)}_{\kappa_{ix}} \tilde{\kappa}^{CL}_{a x}
+\end{align}
+
+For plateau and banana correction, ({\tt 'b2trcl\_lluciani'.eq.'3'}):
+\begin{align}
+c^{(Luciani)}_{\kappa_{ix}} = 1.6 \cdot \frac{\varepsilon^{3/2}}{K_2}
+\end{align}
+
+\begin{align}
+K_2 = \frac{0.66+1.88 \cdot \sqrt{\varepsilon} - 1.54 \cdot \varepsilon}
+           {1 + 1.03 \cdot \nu^{1/2}_* + 0.31 \nu_*}
+     +\frac{1.17 \cdot \varepsilon^3 \cdot \nu_*}
+           {1 + 0.74 \cdot \varepsilon^{3/2} \cdot \nu_*}
+\end{align}
+
+\begin{align}\label{eq:nu_zh}
+\nu_* = \frac{c(y)}{2 \pi \left( \tau_{ii} V_{th} \right)^{eff}}
+,\quad
+\left( \tau_{ii} V_{th} \right)^{eff} = \sum_{a} \frac{n_a}{n_i} \tau^{(Zh)}_{a} \sqrt{\frac{T_i}{m_{a}}}
+\end{align}
+
+\begin{align}
+\tau^{(Zh)}_{a} = \tau^{(Br)}_{a} \cdot \frac{Z_{eff} n_e}{\sum_{b} \sqrt{\frac{2 \mu_{ab}}{m_a}} Z_b^2 n_b}
+,\quad
+\tau^{(Br)}_{a} = \frac{3}{4 \sqrt{\pi}} \frac{1}{Z_a^2 Z_{eff} n_e} \frac{\sqrt{m_a} T_i^{\frac{3}{2}}}{\ln \Lambda} {\left( \frac{4 \pi \epsilon_0}{e^2} \right)}^2
+\end{align}
+
+Where the Zhdanov ion heat conductivity is:
+\begin{align}\label{eq:eni_zh_dkapixCL}
+\tilde{\kappa}^{CL}_{ix} = \sum_\alpha \left( \overline{\tilde{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{\tilde{\kappa}^{B}_{\alpha x}} \left( \tilde{I}_\alpha - 1 \right) \right)
+\end{align}
+
+\begin{align}\label{eq:eni_zh_kapixCL}
+{\kappa}^{CL}_{ix} = \sum_\alpha \left( \overline{{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{{\kappa}^{B}_{\alpha x}} \left( \tilde{I}_\alpha - 1 \right) \right)
+\end{align}
+
+\begin{align}
+\tilde{I}_\alpha = \sum_Z \frac{1}{I_{a(\alpha,Z)}} \left( \frac{n_{a}}{\overline n_{\alpha}} \right)^2
+\end{align}
+
+\begin{align}\label{eq:eni_zh_dkapaxCL}
+\tilde{\kappa}^{CL}_{ax} = \frac{n_{a}}{\overline n_{\alpha}} \left( \overline{\tilde{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{\tilde{\kappa}^{B}_{\alpha x}} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right)
+\end{align}
+
+\begin{align}\label{eq:eni_zh_kapaxCL}
+{\kappa}^{CL}_{ax} = \frac{n_{a}}{\overline n_{\alpha}} \left( \overline{{\kappa}^{CL}_{\alpha x}} + zhcscorr \cdot \overline{{\kappa}^{B}_{\alpha x}} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right)
+\end{align}
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+
+\begin{align}
+\overline{\tilde{\kappa}^{CL}_{\alpha x}} = -\frac{5}{2} b_x^2 \frac{\zeta_p}{\left( Z_{eff}n_e \right)^2} \frac{T_i}{m_p} \sum_\beta \tilde{\check{a}}^{fl\ h}_{\alpha \beta} \overline{n}_{\alpha} \overline{n}_{\beta},\ \ \ \left( \frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted} \right)
+\end{align}
+
+\begin{align}
+\tilde{\check{a}}^{fl\ h}_{\alpha \beta} = c^{(F\ lim\ h)}_{\alpha} \tilde{\check{a}}_{\alpha \beta}
+\end{align}
+
+\begin{equation}
+\begin{matrix}
+\tilde{c}^{(F\ lim\ h)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+\frac{1}{\left( 1 + \left( \frac{\frac{5}{2} \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2 m_p} \left| \sum_\gamma \tilde{\check{a}}_{\alpha \gamma} \overline{n}_{\gamma} b_x \widetilde{\frac{\partial T_{\gamma}}{h_x\partial x}} \right| }{zhflcorrh \cdot zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}}, &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{align}
+\overline{{\kappa}^{CL}_{\alpha x}} = -\frac{5}{2} b_x^2 \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2} \frac{T_i}{m_p} \sum_\beta \tilde{\check{a}}_{\alpha \beta} \overline{n}_{\alpha} \overline{n}_{\beta},\ \ \ \left( \frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted} \right)
+\end{align}
+
+\textbf{\textit{otherwise}}
+
+\begin{align}
+\overline{\tilde{\kappa}^{CL}_{\alpha x}} = b_x^2 \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2} \frac{T_i}{m_p} c^{\left( h_T^A\ fl \right) }_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \overline{n}_{\alpha}^2 \left( \frac{Z_{eff} n_e}{\overline{Z_\alpha^2 n_\alpha}} \right)^2,\ \ \ \left( \frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted} \right)
+\end{align}
+
+\begin{align}
+c^{(h_T^A\ fl)}_{\alpha} = \tilde{c}^{(F\ lim\ h)}_{\alpha} c^{(h_T^A)}_{\alpha}
+\end{align}
+
+\begin{equation}
+\begin{matrix}
+\tilde{c}^{(F\ lim\ h)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+\frac{1}{\left( 1 + \left( \frac{\frac{\zeta_p}{(\overline{Z_\alpha^2 n_\alpha})^2 m_{p}} \overline{n}_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \left| c^{(h_T^A)}_{\alpha} b_x \widetilde{\frac{\partial T_{\alpha}}{h_x \partial x}} \right| }{zhflcorrh \cdot zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}}, &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{align}
+\overline{{\kappa}^{CL}_{\alpha x}} = b_x^2 \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2} \frac{T_i}{m_p} c^{(h_T^A)}_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \overline{n}_{\alpha}^2 \left(\frac{Z_{eff} n_e}{\overline{Z_\alpha^2 n_\alpha}} \right)^2,\ \ \ \left( \frac{Z^2}{\overline{Z_\alpha^2}} \text{weighted} \right)
+\end{align}
+
+\begin{align}
+c^{(h_T^A)}_{\alpha} = \frac{125}{32} \frac{1}{\tilde{\Delta}_\alpha} \left( 1 + \frac{433 \sqrt{2}}{360} Z^s_{11\alpha} \right)
+\end{align}
+
+\textbf{\textit{end}}
+
+\begin{align}
+\overline{\tilde{\kappa}^{B}_{\alpha x}} = b_x^2 \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2}\frac{T_i}{m_p} c^{(F\ limB\ h)}_{\alpha} c^{(h_T^B)}_\alpha \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \overline{n}_{\alpha}^2 \left( \frac{Z_{eff} n_e}{\overline{Z_\alpha^2 n_\alpha}} \right)^2
+\end{align}
+
+\begin{align}
+\overline{{\kappa}^{B}_{\alpha x}} = b_x^2 \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2} \frac{T_i}{m_p} c^{(h_T^B)}_\alpha \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \overline{n}_{\alpha}^2 \left( \frac{Z_{eff} n_e}{\overline{Z_\alpha^2 n_\alpha}} \right)^2
+\end{align}
+
+\begin{align}
+c^{(h_T^B)}_\alpha = \frac{139750}{53471}
+                 \frac{1 + \frac{6928 \sqrt{2}}{8385} Z^s_{11\alpha}}{D^{part}_\alpha}
+\end{align}
+where:
+\begin{align}\label{eq:D_alpha_part}
+{D^{part}_\alpha} =
+1 + \frac{204376 \sqrt{2}}{160413} Z^s_{11\alpha}
+  + \frac{72670 \sqrt{2}}{53471} Z^s_{5\alpha}
+  - \frac{76728 \sqrt{2}}{53471} Z^s_{9\alpha}
+  + \frac{360256}{160413} Z^s_{5\alpha} Z^s_{11\alpha}
+  - \frac{101568}{53471} \left( {Z^s_{9\alpha}} \right)^2
+\end{align}
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+
+\begin{equation}
+\begin{matrix}
+c^{(F\ limB\ h)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+0.5 + 0.5 \cdot \tanh \left[ 10 \cdot \left( \frac{zhflcorrh \cdot zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}}{\frac{5}{2} \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2 m_p} \left| \sum_\gamma \tilde{\check{a}}_{\alpha \gamma} \overline{n}_{\gamma} b_x \widetilde{\frac{\partial T_{\gamma}}{h_x \partial x}} \right|} - 1 \right) \right], &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\textbf{\textit{else}}
+
+\begin{equation}
+\begin{matrix}
+c^{(F\ limB\ h)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+0.5 + 0.5 \cdot \tanh \left[ 10 \cdot \left(
+ \frac{zhflcorrh \cdot zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}}
+      {\frac{\zeta_p}{\left( \overline{Z_\alpha^2 n_\alpha} \right)^2 m_{p}}
+       \overline{n}_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}}
+       \left| c^{(h_T^A)}_{\alpha} b_x \widetilde{\frac{\partial T_{\alpha}}
+                                                   {h_x \partial x}} \right| }
+ - 1 \right) \right], &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\subsection{Velocity-dependent ion heat flux}
+
+If {\tt Zhdanov\_vel\_heat.eq.1}, then:
+
+\begin{align}\label{eq:eni_tifix}
+\frac{\sqrt{g}}{h_x} h^V_{ix} = \frac{\sqrt{g}}{h_x} b_x T_i \sum_{\substack{a \\ z_a \neq 0}} n_{a} \sum_{\beta} c^{(h_w)}_{\beta \alpha(a)} \left( V_{a\parallel} - \overline{V}_{\beta\parallel} \right)
+\end{align}
+
+Therefore:
+\begin{multline}
+\widetilde{q}_{ix} = \widetilde{f}_{ix} T_i - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} = \\
+= \frac{3}{2} \Gamma_{ix} T_i + V_{ix}^{(str)} n_i T_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right) T_i \\
+- \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x} - q_{ix}^{P.Sch} + b_x T_i \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right)
+\end{multline}
+
+\begin{multline*}
+\widetilde{f}_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right) \\
++ b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right)
+\end{multline*}
+
+\begin{multline}
+q_{ix} = \left[
+\frac{3}{2} \Gamma_{ix} +
+\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde{V}_{ax}^{(dia)} +
+V_{ix}^{(str)} n_i + b_x \sum_{\alpha} \overline{n}_{\alpha} \sum_{\beta} c^{(h_w^A)}_{\beta \alpha} \left( \overline{V}_{\alpha\parallel} - \overline{V}_{\beta\parallel} \right) \right. \\
++ \left. \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j}_x^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j}_x^{\left( visq \right)}}{e} \right)
+\right] T_i
+- \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
+\end{multline}
+
+\begin{equation}
+q_{ix}^{(Eir)} =
+\frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \Gamma_{ax}^{(Eir)} T_i -
+\kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x} + h^V_{ix}
+\end{equation}
+
+\subsection{Thermal force}
+
+If {\tt Zhdanov\_tf\_fr.eq.1}, then:
+
+\textbf{In the friction source part of B2.5:}
+
+For isonuclear sequence $\alpha$ and charge state $Z$:
+
+\begin{multline}
+S^m_{Therm,ia} = \left[ a \rightarrow \alpha Z,\ \text{then}\ a(\alpha,Z) \right] = R_{\alpha Z}^{T} = \\
+- I_{a} \sum_{\beta} \overline{n}_{\beta} \tilde{c}^{(R_T^A)}_{\alpha \beta}
+b_x \widetilde{\frac{\partial T_{\beta}}{h_x\partial x}} - zhcscorr \cdot \overline{n}_{\alpha} c^{(R_T^B)}_{\alpha} \left( \frac{n_{a}}{\overline{n}_{\alpha}} b_x \frac{\partial T_{a}}{h_x \partial x} - I_{a} b_x \widetilde{\frac{\partial T_{\alpha}}{h_x \partial x}} \right)
+\end{multline}
+
+Temperature gradients:
+\begin{align}
+\widetilde{\frac{\partial T_{\alpha}}{h_x \partial x}} = \sum_Z \frac{n_{a(\alpha,Z)}}{\overline{n}_{\alpha}} \frac{\partial T_{a(\alpha,Z)}}{h_x \partial x}
+\end{align}
+
+\begin{align}
+T_{a} = T_{i} + zhd\_corr \cdot zhd\_corrT \cdot \frac{1}{3} m_a \textbf{w}^2_{a}
+\end{align}
+
+\begin{align}
+T = T_{i},
+\quad
+\textbf{w}^2_{a} = w^2_{a\parallel} % \ \left( + {w^{(drift)}_{a \perp}}^2 \right)
+\end{align}
+
+(The drift velocity could be added to the equation above)
+
+\begin{align}
+w_{a\parallel} = V_{a\parallel} - V_{\parallel},
+\quad
+V_{\parallel} = \frac{1}{\rho} \sum_{a} \rho_{a} V_{a\parallel}
+\end{align}
+
+\begin{align}
+\rho = \sum_{a} \rho_{a},
+\quad
+\rho_{a} = m_{a} n_{a}
+\end{align}
+
+\begin{align}
+I_{a} = \frac{Z^2 n_{a}}{\overline{Z_\alpha^2 n_{\alpha}}},
+\quad
+\overline{n}_{\alpha} = \sum_Z n_{a(\alpha,Z)},\ \ \ \ \overline{Z_\alpha^2 n_{\alpha}} = \sum_Z Z^2 n_{a(\alpha,Z)}
+\end{align}
+
+\begin{align}
+Z_{eff} n_e = \sum_\alpha \overline{Z_\alpha^2 n_{\alpha}},\ \ \ \ \overline{Z_\alpha^2} = \frac{\overline{Z_\alpha^2 n_{\alpha}}}{\overline{n}_{\alpha}}
+\end{align}
+
+\textbf{In the transport part of B2.5:}
+
+Thermal force coefficients are:
+
+First coefficient is:
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+
+\begin{multline}
+\tilde{c}^{(R_T^A)}_{\alpha \beta} = -\frac{5}{2} \sum_{\gamma} \left[ \frac{\mu_{\alpha \gamma}}{m_{\alpha}} \check{G}^{(2)}_{\alpha \gamma } \left( \tilde{\check{a}}^{fl}_{\alpha \beta} - \frac{m_{\alpha}}{m_{\gamma}} \tilde{\check{a}}^{fl}_{\gamma \beta} \right)
++ \left( \frac{\mu_{\alpha \gamma}}{m_{\alpha}} \right)^2 \check{G}^{(8)}_{\alpha \gamma } \left(\tilde{\check{a}}^{mdf\_fl}_{\alpha + n_s \beta} - \left( \frac{m_{\alpha}}{m_{\gamma}} \right)^2 \tilde{\check{a}}^{mdf\_fl}_{\gamma + n_s \beta} \right) \right]
+\end{multline}
+
+\begin{align}
+\tilde{\check{a}}^{fl}_{\alpha \beta} = c^{(F\ lim)}_{\alpha} \tilde{\check{a}}_{\alpha \beta}
+\end{align}
+
+\begin{align}
+\tilde{\check{a}}^{mdf\_fl}_{\alpha \beta} = c^{(F\ lim)}_{\alpha} \tilde{\check{a}}^{mdf}_{\alpha \beta}
+\end{align}
+
+\begin{equation}
+\begin{matrix}
+c^{(F\ lim)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+\frac{1}{\left( 1 + \left(\frac{\frac{5}{2} \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2 m_p} \left| \sum_\gamma \tilde{\check{a}}_{\alpha \gamma} \overline{n}_{\gamma} b_x \widetilde{\frac{\partial T_{\gamma}}{h_x \partial x}} \right| }{zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}}, &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{align}
+\tilde{c}^{(R_T^A)\_nofl}_{\alpha \beta} = -\frac{5}{2} \sum_{\gamma} \left[ \frac{\mu_{\alpha \gamma}}{m_{\alpha}} \check{G}^{(2)}_{\alpha \gamma } \left( \tilde{\check{a}}_{\alpha \beta} - \frac{m_{\alpha}}{m_{\gamma}} \tilde{\check{a}}_{\gamma \beta} \right)
++ \left( \frac{\mu_{\alpha \gamma}}{m_{\alpha}} \right)^2 \check{G}^{(8)}_{\alpha \gamma } \left(\tilde{\check{a}}^{mdf}_{\alpha + n_s \beta} - \left( \frac{m_{\alpha}}{m_{\gamma}} \right)^2 \tilde{\check{a}}^{mdf}_{\gamma + n_s \beta} \right) \right]
+\end{align}
+
+\textbf{\textit{else}}
+
+\begin{align}
+\tilde{c}^{(R_T^A)}_{\alpha \beta} = \delta_{\alpha \beta} \sum_{\gamma} c^{(R_T^A)}_{\alpha \gamma} \frac{\overline{Z_\gamma^2 n_\gamma}}{\overline{Z_\alpha^2 n_\alpha}} - c^{(R_T^A)}_{\beta \alpha} \frac{\overline{Z_\alpha^2 n_\alpha}}{\overline{Z_\beta^2 n_\beta}}
+\end{align}
+
+\begin{align}
+c^{(R_T^A)}_{\alpha\beta} = \tilde{c}^{(F\ lim)}_{\alpha} c^{(R_T^A)\_nofl}_{\alpha\beta}
+\end{align}
+
+\begin{equation}
+\begin{matrix}
+\tilde{c}^{(F\ lim)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+\frac{1}{\left( 1 + \left( \frac{\frac{\zeta_p}{\left( \overline{Z_\alpha^2 n_\alpha}\right)^2 m_{p}} \overline{n}_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \left| c^{(h_T^A)}_{\alpha} b_x \widetilde{\frac{\partial T_{\alpha}}{h_x \partial x}} \right|}{zhflcorr \cdot c_{fl\ lim}\sqrt{\frac{T}{m_{\alpha}}}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}}, &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{align}
+c^{(h_T^A)}_{\alpha} = \frac{125}{32} \frac{1}{\tilde{\Delta}_\alpha} \left( 1 + \frac{433 \sqrt{2}}{360} Z^s_{11\alpha} \right)
+\end{align}
+
+\begin{align}
+\tilde{c}^{(R_T^A)\_nofl}_{\alpha \beta} = \delta_{\alpha \beta} \sum_{\gamma} c^{(R_T^A)\_nofl}_{\alpha \gamma} \frac{\overline{Z_\gamma^2 n_\gamma}}{\overline{Z_\alpha^2 n_\alpha}} - c^{(R_T^A)\_nofl}_{\beta \alpha} \frac{\overline{Z_\alpha^2 n_\alpha}}{\overline{Z_\beta^2 n_\beta}}
+\end{align}
+
+\begin{align}
+c^{(R_T^A)\_nofl}_{\alpha\beta} =
+\frac{1}{\tilde{\Delta}_\alpha}\frac{25 \sqrt{2}}{16} \frac{\mu_{\alpha \beta}}{m_\alpha} \sqrt{\frac{\mu_{\alpha\beta}}{m_\alpha}} \left[ \frac{3}{2} + \frac{433 \sqrt{2}}{240} Z^s_{11\alpha} -\frac{1}{2} \frac{\mu_{\alpha \beta}}{m_\alpha} \left( 1 + \frac{23 \sqrt{2}}{8} Z^s_{9\alpha} \right) \right]
+\end{align}
+
+\begin{align}
+\tilde{\Delta}_\alpha = \frac{5629}{1152} Z^s_{5\alpha} Z^s_{11\alpha} - \frac{529}{128} {Z^s_{9\alpha}}^2 + \frac{65 \sqrt{2}}{32} Z^s_{5\alpha} + \frac{433 \sqrt{2}}{288} Z^s_{11\alpha} - \frac{23 \sqrt{2}}{16} Z^s_{9\alpha} + 1
+\end{align}
+
+\textbf{\textit{end}}
+
+Second coefficient is:
+\begin{align}
+c^{(R_T^B)}_{\alpha} = c^{(F\ limB)}_{\alpha} c^{(R_T^B)\_nofl}_{\alpha}
+\end{align}
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+\begin{equation}
+\begin{matrix}
+c^{(F\ limB)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+0.5 + 0.5 \cdot \tanh \left[ 10 \cdot \left( \frac{zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}}{\frac{5}{2} \frac{\zeta_p}{\left( Z_{eff} n_e \right)^2 m_p} \left| \sum_\gamma \tilde{\check{a}}_{\alpha \gamma} \overline{n}_{\gamma} b_x \widetilde{\frac{\partial T_{\gamma}}{h_x \partial x}} \right| } - 1 \right) \right], &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\textbf{\textit{else}}
+
+\begin{equation}
+\begin{matrix}
+c^{(F\ limB)}_{\alpha} & =
+& \left\{
+\begin{matrix}
+1, & \text{inside the separatrix} \\
+0.5 + 0.5 \cdot \tanh \left[ 10 \cdot \left( \frac{ zhflcorr \cdot c_{fl\ lim} \sqrt{\frac{T}{m_{\alpha}}}}{\frac{\zeta_p}{\left( \overline{Z_\alpha^2 n_\alpha} \right)^2 m_{p}} \overline{n}_{\alpha} \sqrt{\frac{2 m_{p}}{m_{\alpha}}} \left| c^{(h_T^A)}_{\alpha} b_x \widetilde{\frac{\partial T_{\alpha}}{h_x \partial x}} \right| } - 1 \right) \right], &
+\text{outside the separatrix} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\textbf{\textit{end}}
+
+\begin{align}
+c^{(R_T^B)\_nofl}_{\alpha} =
+\frac{31500}{53471}
+\frac{\frac{559}{420} \left( 1 + \frac{6928 \sqrt{2}}{8385} Z^s_{11\alpha} \right) \left( 1 + 2 \sqrt{2} Z^s_{2\alpha} \right) - \frac{139}{420} \left( 1 + \frac{184 \sqrt{2}}{139} Z^s_{9\alpha} \right) \left( 1 + 4 \sqrt{2} Z^s_{8\alpha} \right)}{D^{part}_\alpha}
+\end{align}
+
+where:
+\begin{align}
+{D^{part}_\alpha} =
+1 + \frac{204376 \sqrt{2}}{160413} Z^s_{11\alpha} + \frac{72670 \sqrt{2}}{53471} Z^s_{5\alpha} - \frac{76728 \sqrt{2}}{53471} Z^s_{9\alpha}
++ \frac{360256}{160413} Z^s_{5\alpha} Z^s_{11\alpha} - \frac{101568}{53471} \left( {Z^s_{9\alpha}} \right)^2
+\end{align}
+
+The $Z$-variables can be found in subsection~\ref{AGZ}.
+
+\subsection{Friction force}
+
+If {\tt Zhdanov\_tf\_fr.eq.1}, then:
+
+\textbf{In the friction source part of B2.5:}
+
+For isonuclear sequence $\alpha$ and charge state $Z$:
+
+\begin{align}
+S^m_{fr,ia} = \left[ a \rightarrow \alpha Z \right] = R_{\alpha Z}^{w} =
+- Z^2 n_{a} \frac{m_p}{\zeta_p} \sum_{\beta} \overline{Z_\beta^2 n_\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_p}} c^{(R_w)}_{\beta\alpha} \left( V_{\alpha Z\parallel} - \overline{V}_{\beta\parallel}\right)
+\end{align}
+where:
+\begin{align}
+\overline{V}_{\alpha\parallel} = \sum_{Z} I_{a(\alpha,Z)} V_{a(\alpha,Z)\parallel}
+\end{align}
+
+\textbf{In the transport part of B2.5:}
+
+\textbf{\textit{if {\tt zhcscorr.eq.1} then}}
+
+\begin{align}
+c^{(R_w)}_{\beta\alpha} =
+\delta_{\alpha\beta} \sum_{\gamma} \sqrt{\frac{\mu_{\alpha \gamma}}{\mu_{\alpha \beta}}} \frac{\overline{Z_\gamma^2 n_\gamma}}{\overline{Z_\beta^2 n_\beta}}\left[ c^{(R_w^B)}_{\gamma\alpha} - c^{(R_w^A)}_{\gamma \alpha} \right] + c^{(R_w^A)}_{\beta \alpha}
+\end{align}
+
+\textbf{\textit{else}}
+
+\begin{align}
+c^{(R_w)}_{\beta\alpha} = \begin{cases} c^{(R_w^A)}_{\beta \alpha}, & \beta\neq\alpha \\ 1, & \beta=\alpha \end{cases}
+\end{align}
+
+\textbf{\textit{end}}
+
+First coefficient:
+\begin{align}
+c^{(R_w^A)}_{\beta \alpha} = 1 + c^{(R_w^A1)}_{\beta \alpha}
+                          + c^{(R_w^A2)}_{\beta \alpha} + c^{(R_w^A3)}_{\beta \alpha}
+\end{align}
+
+\begin{align}
+c^{(R_w^A1)}_{\beta \alpha} =
+-\sum_{\gamma\neq\alpha} \frac{\mu_{\alpha \gamma}}{m_{\alpha}} \sqrt{\frac{\mu_{\alpha\gamma}}{\mu_{\alpha\beta}}} \frac{\overline{Z_\gamma^2 n_\gamma}}{\overline{Z_\beta^2 n_\beta}} \left[ \frac{3}{5} c^{(h_w^A)}_{\beta \alpha} - \frac{3}{14} \frac{\mu_{\alpha \gamma}}{m_{\alpha}} c^{(r_w^A)}_{\beta \alpha} \right]
+\end{align}
+
+\begin{align}
+c^{(R_w^A2)}_{\beta \alpha} =
+\sum_{\gamma\neq\alpha} \frac{\mu_{\alpha \gamma}}{m_{\gamma}} \sqrt{\frac{\mu_{\alpha\gamma}}{\mu_{\alpha\beta}}} \frac{\overline{Z_\gamma^2 n_\gamma}}{\overline{Z_\beta^2 n_\beta}} \left[ \frac{3}{5} c^{(h_w^A)}_{\beta \gamma} - \frac{3}{14} \frac{\mu_{\alpha \gamma}}{m_{\gamma}} c^{(r_w^A)}_{\beta \gamma} \right]
+\end{align}
+
+\begin{align}
+c^{(R_w^A3)}_{\beta \alpha} =
+-\frac{\mu_{\alpha \beta}}{m_{\beta}} \sum_{\gamma}\left[ \frac{3}{5} c^{(h_w^A)}_{\gamma\beta}
+- \frac{3}{14} \frac{\mu_{\alpha \beta}}{m_{\beta}} c^{(r_w^A)}_{\gamma\beta} \right]
+\end{align}
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+
+\begin{align}
+c^{(h_w^A)}_{\beta \alpha} = \sum_{\gamma} \left( c^{(h_w^A*)}_{\alpha \gamma\beta} - c^{(h_w^A*)}_{\alpha\beta\gamma} \right)
+\end{align}
+
+\begin{align}
+c^{(h_w^A*)}_{\alpha\gamma\beta} = -\frac{5}{2} \frac{\mu_{\gamma\beta}}{m_\gamma} \check{G}^{(2)}_{\gamma \beta}\tilde{\check{a}}_{\alpha \gamma} - \frac{35}{2} \left( \frac{\mu_{\gamma \beta}}{m_{\gamma}} \right)^2 \check{G}^{(8)}_{\gamma \beta} \tilde{\check{a}}_{\alpha \gamma + n_s}
+\end{align}
+
+\begin{align}
+c^{(r_w^A)}_{\beta \alpha} = \sum_{\gamma} \left( c^{(r_w^A*)}_{\alpha \gamma\beta} - c^{(r_w^A*)}_{\alpha \beta \gamma} \right)
+\end{align}
+
+\begin{align}
+c^{(r_w^A*)}_{\alpha \gamma\beta} = -\frac{5}{2} \frac{\mu_{\gamma \beta}}{m_\gamma} \check{G}^{(2)}_{\gamma \beta} \tilde{\check{a}}^{mdf}_{\alpha + n_s \gamma} - \frac{35}{2} \left( \frac{\mu_{\gamma \beta}}{m_{\gamma}} \right)^2 \check{G}^{(8)}_{\gamma \beta} \tilde{\check{a}}^{mdf}_{\alpha+n_s\gamma + n_s}
+\end{align}
+
+\textbf{\textit{else}}
+
+\begin{align}\label{eq:heat_flux_vel_aver_coef}
+c^{(h_w^A)}_{\beta \alpha} = \frac{1}{\tilde{\Delta}_\alpha} \frac{25 \sqrt{2}}{16} \frac{\mu_{\alpha \beta}}{m_\alpha} \sqrt{\frac{\mu_{\alpha\beta}}{m_\alpha}} \left[ \frac{3}{2} + \frac{433 \sqrt{2}}{240} Z^s_{11\alpha} - \frac{1}{2} \frac{\mu_{\alpha \beta}}{m_\alpha} \left( 1 + \frac{23 \sqrt{2}}{8} Z^s_{9\alpha} \right) \right] \frac{\overline{Z_\beta^2} n_\beta}{\overline{Z_\alpha^2} n_\alpha}
+\end{align}
+
+\begin{align}\label{eq:r_moment_vel_aver_coef}
+c^{(r_w^A)}_{\beta \alpha} = -\frac{1}{\tilde{\Delta}_\alpha} \frac{35 \sqrt{2}}{24} \frac{\mu_{\alpha \beta}}{m_\alpha} \sqrt{\frac{\mu_{\alpha\beta}}{m_\alpha}} \left[ -\frac{3}{2} - \frac{69 \sqrt{2}}{16} Z^s_{9\alpha} + \frac{5}{2} \frac{\mu_{\alpha \beta}}{m_\alpha} \left( 1 + \frac{13 \sqrt{2}}{8} Z^s_{5\alpha} \right) \right] \frac{\overline{Z_\beta^2} n_\beta}{\overline{Z_\alpha^2} n_\alpha}
+\end{align}
+
+\ \ \textbf{\textit{If {\tt zh\_analyt\_mdf.eq.1} then}}
+
+\ \ \ \ \textbf{\textit{If $m_\alpha > m_\beta$ then}}
+
+\begin{align}
+c^{(h_w^A)}_{\beta \alpha} = 0
+\end{align}
+
+\begin{align}
+c^{(r_w^A)}_{\beta \alpha} = 0
+\end{align}
+
+\ \ \ \ \textbf{\textit{end}}
+
+\ \ \textbf{\textit{end}}
+
+\textbf{\textit{end}}
+
+$A$-coefficients and $G$-objects can be found in subsection~\ref{AGZ}.
+
+Second coefficient:
+
+\begin{align}
+c^{(R_w^B)}_{\beta\alpha} = 1 - \frac{3}{5} \frac{\mu_{\alpha \beta}}{m_{\alpha}} c^{(h_w^B)}_\alpha
++ \frac{3}{14} \left( \frac{\mu_{\alpha \beta}}{m_{\alpha}} \right)^2 c^{(r_w^B)}_\alpha
+\end{align}
+
+\begin{align}\label{eq:c_6_analyt}
+c^{(h_w^B)}_\alpha =
+\frac{31500}{53471}
+\frac{1 - \frac{139 \sqrt{2}}{105} Z^s_{8\alpha} - \frac{46 \sqrt{2}}{105} Z^s_{9\alpha} + \frac{1732 \sqrt{2}}{1575} Z^s_{11\alpha} + \frac{559 \sqrt{2}}{210} Z^s_{2\alpha} - \frac{368}{105} Z^s_{8\alpha} Z^s_{9\alpha} + \frac{6928}{1575} Z^s_{2\alpha} Z^s_{11\alpha}}{D^{part}_\alpha}
+\end{align}
+
+\begin{align}\label{eq:c_8_analyt}
+c^{(r_w^B)}_\alpha =
+\frac{17080}{53471}
+\frac{1 + \frac{276 \sqrt{2}}{61} Z^s_{9\alpha} + \frac{417 \sqrt{2}}{61} Z^s_{2\alpha} - \frac{590 \sqrt{2}}{61} Z^s_{8\alpha} - \frac{130 \sqrt{2}}{61} Z^s_{5\alpha} + \frac{1104}{61} Z^s_{2\alpha} Z^s_{9\alpha} - \frac{1040}{61} Z^s_{5\alpha} Z^s_{8\alpha}}{D^{part}_\alpha}
+\end{align}
+
+where:
+
+\begin{align}
+{D^{part}_\alpha} =
+1 + \frac{204376 \sqrt{2}}{160413} Z^s_{11\alpha}
+  + \frac{72670 \sqrt{2}}{53471} Z^s_{5\alpha}
+  - \frac{76728 \sqrt{2}}{53471} Z^s_{9\alpha}
+  + \frac{360256}{160413} Z^s_{5\alpha} Z^s_{11\alpha}
+  - \frac{101568}{53471} \left( {Z^s_{9\alpha}} \right)^2
+\end{align}
+
+$Z$-variables can be found in subsection~\ref{AGZ}.
+
+\subsection{Viscous stress}
+
+From Zhdanov for ions:
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{align}
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2} \frac{\partial \left(B^{\frac{1}{2}} V_{\parallel a} \right)}{h_x \partial x}\right)
+\end{align}
+
+where:
+
+\begin{align}
+\rho^{rel}_a = \frac{\rho_{a}}{\rho},\ \ \
+\rho = \sum_{a} \rho_{a},\ \ \
+\rho_{a} = m_{a} n_{a}
+\end{align}
+
+\begin{align}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visres_0}
+\left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
+- \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x} \right)
+B^{\frac{1}{2}} V_{\parallel a}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visai_0}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = 0
+\end{align}
+
+\begin{multline}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel} =
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \left(\frac{\partial \ln h_z}{h_x \partial x}  V_{\parallel a}
+- \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right) = \\
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \left(\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{ \partial \ln h_z}{h_x \partial x} V_{\parallel a} - \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right)
+\end{multline}
+
+Thus the momentum flux is:
+
+\begin{equation}\label{eq:mom_zh_fluxx_0}
+\Gamma^m_{ax} = \left\{
+\begin{matrix}
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 0 \\
+\end{matrix}
+\right.
+\end{equation}
+
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\end{equation}
+
+and the momentum source is:
+
+\begin{equation}
+\begin{matrix}
+S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+& \ z_a \neq 0 \\
+\\
+0, & z_a = 0 \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
+\begin{multline}
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2} \frac{\partial \left(B^{\frac{1}{2}} V_{\parallel} \right)}{h_x \partial x}\right) = \\
+ -B^{\frac{3}{2}} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2} \frac{\partial \left( B^{\frac{1}{2}} \left( \rho^{rel}_a V_{\parallel a} \right) \right)}{h_x \partial x} \right)\\
+ -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2} \frac{\partial \left(B^{\frac{1}{2}} \left( V_{\parallel} - \rho^{rel}_a V_{\parallel a} \right) \right)}{h_x \partial x} \right)
+\end{multline}
+
+where:
+
+\begin{align}
+\rho^{rel}_a = \frac{\rho_{a}}{\rho},\ \ \
+\rho = \sum_{a} \rho_{a},\ \ \
+\rho_{a} = m_{a} n_{a}
+\end{align}
+
+Note that:
+
+\begin{align}
+V_{\parallel} - \rho^{rel}_a V_{\parallel a} = \sum_{b\neq a} \rho^{rel}_b V_{\parallel b}
+\end{align}
+
+does not depend on $V_{\parallel a}$.
+
+\begin{align}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visres}
+\left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
+- \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x} \right)
+B^{\frac{1}{2}} \rho^{rel}_a V_{\parallel a}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visai}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -B^{\frac 3 2} b_x \frac{\partial}{h_x \partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \frac{1}{b_x B^2}\frac{h_x}{h_z \sqrt g} \frac{\partial \left(B^{\frac{1}{2}} \left( V_{\parallel} - \rho^{rel}_a V_{\parallel a} \right) \right)}{h_x \partial x}\right)
+\end{align}
+
+\begin{multline}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel} =
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \left(\frac{\partial \ln h_z}{h_x \partial x} \rho^{rel}_a V_{\parallel a}
+- \frac{\partial \rho^{rel}_a V_{\parallel a}}{h_x \partial x} \right) \right) = \\
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \left(\frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\left( \frac{ \partial \ln h_z}{h_x \partial x} - \frac{\partial \ln{\rho^{rel}_a}}{h_x \partial x}\right) V_{\parallel a} - \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right)
+\end{multline}
+
+Thus the momentum flux is:
+
+\begin{equation}\label{eq:mom_zh_fluxx}
+\Gamma^m_{ax} = \left\{
+\begin{matrix}
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \left( \frac{\partial \ln h_z}{h_x \partial x} - \frac{\partial \ln{\rho^{rel}_a}}{h_x \partial x} \right) V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 0 \\
+\end{matrix}
+\right.
+\end{equation}
+
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3}\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\end{equation}
+
+and the momentum source is:
+
+\begin{equation}
+\begin{matrix}
+S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+& \ z_a \neq 0 \\
+\\
+0, & z_a = 0 \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} =
+ -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\widetilde{\widetilde{\eta}}^{(CL)}_{a x}\frac{1}{B^{2}b_x}\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel a}\bigg)\Bigg]\\
+-\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
+\bigg]\Bigg]
+\end{multline}
+
+\begin{align}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visres_2}
+\left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
+- \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x} \right)
+B^{\frac{1}{2}} V_{\parallel a}
+\end{align}
+
+\begin{multline}\label{eq:mom_zh_visai_2}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
+\bigg]\Bigg]
+\end{multline}
+
+\begin{multline}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel} =
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\left(\frac{\partial \ln h_z}{h_x \partial x}  V_{\parallel a}
+- \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right) = \\
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \left(\frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\frac{ \partial \ln h_z}{h_x \partial x} V_{\parallel a} - \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right)
+\end{multline}
+
+Thus the momentum flux is:
+
+\begin{equation}\label{eq:mom_zh_fluxx_2}
+\Gamma^m_{ax} = \left\{
+\begin{matrix}
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 0 \\
+\end{matrix}
+\right.
+\end{equation}
+
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\end{equation}
+
+and the momentum source is:
+
+\begin{equation}
+\begin{matrix}
+S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+& \ z_a \neq 0 \\
+\\
+0, & z_a = 0 \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\ \ \textbf{\textit{end}}
+
+Where the viscous stress coefficient is:
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} or {\tt zh\_vis\_type.eq.1} then}}
+
+\begin{align}\label{eq:mom_zh_ddveta}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_dveta}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \eta^{(CL)}_{ax}
+\end{align}
+
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
+
+\begin{equation}
+\begin{matrix}
+c_{\eta_{ax}^{(CL)}} & =
+& \left\{
+\begin{matrix}
+1, & \ z_a \neq 0 \; \text{and only for inner flux surfaces} \\
+\frac 1
+{\left(1 + \left( \frac{
+\eta^{(CL)}_{a}
+  \left| b_x \frac{\partial V_{\parallel}}{h_x \partial x} \right|
+}
+{V_{m_a}^{(\max)}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}
+}, &
+\text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}
+V_{m_a}^{(\max)} = c_{flim_2} n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+\end{equation}
+
+\begin{equation}\label{eq:mom_zh_veta}
+\eta^{(CL)}_{ax} =
+\left\{
+\begin{aligned}
+0, & \ z_a = 0 \\
+\rho^{rel}_a \eta^{(CL)}_{a} b_x^2, & \ z_a \neq 0  \\
+\end{aligned} \right.
+\end{equation}
+
+\begin{align}
+\eta^{(CL)}_{a} = n_{a} T_i \left[ \sum_{\beta} \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta} \frac{\overline{n}_{\beta}}{\overline{n}_{\alpha}} + zhcscorr \cdot 2 c^{(\pi_u^B)}_{\alpha} \tau_{\alpha \alpha }^{(Zh)} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right]
+\end{align}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{align}\label{eq:mom_zh_ddveta_2}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_dveta_2}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{\alpha x}^{(CL)}} \eta^{(CL)}_{ax}
+\end{align}
+
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
+
+\begin{equation}
+\begin{matrix}
+c_{\eta_{\alpha x}^{(CL)}} & =
+& \left\{
+\begin{matrix}
+1, & \ z_a \neq 0 \; \text{and only for inner flux surfaces} \\
+\frac 1
+{\left(1 + \left( \frac{
+\eta^{(CL) eff}_{\alpha}
+  \left| b_x \frac{\partial V_{\parallel}}{h_x \partial x} \right|
+}
+{V_{m_\alpha}^{(\max)}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}
+}, &
+\text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}
+V_{m_\alpha}^{(\max)} = c_{flim_2} \overline{n}_\alpha T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+\end{equation}
+
+\begin{equation}
+\eta^{(CL) eff}_{\alpha}=\sum_\beta \frac{\eta^{(u_iA)}_{\alpha \beta}}{p_\alpha} \overline{n}_\beta T_i
+\end{equation}
+
+\begin{equation}\label{eq:mom_zh_veta_2}
+\eta^{(CL)}_{ax} =
+\left\{
+\begin{aligned}
+0, & \ z_a = 0 \\
+ \eta^{(CL)}_{a} b_x^2, & \ z_a \neq 0  \\
+\end{aligned} \right.
+\end{equation}
+
+\begin{align}
+\eta^{(CL)}_{a} = \left[ a \rightarrow \alpha Z \right] = \Bigg[\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}+
+zhcscorr\cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\left(\frac{1}{I_{a}}-1\right)\Bigg]\frac{n_{a}}{\overline{n}_{\alpha}} n_{a}T_i
+\end{align}
+
+\begin{align}
+\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}= c_{\eta^{(CL)}}^{Luciani} \frac{\widetilde{\eta}^{(u_iA)}_{\alpha \beta x}}{p_\alpha},\ \ \ \ \frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}= c_{\eta^{(CL)}}^{Luciani} \frac{\widetilde{\eta}^{(u_iB)}_{\alpha x}}{p_\alpha}
+\end{align}
+
+\begin{align}
+\frac{\widetilde{\eta}^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = c_{\eta_{\alpha x}^{(CL)}} \frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha},\ \ \ \frac{\widetilde{\eta}^{(u_iB)}_{\alpha x}}{p_\alpha} = c_{\eta_{\alpha x}^{(CL)}} \frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}
+\end{align}
+
+\begin{align}
+\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta};\ \ \
+\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_u^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha},
+\end{align}
+
+\ \ \textbf{\textit{end}}
+
+where:
+
+\begin{align}
+\tau_{\alpha \beta }^{(Zh)} = \sqrt{\frac{\mu_{\alpha\beta}}{m_{p}}} \frac{\zeta_p}{\overline{Z_\alpha^2}\overline{Z_\beta^2 n_\beta}}
+\end{align}
+
+Heat viscosity:
+
+\begin{multline}
+ \left( \nabla \cdot\overset\leftrightarrow\pi _a^{h_i} \right)_{\parallel} = -B^{3/2} b_x \frac{\partial}{h_x \partial x} \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}\frac{1}{b_x B^{2}}\frac{h_x}{h_z \sqrt g} \frac{\partial}{h_x \partial x}\left(\sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right] + \\
+zhcscorr \cdot zhcscorr\_vq \cdot \\
+\left( -B^{3/2} b_x \frac{\partial}{h_x\partial x} \left[ \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{1}{b_x B^{2}} \frac{h_x}{h_z \sqrt g} \left( \frac{1}{I_a} \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right] \right)
+\end{multline}
+
+where the heat fluxes are given by:
+
+\begin{align}
+\frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} = \overline{h}^{(1)}_{\beta} \arctan{\left( \frac{1}{\overline{h}^{(1)}_{\beta}} \frac{\overline{h}^{\ast(0)}_{\beta x}}{b_x} \right)},\ \ \ \overline{h}^{(1)}_{\beta} = c_{q1} \overline{n}_\beta T_i \sqrt{\frac{T_i + T_e}{m_\beta}}
+\end{align}
+
+\begin{align}
+\frac{\widetilde{h^{(0)}_{a x}}}{b_x} = h^{(1)}_{a} \arctan{\left( \frac{1}{h^{(1)}_{a}} \frac{h^{(0)}_{ax}}{b_x} \right)},\ \ \ h^{(1)}_{a} = c_{q1} n_a T_i \sqrt{\frac{T_i + T_e}{m_a}}
+\end{align}
+
+In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
+
+\begin{equation}
+\begin{matrix}
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\frac{\overline {\tilde h}^{\ast(dia)}_{\beta x}}{b_x} & =
+& \left\{
+\begin{matrix}
+0 & \text{outside the separatrix} \\
+-\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{\overline{(Z^{-1})}^\ast_\beta\overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+& \text{inside the separatrix}
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}
+\begin{matrix}
+\frac{h^{(0)}_{ax}}{b_x} =
+\frac{\tilde h^{(dia)}_{ax}}{b_x} & =
+& \left\{
+\begin{matrix}
+0 & \text{outside the separatrix} \\
+-\frac 5 2 \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{n_a T_i}{Z_a e} \frac{\partial T_i}{h_y \partial y}
+& \text{inside the separatrix}
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
+\begin{equation}
+\begin{matrix}
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\overline h^\ast_{\beta\parallel} + \frac{\overline {h}^{\ast(dia)}_{\beta x}}{b_x} & =
+& \left\{
+\begin{matrix}
+0 & \text{outside the separatrix} \\
+-\frac{\overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}}{b_x} \frac{\partial T_i}{h_x \partial x} - \frac{5}{2} \frac{B_z B}{B_x B^2} \frac{\overline{(Z^{-1})}^\ast_\beta \overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+& \text{inside the separatrix}
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+\begin{equation}
+\begin{matrix}
+\frac{h^{(0)}_{ax}}{b_x} = h_{a\parallel} +
+\frac{h^{(dia)}_{ax}}{b_x} & =
+& \left\{
+\begin{matrix}
+0 & \text{outside the separatrix} \\
+-\frac{\tilde{\tilde{\kappa}}^{CL}_{ax}}{b_x} \frac{ \partial T_i}{h_x \partial x}
+-\frac{5}{2} \frac{B_z B}{B_x B^2 } \frac{n_a T_i}{Z_a e} \frac{\partial T_i}{h_y \partial y}
+& \text{inside the separatrix}
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{align}
+\overline{(Z^{-1})}^\ast_\beta = \frac{1}{\overline{n}_{\beta}}\sum_\zeta \frac{n_{b(\beta,\zeta)}}{\zeta},\ \ \ \  \overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}=\sum_\zeta\tilde{\tilde{\kappa}}^{CL}_{\beta \zeta x}
+\end{align}
+
+And the viscosity coefficients are:
+
+\begin{align}\label{eq:mom_zh_veta_hA}
+\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta^{(CL)}}^{Luciani} \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_h^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_veta_hB}
+\frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta^{(CL)}}^{Luciani} \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_h^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha}
+\end{align}
+
+\begin{align}
+\tilde{\alpha}^{neo} = \frac {1}{1.7}
+\left(
+\frac{-0.17 + 1.05 \nu_{\ast}^{1/2} + 2.7 \nu_{\ast}^2 \varepsilon^3}
+         {1 + 0.7 \nu_{\ast}^{1/2} + \nu_{\ast}^2 \varepsilon^3} - 1 \right)
+\end{align}
+
+The old formulation was:
+
+\begin{align}
+\alpha^{NEO} = \underbrace{\frac 4{3}}_{tensor} \cdot \underbrace{\frac{2}{5}}_{heat\ flux} \cdot
+\underbrace{\frac{1}{1.7}
+\left(
+\frac{-0.17 + 1.05 \nu_{\ast}^{1/2} + 2.7 \nu_{\ast}^2 \varepsilon^3}
+{1 + 0.7 \nu_{\ast}^{1/2} + \nu_{\ast}^2 \varepsilon^3} - 1 \right)}_{neoclassical\ correction}\cdot \underbrace{1.7}_{kinetic}
+\end{align}
+
+\textbf{\textit{If {\tt zh\_imp\_analyt.eq.0} then}}
+
+\begin{align}
+\check{c}^{(\pi_u^A)}_{\alpha \beta} = -\frac{\overline{Z_\alpha^2 n_\alpha}}{Z_{eff} n_e} \frac{\overline{Z_\beta^2 n_\beta}}{Z_{eff} n_e}\frac{\tilde {\check {c}}_{\alpha \beta}}{\sqrt{\frac{\mu_{\alpha\beta}}{m_{p}}}}
+\end{align}
+
+\begin{align}
+\check{c}^{(\pi_h^A)}_{\alpha \beta} =
+ -\frac{\overline{Z_\alpha^2 n_\alpha}}{Z_{eff} n_e}
+  \frac{\overline{Z_\beta^2 n_\beta}}{Z_{eff} n_e}
+  \frac{ \left( \tilde{\check{c}}_{\alpha \beta} +
+         \frac{7}{2} \tilde{\check{c}}_{\alpha \beta+n_s} \right)}
+       {\sqrt{\frac{\mu_{\alpha\beta}}{m_{p}}}}
+\end{align}
+
+\textbf{\textit{else}}
+
+\begin{align}
+\check{c}^{(\pi_u^A)}_{\alpha \beta} = 2 c^{(\pi_u^A)}_\alpha \delta_{\alpha \beta};\ \ \
+c^{(\pi_u^A)}_\alpha = \frac{1025}{1068} \frac{1}{\Delta_\alpha^\pi} \left( 1 + \frac{204 \sqrt{2}}{205} Z^\pi_{22\alpha} \right)
+\end{align}
+
+\begin{align}
+\check{c}^{(\pi_h^A)}_{\alpha \beta} = 2 c^{(\pi_h^A)}_\alpha \delta_{\alpha \beta}
+;\ \ \
+c^{(\pi_h^A)}_\alpha = \frac{1655}{1068} \frac{1}{\Delta_\alpha^\pi} \left( 1 + \frac{204 \sqrt{2}}{331} Z^\pi_{22\alpha} + \frac{252 \sqrt{2}}{331} Z^\pi_{12\alpha} \right)
+\end{align}
+
+\begin{align}
+\Delta_\alpha^\pi = \frac{204}{89} Z^\pi_{11\alpha} Z^\pi_{22\alpha} - \frac{108}{89} {Z^\pi_{12\alpha}}^2 + \frac{205 \sqrt{2}}{178} Z^\pi_{11\alpha} + \frac{102 \sqrt{2}}{89} Z^\pi_{22\alpha} - \frac{54 \sqrt{2}}{89} Z^\pi_{12\alpha} + 1
+\end{align}
+
+\textbf{\textit{end}}
+
+\begin{align}\label{eq:c7_part}
+c^{(\pi_u^B)}_{\alpha} = \frac{265}{334}
+\frac{1 + \frac{204 \sqrt{2}}{265} Z^\pi_{22\alpha}}{D^{\pi part}_\alpha}
+\end{align}
+
+\begin{align}\label{eq:c12_part}
+c^{(\pi_h^B)}_{\alpha} = \frac{475}{334}
+\frac{1 + \frac{252 \sqrt{2}}{475} Z^\pi_{12\alpha} + \frac{204 \sqrt{2}}{475} Z^\pi_{22\alpha}}{D^{\pi part}_\alpha}
+\end{align}
+
+\begin{align}\label{eq:D_vis_alpha_part}
+{D^{\pi part}_\alpha} =
+1 + \frac{159 \sqrt{2}}{167} Z^\pi_{11\alpha} + \frac{816 \sqrt{2}}{835} Z^\pi_{22\alpha}
+  - \frac{108 \sqrt{2}}{167} Z^\pi_{12\alpha}
+  + \frac{1224}{835} Z^\pi_{11\alpha} Z^\pi_{22\alpha}
+  - \frac{648}{835} \left( Z^\pi_{12\alpha} \right)^2
+\end{align}
+
+\subsection{A-coefficients, G-objects and Z-variables}\label{AGZ}
+
+Re-normalized part of the inverted matrix is: \\
+\hspace{20pt}$\alpha=0..n_s-1$
+
+\hspace{20pt}$\beta=0..2n_s-1$
+\begin{align}
+\tilde {\check {a}}^{mdf}_{\alpha \beta} = \frac{m_{\alpha}}{T} \tilde{\check{a}}_{\alpha + n_s \beta}
+\end{align}
+
+and $\tilde{\check{a}}_{\alpha \beta}$ are the elements of the inverted matrix. Elements of the original matrix are: \\
+$\alpha=0..n_s-1$
+
+\hspace{20pt}$\beta=0..n_s-1$
+\begin{align}
+\check{a}_{\alpha \beta}=
+\check{G}^{(6)}_{\alpha \beta}
+,\quad
+\check{a}_{\alpha + n_s\beta}=
+7 \check{G}^{(10)}_{\alpha \beta}
+\end{align}
+
+\begin{align}
+\check{a}_{\alpha\beta + n_s}=
+\frac{m_{\alpha}}{T}\check{G}^{(10)}_{\alpha \beta}
+,\quad
+\check{a}_{\alpha+n_s\beta+n_s}=
+\frac{m_{\beta}}{T}\check{G}^{(12)}_{\alpha \beta}
+\end{align}
+
+Addition for diagonal elements: \\
+\hspace{20pt}$\beta=0..n_s-1$
+\begin{align}
+\check{a}_{\beta\beta} =
+\check{a}_{\beta\beta} + \sum_{\gamma} \check{G}^{(5)}_{\beta \gamma}
+,\quad
+\check{a}_{\beta + n_s \beta}=
+\check{a}_{\beta + n_s \beta} + 7 \sum_{\gamma} \check{G}^{(9)}_{\beta\gamma}
+\end{align}
+
+\begin{align}
+\check{a}_{\beta\beta + n_s} =
+\check{a}_{\beta\beta + n_s} + \frac{m_{\beta}}{T} \sum_{\gamma} \check{G}^{(9)}_{\beta \gamma}
+,\quad
+\check{a}_{\beta + n_s \beta + n_s} = \check{a}_{\beta + n_s \beta + n_s}+
+\frac{m_{\beta}}{T} \sum_{\gamma} \check{G}^{(11)}_{\beta \gamma}
+\end{align}
+
+Elements of the matrix for the viscous stress tensor are:\\
+$\alpha=0..n_s-1$
+
+\hspace{20pt}$\beta=0..n_s-1$
+\begin{align}
+\check{c}_{\alpha \beta}=
+\check{G}^{(4)}_{\alpha \beta}
+,\quad
+\check{c}_{\alpha + n_s \beta}=
+\frac{7}{2} \frac{m_{\alpha}}{m_{\beta}} \check{G}^{(14)}_{\alpha \beta}
+\end{align}
+
+\begin{align}
+\check{c}_{\alpha\beta + n_s} =
+\frac{m_{\alpha}}{T}\frac{m_{\beta}}{m_{\alpha}}\check{G}^{(14)}_{\alpha \beta}
+,\quad
+\check{c}_{\alpha + n_s \beta + n_s} =
+\frac{m_{\alpha}}{T} \check{G}^{(16)}_{\alpha \beta}
+\end{align}
+
+Addition for diagonal elements: \\
+\hspace{20pt}$\beta=0..n_s-1$
+\begin{align}
+\check{c}_{\beta\beta} =
+\check{c}_{\beta\beta} + \sum_{\gamma} \check{G}^{(3)}_{\beta \gamma}
+,\quad
+\check{c}_{\beta + n_s \beta} =
+\check{c}_{\beta + n_s \beta} + \frac{7}{2} \sum_{\gamma} \check{G}^{(13)}_{\beta\gamma}
+\end{align}
+
+\begin{align}
+\check{c}_{\beta\beta+n_s} =
+\check{c}_{\beta\beta+n_s} + \frac{m_{\alpha}}{T} \sum_{\gamma} \check{G}^{(13)}_{\beta \gamma}
+,\quad
+\check{c}_{\beta + n_s \beta + n_s} = \check{c}_{\beta + n_s \beta + n_s} +
+\frac{m_{\alpha}}{T} \sum_{\gamma} \check{G}^{(15)}_{\beta \gamma}
+\end{align}
+
+Where the $\check{G}^{(n)}_{\alpha \beta }$ objects are:
+\begin{equation}
+\check{G}^{(n)}_{\alpha \beta } = \frac{\overline{Z_\alpha^2 n_\alpha}}{Z_{eff} n_e}\frac{\overline{Z_\beta^2 n_\beta}}{Z_{eff} n_e} N_{\alpha \beta }^{(n)}
+\end{equation}
+
+Where $N_{\alpha \beta }^{(n)}$ is a different part of each $\check{G}^{(n)}_{\alpha \beta }$:
+
+\begin{align}
+N_{\alpha \beta}^{(2)} = \frac{3}{5} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(3)} = -2 \left( 1 + \frac{3}{5} \frac{m_\beta}{m_\alpha} \right) \frac{m_p}{m_\alpha + m_\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(4)} = \frac{4}{5} \frac{m_p}{m_\alpha + m_\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\\
+N_{\alpha \beta}^{(5)} = -\left( \frac{13}{10} \frac{m_\beta}{m_\alpha} + \frac{8}{5} + 3 \frac{m_\alpha}{m_\beta} \right) \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(6)} = \frac{27}{10} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(8)} = -\frac{3}{14} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\\
+N_{\alpha \beta}^{(9)} = \frac{3}{5} \left( \frac{23}{28} \frac{m_\beta}{m_\alpha} + \frac{8}{7} + 3 \frac{m_\alpha}{m_\beta} \right) \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\frac{\mu_{\alpha\beta}}{m_{\alpha}},\ \ \ \
+N_{\alpha \beta}^{(10)} = -\frac{45}{28} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\frac{\mu_{\alpha\beta}}{m_{\alpha}}\\
+N_{\alpha \beta}^{(11)} = -\left(\frac{433}{280} \frac{m^2_\beta}{m^2_\alpha} + \frac{136}{35} \frac{m_\beta}{m_\alpha} + \frac{459}{35} + \frac{32}{5} \frac{m_\alpha}{m_\beta} + 5 \frac{m^2_\alpha}{m^2_\beta} \right) \kappa^2_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(12)} = \frac{75}{8} \kappa^2_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\\
+N_{\alpha \beta}^{(13)} = \left(\frac{18}{35} \frac{m_\beta}{m_\alpha} + \frac{6}{5} \right) \frac{m_p}{m_\alpha} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\ \ \ \
+N_{\alpha \beta}^{(14)} = -\frac{24}{35} \frac{m_p}{m_\alpha} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}\\
+N_{\alpha \beta}^{(15)} = -\left( \frac{51}{35} \frac{m^2_\beta}{m^2_\alpha} + \frac{37}{7} \frac{m_\beta}{m_\alpha} + \frac{22}{5} + 4 \frac{m_\alpha}{m_\beta} \right) \frac{m_{p}}{m_\alpha + m_\beta} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}},\\
+N_{\alpha \beta}^{(16)} = \frac{24}{7} \frac{m_\beta}{m_\alpha} \frac{m_{p}}{m_\alpha + m_\beta} \kappa_{\alpha\beta} \sqrt{\frac{\mu_{\alpha \beta}}{m_{p}}}
+\end{align}
+
+Finally $Z$-variables are defined by:
+
+\begin{align}
+Z^*_\alpha = \sum_{\beta \neq \alpha} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}},\ \ \ \
+Z^*_{c\alpha} = \sum_{\beta \neq \alpha} \sqrt{\frac{\mu_{\alpha\beta}}{m_\alpha}} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^s_{2\alpha} = \sum_{\beta\neq\alpha} \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{3/2} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^s_{8\alpha} = \sum_{\beta\neq\alpha} \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{5/2} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^s_{5\alpha} = \sum_{\beta \neq \alpha}\left(1+\frac{16}{13}\frac{m_\alpha}{m_\beta}+\frac{30}{13}\left(\frac{m_\alpha}{m_\beta}\right)^2\right)\left(\frac{\mu_{\alpha \beta}}{m_\alpha}\right)^{5/2}\frac{\overline{Z_\beta^2n_\beta}}{\overline{Z_\alpha^2n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^s_{9\alpha} = \sum_{\beta \neq \alpha} \left( 1 + \frac{32}{23} \frac{m_\alpha}{m_\beta} + \frac{84}{23} \left( \frac{m_\alpha}{m_\beta} \right)^2 \right) \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{7/2} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^s_{11\alpha} = \sum_{\beta \neq \alpha} \left( 1 + \frac{1088}{433} \frac{m_\alpha}{m_\beta} + \frac{3672}{433} \left( \frac{m_\alpha}{m_\beta} \right)^2 +
+\frac{1792}{433} \left( \frac{m_\alpha}{m_\beta} \right)^3 +
+\frac{1400}{433} \left( \frac{m_\alpha}{m_\beta} \right)^4 \right)
+\left( \frac{\mu_{\alpha \beta}}{m_\alpha}\right)^{9/2} \frac{\overline{Z_\beta^2 n_\beta}}{\overline{Z_\alpha^2 n_\alpha}}
+\end{align}
+
+\begin{align}
+Z^\pi_{11\alpha} = \sum_{\beta \neq \alpha} \left( 1 + \frac{5}{3} \frac{m_\alpha}{m_\beta} \right) \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{3/2} \frac{\overline{Z_\beta^2} n_\beta}{\overline{Z_\alpha^2} n_\alpha}\\
+Z^\pi_{12\alpha} = \sum_{\beta \neq \alpha} \left( 1 + \frac{7}{3} \frac{m_\alpha}{m_\beta} \right) \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{5/2} \frac{\overline{Z_\beta^2} n_\beta}{\overline{Z_\alpha^2} n_\alpha}
+\end{align}
+
+\begin{align}
+Z^\pi_{22\alpha} = \sum_{\beta \neq \alpha} \left( 1 + \frac{185}{51} \frac{m_\alpha}{m_\beta}
++ \frac{154}{51} \left( \frac{m_\alpha}{m_\beta} \right)^2
++ \frac{140}{51} \left( \frac{m_\alpha}{m_\beta} \right)^3 \right) \left( \frac{\mu_{\alpha \beta}}{m_\alpha} \right)^{7/2} \frac{\overline{Z_\beta^2} n_\beta}{\overline{Z_\alpha^2} n_\alpha}
+\end{align}
+
+\subsection{Heat source}
+
+If {\tt Zhdanov\_tf\_fr.eq.1}, then:
+
+\textbf{In the heat source part of B2.5:}
+
+\begin{multline}
+Q_{F_{ab}} = -\sum_\alpha \sum_Z w_{\alpha Z \parallel} \left( R_{\alpha Z} + R^e_{\alpha Z} \right)=\\
+-\left( \sum_a V_{a \parallel} \left( S^m_{fr,a} + S^m_{Therm,a} \right) - zhd\_corr \cdot V_{\parallel} \sum_a \left( S^m_{fr,ea} + S^m_{Therm,ea} \right) \right)
+\end{multline}
+
+\begin{multline}
+Q_{F_{ei}} = w_{e \parallel} \sum_\alpha \sum_Z R^e_{\alpha Z} =\\
+V_{e\parallel} \left( \sum_a \left( S^m_{fr,ea} + S^m_{Therm,ea} \right) - zhd\_corr \cdot \frac{V_{\parallel}}{V_{e\parallel}} \sum_a \left( S^m_{fr,ea} + S^m_{Therm,ea} \right) \right)
+\end{multline}
+
+If {\tt Zhdanov\_visu.eq.1}, then:
+
+\textbf{In the heat source part of B2.5:}
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{equation}
+Q_{vis} = \sum \limits_{fluid~species} \left(
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
+\right)
+\end{equation}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
+\begin{multline}
+Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
+          \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2 +\frac{4}{3} \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+ \left(
+                \frac{\partial V_{\parallel}}{h_x \partial x}
+        \right)^2
+\right) +\\
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a= 0\\ fluid}} \left(
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta_{ay} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2
+\right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+Q_{vis} = \sum \limits_{fluid~species}\Bigg[
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\alpha \zeta)}\bigg)
+\bigg] \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)\Bigg]
+\end{multline}
+
+\ \ \textbf{\textit{end}}
+
+\subsection{Currents}
+
+\textbf{In the current part of B2.5:}
+
+If {\tt Zhdanov\_visu.eq.1}, then:
+
+\begin{equation}
+\widetilde j_x^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }}
+\widetilde j_{ax}^{(vis \parallel)}
+\end{equation}
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{multline}
+\widetilde j_{ax}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+- \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_y \partial y}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
+\begin{multline}
+\widetilde j_{ax}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+- \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_y \partial y}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{ \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\widetilde j_{ax}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+- \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_y \partial y}
+\left( \frac{1}{B^2} \right)\Bigg[
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
+\bigg]\Bigg], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{end}}
+
+\begin{equation}
+\widetilde{j}_y^{(vis \parallel)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde{j}_{ay}^{(vis \parallel)}
+\end{equation}
+
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} then}}
+
+\begin{multline}
+\widetilde{j}_{ay}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+\frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.1} then}}
+
+\begin{multline}
+\widetilde{j}_{ay}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+\frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right)
+\frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a}
+\frac{\partial \left( \sqrt{B} V_{ \parallel} \right)}{h_x \partial x}, &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\widetilde j_{ay}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+\frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right)\Bigg[
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
+\bigg]\Bigg], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
+\ \ \textbf{\textit{end}}
+
+If {\tt Zhdanov\_vish.eq.1}, then:
+
+\begin{equation}
+\widetilde{j}_x^{(visq)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0 }}
+\widetilde{j}_{ax}^{(visq)}
+\end{equation}
+
+\begin{multline}
+\widetilde{j}_{ax}^{(visq)} =
+\left\{
+\begin{aligned}
+- \frac{2}{5} \frac{B_z \sqrt{B}}{3 B_x}
+  \frac{\partial}{h_y \partial y}
+  \left( \frac{1}{B^2} \right)
+  \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}
+                           \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}
+                           \frac{\partial}{h_x\partial x}
+                                \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. + \\
+         \left. zhcscorr \cdot zhcscorr\_vq \cdot
+         \frac{n_{a}}{\overline n_{\alpha}}
+         \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha}
+         \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x}
+                \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right)
+              - \frac{\partial}{h_x\partial x}
+                     \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right)
+               \right) \right], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha},\ \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \text{already contain a factor of } b_x^2 \right)
+\end{multline}
+
+\begin{equation}
+\widetilde{j}_y^{(visq)} =
+\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}}\widetilde{j}_{ay}^{(visq)}
+\end{equation}
+
+\begin{multline}
+\widetilde{j}_{ay}^{(visq)}=
+\left\{
+\begin{aligned}
+\frac{2}{5} \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right) \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\partial}{h_x\partial x} \left(\sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. +\\
+ \left. zhcscorr \cdot zhcscorr\_vq \cdot
+ \frac{n_{a}}{\overline{n}_{\alpha}} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha},\ \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \text{already contain a factor of } b_x^2 \right)
+\end{multline}
+
+\subsection{The thermal and friction forces (legacy)}\label{subsec:zh_legacy_tf_fr}
+
+Reduced improved analytical expressions were included into the standard 3.0.7 \SOLPSITER code structure.
+
+\textbf{\textit{If {\tt Zhdanov\_closure.eq.0} .or. {\tt Zhdanov\_test.eq.1} .or. {\tt Zhdanov\_tf\_fr.eq.0} then}}\\
+
+\ \ \textbf{\textit{If {\tt impr\_form\_tf.eq.1} then}}
+
+\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
+
+\begin{align}
+K^{(Therm)}_{\beta0} = \frac{1}{\tilde{\Delta}_0} \frac{25}{16} \frac{\mu_{0 \beta}}{m_{0}} \left[ \frac{3}{2} \left( 1 + \frac{433 \sqrt{2}}{360} Z^s_{110} \right) - \frac{1}{2} \frac{\mu_{0 \beta}}{m_0} \left( 1 + \frac{23 \sqrt{2}}{8} Z^s_{90} \right) \right] \left( 1 + \sqrt{2} Z^*_{c\alpha} \right)
+\end{align}
+
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+
+\ \ \textbf{\textit{else}}
+
+\ \ \ Standard model is used.
+
+\ \ \textbf{\textit{end}}
+
+\ \ \textbf{\textit{If {\tt impr\_form\_fr.eq.1} then}}
+
+\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
+
+\begin{multline}
+K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
+1 - \frac{15 \sqrt{2}}{16} Z^s_{20} \frac{\mu_{0 \beta}}{m_0} \frac{1}{\tilde{\Delta}_0} \left( \frac{3}{2} - \frac{1}{2} \frac{\mu_{0 \beta}}{m_0} + \frac{433 \sqrt{2}}{240} Z^s_{110} - \frac{23 \sqrt{2}}{16} \frac{\mu_{0 \beta}}{m_0} Z^s_{90} \right)\\
+-
+\frac{5 \sqrt{2}}{16} Z^s_{80} \frac{\mu_{0 \beta}}{m_0} \frac{1}{\tilde{\Delta}_0} \left( \frac{5}{2} \frac{\mu_{0 \beta}}{m_0} - \frac{3}{2} + \frac{65 \sqrt{2}}{16} \frac{\mu_{0 \beta}}{m_0}Z^s_{50} - \frac{69 \sqrt{2}}{16} Z^s_{90} \right)
+\end{multline}
+
+
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+
+\ \ \textbf{\textit{else}}
+
+\ \ \ Standard model is used.
+
+\ \ \textbf{\textit{end}}
+
+\textbf{\textit{end}}
+
+\subsection{The distribution function}
+
+%\begin{align}
+%f_a(\textbf{v})=f^\parallel_a(c_\parallel)f^\perp_a(v_\perp)f^\perp_a(v_y)
+%\end{align}
+%Where $f^\perp_a(v_\perp)$ and $f^\perp_a(v_y)$ are drift-Maxwell distribution funcitons and:
+%\begin{align}
+%c_\parallel=v_\parallel-u_\parallel,\ \ \ u_\parallel = \frac{\sum_{a} m_a n_{a} {u_{a}}_\parallel}{\sum_{a} m_a n_{a}}
+%\end{align}
+%\begin{multline}
+%f^\parallel_a(c_\parallel)=n_a\left(\frac{m_a}{2\pi T_i}\right)^{1/2}\exp{\left(-\frac{m_ac_\parallel^2}{2T_i}\right)}\cdot\left[1+\gamma_a w_{\parallel a}c_\parallel+\frac{1}{5}\gamma_a^2\frac{h_{\parallel a}}{p_a}
+%\end{multline}
+
+\begin{multline}\label{eq:zh_ion_dist_fun}
+f_a(\textbf{c}) = n_a \left( \frac{m_a}{2 \pi T_i} \right)^{3/2} \exp{\left( -\frac{m_a c^2}{2 T_i} \right)} \cdot \left[ 1 + \gamma_a w_{\parallel a} c_\parallel + \right. \\
+\left. \frac{1}{5} \gamma_a^2 \left( \frac{h^T_{\parallel a}}{p_a} + \frac{h^w_{\parallel a}}{p_a} \right) c_\parallel \left( c^2 - \frac{5}{\gamma_a} \right) + \frac{1}{70} \gamma_a^3 \left( \frac{ r^T_{\parallel a} \gamma_a}{p_a} + \frac{r^w_{\parallel a} \gamma_a}{p_a} \right) c_\parallel \left( c^4 - \frac{14}{\gamma_a} c^2 + \frac{35}{\gamma_a^2} \right) \right]
+\end{multline}
+
+\begin{multline}
+f_e(\textbf{c}) = n_e \left( \frac{m_e}{2 \pi T_e} \right)^{3/2} \exp{\left( -\frac{m_e c^2}{2 T_e} \right)} \cdot \left[ 1 + \gamma_e w_{\parallel e} c_\parallel + \right. \\
+\left. \frac{1}{5} \gamma_e^2 \left(\frac{h^T_{\parallel e}}{p_e} + \frac{h^w_{\parallel e}}{p_e} \right) c_\parallel \left( c^2 - \frac{5}{\gamma_e} \right) + \frac{1}{70} \gamma_e^3 \left( \frac{ r^T_{\parallel e} \gamma_e}{p_e} + \frac{r^w_{\parallel e} \gamma_e}{p_e} \right) c_\parallel \left( c^4 - \frac{14}{\gamma_e} c^2 + \frac{35}{\gamma_e^2} \right) \right]
+\end{multline}
+
+where:
+
+\begin{align}
+\gamma_e = \frac{m_e}{T_e},\ \ \ \gamma_a = \frac{m_a}{T_i},\ \ \ \textbf{c} = \textbf{v} - \textbf{u},\ \ \ \textbf{u} = \frac{\sum_{a} m_a n_{a} \textbf{u}_a}{\sum_{a} m_a n_{a}}
+\end{align}
+
+NB: if $\textbf{u}^{\perp}_e,\textbf{u}^{\perp}_a \neq \textbf{u}^{\perp}$ (charge-dependent drifts are significant), this distribution function should be corrected.
+
+\begin{multline}
+\int_0^{\infty} \int_0^{2\pi} f_a \left( c_\parallel , c_\perp \right) c_\perp d\varphi dc_\perp = n_a \left( \frac{\gamma_a}{2 \pi} \right)^{1/2} \exp{\left( -\frac{\gamma_a}{2} c_\parallel^2 \right)} \cdot \left[ 1 + \gamma_a w_{\parallel a} c_\parallel + \right. \\
+\left. \frac{1}{5} \gamma_a^2 \left( \frac{h^T_{\parallel a}}{p_a} + \frac{h^w_{\parallel a}}{p_a} \right) c_\parallel \left(c_\parallel^2 - \frac{3}{\gamma_a} \right) + \frac{1}{70} \gamma_a^3 \left( \frac{r^T_{\parallel a} \gamma_a}{p_a} + \frac{r^w_{\parallel a} \gamma_a}{p_a} \right) c_\parallel \left( c_\parallel^4 - \frac{10}{\gamma_a} c_\parallel^2 + \frac{15}{\gamma_a^2} \right) \right]
+\end{multline}
 
 \chapter{Boundary conditions in B2.5}
 \label{cha:Mladen}\index{boundary conditions}
@@ -14211,11 +15899,37 @@ $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^
 
 $\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_cvsahzx[XXX].dat}} & (\ref{eq:mom_veta}) \\
 
+$\displaystyle \frac{\widetilde{\widetilde{\eta}}^{(CL)}_{ax}}{\rho^{rel}_a} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_visres}), (\ref{eq:mom_zh_visai}) \\
+
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_clx[XXX].dat}} & (applied in \ref{eq:mom_zh_fluxx}) \\
+
+$\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_drhox[XXX].dat}} & (\ref{eq:mom_zh_ddveta}) \\
+
+$\displaystyle \widetilde{\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_flx[XXX].dat}} & (\ref{eq:mom_zh_dveta}) \\
+
+$\displaystyle {\eta}^{(CL)}_{ax} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahzx0\_noflx[XXX].dat}} & (\ref{eq:mom_zh_veta}) \\
+
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzx[XXX].dat} & (\ref{eq:mom_etana}) \\
 
 $\displaystyle \eta_{a}^{(AN)} \frac{h_z\sqrt g}{h_y^2}$ & $kg \cdot m/s$ & \texttt{b2trno\_cvsahzy[XXX].dat} & (\ref{eq:mom_etana})  \\
 
 $\displaystyle \eta_{ax}^{CL} \frac{h_z\sqrt g}{h_x^2}$ & $kg \cdot m/s$ & \texttt{b2trcl\_cvsahzx[XXX].dat} & (\ref{eq:mom_etaCL})  \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsahz\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \scriptsize{\texttt{b2tral\_cvsa\_hAdp\_lucx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hAdpx[XXX]\_[YYY].dat}} & (\ref{eq:mom_zh_veta_hA}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa\_hBdp\_lucx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{h_z \sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsahz0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
+
+$\displaystyle \frac{{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{\sqrt{g}}{h_x^2}$ \footnotesize{(only for Section~\ref{sec:Zhdanov})} & $kg \cdot m/s$ & \footnotesize{\texttt{b2tral\_cvsa0\_hBdpx[XXX].dat}} & (\ref{eq:mom_zh_veta_hB}) \\
 
 $\displaystyle \tau_a$ & $s$ & \texttt{b2tqca\_taua[XXX].dat} & (\ref{eq:mom_taua}) \\
 
@@ -14393,6 +16107,8 @@ $\displaystyle -\frac{\sqrt{g}}{h_x} \kappa_{ix} \frac{1}{h_x} \frac{\partial{T_
 
 $\displaystyle -\frac{\sqrt{g}}{h_y} \kappa_{iy} \frac{1}{h_y} \frac{\partial{T_i}}{\partial y}$ & $W$ & \texttt{b2tfhi\_\_qi\_ki\_gTy.dat} & (\ref{eq:eni_tiqiy}) \\
 
+$\displaystyle \frac{\sqrt{g}}{h_x}h^V_{ix}$ (only for Section~\ref{sec:Zhdanov}) & $W$ & \texttt{b2tfhi\_\_hi\_velx.dat} & (\ref{eq:eni_tifix}) \\
+
 $\chi_a^{(AN)}$ & $m^2/s$ & \texttt{b2tqna\_hcib[XXX].dat} & (\ref{eq:eni_kapAN}), (\ref{eq:eni_chiAN}) \\
 
 $\displaystyle \kappa_{ix} \frac{\sqrt{g}}{h_x^2}$ & $s^{-1}$ & \texttt{b2tfhi\_\_chcix\_Pat.dat} & (\ref{eq:eni_kapixAN}) \\
@@ -14408,6 +16124,18 @@ $\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}
 $\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ & $ s^{-1} $ & \texttt{b2trcl\_luciani\_chcix.dat} & (\ref{eq:eni_tikapixCL}), (\ref{eq:eni_tkapixCL}) \\
 
 $\displaystyle \kappa_{ix}^{(CL)} \frac{\sqrt g}{h_x^2}$ & $s^{-1}$ & \texttt{b2trcl\_chcix.dat} & (\ref{eq:eni_kapixCL}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0x.dat} & (applied in \ref{eq:eni_kapix}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_lucx.dat} & (\ref{eq:eni_zh_ddkapixCL}) \\
+
+$\displaystyle \widetilde{\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_flx.dat} & (\ref{eq:eni_zh_dkapixCL}) \\
+
+$\displaystyle {\kappa}_{ix}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_noflx.dat} & (\ref{eq:eni_zh_kapixCL}) \\
+
+$\displaystyle \widetilde{\widetilde{\kappa}}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \footnotesize{\texttt{b2tral\_chci\_a\_lucx.dat}} & (\ref{eq:eni_zh_ddkapaxCL}) \\
+
+$\displaystyle \widetilde{\kappa}_{ax}^{(CL)} \frac{\sqrt{g}}{h_x^2}$ (only for Section~\ref{sec:Zhdanov}) & $s^{-1}$ & \texttt{b2tral\_chci0\_ax.dat} & (\ref{eq:eni_zh_dkapaxCL}) \\
 
 $\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_x} T_i \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)}$ & $W$ & \texttt{b2tfhi\_\_qidiax.dat} & (\ref{eq:eni_qix}) \\
 
@@ -14485,6 +16213,22 @@ $\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csi
 
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
+
+\hline
+\multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
+\hline
+
+$\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle w_{\parallel a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_w\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{h^T_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hTdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{h^w_{\parallel a}}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_hwdp\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rTdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
+
+$\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rwdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
 \hline
 \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
@@ -19386,8 +21130,13 @@ We list below where the {\tt B2.5} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+AL\_MAJOR\_VERSION & b2plot/b2pawpwr.F \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
+AL\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
+AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\
@@ -19586,6 +21335,7 @@ HPUX & sources/eirene\_f30f31.F \\
 IBMaix & b2plot/b2plot.F \\
 IBMaix & postprocessing/b2ytdr.F \\
 IBMaix & user/b2file.F \\
+IMAS & b2plot/b2paspwr.F \\
 IMAS & driver/b2mnds.F \\
 IMAS & ids/b2mod\_interp.F90 \\
 IMAS & ids/b2mod\_ual.F90 \\
@@ -19597,6 +21347,7 @@ IMAS & modules/b2mod\_b2cmrc.F \\
 IMAS & modules/b2mod\_ppout.F \\
 IMAS & preprocessing/b2ardr.F \\
 IMAS & utility/ratadas.F \\
+IMAS\_MAJOR\_VERSION & b2plot/b2paspwr.F \\
 IMAS\_MAJOR\_VERSION & driver/b2mod\_driver.F \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 IMAS\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
