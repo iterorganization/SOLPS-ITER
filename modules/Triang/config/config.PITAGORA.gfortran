@@ -1,7 +1,7 @@
 # Test whether necessary variables are defined
-GLI_HOME ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gks
-GR_ROOT  ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gr
-NAGDIR   ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/nag
+GLI_HOME ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gks
+GR_ROOT  ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gr
+NAGDIR   ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/nag
 LD_GR    ?= -L${GR_ROOT} -lgr
 LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
 LD_NAG   ?= -L${NAGDIR} -lnag -lstdc++
