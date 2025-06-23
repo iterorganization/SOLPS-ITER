@@ -1,0 +1,22 @@
+# Test whether necessary variables are defined
+GLI_HOME ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gks
+GR_ROOT  ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/gr
+NAGDIR   ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/nag
+LD_GR    ?= -L${GR_ROOT} -lgr
+LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
+LD_NAG   ?= -L${NAGDIR} -lnag -lstdc++
+
+CPP       = /lib/cpp -traditional
+
+ifdef SOLPS_DEBUG
+FCOPTS    = -fcheck=all -fbacktrace
+endif
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+LDLIBS    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

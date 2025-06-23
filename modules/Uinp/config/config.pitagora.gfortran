@@ -1,0 +1,15 @@
+# Test whether necessary variables are defined
+MSCL_ROOT ?= /marconi_work/FUSIO_ALL/SOLPS-ITER/${COMPILER}/mscl/1.2.3
+LD_MSCL   ?= -L${MSCL_ROOT}/lib -lmscl
+
+MPI_FC  ?= mpif90
+ifdef SOLPS_MPI
+FC       = ${MPI_FC}
+endif
+
+CPP      = /lib/cpp -traditional
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
