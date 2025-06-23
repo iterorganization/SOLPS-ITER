@@ -9056,9 +9056,9 @@ q_{ex} =
 \begin{equation}\label{eq:ene_gammaxhe}
 \Gamma_{ax}^{(he)} =
 \left(
-        b_x V_{a \parallel} + V_{ax}^{(E)} + \frac{5}{3} V_a^{(AN)} + V_a^{corr\_dpc}
+        b_x V_{a \parallel} + V_{ax}^{(E)} + f_{(he)} V_a^{(AN)} + V_a^{corr\_dpc}
 \right) n_a -
-\frac{5}{3} \left[
+f_{(he)} \left[
         D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} + \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \right]
 \end{equation}
@@ -9112,6 +9112,9 @@ The parameter $\widetilde{c_e}^{(2)}$ is given by
 $\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)} = 1.56 \frac{(1 + 1.4 z_{eff})(1 + 0.52 z_{eff})}{(1 + 2.56 z_{eff})( 1 + 0.29 z_{eff})}\frac{1}{\left( z_{eff} + \frac{\sqrt{2}}{2} \right)}$
 when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or by its limiting
 value at $z_{eff} = 1$ of 0.71 otherwise.
+
+The prefactor $f_{(he)}$ is set by default to $1$ if using the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
+
 \end{sloppypar}
 
 \subsection{Electron energy transport}
@@ -9426,7 +9429,7 @@ q_{ey} = \left[
 \end{equation}
 
 \begin{equation}\label{eq:ene_gammayhe}
-\Gamma_{ay}^{(he)} = \left( \frac{5}{3} V_a^{(AN)} + V_{ay}^{(E)} \right) n_a - \frac{5}{3} \left[
+\Gamma_{ay}^{(he)} = \left( f_{(he)} V_a^{(AN)} + V_{ay}^{(E)} \right) n_a - f_{(he)} \left[
         D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} +
         \widetilde D_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \right]
@@ -9476,6 +9479,8 @@ $c_{\alpha,0} = 10^{-3}, \;\;\; c_{\alpha,1} = 0,\;\;\; c_{\alpha,3} = 0$
 If $c_{\alpha,7} \ne 0$, then $f_\alpha$ contains a flux-scaling factor of $\left( \frac{h_y}{h_{y,ref}} \right)^2$, otherwise it is $1$ everywhere.
 
 $\alpha^{(CL)}_{y} = 0$
+
+The prefactor $f_{(he)}$ is set by default to $1$ if using the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
 
 \section{Ion energy equations}
 
