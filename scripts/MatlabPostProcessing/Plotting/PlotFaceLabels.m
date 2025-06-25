@@ -2,6 +2,8 @@ function PlotFaceLabels(gm,labellist,colorlist,type)
 % plot the faces of an unstructured B2.5 mehs with colors correspondng to labels
 hold on;
 N = length(labellist); % number of different labels provided
+iflag = 0;
+nfaces = 0;
 for iFc = 1:gm.nFc
     vx1 = gm.fcVx(iFc,1); % first vertex of face
     vx2 = gm.fcVx(iFc,2); % second vertex of face
@@ -15,7 +17,8 @@ for iFc = 1:gm.nFc
         else
             for i = 1:N
                 if gm.fcReg(iFc) == labellist(i)
-                    plot([x1 x2],[y1 y2],colorlist(i),'LineWidth',2) 
+                    plot([x1 x2],[y1 y2],colorlist(i),'LineWidth',2)
+                    iflag = 1;
                 end
             end
         end
@@ -25,7 +28,10 @@ for iFc = 1:gm.nFc
         else
             for i = 1:N
                 if gm.fcLbl(iFc) == labellist(i)
-                    plot([x1 x2],[y1 y2],colorlist(i),'LineWidth',2) 
+                    plot([x1 x2],[y1 y2],colorlist(i),'LineWidth',2)
+                    iflag = 1;
+                    nfaces = nfaces + 1;
+
                 end
             end
         end
@@ -34,5 +40,11 @@ for iFc = 1:gm.nFc
     end
 
 end
+
+if iflag==0
+    error('No faces plotted')
+end
+
+fprintf('Number of faces found: %d \n', nfaces);
 hold off;
 end
