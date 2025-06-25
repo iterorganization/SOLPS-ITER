@@ -1,4 +1,4 @@
-function h = quiverplot(gmtry,uu,vv)
+function h = quiverplot_cv(gmtry,uu,vv)
 % h = quiverplot(gmtry,uu,vv)
 %
 % Routine to make quiver plot of the velocity field (uu,vv), where uu
