@@ -1,4 +1,4 @@
-function Patchplot2(gmtry,field,scale,fmin,fmax)
+function Patchplot2(gmtry,field,scale,fmin,fmax,threshold,check_type)
 % p = patchplot(gmtry,field,options)
 %
 % Routine to make patchplot of cell centered quantity.
@@ -30,6 +30,16 @@ end
 if ~exist('fmax','var') || isempty(fmax)
     fmax = max(max(field/scale));
 end
+if ~exist('check_type','var') || isempty(check_type)
+    check_type = 'g';
+    if ~isempty(threshold)
+        fprintf('WARNING: threshold set but type of check not specified.')
+        fprintf(' Assuming quantity > threshold as check.\n')
+    end
+end
+if ~exist('threshold','var') || isempty(threshold)
+    threshold = 9e99;
+end
 
 % Consistency checks
 if fmin > fmax
@@ -40,15 +50,19 @@ end
 field = max(min(field/scale,fmax),fmin);
 
 if isplasmagrid(gmtry)
+    
     nx2 = size(gmtry.crx,1);
     ny2 = size(gmtry.crx,2);
+    
     % Resize for patch plot
     X = reshape(gmtry.crx,nx2*ny2,4)';
     Y = reshape(gmtry.cry,nx2*ny2,4)';
     f = reshape(field,nx2*ny2,1)';
+    
     % Create closed polygon from vertex coordinates
     X(3:4,:) = X(4:-1:3,:);
     Y(3:4,:) = Y(4:-1:3,:);
+    
     % Eliminate guard cells 
     if isfield(gmtry,'cflags') & ~isempty(gmtry.cflags)
         X = X(:,gmtry.cflags(:,:,1)~=9);
@@ -74,6 +88,21 @@ elseif isunstructuredgrid(gmtry)
             S(iCv).ZData = [];
         else
             S(iCv).ZData = field(iCv);
+          if check_type == 'g'
+                if S(iCv).ZData > threshold && iCv <= gmtry.nCi
+                    fprintf('Warning. High value of quantity at iCv number %d\n',iCv)
+                    fprintf('Coordinates:\n R = %f, Z = %f \n', gmtry.cvX(iCv), gmtry.cvY(iCv))
+                    fprintf('Cell volume: %f\n', gmtry.cvVol(iCv))
+                end
+            elseif check_type == 's'
+                if S(iCv).ZData < threshold && iCv <= gmtry.nCi
+                    fprintf('Warning. High value of quantity at iCv number %d\n',iCv)
+                    fprintf('Coordinates:\n R = %f, Z = %f \n', gmtry.cvX(iCv), gmtry.cvY(iCv))
+                    fprintf('Cell volume: %f\n', gmtry.cvVol(iCv))
+                end
+            else
+                error('Invalid check_type. Must be `g` (>) or `s` (<)')
+            end
         end
         iVx1 = gmtry.cvVx(gmtry.cvVxP(iCv,1));
         for i = 1:gmtry.cvVxP(iCv,2)
@@ -140,16 +169,32 @@ end
 % Check current status of hold
 hs = ishold;
 hold on;
+% Handle array initialisation
+nCells = size(S.XData, 2);
+p = gobjects(nCells,1);
 
 % Create patch plot
-for i = 1:length(S)
-    p(i) = patch(S(i).XData,S(i).YData,S(i).ZData);
+for i = 1:nCells
+    p(i) = patch(S.XData(:,i), S.YData(:,i), S.ZData(i)); % Usa colormap di default
     p(i).LineWidth = 0.01;
     p(i).EdgeColor = 'none';
+end
+
+% Modify border color if ZData goes above threshold
+for i = 1:nCells
+    if S.ZData(i) > threshold && check_type == 'g' && i <= gmtry.nCi
+        set(p(i), 'EdgeColor', 'r', 'LineWidth', 2.5);
+    elseif S.ZData(i) < threshold && check_type == 's' && i <= gmtry.nCi
+        set(p(i), 'EdgeColor', 'g', 'LineWidth', 2.5)
+    end
 end
 colorbar
 % Set axis to fmin and fmax
 caxis([fmin fmax]);
 
 % Reset status of hold
-if ~hs, hold off; end;
+if ~hs
+    hold off
+end
+
+end
