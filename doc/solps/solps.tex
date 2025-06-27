@@ -9058,7 +9058,7 @@ q_{ex} =
 \left(
         b_x V_{a \parallel} + V_{ax}^{(E)} + f_{(he)} V_a^{(AN)} + V_a^{corr\_dpc}
 \right) n_a -
-f_{(he)} D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \frac 53 \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
+f_{(he)} D_{n,a} \frac{1}{h_x} \frac{\partial n_a}{\partial x} - \frac{5}{3} \widetilde{D}_{p,ax} \frac{1}{h_x} \frac{\partial p_a}{\partial x}
 \end{equation}
 
 \begin{equation}\label{eq:ene_qexeir}
@@ -9111,7 +9111,7 @@ $\widetilde{c_e}^{(2)} = \frac{c_e^{(2)}}{\left( z_{eff} + \frac{\sqrt{2}}{2} \r
 when {\tt 'b2sigp\_style'} is set to {\tt '2'} (default) or by its limiting
 value at $z_{eff} = 1$ of 0.71 otherwise.
 
-The prefactor $f_{(he)}$ is set by default to $1$ if using the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
+The prefactor $f_{(he)}$ is set by default to $1$, to match the physics assumptions underlying the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}, which recovers the original \SOLPSfivetwo physics model). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
 
 \end{sloppypar}
 
@@ -9427,9 +9427,9 @@ q_{ey} = \left[
 \end{equation}
 
 \begin{equation}\label{eq:ene_gammayhe}
-\Gamma_{ay}^{(he)} = \left( f_{(he)} V_a^{(AN)} + V_{ay}^{(E)} \right) n_a - f_{(he)} \left[
-        D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} +
-        \widetilde D_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
+\Gamma_{ay}^{(he)} = \left( f_{(he)} V_a^{(AN)} + V_{ay}^{(E)} \right) n_a - \left[
+        f_{(he)} D_{n,a} \frac{1}{h_y} \frac{\partial n_a}{\partial y} +
+        \frac{5}{3} \widetilde D_{p,ay} \frac{1}{h_y} \frac{\partial p_a}{\partial y}
 \right]
 \end{equation}
 
@@ -9478,7 +9478,7 @@ If $c_{\alpha,7} \ne 0$, then $f_\alpha$ contains a flux-scaling factor of $\lef
 
 $\alpha^{(CL)}_{y} = 0$
 
-The prefactor $f_{(he)}$ is set by default to $1$ if using the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
+The prefactor $f_{(he)}$ is set by default to $1$, to match the physics assumptions underlying the $k-\epsilon$ model (meaning {\tt keps\_he\_anom\_model.eq.1}), and $\frac{5}{3}$ otherwise (meaning {\tt keps\_he\_anom\_model.eq.0}, which recovers the original \SOLPSfivetwo physics model). A value of $1$ is also found to help in avoiding non-monotonic ion temperature profiles in the far-SOL and promote code stability.
 
 \section{Ion energy equations}
 
