@@ -1,5 +1,5 @@
 #! /bin/tcsh
-#PBS -l nodes=1:ppn=#PROCS#
+#PBS -l nodes=#NODES#:ppn=#PROCS#
 #PBS -l walltime=#HOURS#:00:00
 #PBS -l mem=#MEM#
 #PBS -M #EMAIL#
@@ -8,6 +8,11 @@
 #PBS -V
 
 echo Using SOLPSTOP = #SOLPSTOP#
+
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 cd "$PBS_O_WORKDIR"
 
@@ -21,15 +26,16 @@ endif
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run -s ${USE_MPI} ${USE_OMP} b2mn >! run.log
+time b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess
+QSUB.postprocess${COUPLED_SUFFIX}
 
 update_solps_run_status "Finished on `hostname` at `date`"
+b2fstate_OK_bool
