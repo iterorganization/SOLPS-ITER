@@ -1,0 +1,68 @@
+setenv GLI_HOME /pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gks
+setenv PATH ${PATH}:/pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NETCDF/bin
+setenv NCARG_ROOT /pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NCARG
+setenv PATH ${PATH}:${NCARG_ROOT}/bin
+setenv SOLPSWORK ${SOLPSTOP}/runs
+setenv FC gfortran
+setenv NO_MANUAL true
+
+# Load modules
+#module unload imasenv
+#module load imasenv/3.25.0/gcc/7.3.0/1.0
+#pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
+module load intel-oneapi-compilers/2023.2.4
+module load intel-oneapi-mpi/2021.12.1
+module load gcc/12.3.0 
+module load libszip/2.1.1--gcc--12.3.0
+module load zlib-ng/2.1.6
+module load hdf5/1.14.3--gcc--12.3.0                                    
+module load netcdf-c/4.9.2--gcc--12.3.0
+module load netcdf-fortran/4.6.1--gcc--12.3.0
+module load nag-library/mark27--binary
+###module load spack
+module load cmake/3.27.9
+
+module use /pitagora/pub/userexternal/dcoster0/spack-0.22.2-6.1/modules
+module load gnuplot
+
+# The script above overwrites $PATH, so modules must be loaded afterwards!!!
+# load modules
+# module load solps-gui
+#module load texlive
+#module load paraview
+
+# Set environment variables
+if (! $?DEVICE) then
+  if ($?TOKAMAKNAME) then
+    setenv DEVICE $TOKAMAKNAME
+  endif
+endif
+
+# Compiler
+setenv FC gfortran
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    if ($?LD_LIBRARY_PATH) then
+      setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    else
+      setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+    endif
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  endif
+endif
+
+# Debugger (set environment variable DBX)
+setenv DBX totalview
