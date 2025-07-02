@@ -1676,6 +1676,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
 \item Utility
  \begin{description}
   \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation.
+  \item[add\_b2plot\_to\_series]\index{add\_b2plot\_to\_series} Appends b2plot data generated according to command file {\tt add\_b2plot\_to\_series.com} to multi-column file {\tt Series.dat} ganerated by {\tt get\_series} (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[ave.awk \#1]\index{ave.awk} Performs an average over the \#1 rows (default all).
   \item[awk.first+even]\index{awk.first+even} Selects the first and every even column from an array of data.
   \item[awk.integrate]\index{awk.integrate} Integrates an array of data.
@@ -1693,16 +1694,23 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
+  \item[get\_series]\index{get\_series} Gets the data from {\tt last\_2d\_out} files of the runs associated with the series described in {\tt series\_file} and prints them out in a plottable multi-column file {\tt Series.dat} according to {\tt get\_series.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[gtdr]\index{gtdr} Script to make a directory tree local.
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
   \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
+  \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
   \item[noquote\_pwd]\index{noquote\_pwd} Returns the current working directory as a string without quotes (c.f.\ {\tt quote\_pwd}).
+  \item[plot\_series]\index{plot\_series} Produces {\tt Series.pdf} file (or {\tt Series.ps} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt Series.dat} file obtained by {\tt get\_series} script according to {\tt plot\_series.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
+  \item[plot\_trc]\index{plot\_trc} Produces {\tt trc.pdf} file (or {\tt trc.ps} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt tracing/*.trc} and {\tt b2time.nc} (potentially other similarly formatted files as well) according to {\tt plot\_trc.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
+  \item[plot\_trg]\index{plot\_trg} Produces {\tt trg.pdf} file (or {\tt trg.pdf} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt ld\_tg\_*.dat} and {\tt fp\_tg\_*.dat} (potentially other similarly formatted files as well) according to {\tt plot\_trg.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Also produces {\tt trg\_sum.dat} file containing some integral, peak and average quantities at the targets. Read the script header for further details.
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
   \item[rlndr]\index{rlndr} Replaces a link address by another.
+  \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space.
+  \item[STIME]\index{STIME} Auxiliary script to handle {\tt b2mndr\_stime} with {\tt saveb2} workflow, run {\tt STIME -h} for details.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
  \end{description}
 \item AD-related (see also ``Expert mode for AD'' in Appendix~\ref{sec:script_ad} for more details)
@@ -1821,14 +1829,18 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
+  \item[get\_series.py]\index{get\_series.py} Driver for the {\tt get\_series} script.
+  \item[last\_2d.py]\index{last\_2d.py} Driver for the {\tt last\_2d} script.
   \item[nareg.py \#1]\index{nareg.py} Average ion densities for region \#1.
   \item[nareg\_species.py \#1]\index{nareg\_species.py} Average ion densities for region \#1 summed over charge states for each species.
   \item[nereg.py]\index{nereg.py} Average electron densities.
   \item[plot\_traduit\_out\_b2us.py]\index{plot\_traduit\_out\_b2us.py}\index{traduit.out.b2us} Plots contents of the {\tt traduit.out.b2us} file.
+  \item[plot\_trc.py]\index{plot\_trc.py} Driver for the {\tt plot\_trc}, {\tt plot\_trg} and {\tt plot\_series} scripts.
   \item[rqradreg.py \#1]\index{rqradreg.py} Line radiation summed over each species' charge states for region \#1.
   \item[rranareg.py \#1]\index{rranareg.py} Recombination rates for region \#1.
   \item[rranareg\_per\_rsanareg.py \#1]\index{[rranareg\_per\_rsanareg.py} Recombination rates divided by ionisation rates for region \#1 (summed over charge states).
   \item[rsanareg.py \#1]\index{rsanareg.py} Ionisation rates for region \#1.
+  \item[sum\_trg.py]\index{sum\_trg.py} Produces output file {\tt trg\_sum.dat} containing some integral, averaged and peaked data at the target using {\tt ld\_t\_*.dat} and {\tt fp\_tg\_*.dat} files.
   \item[tereg.py]\index{tereg.py} Average electron temperatures.
   \item[tiara\_ggd\_to\_b2us.py]\index{tiara\_ggd\_to\_b2us.py}\index{GGD} Converts a GGD object from an {\tt equilibrium} IDS into the {\tt b2us} format.
   \item[tireg.py]\index{tireg.py} Average ion temperatures.
