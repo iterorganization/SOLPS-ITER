@@ -90,7 +90,7 @@ logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcN
 
 b2time_FLE = 'b2time'
 b2tallies_FLE = 'b2tallies'
-TRC_FLE = ['sepdata', 'blne', 'blnn', 'integral', 'user', 'intshrt', 'residuals']
+TRC_FLE = ['sepdata', 'blne', 'blnn', 'integral', 'user', 'user.trc.n.01', 'intshrt', 'residuals']
 ".trc files that will be averaged"
 
 raw_file = 'last_2d_out'
