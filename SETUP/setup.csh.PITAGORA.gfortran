@@ -1,6 +1,6 @@
-setenv GLI_HOME /pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gks
-setenv PATH ${PATH}:/pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NETCDF/bin
-setenv NCARG_ROOT /pitagora/home/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NCARG
+setenv GLI_HOME /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gks
+setenv PATH ${PATH}:/pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NETCDF/bin
+setenv NCARG_ROOT /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK ${SOLPSTOP}/runs
 setenv FC gfortran
