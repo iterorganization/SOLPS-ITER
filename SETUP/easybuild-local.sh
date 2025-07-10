@@ -831,7 +831,7 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
-	gnuplot/5.4.8-GCCcore-12.3.0
+	gnuplot/6.0.1-GCCcore-13.2.0
 	xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
