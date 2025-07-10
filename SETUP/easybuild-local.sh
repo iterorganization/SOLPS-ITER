@@ -794,7 +794,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	CMake/3.27.6-GCCcore-13.2.0
 	ParaView/5.12.0-foss-2023b-Qt5
 	Qt5/5.15.13-GCCcore-13.2.0
-	netcdf4-python/1.6.5-foss-2023b
+	netcdf4-python/1.7.1.post2-foss-2023b
 	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b --ignore-checksums
@@ -857,7 +857,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
 	ToFu/1.7.9-iimkl-2023b --from-pr=20999
 	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
-	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
+	netcdf4-python/1.7.1.post2-intel-2023b --from-ITER-SDCC
 	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
 	UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
 	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}

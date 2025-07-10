@@ -44,7 +44,6 @@ module load OpenBLAS/0.3.24-GCC-13.2.0
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
-#setenv QTDIR ${EBROOTQT5}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 
@@ -53,10 +52,18 @@ setenv MPDIR ${EBROOTIMPI}
 setenv DBX gdb
 
 # Compilers
-setenv FC ifx
-setenv MPI_FC "mpiifort -fc=mpiifx"
-setenv CXX icpx
-setenv CC icx
+# Avoid usage of ifx compiler until its many issues are fixed
+# if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "CentOS") then
+  setenv FC ifort
+  setenv MPI_FC mpiifort
+  setenv CXX icpc
+  setenv CC icc
+# else
+#   setenv FC ifx
+#   setenv MPI_FC "mpiifort -fc=mpiifx"
+#   setenv CXX icpx
+#   setenv CC icx
+# endif
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
@@ -85,8 +92,6 @@ if (! $?SOLPS_GUI_PREFIX) then
   end
 endif
 if ($?SOLPS_GUI_PREFIX) then
-  module load PySide6/6.6.2-GCCcore-13.2.0
-  module load matplotlib/3.8.2-iimkl-2023b
   setenv QT_API PySide6
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/actors:${PYTHONPATH}"
   setenv PYTHONPATH "${SOLPS_GUI_PREFIX}/src/gui:${PYTHONPATH}"
