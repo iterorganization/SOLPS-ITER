@@ -1,10 +1,8 @@
-#! /bin/tcsh
+#! /bin/tcsh -f
 
 #SBATCH --nodes=#NODES#
-#SBATCH --ntasks-per-node=#TASKS#
+#SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
-#SBATCH -p cclake
-#SBATCH -A #ACCOUNT#
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem=#MEM#
 #SBATCH --job-name=#JOBNAME#
@@ -14,8 +12,8 @@
 #SBATCH -e SLURM-%j.err
 #SBATCH  --no-requeue
 
-### This script submits the job, which launches the SOLPS-ITER code, to the CSD3 cluster,
-### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
+### This script submits the job, which launches the B2.5 code, to the MPCDF clusters Raven and Viper,
+### and resubmits the job again after successful finish of B2.5 in a loop manner.
 ###
 ### Successful finish means that either the prescribed (by 'b2mndr_ntim') number of steps is reached
 ### or the prescribed (by 'b2mndr_cpu' or 'b2mndr_elapsed') time of run is elapsed.
@@ -23,12 +21,17 @@
 ### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
 ### the loop breaks, i.e. the job is not resubmitted again.
 ###
-### Usage:
-###   Submit the job:     `csd3submit -T 48 SLURM.csd3_coupled_loop`
-###               or      `csd3submit -m "-np 36" -j "JobName" -T 48 -M 24G SLURM.csd3_coupled_loop`
+### Usage: 
+###   Submit the job:     `mpcdfsubmit -s -j "JobName" SLURM.mpcdf_loop`
 ###   Stop the run:       `touch b2mn.exe.dir/.quit`
 
 echo Using SOLPSTOP = #SOLPSTOP#
+
+#echo $MANPATH
+#echo $PATH
+#echo $OLD_PATH
+#echo $LD_LIBRARY_PATH
+#echo $PYTHONPATH
 
 set STANDALONE_ARG="#STANDALONE_ARG#"
 set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
@@ -37,13 +40,10 @@ set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
-  module load intelmpi
-  set MPI_EXEC=mpirun
   set MPI_OPTS=#MPIOPTS#
   set MPI_PREFLAGS="--mpi=mpi2"
-  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI="-m srun"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
-  setenv I_MPI_PIN_PROCESSOR_LIST 0-47
 else
   set MPI_PREFLAGS=""
 endif
@@ -57,8 +57,6 @@ endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
-
-rm -f run.KAPUTT
 
 b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
@@ -109,18 +107,9 @@ if ("$Break_loop" == "no") then
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`
     mv b2fstati b2fstati_$NOW
-    if (-e fort.13.i) mv fort.13.i fort.13.i_$NOW
-    if (-e fort.14.i) mv fort.14.i fort.14.i_$NOW
-    if (-e fort.15.i) mv fort.15.i fort.15.i_$NOW
-    if (-e fort.44.i) mv fort.44.i fort.44.i_$NOW
-    if (-e fort.46.i) mv fort.46.i fort.46.i_$NOW
-    if (-e fort.44_aver.i) mv fort.44_aver.i fort.44_aver.i_$NOW
-    if (-e fort.46_aver.i) mv fort.46_aver.i fort.46_aver.i_$NOW
-    if (-e conbe.dat.i) mv conbe.dat.i conbe.dat_$NOW
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
-    echo csd3submit #LOOPOPTS# SLURM.csd3_coupled_loop
-    csd3submit #LOOPOPTS# SLURM.csd3_coupled_loop
+    mpcdfsubmit #LOOPOPTS# SLURM.mpcdf_loop
   endif
 endif

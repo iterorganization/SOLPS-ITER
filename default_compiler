@@ -37,6 +37,7 @@ case "JET":
 case "KEIO":
 case "KSTAR":
 case "LEUVEN":
+case "MPCDF":
 case "NSCC":
 case "SPBSTU":
 case "SURFSARA":
@@ -51,6 +52,7 @@ case "MARCONI":
 case "MEPHI":
 case "NERSC":
 case "ORNL":
+case "PITAGORA":
 case "PPPL":
 case "WM":
   echo gfortran

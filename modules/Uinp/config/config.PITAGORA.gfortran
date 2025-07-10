@@ -1,5 +1,5 @@
 # Test whether necessary variables are defined
-MSCL_ROOT ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/mscl/1.2.3
+MSCL_ROOT ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/mscl_1.2.4
 LD_MSCL   ?= -L${MSCL_ROOT}/lib -lmscl
 
 MPI_FC  ?= mpif90
