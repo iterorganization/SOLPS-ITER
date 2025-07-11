@@ -890,7 +890,7 @@ fi
 function fetch_from_iter_cluster()
 {
     ITER_USERNAME=${ITER_USERNAME:-${USER}}
-    site=${ITER_USERNAME}@sdcc-login02
+    site=${ITER_USERNAME}@98dci4-srv-1003
     target=easyconfigs.local
     iter_ebprefix=/work/imas/opt/EasyBuild
     proxy='-o StrictHostKeyChecking=no -o "ProxyCommand ssh '
