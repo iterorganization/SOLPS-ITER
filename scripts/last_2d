@@ -114,11 +114,11 @@ mkdir $WRK_DIR
 
 if [ -d "$TRC_DIR" ]
 then
-  echo "cp $TRC_DIR/*.trc $WRK_DIR/"
-  cp "$TRC_DIR"/*.trc "$WRK_DIR/"
-  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*.trc"
-  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*.trc
-  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*.trc
+  echo "cp $TRC_DIR/* $WRK_DIR/"
+  cp "$TRC_DIR"/* "$WRK_DIR/"
+  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
+  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
   if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
