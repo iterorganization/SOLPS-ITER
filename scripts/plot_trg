@@ -167,9 +167,9 @@ fi
 
 if [ -d "$WRK_DIR" ]
 then
-  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*.dat"
-  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*.dat
-  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*.dat
+  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
+  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
 fi
 
 if [ -d "$WRK_DIR" ] && [ -f "$SEXEC" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
