@@ -90,7 +90,7 @@ logging.basicConfig(filename=log_file,format='%(levelname)s:%(filename)s-%(funcN
 
 b2time_FLE = 'b2time'
 b2tallies_FLE = 'b2tallies'
-TRC_FLE = ['sepdata', 'blne', 'blnn_SPb', 'integral', 'user_SPb', 'user', 'intshrt']
+TRC_FLE = ['sepdata', 'blne', 'blnn', 'blnn_SPb', 'integral', 'user_SPb', 'user', 'user.trc.n.01', 'intshrt']
 ".trc files that will be averaged"
 
 raw_file = 'last_2d_out'
@@ -541,7 +541,7 @@ def READ_TRC(trc_file):
 
     "Try reading standard .trc file"
     "assuming: file begins with # marked comment lines and last of them contrains data headers"
-    logging.info('tring to read %s assuming text file in .trc standard format',input_file)
+    logging.info('trying to read %s assuming text file in .trc standard format',input_file)
     with open(input_file,"r") as ff:
         while True:
             try:
