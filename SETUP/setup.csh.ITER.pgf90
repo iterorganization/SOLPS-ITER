@@ -131,4 +131,5 @@ endif
 
 # Other environment variables
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+setenv SCRATCH_DIR /scratch/users/$USER
 
