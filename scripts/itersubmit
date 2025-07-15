@@ -1,7 +1,7 @@
 #! /usr/bin/env tcsh
 
 set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
-set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set NODES=1
@@ -58,8 +58,7 @@ Available options are:
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>          memory size (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
-  -Q <<PARTITION>>         partition on which to submit the job
-                           (default gen10_ib on CentOS nodes, gen11 on RedHat nodes)
+  -Q <<PARTITION>>         partition on which to submit the job (default "sirius")
 
 EOF
     exit
@@ -249,9 +248,9 @@ set nodename=`hostname`
 set job_prefix="SLURM"
 if ($part == "unset") then
   if ($os == "CentOS") then
-    set part=gen10_ib
+    set part=altair
   else
-    set part=gen11
+    set part=sirius
   endif
 endif
 unsetenv LD_PRELOAD
@@ -327,15 +326,15 @@ sed \
 if ($chain != "unset") then
   set b2run_line=`grep -n "b2run" $NAME | cut -d ':' -f 1`
   @ before_line = $b2run_line - 1
-  head -n ${before_line} $NAME > $job_prefix.iter.after_$chain
-  echo "mv run.log.gz run.log.$chain.gz" >> $job_prefix.iter.after_$chain
-  echo "mv b2mn.prt b2mn.prt.$chain" >> $job_prefix.iter.after_$chain
-  echo "mv b2fstate b2fstati" >> $job_prefix.iter.after_$chain
-  echo "if (-e b2favere) mv b2favere b2faveri" >> $job_prefix.iter.after_$chain
+  head -n ${before_line} $NAME > $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv run.log.gz run.log.$chain.gz" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv b2mn.prt b2mn.prt.$chain" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv b2fstate b2fstati" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "if (-e b2favere) mv b2favere b2faveri" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
   set all_lines=`cat $NAME | wc -l`
   @ tail_lines = $all_lines - $before_line
-  tail -n $tail_lines $NAME >> $job_prefix.iter.after_$chain
-  set NAME=$job_prefix.iter.after_$chain
+  tail -n $tail_lines $NAME >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  set NAME=$SCRATCH_DIR/$job_prefix.iter.after_$chain
 endif
 
 update_solps_run_status -n "Submitted at `date`"

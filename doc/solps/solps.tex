@@ -2087,9 +2087,9 @@ command, to obtain here a run using 8GB of memory. The {\tt B} (for "bytes") is 
 
 The partition on which the job will be run can be specified by means of the {\tt -Q} option. For example:
 \begin{verbatim}
-itersubmit -Q gen10_ib
+itersubmit -Q sirius
 \end{verbatim}
-chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster CentOS nodes. If running on a RedHat node, the default partition name is {\tt gen11}.
+chooses the {\tt sirius} partition, which is the default on the ITER SDCC cluster. Another usable partition on the cluster is {\tt sun}.
 
 When using the SLURM job submission engine, it is also possible to submit a chain of jobs simultaneously (or at least in very quick succession), in which jobs only start after the previous one has completed successfully. Chains can be of arbitrary length and each job in the chain will be added individually to the queue. On oversubscribed clusters, this chain submission option tends to launch the next job in the chain earlier than if resubmitted only after the preceding job has finished. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
 \begin{verbatim}

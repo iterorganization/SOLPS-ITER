@@ -94,6 +94,7 @@ endif
 unsetenv MPLBACKEND
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib64
 setenv SOLPSWORK /work/projects/solps-iter/$USER
+setenv SCRATCH_DIR /scratch/users/$USER
 setenv PYTHONPATH "/work/imas/opt/SOLPS-GUI/1.5/src/widgets:${PYTHONPATH}"
 setenv PYQTDESIGNERPATH "/work/imas/opt/SOLPS-GUI/1.5/src/plugins/designer"
 setenv SOLPSGUI "/work/imas/opt/SOLPS-GUI/1.5/src/gui"
