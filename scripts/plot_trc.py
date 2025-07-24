@@ -273,7 +273,7 @@ def READ_TRC(trc_file):
     "Try reading standard .trc file"
     "assuming: file begins with # marked comment lines and last of them contrains data headers"
     if ( file_read == False ):
-        logging.info('tryng to read %s assuming text file in .trc standard format',input_file)
+        logging.info('trying to read %s assuming text file in .trc standard format',input_file)
         with open(input_file,"r") as ff:
             while True:
                 try:
