@@ -2757,7 +2757,8 @@ which contains
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+    When {\tt bcene\_15\_style=1}, the electron flux is computed via the exponential of the sheath potential drop, and {\tt ENEPAR(:,1)} is used to artificially increase or decrease the sheath transmission coefficient for electrons (default = {\tt 0}).
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
@@ -2822,7 +2823,7 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
@@ -2843,8 +2844,8 @@ which contains
   \item[24] feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
-    {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback.
+    {\tt ENIPAR(,1)} specifies the desired ion temperature in $eV$.
+    {\tt ENIPAR(,2)} is the strength of the feedback.
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
@@ -2885,8 +2886,8 @@ which contains
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[17] sheath condition for floating target. This BC provides a zero net current through the target. First, the total current through the surface is computed. Then, the potential is corrected by a factor of {\tt POTPAR(,1) * current} to reduce the current. {\tt POTPAR(,2)} used for storing the potential value, in $V$, during the iterative process and to provide an initial guess.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
-    {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
-    {\tt POTPAR(,,2)} is the strength of the feedback.
+    {\tt POTPAR(,1)} specifies the desired electric potential in $V$,
+    {\tt POTPAR(,2)} is the strength of the feedback.
   \end{description}
 \item[CONPAR]\index{CONPAR} {\tt real array, length NS * NBC * 3}, supplies
   the additional parameters needed for the option specified by
@@ -21137,9 +21138,9 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
+B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\

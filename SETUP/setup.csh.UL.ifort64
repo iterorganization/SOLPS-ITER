@@ -44,9 +44,10 @@ setenv MPDIR ${EBROOTIMPI}
 setenv DBX gdb
 
 # Compilers
-setenv CC icc
 setenv FC ifort
+setenv MPI_FC mpiifort
 setenv CXX icpc
+setenv CC icc
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"

@@ -16,14 +16,14 @@ similar to `setup.csh.ITER.gfortran` and `setup.csh.ITER.ifort64`,
 respectively. Configs `config.UL.gfortran` and `config.UL.ifort64` can
 actually be symlinked to config.ITER versions.
 
-Essentially, this script extends functionality of
+Essentially, this script extends functionality of the
 [EasyBuild](http://easybuild.readthedocs.org/) tool by adding search
 paths to ITER-specific easyconfigs (`.eb`) for sources from ITER Git
 repositories.
 
 The only requirement for this script is recent version
 of Python 3 and modulesfiles or lmod support. The rest is being
-downloaded from internet and ITER Git website. Quick astart for
+downloaded from internet and ITER Git website. Quick start for
 building may be by creating Personal Access Token from
 https://git.iter.org/plugins/servlet/access-tokens/manage and entering
 
@@ -32,7 +32,7 @@ https://git.iter.org/plugins/servlet/access-tokens/manage and entering
     export HTTP_AUTH_BEARER="ReplaceWithPersonalAccessToken"
     SETUP/easybuild-local.sh --help | more
     SETUP/easybuild-local.sh
-    SETUP/easybuild-local.sh --imas-foss install
+    SETUP/easybuild-4.05128538E+00local.sh --imas-foss install
     SETUP/easybuild-local.sh --imas-apps
 ~~~
 
@@ -112,7 +112,7 @@ should rather be [pushed to
 upstream](https://github.com/easybuilders/easybuild-easyconfigs/pulls).
 
 For a large software distribution such as SOLPS-ITER it is important
-that all modules use the same parent modules. For example Qt and PyQt
+that all modules use the same parent modules. For example Qt and PySide
 should be aligned with only one version. Replacing with newer version
 might lead to crashes and symbol problems. Often problems occur with
 OpenSSL that should be the latest system provided one. Complete build
@@ -128,17 +128,17 @@ installed. For example
 
     export EASYBUILD_PREFIX=/opt/pkg/ITER
 
-before running this script. Otherwise modules will be installed under
+before running this script. Otherwise, modules will be installed under
 `easybuild.local/software` and `easybuild.local/modules/all`.
 
-To use build modules use
+To use such build modules use
 
     module use ${PWD}/easybuild.local/modules/all
 
 ### Site specific configuration
 
 Instead of exporting environment variables one can save site-specific
-configuration under `SETUP/setup-easybuild.local` that is sourced
+configuration under `SETUP/setup.easybuild.local` that is sourced
 if exists. For example:
 
     export EASYBUILD_PREFIX=/opt/pkg/ITER
@@ -286,12 +286,11 @@ and not by the EasyBuild module. This resolves problems when compiling
 ParaView and PySide6 (shiboken6) since system /lib64 might be in place
 of OpenSSL module and symbol incompatibility.
 
-### ParaView
+### ParaView and Catalyst
 
 Building ParaView can run out of memory or crashes on some machines
 and for that use lower threads or even `--parallel 1` for serial build.
 
-### IMAS
 
 ParaView Catalyst configuration does not work correctly with CMake/3.26 or higher.
 For that the recommended way is to backport to CMake/3.20 with the following commands:
@@ -321,7 +320,7 @@ Dependency to IMAS for AMNS, GGD and VIZ needs to be updated with
 
 If IMAS-AL MATLAB is not required it can be removed from AMNS with
 
-or 
+or
 
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/GGD/* 
     sed -i -e /CPATH/d ${EASYBUILD_PREFIX}/modules/*/AMNS/*
@@ -400,7 +399,9 @@ The following notes are guides for builders with similar setup. ITER
 site notes are just proof of concept and guide for other sites that
 already have EasyBuild modules in place and want to install complete
 SOLPS-ITER toolchain, including IMAS. Confer notes below with your
-machine on how to resolve similar problems.
+machine on how to resolve similar problems. Some of them are marked (outdated)
+but can be still useful for recipes with similar problems that might
+occur in newer packages build too.
 
 ### AMD processors with Intel toolchain
 
@@ -423,7 +424,6 @@ Using system Python 3.6.8 fails within shutil.copytree() function.
 
    module load python-3.8.12-gcc-8.5.0-bvu5tg4
    export EASYBUILD_MODULES_TOOL=Lmod
-
 
 ParaView requires Qt/5.15.2 for qhelpgenerator to work on Trinity
 desktop. To avoid clashes it is required to change all Qt dependent
@@ -473,6 +473,9 @@ such as NetCDF, HDF5, ...
     export PATH=$tmp_path LD_LIBRARY_PATH=$tmp_llp PYTHONPATH=$tmp_pp
     export INTEL_LICENSE_FILE=27010@io-ws-ls1  
 
+Several processor generations in compute nodes (gen9, gen10, gen11)
+exists and for building the oldest (gen9) should be in order to run
+modules on all nodes without crashes due to binary incompatibility.
 
 ITER Organization is using "Forward Trust SSL Proxy" and `--help` does
 not work due to intermediate self-signed certificate. To overcome this
@@ -787,7 +790,7 @@ ENVIRONMENT variables:
 
 Files:
 
-  SETUP/setup-easybuild.local Site specific environment variables and modules
+  SETUP/setup.easybuild.local Site specific environment variables and modules
 
 ~~~
 EOF

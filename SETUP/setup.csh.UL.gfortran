@@ -47,6 +47,7 @@ setenv DBX gdb
 # Compilers
 setenv CC gcc
 setenv FC gfortran
+setenv MPI_FC mpif90
 setenv CXX g++
 
 if (`where paraview-config` == "") then
@@ -98,4 +99,4 @@ else
 endif
 
 # Other environment variables
-
+#setenv SOLPSWORK /work/projects/solps-iter/$USER
