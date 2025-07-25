@@ -12,7 +12,7 @@
 #SBATCH -e SLURM-%j.err
 #SBATCH  --no-requeue
 
-### This script submits the job, which launches the SOLPS-ITER code, to the MCPDF clusters Raven and Viper,
+### This script submits the job, which launches the SOLPS-ITER code, to the MPCDF clusters Raven and Viper,
 ### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
 ###
 ### Successful finish means that either the prescribed (by 'b2mndr_ntim') number of steps is reached
@@ -28,6 +28,11 @@
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
 set USE_MPI=""
 if ($?SOLPS_MPI) then
   set MPI_OPTS=#MPIOPTS#
@@ -42,8 +47,8 @@ set TIME="time srun ${MPI_PREFLAGS}"
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
@@ -51,9 +56,9 @@ update_solps_run_status "Started on `hostname` at `date`"
 
 rm -f run.KAPUTT
 
-b2run ${USE_MPI} ${USE_OMP} b2mn >& run.log
+b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess_coupled
+QSUB.postprocess${COUPLED_SUFFIX}
 
 preserve_scratch_to_work
 
