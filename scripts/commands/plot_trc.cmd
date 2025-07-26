@@ -2022,46 +2022,6 @@
 :PFR_flow_total_N:\Gamma_{N}^{PFR}:
 :PFR_flow_total_Ne:\Gamma_{Ne}^{PFR}:
 :PFR_flow_total_Ar:\Gamma_{Ar}^{PFR}:
-@file:user.trc.n.01
-@page: Integral ion saturation current to the target, MA
-:isatt_il:I_{sat}^{inner}:1.e-6
-:isatt_ol:I_{sat}^{outer}:1.e-6
-:isatt_iu:I_{sat}^{in_up}:1.e-6
-:isatt_ou:I_{sat}^{ou_up}:1.e-6
-@page: Shaped peak heat flux to the target, MW/m^{2}
-:pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
-:pk_pwr_o:q_{peak,shp}^{outer}:1.e-6
-:pk_pw_iu:q_{peak,shp}^{in_up}:1.e-6
-:pk_pw_ou:q_{peak,shp}^{ou_up}:1.e-6
-@page: Parallel peak heat flux to wall, MW/m^{2}
-:pk_ppf_w:q_{\parallel}^{wall}:1.e-6
-@page: Neutral pressure in PFR, Pa
-:Pneu_PFR:average:
-:Pneu_PFRi:inner:
-:Pneu_PFRo:outer:
-@page: Neutral pressure at the pump H, Pa
-:p_H2_pump:p_{H2}^{pump}:
-:p_H_pump:p_{H}^{pump}:
-@page: Neutral pressure at the pump D, Pa
-:p_D2_pump:p_{D2}^{pump}:
-:p_D_pump:p_{D}^{pump}:
-@page: Neutral pressure at the pump T, Pa
-:p_T2_pump:p_{T2}^{pump}:
-:p_T_pump:p_{T}^{pump}:
-@page: Neutral pressure at the pump He, Pa
-:p_He_pump:p_{He}^{pump}:
-@page: DT throughput, Pa*m^{3}/s
-:DT_thrpt:DT_{thrpt}:
-@page: Total fuel flux through PFR, s^{-1}
-:PFR_flow_total_H:\Gamma_{H}^{PFR}:
-:PFR_flow_total_D:\Gamma_{D}^{PFR}:
-:PFR_flow_total_T:\Gamma_{T}^{PFR}:
-@page: Total He flux through PFR, s^{-1}
-:PFR_flow_total_He:\Gamma_{He}^{PFR}:
-@page: Total impurity flux through PFR, s^{-1}
-:PFR_flow_total_N:\Gamma_{N}^{PFR}:
-:PFR_flow_total_Ne:\Gamma_{Ne}^{PFR}:
-:PFR_flow_total_Ar:\Gamma_{Ar}^{PFR}:
 @file:blnm
 @page: Momentum balance lower inner (ank)
 :ref_resf_il:relative force tot:
