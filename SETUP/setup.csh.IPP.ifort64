@@ -1,26 +1,23 @@
 # Load modules
 setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
-module load anaconda/3/2023.03
-module load intel/2023.1.0.x
 module load texlive/2021
-# module load subversion  # use built in SVN
 module load arm_ddt/22.1
 module load doxygen/Release_1_9_7-190-g7df783537
-#module load mdsplus
-module load netcdf-serial/4.8.1
-module load hdf5-serial/1.14.1
-#module load nag_flib/intel/mk24
-module load git/2.39
-module load impi/2021.9
-module load nag_flib/mk26
-module load gnuplot/5.4
+module load git/2.48
+module load gnuplot/6.0
 
-module load imas-modules/1.0
-module load IMAS/3.39.0-4.11.5
-module load GGD/1.10.3-ifort-2021.9.0
+module load imas-modules/2.0
+module load IMAS/3.42.0-2024.08.1-intel-2023b
+module load GGD/1.12.0-intel-2023b-DD-3.42.0
+module load AMNS/1.5.1-intel-2023b-DD-3.42.0
 module load Fundamental-Constants/0.1.1
-module load AMNS/1.4.0.1-6dba-ifort-2021.9.0
-module load json-fortran/jsonfortran-intel-8.4.0
+
+module load impi/2021.10.0-intel-compilers-2023.2.1
+module load netCDF-Fortran/4.6.1-iimpi-2023b
+module load HDF5/1.14.3-iimpi-2023b
+module load json-fortran/8.5.2-intel-compilers-2023.2.1
+
+module load IPython/8.17.2-GCCcore-13.2.0
 
 setenv DBX ddt
 setenv SYSNAME amd64_sles15
@@ -52,9 +49,11 @@ setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
 setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
 setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 [ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
+setenv NETCDF_HOME /toks/scratch/dpc/easybuild/software/netCDF-Fortran/4.6.1-iimpi-2023b
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
+
+setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
