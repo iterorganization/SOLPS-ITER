@@ -1,0 +1,22 @@
+# Test whether necessary variables are defined
+GLI_HOME ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gks
+GR_ROOT  ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/gr
+NAGDIR   ?= /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/nag
+LD_GR    ?= -L${GR_ROOT} -lgr
+LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
+LD_NAG   ?= -L${NAGDIR} -lnag -lstdc++
+
+CPP       = /lib/cpp -traditional
+
+ifdef SOLPS_DEBUG
+FCOPTS    = -fcheck=all -fbacktrace
+endif
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+
+LDLIBS    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

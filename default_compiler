@@ -52,6 +52,7 @@ case "MARCONI":
 case "MEPHI":
 case "NERSC":
 case "ORNL":
+case "PITAGORA":
 case "PPPL":
 case "WM":
   echo gfortran
