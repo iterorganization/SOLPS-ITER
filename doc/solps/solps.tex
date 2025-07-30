@@ -2647,8 +2647,9 @@ which contains
     ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
     {\tt 'ionising\_core'} switch is used,
     {\tt CONPAR(,,2)} is the strength of the feedback.
-  \item[14] sound speed velocity flux,
-    {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+  \item[14] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt CONPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$.
+    to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+    Recommended for cases with drifts.
   \item[15] prescribe a radial leakage velocity,
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2708,7 +2709,9 @@ which contains
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[13] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
+    to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+    Recommended for cases with drifts.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
   \item[16] prescribe the average value of the parallel velocity,
@@ -2823,7 +2826,9 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
+    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14} and {\tt BCMOM=13} for all ion species.
+    Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
@@ -10706,7 +10711,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \right|_W
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10769,7 +10774,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \right|_E
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10970,7 +10975,7 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11046,7 +11051,7 @@ $u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11806,7 +11811,7 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -11892,7 +11897,7 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
