@@ -254,7 +254,6 @@ The problem is exhibited at Tcl version of modules only while at Lua
 the replacement is silently ignored. See Marconi or IFERC subsection
 below on how to address this correctly.
 
-
 ### OpenSSL
 
 Qt5 and Qt6 should have OpenSSL version 1.1.1 installed on the system
@@ -332,7 +331,7 @@ site notes are just proof of concept and guide for other sites that
 already have EasyBuild modules in place and want to install complete
 SOLPS-ITER toolchain, including IMAS. Confer notes below with your
 machine on how to resolve similar problems. Some of them are marked (outdated)
-but can be still usefulf for recipes with similar problems that might
+but can be still useful for recipes with similar problems that might
 occur in newer packages build too.
 
 ### AMD processors with Intel toolchain
@@ -402,7 +401,6 @@ such as NetCDF, HDF5, ...
     SETUP/easybuild-local.sh --force --skip-test-step \
       --try-amend="configopts=--with-slurm --with-pmi" \
       OpenMPI-4.1.6-GCC-13.2.0.eb
-
 
 Several processor generations in compute nodes (gen9, gen10, gen11)
 exists and for building the oldest (gen9) should be in order to run

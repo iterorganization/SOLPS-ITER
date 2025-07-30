@@ -1774,9 +1774,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
  \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
  \begin{description}
-  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
@@ -2835,8 +2835,8 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, recommended when using drifts. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
-    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14}, and {\tt BCMOM=13}.
+  \item[15] sheath boundary condition. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
+    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14} and {\tt BCMOM=13} for all ion species.
     If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; the ion heat flux is computed using the target particle flux and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5});
     to be used in conjunction with {\tt BCMOM=13}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCCON=14}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
@@ -4755,7 +4755,7 @@ Using the {\tt -r} option with these scripts creates relative links. Default beh
 
 If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will translate it to the JSON format as part of the run. The input file that {\tt Eirene} actually uses is the one to which the symbolic link {\tt fort.1} file points.
 
-%% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
+%% Examples files from https://solps-mdsplus.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
 \section{Input files}
 
@@ -5454,7 +5454,7 @@ Note that the {\tt SNAPSHOT::TOP.GRID:DSPAR} and {\tt SNAPSHOT::TOP.GRID:DSPOL} 
 
 \subsection{Using standard experimental data viewing programs}
 
-The {\tt MDSplus} server name is {\tt solps-mdsplus.aug.ipp.mpg.de:8001}.
+The {\tt MDSplus} server name is {\tt solps-mdsplus.ipp.mpg.de:8001}.
 
 The tree name is {\tt solps}.
 
@@ -5500,7 +5500,7 @@ graph in figure \ref{fig:cviewsolpsmdsplus} is produced.
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt solps}
 \item {\tt Signal:} = {\tt \\top.timedep.ne:ompsep}
@@ -5512,7 +5512,7 @@ You can also use
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt timedep}
 \item {\tt Signal:} = {\tt \\top.ne:ompsep}
@@ -5540,7 +5540,7 @@ Adding {\tt te:ompsep} and {\tt ti:ompsep}, the graph in figure
 \index{idl}
 
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 mdsopen,'solps',251
 te_coarse=mdsvalue('\top.snapshot:te')
 cr_coarse=mdsvalue('\top.snapshot.grid:cr')
@@ -5557,7 +5557,7 @@ oplot,cr_fine[*,10],te_fine[*,10],linestyle=2,psym=-2
 \index{matlab}
 
 \begin{verbatim}
-mdsopen('solps-mdsplus.aug.ipp.mpg.de:8001::solps',nshot);
+mdsopen('solps-mdsplus.ipp.mpg.de:8001::solps',nshot);
 onx= mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NX');
 ny = mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NY'); %number of radial cells
 ne = mdsvalue('\SOLPS::TOP.SNAPSHOT:NE');
@@ -5594,7 +5594,7 @@ You will need the MDSplus interface for python.
 \begin{verbatim}
 import MDSplus
 
-conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn = MDSplus.Connection('solps-mdsplus.ipp.mpg.de:8001')
 conn.openTree('solps', 12380)
 r=conn.get('\\top.snapshot.grid:r')
 z=conn.get('\\top.snapshot.grid:z')
@@ -5667,7 +5667,7 @@ mencoder 'mf://frames/tmp_??????.png' -mf type=png:fps=30 -ovc lavc -lavcopts \
 \end{Verbatim}
 
 The resultant movie can be found at\\
-\href{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
+\href{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
 
 \section{Querying the database}
 \index{database}\index{querying database}
@@ -5676,7 +5676,7 @@ All cases are also entered into a {\tt MySQL}\index{MySQL}
 (\href{http://www.mysql.com/}{http://www.mysql.com/}) database.
 
 A Web interface to the database is available at
-\href{http://solps-mdsplus.aug.ipp.mpg.de/solps/}{http://solps-mdsplus.aug.ipp.mpg.de/solps/}
+\href{http://solps-mdsplus.ipp.mpg.de/solps/}{http://solps-mdsplus.ipp.mpg.de/solps/}
 via {\tt Zope}\index{Zope}\\
 (\href{http://www.zope.org/}{http://www.zope.org/}).
 
@@ -5686,7 +5686,7 @@ user follows:
 
 \index{database query via IDL}
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select user,count(*) from id group by user','solps')")
 mdsdisconnect
 help,ans
@@ -5696,7 +5696,7 @@ print,transpose(ans)
 Another, more complicated, {\tt IDL} example is:
 
 \begin{Verbatim}[fontsize=\footnotesize]
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select solpsindex,shot,time,ompsep_te,ompsep_ti,user,exp
    from id where ompsep_te>110.0 and ompsep_te<120.0','solps')")
 mdsdisconnect
@@ -5779,7 +5779,7 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
       call getarg(1,arg)
       read(arg,*) ishot
 
-      call itdb_open(status,"solps-mdsplus.aug.ipp.mpg.de:8001",
+      call itdb_open(status,"solps-mdsplus.ipp.mpg.de:8001",
      1 "solps", ishot)
       call itdb_err_msg('itdb_open',status)
 
@@ -5912,30 +5912,30 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
 The IPP MDSplus server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
 running SUSE LINUX 10.1 (X86-64).  The data is stored in MR-AFS.
 
-%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.aug.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
+%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
 
 As of Wed Jun 1 21:30:57 CEST 2005 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 12497 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 12497 cases consisting of
 387.158 GB in 261099 files.
 
 As of Wed Jul 26 19:12:53 CEST 2006 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 15999 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 15999 cases consisting of
 995.904 GB in 334534 files.
 
 As of Sat Mar 8 00:46:36 CET 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 22190 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 22190 cases consisting
 of 2824.17 GB in 464547 files.
 
 As of Tue Oct 7 19:45:57 CEST 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 25623 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 25623 cases consisting
 of 3646.37 GB in 536644 files.
 
 As of Tue Jan 13 10:05:51 MET 2009 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 26448 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 26448 cases consisting
 of 3802.68 GB in 553970 files.
 
 As of Thu Jun 8 11:22:51 CEST 2017 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 95977 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 95977 cases consisting of
 19859.1 GB in 1929218 files.
 
 \chapter{Running DivGeo}
