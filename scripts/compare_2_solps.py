@@ -24,7 +24,7 @@ parser.add_argument("Shot1", type=int, help="Reference shot number")
 parser.add_argument("Shot2", type=int, help="Comparison shot number")
 args=parser.parse_args()
 
-conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn = MDSplus.Connection('solps-mdsplus.ipp.mpg.de:8001')
 
 ref    = read_solps(args.Shot1, conn)
 comp   = read_solps(args.Shot2, conn)
