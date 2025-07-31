@@ -5602,11 +5602,6 @@ The resultant movie can be found at\\
 All cases are also entered into a {\tt MySQL}\index{MySQL}
 (\href{http://www.mysql.com/}{http://www.mysql.com/}) database.
 
-A Web interface to the database is available at
-\href{http://solps-mdsplus.ipp.mpg.de/solps/}{http://solps-mdsplus.ipp.mpg.de/solps/}
-via {\tt Zope}\index{Zope}\\
-(\href{http://www.zope.org/}{http://www.zope.org/}).
-
 The database can also be queried via {\tt MySQL} commands passed via {\tt MDSplus}. An {\tt IDL}
 example of querying the database to find the number of shots supplied by each
 user follows:
@@ -5648,7 +5643,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_scatter.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Scatter plot for separatrix temperature versus density.}
     \label{fig:python_sql_scatter}
 \end{figure}
 
@@ -5658,7 +5653,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_lin}
 \end{figure}
 
@@ -5668,7 +5663,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_log.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Log histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_log}
 \end{figure}
 
