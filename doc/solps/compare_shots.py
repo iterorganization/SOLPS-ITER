@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 # matplotlib.ticker contains classes to support completely configurable tick locating and formatting.
 import matplotlib.ticker as ticker
 	
-def compare_shots(shot, filename=None, server='solps-mdsplus.aug.ipp.mpg.de:8001'):
+def compare_shots(shot, filename=None, server='solps-mdsplus.ipp.mpg.de:8001'):
 	'''
 This function reads 1D datasets from shot <shot> on solps server <server> through MDS+ and either
 displays or writes a resulting picture on disk thanks to matplotlib. 
