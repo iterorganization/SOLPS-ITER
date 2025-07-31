@@ -4755,7 +4755,7 @@ Using the {\tt -r} option with these scripts creates relative links. Default beh
 
 If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will translate it to the JSON format as part of the run. The input file that {\tt Eirene} actually uses is the one to which the symbolic link {\tt fort.1} file points.
 
-%% Examples files from https://solps-mdsplus.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
+%% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
 \section{Input files}
 
@@ -5373,11 +5373,11 @@ needs to be set --- consult your systems people about this, or the
 {\tt MDSplus} documentation.
 \end{sloppypar}
 
-[At IPP on the TOK Linux cluster, add the following to {\tt .login}:
+On many systems, it is sufficient to do
 \begin{verbatim}
-setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
-source $MDSPLUS_DIR/setup.csh
+module load MDSplus/7.153.3-GCCcore-13.2.0
 \end{verbatim}
+or whatever the latest version of MDSplus is.
 %% $
 
 {\tt b2md} requires as input {\tt b2md.dat} and this is searched for in the
@@ -5411,7 +5411,7 @@ the last number stored within.
 \index{tree structure in MDSplus}
 \index{MDSplus SOLPS tree structure}
 
-%%rsync -avP ~/afs/MDSPLUS_examples/*.TCL.index MDSPLUS/
+%%rsync -avP /shares/dmz/services/solps-mdsplus/MDS/TCL/. MDSPLUS/  [on srv-solps-1.dmz.ipp.mpg.de]
 
 The {\tt solps} tree consists of the main tree, {\tt SOLPS}, and six sub-trees: {\tt IDENT},
 {\tt SNAPSHOT}, {\tt TALLIES}, {\tt TIMEDEP}, {\tt MOVIES} and {\tt DIAG}.
@@ -5912,7 +5912,7 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
 The IPP MDSplus server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
 running SUSE LINUX 10.1 (X86-64).  The data is stored in MR-AFS.
 
-%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
+%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /shares/dmz/services/solps-mdsplus/MDS/models/shotid.sys` cases consisting of `du -hs /shares/dmz/services/solps-mdsplus/MDS/0` in `find /shares/dmz/services/solps-mdsplus/MDS/0 -type f | wc -l` files.
 
 As of Wed Jun 1 21:30:57 CEST 2005 the SOLPS MDSplus server
 "solps-mdsplus.ipp.mpg.de:8001" contained 12497 cases consisting of
@@ -5937,6 +5937,10 @@ of 3802.68 GB in 553970 files.
 As of Thu Jun 8 11:22:51 CEST 2017 the SOLPS MDSplus server
 "solps-mdsplus.ipp.mpg.de:8001" contained 95977 cases consisting of
 19859.1 GB in 1929218 files.
+
+As of 2025-07-31T09:02:17 CEST the SOLPS MDSplus server
+"solps-mdsplus.ipp.mpg.de:8001" contained 186288 cases consisting of
+42 TB in 3909532 files.
 
 \chapter{Running DivGeo}
 \label{cha:divgeo}\index{DG, running}
