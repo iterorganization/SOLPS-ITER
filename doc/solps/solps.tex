@@ -1774,9 +1774,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
  \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
  \begin{description}
-  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
@@ -5363,11 +5363,11 @@ needs to be set --- consult your systems people about this, or the
 {\tt MDSplus} documentation.
 \end{sloppypar}
 
-[At IPP on the TOK Linux cluster, add the following to {\tt .login}:
+On many systems, it is sufficient to do
 \begin{verbatim}
-setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
-source $MDSPLUS_DIR/setup.csh
+module load MDSplus/7.153.3-GCCcore-13.2.0
 \end{verbatim}
+or whatever the latest version of MDSplus is.
 %% $
 
 {\tt b2md} requires as input {\tt b2md.dat} and this is searched for in the
@@ -5401,7 +5401,7 @@ the last number stored within.
 \index{tree structure in MDSplus}
 \index{MDSplus SOLPS tree structure}
 
-%%rsync -avP ~/afs/MDSPLUS_examples/*.TCL.index MDSPLUS/
+%%rsync -avP /shares/dmz/services/solps-mdsplus/MDS/TCL/. MDSPLUS/  [on srv-solps-1.dmz.ipp.mpg.de]
 
 The {\tt solps} tree consists of the main tree, {\tt SOLPS}, and six sub-trees: {\tt IDENT},
 {\tt SNAPSHOT}, {\tt TALLIES}, {\tt TIMEDEP}, {\tt MOVIES} and {\tt DIAG}.
@@ -5444,7 +5444,7 @@ Note that the {\tt SNAPSHOT::TOP.GRID:DSPAR} and {\tt SNAPSHOT::TOP.GRID:DSPOL} 
 
 \subsection{Using standard experimental data viewing programs}
 
-The {\tt MDSplus} server name is {\tt solps-mdsplus.aug.ipp.mpg.de:8001}.
+The {\tt MDSplus} server name is {\tt solps-mdsplus.ipp.mpg.de:8001}.
 
 The tree name is {\tt solps}.
 
@@ -5490,7 +5490,7 @@ graph in figure \ref{fig:cviewsolpsmdsplus} is produced.
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt solps}
 \item {\tt Signal:} = {\tt \\top.timedep.ne:ompsep}
@@ -5502,7 +5502,7 @@ You can also use
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt timedep}
 \item {\tt Signal:} = {\tt \\top.ne:ompsep}
@@ -5530,7 +5530,7 @@ Adding {\tt te:ompsep} and {\tt ti:ompsep}, the graph in figure
 \index{idl}
 
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 mdsopen,'solps',251
 te_coarse=mdsvalue('\top.snapshot:te')
 cr_coarse=mdsvalue('\top.snapshot.grid:cr')
@@ -5547,7 +5547,7 @@ oplot,cr_fine[*,10],te_fine[*,10],linestyle=2,psym=-2
 \index{matlab}
 
 \begin{verbatim}
-mdsopen('solps-mdsplus.aug.ipp.mpg.de:8001::solps',nshot);
+mdsopen('solps-mdsplus.ipp.mpg.de:8001::solps',nshot);
 onx= mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NX');
 ny = mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NY'); %number of radial cells
 ne = mdsvalue('\SOLPS::TOP.SNAPSHOT:NE');
@@ -5584,7 +5584,7 @@ You will need the MDSplus interface for python.
 \begin{verbatim}
 import MDSplus
 
-conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn = MDSplus.Connection('solps-mdsplus.ipp.mpg.de:8001')
 conn.openTree('solps', 12380)
 r=conn.get('\\top.snapshot.grid:r')
 z=conn.get('\\top.snapshot.grid:z')
@@ -5657,7 +5657,7 @@ mencoder 'mf://frames/tmp_??????.png' -mf type=png:fps=30 -ovc lavc -lavcopts \
 \end{Verbatim}
 
 The resultant movie can be found at\\
-\href{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
+\href{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
 
 \section{Querying the database}
 \index{database}\index{querying database}
@@ -5665,18 +5665,13 @@ The resultant movie can be found at\\
 All cases are also entered into a {\tt MySQL}\index{MySQL}
 (\href{http://www.mysql.com/}{http://www.mysql.com/}) database.
 
-A Web interface to the database is available at
-\href{http://solps-mdsplus.aug.ipp.mpg.de/solps/}{http://solps-mdsplus.aug.ipp.mpg.de/solps/}
-via {\tt Zope}\index{Zope}\\
-(\href{http://www.zope.org/}{http://www.zope.org/}).
-
 The database can also be queried via {\tt MySQL} commands passed via {\tt MDSplus}. An {\tt IDL}
 example of querying the database to find the number of shots supplied by each
 user follows:
 
 \index{database query via IDL}
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select user,count(*) from id group by user','solps')")
 mdsdisconnect
 help,ans
@@ -5686,7 +5681,7 @@ print,transpose(ans)
 Another, more complicated, {\tt IDL} example is:
 
 \begin{Verbatim}[fontsize=\footnotesize]
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select solpsindex,shot,time,ompsep_te,ompsep_ti,user,exp
    from id where ompsep_te>110.0 and ompsep_te<120.0','solps')")
 mdsdisconnect
@@ -5711,7 +5706,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_scatter.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Scatter plot for separatrix temperature versus density.}
     \label{fig:python_sql_scatter}
 \end{figure}
 
@@ -5721,7 +5716,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_lin}
 \end{figure}
 
@@ -5731,7 +5726,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_log.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Log histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_log}
 \end{figure}
 
@@ -5769,7 +5764,7 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
       call getarg(1,arg)
       read(arg,*) ishot
 
-      call itdb_open(status,"solps-mdsplus.aug.ipp.mpg.de:8001",
+      call itdb_open(status,"solps-mdsplus.ipp.mpg.de:8001",
      1 "solps", ishot)
       call itdb_err_msg('itdb_open',status)
 
@@ -5902,31 +5897,35 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
 The IPP MDSplus server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
 running SUSE LINUX 10.1 (X86-64).  The data is stored in MR-AFS.
 
-%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.aug.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
+%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /shares/dmz/services/solps-mdsplus/MDS/models/shotid.sys` cases consisting of `du -hs /shares/dmz/services/solps-mdsplus/MDS/0` in `find /shares/dmz/services/solps-mdsplus/MDS/0 -type f | wc -l` files.
 
 As of Wed Jun 1 21:30:57 CEST 2005 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 12497 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 12497 cases consisting of
 387.158 GB in 261099 files.
 
 As of Wed Jul 26 19:12:53 CEST 2006 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 15999 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 15999 cases consisting of
 995.904 GB in 334534 files.
 
 As of Sat Mar 8 00:46:36 CET 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 22190 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 22190 cases consisting
 of 2824.17 GB in 464547 files.
 
 As of Tue Oct 7 19:45:57 CEST 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 25623 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 25623 cases consisting
 of 3646.37 GB in 536644 files.
 
 As of Tue Jan 13 10:05:51 MET 2009 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 26448 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 26448 cases consisting
 of 3802.68 GB in 553970 files.
 
 As of Thu Jun 8 11:22:51 CEST 2017 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 95977 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 95977 cases consisting of
 19859.1 GB in 1929218 files.
+
+As of 2025-07-31T09:02:17 CEST the SOLPS MDSplus server
+"solps-mdsplus.ipp.mpg.de:8001" contained 186288 cases consisting of
+42 TB in 3909532 files.
 
 \chapter{Running DivGeo}
 \label{cha:divgeo}\index{DG, running}

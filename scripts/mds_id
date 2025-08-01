@@ -2,7 +2,7 @@
 if ($?SOLPSMDSSERVER) then
   echo MDSSERVER:$SOLPSMDSSERVER
 else
-  echo MDSSERVER:"solps-mdsplus.aug.ipp.mpg.de:8002"
+  echo MDSSERVER:"solps-mdsplus.ipp.mpg.de:8002"
 endif
 echo date:`date`
 echo dir:`cd .. ; pwd`
