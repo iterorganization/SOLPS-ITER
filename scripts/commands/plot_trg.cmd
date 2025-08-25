@@ -472,3 +472,134 @@
 :Ar_pres_atm:p_{Ar}:
 :W_pres_atm:p_{W}:
 
+@file:wlld_FWP
+@page: Total heat flux at the first wall, MW/m^{2}
+@setx:x:x, m:
+@log:
+:Wtot:Wtot:1.e-6
+@page: Heat loads breakdown at the first wall, MW/m^{2}
+@setx:x:x, m:
+@log:
+:Wtot:total:1.e-6
+:Wpls:plasma:1.e-6
+:Wneu:neutrals:1.e-6
+:Wrad:radiation:1.e-6
+@page: Particle heat loads breakdown at the first wall, MW/m^{2}
+@setx:x:x, m:
+@log:
+:Wpart:total:1.e-6
+:Wheat:kinetic:1.e-6
+:Wpot:potential:1.e-6
+@page: n_{e} at the first wall, m^{-3}
+@setx:x:x, m:
+@log:
+:ne:n_{e}:
+@page: T_{e,i} at the first wall, eV
+@setx:x:x, m:
+@log:
+:Te:T_{e}:
+:Ti:T_{i}:
+@page: H ion flux at the first wall, m^{-2}s^{-1}
+@setx:x:x, m:
+@log:
+:flxi_H:\Gamma_{H+}:
+:flxi_D:\Gamma_{D+}:
+:flxi_T:\Gamma_{T+}:
+@page: Avg H ion energy at the first wall, eV
+@setx:x:x, m:
+@log:
+:Eavi_H:\Gamma_{H+}:
+:Eavi_D:\Gamma_{D+}:
+:Eavi_T:\Gamma_{T+}:
+@page: H atom flux at the first wall, m^{-2}s^{-1}
+@setx:x:x, m:
+@log:
+:flxa_H:\Gamma_{H}:
+:flxa_D:\Gamma_{D}:
+:flxa_T:\Gamma_{T}:
+@page: Avg H atom energy at the first wall, eV
+@setx:x:x, m:
+@log:
+:Eava_H:\Gamma_{H}:
+:Eava_D:\Gamma_{D}:
+:Eava_T:\Gamma_{T}:
+@page: H atom pressure at the first wall, Pa
+@setx:x:x, m:
+@log:
+:pa_H:p_{H}:
+:pa_D:p_{D}:
+:pa_D:p_{T}:
+@page: H mol flux at the first wall, m^{-2}s^{-1}
+@setx:x:x, m:
+@log:
+:flxm_H2:\Gamma_{H_{2}}:
+:flxm_D2:\Gamma_{D_{2}}:
+:flxm_T2:\Gamma_{T_{2}}:
+@page: Avg H mol energy at the first wall, eV
+@setx:x:x, m:
+@log:
+:Eavm_H2:\Gamma_{H_{2}}:
+:Eavm_D2:\Gamma_{D_{2}}:
+:Eavm_T2:\Gamma_{T_{2}}:
+@page: H mol pressure at the first wall, Pa
+@setx:x:x, m:
+@log:
+:pm_H2:p_{H_{2}}:
+:pm_D2:p_{D_{2}}:
+:pm_T2:p_{T_{2}}:
+@page: Imp ion flux at the first wall, m^{-2}s^{-1}
+@setx:x:x, m:
+@log:
+:flxi_He:\Gamma_{He+}:
+:flxi_Be:\Gamma_{Be+}:
+:flxi_Li:\Gamma_{Li+}:
+:flxi_C:\Gamma_{C+}:
+:flxi_N:\Gamma_{N+}:
+:flxi_Ne:\Gamma_{Ne+}:
+:flxi_Ar:\Gamma_{Ar+}:
+:flxi_W:\Gamma_{W+}:
+@page: Avg imp ion energy at the first wall, eV
+@setx:x:x, m:
+@log:
+:Eavi_He:\Gamma_{He+}:
+:Eavi_Be:\Gamma_{Be+}:
+:Eavi_Li:\Gamma_{Li+}:
+:Eavi_C:\Gamma_{C+}:
+:Eavi_N:\Gamma_{N+}:
+:Eavi_Ne:\Gamma_{Ne+}:
+:Eavi_Ar:\Gamma_{Ar+}:
+:Eavi_W:\Gamma_{W+}:
+@page: Imp atom flux at the first wall, m^{-2}s^{-1}
+@setx:x:x, m:
+@log:
+:flxa_He:\Gamma_{He}:
+:flxa_Be:\Gamma_{Be}:
+:flxa_Li:\Gamma_{Li}:
+:flxa_C:\Gamma_{C}:
+:flxa_N:\Gamma_{N}:
+:flxa_Ne:\Gamma_{Ne}:
+:flxa_Ar:\Gamma_{Ar}:
+:flxa_W:\Gamma_{W}:
+@page: Avg imp atom energy at the first wall, eV
+@setx:x:x, m:
+@log:
+:Eava_He:\Gamma_{He}:
+:Eava_Be:\Gamma_{Be}:
+:Eava_Li:\Gamma_{Li}:
+:Eava_C:\Gamma_{C}:
+:Eava_N:\Gamma_{N}:
+:Eava_Ne:\Gamma_{Ne}:
+:Eava_Ar:\Gamma_{Ar}:
+:Eava_W:\Gamma_{W}:
+@: Imp atom pressure at the first wall, Pa
+@setx:x:x, m:
+@log:
+:pa_He:p_{He}:
+:pa_Be:p_{Be}:
+:pa_Li:p_{Li}:
+:pa_C:p_{C}:
+:pa_N:p_{N}:
+:pa_Ne:p_{Ne}:
+:pa_Ar:p_{Ar}:
+:pa_W:p_{W}:
+

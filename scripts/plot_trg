@@ -32,7 +32,7 @@ OUTPUT_FMT=pdf
 ORIGIN_PDF=multipage.pdf
 STATE_FILE=b2fstate
 REF_FILE=ld_tg_o.dat
-LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat'
+LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat wlld_FWP.dat'
 
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}
@@ -152,8 +152,8 @@ then
   }; done
 else
   echo "$LN_FILES not found or too old trying to produce..."
-  echo "echo '100 wlld' | b2plot"
-  echo "100 wlld" | b2plot >/dev/null 2>&1
+  echo "echo '1111 wlld' | b2plot"
+  echo "1111 wlld" | b2plot >/dev/null 2>&1
   count=`ls -l $B2PL_DIR/$LN_FILES 2>/dev/null | wc -l`
   if [ $count != 0 ]
   then
