@@ -42,7 +42,7 @@ Carre2:
   cd $SOLPSTOP/modules/Carre2
   set repo="Carre2"
   git fetch --prune
-  git checkout feature/Carre2 && echo "Checked out Carre2 branch" || goto branch
+  git checkout feature/Carre2_wg_release && echo "Checked out Carre2 WG-release branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
@@ -50,7 +50,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git checkout feature/wg_release && echo "Checked out DivGeo WG-release branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
