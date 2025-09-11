@@ -5,10 +5,11 @@ echo "Switching to SOLPS-ITER WG-release branch"
 set repo="SOLPS-ITER"
 git fetch --prune
 git checkout feature/wg-release && echo "Checked out SOLPS-ITER WG-release branch" || goto branch
+git submodule init
+git submodule update
 git pull && goto b25 || goto local
 
 b25:
-  git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
