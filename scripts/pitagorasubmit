@@ -9,6 +9,7 @@ set THREADS=1
 set hours=24
 set mem=4GB
 set part="unset"
+set account="unset"
 set chain="unset"
 set job_count=0
 echo Your email is $EMAIL
@@ -52,6 +53,7 @@ Available options are:
   -M <<MEM_SIZE>>    memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
   -Q <<PARTITION>>   partition on which to submit the job (default dcgp_fua_prod for short and long jobs)
+  -A <<ACCOUNT>>     account name
 
 EOF
     exit
@@ -157,6 +159,16 @@ EOF
     set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
     goto argloop
   endif
+  if ("X${1}X" == "X-AX") then
+    shift
+    set account="$1"
+    echo Requested partition is ${part}
+    shift
+    set HELP_STRING="${account}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-A ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
   if ("X${1}X" == "X-cX") then
     shift
     if ($chain == "unset") then
@@ -244,6 +256,7 @@ sed \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
+  -e 's:#ACCOUNT#:'$account':g' \
   -e 's:#CPU#:'$cpu':g' \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \

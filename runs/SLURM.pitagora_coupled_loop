@@ -9,7 +9,7 @@
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
-#SBATCH --account=FUA34_ADC
+#SBATCH --account=#ACCOUNT#
 #SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
@@ -26,7 +26,7 @@ if ($?SOLPS_MPI) then
   set TIME="srun --mpi=pmi2"
   set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
-  setenv I_MPI_PIN_PROCESSOR_LIST 0-27
+  setenv I_MPI_PIN_PROCESSOR_LIST 0-511
 endif
 
 set USE_OMP=""

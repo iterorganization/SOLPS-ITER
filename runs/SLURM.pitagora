@@ -9,7 +9,7 @@
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
-#SBATCH --account=FUSIO_ru9IPP  # was FUA34_ADC
+#SBATCH --account=#ACCOUNT#
 #SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
