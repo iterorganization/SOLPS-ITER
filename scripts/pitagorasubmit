@@ -162,7 +162,7 @@ EOF
   if ("X${1}X" == "X-AX") then
     shift
     set account="$1"
-    echo Requested partition is ${part}
+    echo Requested account is ${account}
     shift
     set HELP_STRING="${account}"
 #    echo $HELP_STRING
