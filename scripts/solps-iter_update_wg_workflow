@@ -1,10 +1,10 @@
 #! /usr/bin/env tcsh
 
 cd $SOLPSTOP
-echo "Switching to SOLPS-ITER WG-release branch"
+echo "Switching to SOLPS-ITER WG_workflow branch"
 set repo="SOLPS-ITER"
 git fetch --prune
-git checkout feature/wg-release && echo "Checked out SOLPS-ITER WG-release branch" || goto branch
+git checkout feature/wg_workflow && echo "Checked out SOLPS-ITER WG-workflow branch" || goto branch
 git submodule init
 git submodule update
 git pull && goto b25 || goto local
@@ -14,7 +14,7 @@ b25:
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
   git fetch --prune
-  git checkout feature/wg-release && echo "Checked out B2.5 WG-release branch" || goto branch
+  git checkout feature/wg_workflow && echo "Checked out B2.5 WG-workflow branch" || goto branch
   git pull && goto Eirene || goto local
 
 Eirene:
@@ -22,7 +22,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout feature/wg-release && echo "Checked out Eirene WG-release branch" || goto branch
+  git checkout feature/wg_workflow && echo "Checked out Eirene WG-workflow branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -43,7 +43,7 @@ Carre2:
   cd $SOLPSTOP/modules/Carre2
   set repo="Carre2"
   git fetch --prune
-  git checkout feature/Carre2 && echo "Checked out Carre2 branch" || goto branch
+  git checkout feature/Carre2_wg_workflow && echo "Checked out Carre2 WG-workflow branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
@@ -51,7 +51,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git checkout feature/wg_workflow && echo "Checked out DivGeo WG-workflow branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
@@ -63,7 +63,7 @@ ADAS:
   git pull && goto compile || goto local
 
 branch:
-  echo "You are not on the WG-release branch."
+  echo "You are not on the WG-workflow branch."
 
 local:
   echo "In your "$repo" copy:"
