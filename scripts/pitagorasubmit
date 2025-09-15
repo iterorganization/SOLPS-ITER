@@ -51,7 +51,7 @@ Available options are:
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
-  -Q <<PARTITION>>   partition on which to submit the job (default skl_fua_dbg for short jobs and skl_fua_prod for long jobs)
+  -Q <<PARTITION>>   partition on which to submit the job (default dcgp_fua_prod for short and long jobs)
 
 EOF
     exit
