@@ -53,7 +53,7 @@ Available options are:
   -M <<MEM_SIZE>>    memory size (default $mem)
   -N <<NODES>>       number of nodes requested (default $NODES)
   -Q <<PARTITION>>   partition on which to submit the job (default dcgp_fua_prod for short and long jobs)
-  -A <<ACCOUNT>>     account name
+  -A <<ACCOUNT>>     account name (mandatory!)
 
 EOF
     exit
@@ -200,6 +200,12 @@ if ($part == "unset") then
   endif
 endif
 set job_prefix="SLURM"
+
+# check that account field has been provided
+if ($account == "unset" ) then
+  echo Account needs to be set with -A option
+  exit 1
+endif
 
 if ($1 == "") then
   echo No argument is specified. Looking for $job_prefix.pitagora
