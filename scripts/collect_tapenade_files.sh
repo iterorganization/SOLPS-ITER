@@ -38,6 +38,8 @@ echo $string >> testfile)
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/b2uxus.f" >> testfile
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/dim.f" >> testfile
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance.f" >> testfile
+echo "$SOLPSTOP/modules/B2.5/src/differentiation/invert_matrix.f" >> testfile
+echo "$dir/b2mwmv.f" >> testfile
 
 cat testfile
 
