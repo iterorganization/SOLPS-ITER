@@ -838,8 +838,11 @@ c*** 6a.  data for reflection model
       write(iunoo,700) utxthd(7)
 
       write(iunoo,706) nltrim
-      if(.not.streql(path,' ')) write(iunoo,'(a6,a60)') 'cpath ',path
-      write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
+      if (nnftrm.gt.0) then
+        if(.not.streql(path,' '))
+     .   write(iunoo,'(a6,a60)') 'cpath ',path
+        write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
+      end if
       if (natmi.gt.0) then
         write(iunoo,703) (datm(iatm),iatm=1,natmi)
       else

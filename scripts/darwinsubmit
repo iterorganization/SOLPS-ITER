@@ -1,0 +1,85 @@
+#! /usr/bin/env tcsh
+
+set standalone='no'
+set compress='no'
+
+echo Started SOLPS-ITER run
+
+argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER runs on MacOS devices (DarwinOS).
+
+Usage:
+
+  `basename $0` {options}
+
+Available options are:
+  -z              compress run.log using gzip
+  -s              specify a standalone B2.5 run
+  -m <<PROCS>>    use MPI parallelization with <<PROCS>> processors
+  -t <<THREADS>>  use OpenMP parallelization with <<THREADS>> threads
+
+EOF
+    exit
+  endif
+  if ("X${1}X" == "X-zX") then
+    set compress='-gz'
+    echo run.log will be compressed
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone='yes'
+    echo Asking for a B2.5 standalone run
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    if (! $?SOLPS_MPI) then
+      source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
+    endif
+    set PROCS="$1"
+    echo Asking for MPI run with a total of $PROCS processors
+    shift
+    set PAR_STRING = '-m "mpiexec -np '$PROCS'"'
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set THREADS="$1"
+    echo Asking for OpenMP run with $THREADS threads
+    shift
+    set PAR_STRING = '-t '$THREADS''
+    goto argloop
+  endif
+
+if (! $?PAR_STRING) then
+  echo Asking for serial run
+  set PAR_STRING = ''
+endif
+
+if (-s fort.1 && ${standalone} == "no") then
+  echo Assuming run with Eirene
+  if (${compress} == "-gz") then
+    (b2run $PAR_STRING b2mn < fort.1 | gzip -9 >& run.log.gz) &
+  else
+    (b2run $PAR_STRING b2mn < fort.1 >& run.log) &
+  endif
+else
+  if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
+  if (${compress} == "-gz") then
+    (b2run $PAR_STRING -s b2mn | gzip -9 >& run.log.gz) &
+  else
+    (b2run $PAR_STRING -s b2mn >& run.log) &
+  endif
+endif

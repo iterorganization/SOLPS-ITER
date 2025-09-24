@@ -254,7 +254,6 @@ The problem is exhibited at Tcl version of modules only while at Lua
 the replacement is silently ignored. See Marconi or IFERC subsection
 below on how to address this correctly.
 
-
 ### OpenSSL
 
 Qt5 and Qt6 should have OpenSSL version 1.1.1 installed on the system
@@ -332,7 +331,7 @@ site notes are just proof of concept and guide for other sites that
 already have EasyBuild modules in place and want to install complete
 SOLPS-ITER toolchain, including IMAS. Confer notes below with your
 machine on how to resolve similar problems. Some of them are marked (outdated)
-but can be still usefulf for recipes with similar problems that might
+but can be still useful for recipes with similar problems that might
 occur in newer packages build too.
 
 ### AMD processors with Intel toolchain
@@ -402,7 +401,6 @@ such as NetCDF, HDF5, ...
     SETUP/easybuild-local.sh --force --skip-test-step \
       --try-amend="configopts=--with-slurm --with-pmi" \
       OpenMPI-4.1.6-GCC-13.2.0.eb
-
 
 Several processor generations in compute nodes (gen9, gen10, gen11)
 exists and for building the oldest (gen9) should be in order to run
@@ -778,7 +776,7 @@ fi
 
 # Listed in SETUP/setup.csh.ITER.gfortran
 SOLPS_ITER_FOSS_2023b_MODULES="
-	gnuplot/5.4.8-GCCcore-12.3.0
+	gnuplot/6.0.1-GCCcore-13.2.0
 	xarray/2024.5.0-gfbf-2023b --from-ITER-SDCC
 	makedepend/1.0.9-GCCcore-13.2.0
 	MSCL/1.2.4-GCCcore-13.2.0
@@ -794,14 +792,14 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	CMake/3.27.6-GCCcore-13.2.0
 	ParaView/5.12.0-foss-2023b-Qt5
 	Qt5/5.15.13-GCCcore-13.2.0
-	netcdf4-python/1.6.5-foss-2023b
+	netcdf4-python/1.7.1.post2-foss-2023b
 	motif/2.3.8-GCCcore-13.2.0 --from-ITER-SDCC
 	texlive/20230313-GCC-13.2.0
 	SimDB/0.11.0-gfbf-2023b --ignore-checksums
 	json-fortran/8.5.2-GCC-13.2.0 --filter-env-vars=CPATH
 	Data-Dictionary/${TAG_DD}-GCCcore-13.2.0 --from-ITER-SDCC
 	MDSplus/7.132.0-GCCcore-13.2.0 --from-ITER-SDCC
-       	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
+	UDA/2.8.0-GCC-13.2.0 --from-pr=19765 --ignore-checksums
         cython-cmake/0.2.0-GCCcore-13.2.0 --from-ITER-SDCC
 	IMAS-AL-MDSplus-models/5.2.2-foss-2023b-DD-${TAG_DD} --from-ITER-SDCC
 	IMAS-AL-Core/5.4.2-foss-2023b --from-ITER-SDCC
@@ -816,7 +814,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
 	PyOpenGL/3.1.7-GCCcore-13.2.0 --from-ITER-SDCC
-       	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
+	PyQtGraph/0.13.7-foss-2023b --from-ITER-SDCC
 	Viz/2.8.0-foss-2023b
 	astropy/6.1.0-gfbf-2023b --from-ITER-SDCC
 	ToFu/1.7.9-gfbf-2023b --from-pr=20999
@@ -825,7 +823,7 @@ SOLPS_ITER_FOSS_2023b_MODULES="
 # Listed in SETUP/setup.csh.ITER.ifort64
 SOLPS_ITER_INTEL_2023b_MODULES="
 	intel-compilers/2023.2.1 --accept-eula-for=Intel-oneAPI
-  	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
+	imkl/2023.2.0 --accept-eula-for=Intel-oneAPI
 	impi/2021.10.0-intel-compilers-2023.2.1 --accept-eula-for=Intel-oneAPI
 	iimpi/2023b --accept-eula-for=Intel-oneAPI
 	CMake/3.27.6-GCCcore-13.2.0
@@ -837,7 +835,7 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	GSL/2.7-intel-compilers-2023.2.1 --from-ITER-SDCC --optarch=GENERIC
 	Boost/1.83.0-intel-compilers-2023.2.1 --from-ITER-SDCC
 	HDF5/1.14.3-iimpi-2023b --from-ITER-SDCC --optarch=GENERIC
-       	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
+	arpack-ng/3.9.0-intel-2023b --from-ITER-SDCC
 	Armadillo/12.8.0-intel-2023b  --from-ITER-SDCC
 	MSCL/1.2.4-iimkl-2023b --from-ITER-SDCC
 	GR/0.0.94-GCCcore-13.2.0 --from-ITER-SDCC
@@ -857,16 +855,16 @@ SOLPS_ITER_INTEL_2023b_MODULES="
 	astropy/6.1.0-iimkl-2023b --from-ITER-SDCC --optarch=GENERIC
 	ToFu/1.7.9-iimkl-2023b --from-pr=20999
 	mpi4py/3.1.5-iimpi-2023b --from-ITER-SDCC
-	netcdf4-python/1.6.5-intel-2023b --from-ITER-SDCC
+	netcdf4-python/1.7.1.post2-intel-2023b --from-ITER-SDCC
 	json-fortran/8.5.2-intel-compilers-2023.2.1 --filter-env-vars=CPATH
 	UDA/2.8.0-intel-compilers-2023.2.1 --from-ITER-SDCC
-  	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-  	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
-  	IDStools/2.0.0-iimkl-2023b --ignore-checksums
-  	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
-  	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	IMAS-AL-Fortran/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IMAS-AL-Python/${TAG_AL}-intel-2023b-DD-${TAG_DD}
+	IDStools/2.0.0-iimkl-2023b --ignore-checksums
+	GGD/1.13.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
+	AMNS/1.6.0-intel-2023b-DD-${TAG_DD} --filter-env-vars=CPATH
 	PyQtGraph/0.13.7-intel-2023b --from-ITER-SDCC
-  	Viz/2.8.0-intel-2023b
+	Viz/2.8.0-intel-2023b
 	PySide6/6.6.2-GCCcore-13.2.0 --from-ITER-SDCC
 	GR/0.73.6-GCCcore-13.2.0 --from-ITER-SDCC
         "
@@ -890,7 +888,7 @@ fi
 function fetch_from_iter_cluster()
 {
     ITER_USERNAME=${ITER_USERNAME:-${USER}}
-    site=${ITER_USERNAME}@sdcc-login02
+    site=${ITER_USERNAME}@98dci4-srv-1003
     target=easyconfigs.local
     iter_ebprefix=/work/imas/opt/EasyBuild
     proxy='-o StrictHostKeyChecking=no -o "ProxyCommand ssh '
@@ -911,7 +909,6 @@ function fetch_from_iter_cluster()
        mkdir -p ${sources}
        cmd="scp -r ${proxy} ${site}:${iter_ebprefix}/sources/${subdir}/${name}/* ${sources}"
        /bin/sh -c "${cmd} || echo Failed command ${cmd}"
-
     done
 }
 

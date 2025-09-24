@@ -3,22 +3,14 @@
 # The version relying on Fujitsu Fortran installed on AFS
 
 # Test whether necessary variables are defined
-ifndef LD_GR
-  $(error LD_GR not defined)
-endif
-ifndef LD_GKS
-  $(error LD_GKS not defined)
-endif
 ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-#CPP      = -/lib/cpp -C -traditional -ffreestanding
 CPP       = /lib/cpp -traditional
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
 LDLIBS    =
 
 #!!!Local Variables:

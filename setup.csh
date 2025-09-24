@@ -50,26 +50,33 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if ( $?SOLPS_HOST_NAME_FORCE ) then
-  setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
-  echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
-else if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
-  echo Loading SETUP/setup.csh.HOST_NAME.local.
-  source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
-else
-  if (-s ${SOLPSTOP}/whereami) then
-    set iamat=`${SOLPSTOP}/whereami|tail -1`
-    echo Running at $iamat.
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  if ( $?SOLPS_HOST_NAME_FORCE ) then
+    setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
+    echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
+  else if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+    echo Loading SETUP/setup.csh.HOST_NAME.local.
+    source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
   else
-    set iamat="UNKNOWN"
+    if (-s ${SOLPSTOP}/whereami) then
+      set iamat=`${SOLPSTOP}/whereami|tail -1`
+      echo Running at $iamat.
+    else
+      set iamat="UNKNOWN"
+    endif
+    switch ($iamat)
+    case "*UNKNOWN":
+      setenv HOST_NAME UNKNOWN
+      breaksw
+    default:
+      setenv HOST_NAME ${iamat}
+    endsw
   endif
-  switch ($iamat)
-  case "*UNKNOWN":
-    setenv HOST_NAME UNKNOWN
-    breaksw
-  default:
-    setenv HOST_NAME ${iamat}
-  endsw
+else   # Using MacOS, so assuming to work on a local device
+  setenv SYSNAME `uname`_`arch`
+  setenv ARCH `arch`
+  echo Running on MacOS, architecture ${ARCH}.
+  setenv HOST_NAME 'DARWIN'
 endif
 
 # COMPILER can also be the argument to setup.csh call
@@ -94,21 +101,23 @@ endif
 limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
-set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
-if ((-f $setup.env.local.${USER}) && \
-    ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
-    ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
-    (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
-      ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
-    (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
-    echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
-    source $setup.env.local.${USER}
-    exit 0
-else
-    # Black magic with sed:
-    #   sed ':a;N;$\!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
-    set setup_pre = `mktemp` alias_pre = `mktemp` && alias | sed 's/a;N;$\!ba//g' >! $alias_pre
-    env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+  if ((-f $setup.env.local.${USER}) && \
+      ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
+      ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+      (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
+        ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
+      (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
+      echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
+      source $setup.env.local.${USER}
+      exit 0
+  else
+      # Black magic with sed:
+      #   sed ':a;N;$\!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
+      set setup_pre = `mktemp` alias_pre = `mktemp` && alias | sed 's/a;N;$\!ba//g' >! $alias_pre
+      env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+  endif
 endif
 
 if (-x `which gmake`) then
@@ -184,8 +193,8 @@ end
 
 # Note: in case of name clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
-setenv OLD_PATH    ${PATH}
-setenv PATH        ${SOLPS_PATH}:${PATH}
+setenv OLD_PATH    "${PATH}"
+setenv PATH        "${SOLPS_PATH}:${PATH}"
 if ($?LD_LIBRARY_PATH) then
   setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
 else
@@ -220,8 +229,8 @@ setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) prin
 setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
 
-setenv PATH_FOR_LOOP ${PATH}
-setenv MANPATH_FOR_LOOP ${MANPATH}
+setenv PATH_FOR_LOOP "${PATH}"
+setenv MANPATH_FOR_LOOP "${MANPATH}"
 
 alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
 alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
@@ -319,21 +328,25 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-set setup_post = `mktemp`
-env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
-   -e '1i# Generated environment cache. Do not edit!' >! $setup_post
-grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
-sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
-grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
-# Black magic with sed:
-#   sed ':a;N;$!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
-#   sed 's/^/alias /' = prepend "alias " for all lines
-#   sed 's/!/\\!/' = properly escape "!" characters ("!" is special in tcsh)
-alias | sed ':a;N;$\!ba;s/\\\n//g' | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
-    -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
-    -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' \
-    -e 's/\!/\\\!/' >> $setup.env.local.${USER}
-rm -f $setup_pre $setup_post $alias_pre
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+  set setup_post = `mktemp`
+  env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
+     -e '1i# Generated environment cache. Do not edit!' >! $setup_post
+  grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
+  sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
+  grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
+  # Black magic with sed:
+  #   sed ':a;N;$!ba;s/\\\n//g' = collapse multiline aliases with "\"-escaped newlines into a single line
+  #   sed 's/^/alias /' = prepend "alias " for all lines
+  #   sed 's/!/\\!/' = properly escape "!" characters ("!" is special in tcsh)
+  alias | sed ':a;N;$\!ba;s/\\\n//g' | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+      -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+      -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' \
+      -e 's/\!/\\\!/' >> $setup.env.local.${USER}
+  rm -f $setup_pre $setup_post $alias_pre
+endif
 
-# List loaded modules
-module list
+# List loaded modules, assuming to work on some HPC cluster
+if (`uname` != "Darwin") then
+  module list
+endif

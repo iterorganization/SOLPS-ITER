@@ -2,7 +2,7 @@
 import MDSplus
 import numpy as np
 
-conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn = MDSplus.Connection('solps-mdsplus.ipp.mpg.de:8001')
 shape = conn.get("shape(_s=sql(\'select solpsindex,shot,time,ompsep_ne,ompsep_te,user,exp from id where ompsep_te>10.0 and ompsep_te<1000.0\',\'solps\'))")
 tmp = conn.get("_s")
 ans = np.array(tmp).reshape(shape[::-1])

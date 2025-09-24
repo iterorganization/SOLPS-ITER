@@ -1,5 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "ngroups.h"
 #include "vars.h"
 
 Vars CreateVars() {

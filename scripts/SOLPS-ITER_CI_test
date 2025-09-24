@@ -37,8 +37,40 @@ cd ${SOLPSTOP}/modules/B2.5
 cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
 touch src/modules/.new_modules
 cd ${SOLPSTOP}
-make listobj_nox b25eirene_nox
+make listobj_nox b25_nox b25eirene_nox
 cd ${SOLPSTOP}/runs/examples/COMPASS_16515_1150ms_D_drift_AFN
+
+# First test the fluid neutral code
+mkdir run_AFN_test_20
+cd run_AFN_test_20
+cp ../run_AFN_drift/b2fstati .
+cp ../run_AFN_drift/b2mn.dat .
+cp ../run_AFN_drift/b2.*.parameters .
+cp ../run_AFN_drift/b2time.nc.i b2time.nc
+cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
+touch b2fstati
+setup_baserun_B25_links
+echo "'b2mndr_ntim' '20'" >> b2mn.dat
+b2run -s b2mn
+cd ..
+mkdir run_AFN_test_2x10
+cd run_AFN_test_2x10
+cp ../run_AFN_drift/b2fstati .
+cp ../run_AFN_drift/b2mn.dat .
+cp ../run_AFN_drift/b2.*.parameters .
+cp ../run_AFN_drift/b2time.nc.i b2time.nc
+cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
+touch b2fstati
+setup_baserun_B25_links
+echo "'b2mndr_ntim' '10'" >> b2mn.dat
+b2run -s b2mn
+rm b2mn.prt
+mv b2fstate b2fstati
+b2run -s b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 2
+cd ..
+
+# Now test the coupled code
 mkdir run_CI_test_20
 cd run_CI_test_20
 cp ../run_kin_CI/b2.*.parameters .
@@ -71,7 +103,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 3
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5
@@ -79,4 +111,4 @@ rm src.local/cfwure.F
 touch src/utility/cfwure.F
 touch src/modules/.new_modules
 cd ${SOLPSTOP}
-make b25eirene_nox
+make b25_nox b25eirene_nox

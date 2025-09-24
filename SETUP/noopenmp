@@ -4,7 +4,7 @@ if ($?SOLPS_PATH) then
   setenv   MPI_FC "$OLD_MPI_COMPILER"
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.openmp||g'`
-  setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
+  setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
   unsetenv OLD_SOLPS_PATH SOLPS_OPENMP USE_OPENMP
   rehash
   echo "SOLPS-ITER OpenMP mode turned off"

@@ -1,0 +1,11 @@
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L${NCFDIR}/lib -lnetcdff
+MSCL_ROOT ?= ${MSCL_HOME}
+NAGDIR ?= ${LAPACK_DIR}
+LD_NAG     = -L${NAGDIR}/lib -llapack -lblas
+
+CPP = /usr/bin/cpp -traditional
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

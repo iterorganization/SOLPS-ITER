@@ -3,6 +3,7 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
+set NODES=1
 set PROCS=1
 set NODES=1
 set THREADS=1
@@ -10,9 +11,11 @@ set hours=24
 set mem=4GB
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set MPIOPTS=""
-set standalone="no"
 set OPTOPTS=""
 setenv SOLPS_OPT ""
 
@@ -60,13 +63,15 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     echo run.log will be compressed
     shift
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
@@ -74,7 +79,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_tgtX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
@@ -91,7 +96,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_adjX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/adj
@@ -107,7 +112,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
     endif
@@ -117,7 +122,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-adjX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_ADJ) then
       source $SOLPSTOP/SETUP/adj
     endif
@@ -182,27 +187,13 @@ unsetenv LD_PRELOAD
 unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
-    echo Assuming run with Eirene
-    echo No argument is specified. Looking for $job_prefix.leuven_coupled$compress
-    set QSUB=`climb_and_look_for $job_prefix.leuven_coupled$compress`
-    if ($QSUB == "//$job_prefix.leuven_coupled$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.leuven_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.leuven_coupled$compress"
-      else
-        set QSUB=""
-      endif
-    endif
-  else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
-    echo No argument is specified. Looking for $job_prefix.leuven$compress
-    set QSUB=`climb_and_look_for $job_prefix.leuven$compress`
-    if ($QSUB == "//$job_prefix.leuven$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.leuven$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.leuven$compress"
-      else
-        set QSUB=""
-      endif
+  echo No argument is specified. Looking for QSUB.leuven
+  set QSUB=`climb_and_look_for QSUB.leuven`
+  if ($QSUB == "//QSUB.leuven") then
+    if (-s $SOLPSTOP/runs/QSUB.leuven) then
+      set QSUB="$SOLPSTOP/runs/QSUB.leuven"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -235,15 +226,19 @@ sed \
   -e 's:#PWD#:'$PWD':g' \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
-  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
-  -e "s:#TASKS#:'$TASKS':g" \
-  -e "s:#PROCS#:'$PROCS':g" \
-  -e "s:#NODES#:'$NODES':g" \
-  -e "s:#THREADS#:'$THREADS':g" \
+  -e 's:#MPIOPTS#:'$MPIOPTS':g' \
+  -e 's:#TASKS#:'$TASKS':g' \
+  -e 's:#PROCS#:'$PROCS':g' \
+  -e 's:#NODES#:'$NODES':g' \
+  -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
-  -e "s:#JOBNAME#:'$JOB_NAME':g" \
+  -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
   < $QSUB > $NAME
 
 update_solps_run_status -n "Submitted at `date`"

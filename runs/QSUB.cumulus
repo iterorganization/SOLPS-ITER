@@ -1,0 +1,50 @@
+#! /bin/tcsh
+#PBS -l nodes=#NODES#:ppn=#PROCS#
+#PBS -l walltime=#HOURS#:00:00
+#PBS -l mem=#MEM#
+#PBS -M #EMAIL#
+#PBS -m ae
+#PBS -N #JOBNAME#
+#PBS -V
+
+echo Using SOLPSTOP = #SOLPSTOP#
+
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+
+cd "$PBS_O_WORKDIR"
+
+set USE_MPI=""
+if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpiexec
+  set MPI_OPTS=#MPIOPTS#
+  set USE_MPI="-m ${MPI_EXEC} ${MPI_OPTS}"
+  set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
+endif
+
+set USE_OMP=""
+if ($?SOLPS_OPENMP) then
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
+endif
+
+update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
+update_solps_run_status "Started on `hostname` at `date`"
+
+set STANDALONE=${STANDALONE_ARG}
+if ($?SOLPS_TGT) then
+  set STANDALONE=-${SOLPS_OPT}tgt
+endif
+
+if ($?SOLPS_ADJ) then
+  set STANDALONE=-${SOLPS_OPT}adj
+endif
+
+time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+
+QSUB.postprocess${COUPLED_SUFFIX}
+
+update_solps_run_status "Finished on `hostname` at `date`"
+b2fstate_OK_bool
