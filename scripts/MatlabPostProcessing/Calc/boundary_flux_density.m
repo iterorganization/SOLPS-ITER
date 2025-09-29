@@ -1,6 +1,7 @@
 function bFlux = boundary_flux_density(gmtry,fcList,flux)
+% bFlux = boundary_flux_density(gmtry,fcList,flux)
 %
-% function to compute the flux normal to the boundary:
+% Function to compute the flux density normal to the boundary:
 % project flux vector onto surface normal pointing away from plasma;
 % positive boundary_flux if out of the plasma domain
 %

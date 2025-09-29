@@ -1,4 +1,10 @@
-function [listcv,listfc,nn] = cv_intersections(segm,gmtry,meth)
+function [listcv,listfc,nn] = cv_intersections(segment,gmtry,meth)
+% [listcv,listfc,nn] = cv_intersections(segment,gmtry,meth)
+%
+% Function to compute the cvs and faces intersected by a given segment.
+% Ordering based on cvX or cvY sorting can be additionally performed.
+% The number of cvs intersected is also returned.
+%
 
 % Set default values for some arguments, if not supplied
 if ~exist('meth','var') || isempty(meth)
@@ -9,8 +15,8 @@ nn = 1;
 listcv = zeros(10000,1);
 listfc = zeros(10000,1);
 
-p1=[segm(1,1) segm(2,1)];
-q1=[segm(1,2) segm(2,2)];
+p1=[segment(1,1) segment(2,1)];
+q1=[segment(1,2) segment(2,2)];
 for ifc=1:gmtry.nFc
     vx1 = gmtry.fcVx(ifc,1);
     vx2 = gmtry.fcVx(ifc,2);

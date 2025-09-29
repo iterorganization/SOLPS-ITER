@@ -1,6 +1,8 @@
 function [vertex] = intvertex_us(nVx,gmtry,vxvol,centre)
-     
-      vertex = zeros(nVx,1);
+% [vertex] = intvertex_us(nVx,gmtry,vxvol,centre)
+%
+% Interpolates a cell-centered quantity on cell vertices.
+%
 
       for iVx = 1: nVx
         volsum = 0.0;

@@ -1,4 +1,9 @@
-function out=intersects(p1,q1,p2,q2)
+function out = intersects(p1,q1,p2,q2)
+% out = intersects(p1,q1,p2,q2)
+%
+% Checks whether two segments defined by points [p1, p2] and [q1, q2]
+% intersect or not.
+%
 
       o1 = orient(p1, q1, p2);
       o2 = orient(p1, q1, q2);

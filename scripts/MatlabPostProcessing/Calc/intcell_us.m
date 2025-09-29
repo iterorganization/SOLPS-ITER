@@ -1,4 +1,10 @@
 function [centre] = intcell_us(nCv,gmtry,wght,face)
+% [centre] = intcell_us(nCv,gmtry,wght,face)
+%
+% Interpolates a face-centered quantity on cell centers using weights
+% (suggested weights are gmtry.intcellR and gmtry.intcellP for radial and
+% poloidal interpolations).
+%
 
       centre=zeros(nCv,1);
       
