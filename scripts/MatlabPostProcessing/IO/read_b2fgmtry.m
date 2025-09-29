@@ -17,7 +17,7 @@ if (fid == -1)
 end
 
 
-% Get version of the b2fstate file
+% Get version of the b2fgmtry file
 
 line    = fgetl(fid);
 version = line(8:17);

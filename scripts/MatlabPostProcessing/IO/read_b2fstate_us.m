@@ -1,5 +1,5 @@
-function state = read_b2fstate(file)
-% state = read_b2fstate(file)
+function state = read_b2fstate_us(file)
+% state = read_b2fstate_us(file)
 %
 % Read b2fstati/b2fstate file created by B2.5.
 %

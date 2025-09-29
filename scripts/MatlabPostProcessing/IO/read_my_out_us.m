@@ -1,5 +1,5 @@
 function dat = read_my_out_us(file)
-% dat = read_my_out(file)
+% dat = read_my_out_us(file)
 %
 % Read .dat-files created by my_out_us routine of B2.5.
 %
@@ -13,6 +13,9 @@ function dat = read_my_out_us(file)
 % Author: Wouter Dekeyser
 % E-mail: wouter.dekeyser@kuleuven.be
 % December 2019
+
+disp(['Attempting read_my_out_us.'])
+
 
 [fid,msg] = fopen(file);
 if (fid == -1)
@@ -30,3 +33,6 @@ end
 % Close file
 fclose(fid);
 
+disp(['Done read_my_out_us with no errors.'])
+
+end
