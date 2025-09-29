@@ -1,23 +1,21 @@
 function [h,vx,vy] = quiverplot_fc(gmtry,uu,vv)
-% h = quiverplot(gmtry,uu,vv)
+% h = quiverplot_fc(gmtry,uu,vv)
 %
-% Routine to make quiver plot of the velocity field (uu,vv), where uu
-% is the poloidal velocity and vv the radial velocity defined in face
-% centers of gmtry.
+% Routine to make quiver plot of a face-centered quantity (e.g. fna, fhe,
+% etc...) on cell faces. This routine quivers the quantity on all the
+% faces. If quivers on boundary faces only is wanted, use quiverplot_bfc.
 %
 % Input arguments:
 %
 % - gmtry  : struct read from b2fgmtry-file
-% - uu     : poloidal velocity component (cell centered)
-% - vv     : radial velocity component (cell centered)
+% - uu     : poloidal component (face centered)
+% - vv     : radial   component (face centered)
 %
 % Output arguments:
 %
 % - h      : handle to the quiver plot
-%
-% Example:
-%
-%
+% - vx     : poloidal component of the quiver
+% - vy     : radial component of the quiver
 %
 
 % Author: Anthony Piras

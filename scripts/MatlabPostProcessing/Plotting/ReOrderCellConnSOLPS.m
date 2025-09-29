@@ -1,11 +1,13 @@
 function geo_us = ReOrderCellConnSOLPS(geo_us,is_ordered,cells)
+% geo_us = ReOrderCellConnSOLPS(geo_us,is_ordered,cells)
+%
 % Description
-%------------
+% ------------
 % Re-orders vertices and faces of cells in an order such that they form a
 % chain as you would walk over the cell boundary
 
 % Options
-%--------
+% --------
 determined_direction = 1;
 
 if nargin == 2
