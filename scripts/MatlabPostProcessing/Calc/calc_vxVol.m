@@ -1,5 +1,8 @@
-function [vxVol]=calc_vxVol(nVx,gmtry,mode)
-
+function [vxVol] = calc_vxVol(nVx,gmtry,mode)
+% [vxVol] = calc_vxVol(nVx,gmtry,mode)
+%
+% Computes the volume of cells.
+%
 
 if (mode==0) 
        % weights for inverse volume interpolation
@@ -31,7 +34,7 @@ if (mode==0)
         for inCv = 1: gmtry.vxCvP(iVx,2)
          iCv = gmtry.vxCv(gmtry.vxCvP(iVx,1) + inCv - 1);
          if (iCv<=gmtry.nCi)
-          vxVol(gmtry.vxCvP(iVx,1) + inCv - 1) = 0.25;
+          vxVol(gmtry.vxCvP(iVx,1) + inCv - 1) = 0.25; % !ap should this be changed if cell is e.g. triangle?
          else
           % Make sure guard cells forminate in the interpolation
           % to vertices => use volume

@@ -1,5 +1,10 @@
 function [gfun] = gradc_us(gmtry,mode,fun,volstyle)
-% compute gradient of cell-centered quantity on cell-celnters
+% [gfun] = gradc_us(gmtry,mode,fun,volstyle)
+%
+% Computes the gradient of cell-centered quantity on cell-centers; the
+% poloidal component gfun(:,1) and the radial component gfun(:,2) are
+% returned.
+%
 
 nCv = gmtry.nCv;
 nFc = gmtry.nFc;
