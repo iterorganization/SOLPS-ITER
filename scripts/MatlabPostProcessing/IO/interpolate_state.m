@@ -1,4 +1,9 @@
 function state = interpolate_state(gmtry0,gmtry1,state0,version,ns)
+% state = interpolate_state(gmtry0,gmtry1,state0,version,ns)
+%
+% Interpolates a b2fstate file for ns species from a grid gmtry0 to a
+% different grid gmtry1.
+%
 
 nCv = gmtry1.nCv;
 nFc = gmtry1.nFc;

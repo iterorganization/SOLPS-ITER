@@ -1,5 +1,5 @@
 function gmtry = read_b2fgmtry_st(file)
-% gmtry = read_b2fgmtry(file)
+% gmtry = read_b2fgmtry_st(file)
 %
 % Read b2fgmtry file created by B2.5.
 %

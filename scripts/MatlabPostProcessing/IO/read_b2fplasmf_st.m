@@ -1,5 +1,5 @@
 function [state,gmtry] = read_b2fplasmf_st(file)
-% [state,gmtry] = read_b2fplasmf_st(file,nx,ny,ns)
+% [state,gmtry] = read_b2fplasmf_st(file)
 %
 % Read formatted b2fplasmf file created by B2.5.
 %

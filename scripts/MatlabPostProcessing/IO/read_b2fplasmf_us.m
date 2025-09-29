@@ -1,5 +1,5 @@
 function state = read_b2fplasmf_us(file)
-% state = read_b2fplasmf_us(file,nx,ny,ns)
+% state = read_b2fplasmf_us(file)
 %
 % Read formatted b2fplasmf file created by B2.5.
 %
@@ -64,6 +64,8 @@ state.kt     = read_rfield(fid,'kt'    ,statedim);
 
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
 state.fne    = read_rfield(fid,'fne'   ,fluxdim);
+state.fni    = read_rfield(fid,'fni'   ,fluxdim);
+state.fmo    = read_rfield(fid,'fmo'   ,fluxdims);
 state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
 state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
