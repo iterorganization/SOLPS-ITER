@@ -1,5 +1,16 @@
 function PlotFaceLabels(gm,labellist,colorlist,type)
-% plot the faces of an unstructured B2.5 mehs with colors correspondng to labels
+% PlotFaceLabels(gm,labellist,colorlist,type)
+%
+% Routine to plot the faces of an unstructured B2.5 mehs with colors
+% correspondng to labels. Faces can be plotted based on 'fcReg' or 'fcLbl'
+% checks. Based on a script by Wim Van Uytven.
+%
+
+% Author: Anthony Piras
+% E-mail: anthony.piras@kuleuven.be
+% August 2025
+
+
 hold on;
 N = length(labellist); % number of different labels provided
 iflag = 0;
@@ -13,7 +24,7 @@ for iFc = 1:gm.nFc
     y2 = gm.vxY(vx2); % y-coord of second vertex
     if type == 'fcReg' 
         if gm.fcReg(iFc) == 0
-            plot([x1 x2],[y1 y2],'k','LineWidth',0.5) 
+%             plot([x1 x2],[y1 y2],'k','LineWidth',0.5) 
         else
             for i = 1:N
                 if gm.fcReg(iFc) == labellist(i)

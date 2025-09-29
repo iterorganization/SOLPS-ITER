@@ -1,9 +1,9 @@
 function h = quiverplot_cv(gmtry,uu,vv)
-% h = quiverplot(gmtry,uu,vv)
+% h = quiverplot_cv(gmtry,uu,vv)
 %
 % Routine to make quiver plot of the velocity field (uu,vv), where uu
 % is the poloidal velocity and vv the radial velocity defined in cell
-% centers of gmtry.
+% centers of gmtry. This is the old quiverplot(gmtry,uu,vv) routine.
 %
 % Input arguments:
 %

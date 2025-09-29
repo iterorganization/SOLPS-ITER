@@ -1,5 +1,4 @@
 function h = plotgeo_us(geo_us,type,varargin)
-
 % h = plotgeo_us(geo_us,options)
 %
 % Routine to plot grid

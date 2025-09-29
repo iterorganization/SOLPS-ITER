@@ -1,5 +1,5 @@
 function [Ch] = contourplot(gmtry,field,scale,fmin,fmax,ncont)
-% [Ch]= contourplot(gmtry,field,scale,ncont,fmin,fmax,ncont)
+% [Ch] = contourplot(gmtry,field,scale,ncont,fmin,fmax,ncont)
 %
 % Routine to make contourplot of cell centered quantity.
 %

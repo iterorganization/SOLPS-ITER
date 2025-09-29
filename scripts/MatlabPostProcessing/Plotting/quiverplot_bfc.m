@@ -1,23 +1,21 @@
 function quiverplot_bfc(gmtry,uu,vv)
-% h = quiverplot(gmtry,uu,vv)
+% h = quiverplot_bfc(gmtry,uu,vv)
 %
-% Routine to make quiver plot of the velocity field (uu,vv), where uu
-% is the poloidal velocity and vv the radial velocity defined in boundary
-% face centers of gmtry.
+% Routine to make quiver plot of a face-centered quantity (e.g. fna, fhe,
+% etc...) on cell faces. This routine quivers the quantity on the boundary
+% faces only. If quivers on all faces is wanted, use quiverplot_fc.
 %
 % Input arguments:
 %
 % - gmtry  : struct read from b2fgmtry-file
-% - uu     : poloidal velocity component (cell centered)
-% - vv     : radial velocity component (cell centered)
+% - uu     : poloidal component (face centered)
+% - vv     : radial   component (face centered)
 %
 % Output arguments:
 %
 % - h      : handle to the quiver plot
-%
-% Example:
-%
-%
+% - vx     : poloidal component of the quiver
+% - vy     : radial component of the quiver
 %
 
 % Author: Anthony Piras
@@ -31,7 +29,7 @@ hs = ishold;
 vx1 = [];
 vx2 = [];
 for iFc = 1:gmtry.nFc
-    if (gmtry.fcLbl(iFc)<0) % assumption: all the boundary faces have fcLbl < 0! Should be generalised.
+    if gmtry.fcCv(iFc,2)>gmtry.nCi
         vx1 = [vx1, gmtry.fcVx(iFc,1)]; % first vertex of face
         vx2 = [vx2, gmtry.fcVx(iFc,2)]; % second vertex of face
     end
@@ -47,9 +45,9 @@ y2 = gmtry.vxY(vx2); % y-coord of second vertex
 gmtry = calc_fcEb(gmtry);
 
 % Normalise fcEb
-norm = sqrt(gmtry.fcEb(find(gmtry.fcLbl<0),1).^2 + gmtry.fcEb(find(gmtry.fcLbl<0),2).^2);
-fcEb(:,1)=gmtry.fcEb(find(gmtry.fcLbl<0),1)./norm;
-fcEb(:,2)=gmtry.fcEb(find(gmtry.fcLbl<0),2)./norm;
+normm = sqrt(gmtry.fcEb(find(gmtry.fcLbl<0),1).^2 + gmtry.fcEb(find(gmtry.fcLbl<0),2).^2);
+fcEb(:,1)=gmtry.fcEb(find(gmtry.fcLbl<0),1)./normm;
+fcEb(:,2)=gmtry.fcEb(find(gmtry.fcLbl<0),2)./normm;
 
 vx = uu(find(gmtry.fcLbl<0)).*fcEb(:,1) - vv(find(gmtry.fcLbl<0)).*fcEb(:,2)*gmtry.sbf;
 vy = uu(find(gmtry.fcLbl<0)).*fcEb(:,2) + vv(find(gmtry.fcLbl<0)).*fcEb(:,1)*gmtry.sbf;

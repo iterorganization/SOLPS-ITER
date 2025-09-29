@@ -1,7 +1,7 @@
-function Patchplot2(gmtry,field,scale,fmin,fmax,threshold,check_type)
-% p = patchplot(gmtry,field,options)
+function [p] = Patchplot2(gmtry,field,scale,fmin,fmax,check_type,threshold)
+% [p] = Patchplot(gmtry,field,options)
 %
-% Routine to make patchplot of cell centered quantity.
+% Routine to make patchplot of cell-centered quantity.
 % 
 % Input arguments:
 %
@@ -14,11 +14,11 @@ function Patchplot2(gmtry,field,scale,fmin,fmax,threshold,check_type)
 % Output arguments:
 %
 % - p       : handle to the patch plot object
-%
+% 
 
-% Author: Wouter Dekeyser
-% E-mail: wouter.dekeyser@kuleuven.be
-% November 2016
+% Author: Anthony Piras
+% E-mail: anthony.piras@kuleuven.be
+% September 2025
 
 % Set default values for some arguments, if not supplied
 if ~exist('scale','var') || isempty(scale)
@@ -30,15 +30,11 @@ end
 if ~exist('fmax','var') || isempty(fmax)
     fmax = max(max(field/scale));
 end
-if ~exist('check_type','var') || isempty(check_type)
-    check_type = 'g';
-    if ~isempty(threshold)
-        fprintf('WARNING: threshold set but type of check not specified.')
-        fprintf(' Assuming quantity > threshold as check.\n')
-    end
-end
 if ~exist('threshold','var') || isempty(threshold)
     threshold = 9e99;
+end
+if ~exist('check_type','var') || isempty(check_type)
+    check_type = 'g';
 end
 
 % Consistency checks
@@ -64,16 +60,16 @@ if isplasmagrid(gmtry)
     Y(3:4,:) = Y(4:-1:3,:);
     
     % Eliminate guard cells 
-    if isfield(gmtry,'cflags') & ~isempty(gmtry.cflags)
+    if isfield(gmtry,'cflags') && ~isempty(gmtry.cflags)
         X = X(:,gmtry.cflags(:,:,1)~=9);
         Y = Y(:,gmtry.cflags(:,:,1)~=9);
         f = f(gmtry.cflags(:,:,1)~=9);
     end
-
+    
     S.XData = X;
     S.YData = Y;
     S.ZData = f;
-
+    
 elseif isunstructuredgrid(gmtry)
 %     To create one polygon, specify X
 %     and Y as vectors. To create multiple polygons, specify X and Y as
@@ -88,7 +84,7 @@ elseif isunstructuredgrid(gmtry)
             S(iCv).ZData = [];
         else
             S(iCv).ZData = field(iCv);
-          if check_type == 'g'
+            if check_type == 'g'
                 if S(iCv).ZData > threshold && iCv <= gmtry.nCi
                     fprintf('Warning. High value of quantity at iCv number %d\n',iCv)
                     fprintf('Coordinates:\n R = %f, Z = %f \n', gmtry.cvX(iCv), gmtry.cvY(iCv))
@@ -107,6 +103,7 @@ elseif isunstructuredgrid(gmtry)
         iVx1 = gmtry.cvVx(gmtry.cvVxP(iCv,1));
         for i = 1:gmtry.cvVxP(iCv,2)
             iVx = gmtry.cvVx(gmtry.cvVxP(iCv,1)+i-1);
+            
             S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx)];
             S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx)];
             if (length(field)==gmtry.nVx)
@@ -136,6 +133,7 @@ elseif isunstructuredgrid(gmtry)
     S.XData = zeros(nmax,length(S0));
     S.YData = S.XData;
     S.ZData = zeros(length(S0),1);
+    
     for ii=1:length(S0)
         nn = length(S0(ii).XData);
         S.XData(1:nn,ii) = S0(ii).XData;
@@ -146,8 +144,9 @@ elseif isunstructuredgrid(gmtry)
             S.YData(nn+1:nmax,ii) = S.YData(nn,ii);
         end
     end
-
+ 
 elseif istrianglegrid(gmtry)
+    
     % Construct the triangles as polygons for patch
     X = zeros(3,size(gmtry.cells,1));
     Y = zeros(3,size(gmtry.cells,1));
@@ -157,8 +156,9 @@ elseif istrianglegrid(gmtry)
             Y(j,i) = gmtry.nodes(gmtry.cells(i,j),2);
         end
     end
-
+    
     f = field';
+    
     S.XData = X;
     S.YData = Y;
     S.ZData = f;
@@ -171,30 +171,40 @@ hs = ishold;
 hold on;
 % Handle array initialisation
 nCells = size(S.XData, 2);
-p = gobjects(nCells,1);
+nmax   = size(S.XData, 1);
 
-% Create patch plot
-for i = 1:nCells
-    p(i) = patch(S.XData(:,i), S.YData(:,i), S.ZData(i)); % Usa colormap di default
-    p(i).LineWidth = 0.01;
-    p(i).EdgeColor = 'none';
-end
+Xv = S.XData(:);
+Yv = S.YData(:);
+Zv = zeros(size(Xv));
 
-% Modify border color if ZData goes above threshold
-for i = 1:nCells
-    if S.ZData(i) > threshold && check_type == 'g' && i <= gmtry.nCi
-        set(p(i), 'EdgeColor', 'r', 'LineWidth', 2.5);
-    elseif S.ZData(i) < threshold && check_type == 's' && i <= gmtry.nCi
-        set(p(i), 'EdgeColor', 'g', 'LineWidth', 2.5)
-    end
-end
+% Build faces
+Faces = reshape(1:numel(Xv), nmax, nCells)';
+
+% Use one patch only
+hs = ishold;
+hold on;
+p = patch('Faces', Faces, ...
+          'Vertices', [Xv Yv Zv], ...
+          'FaceVertexCData', S.ZData, ...
+          'FaceColor', 'flat', ...
+          'EdgeColor', 'none');
+
 colorbar
-% Set axis to fmin and fmax
 caxis([fmin fmax]);
 
-% Reset status of hold
-if ~hs
-    hold off
+% Highlight borders
+mask_g = (check_type == 'g') & (S.ZData > threshold) & (1:nCells)' <= gmtry.nCi;
+mask_s = (check_type == 's') & (S.ZData < threshold) & (1:nCells)' <= gmtry.nCi;
+highlight = mask_g | mask_s;
+
+if any(highlight)
+    patch('Faces', Faces(highlight,:), ...
+          'Vertices', [Xv Yv Zv], ...
+          'FaceColor', 'none', ...
+          'EdgeColor', 'r', ...
+          'LineWidth', 2.0);
 end
 
+if ~hs
+    hold off;
 end
