@@ -13,6 +13,7 @@ endif
 
 # Check if main development environment and package managers are installed
 
+setenv XQUARTZ_HOME /opt/X11
 if ( ! -d "$XQUARTZ_HOME" ) then
     echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
 endif
@@ -49,7 +50,6 @@ setenv NETCDF_HOME `brew --prefix netcdf`
 setenv NETCDF_FORTRAN_HOME `brew --prefix netcdf-fortran`
 setenv NCARG_ROOT /opt/local
 setenv MOTIF_HOME /opt/local
-setenv XQUARTZ_HOME /opt/X11
 
 setenv DBX ddt
 setenv DBX idb

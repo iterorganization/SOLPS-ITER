@@ -636,45 +636,17 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
-\subsection{MacOS support}
-\index{MacOS support}
+\subsection{Installation on local machines}
+\index{Installation on local machines}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
-
-First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
-
-The following external libraries must be then installed using Homebrew:
-
-\begin{description}
-\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
-\item[Cross-platform make] using the formula: {\tt brew install cmake}.
-\item[ctags] using the formula: {\tt brew install ctags}.
-\item[Doxygen] using the formula: {\tt brew install doxygen}.
-\item[Freetype] using the formula: {\tt brew install freetype}.
-\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
-\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
-\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
-\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
-\item[PNG library] using the formula: {\tt brew install libpng}.
-\item[XPrint client library] using the formula: {\tt brew install libxp}.
-\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
-\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
-\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
-\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
-\end{description}
-
-Further external libraries must be instead installed using MacPorts:
-
-\begin{description}
-\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
-\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
-\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
-\end{description}
-
-The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
+The code can be compiled also on local machines for fully offline usage, provided that the user attempting the installation has admin rights. Different Unix-based environments are supported, namely Linux (e.g.\ for Ubuntu computers) and Darwin (for Apple MacOS computers), and different CPU architectures (x86\_64 and arm64). The corresponding hostnames are {\bf LINUX} and {\bf DARWIN}, and the used compiler is {\tt gfortran}. The various setup and configuration files for both the main code and the submodules are already provided.\\
+As prerequirement, on Linux systems the Conda package manager need to be installed through {\tt Miniconda3}. This can be done by downloading and executing the file (\href{https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh}{\url{https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh}}). On Darwin systems, instead, the user will need to install the {\tt XQuartz} package (\href{https://www.xquartz.org/}{https://www.xquartz.org/}), the {\tt Homebrew} package manager (\href{https://brew.sh/}{https://brew.sh/}) and the {\tt MacPorts} package manager (\href{https://ports.macports.org/}{https://ports.macports.org/}). A python installation also needs to be present.\\
+The various libraries required for the code to be fully operational need to be installed, before attempting to compile the code. All required libraries, for both Linux and Darwin systems, can be completely automatically downloaded and/or compiled by running the script
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
+which will guide the used through all the required installation steps. The provided setup and configuration files already recognize the path to the compiled libraries as automatically provided by the above script.\\
+The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested. Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}

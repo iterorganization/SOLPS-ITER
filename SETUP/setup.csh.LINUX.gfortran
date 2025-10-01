@@ -24,16 +24,17 @@ if ("$CONDA_ROOT" == "") then
 else
     setenv CONDA_CHANGEPS1 no
     source ${CONDA_ROOT}/etc/profile.d/conda.csh
-    setenv PATH "${PATH}:${CONDA_PREFIX}/bin"
-    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib"
     set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
     if ("$env_exists" == "") then
         set MISSING_DEPENDENCY = 1
     else
         conda activate solps_ncl_env
+        setenv PATH "${PATH}:${CONDA_PREFIX}/bin"
+        setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib"
         if (-e $CONDA_ROOT/envs/solps_ncl_env/lib/libcurl.so.4) then
             rm $CONDA_ROOT/envs/solps_ncl_env/lib/libcurl.so.4
         endif
+        setenv NCARG_LIB_DIR $CONDA_PREFIX/lib
     endif
 endif
 
@@ -62,7 +63,6 @@ setenv MOTIF_LIB_DIR `find $lib_paths -type f -name "libXm*.so*" -exec dirname {
 setenv MOTIF_INCLUDE_DIR `find /usr/include /usr/local/include -type f -name "Xm.h" -exec dirname {} \; | sort -u`
 setenv NETCDF_LIB_DIR `find $lib_paths -type f -name "libnetcdf*.so*" -exec dirname {} \; | sort -u`
 setenv NETCDF_FORTRAN_LIB_DIR `find $lib_paths -type f -name "libnetcdff*.so*" -exec dirname {} \; | sort -u`
-setenv NCARG_LIB_DIR $CONDA_PREFIX/lib
 
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SOLPSTOP}/lib/LINUX.gfortran/mscl/lib"
 

@@ -1308,6 +1308,8 @@ endif
 
 if ("$OSTYPE" == "linux") then
 
+  setenv CONDA_CHANGEPS1 no
+  source ${CONDA_ROOT}/etc/profile.d/conda.csh
   set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
   if ("$env_exists" == "") then   # Check if the environment with the library is already existing
 
@@ -1600,9 +1602,9 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
     endif
     git clone ssh://git@git.iter.org/lib/gr-software.git gr
     cd gr
-    sed -i '' 's/^all: libgr.a install$/all: libgr.a/' Makefile
-    sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
     if ("$OSTYPE" == "linux") then
+      sed -i 's/^all: libgr.a install$/all: libgr.a/' Makefile
+      sed -i '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
       if ("$COMPILER" == "gfortran") then
         cat <<EOF >> Makefile
 linux.gfortran:
@@ -1620,6 +1622,8 @@ EOF
         make linux.${COMPILER}
       endif
     else if ("$OSTYPE" == "darwin") then
+      sed -i '' 's/^all: libgr.a install$/all: libgr.a/' Makefile
+      sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
       cat <<EOF >> Makefile
 darwin.gfortran:
 	@make all F77="gfortran" \\
