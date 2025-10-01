@@ -1,0 +1,88 @@
+setenv SYSNAME `uname`_`arch`
+alias gmake make
+if ( ! $?MISSING_DEPENDENCY ) set MISSING_DEPENDENCY = 0
+
+# Initialize the path collections, if they do not exist already
+
+if ( ! $?LD_LIBRARY_PATH ) then
+    setenv LD_LIBRARY_PATH
+endif
+if ( ! $?PKG_CONFIG_PATH ) then
+    setenv PKG_CONFIG_PATH
+endif
+
+# Add directories of compiled libraries, include directives, etc.
+
+setenv PATH "${PATH}:/usr/bin"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/lib"
+
+set CONDA_ROOT = `find $HOME -type d -name "miniconda3" | head -n 1`
+if ("$CONDA_ROOT" == "") then
+    echo "Warning: Miniconda installation not found."
+    echo "Download and execute the file https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh."
+    echo "After that, close your SOLPS-ITER session and restart it."
+else
+    setenv CONDA_CHANGEPS1 no
+    source ${CONDA_ROOT}/etc/profile.d/conda.csh
+    setenv PATH "${PATH}:${CONDA_PREFIX}/bin"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib"
+    set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
+    if ("$env_exists" == "") then
+        set MISSING_DEPENDENCY = 1
+    else
+        conda activate solps_ncl_env
+        if (-e $CONDA_ROOT/envs/solps_ncl_env/lib/libcurl.so.4) then
+            rm $CONDA_ROOT/envs/solps_ncl_env/lib/libcurl.so.4
+        endif
+    endif
+endif
+
+if ( `which python3 >& /dev/null; echo $status` != 0 ) then
+    echo "Warning: python installation not found. Install it using your preferred method."
+else
+    setenv PATH "${PATH}:`which python3 | xargs dirname`"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`which python3 | xargs dirname`/../lib"
+endif
+
+set all_lib_paths = ( /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/local/lib )
+set lib_paths = ()
+foreach d ($all_lib_paths)
+    if (-d $d) then
+        set lib_paths = ( $lib_paths $d )
+    endif
+end
+
+setenv FREETYPE_LIB_DIR `find $lib_paths -type f -name "libfreetype*.so*" -exec dirname {} \; | sort -u`
+setenv LAPACK_LIB_DIR `find $lib_paths -type f -name "liblapack*.so*" -exec dirname {} \; | sort -u`
+setenv BLAS_LIB_DIR `find $lib_paths -type f -name "libblas*.so*" -exec dirname {} \; | sort -u`
+setenv LIBPNG_LIB_DIR `find $lib_paths -type f -name "libpng*.so*" -exec dirname {} \; | sort -u`
+setenv LIBXPM_LIB_DIR `find $lib_paths -type f -name "libXpm*.so*" -exec dirname {} \; | sort -u`
+setenv LIBXPM_INCLUDE_DIR `find /usr/include /usr/local/include -type f -name "xpm.h" -exec dirname {} \; | sort -u`
+setenv MOTIF_LIB_DIR `find $lib_paths -type f -name "libXm*.so*" -exec dirname {} \; | sort -u`
+setenv MOTIF_INCLUDE_DIR `find /usr/include /usr/local/include -type f -name "Xm.h" -exec dirname {} \; | sort -u`
+setenv NETCDF_LIB_DIR `find $lib_paths -type f -name "libnetcdf*.so*" -exec dirname {} \; | sort -u`
+setenv NETCDF_FORTRAN_LIB_DIR `find $lib_paths -type f -name "libnetcdff*.so*" -exec dirname {} \; | sort -u`
+setenv NCARG_LIB_DIR $CONDA_PREFIX/lib
+
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SOLPSTOP}/lib/LINUX.gfortran/mscl/lib"
+
+setenv DBX ddt
+setenv DBX idb
+
+setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig"
+
+# Define compilers
+
+setenv CC gcc
+setenv FC gfortran
+setenv MPI_FC /usr/bin/mpif90
+setenv CXX g++
+
+# Check if external libraries are installed
+
+
+
+
+if ( $?MISSING_DEPENDENCY && "$MISSING_DEPENDENCY" == "1" ) then
+    echo "Warning: some dependencies are not installed. Install them running the script 'install_dependencies'."
+endif

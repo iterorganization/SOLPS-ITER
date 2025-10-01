@@ -1,0 +1,52 @@
+# Specify paths to root-directories of following libraries on your system
+#
+# Special notes:
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Use LD_NAG to link to the BLASLAPACK library instead
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 17 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
+
+#
+# Variables for linking
+#
+
+LD_NETCDF  = -L${NETCDF_LIB_DIR} -lnetcdf -L${NETCDF_FORTRAN_LIB_DIR}
+LD_MSCL    = 
+LD_GR      = 
+LD_GKS     = 
+LD_NCARG   = -L${NCARG_LIB_DIR} -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_LIB_DIR} -lfreetype -L${LIBPNG_LIB_DIR} -lpng
+LD_NAG     = -L${LAPACK_LIB_DIR} -llapack -L${BLAS_LIB_DIR} -lblas
+LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
+
+#
+# Provide compiler
+#
+
+FC         = gfortran
+MPI_FC     = /usr/bin/mpif90
+
+#
+# Preprocessor options
+#
+
+SOLPS_CPP      = -DNCAR4 -DNO_NAG
+B25_DEFINES    =
+CARRE_DEFINES  =
+EIRENE_DEFINES =
+FFLAGSEXTRA    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:

@@ -1,0 +1,7 @@
+LIBS = -lXm -lXt -lX11 -lXext -lXmuu -lXft -lpthread -lm -L$(MOTIF_LIB_DIR)
+INCLUDES = -I/${MOTIF_INCLUDE_DIR} -I/${LIBXPM_INCLUDE_DIR}
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+
