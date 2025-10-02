@@ -1429,6 +1429,7 @@ if ("$OSTYPE" == "linux") then
       rm $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/9.0.2.tar.gz
       echo LIBJSON  = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
       echo LIBJSON  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LDLIBES  += -L\$\{LIBJSON\} -ljsonfortran >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
       echo LIBJSON  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
       cd $SOLPSTOP
       echo JSON-Fortran library successfully installed.
