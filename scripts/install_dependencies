@@ -1,51 +1,17 @@
 #! /usr/bin/env tcsh
 
-if ( ! $?INSTALL_SOLPSLIB_NEW ) set INSTALL_SOLPSLIB_NEW = 0
+if ( ! $?RESTART_SOLPS ) set RESTART_SOLPS = 0
 if ( ! $?MISSING_DEPENDENCY ) set MISSING_DEPENDENCY = 0
+if ( ! $?MISSING_TEX ) set MISSING_TEX = 0
 
-# Check if the required package managers are installed
-
-if ("$OSTYPE" == "linux") then
-
-  set CONDA_ROOT = `find $HOME -type d -name "miniconda3" | head -n 1`
-  if ("$CONDA_ROOT" == "") then
-    echo
-    echo "Warning: Miniconda installation not found."
-    echo "Download and execute the file https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh."
-    echo "After that, close your SOLPS-ITER session, restart it"
-    echo "and relaunch the install_dependencies script."
-    exit 1
-  endif
-
-else if ("$OSTYPE" == "darwin") then
-
-  set XQUARTZ_HOME = "/opt/X11"
-  if ( ! -d "$XQUARTZ_HOME" ) then
-    echo
-    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
-    echo "After that, relaunch the install_dependencies script."
-    exit 1
-  endif
-
-  if ( `which brew >& /dev/null; echo $status` != 0 ) then
-    echo
-    echo "Warning: Homebrew installation not found. Install it from https://brew.sh/."
-    echo "After that, relaunch the install_dependencies script."
-    exit 1
-  endif
-
-  if ( `which port >& /dev/null; echo $status` != 0 ) then
-    echo
-    echo "Warning: MacPorts installation not found. Install it from https://ports.macports.org/."
-    echo "After that, relaunch the install_dependencies script."
-    exit 1
-  endif
-
-endif
-
-# Create local configuration files, if they do not already exist, where to append the new library paths
+# Create local setup and configuration files, if they do not already exist, where to append the new library paths
 
 # General
+if (! -e "${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.bak
+endif
 if (! -e "${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local") then
   touch ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
 else
@@ -124,6 +90,88 @@ else
   cp ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local.bak
 endif
 
+# Check if the required package managers are installed
+
+if ("$OSTYPE" == "linux") then
+
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
+
+    set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+    if (! -d "${CONDA_ROOT}" ) then
+      echo
+      echo "Warning: miniforge installation not found."
+      echo "Do you wish to install it? (y/n) [y] "
+      set MINIFORGE_INSTALL = $<
+
+      if ( "$MINIFORGE_INSTALL" == "" ) then
+        set MINIFORGE_INSTALL = "y"
+      endif
+
+      if ( "$MINIFORGE_INSTALL" == "y" ) then 
+        install_miniforge
+        echo "Close your shell, re-open it, start a new SOLPS-ITER"
+        echo "and relaunch the install_dependencies script."
+        exit 1
+      else
+        exit 1
+      endif
+    endif
+
+  else   # HPC cluster
+
+    set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+    if (! -d "${CONDA_ROOT}" ) then
+      echo
+      echo "Warning: miniforge installation not found."
+      echo "This will be needed to locally, install the Blas/Lapack, NetCDF and NCARG libraries,"
+      echo "if any of these is not present in your cluster."
+      echo -n "Do you wish to install it? (y/n) [n] "
+      set MINIFORGE_INSTALL = $<
+
+      if ( "$MINIFORGE_INSTALL" == "" ) then
+        set MINIFORGE_INSTALL = "n"
+      endif
+
+      if ( "$MINIFORGE_INSTALL" == "y" ) then 
+        install_miniforge
+        echo set CONDA_ROOT    = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/miniforge3 >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo setenv CONDA_CHANGEPS1 no >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo 'source ${CONDA_ROOT}/etc/profile.d/conda.csh >& /dev/null' >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo setenv LD_LIBRARY_PATH \$\{CONDA_PREFIX\}/lib:\$\{LD_LIBRARY_PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo "Close your shell, re-open it, start a new SOLPS-ITER"
+        echo "and relaunch the install_dependencies script."
+        exit 1
+      endif
+    endif
+
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  set XQUARTZ_HOME = "/opt/X11"
+  if ( ! -d "$XQUARTZ_HOME" ) then
+    echo
+    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
+    echo "After that, relaunch the install_dependencies script."
+    exit 1
+  endif
+
+  if ( `which brew >& /dev/null; echo $status` != 0 ) then
+    echo
+    echo "Warning: Homebrew installation not found. Install it from https://brew.sh/."
+    echo "After that, relaunch the install_dependencies script."
+    exit 1
+  endif
+
+  if ( `which port >& /dev/null; echo $status` != 0 ) then
+    echo
+    echo "Warning: MacPorts installation not found. Install it from https://ports.macports.org/."
+    echo "After that, relaunch the install_dependencies script."
+    exit 1
+  endif
+
+endif
+
 # Create lib folder for locally compiled libraries if it does not exist
 
 if (! -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}" ) then
@@ -132,7 +180,7 @@ endif
 
 # Install X11 development library
 
-if ("$OSTYPE" == "linux") then   # Only for Linux; for MacOS to be replaced by manual installation of XQuartz
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then   # Only for Linux; for MacOS to be replaced by manual installation of XQuartz
 
   set pkg_check = `dpkg -l | grep -w xorg-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -166,7 +214,7 @@ endif
 
 # Install relevant compilers
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w gcc`
   if ("$pkg_check" == "") then   # Check if the compiler is already installed
@@ -285,7 +333,7 @@ endif
 
 # Install cmake library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w cmake`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -300,6 +348,7 @@ if ("$OSTYPE" == "linux") then
     endif
 
     if ( "$CMAKE_INSTALL" == "y" ) then 
+      set RESTART_SOLPS = 1
       sudo apt-get install -y cmake
       echo cmake library successfully installed.
       sleep 1
@@ -348,7 +397,7 @@ endif
 
 # Install ctags library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w exuberant-ctags`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -411,7 +460,7 @@ endif
 
 # Install Doxygen library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w doxygen`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -474,7 +523,7 @@ endif
 
 # Install Freetype library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libfreetype-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -537,7 +586,7 @@ endif
 
 # Install Ghostscript library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w ghostscript`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -600,7 +649,7 @@ endif
 
 # Install Gnuplot library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w gnuplot`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -663,7 +712,7 @@ endif
 
 # Install HDF5 library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libhdf5-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -728,59 +777,127 @@ endif
 
 if ("$OSTYPE" == "linux") then
 
-  set pkg_check = `dpkg -l | grep -w libblas-dev`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    echo
-    echo Blas library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set BLAS_INSTALL = $<
+    set pkg_check = `dpkg -l | grep -w libblas-dev`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-    if ( "$BLAS_INSTALL" == "" ) then
-      set BLAS_INSTALL = "y"
-    endif
+      echo
+      echo Blas library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set BLAS_INSTALL = $<
 
-    if ( "$BLAS_INSTALL" == "y" ) then 
-      sudo apt-get install -y libblas-dev
-      echo Blas library successfully installed.
-      sleep 1
+      if ( "$BLAS_INSTALL" == "" ) then
+        set BLAS_INSTALL = "y"
+      endif
+
+      if ( "$BLAS_INSTALL" == "y" ) then 
+        sudo apt-get install -y libblas-dev
+        echo Blas library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo Blas library already locally installed.
       sleep 1
+
     endif
 
-  else
-    echo
-    echo Blas library already locally installed.
-    sleep 1
+    set pkg_check = `dpkg -l | grep -w liblapack-dev`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-  endif
+      echo
+      echo Lapack library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set LAPACK_INSTALL = $<
 
-  set pkg_check = `dpkg -l | grep -w liblapack-dev`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+      if ( "$LAPACK_INSTALL" == "" ) then
+        set LAPACK_INSTALL = "y"
+      endif
 
-    echo
-    echo Lapack library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set LAPACK_INSTALL = $<
+      if ( "$LAPACK_INSTALL" == "y" ) then 
+        sudo apt-get install -y liblapack-dev
+        echo Lapack library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
 
-    if ( "$LAPACK_INSTALL" == "" ) then
-      set LAPACK_INSTALL = "y"
-    endif
-
-    if ( "$LAPACK_INSTALL" == "y" ) then 
-      sudo apt-get install -y liblapack-dev
-      echo Lapack library successfully installed.
-      sleep 1
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo Lapack library already locally installed.
       sleep 1
+
     endif
 
-  else
+  else   # HPC cluster
+
     echo
-    echo Lapack library already locally installed.
-    sleep 1
+    echo -n "Do you wish to locally install the Blas/Lapack library? The conda package manager will be used. (y/n) [n] "
+    set BLASLAPACK_INSTALL = $<
+
+    if ( "$BLASLAPACK_INSTALL" == "" ) then
+      set BLASLAPACK_INSTALL = "n"
+    endif
+
+    if ( "$BLASLAPACK_INSTALL" == "y" ) then 
+      set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+      if (! -d "${CONDA_ROOT}" ) then
+        echo
+        echo "Warning: miniforge installation still not found."
+        echo "Restart the install_dependencies script and choose the option to install it."
+        sleep 1
+      else
+        set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
+        if ("$env_exists" == "") then
+          set RESTART_SOLPS = 1
+          conda create -n solps_env -c conda-forge -y blas lapack
+          conda activate solps_env
+          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo LAPACK_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo BLAS_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo LD_NAG  = -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo SOLPS_CPP      = -DNCAR4 -DNO_NAG >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo LAPACK_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+          echo BLAS_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+          echo LD_NAG  \?= -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+          echo LAPACK_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+          echo BLAS_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+          echo LD_NAG  \?= -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+          echo Blas/Lapack library successfully locally installed.
+          sleep 1
+        else
+          conda activate solps_env
+          set blas_installed = `conda list -n solps_env | awk '{print $1}' | grep -w blas`
+          set lapack_installed = `conda list -n solps_env | awk '{print $1}' | grep -w lapack`
+          if ("$blas_installed" != "" && "$lapack_installed" != "") then
+              echo Blas/Lapack library already locally installed.
+          else
+              set RESTART_SOLPS = 1
+              conda install -c conda-forge -y blas lapack
+              echo LAPACK_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo BLAS_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo LD_NAG  = -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo SOLPS_CPP      = -DNCAR4 -DNO_NAG >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo LAPACK_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+              echo BLAS_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+              echo LD_NAG  \?= -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+              echo LAPACK_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+              echo BLAS_LIB_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+              echo LD_NAG  \?= -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+              echo Blas/Lapack library successfully locally installed.
+          endif
+          sleep 1
+        endif
+      endif
+    else
+      sleep 1
+    endif
 
   endif
 
@@ -817,7 +934,7 @@ endif
 
 # Install PNG library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libpng-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -880,7 +997,7 @@ endif
 
 # Install XPrint library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libxpm4`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -943,7 +1060,7 @@ endif
 
 # Install NetCDF library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libnetcdf-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -1008,31 +1125,86 @@ endif
 
 if ("$OSTYPE" == "linux") then
 
-  set pkg_check = `dpkg -l | grep -w libnetcdff-dev`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    echo
-    echo NetCDF-Fortran library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set NETCDFF_INSTALL = $<
+    set pkg_check = `dpkg -l | grep -w libnetcdff-dev`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-    if ( "$NETCDFF_INSTALL" == "" ) then
-      set NETCDFF_INSTALL = "y"
-    endif
+      echo
+      echo NetCDF-Fortran library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set NETCDFF_INSTALL = $<
 
-    if ( "$NETCDFF_INSTALL" == "y" ) then 
-      sudo apt-get install -y libnetcdff-dev
-      echo NetCDF-Fortran library successfully installed.
-      sleep 1
+      if ( "$NETCDFF_INSTALL" == "" ) then
+        set NETCDFF_INSTALL = "y"
+      endif
+
+      if ( "$NETCDFF_INSTALL" == "y" ) then 
+        sudo apt-get install -y libnetcdff-dev
+        echo NetCDF-Fortran library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo NetCDF-Fortran library already locally installed.
       sleep 1
+
     endif
 
-  else
+  else   # HPC cluster
+
     echo
-    echo NetCDF-Fortran library already locally installed.
-    sleep 1
+    echo -n "Do you wish to locally install the NetCDF library? The conda package manager will be used. (y/n) [n] "
+    set NETCDF_INSTALL = $<
+
+    if ( "$NETCDF_INSTALL" == "" ) then
+      set NETCDF_INSTALL = "n"
+    endif
+
+    if ( "$NETCDF_INSTALL" == "y" ) then 
+      set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+      if (! -d "${CONDA_ROOT}" ) then
+        echo
+        echo "Warning: miniforge installation still not found."
+        echo "Restart the install_dependencies script and choose the option to install it."
+        sleep 1
+      else
+        set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
+        if ("$env_exists" == "") then
+          set RESTART_SOLPS = 1
+          conda create -n solps_env -c conda-forge -y netcdf-fortran
+          conda activate solps_env
+          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo NCDIR  = \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo LD_NETCDF  = -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+          echo NCDIR  \?= \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+          echo LD_NETCDF  \?= -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+          echo NetCDF library successfully locally installed.
+          sleep 1
+        else
+          conda activate solps_env
+          set netcdf_installed = `conda list -n solps_env | awk '{print $1}' | grep -w netcdf-fortran`
+          if ("$netcdf_installed" != "") then
+              echo NetCDF library already locally installed.
+          else
+              set RESTART_SOLPS = 1
+              conda install -c conda-forge -y netcdf-fortran
+              echo NCDIR  = \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo LD_NETCDF  = -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+              echo NCDIR  \?= \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+              echo LD_NETCDF  \?= -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+              echo NetCDF library successfully locally installed.
+          endif
+          sleep 1
+        endif
+      endif
+    else
+      sleep 1
+    endif
 
   endif
 
@@ -1069,7 +1241,7 @@ endif
 
 # Install MPI library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libopenmpi-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -1160,7 +1332,7 @@ endif
 
 # Install MOTIF library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w libmotif-dev`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -1238,7 +1410,7 @@ if ("$OSTYPE" == "linux") then
 
     if ( "$JSON_INSTALL" == "y" ) then
       define_compilers
-      set INSTALL_SOLPSLIB_NEW = 1
+      set RESTART_SOLPS = 1
       cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2"
@@ -1308,63 +1480,121 @@ endif
 
 if ("$OSTYPE" == "linux") then
 
-  setenv CONDA_CHANGEPS1 no
-  source ${CONDA_ROOT}/etc/profile.d/conda.csh
-  set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
-  if ("$env_exists" == "") then   # Check if the environment with the library is already existing
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    echo
-    echo NCARG library not locally installed.
-    echo -n "Do you wish to install it? The environment solps_ncl_env will be created with conda. (y/n) [y] "
-    set NCARG_INSTALL = $<
+    set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
+    if ("$env_exists" == "") then   # Check if the environment with the library is already existing
 
-    if ( "$NCARG_INSTALL" == "" ) then
-      set NCARG_INSTALL = "y"
-    endif
+      echo
+      echo NCARG library not locally installed.
+      echo -n "Do you wish to install it? The environment solps_ncl_env will be created with conda. (y/n) [y] "
+      set NCARG_INSTALL = $<
 
-    if ( "$NCARG_INSTALL" == "y" ) then 
-      setenv CONDA_CHANGEPS1 no
-      conda create -n solps_ncl_env -c conda-forge ncl
-      conda activate solps_ncl_env
-      echo NCARG library successfully installed.
-      sleep 1
+      if ( "$NCARG_INSTALL" == "" ) then
+        set NCARG_INSTALL = "y"
+      endif
+
+      if ( "$NCARG_INSTALL" == "y" ) then 
+        set RESTART_SOLPS = 1
+        setenv CONDA_CHANGEPS1 no
+        conda create -n solps_ncl_env -c conda-forge -y ncl
+        conda activate solps_ncl_env
+        echo NCARG library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo NCARG library already locally installed.
       sleep 1
+
     endif
 
-  else
-    echo
-    echo NCARG library already locally installed.
-    sleep 1
+    set pkg_check = `dpkg -l | grep -w libcairo2-dev`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-  endif
+      echo
+      echo Cairo library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set CAIRO_INSTALL = $<
 
-  set pkg_check = `dpkg -l | grep -w libcairo2-dev`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+      if ( "$CAIRO_INSTALL" == "" ) then
+        set CAIRO_INSTALL = "y"
+      endif
 
-    echo
-    echo Cairo library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set CAIRO_INSTALL = $<
+      if ( "$CAIRO_INSTALL" == "y" ) then 
+        sudo apt-get install -y libcairo2-dev
+        echo Cairo library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
 
-    if ( "$CAIRO_INSTALL" == "" ) then
-      set CAIRO_INSTALL = "y"
-    endif
-
-    if ( "$CAIRO_INSTALL" == "y" ) then 
-      sudo apt-get install -y libcairo2-dev
-      echo Cairo library successfully installed.
-      sleep 1
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo Cairo library already locally installed.
       sleep 1
+
     endif
 
-  else
-    echo
-    echo Cairo library already locally installed.
-    sleep 1
+  else   # HPC cluster
+
+    if ("$COMPILER" == "gfortran") then
+
+      echo
+      echo -n "Do you wish to locally install the NCARG library? The conda package manager will be used. (y/n) [n] "
+      set NCARG_INSTALL = $<
+
+      if ( "$NCARG_INSTALL" == "" ) then
+        set NCARG_INSTALL = "n"
+      endif
+
+      if ( "$NCARG_INSTALL" == "y" ) then 
+        set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+        if (! -d "${CONDA_ROOT}" ) then
+          echo
+          echo "Warning: miniforge installation still not found."
+          echo "Restart the install_dependencies script and choose the option to install it."
+          sleep 1
+        else
+          set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
+          if ("$env_exists" == "") then
+            set RESTART_SOLPS = 1
+            conda create -n solps_env -c conda-forge -y ncl cairo fontconfig freetype bzip2
+            conda activate solps_env
+            echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+            echo NCARG_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+            echo LD_NCARG  = -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+            echo NCARG_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+            echo LD_NCARG  \?= -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+            echo NCARG library successfully locally installed.
+            sleep 1
+          else
+            conda activate solps_env
+            set ncarg_installed = `conda list -n solps_env | awk '{print $1}' | grep -w ncl`
+            if ("$ncarg_installed" != "") then
+                echo NCARG library library already locally installed.
+            else
+                set RESTART_SOLPS = 1
+                conda install -c conda-forge -y ncl cairo fontconfig freetype bzip2
+                echo NCARG_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+                echo LD_NCARG  = -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+                echo NCARG_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+                echo LD_NCARG  \?= -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+                echo NCARG library library successfully locally installed.
+            endif
+            sleep 1
+          endif
+        endif
+      else
+        sleep 1
+      endif
+
+    endif
 
   endif
 
@@ -1416,7 +1646,7 @@ if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version o
 
     if ( "$MSCL_INSTALL" == "y" ) then
       define_compilers
-      set INSTALL_SOLPSLIB_NEW = 1
+      set RESTART_SOLPS = 1
       cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
@@ -1427,6 +1657,7 @@ if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version o
       ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl F77=${FC} CC=${CC}
       make all
       make install
+      echo setenv LD_LIBRARY_PATH \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib:\$\{LD_LIBRARY_PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT  = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
       echo LD_MSCL    = -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
       echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1477,7 +1708,7 @@ else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresp
 
     if ( "$MSCL_INSTALL" == "y" ) then
       define_compilers
-      set INSTALL_SOLPSLIB_NEW = 1
+      set RESTART_SOLPS = 1
       cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
@@ -1540,7 +1771,7 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks/libgks.a" ) then
 
   if ( "$GKS_INSTALL" == "y" ) then
     define_compilers
-    set INSTALL_SOLPSLIB_NEW = 1
+    set RESTART_SOLPS = 1
     cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
     if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli" ) then
       rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli"
@@ -1595,7 +1826,7 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
 
   if ( "$GR_INSTALL" == "y" ) then
     define_compilers
-    set INSTALL_SOLPSLIB_NEW = 1
+    set RESTART_SOLPS = 1
     cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
     if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr" ) then
       rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr"
@@ -1668,7 +1899,7 @@ endif
 
 # Install TeXlive library
 
-if ("$OSTYPE" == "linux") then
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
 
   set pkg_check = `dpkg -l | grep -w texlive-full`
   if ("$pkg_check" == "") then   # Check if the library is already installed
@@ -1687,7 +1918,7 @@ if ("$OSTYPE" == "linux") then
       echo TeXlive library successfully installed.
       sleep 1
     else
-      set MISSING_DEPENDENCY = 1
+      set MISSING_TEX = 1
       sleep 1
     endif
 
@@ -1716,7 +1947,7 @@ else if ("$OSTYPE" == "darwin") then
       echo TeXlive library successfully installed.
       sleep 1
     else
-      set MISSING_DEPENDENCY = 1
+      set MISSING_TEX = 1
       sleep 1
     endif
 
@@ -1743,10 +1974,17 @@ else
 
 endif
 
+if ( $?MISSING_TEX && "$MISSING_TEX" == "1" ) then
+
+  echo Warning: A full LaTeX installation is still missing.
+  echo The manuals may not be correctly generated.
+
+endif
+
 # If at least one of the libraries was absent and was locally compiled within SOLPSLIB, then warn the user to restart the session to re-initialize variables 
 # in order to avoid clashes with the shortcuts to compiler variables
 
-if ( $?INSTALL_SOLPSLIB_NEW && "$INSTALL_SOLPSLIB_NEW" == "1" ) then
+if ( $?RESTART_SOLPS && "$RESTART_SOLPS" == "1" ) then
 
   echo The variables linking some locally compiled libraries have been
   echo written to \$\{SOLPSTOP\}/SETUP/config.${HOST_NAME}.${COMPILER}.local.

@@ -16,14 +16,15 @@ endif
 setenv PATH "${PATH}:/usr/bin"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/lib"
 
-set CONDA_ROOT = `find $HOME -type d -name "miniconda3" | head -n 1`
-if ("$CONDA_ROOT" == "") then
-    echo "Warning: Miniconda installation not found."
-    echo "Download and execute the file https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh."
-    echo "After that, close your SOLPS-ITER session and restart it."
+set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+if (! -d "${CONDA_ROOT}" ) then
+    echo "Warning: miniforge installation not found."
+    echo "Install it using the script install_miniforge"
+    echo "After that, close your shell, re-open it, start a new SOLPS-ITER"
+    echo "and launch the install_dependencies script to install the missing dependencies."
 else
     setenv CONDA_CHANGEPS1 no
-    source ${CONDA_ROOT}/etc/profile.d/conda.csh
+    source ${CONDA_ROOT}/etc/profile.d/conda.csh >& /dev/null
     set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
     if ("$env_exists" == "") then
         set MISSING_DEPENDENCY = 1
@@ -80,8 +81,102 @@ setenv CXX g++
 
 # Check if external libraries are installed
 
-
-
+set pkg_check = `dpkg -l | grep -w xorg-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w gcc`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w g++`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w gfortran`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w cmake`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w exuberant-ctags`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w doxygen`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libfreetype-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w ghostscript`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w gnuplot`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libhdf5-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libblas-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w liblapack-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libpng-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libxpm4`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libnetcdf-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libnetcdff-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libopenmpi-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w openmpi-bin`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libmotif-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libcairo2-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib/libjsonfortran.a" ) then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/lib/libmscl.a" ) then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks/libgks.a" ) then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then
+    set MISSING_DEPENDENCY = 1
+endif
 
 if ( $?MISSING_DEPENDENCY && "$MISSING_DEPENDENCY" == "1" ) then
     echo "Warning: some dependencies are not installed. Install them running the script 'install_dependencies'."
