@@ -58,14 +58,16 @@ for jj = 1:length(surf_indx)
         error('Apparently no flux surface has been plotted for the given surface index...')
     end
 end
-
+xlabel('R [m]')
+ylabel('Z [m]')
+title('Flux surfaces')
 axis equal
 
-if ~isempty(rzomp)
+if exist('rzomp','var') && ~isempty(rzomp)
     plot(rzomp(1,:),rzomp(2,:),'k--','LineWidth',2)
 end
 
-if ~isempty(rzimp)
+if exist('rzimp','var') && ~isempty(rzimp)
     plot(rzimp(1,:),rzimp(2,:),'k--','LineWidth',2)
 end
 
