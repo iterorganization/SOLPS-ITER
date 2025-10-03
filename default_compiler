@@ -48,6 +48,7 @@ case "CONTAINER":
 case "DARWIN":
 case "IPPCR":
 case "JFRS":
+case "LINUX":
 case "MARCONI":
 case "MEPHI":
 case "NERSC":

@@ -1,0 +1,51 @@
+#! /usr/bin/env tcsh
+
+# Set the Miniforge installation path
+set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+
+if (! -d "${CONDA_ROOT}" ) then
+
+  echo
+  echo "The miniforge package manager will be located in "
+  echo "${CONDA_ROOT}"
+  echo -n "Do you wish to continue? (y/n) [y] "
+  set CONDA_INSTALL = $<
+
+  if ( "$CONDA_INSTALL" == "" ) then
+    set CONDA_INSTALL = "y"
+  endif
+
+  if ( "$CONDA_INSTALL" == "y" ) then
+
+    # Make sure the parent directory exists
+    if (! -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}" ) then
+      mkdir -p "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}"
+    endif
+
+    # Go to the installation directory
+    cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+
+    # Download Miniforge installer (assuming to be in a x86_64 Linux environment)
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+
+    # Install Miniforge in batch mode at $CONDA_ROOT
+    bash Miniforge3-Linux-x86_64.sh -b -p $CONDA_ROOT
+
+    # Remove installed
+    rm Miniforge3-Linux-x86_64.sh
+
+    # Initialize conda
+    ${CONDA_ROOT}/bin/conda init tcsh
+
+    echo
+    echo miniforge package manager successfully installed.
+
+  else
+    echo miniforge package manager still not installed.
+  endif
+
+else
+
+  echo miniforge package manager already locally installed.
+
+endif
