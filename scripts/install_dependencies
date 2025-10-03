@@ -139,7 +139,8 @@ if ("$OSTYPE" == "linux") then
         echo set CONDA_ROOT    = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/miniforge3 >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
         echo setenv CONDA_CHANGEPS1 no >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
         echo 'source ${CONDA_ROOT}/etc/profile.d/conda.csh >& /dev/null' >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
-        echo setenv LD_LIBRARY_PATH \$\{CONDA_PREFIX\}/lib:\$\{LD_LIBRARY_PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo 'if ( ! $?CONDA_PREFIX ) setenv CONDA_PREFIX ""' >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        echo 'if ( $?CONDA_PREFIX ) setenv LD_LIBRARY_PATH ${CONDA_PREFIX}/lib:${LD_LIBRARY_PATH}' >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
         echo "Close your shell, re-open it, start a new SOLPS-ITER"
         echo "and relaunch the install_dependencies script."
         exit 1
