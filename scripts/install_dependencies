@@ -865,7 +865,7 @@ if ("$OSTYPE" == "linux") then
           set RESTART_SOLPS = 1
           $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y blas lapack
           conda activate solps_env
-          echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
           echo LAPACK_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo BLAS_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo LD_NAG  = -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
@@ -1185,7 +1185,7 @@ if ("$OSTYPE" == "linux") then
           set RESTART_SOLPS = 1
           $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y netcdf-fortran
           conda activate solps_env
-          echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
           echo NCDIR  = \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo LD_NETCDF  = -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo NCDIR  \?= \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1575,7 +1575,7 @@ if ("$OSTYPE" == "linux") then
             set RESTART_SOLPS = 1
             $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y ncl cairo fontconfig freetype bzip2
             conda activate solps_env
-            echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+            echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
             echo NCARG_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
             echo LD_NCARG  = -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
             echo NCARG_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1997,6 +1997,6 @@ if ( $?RESTART_SOLPS && "$RESTART_SOLPS" == "1" ) then
 
   echo The variables linking some locally compiled libraries have been
   echo written to \$\{SOLPSTOP\}/SETUP/config.${HOST_NAME}.${COMPILER}.local.
-  echo Please close your SOLPS-ITER session and restart it.
+  echo Please close your SOLPS-ITER session and your shell and restart them.
 
 endif
