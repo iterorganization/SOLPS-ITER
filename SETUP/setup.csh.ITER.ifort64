@@ -60,7 +60,7 @@ else
   module load motif/2.3.8-GCCcore-13.2.0
   module load texlive/20230313-intel-compilers-2023.2.1
   module load libtirpc/1.3.4-GCCcore-13.2.0
-  module load SimDB/0.11.0-iimkl-2023b
+  module load SimDB/0.13.0-iimkl-2023b
   module load ToFu/1.7.9-iimkl-2023b
   module load netcdf4-python/1.7.1.post2-intel-2023b
   module load json-fortran/8.5.2-intel-compilers-2023.2.1
