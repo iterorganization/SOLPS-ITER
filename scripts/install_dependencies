@@ -100,7 +100,7 @@ if ("$OSTYPE" == "linux") then
     if (! -d "${CONDA_ROOT}" ) then
       echo
       echo "Warning: miniforge installation not found."
-      echo "Do you wish to install it? (y/n) [y] "
+      echo -n "Do you wish to install it? (y/n) [y] "
       set MINIFORGE_INSTALL = $<
 
       if ( "$MINIFORGE_INSTALL" == "" ) then
@@ -113,6 +113,8 @@ if ("$OSTYPE" == "linux") then
         echo "and relaunch the install_dependencies script."
         exit 1
       else
+        echo
+        echo "You need to install miniforge in order to continue using this script!"
         exit 1
       endif
     endif
@@ -140,6 +142,10 @@ if ("$OSTYPE" == "linux") then
         echo setenv LD_LIBRARY_PATH \$\{CONDA_PREFIX\}/lib:\$\{LD_LIBRARY_PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
         echo "Close your shell, re-open it, start a new SOLPS-ITER"
         echo "and relaunch the install_dependencies script."
+        exit 1
+      else
+        echo
+        echo "You need to install miniforge in order to continue using this script!"
         exit 1
       endif
     endif
@@ -853,12 +859,12 @@ if ("$OSTYPE" == "linux") then
         echo "Restart the install_dependencies script and choose the option to install it."
         sleep 1
       else
-        set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
-        if ("$env_exists" == "") then
+        set CONDA_BASE = `conda info --base`
+        if ( ! -d "$CONDA_BASE/envs/solps_env" ) then
           set RESTART_SOLPS = 1
-          conda create -n solps_env -c conda-forge -y blas lapack
+          $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y blas lapack
           conda activate solps_env
-          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
           echo LAPACK_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo BLAS_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo LD_NAG  = -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
@@ -873,13 +879,13 @@ if ("$OSTYPE" == "linux") then
           sleep 1
         else
           conda activate solps_env
-          set blas_installed = `conda list -n solps_env | awk '{print $1}' | grep -w blas`
-          set lapack_installed = `conda list -n solps_env | awk '{print $1}' | grep -w lapack`
+          set blas_installed = `$CONDA_BASE/bin/conda list -n solps_env | awk '{print $1}' | grep -w blas`
+          set lapack_installed = `$CONDA_BASE/bin/conda list -n solps_env | awk '{print $1}' | grep -w lapack`
           if ("$blas_installed" != "" && "$lapack_installed" != "") then
               echo Blas/Lapack library already locally installed.
           else
               set RESTART_SOLPS = 1
-              conda install -c conda-forge -y blas lapack
+              $CONDA_BASE/bin/conda install -c conda-forge -y blas lapack
               echo LAPACK_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
               echo BLAS_LIB_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
               echo LD_NAG  = -L\$\{LAPACK_LIB_DIR\} -llapack -L\$\{BLAS_LIB_DIR\} -lblas >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
@@ -1173,12 +1179,12 @@ if ("$OSTYPE" == "linux") then
         echo "Restart the install_dependencies script and choose the option to install it."
         sleep 1
       else
-        set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
-        if ("$env_exists" == "") then
+        set CONDA_BASE = `conda info --base`
+        if ( ! -d "$CONDA_BASE/envs/solps_env" ) then
           set RESTART_SOLPS = 1
-          conda create -n solps_env -c conda-forge -y netcdf-fortran
+          $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y netcdf-fortran
           conda activate solps_env
-          echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+          echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
           echo NCDIR  = \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo LD_NETCDF  = -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
           echo NCDIR  \?= \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1187,12 +1193,12 @@ if ("$OSTYPE" == "linux") then
           sleep 1
         else
           conda activate solps_env
-          set netcdf_installed = `conda list -n solps_env | awk '{print $1}' | grep -w netcdf-fortran`
+          set netcdf_installed = `$CONDA_BASE/bin/conda list -n solps_env | awk '{print $1}' | grep -w netcdf-fortran`
           if ("$netcdf_installed" != "") then
               echo NetCDF library already locally installed.
           else
               set RESTART_SOLPS = 1
-              conda install -c conda-forge -y netcdf-fortran
+              $CONDA_BASE/bin/conda install -c conda-forge -y netcdf-fortran
               echo NCDIR  = \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
               echo LD_NETCDF  = -L\$\{NCDIR\}/lib -lnetcdff >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
               echo NCDIR  \?= \$\{CONDA_PREFIX\} >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1483,8 +1489,8 @@ if ("$OSTYPE" == "linux") then
 
   if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
-    if ("$env_exists" == "") then   # Check if the environment with the library is already existing
+    set CONDA_BASE = `conda info --base`
+    if ( ! -d "$CONDA_BASE/envs/solps_ncl_env" ) then   # Check if the environment with the library is already existing
 
       echo
       echo NCARG library not locally installed.
@@ -1498,7 +1504,8 @@ if ("$OSTYPE" == "linux") then
       if ( "$NCARG_INSTALL" == "y" ) then 
         set RESTART_SOLPS = 1
         setenv CONDA_CHANGEPS1 no
-        conda create -n solps_ncl_env -c conda-forge -y ncl
+        set CONDA_BASE = `conda info --base`
+        $CONDA_BASE/bin/conda create -n solps_ncl_env -c conda-forge -y ncl
         conda activate solps_ncl_env
         echo NCARG library successfully installed.
         sleep 1
@@ -1562,12 +1569,12 @@ if ("$OSTYPE" == "linux") then
           echo "Restart the install_dependencies script and choose the option to install it."
           sleep 1
         else
-          set env_exists = `conda env list | awk '{print $1}' | grep -w solps_env`
-          if ("$env_exists" == "") then
+          set CONDA_BASE = `conda info --base`
+          if ( ! -d "$CONDA_BASE/envs/solps_env" ) then
             set RESTART_SOLPS = 1
-            conda create -n solps_env -c conda-forge -y ncl cairo fontconfig freetype bzip2
+            $CONDA_BASE/bin/conda create -n solps_env -c conda-forge -y ncl cairo fontconfig freetype bzip2
             conda activate solps_env
-            echo conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+            echo \$\{CONDA_PREFIX\}/../bin/conda activate solps_env >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
             echo NCARG_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
             echo LD_NCARG  = -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
             echo NCARG_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1576,12 +1583,12 @@ if ("$OSTYPE" == "linux") then
             sleep 1
           else
             conda activate solps_env
-            set ncarg_installed = `conda list -n solps_env | awk '{print $1}' | grep -w ncl`
+            set ncarg_installed = `$CONDA_BASE/bin/conda list -n solps_env | awk '{print $1}' | grep -w ncl`
             if ("$ncarg_installed" != "") then
                 echo NCARG library library already locally installed.
             else
                 set RESTART_SOLPS = 1
-                conda install -c conda-forge -y ncl cairo fontconfig freetype bzip2
+                $CONDA_BASE/bin/conda install -c conda-forge -y ncl cairo fontconfig freetype bzip2
                 echo NCARG_DIR  = \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
                 echo LD_NCARG  = -L\$\{NCARG_DIR\} -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext \`pkg-config --libs cairo\` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
                 echo NCARG_DIR  \?= \$\{CONDA_PREFIX\}/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
@@ -1840,14 +1847,14 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
       if ("$COMPILER" == "gfortran") then
         cat <<EOF >> Makefile
 linux.gfortran:
-	@make all F77="gfortran" \\
-	CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
-	F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
-	F90="gfortran" \\
-	F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
-	F90OBJS="" \\
-	RANLIB="echo" \\
-	BLDFLAG="ar cr"
+  @make all F77="gfortran" \\
+  CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
+  F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+  F90="gfortran" \\
+  F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+  F90OBJS="" \\
+  RANLIB="echo" \\
+  BLDFLAG="ar cr"
 EOF
         make linux.gfortran
       else
@@ -1858,14 +1865,14 @@ EOF
       sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
       cat <<EOF >> Makefile
 darwin.gfortran:
-	@make all F77="gfortran" \\
-	CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
-	F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
-	F90="gfortran" \\
-	F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
-	F90OBJS="" \\
-	RANLIB="echo" \\
-	BLDFLAG="ar cr"
+  @make all F77="gfortran" \\
+  CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
+  F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+  F90="gfortran" \\
+  F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+  F90OBJS="" \\
+  RANLIB="echo" \\
+  BLDFLAG="ar cr"
 EOF
       make darwin.gfortran
     endif

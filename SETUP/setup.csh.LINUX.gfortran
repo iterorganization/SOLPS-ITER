@@ -25,8 +25,8 @@ if (! -d "${CONDA_ROOT}" ) then
 else
     setenv CONDA_CHANGEPS1 no
     source ${CONDA_ROOT}/etc/profile.d/conda.csh >& /dev/null
-    set env_exists = `conda env list | awk '{print $1}' | grep -w solps_ncl_env`
-    if ("$env_exists" == "") then
+    set CONDA_BASE = `conda info --base`
+    if ( ! -d "$CONDA_BASE/envs/solps_ncl_env" ) then
         set MISSING_DEPENDENCY = 1
     else
         conda activate solps_ncl_env
