@@ -1,0 +1,22 @@
+GR_ROOT ?= ${GR_HOME}
+
+LD_NAG     = -L${LAPACK_LIB_DIR} -llapack -L${BLAS_LIB_DIR} -lblas
+
+#CPP      = -/lib/cpp -traditional
+CPP       = /usr/bin/cpp -traditional
+
+FC       ?= gfortran
+
+ifdef SOLPS_DEBUG
+FCOPTS    = -debug all -ffpe-trap=invalid -ffpe-trap=zero -ftrapv -fsignaling-nans
+endif
+
+GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu -L$(MOTIF_LIB_DIR)
+
+#LDLIBS   = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS    =
+
+#!!!Local Variables:
+#!!! mode: Makefile
+#!!! End:
+

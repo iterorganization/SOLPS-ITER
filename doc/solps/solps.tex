@@ -337,7 +337,7 @@ Those libraries which are not available in a cluster must be necessarily locally
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
-it is possible to automatically build the MSCL, GKS, and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
+it is possible to automatically obtain the Blas/Lapack, NetCDF and NCARG libraries, which might be not already available in some HPC clusters, using a local Conda installation, and the JSON-Fortran, MSCL, GKS, and GR libraries, which are usually not already available in most of the HPC clusters, building these from source in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Note the NCARG library can be obtained only for cluster installations using a {\tt gfortran} compiler. The compiling flags needed to correctly link these libraries are also automatically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -361,6 +361,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
 \begin{description}\index{Hostnames}
   \item[ASIPP] Academica Sinica, Hefei: *.ipp.cas.cn
   \item[CCFE] Culham Centre for Fusion Energy: *.ccfe.ac.uk
+  \item[DARWIN] Stand-in for a MacOS Darwin operating system on a stand-alone laptop
   \item[FZJ] Forschungszentrum J{\"u}lich: *.fz-juelich.de, *.ipp.kfa-juelich.de
   \item[GA] General Atomics: *.fusion.gat.com
   \item[IAEA] Internal Atomic Energy Agency: *.iaea.org
@@ -375,6 +376,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[JET] JET domain: *.jet.uk
   \item[KEIO] Keio University of Yokohama: *.keio.ac.jp
   \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be
+  \item[LINUX] Stand-in for a Linux-based operating system on a stand-alone laptop
   \item[MEPHI] Moscow Engineering Physics Institute: *.mephi.ru
   \item[MPCDF] Max Planck Computing and Data Facility: *.mpcdf.mpg.de
   \item[NERSC] DOE supercomputer center: *.nersc.gov
@@ -636,45 +638,17 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
-\subsection{MacOS support}
-\index{MacOS support}
+\subsection{Installation on local machines}
+\index{Installation on local machines}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
-
-First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
-
-The following external libraries must be then installed using Homebrew:
-
-\begin{description}
-\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
-\item[Cross-platform make] using the formula: {\tt brew install cmake}.
-\item[ctags] using the formula: {\tt brew install ctags}.
-\item[Doxygen] using the formula: {\tt brew install doxygen}.
-\item[Freetype] using the formula: {\tt brew install freetype}.
-\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
-\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
-\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
-\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
-\item[PNG library] using the formula: {\tt brew install libpng}.
-\item[XPrint client library] using the formula: {\tt brew install libxp}.
-\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
-\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
-\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
-\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
-\end{description}
-
-Further external libraries must be instead installed using MacPorts:
-
-\begin{description}
-\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
-\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
-\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
-\end{description}
-
-The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
+The code can be compiled also on local machines for full offline usage, provided that the user attempting the installation has admin rights. Different Unix-based environments are supported, namely Linux (e.g.\ for Ubuntu computers) and Darwin (for Apple MacOS computers), and different CPU architectures (x86\_64 and arm64). The corresponding hostnames are {\bf LINUX} and {\bf DARWIN}, respectively, and the used compiler is {\tt gfortran}. The various setup and configuration files for both the main code and the submodules are already provided.\\
+On Linux systems a Conda-based package manager needs to be installed, which is automatically done while building the various libraries (see next paragraph). On Darwin systems, instead, as a prerequirement the user will need to install the {\tt XQuartz} package (\href{https://www.xquartz.org/}{https://www.xquartz.org/}), the {\tt Homebrew} package manager (\href{https://brew.sh/}{https://brew.sh/}) and the {\tt MacPorts} package manager (\href{https://ports.macports.org/}{https://ports.macports.org/}). A python installation also needs to be present.\\
+The various libraries required for the code to be fully operational need to be installed, before attempting to compile the code. All required libraries, for both Linux and Darwin systems, can be completely automatically downloaded and/or compiled by running the script
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
+which will guide the user through all the required installation steps. The provided setup and configuration files already recognize the paths to the compiled libraries as automatically provided by the above script.\\
+The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested. Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -1680,7 +1654,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
-  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs all external dependencies needed to correctly compile and run \SOLPSITER, if not already present, in a fully automatized way. Additionally, if needed, it automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file and in the corresponding configuration files of the various submodules. For local \SOLPSITER installations, all required external dependencies can be locally provided. For installations on HPC clusters, only the dependencies which may be missing are provided, namely the Blas/Lapack, NetCDF, NCARG, JSON-Fortran, MSCL, GKS, and GR libraries. Note that the NCARG library can be built only for cluster installations using a {\tt gfortran} compiler.
+  \item[install\_miniforge]\index{install\_miniforge} This script installs a \SOLPSITER-specific local Conda installation, based on {\tt miniforge}, located in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Such installation is required to obtain some external packages needed by the compilation of the code, namely Blas/Lapack, NetCDF and NCARG, using the {\tt install\_dependencies} script.
   \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.

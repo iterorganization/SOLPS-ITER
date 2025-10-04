@@ -15,6 +15,7 @@ module load Fundamental-Constants/0.1.1
 module load impi/2021.10.0-intel-compilers-2023.2.1
 module load netCDF-Fortran/4.6.1-iimpi-2023b
 module load HDF5/1.14.3-iimpi-2023b
+module load json-fortran/8.5.2-intel-compilers-2023.2.1
 
 module load IPython/8.17.2-GCCcore-13.2.0
 
@@ -51,12 +52,8 @@ setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 setenv NETCDF_HOME /toks/scratch/dpc/easybuild/software/netCDF-Fortran/4.6.1-iimpi-2023b
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
-<<<<<<< HEAD
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
-=======
 
 setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
->>>>>>> 983edbe5 (Updated IPP.fort64 setup and config files to new hardware and modules for tok cluster)
 
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
