@@ -50,7 +50,7 @@ setenv SOLPSWORK ${SOLPSTOP}/runs
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
 
-if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster or on a local Linux device
   if ( $?SOLPS_HOST_NAME_FORCE ) then
     setenv HOST_NAME $SOLPS_HOST_NAME_FORCE
     echo "Running at $HOST_NAME (set by SOLPS_HOST_NAME_FORCE)"
@@ -101,7 +101,7 @@ endif
 limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
-if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
   set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
   if ((-f $setup.env.local.${USER}) && \
       ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
@@ -196,9 +196,9 @@ setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH
 setenv OLD_PATH    "${PATH}"
 setenv PATH        "${SOLPS_PATH}:${PATH}"
 if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
+  setenv LD_LIBRARY_PATH "${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}"
 else
-  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python
+  setenv LD_LIBRARY_PATH "${SOLPSLIB}:${SOLPSTOP}/lib/python"
 endif
 setenv PYTHONPATH ${PYTHONPATH}:${SCRIPTS_PATH}
 if ($?PYTHON_PATH) then
@@ -328,7 +328,7 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
   set setup_post = `mktemp`
   env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
      -e '1i# Generated environment cache. Do not edit!' >! $setup_post
@@ -347,6 +347,6 @@ if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
 endif
 
 # List loaded modules, assuming to work on some HPC cluster
-if (`uname` != "Darwin") then
+if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then
   module list
 endif

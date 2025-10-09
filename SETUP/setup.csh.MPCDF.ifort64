@@ -41,6 +41,7 @@ else if ($cluster == "viper") then
 endif
 
 # Compiler
+setenv CC icc
 setenv FC ifort
 setenv MPI_FC mpiifort
 
