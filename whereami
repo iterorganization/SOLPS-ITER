@@ -36,6 +36,7 @@ case "*.iferc-csc.org":
   echo IFERC
   breaksw
 case "*.eufus.eu":
+case "*.efgw.local":
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
 case "*.galileo.cineca.it"
