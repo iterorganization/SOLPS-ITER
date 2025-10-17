@@ -68,6 +68,7 @@ ifeq ($(shell [ -e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes 
 endif
 
 MAKETAGS ?= ctags -e -f
+export MAKETAGS
 
 # Setup debug flags
 EXT_DBG =

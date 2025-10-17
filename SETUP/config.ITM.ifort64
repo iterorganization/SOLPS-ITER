@@ -57,6 +57,7 @@ MPI_FC    ?= mpiifort
 ifdef SOLPS_MPI
 FC         = ${MPI_FC}
 endif
+MAKETAGS   = etags -o
 
 #
 # Preprocessor options
