@@ -25,7 +25,7 @@ end
 if isfield(rates,'version')
     version = rates.version;
 else
-    version = '03.002.000';
+    version = '03.002.001';
 end
 
 disp(['write_b2frates -- file version ',version]);

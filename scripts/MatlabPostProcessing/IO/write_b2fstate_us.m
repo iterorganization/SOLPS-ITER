@@ -1,5 +1,5 @@
-function write_b2fstate(file,label,state)
-% write_b2fstate(file,label,state)
+function write_b2fstate_us(file,label,state)
+% write_b2fstate_us(file,label,state)
 %
 % Write b2fstati/b2fstate file for use by B2.5.
 %
@@ -27,7 +27,7 @@ end
 if isfield(state,'version')
     version = state.version;
 else
-    version = '03.002.000';
+    version = '03.002.001';
 end
 
 disp(['write_b2fstate -- file version ',version]);
