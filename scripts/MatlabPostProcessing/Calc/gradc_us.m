@@ -12,7 +12,7 @@ nVx = gmtry.nVx;
 
 % initialize output
 gfun = zeros(nCv,2);
-if (mode<0 | mode>1)
+if (mode<0 || mode>1)
     error('mode must be 0 or 1')
 end
 

@@ -20,8 +20,8 @@ end
 
 %% Get version of the b2fstate file
 
-%line    = fgetl(fid);
-%version = line(8:17);
+line    = fgetl(fid);
+version = line(8:17);
 
 %state.version = version;
 

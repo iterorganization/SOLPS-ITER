@@ -20,6 +20,9 @@ if (fid == -1)
    error(msg);
 end
 
+line    = fgetl(fid);
+version = line(8:17);
+
 
 %% Read dimensions nx, ny, ns
 
