@@ -12,22 +12,31 @@ setenv PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}
 endif
 setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
-setenv FC gfortran
+setenv SCRATCH_DIR /pfs/scratch/$USER
 
-# Load modules
-module unload imasenv
-module load git/2.23
+module load cineca-modules/1.0
+module load cmake/3.27.9
+module load python/3.11.7
+module load nag-library/27
+module load texinfo/7.0.3
+module load emacs/29.3
+module load netCDF/4.9.2-gompi-2023b netCDF-Fortran/4.6.1-gompi-2023b
+
+# add IMAS module list to module system
+module use /gw/swimas/modules/all
+
+# load IMAS modules for FOSS
 module load IMAS/3.42.0-2025.01-foss-2023b
 module load GGD/1.12.0-foss-2023b-DD-3.42.0
 module load Fundamental-Constants/0.1.1 AMNS/1.5.1-foss-2023b-DD-3.42.0
-module load json-fortran/8.5.2-GCC-13.2.0
-module unload cmake
-module load cmake/3.18.2
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
+
+# Load modules
+module load json-fortran/8.5.2-GCC-13.2.0
+# module unload cmake
+# module load cmake/3.18.2
 setenv EBVERSIONMSCL "1.2.4"
-module load itm-nag
-module load netCDF/4.9.2-gompi-2023b netCDF-Fortran/4.6.1-gompi-2023b
-setenv SYSNAME `fs sysname | cut -d "'" -f 2`
+setenv SYSNAME x86_64_rhel9
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules
@@ -70,6 +79,6 @@ else
 endif
 
 # Debugger (set environment variable DBX)
-module load totalview/2023.2
-setenv DBX totalview
+# module load totalview/2023.2
+# setenv DBX totalview
 
