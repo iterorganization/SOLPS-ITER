@@ -39,27 +39,46 @@ h  = struct('h',[]);
 if isfield(gmtry,'nCv')
     
     % Plot all internal cells as set of faces
-    for iCv = 1:gmtry.nCi
-       rco = [];
-       zco = [];
-       for iFc = 1:gmtry.cvFcP(iCv,2)
-            rco    = [rco,[gmtry.vxX(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),1));...
-                          gmtry.vxX(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),2))]];
-            zco    = [zco,[gmtry.vxY(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),1));...
-                          gmtry.vxY(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),2))]];
-       end
-       h(iCv).h = plot(rco,zco,varargin{:});hold on;
+    nInt = gmtry.nCi;
+    R_all = [];
+    Z_all = [];
+
+    for iCv = 1:nInt
+        startIdx = gmtry.cvFcP(iCv,1);
+        nFc      = gmtry.cvFcP(iCv,2);
+        fcIdx    = gmtry.cvFc(startIdx:startIdx+nFc-1);
+
+        vx1 = gmtry.fcVx(fcIdx,1);
+        vx2 = gmtry.fcVx(fcIdx,2);
+
+        rco = [gmtry.vxX(vx1) gmtry.vxX(vx2)]';
+        zco = [gmtry.vxY(vx1) gmtry.vxY(vx2)]';
+
+        R_all = [R_all; rco(:); NaN];
+        Z_all = [Z_all; zco(:); NaN];
     end
 
-    % Guard cells: black
-    for iCv = gmtry.nCi+1:gmtry.nCv
-        iFc = gmtry.cvFc(gmtry.cvFcP(iCv,1));
-        rco = [gmtry.vxX(gmtry.fcVx(iFc,1));...
-               gmtry.vxX(gmtry.fcVx(iFc,2))];
-        zco = [gmtry.vxY(gmtry.fcVx(iFc,1));...
-               gmtry.vxY(gmtry.fcVx(iFc,2))];
-       h(iCv).h = plot(rco,zco,'k');hold on;
+    % Plot all internal faces in one go
+    hInt = plot(R_all, Z_all, varargin{:});
+    hold on;
+
+    % --- Guard cells (black lines) ---
+    nGuard = gmtry.nCv - gmtry.nCi;
+    R_guard = zeros(3 * nGuard, 1); % 2 pts + NaN per line
+    Z_guard = zeros(3 * nGuard, 1);
+
+    for k = 1:nGuard
+        iCv = gmtry.nCi + k;
+        iFc = gmtry.cvFc(gmtry.cvFcP(iCv,1)); % single face
+        vx  = gmtry.fcVx(iFc,:);
+        idx = (k-1)*3 + (1:3);
+        R_guard(idx) = [gmtry.vxX(vx(1)); gmtry.vxX(vx(2)); NaN];
+        Z_guard(idx) = [gmtry.vxY(vx(1)); gmtry.vxY(vx(2)); NaN];
     end
+
+    % Single plot call for all guard cells
+    hGuard = plot(R_guard, Z_guard, 'k');
+    axis equal
         
 else
     switch gmtry.nncut
@@ -124,9 +143,5 @@ else
             
     end
 end
-
-% Reset status of hold
-if ~hs, hold off; end;
-
 
 
