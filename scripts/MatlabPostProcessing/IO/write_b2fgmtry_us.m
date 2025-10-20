@@ -19,7 +19,7 @@ end
 
 %% Write a version header
 
-VERSION = 'VERSION03.002.000 Matlab';
+VERSION = 'VERSION03.002.001 Matlab';
 fprintf(fid,'%s\n',VERSION);
 disp(['write_b2fgmtry_us -- file version ',VERSION(8:end)]);
 
