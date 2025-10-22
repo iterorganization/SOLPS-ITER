@@ -20,7 +20,7 @@
 # Add -DLEGACYCOMP to SOLPS_CPP
 #
 
-       NCDIR ?= ${ITM_NETCDF_DIR}
+#       NCDIR ?= ${EBROOTNETCDF}
    MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
@@ -34,7 +34,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = `pkg-config --libs netcdf netcdf-fortran`
+# LD_NETCDF  = `pkg-config --libs netcdf`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
@@ -63,7 +63,7 @@ MAKETAGS   = etags -o
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM -DNO_CDF
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
