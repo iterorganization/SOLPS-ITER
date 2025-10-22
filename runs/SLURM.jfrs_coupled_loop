@@ -1,15 +1,15 @@
 #! /bin/tcsh
 
-#SBATCH  --nodes=1
-#SBATCH  --ntasks-per-node=#PROCS#
-#SBATCH  --cpus-per-task=#CPUS#
-#SBATCH  --time=#HOURS#:00:00
-#SBATCH  --mail-user=#EMAIL#
-#SBATCH  --mail-type=END,FAIL
-#SBATCH  --job-name=#JOBNAME#
-#SBATCH  --partition=#PART#
-#SBATCH  --account=MISONIC
-#SBATCH  --no-requeue
+#SBATCH --nodes=#NODES#
+#SBATCH --ntasks-per-node=#PROCS#
+#SBATCH --cpus-per-task=#CPUS#
+#SBATCH --time=#HOURS#:00:00
+#SBATCH --mail-user=#EMAIL#
+#SBATCH --mail-type=END,FAIL
+#SBATCH --job-name=#JOBNAME#
+#SBATCH --partition=#PART#
+#SBATCH --account=MISONIC
+#SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP#
 
@@ -29,6 +29,11 @@ module load gdb4hpc
 module load cray-netcdf/4.6.1.3
 module load cray-parallel-netcdf/1.8.1.4
 module list
+
+set STANDALONE_ARG="#STANDALONE_ARG#"
+set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
+set COMPRESS_ARG="#COMPRESS_ARG#"
+set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
@@ -54,9 +59,9 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-time b2run ${USE_MPI} ${USE_OMP} b2mn >! run.log
+time b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
-QSUB.postprocess_coupled
+QSUB.postprocess${COUPLED_SUFFIX}
 
 preserve_scratch_to_work
 

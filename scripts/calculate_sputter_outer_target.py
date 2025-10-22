@@ -8,7 +8,7 @@ import sputter
 
 parser=argparse.ArgumentParser(description="""
 Calculate sputtering at the outer target based on the SOLPS data
-stored in the MDSplus server solps-mdsplus.aug.ipp.mpg.de
+stored in the MDSplus server solps-mdsplus.ipp.mpg.de
 """, formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("--target", "-t", type=str, help="Target material (default W)",default='W')
 parser.add_argument("Shot", type=int, help="Shot number")

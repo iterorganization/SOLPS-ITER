@@ -17,7 +17,7 @@
 %              the left-most end, otherwise false                              %
 % strata_plot: If true then divide the EIRENE source into components from each %
 %              stratum (in a new figure)                                       %
-% axstrat:     Array of aces into which strata plots will be placed            % 
+% axstrat:     Array of axes into which strata plots will be placed            % 
 % makeplot:    Decides whether to make plots or just pass back the values in   %
 %              the radial balance plots                                        %
 % areaend:     Either 'left', 'right' or 'none'. Defines the poloidal end      %

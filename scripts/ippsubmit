@@ -3,23 +3,38 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
+set NODES=1
 set PROCS=1
+set PROCS_TOT=1
+set PROCS_PER_NODE=1
 set THREADS=1
+set THREADS_TOT=1
+set CPU_TOT=1
 set hours=24
 set mem=4GB
 set chain="unset"
+set job_count=0
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
 set MPIOPTS=""
-set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set LOOP_OPTS=""
 set OPTOPTS=""
 setenv SOLPS_OPT ""
+set exclusive=""
+set run_dirs=""
+set run_number = 1
+set mpi_flag = 0
+set openmp_flag = 0
+set batch_flag = 0
+set manual_nodes_flag = 0
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
 argloop:
@@ -39,6 +54,7 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
+  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
@@ -49,6 +65,15 @@ Available options are:
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>          memory size (default $mem)
+  -N <<NODES>>             number of nodes requested (default $NODES)
+  -b <<RUN_DIRS_LIST>>     ask for a batch submission of multiple runs from the folders in <<RUN_DIRS_LIST>>
+                           the comma-separated list <<RUN_DIRS_LIST>> (e.g. -b 'run1,run2')
+
+Available per-job resources on the cluster:
+  Up to 256 CPUs per node, on 1 or multiple nodes
+  Maximum memory per CPU: 10 GB
+  Maximum memory per node: 370 GB
+  Maximum run times: 2.00.00 h, 24.00.00 h or 48.00.00 h, depending on qos
 
 EOF
     exit
@@ -64,23 +89,23 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
-    echo run.log will be compressed
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     shift
     set LOOP_OPTS="-z ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
-    echo Asking for a B2.5 standalone run
     shift
     set LOOP_OPTS="-s ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-opt_tgtX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
@@ -99,7 +124,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_adjX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/adj
@@ -117,7 +142,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
     endif
@@ -128,7 +153,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-adjX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_ADJ) then
       source $SOLPSTOP/SETUP/adj
     endif
@@ -145,13 +170,12 @@ EOF
       set MPI_SET=yes
     endif
     set MPIOPTS="$1"
-    echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for MPI run with a total of $PROCS processors
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
 #    echo $HELP_STRING
     set LOOP_OPTS="-m ${HELP_STRING} ${LOOP_OPTS}"
+    set mpi_flag = 1
     goto argloop
   endif
   if ("X${1}X" == "X-tX") then
@@ -161,11 +185,21 @@ EOF
       set OPENMP_SET=yes
     endif
     set THREADS="$1"
-    echo Asking for OpenMP run with $THREADS threads
     shift
     set HELP_STRING=\"${THREADS}\"
 #    echo $HELP_STRING
     set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}"
+    set openmp_flag = 1
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    shift
+    set HELP_STRING="${NODES}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${HELP_STRING} ${LOOP_OPTS}"
+    set manual_nodes_flag = 1
     goto argloop
   endif
   if ("X${1}X" == "X-TX") then
@@ -185,7 +219,6 @@ EOF
   if ("X${1}X" == "X-MX") then
     shift
     set mem="$1"
-    echo Requested memory is ${mem}
     shift
     set HELP_STRING=\"${mem}\"
 #    echo $HELP_STRING
@@ -194,34 +227,143 @@ EOF
   endif
   if ("X${1}X" == "X-cX") then
     shift
-    set chain="$1"
-    echo Chain submission following job number ${chain}
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
+    goto argloop
+  endif
+  if ("X${1}X" == "X-bX") then
+    shift
+    set batch_flag = 1
+    set run_dirs=(`echo $1 | sed 's/,/ /g'`)
+    @ run_number = $run_number * $#run_dirs
+    echo Submitting $run_number batch runs from directories: $run_dirs
     shift
     goto argloop
   endif
 
-if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
+if ($mpi_flag == 1) then
+  @ PROCS_TOT = $run_number * $PROCS
+endif
+if ($openmp_flag == 1) then
+  @ THREADS_TOT = $run_number * $THREADS
+endif
+@ CPU_TOT = $run_number * $PROCS * $THREADS
+
+set mem_num = `echo $mem | sed 's/[^0-9]*//g'`
+
+if ($mem_num > 10) then
+  echo Error: requested memory per CPU exceeds the allowed maximum of 10 GB
+  exit 1
+endif
+
+if ($batch_flag == 0) then
+  if ($mpi_flag == 0 && $openmp_flag == 0) then
+    echo Asking for serial run
+    echo Total number of CPU requested: 1
+  else if ($mpi_flag == 1 && $openmp_flag == 0) then
+    echo Asking for MPI run with $PROCS processors
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $PROCS_TOT
+  else if ($mpi_flag == 0 && $openmp_flag == 1) then
+    echo Asking for OpenMP run with $THREADS threads
+    echo Total number of CPU requested: $THREADS
+  else if ($mpi_flag == 1 && $openmp_flag == 1) then
+    echo Asking for hybrid MPI+OpenMP run with $PROCS processors and $THREADS threads
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $CPU_TOT
+  endif
+else if ($batch_flag == 1) then
+  if ($mpi_flag == 0 && $openmp_flag == 0) then
+    echo Asking for serial batch runs
+    echo Total number of CPU requested: $run_number
+  else if ($mpi_flag == 1 && $openmp_flag == 0) then
+    echo Asking for MPI batch runs with $PROCS processors each one
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $PROCS_TOT
+  else if ($mpi_flag == 0 && $openmp_flag == 1) then
+    echo Asking for OpenMP batch runs with $THREADS threads each one
+    echo Total number of CPU requested: $THREADS_TOT
+  else if ($mpi_flag == 1 && $openmp_flag == 1) then
+    echo Asking for hybrid MPI+OpenMP batch runs with $PROCS processors and $THREADS threads each one
+    echo Using MPI options: $MPIOPTS
+    echo Total number of CPU requested: $CPU_TOT
+  endif
+endif
+
+if ($manual_nodes_flag == 0) then
+  if ($CPU_TOT > 256) then
+    set NODES = `echo $CPU_TOT | awk '{print ($1 % 256 == 0) ? int($1/256) : int($1/256) + 1}'`
+  endif
+else
+  if ($CPU_TOT > `expr $NODES \* 256`) then
+    echo Error: maximum number of CPUs per node is 256. Request more nodes.
+    exit 1
+  endif
+endif
+
+echo Requested memory per CPU is ${mem}
+
+@ mem_tot = ( $mem_num * $CPU_TOT + $NODES - 1 ) / $NODES
+if ( $mem_tot > 370 ) then
+  echo Error: total requested memory per node exceeds the allowed maximum of 370 GB.
+  echo Request less memory per CPU or more nodes.
+  exit 1
+endif
+
+if ($batch_flag == 0) then
+  if ($standalone == "yes") then
+    echo Asking for a B2.5 standalone run
+  else if (-s fort.1 && $standalone == "no") then
     echo Assuming run with Eirene
-    echo No argument is specified. Looking for SLURM.ipp_coupled$compress
-    set QSUB=`climb_and_look_for SLURM.ipp_coupled$compress`
-    if ($QSUB == "//SLURM.ipp_coupled$compress") then
-      if (-s $SOLPSTOP/runs/SLURM.ipp_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/SLURM.ipp_coupled$compress"
-      else
-        set QSUB=""
+  else 
+    echo Asking run with Eirene but no fort.1 file found: reverting to a standalone run
+    set standalone_arg="-s"
+    set coupled_suffix=""
+  endif
+else if ($batch_flag == 1) then
+  if ($standalone == "yes") then
+    echo Asking for B2.5 standalone runs
+  else if ($standalone == "no") then
+    set all_have_fort1 = 1
+    foreach dir ($run_dirs)
+      if (! -s $dir/fort.1) then
+        set all_have_fort1 = 0
+        break
       endif
+    end
+    if ($all_have_fort1) then
+      echo Assuming runs with Eirene
+    else
+      echo Asking runs with Eirene but no fort.1 file found in some run directories: reverting to standalone runs
+      set standalone_arg="-s"
+      set coupled_suffix=""
     endif
-  else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
-    echo No argument is specified. Looking for SLURM.ipp$compress
-    set QSUB=`climb_and_look_for SLURM.ipp$compress`
-    if ($QSUB == "//SLURM.ipp$compress") then
-      if (-s $SOLPSTOP/runs/SLURM.ipp$compress) then
-        set QSUB="$SOLPSTOP/runs/SLURM.ipp$compress"
-      else
-        set QSUB=""
-      endif
+  endif
+endif
+
+if ($compress_suffix == ".gz") then
+  echo run.log files will be compressed
+endif
+
+if ($1 == "") then
+  echo No argument is specified. Looking for SLURM.ipp
+  set QSUB=`climb_and_look_for SLURM.ipp`
+  if ($QSUB == "//SLURM.ipp") then
+    if (-s $SOLPSTOP/runs/SLURM.ipp) then
+      set QSUB="$SOLPSTOP/runs/SLURM.ipp"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -251,10 +393,14 @@ endif
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
 endif
 
 # logic to determine the partition and qos on the IPP TOK cluster
-if ($PROCS == 1) then
+if ($CPU_TOT == 1) then
   set part=s.tok
   if ($hours > 36 ) then
     set qos=s.tok.long
@@ -264,14 +410,33 @@ if ($PROCS == 1) then
     set qos=s.tok.short
   endif
 else
-  set part=p.tok.openmp
-  if ($hours > 24) then
-    set qos=p.tok.openmp.48h
-  else if ($hours > 2) then
-    set qos=p.tok.openmp.24h
-  else
-    set qos=p.tok.openmp.2h
+  if ($NODES == 1) then
+    set part=p.tok.openmp
+    if ($hours > 24) then
+      set qos=p.tok.openmp.48h
+    else if ($hours > 2) then
+      set qos=p.tok.openmp.24h
+    else
+      set qos=p.tok.openmp.2h
+    endif
+  else if ($NODES > 1) then
+    set part=p.tok
+    if ($hours > 24) then
+      set qos=p.tok.48h
+    else if ($hours > 2) then
+      set qos=p.tok.24h
+    else
+      set qos=p.tok.2h
+    endif
   endif
+endif
+
+if ($NODES == 1) then
+  echo Running on 1 node, partition ${qos}
+  set PROCS_PER_NODE=$PROCS_TOT
+else if ($NODES > 1) then
+  echo Running on ${NODES} nodes, partition ${qos}
+  set PROCS_PER_NODE = `echo "$PROCS_TOT $NODES" | awk '{print ($1 % $2 == 0) ? int($1/$2) : int($1/$2)+1}'`
 endif
 
 sed \
@@ -279,8 +444,9 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
-  -e 's:#PROCS#:'$PROCS':g' \
-  -e 's:#THREADS#:'$THREADS':g' \
+  -e 's:#NODES#:'$NODES':g' \
+  -e 's:#PROCS#:'$PROCS_PER_NODE':g' \
+  -e 's:#THREADS#:'$THREADS_TOT':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
@@ -288,6 +454,12 @@ sed \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
+  -e 's:#RUN_NUMBER#:'$run_number':g' \
+  -e 's:#RUN_DIRS#:'"$run_dirs"':g' \
   < $QSUB > $NAME
 
 if ($chain != "unset") then
@@ -307,7 +479,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch --export=ALL $NAME
+  sbatch ${exclusive} --export=ALL $NAME
 else
-  sbatch --export=ALL --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --export=ALL --dependency=afterok:${chain} $NAME
 endif

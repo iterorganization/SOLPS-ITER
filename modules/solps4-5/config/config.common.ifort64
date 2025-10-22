@@ -1,5 +1,11 @@
 ifeq (${FC},f77)
 FC = ifort
+else
+ifeq (${FC},ifx)
+ifdef SOLPS_DEBUG
+FC = ifort
+endif
+endif
 endif
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 
@@ -11,7 +17,7 @@ CPP4OPTS = -P -I${SRCDIR} ${EQUIV4}
 CPP5OPTS = -P -I${SRCDIR} ${EQUIV5}
 SED = sed s:\#PREC\#:d:g
 SED =
-LINK_MOD = 
+LINK_MOD =
 
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
@@ -27,14 +33,19 @@ else
 FCOPTS += -O3
 endif
 endif
+ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 21; echo $$?),0)
+FCOPTS += -r8
+DBLOPTION =
+else
+DBLOPTION = -r8
+endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FCOPTS += -vec_report0
 endif
 
 DBLFC = ${FC}
-DBLOPTION = -r8
 DBLSED = sed -e s:\#PREC\#:d:g
-DBLSED = 
+DBLSED =
 
 INCMOD = -I
 MOD = mod

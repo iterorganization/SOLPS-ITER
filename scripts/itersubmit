@@ -1,24 +1,28 @@
 #! /usr/bin/env tcsh
 
 set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
-set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
-set PROCS=1
 set NODES=1
+set PROCS=1
 set THREADS=1
 set hours=36
 set mem=4GB
 set part="unset"
 set chain="unset"
+set job_count=0
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
 set MPIOPTS=""
-set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set LOOP_OPTS=""
 set OPTOPTS=""
 setenv SOLPS_OPT ""
+set exclusive=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -42,6 +46,7 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
+  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
@@ -53,8 +58,7 @@ Available options are:
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>          memory size (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
-  -Q <<PARTITION>>         partition on which to submit the job
-                           (default gen10_ib on CentOS nodes, gen11 on RedHat nodes)
+  -Q <<PARTITION>>         partition on which to submit the job (default "sirius")
 
 EOF
     exit
@@ -70,14 +74,16 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     echo run.log will be compressed
     shift
     set LOOP_OPTS="-z ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
@@ -86,7 +92,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_tgtX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
@@ -105,7 +111,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_adjX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/adj
@@ -123,7 +129,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
     endif
@@ -134,7 +140,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-adjX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_ADJ) then
       source $SOLPSTOP/SETUP/adj
     endif
@@ -148,6 +154,7 @@ EOF
     shift
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
@@ -163,6 +170,7 @@ EOF
     shift
     if (! $?SOLPS_OPENMP) then
       source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
     endif
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
@@ -218,9 +226,19 @@ EOF
   endif
   if ("X${1}X" == "X-cX") then
     shift
-    set chain="$1"
-    echo Chain submission following job number ${chain}
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
     shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
     goto argloop
   endif
 
@@ -230,9 +248,9 @@ set nodename=`hostname`
 set job_prefix="SLURM"
 if ($part == "unset") then
   if ($os == "CentOS") then
-    set part=gen10_ib
+    set part=altair
   else
-    set part=gen11
+    set part=sirius
   endif
 endif
 unsetenv LD_PRELOAD
@@ -242,27 +260,13 @@ endif
 unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
-    echo Assuming run with Eirene
-    echo No argument is specified. Looking for $job_prefix.iter_coupled$compress
-    set QSUB=`climb_and_look_for $job_prefix.iter_coupled$compress`
-    if ($QSUB == "//$job_prefix.iter_coupled$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.iter_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.iter_coupled$compress"
-      else
-        set QSUB=""
-      endif
-    endif
-  else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
-    echo No argument is specified. Looking for $job_prefix.iter$compress
-    set QSUB=`climb_and_look_for $job_prefix.iter$compress`
-    if ($QSUB == "//$job_prefix.iter$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.iter$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.iter$compress"
-      else
-        set QSUB=""
-      endif
+  echo No argument is specified. Looking for $job_prefix.iter
+  set QSUB=`climb_and_look_for $job_prefix.iter`
+  if ($QSUB == "//$job_prefix.iter") then
+    if (-s $SOLPSTOP/runs/$job_prefix.iter) then
+      set QSUB="$SOLPSTOP/runs/$job_prefix.iter"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -292,6 +296,10 @@ endif
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
 endif
 
 sed \
@@ -299,36 +307,40 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#NODES#:'$NODES':g' \
   -e "s:#TASKS#:'$TASKS':g" \
-  -e "s:#PROCS#:'$PROCS':g" \
-  -e "s:#NODES#:'$NODES':g" \
-  -e "s:#THREADS#:'$THREADS':g" \
+  -e 's:#PROCS#:'$PROCS':g' \
+  -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
-  -e "s:#JOBNAME#:'$JOB_NAME':g" \
+  -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
   < $QSUB > $NAME
 
 if ($chain != "unset") then
   set b2run_line=`grep -n "b2run" $NAME | cut -d ':' -f 1`
   @ before_line = $b2run_line - 1
-  head -n ${before_line} $NAME > $job_prefix.iter.after_$chain
-  echo "mv run.log.gz run.log.$chain.gz" >> $job_prefix.iter.after_$chain
-  echo "mv b2mn.prt b2mn.prt.$chain" >> $job_prefix.iter.after_$chain
-  echo "mv b2fstate b2fstati" >> $job_prefix.iter.after_$chain
-  echo "if (-e b2favere) mv b2favere b2faveri" >> $job_prefix.iter.after_$chain
+  head -n ${before_line} $NAME > $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv run.log.gz run.log.$chain.gz" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv b2mn.prt b2mn.prt.$chain" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "mv b2fstate b2fstati" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  echo "if (-e b2favere) mv b2favere b2faveri" >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
   set all_lines=`cat $NAME | wc -l`
   @ tail_lines = $all_lines - $before_line
-  tail -n $tail_lines $NAME >> $job_prefix.iter.after_$chain
-  set NAME=$job_prefix.iter.after_$chain
+  tail -n $tail_lines $NAME >> $SCRATCH_DIR/$job_prefix.iter.after_$chain
+  set NAME=$SCRATCH_DIR/$job_prefix.iter.after_$chain
 endif
 
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch ${exclusive} $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --dependency=afterok:${chain} $NAME
 endif

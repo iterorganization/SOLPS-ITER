@@ -2828,7 +2828,7 @@ c
       integer ns
 
       character*32 hlp_frm
-      integer is, ib, ii(1), nsns
+      integer is, ib, ii(1)
       intrinsic mod
 
       write(*,*) 'Writing ',trim(neutrals_filename)

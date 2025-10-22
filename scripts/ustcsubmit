@@ -3,20 +3,25 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
+set NODES=1
 set PROCS=1
 set hours=36
 set mem=4GB
 set part="long"
 set chain="unset"
+set job_count=0
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
 set MPIOPTS=""
-set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set LOOP_OPTS=""
 set job_prefix="SLURM"
 set OPTOPTS=""
 setenv SOLPS_OPT ""
+set exclusive=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -40,6 +45,7 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
+  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
@@ -64,14 +70,16 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     echo run.log will be compressed
     shift
     set LOOP_OPTS="-z ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
@@ -80,7 +88,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_tgtX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
@@ -99,7 +107,7 @@ EOF
   endif
   if ("X${1}X" == "X-opt_adjX") then
     shift
-    set standalone="yes"
+    set standalone_arg="-s"
     setenv SOLPS_OPT "opt_"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/adj
@@ -117,7 +125,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-tgtX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_TGT) then
       source $SOLPSTOP/SETUP/tgt
     endif
@@ -128,7 +136,7 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-adjX") then
-    set standalone="yes"
+    set standalone_arg="-s"
     if (! $?SOLPS_ADJ) then
       source $SOLPSTOP/SETUP/adj
     endif
@@ -142,6 +150,7 @@ EOF
     shift
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
@@ -156,6 +165,7 @@ EOF
     shift
     if (! $?SOLPS_OPENMP) then
       source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
     endif
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
@@ -198,34 +208,30 @@ EOF
   endif
   if ("X${1}X" == "X-cX") then
     shift
-    set chain="$1"
-    echo Chain submission following job number ${chain}
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
     shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
     goto argloop
   endif
 
 if ($1 == "") then
-  if (-s input.dat && $standalone == "no") then
-    echo Assuming run with Eirene
-    echo No argument is specified. Looking for $job_prefix.ustc_coupled$compress
-    set QSUB=`climb_and_look_for $job_prefix.ustc_coupled$compress`
-    if ($QSUB == "//$job_prefix.ustc_coupled$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.ustc_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.ustc_coupled$compress"
-      else
-        set QSUB=""
-      endif
-    endif
-  else
-    if ($standalone == "no") echo No input.dat file found: reverting to a standalone run
-    echo No argument is specified. Looking for $job_prefix.ustc$compress
-    set QSUB=`climb_and_look_for $job_prefix.ustc$compress`
-    if ($QSUB == "//$job_prefix.ustc$compress") then
-      if (-s $SOLPSTOP/runs/$job_prefix.ustc$compress) then
-        set QSUB="$SOLPSTOP/runs/$job_prefix.ustc$compress"
-      else
-        set QSUB=""
-      endif
+  echo No argument is specified. Looking for $job_prefix.ustc
+  set QSUB=`climb_and_look_for $job_prefix.ustc`
+  if ($QSUB == "//$job_prefix.ustc") then
+    if (-s $SOLPSTOP/runs/$job_prefix.ustc) then
+      set QSUB="$SOLPSTOP/runs/$job_prefix.ustc"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -254,6 +260,10 @@ endif
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
 endif
 
 sed \
@@ -287,7 +297,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch $NAME
+  sbatch ${exclusive} $NAME
 else
-  sbatch --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --dependency=afterok:${chain} $NAME
 endif

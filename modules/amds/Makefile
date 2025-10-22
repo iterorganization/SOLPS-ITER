@@ -93,13 +93,13 @@ all: $(RES2FBR) $(TARGET) $(CALC)
 .PHONY: VERSION clean neat all depend listobj force
 
 $(OBJDIR)/vacreate.o:
-	$(CC) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
+	$(CC) $(INCLUDES) -DCbFree=CbFree_ignore -c src/vacreate.c -o $(OBJDIR)/vacreate.o
 
 $(OBJDIR)/%.o : %.c
-	$(CC) -c $< -o $@
+	$(CC) $(INCLUDES) -c $< -o $@
 
 $(TARGET): $(DEST) $(MAKES)
-	$(CC) $(CFLAGS) -o $@ $(DEST) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DEST) $(LIBS)
 
 src/x_~fbr.c: src/amds.xrs $(RES2FBR)
 	$(RES2FBR) amdsResources < src/amds.xrs > src/x_~fbr.c
@@ -129,7 +129,7 @@ tags:
 	rm -f TAGS ; ${MAKETAGS} TAGS src/*.c src/*.h || touch TAGS
 
 depend: ${OBJS:.o=.c}
-	@$(CC) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
+	@$(CC) $(INCLUDES) -M $^ | sed '/^[^ ]*.o: / s|^|${OBJDIR}/|' | \
 	sed -e 's,^${OBJDIR}/,\$${OBJDIR}/,' | \
 	sed 's,: ${SOLPSTOP},: $${SOLPSTOP},' > ${OBJDIR}/dependencies.${COMPILER}
 

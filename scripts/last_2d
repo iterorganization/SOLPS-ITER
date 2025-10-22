@@ -1,0 +1,222 @@
+#!/bin/bash
+#
+# pshenoa version 2023/07/06
+# Governing script for the averaging of tracing files with last_2d.py
+#
+#======================================================================
+# USAGE:
+#
+# in the desired run directory:
+# plot_trc ires
+#                if suppled ires: sets up the averaging interval,
+#                if ires > 0 average the data over int(ires) iterations
+#                if ires < 0 average the data over float(-ires) [ms]
+#
+#                alternatively ires can be provied by simply changing
+#                the value in the hidden .RES file
+#
+# unformatted raw output is written to last_2d_out
+# formatted output of desired quantities is governed by last_2d.cmd file
+# by default the last_2d.cmd file in the present directory is used
+# if absent last_2d will search for it in the baserun directory above
+# and in the one from which the last_2d script is called
+#=======================================================================
+
+MARK=.L2D
+CMD_FILE=last_2d.cmd
+L2D_SCRIPT=last_2d.py
+TRC_DIR=tracing
+OUTPUT_RAW=last_2d_out
+OUTPUT_FMT=last_2d_out_f
+LN_FILES='b2time.nc b2tallies.nc'
+LL_USER='user.trc'
+
+B2EXE_DIR=b2mn.exe.dir
+CURRENT_DIR=${PWD##*/}
+BASERUN_DIR=../baserun
+if [ $CURRENT_DIR = $B2EXE_DIR ]
+then
+  BASERUN_DIR=../$BASERUN_DIR
+fi
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+LEXEC=last_2d.l2d.py
+LCMD=last_2d.l2d.cmd
+LLOG=last_2d.l2d.log
+LRES=.RES
+WRK_DIR=wrk.l2d
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$L2D_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$L2D_SCRIPT $LEXEC"
+  ln -sf "$SOURCE_DIR/$L2D_SCRIPT" "$LEXEC"
+else
+  echo "driver script $L2D_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $LCMD"
+  ln -sf "$CMD_FILE" "$LCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $BASERUN_DIR"
+  if [ -f "$BASERUN_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $BASERUN_DIR"
+    echo "ln -sf $BASERUN_DIR/$CMD_FILE $LCMD"
+    ln -sf "$BASERUN_DIR/$CMD_FILE" "$LCMD"
+  else
+    echo "no command file $CMD_FILE in $BASERUN_DIR"
+    echo "checking $CMD_LOCAL_DIR"
+    if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+      echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $LCMD"
+      ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$LCMD"
+    else
+      echo "checking $CMD_DIR"
+      if [ -f "$CMD_DIR/$CMD_FILE" ]
+      then
+        echo "command file $CMD_FILE spotted in $CMD_DIR"
+        echo "ln -sf $CMD_DIR/$CMD_FILE $LCMD"
+        ln -sf "$CMD_DIR/$CMD_FILE" "$LCMD"
+      else
+        echo "no command file $CMD_FILE found... raw results of the averaging will be written to $OUTPUT_RAW, FORMATTED OUTPUT $OUTPUT_FMT WONT BE WRITTEN!"
+      fi
+    fi
+  fi
+fi
+
+if [ -d "$WRK_DIR" ]
+then
+  echo "rm -rf $WRK_DIR"
+  rm -rf $WRK_DIR
+fi
+
+echo "mkdir $WRK_DIR"
+mkdir $WRK_DIR
+
+if [ -d "$TRC_DIR" ]
+then
+  echo "cp $TRC_DIR/* $WRK_DIR/"
+  cp "$TRC_DIR"/* "$WRK_DIR/"
+  echo "fixing format: sed -i 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+  sed -i 's/[0-9]-/E-/g' $WRK_DIR/*
+  sed -i 's/[0-9]+/E+/g' $WRK_DIR/*
+  count=`ls -1 $WRK_DIR/user.trc* 2>/dev/null | wc -l`
+  if [ $count > 1 ]
+  then
+    USER_TMP=`ls -1 $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
+    echo "temproary user.trc file = $USER_TMP spotted"
+    echo "cp -rf $USER_TMP $WRK_DIR/$LL_USER"
+    cp -rf  "$USER_TMP" "$WRK_DIR"/"$LL_USER"
+  fi
+  if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
+  then
+    for f in $LN_FILES; do {
+      if [ -f "$f" ]
+      then
+        echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
+      else
+        if [ -f "../$f" ]
+	then
+          echo "cp ../$f $WRK_DIR/$f" && cp "../$f" "$WRK_DIR/$f"
+	fi
+      fi
+    }; done
+  else
+    for f in $LN_FILES; do {
+      [ -f "$f" ] && echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
+    }; done
+  fi
+  for f in $LN_FILES; do {
+    [ ! -f "$WRK_DIR/$f" ] && echo "could not find $f file"
+    }; done
+fi
+
+ires=0
+if [ $# -eq 0 ]
+then
+  echo "no argument given, no adjustment to $LRES will be done"
+else
+  ires=$1
+  regex='^[+-]?[0-9]+([.][0-9]+)?+([eE][+-][0-9]+)?$'
+#  if [ -n "$ires" ] && [ "$ires" -eq "$ires" ] 2>/dev/null
+  if [[ $ires  =~ $regex ]]
+  then
+    if (( $(echo "$ires > 0." | bc -l)))
+    then
+      echo "positive argument given, averaging will be performed over the last int($ires) iterations"
+      echo "echo $ires > $LRES"
+      echo "$ires" > "$LRES"
+    fi
+    if (( $(echo "$ntime < 0." | bc -l)))
+    then
+      echo "negative argument given, averaging will be performed over the last $ires ms"
+      echo "echo $ires > $LRES"
+      echo "$ires" > "$LRES"
+    fi
+    if (( $(echo "$ires == 0." | bc -l)))
+    then
+      echo "0 argument provided, $LRES file will be removed"
+      echo "rm -rf $LRES"
+      rm -rf $LRES
+    fi
+  else
+    echo "WARNING: argument $ires is not a number, skipping"
+  fi
+fi
+
+if [ -f "$LRES" ]
+then
+  echo "$LRES file present, containing:"
+  cat "$LRES"
+fi
+
+if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$LEXEC" ]
+then
+  echo "workspace is set, procceed to averaging..."
+  echo "python $LEXEC $LCMD $WRK_DIR $LLOG"
+  python "$LEXEC" "$LCMD" "$WRK_DIR" "$LLOG"
+  echo "cat $LLOG"
+  cat $LLOG
+  echo "rm -f $LLOG"
+  rm -f $LLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $LEXEC $WRK_DIR/"
+  ls -l "$LEXEC" "$WRK_DIR/"
+fi
+
+echo "cleaning..."
+echo "rm -rf $LEXEC $LCMD $WRK_DIR $MARK"
+rm -rf "$LEXEC" "$LCMD" "$WRK_DIR" "$MARK"
+
+if [ -f "$OUTPUT_RAW" ]
+then
+  if [ -f "$OUTPUT_FMT" ]
+  then
+    echo "last_2d finished check $OUTPUT_FMT for the formatted and $OUTPUT_RAW for the raw results of the averaging"
+  else
+    echo "only $OUTPUT_RAW containing the raw output of the averaging was written, check the supplied $LCMD file"
+  fi
+else
+  echo "something went wrong no $OUTPUT_RAW produced (tracing files empty??)"
+fi

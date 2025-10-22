@@ -1,22 +1,30 @@
 # Test whether required environment variables are set
 # If not, attempt to determine them automatically
 
+UNAME := $(shell uname)
+
 # Identify HOST_NAME
 ifndef HOST_NAME
-  ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
-    # Identify host from whereami-script
-    HOST_NAME = $(shell echo `./whereami|tail -1`)
-    ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
-      # If no specific host identified, use default settings
+  ifneq ($(UNAME),Darwin)
+  # Assuming to work on some HPC cluster
+    ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+      # Identify host from whereami-script
+      HOST_NAME = $(shell echo `./whereami|tail -1`)
+      ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
+        # If no specific host identified, use default settings
+        HOST_NAME = default
+      endif
+    else
+      # If whereami-script not found, use default settings
       HOST_NAME = default
     endif
+    export HOST_NAME
+    ifeq (${HOST_NAME},default)
+      $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+    endif
   else
-    # If whereami-script not found, use default settings
-    HOST_NAME = default
-  endif
-  export HOST_NAME
-  ifeq (${HOST_NAME},default)
-    $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+  # Using MacOS, so assuming to work on a local device
+    HOST_NAME = DARWIN
   endif
 endif
 
@@ -60,6 +68,7 @@ ifeq ($(shell [ -e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes 
 endif
 
 MAKETAGS ?= ctags -e -f
+export MAKETAGS
 
 # Setup debug flags
 EXT_DBG =

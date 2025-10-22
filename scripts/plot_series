@@ -1,0 +1,183 @@
+#!/bin/bash
+#
+# pshenoa version 2023/07/07
+# Governing script for the series plotting with plot_trc.py
+#
+#======================================================================
+# USAGE:
+#
+# in the desired run directory:
+# plot_series $series.dat $series.name
+#                First argument is the series file produced by the
+#                get_series script
+#                Second argument can be used to control the outputfile
+#                name (.ps will be attached in the end if absent)
+#
+# by default the plot_series.cmd file in the present directory is used
+# if absent plot_series will search for it the directory above from
+# the script is invoked
+#=======================================================================
+
+MARK=.TRS
+CMD_FILE=plot_series.cmd
+PLT_SCRIPT=plot_trc.py
+OUTPUT_FILE=series
+OUTPUT_FMT=pdf
+ORIGIN_PDF=multipage.pdf
+DSH_FILE=.plt_series
+
+CURRENT_DIR=${PWD##*/}
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+PEXEC=plot_trc.series.py
+PCMD=plot_trc.series.cmd
+PLOG=plot_trc.series.log
+WRK_DIR=wrk.series
+WRK_FILE=series
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+then
+  OUTPUT_FMT=$PLOT_TRC_FMT
+  echo "Output will be written to Series_name.$OUTPUT_FMT"
+else
+  echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file Series_name.$OUTPUT_FMT will be used "
+fi
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$PLT_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$PLT_SCRIPT $PEXEC"
+  ln -sf "$SOURCE_DIR/$PLT_SCRIPT" "$PEXEC"
+else
+  echo "driver script $PLT_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $PCMD"
+  ln -sf "$CMD_FILE" "$PCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $CMD_LOCAL_DIR"
+  if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+    echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $PCMD"
+    ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$PCMD"
+  else
+    echo "checking $CMD_DIR"
+    if [ -f "$CMD_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_DIR"
+      echo "ln -sf $CMD_DIR/$CMD_FILE $PCMD"
+      ln -sf "$CMD_DIR/$CMD_FILE" "$PCMD"
+    else
+      echo "no command file $CMD_FILE found... plots wont be produced"
+    fi
+  fi
+fi
+
+SFILE=
+[ ! $# -eq 0 ] && {
+  SFILE=$1 && echo "Working with series file: $SFILE "
+} || {
+  [ -f $DSH_FILE ] && SFILE=`cat $DSH_FILE | tr -d ' '` && echo "Working with default series file: $SFILE"
+}
+shift
+[ ! $# -eq 0 ] && {
+  res=`echo $1 | rev | cut -f 1 -d "."`
+  res1=`echo "$OUTPUT_FMT" | rev`
+  if [ "$res" == "$res1" ]
+  then
+    OUTPUT_FILE=$1
+  else
+    snum=${#OUTPUT_FMT}
+    res2=`echo $1 | rev | cut -f $snum | rev`
+    OUTPUT_FILE="$res2"
+  fi
+  echo "Output will be written to: $OUTPUT_FILE.$OUTPUT_FMT"
+}
+
+if [ -d "$WRK_DIR" ]
+then
+  echo "rm -rf $WRK_DIR"
+  rm -rf $WRK_DIR
+fi
+echo "mkdir $WRK_DIR"
+mkdir "$WRK_DIR"
+
+if [ ! -z "$SFILE" ]
+then
+  echo "cp -rf $SFILE $WRK_DIR/$WRK_FILE"
+  cp -rf "$SFILE" "$WRK_DIR"/"$WRK_FILE"
+else
+  echo "series file was neither provided as an argument nor found in $DSH_FILE"
+fi
+
+if [ -d "$WRK_DIR" ] && [ ! -z "$(ls -A "$WRK_DIR")" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
+then
+  echo "workspace is set, start plotting..."
+  echo "python $PEXEC $PCMD $WRK_DIR $PLOG $PLOT_TRC_FMT"
+  python "$PEXEC" "$PCMD" "$WRK_DIR" "$PLOG" "$PLOT_TRC_FMT"
+  echo "cat $PLOG"
+  cat $PLOG
+  echo "rm -f $PLOG"
+  rm -f $PLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $PEXEC $PCMD $WRK_DIR/"
+  ls -l "$PEXEC" "$PCMD" "$WRK_DIR/"
+fi
+
+if [ "$OUTPUT_FMT" = "pdf" ]
+then
+  if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
+  then
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
+  else
+    echo "no $ORIGIN_PDF produced, trying .ps output instead"
+    OUTPUT_FMT=ps
+  fi
+fi
+
+if [ "$OUTPUT_FMT" = "ps" ]
+then
+  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ $count != 0 ]
+  then
+    echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
+    echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
+    gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+    echo "ps2pdf $OUTPUT_FILE.$OUTPUT_FMT $OUTPUT_FILE.pdf"
+    ps2pdf "$OUTPUT_FILE.$OUTPUT_FMT" "$OUTPUT_FILE.pdf"
+  else
+    echo "no *.ps produced, nothing to do"
+  fi
+fi
+
+echo "cleaning..."
+echo "rm -rf $PEXEC $PCMD $WRK_DIR $MARK"
+rm -rf "$PEXEC" "$PCMD" "$WRK_DIR" "$MARK"
+
+if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ]
+then
+  echo "plot_trc finished check $OUTPUT_FILE.$OUTPUT_FMT for the result"
+else
+  echo "no $OUTPUT_FILE.$OUTPUT_FMT produced, make sure proper $CMD_FILE is supplied"
+fi

@@ -1,0 +1,77 @@
+#!/bin/ksh
+# Helps to handle b2mndr_stime switch with saveb2 workflow
+# OPTIONS:
+#     -a  -- set b2mndr_stime to -1 (to be used if continuing without saveb2 -l)
+#     -l  -- pirnts time interval of the current tracing files
+#     -h  -- pirnts help
+#     -*  -- in other cases sets b2mndr_stime to current timestamp of b2fstati (to be used after saveb2 -l)
+
+NAME=${0##*/}
+USAGE="$NAME - Auxilary script to be used with b2save workflow. \n
+Usage: $NAME Options \n
+Options:  \n
+\t        -a  -- set b2mndr_stime to -1 (to be used if continuing without b2save -l) \n
+\t        -p  -- pirnts time interval of the current tracing files \n
+\t        -l  -- in other cases sets b2mndr_stime to current timestamp of b2fstati (to be used after b2save -l) \n
+"
+
+[ ! $# -eq 0 ] && arg=$1
+case $arg in
+  -a)
+    echo "Append mode: b2mndr_stim will be set to -1"
+    mode=a
+    ;;
+  -p)
+    echo "LTIME mode: fetching time interval of current tracing files"
+    mode=p
+    ;;
+  -l)
+    echo "saveb2 mode: b2mndr_stim will be set to current b2fstati timestamp"
+    mode=l
+    ;;
+   *)
+    print -- $USAGE
+    exit 1
+esac
+
+[ $mode == "p" ] && {
+
+  if [ -f tracing/blne.trc ]
+  then
+    cat tracing/blne.trc | sed "/^#/d" | head -1 | sed "s/^[ \t]*//" | cut -d " " -f 1
+    tail -1 tracing/blne.trc | sed "s/^[ \t]*//" | cut -d " " -f 1
+  fi
+
+} || {
+
+  if [ $mode == "a" ]
+  then
+    STIME=-1.0
+    echo "STIME = $STIME"
+  else
+    if [ $mode == "l" ] && [ -f b2fstati ]
+    then
+      STIME=`grep -A 1 time b2fstati | tail -1`
+      echo "STIME = $STIME"
+    else
+      echo "b2fstati is absent"
+    fi
+  fi
+
+  if [ ! -z "${STIME}" ]
+  then
+    if [ -f b2mn.dat ]
+    then
+      echo "deleting from b2mn.dat: `grep b2mndr_stim b2mn.dat`"
+      sed -i.bk '/b2mndr_stim/d' b2mn.dat
+      echo "adding to b2mn.dat: 'b2mndr_stim' '$STIME'"
+      echo "'b2mndr_stim' '$STIME'" >> b2mn.dat
+    else
+      echo "b2mn.dat is absent"
+    fi
+  else
+    echo "TIME veriable could not be set"
+  fi
+
+}
+
