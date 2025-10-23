@@ -9,10 +9,13 @@ echo "      integer ,parameter :: nbdirsmax=10" >> b2mod_diffsizes.F
 echo "      integer ,parameter :: nbdirsmax0=nbdirsmax" >> b2mod_diffsizes.F
 echo "      end module b2mod_diffsizes" >> b2mod_diffsizes.F
 
-sed -i -e '/ADCONTEXT/d' b2mn_hess.F90
+sed -i -e '/ADCONTEXT/d' b2mod_main_diffv_diffv.F90
+sed -i -e '/r8\/8/d' b2mod_main_diffv_diffv.F90
+sed -i -e '/nsigmx\/8/d' b2mod_main_diffv_diffv.F90
+sed -i -e 's/B2MN_STEP_DV_DV(j, jd0, jd, jdd, nbdirs)/B2MN_STEP_DV_DV(j, jd0, jd, jdd, nbdirs, nbdirs0)/g' b2mod_main_diffv_diffv.F90
 sed -i -e 's/state_avg, state_avgd, npar_opt, nbdirs0/state_avg, state_avgd, npar_opt, npar_opt/g' b2mn_hess.F90
 sed -i -e '/CALL B2MN_STEP_DV_DV/i\  CALL SET_TGT_TGT_PERTURBATION(switchd,switchd0)' b2mn_hess.F90
-sed -i -e 's/jd, jdd, arg1, nbdirs0)/jd, jdd, arg1, arg1)/g' b2mn_hess.F90
+sed -i -e 's/jd, jdd, arg1)/jd, jdd, arg1, arg1)/g' b2mn_hess.F90
 sed -i -e 's/nbdirs0)/npar_opt)/g' b2mn_hess.F90
 
 sed -i -e 's/arg10, nbdirs0)/arg10, arg10)/g' b2mod_driver_diffv_diffv.F90

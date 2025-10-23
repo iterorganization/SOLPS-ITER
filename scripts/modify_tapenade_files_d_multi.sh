@@ -1,7 +1,7 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-rm b2uxus_dv.F90 solve_covariance_dv.F90 calc_res_fp_dv.F90 cfwure_dv.F90 invert_matrix_dv.F90
+rm b2uxus_dv.F90 solve_covariance_dv.F90 calc_res_fp_dv.F90 cfwure_dv.F90 cfwuin_dv.F90 invert_matrix_dv.F90
 collect_nodiff_d_multi.sh
 rm damax_dv.F90 smin_dv.F90 smax_dv.F90 get_jsep_dv.F90 my_outi_us_dv.F90
 mv b2mn_dv.F90 b2mn_d.F90
@@ -61,7 +61,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd10/INTEGER :: dummyzerodiffd10(nbdirsmax)/
 sed -i -e "s/INTEGER :: dummyzerodiffd14/INTEGER :: dummyzerodiffd14(nbdirsmax)/g" b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFcvhz/nCv/g' b2nxfv_dv.F90 b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFdv%ni/nCv/g' b2npmo_dv.F90
-sed -i -e 's/ISIZE1OFdv%ne2/nCv/g' b2npmo_dv.F90
+sed -i -e 's/ISIZE1OFdv%ne2/nCv/g' b2npmo_dv.F90 b2npht_dv.F90
 sed -i -e 's/ISIZE1OFdv%lnlam/nCv/g' b2npmo_dv.F90
 sed -i -e 's/ISIZE1OFvxhz/nVx/g' b2nxfv_dv.F90
 sed -i -e 's/ISIZE1OFfcqalf/nFc/g' b2sian_dv.F90 b2stbc_dv.F90 b2stbc_phys_dv.F90 b2tfhe__dv.F90 b2tfhi__dv.F90 b2trno_dv.F90 b2tfch__dv.F90 b2tfnb_dv.F90 b2tinnt_dv.F90 b2tvskt_dv.F90 b2tfrn_dv.F90
@@ -140,19 +140,17 @@ sed -i -e 's/calc_dist(/calc_dist_nodiff(/g' b2wdat.F
 sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
 sed -i '/REAL(kind=r8) :: const_h/i\# ifndef CONSTANTS_PROVIDED' heatdiff1D_dv.F90 ratstr_dv.F90
 sed -i '/PARAMETER (const_h/a\# endif' heatdiff1D_dv.F90 ratstr_dv.F90
-sed -i -e 's/md0%cfoncv(nd, 1:m%ncf) = 0.D0/md0%cfoncv(nd, 1:m%ncf) = .true./g' b2us_map_diffv.F90
-sed -i -e 's/d0%cvonclosedsurface(nd, 1:m%ncv) = 0.D0/d0%cvonclosedsurface(nd, 1:m%ncv) = .true./g' b2us_map_diffv.F90
-sed -i -e 's/state_extd%is_neutral(nd, 0:ns_ext-1) = 0.D0/state_extd%is_neutral(nd, 0:ns_ext-1) = .true./g' b2us_plasma_diffv.F90
+
 sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_diag_diffv.F90
 sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv.F90 b2mod_boundary_namelist_diffv.F90
-sed -i '/INTRINSIC MAX/d' b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90 b2news__dv.F90 b2news_m_dv.F90 b2stel_dv.F90 b2tqna_dv.F90
+sed -i '/INTRINSIC MAX/d' b2stbc_phys_dv.F90 b2usr_cost_function_dv.F90 fix_user_dv.F90 b2news__dv.F90 b2news_m_dv.F90 b2stel_dv.F90 b2tqna_dv.F90 b2mod_recycle_diffv.F90
 sed -i '/INTRINSIC ABS/d' b2srsm_dv.F90 b2mod_feedback_diffv.F90 b2trcl_dv.F90
 
 sed -i '/EXTERNAL ALLOC_B2MOD_B2_TO_ASTRA/d' b2mod_driver_diffv.F90 b2mod_main_diffv.F90
 sed -i '/EXTERNAL CDFMOVIE/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL DEALLOC_B2MOD_MWTI/d' b2mod_driver_diffv.F90
 sed -i '/EXTERNAL TALLIES/d' b2mod_driver_diffv.F90
-sed -i '/EXTERNAL REPEAT/d' b2trzh_dv.F90 b2mod_geometry_diffv.F90
+sed -i '/EXTERNAL REPEAT/d' b2trzh_dv.F90 b2mod_geometry_diffv.F90 b2mod_elements_diffv.F90
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
 sed -i '/EXTERNAL RESTART_MA28_FOR_US/d' b2news__dv.F90 b2npmo_dv.F90 b2usht_dv.F90 b2news_m_dv.F90
@@ -175,6 +173,7 @@ sed -i '/INTEGER :: OR/d' b2stbr_dv.F90
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_dv.F90 b2usmo_dv.F90 b2usht_dv.F90 b2uspo_dv.F90
 sed -i -e 's/GET_JSEP_NODIFF/GET_JSEP/g' ./*.F90
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' ./*.F90
+sed -i -e 's/CFWUIN_NODIFF/CFWUIN/g' ./*.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_dv.F90 
 sed -i '/EXTERNAL IPPRHP/d' b2mnds_dv.F90 
 sed -i '/EXTERNAL ANINT/d' b2xvcp_dv.F90 
@@ -215,7 +214,7 @@ sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g
 sed -i -e 's/USE B2MOD_NEUTR_SRC_SCALING_DIFFV/USE B2MOD_NEUTR_SRC_SCALING/g' b2mod_diag_diffv.F90 b2mod_driver_diffv.F90 b2mod_main_diffv.F90 b2stbr_dv.F90
 sed -i -e 's/MY_OUT_US_NODIFF/MY_OUT_US/g' ./*.F90
 sed -i -e 's/sort_faces/sort_faces_nodiff/g' b2wdat.F b2pwlprp.F
-sed -i -e 's/USE B2MOD_PLASMA_DIFFV/USE B2MOD_PLASMA/g' heatdiff2D_dv.F90 init_wall_dv.F90
+sed -i 's/call species/call species_nodiff/g' tallies.F
 
 sed -i -e "s/REAL\*8/REAL(kind=r8)/g" *_diffv.F90
 sed -i -e "s/REAL\([^(].*::\)/REAL(kind=r8)\1/g" *_diffv.F90
@@ -346,6 +345,7 @@ sed -i -e 's/cfnormd(:, 0:0) = 0.D0/cfnormd = 0.D0/g' b2usr_cost_function_dv.F90
 sed -i -e 's/voldd(:, 0:0) = 0.D0/voldd = 0.D0/g' b2usr_cost_function_dv.F90
 sed -i -e 's/ALLOCATE(rtd%iscx(0:rt%nscxmax-1), source=0)/ALLOCATE(rtd%iscx(nbdirsmax, 0:rt%nscxmax-1), source=0)/g' b2us_plasma_diffv.F90
 sed -i -e 's/rtd%iscx(nd) = 0/rtd%iscx = 0/ g' b2us_plasma_diffv.F90
+sed -i -e 's/ALLOCATE(state_extd%text(0:ns_ext-1))/ALLOCATE(state_extd%text(nbdirsmax, 0:ns_ext-1))/ g' b2us_plasma_diffv.F90
 sed -i -e 's/ALLOCATE(state_extd%is_neutral(0:ns_ext-1))/ALLOCATE(state_extd%is_neutral(nbdirsmax, 0:ns_ext-1))/ g' b2us_plasma_diffv.F90
 sed -i -e 's/state_extd%is_neutral(nd) = 0.D0/state_extd%is_neutral = .false./g' b2us_plasma_diffv.F90
 
@@ -399,6 +399,20 @@ sed -i -e 's/CALL B2SAXPY_DV(ncv, switch%shi0ep/CALL B2SAXPY_DV(ncv, switch%shi0
 #missing arguments in call to b2trcl in b2tral
 sed -i -e 's/\&          dummyzerodiffd0, dummyzerodiffd, co%vsaf_cl, cod%vsaf_cl, co%\&/\&          co%cthe, dummyzerodiffd0, co%cthi, dummyzerodiffd, co%vsaf_cl, cod%vsaf_cl, co%\&/g' b2tral_dv.F90
 
+#missing arguments in call to calcflow in b2tfnb
+sed -i -e 's/\&            dummyzerodiffd, nbdirs)/\&            dv%fna_52(:, :, isb), dummyzerodiffd, nbdirs)/g' b2tfnb_dv.F90
+
+#missing arguments in call to b2sihs in b2npht
+sed -i -e 's/\&             pld%ti, pl%tn, pld%tn, pl%po, pld%po, dv%ne, dvd%ne, \&/\&             pld%ti, pl%tn, pld%tn, pl%po, pld%po, dv%ne, dvd%ne, dv%ne2, \&/g' b2npht_dv.F90
+
+
+sed -i -e "s/REAL(kind=r8) :: result1/integer :: result1/g" b2us_map_diffv.F90 b2usmo_dv.F90 b2uspo_dv.F90
+sed -i -e "s/REAL(kind=r8) :: result10/integer :: result10/g" b2usco_dv.F90
+sed -i -e "s/REAL(kind=r8) :: result12/integer :: result12/g" b2us_geo_diffv.F90
+sed -i -e "s/md0%cvalongboundary = 0.D0/md0%cvalongboundary = .false./g" b2us_map_diffv.F90
+sed -i -e "s/md0%cvonclosedsurface = 0.D0/md0%cvonclosedsurface = .false./g" b2us_map_diffv.F90
+sed -i -e "s/md0%cfoncv = 0.D0/md0%cfoncv = .true./g" b2us_map_diffv.F90
+
 sed -i -e 's/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv, &/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv/g' b2us_geo_diffv.F90
 sed -i '/& check_geometry_dv/d' b2us_geo_diffv.F90
 sed -i -e 's/read_b2fgmtry_dv, read_b2fstate_dv, write_b2fstate_dv, &/read_b2fgmtry_dv, read_b2fstate_dv/g' b2us_io_diffv.F90
@@ -411,9 +425,6 @@ sed -i -e 's/\&     text/\&     text(:,:)/g' b2us_plasma_diffv.F90
 sed -i -e 's/DO ii2=1,SIZE(state_extd%text(ii1), 1)/DO ii2=1,SIZE(state_extd%text, 2)-1/g' b2us_plasma_diffv.F90
 sed -i -e 's/state_extd%text(ii1)(nd, ii2) =/state_extd%text(nd, ii2) =/g' b2us_plasma_diffv.F90
 
-#missing arguments in call to calcflow in b2tfnb
-sed -i -e 's/\&            dummyzerodiffd, nbdirs)/\&            dv%fna_52(:, :, isb), dummyzerodiffd, nbdirs)/g' b2tfnb_dv.F90
-
 # for residuals calculation
 sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  call b2mwq0_nodiff(nout(10), ns, switch)" b2mnds_dv.F90
 sed -i -e "/CALL B2MWQ0_NODIFF(nout(4), ns, switch)/a\  call cfwuch(nout(10), 120, lblmn, 'label')" b2mnds_dv.F90
@@ -425,13 +436,13 @@ sed -i -e '0,/CALL B2MXAC_NODIFF/s/CALL B2MXAC_NODIFF/CALL B2MXAC_NO1DIFF/g' b2m
 sed -i -e '/CALL B2MXAC_NO1DIFF/a\        CALL B2MXAC_DIFFv(ncv, ns, std%dv, std%diag)' b2mndt_dv.F90
 sed -i -e '/CALL B2MXAC_NO1DIFF/a\!      ..compute norms of the differentiated corrections' b2mndt_dv.F90
 sed -i -e '/CALL B2MXAC_NO1DIFF/a\&         std%pl, std%dv, std%diag)' b2mndt_dv.F90
-sed -i -e '/CALL B2MXAC_NO1DIFF/a\        CALL B2MXAR_DIFFv(nCv, ns, mpg%nnreg(0), switch%BoRiS, switch, geo, mpg, &' b2mndt_dv.F90
+sed -i -e '/CALL B2MXAC_NO1DIFF/a\        CALL B2MXAR_DIFFv(nCv, ns, switch, geo, mpg, &' b2mndt_dv.F90
 sed -i -e '/CALL B2MXAC_NO1DIFF/a\!      ..compute norms of the differentiated residuals' b2mndt_dv.F90
 sed -i -e 's/B2MXAC_NO1DIFF/B2MXAC_NODIFF/g' b2mndt_dv.F90
 sed -i -e '0,/IF (MOD(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/s/IF (MOD(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/g' b2mndt_dv.F90
 sed -i -e '0,/IF (MOD(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/s/IF (MOD(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/g' b2mndt_dv.F90
 sed -i -e '/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/a\              FLUSH(nout(10))' b2mndt_dv.F90
-sed -i -e '/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/a\&             switch%BoRiS, switch, geo, std%pl, std%dv, std%diag)' b2mndt_dv.F90
+sed -i -e '/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/a\&             switch, geo, std%pl, std%dv, std%diag)' b2mndt_dv.F90
 sed -i -e '/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/a\            CALL B2MWQT_DIFFv(nout(10), ncv, ns, itim, b2mndt_itcnt, &' b2mndt_dv.F90
 sed -i -e '/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/a\!       ..output differentiated residuals' b2mndt_dv.F90
 sed -i -e 's/IF (MOD1(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/IF (MOD(ncall_b2mndt, switch%ntim_step_out) .EQ. 0) THEN/g' b2mndt_dv.F90

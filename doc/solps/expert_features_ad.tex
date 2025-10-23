@@ -20,7 +20,7 @@ Once the above requirements have been fulfilled, the user can start differentiat
 
 The command line to perform the tangent differentiation is the following:
 \begin{verbatim}
-$TAPENADEDIR/bin/tapenade -d -O . -head "b2mn_step(J)/(enepar)" \
+$TAPENADEDIR/bin/tapenade -d -O . -head "b2mndr_1(J)/(enepar)" \
   `collect_tapenade_files.sh` \
   -ext $SOLPSTOP/modules/B2.5/src/differentiation/solpsGeneralLib \
   -context -java "-mx30g" -noisize -msglevel 30 -html -r8 >! log
@@ -32,7 +32,7 @@ The different options and their meaning is listed below:
   
   \item {\tt -O .} This flag indicates that the output directory is the current directory
   
-  \item {\tt -head "b2mn\_step(J)/(enepar)"} This flag tells {\tt Tapenade} which is the head/root subroutine for the differentiation and the dependent and independent variables. In the current implementation the head routine should be {\tt b2mn\_step}. Within the first parentheses it is indicated which is/are the dependent variables, i.e. the outputs or cost function {\tt J}. Note that again, in the current implementation, the dependent variable should be {\tt J}. Finally, within the second parentheses are indicated the independent variables, i.e. the input parameters. In this example it is the energy boundary condition parameter, but other common options are the anomalous transport coefficients e.g. {\tt parm\_dna}, {\tt parm\_hce}, and {\tt parm\_hci}. Note also that even though these are arrays, it is not necessary to specify the array elements, this will be done at a later stage, see Section~\ref{sec:diff_files}. Finally, be aware that the specified inputs/outputs must be arguments of the head subroutine or must be {\em visible} within the routine using modules.
+  \item {\tt -head "b2mndr\_1(J)/(enepar)"} This flag tells {\tt Tapenade} which is the head/root subroutine for the differentiation and the dependent and independent variables. In the current implementation the head routine should be {\tt b2mndr\_1}. Within the first parentheses it is indicated which is/are the dependent variables, i.e. the outputs or cost function {\tt J}. Note that again, in the current implementation, the dependent variable should be {\tt J}. Finally, within the second parentheses are indicated the independent variables, i.e. the input parameters. In this example it is the energy boundary condition parameter, but other common options are the anomalous transport coefficients e.g. {\tt parm\_dna}, {\tt parm\_hce}, and {\tt parm\_hci}. Note also that even though these are arrays, it is not necessary to specify the array elements, this will be done at a later stage, see Section~\ref{sec:diff_files}. Finally, be aware that the specified inputs/outputs must be arguments of the head subroutine or must be {\em visible} within the routine using modules.
   
   \item {\tt `collect\_tapenade\_files.sh`} This script is run in order to pass to {\tt Tapenade} the names of the necessary source files to be differentiated. These source files must be the {\tt *.f} and {\tt *.f90} files which have been produced by the {\tt cpp} preprocessor and this is why the user needs to re-compile the code first.
   
@@ -121,7 +121,7 @@ If one wants to obtain the full Jacobian, i.e. the gradient with respect to all 
 
 To do so, the user should insert the flag {\tt -multi} and specify different independent variables when invoking the {\tt Tapenade} command line described in Section~\ref{sec:runningTapeTgt}, which for example can be modified as follows:
 \begin{verbatim}
-   -multi -head "b2mn_step(J)/(enepar enipar parm_dna parm_hci parm_hce)"
+   -multi -head "b2mndr_1(J)/(enepar enipar parm_dna parm_hci parm_hce)"
 \end{verbatim}
 
 In this way {\tt Tapenade} will provide the derivative of all cost functions {\tt J} against the five input parameters specified (the ordering does not matter).
@@ -228,7 +228,7 @@ $TAPENADEDIR/bin/tapenade -b -O . -head "b2mndr_1(J)/(parm_dna parm_hce \
   "-mx30g" -noisize -msglevel 30 -html -r8 >! log
 \end{verbatim}
 
-The options are the same as for tangent AD with the difference only in the flag {\tt -b} which enables adjoint mode. \textbf{Important:} Note the different head routine, which for adjoint is {\tt b2mndr\_1}.
+The options are the same as for tangent AD with the difference only in the flag {\tt -b} which enables adjoint mode.
 
 As with tangent mode, new source files are produced by {\tt Tapenade}, this time with {\tt \_b} in place of {\tt \_d} for files, routines, and variables names. Modules keep the same {\tt \_diff} naming convention. Similarly as with tangent AD, diff'ed files need some tuning, described in the following section.
 
@@ -313,7 +313,7 @@ Some AD pragmas are already inserted as comments in the {\tt B2.5} code and main
 
 The command line to perform the pre-processing mode is the following:
 \begin{verbatim}
-$TAPENADEDIR/bin/tapenade -p -O . -head "b2mn_step(J)/(parm_dna parm_hce \
+$TAPENADEDIR/bin/tapenade -p -O . -head "b2mndr_1(J)/(parm_dna parm_hce \
   parm_hci enepar enipar conpar)" `collect_tapenade_files.sh` -ext \
   $SOLPSTOP/modules/B2.5/src/differentiation/solpsGeneralLib -context -java \
   "-mx30g" -noisize -msglevel 30 -html -r8 >! log
@@ -333,13 +333,13 @@ After that, the user should create the folder {\tt \$SOLPSTOP/modules/B2.5/build
 
 The command line to perform the tangent over tangent differentiation is the following:
 \begin{verbatim}
-	$TAPENADEDIR/bin/tapenade -d -multi -O . -head "b2mn_step_dv(Jd)/(parm_dna parm_hce \
+	$TAPENADEDIR/bin/tapenade -d -multi -O . -head "b2mndr_1_dv(Jd)/(parm_dna parm_hce \
 	parm_hci enepar enipar conpar)" `collect_tapenade_files_tgt.sh` -ext \
 	$SOLPSTOP/modules/B2.5/src/differentiation/solpsGeneralLib -context -java \
 	"-mx30g" -noisize -msglevel 30 -html -r8 >! log
 \end{verbatim}
 
-\textbf{Important:} Note the different head routine, which is now {\tt b2mn\_step\_dv}, and the dependent variable which is now {\tt Jd}.
+\textbf{Important:} Note the different head routine, which is now {\tt b2mndr\_1\_dv}, and the dependent variable which is now {\tt Jd}.
 
 {\tt Tapenade} will produce files with an additional {\tt \_dv} for routine names, and . Similarly as with tangent AD, diff'ed files need some tuning, described in the following section.
 

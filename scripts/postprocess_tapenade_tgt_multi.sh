@@ -13,12 +13,7 @@ sed -i -e "/CALL B2MN_STEP_DV/i\  call xertst(switch%b2optim_namelist.eq.1, 'Sen
 sed -i -e "/CALL B2MN_STEP_DV/i\  call set_tgt_perturbation(switchd)" b2mn_d.F90
 sed -i -e 's/DV(nbdirs)/DV(npar_opt)/g' b2mn_d.F90
 sed -i -e 's/DV(j, jd, nbdirs)/DV(j, jd, npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g' b2mn_d.F90
-sed -i '/b2sikt_fac_sheath/d' b2mn_d.F90
-sed -i '/b2sikt_fac_diss/d' b2mn_d.F90
-sed -i '/b2sikt_fac_vis_rs/d' b2mn_d.F90
-sed -i '/b2tfhi_fkt_hie/d' b2mn_d.F90
-sed -i '/b2tqna_ballooning/d' b2mn_d.F90
-sed -i '/\&                            8)/d' b2mn_d.F90
+
 
 ## insert an extra call to b2usr_cost_function_DV within the fixed point loop, only for output purposes.
 ## This could have been done using $AD DO-NOT-DIFF pragmas but they fail for adjoint AD
@@ -56,13 +51,19 @@ sed -i -e 's/incre1ment/increment/g' b2mod_driver_diffv.F90
 
 sed -i -e "0,/primal_iterations = itim/s/primal_iterations = itim/primal_iterations = itim\n      gradient_iterations = itim/" b2mod_driver_diffv.F90
 
-sed -i "/ADCONTEXTTGT/d" b2mn_d.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
-sed -i "/r8\*nbcd\*2/d" b2mn_d.F90
-sed -i "/\*8\*nsdecl\/8/d" b2mn_d.F90
-sed -i "/r8\/8/d" b2mn_d.F90
-sed -i "/r8\*nsdmax/d" b2mn_d.F90
-sed -i "/nsigmx/d" b2mn_d.F90
-sed -i "/\*nkind_coeff/d" b2mn_d.F90
+sed -i "/ADCONTEXTTGT/d" b2mod_main_diffv.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
+sed -i "/r8\*nbcd\*2/d" b2mod_main_diffv.F90
+sed -i "/\*8\*nsdecl\/8/d" b2mod_main_diffv.F90
+sed -i "/r8\/8/d" b2mod_main_diffv.F90
+sed -i "/r8\*nsdmax/d" b2mod_main_diffv.F90
+sed -i "/nsigmx/d" b2mod_main_diffv.F90
+sed -i "/\*nkind_coeff/d" b2mod_main_diffv.F90
+sed -i '/b2sikt_fac_sheath/d' b2mod_main_diffv.F90
+sed -i '/b2sikt_fac_diss/d' b2mod_main_diffv.F90
+sed -i '/b2sikt_fac_vis_rs/d' b2mod_main_diffv.F90
+sed -i '/b2tfhi_fkt_hie/d' b2mod_main_diffv.F90
+sed -i '/b2tqna_ballooning/d' b2mod_main_diffv.F90
+sed -i '/\&                            8)/d' b2mod_main_diffv.F90
 
 sed -i -e '/enkpard(nd, :, :) = 0.D0/d' b2mod_driver_diffv.F90
 sed -i -e '/parm_dnad(nd, 1) = 0.D0/d' b2tqna_dv.F90
