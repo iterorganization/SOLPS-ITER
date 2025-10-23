@@ -63,7 +63,7 @@ MAKETAGS   = etags -o
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM -DNO_CDF
+SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
