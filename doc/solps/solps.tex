@@ -1710,6 +1710,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector mode.
   \item[postprocess\_tapenade\_hess\_tgt.sh]\index{postprocess\_tapenade\_hess\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent over tangent vector mode.
   \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90}, looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
+  \item[clean\_tapenade\_log.sh]\index{clean\_tapenade\_log.sh} Cleans some of the harmless output messages of {\tt Tapenade} from the log file of the differentiation.
+  \item[postprocess\_tapenade\_tgt\_debug.sh]\index{postprocess\_tapenade\_tgt\_debug.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent DEBUG mode. EXPERIMENTAL!
+  \item[postprocess\_tapenade\_tgt\_multi\_debug.sh]\index{postprocess\_tapenade\_tgt\_multi\_debug.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector DEBUG mode. EXPERIMENTAL!
   \item[resall\_D\_diff]\index{resall\_D\_diff} Plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
   \item[resall\_D\_diff\_diff]\index{resall\_D\_diff\_diff} Plots the evolution of the residuals of all the second order diff'ed equations for D only cases (in tangent over tangent mode only).
   \item[resco\_diff]\index{resco\_diff} Plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
