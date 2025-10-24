@@ -1,14 +1,14 @@
 setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
 setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
 if (! $?LD_LIBRARY_PATH) then
-setenv LD_LIBRARY_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
+setenv LD_LIBRARY_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl_1.2.4/lib
 else
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl_1.2.4/lib
 endif
 if (! $?PKG_CONFIG_PATH) then
-setenv PKG_CONFIG_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
+setenv PKG_CONFIG_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl_1.2.4/lib/pkgconfig
 else
-setenv PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
+setenv PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl_1.2.4/lib/pkgconfig
 endif
 setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
@@ -34,8 +34,6 @@ module load makedepend/1.0.9-GCCcore-13.2.0
 
 # load other CINECA environment modules
 module load cineca-modules/1.0
-module load nag-library/27
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NAG_LIB}
 
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 setenv EBVERSIONMSCL "1.2.4"
