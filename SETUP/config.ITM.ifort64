@@ -53,6 +53,7 @@ ifdef SOLPS_MPI
 FC         = ${MPI_FC}
 endif
 CC         = icc
+MAKETAGS   = etags -o
 
 #
 # Preprocessor options
