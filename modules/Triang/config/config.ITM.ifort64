@@ -13,10 +13,6 @@ endif
 ifndef LD_GKS
 LD_GKS    = -L${GLI_HOME} -lgks -lgfortran
 endif
-ifndef LD_NAG
-NAGDIR   ?= /pfs/work/g2dpc/SOLPS-ITER/nag
-LD_NAG    = -L${NAGDIR} -lnag
-endif
 
 #CPP      = -/lib/cpp -C -traditional -ffreestanding
 CPP       = /lib/cpp -traditional -ffreestanding
