@@ -1,0 +1,136 @@
+#! /usr/bin/env tcsh
+
+set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set EMAIL=`get_git_email`
+set JOB_NAME="gmake"
+set hours=4
+set mem=10GB
+set part="gw"
+set objects=""
+set options=""
+set chain="unset"
+set job_count=0
+
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+
+argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the EFGW machine.
+
+Usage:
+
+Available options are:
+  -h                 prints this message
+  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
+  -c <<JOB_ID>>      job ID of the previous job in a chain submission
+  -o <<OPTIONS>>     options to be passed to the Makefile (within quotes)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
+  -Q <<PARTITION>>   partition on which to submit the job (default $part)
+
+The list of compile targets (default "solps") is to be provided after these options.
+
+EOF
+    exit
+  endif
+  if ("X${1}X" == "X-jX") then
+    shift
+    set JOB_NAME="$1"
+    echo Job name is ${JOB_NAME}
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    if ( $hours == 1) then
+      echo Requested time is ${hours} hour
+    else
+      echo Requested time is ${hours} hours
+    endif
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    echo Requested memory is ${mem}
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-QX") then
+    shift
+    set part="$1"
+    echo Requested partition is ${part}
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-cX") then
+    shift
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-oX") then
+    shift
+    if ($options != "") then
+      set options="${options} $1"
+    else
+      set options="$1"
+    endif
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" != "XX") then
+    set objects="${objects} $1"
+    shift
+    goto argloop
+  endif
+
+# logic to determine the partition on the ITER SDCC cluster
+set nodename=`hostname`
+set job_prefix="SLURM"
+set QSUB="$SOLPSTOP/scripts/$job_prefix.efgw_compile"
+
+echo Using submission file template $QSUB
+
+if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
+endif
+
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e 's:#MEM#:'$mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e 's:#PART#:'$part':g' \
+  -e "s:#JOBNAME#:'$JOB_NAME':g" \
+  -e 's:#USER#:'$USER':g' \
+  -e "s:#OBJECTS#:'$objects':g" \
+  -e 's:#COMPILER#:'$COMPILER':g' \
+  < $QSUB > $NAME
+
+if ("X${options}X" != "XX") then
+  echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& make.log.${COMPILER}" >> $NAME
+else
+  echo "${MAKE} ${objects} >>& make.log.${COMPILER}" >> $NAME
+endif
+
+if ($chain == "unset") then
+  sbatch $NAME
+else
+  sbatch --dependency=afterany:${chain} $NAME
+endif
+

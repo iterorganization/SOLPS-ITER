@@ -31,7 +31,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the Marconi Gateway cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the EFGW machine.
 
 Usage:
 
