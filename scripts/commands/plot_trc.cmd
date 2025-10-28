@@ -54,6 +54,8 @@
 :nr_sep_C:\eta_{C}^{sep}:1.e+2
 @page: Separatrix density fraction N, \%
 :nr_sep_N:\eta_{N}^{sep}:1.e+2
+@page: Separatrix density fraction O, \%
+:nr_sep_O:\eta_{O}^{sep}:1.e+2
 @page: Separatrix density fraction Ne, \%
 :nr_sep_Ne:\eta_{Ne}^{sep}:1.e+2
 @page: Separatrix density fraction Ar, \%
@@ -85,6 +87,7 @@
 :imp_rad_B:B:1.e-6
 :imp_rad_C:C:1.e-6
 :imp_rad_N:N:1.e-6
+:imp_rad_O:O:1.e-6
 :imp_rad_Ne:Ne:1.e-6
 :imp_rad_Ar:Ar:1.e-6
 :imp_rad_W:W:1.e-6
@@ -267,6 +270,22 @@
 :flux_ttr_N:dln(N)/dt:
 @page: Total relative error in N balance
 :bln_blnr_N:err/sum:
+@page: Flux balance total O, s^{-1}
+:ion_core_O:ion_core:
+:ntr_core_O:ntr_core:
+:ion_targ_O:ion_targ:
+:ntr_targ_O:ntr_targ:
+:ion_wall_O:ion_wall:
+:ntr_wall_O:ntr_wall:
+:ntr_puff_O:ntr_puff:
+:flux_tot_O:tot_flux:
+:flux_bln_O:err_totl:
+@page: O ion dN/dt, s^{-1}
+:flx_d/dt_O:dN/dt:
+@page: O content dln(N)/dt, s^{-1}
+:flux_ttr_O:dln(N)/dt:
+@page: Total relative error in O balance
+:bln_blnr_O:err/sum:
 @page: Flux balance total Ne, s^{-1}
 :ion_core_Ne:ion_core:
 :ntr_core_Ne:ntr_core:
@@ -436,6 +455,16 @@
 :N_a_reg_02_N:SOL:
 :N_a_reg_03_N:inner:
 :N_a_reg_04_N:outer:
+@page: Total number of O ions per region
+:N_i_reg_01_O:core:
+:N_i_reg_02_O:SOL:
+:N_i_reg_03_O:inner:
+:N_i_reg_04_O:outer:
+@page: Total number of O neutrals per region
+:N_a_reg_01_O:core:
+:N_a_reg_02_O:SOL:
+:N_a_reg_03_O:inner:
+:N_a_reg_04_O:outer:
 @page: Total number of Ne ions per region
 :N_i_reg_01_Ne:core:
 :N_i_reg_02_Ne:SOL:
@@ -500,6 +529,10 @@
 :N_s_sli_N:N_{i,N}^{edge}:
 @page: Total number of N particles in the egde
 :N_s_slt_N:N_{N}^{edge}:
+@page: Total number of O ions in the egde
+:N_s_sli_O:N_{i,O}^{edge}:
+@page: Total number of O particles in the egde
+:N_s_slt_O:N_{O}^{edge}:
 @page: Total number of Ne ions in the egde
 :N_s_sli_Ne:N_{i,Ne}^{edge}:
 @page: Total number of Ne particles in the egde
@@ -508,6 +541,10 @@
 :N_s_sli_Ar:N_{i,Ar}^{edge}:
 @page: Total number of Ar particles in the egde
 :N_s_slt_Ar:N_{Ar}^{edge}:
+@page: Total number of W ions in the egde
+:N_s_sli_W:N_{i,W}^{edge}:
+@page: Total number of W particles in the egde
+:N_s_slt_W:N_{W}^{edge}:
 @page: Internal source rescaling ratios H
 :sclrtio_01_H:
 :sclrtio_02_H:
@@ -1324,6 +1361,108 @@
 :sclfact_48_N:
 :sclfact_49_N:
 :sclfact_50_N:
+@page: Internal source rescaling ratios O
+:sclrtio_01_O:
+:sclrtio_02_O:
+:sclrtio_03_O:
+:sclrtio_04_O:
+:sclrtio_05_O:
+:sclrtio_06_O:
+:sclrtio_07_O:
+:sclrtio_08_O:
+:sclrtio_09_O:
+:sclrtio_10_O:
+:sclrtio_11_O:
+:sclrtio_12_O:
+:sclrtio_13_O:
+:sclrtio_14_O:
+:sclrtio_15_O:
+:sclrtio_16_O:
+:sclrtio_17_O:
+:sclrtio_18_O:
+:sclrtio_19_O:
+:sclrtio_20_O:
+:sclrtio_21_O:
+:sclrtio_22_O:
+:sclrtio_23_O:
+:sclrtio_24_O:
+:sclrtio_25_O:
+:sclrtio_26_O:
+:sclrtio_27_O:
+:sclrtio_28_O:
+:sclrtio_29_O:
+:sclrtio_30_O:
+:sclrtio_31_O:
+:sclrtio_32_O:
+:sclrtio_33_O:
+:sclrtio_34_O:
+:sclrtio_35_O:
+:sclrtio_36_O:
+:sclrtio_37_O:
+:sclrtio_38_O:
+:sclrtio_39_O:
+:sclrtio_40_O:
+:sclrtio_41_O:
+:sclrtio_42_O:
+:sclrtio_43_O:
+:sclrtio_44_O:
+:sclrtio_45_O:
+:sclrtio_46_O:
+:sclrtio_47_O:
+:sclrtio_48_O:
+:sclrtio_49_O:
+:sclrtio_50_O:
+@page: Internal source rescaling factors O
+:sclfact_01_O:
+:sclfact_02_O:
+:sclfact_03_O:
+:sclfact_04_O:
+:sclfact_05_O:
+:sclfact_06_O:
+:sclfact_07_O:
+:sclfact_08_O:
+:sclfact_09_O:
+:sclfact_10_O:
+:sclfact_11_O:
+:sclfact_12_O:
+:sclfact_13_O:
+:sclfact_14_O:
+:sclfact_15_O:
+:sclfact_16_O:
+:sclfact_17_O:
+:sclfact_18_O:
+:sclfact_19_O:
+:sclfact_20_O:
+:sclfact_21_O:
+:sclfact_22_O:
+:sclfact_23_O:
+:sclfact_24_O:
+:sclfact_25_O:
+:sclfact_26_O:
+:sclfact_27_O:
+:sclfact_28_O:
+:sclfact_29_O:
+:sclfact_30_O:
+:sclfact_31_O:
+:sclfact_32_O:
+:sclfact_33_O:
+:sclfact_34_O:
+:sclfact_35_O:
+:sclfact_36_O:
+:sclfact_37_O:
+:sclfact_38_O:
+:sclfact_39_O:
+:sclfact_40_O:
+:sclfact_41_O:
+:sclfact_42_O:
+:sclfact_43_O:
+:sclfact_44_O:
+:sclfact_45_O:
+:sclfact_46_O:
+:sclfact_47_O:
+:sclfact_48_O:
+:sclfact_49_O:
+:sclfact_50_O:
 @page: Internal source rescaling ratios Ne
 :sclrtio_01_Ne:
 :sclrtio_02_Ne:
@@ -1676,6 +1815,14 @@
 :resco01_05_N:
 :resco01_06_N:
 :resco01_07_N:
+:resco01_01_O:
+:resco01_02_O:
+:resco01_03_O:
+:resco01_04_O:
+:resco01_05_O:
+:resco01_06_O:
+:resco01_07_O:
+:resco01_08_O:
 :resco01_01_Ne:
 :resco01_02_Ne:
 :resco01_03_Ne:
@@ -1753,6 +1900,14 @@
 :resco02_05_N:
 :resco02_06_N:
 :resco02_07_N:
+:resco02_01_O:
+:resco02_02_O:
+:resco02_03_O:
+:resco02_04_O:
+:resco02_05_O:
+:resco02_06_O:
+:resco02_07_O:
+:resco02_08_O:
 :resco02_01_Ne:
 :resco02_02_Ne:
 :resco02_03_Ne:
@@ -1830,6 +1985,14 @@
 :resco03_05_N:
 :resco03_06_N:
 :resco03_07_N:
+:resco03_01_O:
+:resco03_02_O:
+:resco03_03_O:
+:resco03_04_O:
+:resco03_05_O:
+:resco03_06_O:
+:resco03_07_O:
+:resco03_08_O:
 :resco03_01_Ne:
 :resco03_02_Ne:
 :resco03_03_Ne:
@@ -1907,6 +2070,14 @@
 :resco04_05_N:
 :resco04_06_N:
 :resco04_07_N:
+:resco04_01_O:
+:resco04_02_O:
+:resco04_03_O:
+:resco04_04_O:
+:resco04_05_O:
+:resco04_06_O:
+:resco04_07_O:
+:resco04_08_O:
 :resco04_01_Ne:
 :resco04_02_Ne:
 :resco04_03_Ne:
@@ -1984,6 +2155,14 @@
 :resmo01_05_N:
 :resmo01_06_N:
 :resmo01_07_N:
+:resmo01_01_O:
+:resmo01_02_O:
+:resmo01_03_O:
+:resmo01_04_O:
+:resmo01_05_O:
+:resmo01_06_O:
+:resmo01_07_O:
+:resmo01_08_O:
 :resmo01_01_Ne:
 :resmo01_02_Ne:
 :resmo01_03_Ne:
@@ -2061,6 +2240,14 @@
 :resmo02_05_N:
 :resmo02_06_N:
 :resmo02_07_N:
+:resmo02_01_O:
+:resmo02_02_O:
+:resmo02_03_O:
+:resmo02_04_O:
+:resmo02_05_O:
+:resmo02_06_O:
+:resmo02_07_O:
+:resmo02_08_O:
 :resmo02_01_Ne:
 :resmo02_02_Ne:
 :resmo02_03_Ne:
@@ -2138,6 +2325,14 @@
 :resmo03_05_N:
 :resmo03_06_N:
 :resmo03_07_N:
+:resmo03_01_O:
+:resmo03_02_O:
+:resmo03_03_O:
+:resmo03_04_O:
+:resmo03_05_O:
+:resmo03_06_O:
+:resmo03_07_O:
+:resmo03_08_O:
 :resmo03_01_Ne:
 :resmo03_02_Ne:
 :resmo03_03_Ne:
@@ -2216,6 +2411,14 @@
 :resmo04_05_N:
 :resmo04_06_N:
 :resmo04_07_N:
+:resmo04_01_O:
+:resmo04_02_O:
+:resmo04_03_O:
+:resmo04_04_O:
+:resmo04_05_O:
+:resmo04_06_O:
+:resmo04_07_O:
+:resmo04_08_O:
 :resmo04_01_Ne:
 :resmo04_02_Ne:
 :resmo04_03_Ne:
@@ -2289,6 +2492,39 @@
 :q_max_iu:q_{peak,sym}^{inner,up}:1.e-6
 :q_max_ou:q_{peak,sym}^{outer,up}:1.e-6
 @file:user
+@page: Shaped peak heat flux to the target, MW/m^{2}
+:pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
+:pk_pwr_o:q_{peak,shp}^{outer}:1.e-6
+:pk_pwr_iu:q_{peak,shp}^{inner,up}:1.e-6
+:pk_pwr_ou:q_{peak,shp}^{outer,up}:1.e-6
+@page: Neutral pressure in PFR, Pa
+:Pneu_PFR:average:
+:Pneu_PFRi:inner:
+:Pneu_PFRo:outer:
+@page: Neutral pressure at the pump H, Pa
+:p_H2_pump:p_{H2}^{pump}:
+:p_H_pump:p_{H}^{pump}:
+@page: Neutral pressure at the pump D, Pa
+:p_D2_pump:p_{D2}^{pump}:
+:p_D_pump:p_{D}^{pump}:
+@page: Neutral pressure at the pump T, Pa
+:p_T2_pump:p_{T2}^{pump}:
+:p_T_pump:p_{T}^{pump}:
+@page: Neutral pressure at the pump He, Pa
+:p_He_pump:p_{He}^{pump}:
+@page: DT throughput, Pa/m^{3}/s
+:DT_thrpt:DT_{thrpt}:
+@page: Total fuel flux through PFR, s^{-1}
+:PFR_flow_total_H:\Gamma_{H}^{PFR}:
+:PFR_flow_total_D:\Gamma_{D}^{PFR}:
+:PFR_flow_total_T:\Gamma_{T}^{PFR}:
+@page: Total He flux through PFR, s^{-1}
+:PFR_flow_total_He:\Gamma_{He}^{PFR}:
+@page: Total impurity flux through PFR, s^{-1}
+:PFR_flow_total_N:\Gamma_{N}^{PFR}:
+:PFR_flow_total_Ne:\Gamma_{Ne}^{PFR}:
+:PFR_flow_total_Ar:\Gamma_{Ar}^{PFR}:
+@file:user.trc.n.01
 @page: Shaped peak heat flux to the target, MW/m^{2}
 :pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
 :pk_pwr_o:q_{peak,shp}^{outer}:1.e-6

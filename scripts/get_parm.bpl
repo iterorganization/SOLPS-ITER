@@ -47,8 +47,10 @@ function spec_symbol {
     (  2 )  S=He;;
     (  3 )  S=Li;;
     (  4 )  S=Be;;
+    (  5 )  S=B_;;
     (  6 )  S=C_;;
     (  7 )  S=N_;;
+    (  8 )  S=O_;;
     ( 10 )  S=Ne;;
     ( 18 )  S=Ar;;
     ( 74 )  S=W_;;
