@@ -116,9 +116,16 @@ if [ -d "$TRC_DIR" ]
 then
   echo "cp $TRC_DIR/* $WRK_DIR/"
   cp "$TRC_DIR"/* "$WRK_DIR/"
-  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
-  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
-  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
+  echo "rm -rf $WRK_DIR/*.i"
+  rm -rf "$WRK_DIR"/*.i
+  count=`ls -1 $WRK_DIR/user.trc* 2>/dev/null | wc -l`
+  if [ $count > 1 ]
+  then
+    USER_TMP=`ls -1 $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
+    echo "temproary user.trc file = $USER_TMP spotted"
+    echo "cp -rf $USER_TMP $WRK_DIR/$LL_USER"
+    cp -rf  "$USER_TMP" "$WRK_DIR"/"$LL_USER"
+  fi
   if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
