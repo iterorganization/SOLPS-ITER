@@ -12,8 +12,8 @@ make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt
 # Run test case sensitivity for tangent, adjoint and hessian
 
 cd ${SOLPSTOP}/runs/examples
-make COMPASS_sensitivity
-cd COMPASS_sensitivity
+make COMPASS_sensitivity_D+T
+cd COMPASS_sensitivity_D+T
 export DEVICE=compass
 correct_baserun_timestamps
 
@@ -45,7 +45,7 @@ cd ${SOLPSTOP}
 rm ${SOLPSTOP}/modules/B2.5/builds/*/b2optim_tao*.*
 make MAKE_OPTIONS=-j8 b25_tgt b25_adj
 
-cd ${SOLPSTOP}/runs/examples/COMPASS_sensitivity
+cd ${SOLPSTOP}/runs/examples/COMPASS_sensitivity_D+T
 mkdir opt_test
 cd opt_test
 setup_baserun_B25_links
