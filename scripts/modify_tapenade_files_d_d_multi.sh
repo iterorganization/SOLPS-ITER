@@ -7,14 +7,12 @@ mv b2mn_d_dv.F90 b2mn_hess.F90
 
 sed -i -e 's/\<0_8\>/D0/g' ./*_dv.F90 ./*_diffv.F90
 
-## RE-CHECK THIS LIST
 sed -i -e 's/use b2mod_user_namelist/use b2mod_user_namelist_diffv_diffv/g' b2mod_cdf.F90 b2mod_mwti.F90 b2mod_trace.F b2mod_usrtrc.F b2mod_wrsep.F b2mod_wrint.F
 sed -i -e 's/use b2us_map/use b2us_map_diffv_diffv/g' b2mod_cdf.F90 b2mod_b2_to_astra.F b2mod_blnc.F b2mod_blnm.F b2mod_mwti.F90 b2mod_trace.F b2uxus.F tallies.F  b2mod_wrsrt.F b2mod_blne.F b2mod_wrint.F b2mod_wrsep.F
 sed -i -e 's/use b2mod_neutrals_namelist/use b2mod_neutrals_namelist_diffv_diffv/g' b2mod_b2_to_astra.F b2mod_blnc.F b2mod_blne.F b2mod_mwti.F90 b2mod_trace.F b2mod_wrsep.F
 sed -i -e 's/use b2mod_b2cmpa/use b2mod_b2cmpa_diffv/g' b2mod_b2_to_astra.F b2mod_blnc.F b2mod_blne.F b2mod_blnm.F b2mod_file.F b2mod_mwti.F90 b2mod_trace.F b2mod_usrtrc.F b2mod_wrint.F b2mod_wrsep.F tallies.F b2mod_wrsrt.F b2mod_ppout.F
 sed -i -e 's/use b2us_geo/use b2us_geo_diffv_diffv/g' b2mod_blnc.F b2mod_mwti.F90 b2mod_trace.F cdfmovie.F tallies.F b2mod_wrsrt.F b2mod_blne.F b2mod_blnm.F b2mod_wrint.F b2mod_wrsep.F
-sed -i -e 's/use b2us_plasma/use b2us_plasma_diffv_diffv/g' b2mod_blnc.F b2mod_blnm.F b2mod_mwti.F90 b2mod_trace.F calc_err.F cdfmovie.F tallies.F b2mod_file.F b2mod_wrsrt.F b2mod_blne.F b2mod_wrint.F b2mod_wrsep.F #b2mwmv.F
-#sed -i -e 's/use b2us_work/use b2us_work_diffv_diffv/g' b2mwmv.F
+sed -i -e 's/use b2us_plasma/use b2us_plasma_diffv_diffv/g' b2mod_blnc.F b2mod_blnm.F b2mod_mwti.F90 b2mod_trace.F calc_err.F cdfmovie.F tallies.F b2mod_file.F b2mod_wrsrt.F b2mod_blne.F b2mod_wrint.F b2mod_wrsep.F
 sed -i -e 's/use b2mod_switches/use b2mod_switches_diffv_diffv/g' b2mod_blnc.F b2mod_blne.F b2mod_blnm.F b2mod_file.F b2mod_mwti.F90 b2mod_trace.F b2mod_usrtrc.F b2mod_wrint.F b2mod_wrsep.F b2mod_wrsrt.F calc_err.F cdfmovie.F tallies.F
 sed -i -e 's/use b2mod_indirect/use b2mod_indirect_diffv_diffv/g' b2mod_b2_to_astra.F b2mod_blnc.F b2mod_blne.F b2mod_geo2.F b2mod_interp.F90 b2mod_mwti.F90 b2mod_trace.F b2mod_usrtrc.F b2mod_wrint.F b2mod_wrsep.F  b2mod_wrsrt.F get_jsep.F b2mod_ppout.F
 sed -i -e 's/use b2mod_external/use b2mod_external_diffv_diffv/g' b2mod_blne.F b2mod_mwti.F90 b2mod_usrtrc.F b2mod_wrint.F b2mod_wrsep.F b2mod_wrsrt.F
@@ -23,7 +21,7 @@ sed -i -e 's/use b2mod_diag/use b2mod_diag_diffv_diffv/g' b2mod_blnc.F b2mod_bln
 sed -i -e 's/use b2mod_numerics_namelist/use b2mod_numerics_namelist_diffv_diffv/g' b2mod_blnc.F b2mod_blne.F b2mod_blnm.F b2mod_usrtrc.F b2mod_wrint.F b2mod_wrsep.F b2mod_wrsrt.F calc_err.F
 sed -i -e 's/use b2mod_boundary_namelist/use b2mod_boundary_namelist_diffv_diffv/g' b2mod_blnc.F b2mod_blne.F b2mod_usrtrc.F
 sed -i -e 's/use b2mod_geo_diffv_diffvmetry/use b2mod_geometry/g' b2mod_blnc.F b2mod_mwti.F90 b2mod_blne.F b2mod_wrsep.F
-sed -i -e 's/use b2mod_math/use b2mod_math_diffv_diffv/g' b2mod_geo2.F b2mod_interp.F90 damax.F ifill.F ma28copy.F sfill.F smax.F smin.F calc_err.F
+sed -i -e 's/use b2mod_math/use b2mod_math_diffv_diffv/g' b2mod_geo2.F b2mod_interp.F90 damax.F ma28copy.F smax.F smin.F calc_err.F
 sed -i -e 's/use b2mod_ad/use b2mod_ad_diffv_diffv/g' my_outi_us.F
 sed -i -e 's/use b2mod_geometry/use b2mod_geometry_diffv_diffv/g' b2mod_blnc.F b2mod_blne.F b2mod_geo2.F b2mod_mwti.F90 b2mod_wrsep.F b2mod_usrtrc.F
 sed -i -e 's/use b2us_geo/use b2us_geo_diffv_diffv/g' b2mod_usrtrc.F
@@ -42,6 +40,10 @@ sed -i -e 's/ank_interface/ank_interface_nodiff/g' wallon.F
 sed -i -e 's/CFWURE_NODIFF/CFWURE/g' b2us_plasma_diffv_diffv.F90 b2wucp_dv_dv.F90 b2us_map_diffv_diffv.F90 b2us_geo_diffv_diffv.F90 b2mwqt_*.F90 b2mwmv_dv_dv.F90 b2mwit_dv_dv.F90 b2mod_running_average_diffv_diffv.F90 b2mod_geo_diffv_diffv.F90 b2mod_batch_average_diffv_diffv.F90
 sed -i -e 's/CFWUIN_NODIFF/CFWUIN/g' b2us_plasma_diffv_diffv.F90 b2wucp_dv_dv.F90 b2us_map_diffv_diffv.F90 b2us_geo_diffv_diffv.F90 b2mwqt_*.F90 b2mwmv_dv_dv.F90 b2mwit_dv_dv.F90 b2mod_running_average_diffv_diffv.F90 b2mod_geo_diffv_diffv.F90 b2mod_batch_average_diffv_diffv.F90 b2mwq0_dv_dv.F90 b2mod_driver_diffv_diffv.F90 b2mnds_dv_dv.F90
 sed -i -e 's/use b2mod_ad/use b2mod_ad_diffv_diffv/g' cfwuin.F cfwure.F
+sed -i -e 's/call sfill/call sfill_nodiff_nodiff/g' b2xpne_st.F prvrt.F
+sed -i -e 's/external sfill/external sfill_nodiff_nodiff/g' b2xpne_st.F prvrt.F
+sed -i -e 's/call ifill/call ifill_nodiff_nodiff/g' prvrti.F
+sed -i -e 's/external ifill/external ifill_nodiff_nodiff/g' prvrti.F
 
 sed -i "/INCLUDE 'DIFFSIZES.inc'/d" ./*.F90
 sed -i "/USE DIFFSIZES/d" ./*.F90
@@ -56,7 +58,6 @@ sed -i -e 's/SMAX_NODIFF/smax/g' ./*.F90
 sed -i -e 's/DAMAX_NODIFF/damax/g' b2mndt_dv_dv.F90 b2mxac_dv_dv.F90 b2mxac_diffv_dv.F90 b2mxac_dv_dv.F90 b2stcx_dv_dv.F90 b2stel_dv_dv.F90
 sed -i -e '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv_diffv.F90 b2mod_boundary_namelist_diffv_diffv.F90
 sed -i -e '/INTRINSIC MAX/d' b2wdat_dv.F90 b2tqna_dv_dv.F90 b2news__dv_dv.F90 b2news_m_dv_dv.F90 b2stel_dv_dv.F90 b2tqna_dv_dv.F90 set_parameters_dv.F90 b2pwlprp_dv.F90
-#sed -i -e "s/USE B2MOD_ELEMENTS/USE B2MOD_ELEMENTS_DIFFV/g" ./*.F90
 sed -i -e "s/USE B2MOD_NEUTR_SRC_SCALING_DIFFV/USE B2MOD_NEUTR_SRC_SCALING/g" b2mod_diag_diffv_diffv.F90 b2mod_driver_diffv_diffv.F90 b2mod_main_diffv_diffv.F90 b2stbr_dv_dv.F90
 sed -i -e "s/USE B2MOD_NEUTR_SRC_SCALING_DIFFV/USE B2MOD_NEUTR_SRC_SCALING/g" b2mod_diag_diffv_diffv.F90 b2mod_driver_diffv_diffv.F90 b2mod_main_diffv_diffv.F90 b2stbr_dv_dv.F90
 sed -i -e "s/USE B2MOD_PLASMA_DIFFV_DIFFV/USE B2MOD_PLASMA_DIFFV/g" heatdiff2D_dv_dv.F90 init_wall_dv_dv.F90
@@ -170,7 +171,6 @@ sed -i -e 's/b2mn_step_dv0, b2mn_fin, b2mn_fin_dv0/b2mn_fin, b2mn_fin_dv0/g' b2m
 
 sed -i -e "s/USE B2MOD_RESIDUALS_DIFFV/USE B2MOD_RESIDUALS/g" b2mod_diag_diffv_diffv.F90
 sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_diag_diffv_diffv.F90
-#sed -i -e "s/USE B2MOD_EIRDIAG_DIFFV/USE B2MOD_EIRDIAG/g" b2mod_neutrals_namelist_diffv_diffv.F90 b2mod_balance_diffv_diffv.F90 b2news__dv_dv.F90 b2news_m_dv_dv.F90 b2sral_dv_dv.F90 b2tinnt_dv_dv.F90 b2tqin_dv_dv.F90
 sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g' b2txvspr_dv_dv.F90
 
 sed -i '/EXTERNAL SUBINI/d' *.F90
@@ -219,19 +219,13 @@ sed -i 's/FIX_USER_NODIFF/FIX_USER/g' fix_user_dv_dv.F90
 sed -i 's/call b2usr_loads(nx,ny,ns,nxtl,nxtr,BoRiS,wtarg_max)/call b2usr_loads_nodiff_nodiff(nx,ny,ns,nxtl,nxtr,BoRiS,\n     \&    wtarg_max)/g' b2mod_usrtrc.F
 sed -i 's/call species/call species_nodiff/g' tallies.F
 sed -i 's/b2xzef/b2xzef_nodiff_nodiff/g' b2mod_wrsep.F
-#sed -i 's/B2NEUT_IND_NODIFF/b2neut_ind/g' b2usr_loads_dv_dv.F90
-#sed -i 's/B2NEUT_SURFCHECK_NODIFF/b2neut_surfcheck/g' b2usr_loads_dv_dv.F90
-#sed -i 's/B2NEUT_ENG_NODIFF/b2neut_eng/g' b2usr_loads_dv_dv.F90
 sed -i 's/B2UXUS_DV_NODIFF/b2uxus_dv/g' b2usco_dv_dv.F90 b2usmo_dv_dv.F90 b2usht_dv_dv.F90 b2uspo_dv_dv.F90
 sed -i -e '/SET_TGT_PERTURBATION_NODIFF/d' b2mn_hess.F90
 sed -i -e '/EXTERNAL DEALLOCATEB2GRIDMAP/d' b2mod_geo_diffv_diffv.F90
 sed -i -e 's/ERF_DV0/ERF_DV/g' erf_dv_dv.F90 b2mod_recycle_diffv_diffv.F90
 sed -i -e '/EXTERNAL ERF_DV/d' b2mod_recycle_diffv_diffv.F90
 sed -i -e 's/DIM_DV0/DIM_DV/g' dim_dv_dv.F90
-#sed -i 's/cfwure/cfwure_nodiff/g' b2mod_residuals.F b2mwmv.F
 sed -i 's/call intcell/call intcell_nodiff_nodiff/g' b2mod_mwti.F90
-#sed -i 's/b2scopy/b2scopy_nodiff_nodiff/g' b2mwmv.F
-#sed -i 's/b2saxpy/b2saxpy_nodiff_nodiff/g' b2mwmv.F
 sed -i -e 's/B2WUZD_NODIFF/B2WUZD/g' b2mod_driver_diffv_diffv.F90 b2mnds_dv_dv.F90 b2mod_running_average_diffv_diffv.F90 b2mod_batch_average_diffv_diffv.F90 b2wucp_dv_dv.F90
 sed -i -e 's/INVERT_MATRIX_DV0/INVERT_MATRIX_DV/g' invert_matrix_dv_dv.F90
 
