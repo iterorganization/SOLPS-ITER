@@ -1,0 +1,142 @@
+#!/bin/bash
+#
+# pshenoa version 2023/07/07
+# Governing script for the series files production get_series.py
+#
+#======================================================================
+# USAGE:
+#
+# in the baserun directory (or any other directory really):
+# get_series $series_file
+#                Argument is the formatted series file (see example
+#                in $SOLPSTOP/scripts directory)
+#                if absent the default .series file will be used
+#
+# Fetches the data from the raw last_2d_out files of the runs associated
+# with the given series (described in formatted series file).
+# Fetching is based on the get_series.cmd file provided
+# by default the get_series.cmd file in the present directory is used
+# if absent will search for it in the baserun directory in the directory
+# from which the get_series script is called
+#=======================================================================
+# EXAMPLE of series file ($GSGOV in this script)
+#
+# series: Example : add_units / scale
+# run   :  001    : ./
+# run   :  002    : ../2405.test
+#
+# keys ( "add_units" and "scale" for now) are optional
+#     scale     - perfoms the scaling according to .cmd file prescription
+#     add_units - adds units to the quantity names in the output file title
+#======================================================================
+
+MARK=.GSD
+DGS_FILE=.series
+CMD_FILE=get_series.cmd
+GTS_SCRIPT=get_series.py
+L2D_SCRIPT=last_2d
+L2D_RAW=last_2d_out
+
+CURRENT_DIR=${PWD##*/}
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+GSEXEC=get_series.exe.py
+GSGOV=series.exe
+GSCMD=get_series.exe.cmd
+GSLOG=get_series.exe.log
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$GTS_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$GTS_SCRIPT $GSEXEC"
+  ln -sf "$SOURCE_DIR/$GTS_SCRIPT" "$GSEXEC"
+else
+  echo "driver script $GTS_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $GSCMD"
+  ln -sf "$CMD_FILE" "$GSCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $CMD_LOCAL_DIR"
+  if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+    echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $GSCMD"
+    ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$GSCMD"
+  else
+    echo "checking $CMD_DIR"
+    if [ -f "$CMD_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_DIR"
+      echo "ln -sf $CMD_DIR/$CMD_FILE $GSCMD"
+      ln -sf "$CMD_DIR/$CMD_FILE" "$GSCMD"
+    else
+      echo "no command file $CMD_FILE found... plots wont be produced"
+    fi
+  fi
+fi
+
+[ ! $# -eq 0 ] && {
+SFILE=$1 && echo "Working with series file: $SFILE "
+} || {
+SFILE=$DGS_FILE && echo "Working with default series file: $SFILE"
+}
+
+if [ -f "$SFILE" ]
+then
+  echo "ln -sf $SFILE $GSGOV"
+  ln -sf "$SFILE" "$GSGOV"
+else
+  echo "required series file $SFILE is absent"
+fi
+
+echo "checking the run data..."
+count=`grep run $GSGOV | wc -l`
+if [ $count != 0 ]
+then
+  i=1
+  while [ $count -ge $i ]; do {
+       path=`grep run $GSGOV | head -$((count+1-i)) | tail -1 | cut -d ':' -f 3 | tr -d ' '`
+       ( cd $path && [ ! -f $L2D_RAW ] && echo "$L2D_RAW absent in $path" && echo "running $L2D_SCRIPT in $path" && $L2D_SCRIPT >/dev/null 2>&1 && [ ! -f $L2D_RAW ] && echo "failed to produce $L2D_RAW in $path" )
+       let "i=i+1"
+  }; done
+else
+  echo "no runs specified in $GSGOV"
+fi
+
+if [ -f "$GSGOV" ] && [ -f $GSCMD ] && [ -f "$GSEXEC" ]
+then
+  echo "workspace is set, procceed to producing series..."
+  echo "python $GSEXEC"
+  python "$GSEXEC"
+  echo "cat $GSLOG"
+  cat $GSLOG
+  echo "rm -f $GSLOG"
+  rm -f $GSLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $GSEXEC $GSGOV $GSCMD"
+  ls -l "$GSEXEC" "$GSGOV" "$GSCMD"
+fi
+
+echo "Work finished, cleaning..."
+echo "rm -rf $GSEXEC $GSCMD $GSGOV $MARK"
+rm -rf "$GSEXEC" "$GSCMD" "$GSGOV" "$MARK"
