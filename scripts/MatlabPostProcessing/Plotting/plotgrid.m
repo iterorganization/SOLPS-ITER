@@ -77,7 +77,7 @@ if isfield(gmtry,'nCv')
     end
 
     % Single plot call for all guard cells
-    hGuard = plot(R_guard, Z_guard, 'k');
+    hGuard = plot(R_guard, Z_guard, 'k', varargin{:});
     axis equal
         
 else
