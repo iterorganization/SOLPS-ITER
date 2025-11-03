@@ -27,11 +27,11 @@ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FFLAGS    += -vec_report0
 endif
 
-INCLUDE    = -Isrc
+INCLUDE    = -Isrc `pkg-config libtirpc --cflags`
 COMPILE    = ${FC} -c ${FFLAGS}
 CPP        = /lib/cpp -traditional
 
-LDLIBS     = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDLIBS     = ${LD_SONNET} ${LD_MSCL} `pkg-config libtirpc --libs`
 LDEXTRA    =
 
 #!!!Local Variables:
