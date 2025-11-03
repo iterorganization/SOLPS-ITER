@@ -54,6 +54,8 @@
 :nr_sep_C:\eta_{C}^{sep}:1.e+2
 @page: Separatrix density fraction N, \%
 :nr_sep_N:\eta_{N}^{sep}:1.e+2
+@page: Separatrix density fraction O, \%
+:nr_sep_O:\eta_{O}^{sep}:1.e+2
 @page: Separatrix density fraction Ne, \%
 :nr_sep_Ne:\eta_{Ne}^{sep}:1.e+2
 @page: Separatrix density fraction Ar, \%
@@ -82,6 +84,7 @@
 :imp_rad_B:B:1.e-6
 :imp_rad_C:C:1.e-6
 :imp_rad_N:N:1.e-6
+:imp_rad_O:O:1.e-6
 :imp_rad_Ne:Ne:1.e-6
 :imp_rad_Ar:Ar:1.e-6
 :imp_rad_W:W:1.e-6
@@ -264,6 +267,22 @@
 :flux_ttr_N:dln(N)/dt:
 @page: Total relative error in N balance
 :bln_blnr_N:err/sum:
+@page: Flux balance total O, s^{-1}
+:ion_core_O:ion_core:
+:ntr_core_O:ntr_core:
+:ion_targ_O:ion_targ:
+:ntr_targ_O:ntr_targ:
+:ion_wall_O:ion_wall:
+:ntr_wall_O:ntr_wall:
+:ntr_puff_O:ntr_puff:
+:flux_tot_O:tot_flux:
+:flux_bln_O:err_totl:
+@page: O ion dN/dt, s^{-1}
+:flx_d/dt_O:dN/dt:
+@page: O content dln(N)/dt, s^{-1}
+:flux_ttr_O:dln(N)/dt:
+@page: Total relative error in O balance
+:bln_blnr_O:err/sum:
 @page: Flux balance total Ne, s^{-1}
 :ion_core_Ne:ion_core:
 :ntr_core_Ne:ntr_core:
@@ -517,6 +536,24 @@
 :N_a_reg_06_N:SOL_rt:
 :N_a_reg_07_N:inner_rt:
 :N_a_reg_08_N:outer_rt:
+@page: Total number of O ions per region
+:N_i_reg_01_O:core_lt:
+:N_i_reg_02_O:SOL_lt:
+:N_i_reg_03_O:inner_lt:
+:N_i_reg_04_O:outer_lt:
+:N_i_reg_05_O:core_rt:
+:N_i_reg_06_O:SOL_rt:
+:N_i_reg_07_O:inner_rt:
+:N_i_reg_08_O:outer_rt:
+@page: Total number of O neutrals per region
+:N_a_reg_01_O:core_lt:
+:N_a_reg_02_O:SOL_lt:
+:N_a_reg_03_O:inner_lt:
+:N_a_reg_04_O:outer_lt:
+:N_a_reg_05_O:core_rt:
+:N_a_reg_06_O:SOL_rt:
+:N_a_reg_07_O:inner_rt:
+:N_a_reg_08_O:outer_rt:
 @page: Total number of Ne ions per region
 :N_i_reg_01_Ne:core_lt:
 :N_i_reg_02_Ne:SOL_lt:
@@ -605,6 +642,10 @@
 :N_s_sli_N:N_{i,N}^{edge}:
 @page: Total number of N particles in the egde
 :N_s_slt_N:N_{N}^{edge}:
+@page: Total number of O ions in the egde
+:N_s_sli_O:N_{i,O}^{edge}:
+@page: Total number of O particles in the egde
+:N_s_slt_O:N_{O}^{edge}:
 @page: Total number of Ne ions in the egde
 :N_s_sli_Ne:N_{i,Ne}^{edge}:
 @page: Total number of Ne particles in the egde
@@ -667,6 +708,14 @@
 :resco01_05_N:
 :resco01_06_N:
 :resco01_07_N:
+:resco01_01_O:
+:resco01_02_O:
+:resco01_03_O:
+:resco01_04_O:
+:resco01_05_O:
+:resco01_06_O:
+:resco01_07_O:
+:resco01_08_O:
 :resco01_01_Ne:
 :resco01_02_Ne:
 :resco01_03_Ne:
@@ -686,6 +735,7 @@
 :resco01_07_Ar:
 :resco01_08_Ar:
 :resco01_09_Ar:
+:resco01_10_Ar:
 :resco01_11_Ar:
 :resco01_12_Ar:
 :resco01_13_Ar:
@@ -703,6 +753,7 @@
 :resco01_07_W:
 :resco01_08_W:
 :resco01_09_W:
+:resco01_10_W:
 :resco01_11_W:
 :resco01_12_W:
 :resco01_13_W:
@@ -720,6 +771,19 @@
 :resco01_25_W:
 :resco01_26_W:
 :resco01_27_W:
+:resco01_28_W:
+:resco01_29_W:
+:resco01_30_W:
+:resco01_31_W:
+:resco01_32_W:
+:resco01_33_W:
+:resco01_34_W:
+:resco01_35_W:
+:resco01_36_W:
+:resco01_37_W:
+:resco01_38_W:
+:resco01_39_W:
+:resco01_40_W:
 @page: Continuity balance equation residuals left SOL
 @iter:100
 @log:
@@ -751,6 +815,14 @@
 :resco02_05_N:
 :resco02_06_N:
 :resco02_07_N:
+:resco02_01_O:
+:resco02_02_O:
+:resco02_03_O:
+:resco02_04_O:
+:resco02_05_O:
+:resco02_06_O:
+:resco02_07_O:
+:resco02_08_O:
 :resco02_01_Ne:
 :resco02_02_Ne:
 :resco02_03_Ne:
@@ -770,6 +842,7 @@
 :resco02_07_Ar:
 :resco02_08_Ar:
 :resco02_09_Ar:
+:resco02_10_Ar:
 :resco02_11_Ar:
 :resco02_12_Ar:
 :resco02_13_Ar:
@@ -787,6 +860,7 @@
 :resco02_07_W:
 :resco02_08_W:
 :resco02_09_W:
+:resco02_10_W:
 :resco02_11_W:
 :resco02_12_W:
 :resco02_13_W:
@@ -804,6 +878,19 @@
 :resco02_25_W:
 :resco02_26_W:
 :resco02_27_W:
+:resco02_28_W:
+:resco02_29_W:
+:resco02_30_W:
+:resco02_31_W:
+:resco02_32_W:
+:resco02_13_W:
+:resco02_34_W:
+:resco02_35_W:
+:resco02_36_W:
+:resco02_37_W:
+:resco02_38_W:
+:resco02_39_W:
+:resco02_40_W:
 @page: Continuity balance equation residuals left inner
 @iter:100
 @log:
@@ -835,6 +922,14 @@
 :resco03_05_N:
 :resco03_06_N:
 :resco03_07_N:
+:resco03_01_O:
+:resco03_02_O:
+:resco03_03_O:
+:resco03_04_O:
+:resco03_05_O:
+:resco03_06_O:
+:resco03_07_O:
+:resco03_08_O:
 :resco03_01_Ne:
 :resco03_02_Ne:
 :resco03_03_Ne:
@@ -854,6 +949,7 @@
 :resco03_07_Ar:
 :resco03_08_Ar:
 :resco03_09_Ar:
+:resco03_10_Ar:
 :resco03_11_Ar:
 :resco03_12_Ar:
 :resco03_13_Ar:
@@ -871,6 +967,7 @@
 :resco03_07_W:
 :resco03_08_W:
 :resco03_09_W:
+:resco03_10_W:
 :resco03_11_W:
 :resco03_12_W:
 :resco03_13_W:
@@ -888,6 +985,19 @@
 :resco03_25_W:
 :resco03_26_W:
 :resco03_27_W:
+:resco03_28_W:
+:resco03_29_W:
+:resco03_30_W:
+:resco03_31_W:
+:resco03_32_W:
+:resco03_33_W:
+:resco03_34_W:
+:resco03_35_W:
+:resco03_36_W:
+:resco03_37_W:
+:resco03_38_W:
+:resco03_39_W:
+:resco03_40_W:
 @page: Continuity balance equation residuals left outer
 @iter:100
 @log:
@@ -919,6 +1029,14 @@
 :resco04_05_N:
 :resco04_06_N:
 :resco04_07_N:
+:resco04_01_O:
+:resco04_02_O:
+:resco04_03_O:
+:resco04_04_O:
+:resco04_05_O:
+:resco04_06_O:
+:resco04_07_O:
+:resco04_08_O:
 :resco04_01_Ne:
 :resco04_02_Ne:
 :resco04_03_Ne:
@@ -938,6 +1056,7 @@
 :resco04_07_Ar:
 :resco04_08_Ar:
 :resco04_09_Ar:
+:resco04_10_Ar:
 :resco04_11_Ar:
 :resco04_12_Ar:
 :resco04_13_Ar:
@@ -955,6 +1074,7 @@
 :resco04_07_W:
 :resco04_08_W:
 :resco04_09_W:
+:resco04_10_W:
 :resco04_11_W:
 :resco04_12_W:
 :resco04_13_W:
@@ -972,6 +1092,19 @@
 :resco04_25_W:
 :resco04_26_W:
 :resco04_27_W:
+:resco04_28_W:
+:resco04_29_W:
+:resco04_30_W:
+:resco04_31_W:
+:resco04_32_W:
+:resco04_33_W:
+:resco04_34_W:
+:resco04_35_W:
+:resco04_36_W:
+:resco04_37_W:
+:resco04_38_W:
+:resco04_39_W:
+:resco04_40_W:
 @page: Continuity balance equation residuals right core
 @iter:100
 @log:
@@ -1003,6 +1136,14 @@
 :resco05_05_N:
 :resco05_06_N:
 :resco05_07_N:
+:resco05_01_O:
+:resco05_02_O:
+:resco05_03_O:
+:resco05_04_O:
+:resco05_05_O:
+:resco05_06_O:
+:resco05_07_O:
+:resco05_08_O:
 :resco05_01_Ne:
 :resco05_02_Ne:
 :resco05_03_Ne:
@@ -1022,6 +1163,7 @@
 :resco05_07_Ar:
 :resco05_08_Ar:
 :resco05_09_Ar:
+:resco05_10_Ar:
 :resco05_11_Ar:
 :resco05_12_Ar:
 :resco05_13_Ar:
@@ -1039,6 +1181,7 @@
 :resco05_07_W:
 :resco05_08_W:
 :resco05_09_W:
+:resco05_10_W:
 :resco05_11_W:
 :resco05_12_W:
 :resco05_13_W:
@@ -1056,6 +1199,19 @@
 :resco05_25_W:
 :resco05_26_W:
 :resco05_27_W:
+:resco05_28_W:
+:resco05_29_W:
+:resco05_30_W:
+:resco05_31_W:
+:resco05_32_W:
+:resco05_33_W:
+:resco05_34_W:
+:resco05_35_W:
+:resco05_36_W:
+:resco05_37_W:
+:resco05_38_W:
+:resco05_39_W:
+:resco05_40_W:
 @page: Continuity balance equation residuals right SOL
 @iter:100
 @log:
@@ -1087,6 +1243,14 @@
 :resco06_05_N:
 :resco06_06_N:
 :resco06_07_N:
+:resco06_01_O:
+:resco06_02_O:
+:resco06_03_O:
+:resco06_04_O:
+:resco06_05_O:
+:resco06_06_O:
+:resco06_07_O:
+:resco06_08_O:
 :resco06_01_Ne:
 :resco06_02_Ne:
 :resco06_03_Ne:
@@ -1106,6 +1270,7 @@
 :resco06_07_Ar:
 :resco06_08_Ar:
 :resco06_09_Ar:
+:resco06_10_Ar:
 :resco06_11_Ar:
 :resco06_12_Ar:
 :resco06_13_Ar:
@@ -1123,6 +1288,7 @@
 :resco06_07_W:
 :resco06_08_W:
 :resco06_09_W:
+:resco06_10_W:
 :resco06_11_W:
 :resco06_12_W:
 :resco06_13_W:
@@ -1140,6 +1306,19 @@
 :resco06_25_W:
 :resco06_26_W:
 :resco06_27_W:
+:resco06_28_W:
+:resco06_29_W:
+:resco06_30_W:
+:resco06_31_W:
+:resco06_32_W:
+:resco06_33_W:
+:resco06_34_W:
+:resco06_35_W:
+:resco06_36_W:
+:resco06_37_W:
+:resco06_38_W:
+:resco06_39_W:
+:resco06_40_W:
 @page: Continuity balance equation residuals right inner
 @iter:100
 @log:
@@ -1171,6 +1350,14 @@
 :resco07_05_N:
 :resco07_06_N:
 :resco07_07_N:
+:resco07_01_O:
+:resco07_02_O:
+:resco07_03_O:
+:resco07_04_O:
+:resco07_05_O:
+:resco07_06_O:
+:resco07_07_O:
+:resco07_08_O:
 :resco07_01_Ne:
 :resco07_02_Ne:
 :resco07_03_Ne:
@@ -1190,6 +1377,7 @@
 :resco07_07_Ar:
 :resco07_08_Ar:
 :resco07_09_Ar:
+:resco07_10_Ar:
 :resco07_11_Ar:
 :resco07_12_Ar:
 :resco07_13_Ar:
@@ -1207,6 +1395,7 @@
 :resco07_07_W:
 :resco07_08_W:
 :resco07_09_W:
+:resco07_10_W:
 :resco07_11_W:
 :resco07_12_W:
 :resco07_13_W:
@@ -1224,6 +1413,19 @@
 :resco07_25_W:
 :resco07_26_W:
 :resco07_27_W:
+:resco07_28_W:
+:resco07_29_W:
+:resco07_30_W:
+:resco07_31_W:
+:resco07_32_W:
+:resco07_33_W:
+:resco07_34_W:
+:resco07_35_W:
+:resco07_36_W:
+:resco07_37_W:
+:resco07_38_W:
+:resco07_39_W:
+:resco07_40_W:
 @page: Continuity balance equation residuals right outer
 @iter:100
 @log:
@@ -1255,6 +1457,14 @@
 :resco08_05_N:
 :resco08_06_N:
 :resco08_07_N:
+:resco08_01_O:
+:resco08_02_O:
+:resco08_03_O:
+:resco08_04_O:
+:resco08_05_O:
+:resco08_06_O:
+:resco08_07_O:
+:resco08_08_O:
 :resco08_01_Ne:
 :resco08_02_Ne:
 :resco08_03_Ne:
@@ -1274,6 +1484,7 @@
 :resco08_07_Ar:
 :resco08_08_Ar:
 :resco08_09_Ar:
+:resco08_10_Ar:
 :resco08_11_Ar:
 :resco08_12_Ar:
 :resco08_13_Ar:
@@ -1291,6 +1502,7 @@
 :resco08_07_W:
 :resco08_08_W:
 :resco08_09_W:
+:resco08_10_W:
 :resco08_11_W:
 :resco08_12_W:
 :resco08_13_W:
@@ -1308,6 +1520,19 @@
 :resco08_25_W:
 :resco08_26_W:
 :resco08_27_W:
+:resco08_28_W:
+:resco08_29_W:
+:resco08_30_W:
+:resco08_31_W:
+:resco08_32_W:
+:resco08_33_W:
+:resco08_34_W:
+:resco08_35_W:
+:resco08_36_W:
+:resco08_37_W:
+:resco08_38_W:
+:resco08_39_W:
+:resco08_40_W:
 @page: Momentum balance equation residuals left core
 @iter:100
 @log:
@@ -1339,6 +1564,14 @@
 :resmo01_05_N:
 :resmo01_06_N:
 :resmo01_07_N:
+:resmo01_01_O:
+:resmo01_02_O:
+:resmo01_03_O:
+:resmo01_04_O:
+:resmo01_05_O:
+:resmo01_06_O:
+:resmo01_07_O:
+:resmo01_08_O:
 :resmo01_01_Ne:
 :resmo01_02_Ne:
 :resmo01_03_Ne:
@@ -1358,6 +1591,7 @@
 :resmo01_07_Ar:
 :resmo01_08_Ar:
 :resmo01_09_Ar:
+:resmo01_10_Ar:
 :resmo01_11_Ar:
 :resmo01_12_Ar:
 :resmo01_13_Ar:
@@ -1375,6 +1609,7 @@
 :resmo01_07_W:
 :resmo01_08_W:
 :resmo01_09_W:
+:resmo01_10_W:
 :resmo01_11_W:
 :resmo01_12_W:
 :resmo01_13_W:
@@ -1392,6 +1627,19 @@
 :resmo01_25_W:
 :resmo01_26_W:
 :resmo01_27_W:
+:resmo01_28_W:
+:resmo01_29_W:
+:resmo01_30_W:
+:resmo01_31_W:
+:resmo01_32_W:
+:resmo01_33_W:
+:resmo01_34_W:
+:resmo01_35_W:
+:resmo01_36_W:
+:resmo01_37_W:
+:resmo01_38_W:
+:resmo01_39_W:
+:resmo01_40_W:
 @page: Momentum balance equation residuals left SOL
 @iter:100
 @log:
@@ -1423,6 +1671,14 @@
 :resmo02_05_N:
 :resmo02_06_N:
 :resmo02_07_N:
+:resmo02_01_O:
+:resmo02_02_O:
+:resmo02_03_O:
+:resmo02_04_O:
+:resmo02_05_O:
+:resmo02_06_O:
+:resmo02_07_O:
+:resmo02_08_O:
 :resmo02_01_Ne:
 :resmo02_02_Ne:
 :resmo02_03_Ne:
@@ -1442,6 +1698,7 @@
 :resmo02_07_Ar:
 :resmo02_08_Ar:
 :resmo02_09_Ar:
+:resmo02_10_Ar:
 :resmo02_11_Ar:
 :resmo02_12_Ar:
 :resmo02_13_Ar:
@@ -1459,6 +1716,7 @@
 :resmo02_07_W:
 :resmo02_08_W:
 :resmo02_09_W:
+:resmo02_10_W:
 :resmo02_11_W:
 :resmo02_12_W:
 :resmo02_13_W:
@@ -1476,6 +1734,19 @@
 :resmo02_25_W:
 :resmo02_26_W:
 :resmo02_27_W:
+:resmo02_28_W:
+:resmo02_29_W:
+:resmo02_30_W:
+:resmo02_31_W:
+:resmo02_32_W:
+:resmo02_33_W:
+:resmo02_34_W:
+:resmo02_35_W:
+:resmo02_36_W:
+:resmo02_37_W:
+:resmo02_38_W:
+:resmo02_39_W:
+:resmo02_40_W:
 @page: Momentum balance equation residuals left inner
 @iter:100
 @log:
@@ -1507,6 +1778,14 @@
 :resmo03_05_N:
 :resmo03_06_N:
 :resmo03_07_N:
+:resmo03_01_O:
+:resmo03_02_O:
+:resmo03_03_O:
+:resmo03_04_O:
+:resmo03_05_O:
+:resmo03_06_O:
+:resmo03_07_O:
+:resmo03_08_O:
 :resmo03_01_Ne:
 :resmo03_02_Ne:
 :resmo03_03_Ne:
@@ -1526,6 +1805,7 @@
 :resmo03_07_Ar:
 :resmo03_08_Ar:
 :resmo03_09_Ar:
+:resmo03_10_Ar:
 :resmo03_11_Ar:
 :resmo03_12_Ar:
 :resmo03_13_Ar:
@@ -1543,6 +1823,7 @@
 :resmo03_07_W:
 :resmo03_08_W:
 :resmo03_09_W:
+:resmo03_10_W:
 :resmo03_11_W:
 :resmo03_12_W:
 :resmo03_13_W:
@@ -1560,6 +1841,19 @@
 :resmo03_25_W:
 :resmo03_26_W:
 :resmo03_27_W:
+:resmo03_28_W:
+:resmo03_29_W:
+:resmo03_30_W:
+:resmo03_31_W:
+:resmo03_32_W:
+:resmo03_33_W:
+:resmo03_34_W:
+:resmo03_35_W:
+:resmo03_36_W:
+:resmo03_37_W:
+:resmo03_38_W:
+:resmo03_39_W:
+:resmo03_40_W:
 @page: Momentum balance equation residuals left outer
 @iter:100
 @log:
@@ -1592,6 +1886,14 @@
 :resmo04_05_N:
 :resmo04_06_N:
 :resmo04_07_N:
+:resmo04_01_O:
+:resmo04_02_O:
+:resmo04_03_O:
+:resmo04_04_O:
+:resmo04_05_O:
+:resmo04_06_O:
+:resmo04_07_O:
+:resmo04_08_O:
 :resmo04_01_Ne:
 :resmo04_02_Ne:
 :resmo04_03_Ne:
@@ -1611,6 +1913,7 @@
 :resmo04_07_Ar:
 :resmo04_08_Ar:
 :resmo04_09_Ar:
+:resmo04_10_Ar:
 :resmo04_11_Ar:
 :resmo04_12_Ar:
 :resmo04_13_Ar:
@@ -1628,6 +1931,7 @@
 :resmo04_07_W:
 :resmo04_08_W:
 :resmo04_09_W:
+:resmo04_10_W:
 :resmo04_11_W:
 :resmo04_12_W:
 :resmo04_13_W:
@@ -1645,6 +1949,19 @@
 :resmo04_25_W:
 :resmo04_26_W:
 :resmo04_27_W:
+:resmo04_28_W:
+:resmo04_29_W:
+:resmo04_30_W:
+:resmo04_31_W:
+:resmo04_32_W:
+:resmo04_33_W:
+:resmo04_34_W:
+:resmo04_35_W:
+:resmo04_36_W:
+:resmo04_37_W:
+:resmo04_38_W:
+:resmo04_39_W:
+:resmo04_40_W:
 @page: Momentum balance equation residuals right core
 @iter:100
 @log:
@@ -1676,6 +1993,14 @@
 :resmo05_05_N:
 :resmo05_06_N:
 :resmo05_07_N:
+:resmo05_01_O:
+:resmo05_02_O:
+:resmo05_03_O:
+:resmo05_04_O:
+:resmo05_05_O:
+:resmo05_06_O:
+:resmo05_07_O:
+:resmo05_08_O:
 :resmo05_01_Ne:
 :resmo05_02_Ne:
 :resmo05_03_Ne:
@@ -1695,6 +2020,7 @@
 :resmo05_07_Ar:
 :resmo05_08_Ar:
 :resmo05_09_Ar:
+:resmo05_10_Ar:
 :resmo05_11_Ar:
 :resmo05_12_Ar:
 :resmo05_13_Ar:
@@ -1712,6 +2038,7 @@
 :resmo05_07_W:
 :resmo05_08_W:
 :resmo05_09_W:
+:resmo05_10_W:
 :resmo05_11_W:
 :resmo05_12_W:
 :resmo05_13_W:
@@ -1729,6 +2056,19 @@
 :resmo05_25_W:
 :resmo05_26_W:
 :resmo05_27_W:
+:resmo05_28_W:
+:resmo05_29_W:
+:resmo05_30_W:
+:resmo05_31_W:
+:resmo05_32_W:
+:resmo05_33_W:
+:resmo05_34_W:
+:resmo05_35_W:
+:resmo05_36_W:
+:resmo05_37_W:
+:resmo05_38_W:
+:resmo05_39_W:
+:resmo05_40_W:
 @page: Momentum balance equation residuals right SOL
 @iter:100
 @log:
@@ -1760,6 +2100,14 @@
 :resmo06_05_N:
 :resmo06_06_N:
 :resmo06_07_N:
+:resmo06_01_O:
+:resmo06_02_O:
+:resmo06_03_O:
+:resmo06_04_O:
+:resmo06_05_O:
+:resmo06_06_O:
+:resmo06_07_O:
+:resmo06_08_O:
 :resmo06_01_Ne:
 :resmo06_02_Ne:
 :resmo06_03_Ne:
@@ -1779,6 +2127,7 @@
 :resmo06_07_Ar:
 :resmo06_08_Ar:
 :resmo06_09_Ar:
+:resmo06_10_Ar:
 :resmo06_11_Ar:
 :resmo06_12_Ar:
 :resmo06_13_Ar:
@@ -1796,6 +2145,7 @@
 :resmo06_07_W:
 :resmo06_08_W:
 :resmo06_09_W:
+:resmo06_10_W:
 :resmo06_11_W:
 :resmo06_12_W:
 :resmo06_13_W:
@@ -1813,6 +2163,19 @@
 :resmo06_25_W:
 :resmo06_26_W:
 :resmo06_27_W:
+:resmo06_28_W:
+:resmo06_29_W:
+:resmo06_30_W:
+:resmo06_31_W:
+:resmo06_32_W:
+:resmo06_33_W:
+:resmo06_34_W:
+:resmo06_35_W:
+:resmo06_36_W:
+:resmo06_37_W:
+:resmo06_38_W:
+:resmo06_39_W:
+:resmo06_40_W:
 @page: Momentum balance equation residuals right inner
 @iter:100
 @log:
@@ -1844,6 +2207,14 @@
 :resmo07_05_N:
 :resmo07_06_N:
 :resmo07_07_N:
+:resmo07_01_O:
+:resmo07_02_O:
+:resmo07_03_O:
+:resmo07_04_O:
+:resmo07_05_O:
+:resmo07_06_O:
+:resmo07_07_O:
+:resmo07_08_O:
 :resmo07_01_Ne:
 :resmo07_02_Ne:
 :resmo07_03_Ne:
@@ -1863,6 +2234,7 @@
 :resmo07_07_Ar:
 :resmo07_08_Ar:
 :resmo07_09_Ar:
+:resmo07_10_Ar:
 :resmo07_11_Ar:
 :resmo07_12_Ar:
 :resmo07_13_Ar:
@@ -1880,6 +2252,7 @@
 :resmo07_07_W:
 :resmo07_08_W:
 :resmo07_09_W:
+:resmo07_10_W:
 :resmo07_11_W:
 :resmo07_12_W:
 :resmo07_13_W:
@@ -1897,6 +2270,19 @@
 :resmo07_25_W:
 :resmo07_26_W:
 :resmo07_27_W:
+:resmo07_28_W:
+:resmo07_29_W:
+:resmo07_30_W:
+:resmo07_31_W:
+:resmo07_32_W:
+:resmo07_33_W:
+:resmo07_34_W:
+:resmo07_35_W:
+:resmo07_36_W:
+:resmo07_37_W:
+:resmo07_38_W:
+:resmo07_39_W:
+:resmo07_40_W:
 @page: Momentum balance equation residuals right outer
 @iter:100
 @log:
@@ -1929,6 +2315,14 @@
 :resmo08_05_N:
 :resmo08_06_N:
 :resmo08_07_N:
+:resmo08_01_O:
+:resmo08_02_O:
+:resmo08_03_O:
+:resmo08_04_O:
+:resmo08_05_O:
+:resmo08_06_O:
+:resmo08_07_O:
+:resmo08_08_O:
 :resmo08_01_Ne:
 :resmo08_02_Ne:
 :resmo08_03_Ne:
@@ -1948,6 +2342,7 @@
 :resmo08_07_Ar:
 :resmo08_08_Ar:
 :resmo08_09_Ar:
+:resmo08_10_Ar:
 :resmo08_11_Ar:
 :resmo08_12_Ar:
 :resmo08_13_Ar:
@@ -1965,6 +2360,7 @@
 :resmo08_07_W:
 :resmo08_08_W:
 :resmo08_09_W:
+:resmo08_10_W:
 :resmo08_11_W:
 :resmo08_12_W:
 :resmo08_13_W:
@@ -1982,6 +2378,19 @@
 :resmo08_25_W:
 :resmo08_26_W:
 :resmo08_27_W:
+:resmo08_28_W:
+:resmo08_29_W:
+:resmo08_30_W:
+:resmo08_31_W:
+:resmo08_32_W:
+:resmo08_33_W:
+:resmo08_34_W:
+:resmo08_35_W:
+:resmo08_36_W:
+:resmo08_37_W:
+:resmo08_38_W:
+:resmo08_39_W:
+:resmo08_40_W:
 @file:user
 @page: Integral ion saturation current to the target, MA
 :isatt_il:I_{sat}^{inner}:1.e-6
