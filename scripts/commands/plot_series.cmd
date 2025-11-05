@@ -58,6 +58,10 @@
 @points:
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
 :nr_sep_Be:\eta_{Be}^{sep}:1.e+2
+@page: Separatrix density fraction B, \%
+@points:
+@setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
+:nr_sep_B:\eta_{B}^{sep}:1.e+2
 @page: Separatrix density fraction C, \%
 @points:
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
@@ -66,6 +70,10 @@
 @points:
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
 :nr_sep_N:\eta_{N}^{sep}:1.e+2
+@page: Separatrix density fraction O, \%
+@points:
+@setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20
+:nr_sep_O:\eta_{O}^{sep}:1.e+2
 @page: Separatrix density fraction Ne, \%
 @points:
 @setx:ne_sep:n_{e,avg}^{sep}, 10^{20} m^{-3}:1.e-20

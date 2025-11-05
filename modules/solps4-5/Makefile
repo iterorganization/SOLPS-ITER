@@ -6,8 +6,6 @@ ifndef COMPILER
 $(error COMPILER not defined)
 endif
 
-MAKETAGS ?= ctags -e -f
-
 MAKES = Makefile
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
@@ -37,6 +35,8 @@ endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
+
+MAKETAGS ?= ctags -e -f
 
 # Extensions for object directories when various options are used
 ifdef SOLPS_OPENMP
@@ -1047,7 +1047,7 @@ endif
 	-mkdir -p ${SRCDIR}/B2_include
 	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
 ifdef LD_NETCDF
-	@rm ${SRCDIR}/B2_include/netcdf.inc
+	@rm -f ${SRCDIR}/B2_include/netcdf.inc
 endif
 	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules

@@ -13,15 +13,30 @@ endif
 setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
+setenv SCRATCH_DIR /pfs/scratch/$USER
 
-module load imasenv/3.37.0/intel/2020/rc
-module load json-fortran/8.4.0/intel/2020
-module unload cmake
-module load cmake/3.18.2
+# add IMAS module list to module system
+module use /gw/swimas/modules/all
+
+# load IMAS modules for Intel
+module load IMAS/3.42.0-2025.01-intel-2023b
+module load GGD/1.12.0-intel-2023b-DD-3.42.0
+module load Fundamental-Constants/0.1.1
+module load AMNS/1.5.1-intel-2023b-DD-3.42.0
+module load texlive/20230313-intel-compilers-2023.2.1
+module load json-fortran/8.5.2-intel-compilers-2023.2.1
+module load netCDF/4.9.2-iimpi-2023b
+module load netCDF-Fortran/4.6.1-iimpi-2023b
+module load CMake/3.27.6-GCCcore-13.2.0
+module load git/2.42.0-GCCcore-13.2.0
+module load Doxygen/1.9.8-GCCcore-13.2.0
+module load Ghostscript/10.02.1-GCCcore-13.2.0
+module load makedepend/1.0.9-GCCcore-13.2.0
+module load OpenBLAS/0.3.24-GCC-13.2.0
+
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
-setenv EBVERSIONMSCL `pkg-config mscl --modversion`
-module load texlive
-setenv SYSNAME `fs sysname | cut -d "'" -f 2`
+setenv EBVERSIONMSCL "1.2.4"
+setenv SYSNAME x86_64_rhel9
 
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
@@ -29,7 +44,7 @@ if (! $?DEVICE) then
   endif
 endif
 
-module load paraview/5.10.0
+# module load paraview/5.10.0
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
@@ -48,15 +63,10 @@ else
     setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
   endif
 endif
-if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
-else
-  setenv LD_LIBRARY_PATH "/usr/lib64"
-endif
 
 # Debugger (set environment variable DBX)
-module switch totalview/2023.2
-setenv DBX totalview
+# module switch totalview/2023.2
+# setenv DBX totalview
 
 # compilers
 
