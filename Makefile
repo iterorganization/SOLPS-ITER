@@ -68,6 +68,7 @@ ifeq ($(shell [ -e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes 
 endif
 
 MAKETAGS ?= ctags -e -f
+export MAKETAGS
 
 # Setup debug flags
 EXT_DBG =
@@ -592,6 +593,7 @@ ifeq (${TAO_PRESENT},1)
 # The following dependency builds must be done last as they change the filelist
 	cd modules/B2.5;           ${MAKE} depend TGT=yes TAO=yes
 	cd modules/B2.5;           ${MAKE} depend ADJ=yes TAO=yes
+	cd modules/B2.5;           ${MAKE} depend HESS_TGT=yes TAO=yes
 else
 	cd modules/B2.5;           ${MAKE} depend TGT=yes
 	cd modules/B2.5;           ${MAKE} depend ADJ=yes
@@ -626,6 +628,7 @@ ifeq (${TAO_PRESENT},1)
 # The following dependency builds must be done last as they change the filelist
 	cd modules/B2.5;           ${MAKE} depend TGT=yes TAO=yes
 	cd modules/B2.5;           ${MAKE} depend ADJ=yes TAO=yes
+	cd modules/B2.5;           ${MAKE} depend HESS_TGT=yes TAO=yes
 else
 	cd modules/B2.5;           ${MAKE} depend TGT=yes
 	cd modules/B2.5;           ${MAKE} depend ADJ=yes

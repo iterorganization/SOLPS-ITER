@@ -36,10 +36,15 @@ case "*.iferc-csc.org":
   echo IFERC
   breaksw
 case "*.eufus.eu":
+case "*.efgw.local":
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
 case "*.galileo.cineca.it"
   [ -d /afs ] && echo ITM || echo MARCONI
+  breaksw
+case "*.pitagora.local"
+case "*.pitagora.cineca.it":
+  echo PITAGORA
   breaksw
 case "*.ipp-garching.mpg.de":
 case "*.ipp.mpg.de":

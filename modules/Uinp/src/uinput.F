@@ -650,11 +650,11 @@ cnh b2.neutrals.parameters for the hybrid model
           write(2,'(i1,1x,i1)') 1,4
         else if (lm_cnfg) then
           write(2,'(i1,1x,i1)') 2,6
-        else if (nncut.eq.1) then
-          write(2,'(i1,1x,i2)') 4,13
-        else if (nncut.eq.2.and.streql(topo,'DNS')) then
-          write(2,'(i1,1x,i2)') 8,26
         else if (nncut.eq.2) then
+          write(2,'(i1,1x,i2)') 4,13
+        else if (nncut.eq.4.and.streql(topo,'DNS')) then
+          write(2,'(i1,1x,i2)') 8,26
+        else if (nncut.eq.4) then
           write(2,'(i1,1x,i2)') 8,27
         end if
         close(2)

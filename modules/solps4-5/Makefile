@@ -401,6 +401,9 @@ ${OBJDIR}/eirmod_comxs.o:
 ${OBJDIR}/eirmod_ctrig.o:
 	ln -sf ${EIRDIR}/eirmod_ctrig.o ${OBJDIR}
 
+${OBJDIR}/eirmod_eirbra.o:
+	ln -sf ${EIRDIR}/eirmod_eirbra.o ${OBJDIR}
+
 ${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.o ${OBJDIR}
 
@@ -659,6 +662,9 @@ ${OBJDIR}/eirmod_comxs.${MOD}:
 
 ${OBJDIR}/eirmod_ctrig.${MOD}:
 	ln -sf ${EIRDIR}/eirmod_ctrig.${MOD} ${OBJDIR}
+
+${OBJDIR}/eirmod_eirbra.${MOD}:
+	ln -sf ${EIRDIR}/eirmod_eirbra.${MOD} ${OBJDIR}
 
 ${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/eirmod_comxs.${MOD}
 	ln -sf ${EIRDIR}/eirmod_extrab25.${MOD} ${OBJDIR}
@@ -1041,17 +1047,17 @@ links: local
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
 ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 	-mkdir -p ${SRCDIR}/B2_include.local
-	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
+	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
 endif
 	@[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
-	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
+	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
 ifdef LD_NETCDF
 	@rm ${SRCDIR}/B2_include/netcdf.inc
 endif
 	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
-	@[ -r `which lndir` ] && lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
+	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules >& /dev/null ) || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
 	-mkdir -p ${SRCDIR}/solps4_B2
 	@cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
 	. ./B2_links

@@ -1,0 +1,234 @@
+#!/bin/bash
+#
+# pshenoa version 2023/05/30
+# Governing script for the target loads plotting with plot_trc.py
+#
+#======================================================================
+# USAGE:
+#
+# in the desired run directory:
+# plot_trg
+#
+#          script uses existing ld_tg* and fp_tg* files if present
+#          otherwise "echo '100 wlld' | b2plot command is executed
+#          to obtain them. Then two python scripts are executed:
+#          trg_sum.py that produces trg_sum.dat summary file and
+#          plot_trcc.py that produces standard set of plots governed
+#          by the plot_trg.cmd command file
+#
+# by default the plot_trg.cmd file in the present directory is used
+# if absent plot_trc will be searched in the baserun directory above
+# and in the one from which the plot_trc script is called
+#=======================================================================
+
+MARK=.TRG
+CMD_FILE=plot_trg.cmd
+PLT_SCRIPT=plot_trc.py
+B2PL_DIR=b2pl.exe.dir
+SUM_SCRIPT=trg_sum.py
+SUM_FILE=trg_sum.dat
+OUTPUT_FILE=trg
+OUTPUT_FMT=pdf
+ORIGIN_PDF=multipage.pdf
+STATE_FILE=b2fstate
+REF_FILE=ld_tg_o.dat
+LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.dat fp_tg_iu.dat fp_tg_ou.dat wlld_FWP.dat'
+
+B2EXE_DIR=b2mn.exe.dir
+CURRENT_DIR=${PWD##*/}
+BASERUN_DIR=../baserun
+if [ $CURRENT_DIR = $B2EXE_DIR ]
+then
+  BASERUN_DIR=../$BASERUN_DIR
+fi
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+SEXEC=trg_sum.trg.py
+SLOG=trg_sum.trg.log
+PEXEC=plot_trc.trg.py
+PCMD=plot_trc.trg.cmd
+PLOG=plot_trc.trg.log
+WRK_DIR=wrk.trg
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+then
+  OUTPUT_FMT=$PLOT_TRC_FMT
+  echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
+else
+  echo "Unexpected value of PLOT_TRC_FMT=$PLOT_TRC_FMT, default output file $OUTPUT_FILE.$OUTPUT_FMT will be used "
+fi
+
+echo "setting up workspace..."
+if [ -f "$SOURCE_DIR/$SUM_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$SUM_SCRIPT $SEXEC"
+  ln -sf "$SOURCE_DIR/$SUM_SCRIPT" "$SEXEC"
+else
+  echo "driver script $SUM_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$SOURCE_DIR/$PLT_SCRIPT" ]
+then
+  echo "ln -sf $SOURCE_DIR/$PLT_SCRIPT $PEXEC"
+  ln -sf "$SOURCE_DIR/$PLT_SCRIPT" "$PEXEC"
+else
+  echo "driver script $PLT_SCRIPT is absent in $SOURCE_DIR"
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $PCMD"
+  ln -sf "$CMD_FILE" "$PCMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $BASERUN_DIR"
+  if [ -f "$BASERUN_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $BASERUN_DIR"
+    echo "ln -sf $BASERUN_DIR/$CMD_FILE $PCMD"
+    ln -sf "$BASERUN_DIR/$CMD_FILE" "$PCMD"
+  else
+    echo "no command file $CMD_FILE in $BASERUN_DIR"
+    echo "checking $CMD_LOCAL_DIR"
+    if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+      echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $PCMD"
+      ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$PCMD"
+    else
+      echo "checking $CMD_DIR"
+      if [ -f "$CMD_DIR/$CMD_FILE" ]
+      then
+        echo "command file $CMD_FILE spotted in $CMD_DIR"
+        echo "ln -sf $CMD_DIR/$CMD_FILE $PCMD"
+        ln -sf "$CMD_DIR/$CMD_FILE" "$PCMD"
+      else
+        echo "no command file $CMD_FILE found... plots wont be produced"
+      fi
+    fi
+  fi
+fi
+
+if [ -d "$WRK_DIR" ]
+then
+  echo "rm -rf $WRK_DIR"
+  rm -rf $WRK_DIR
+fi
+echo "mkdir $WRK_DIR"
+mkdir "$WRK_DIR"
+
+count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
+if [ $count = 0 ]
+then
+  STATE_FILE=b2fstati
+  count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
+  if [ $count = 0 ]
+  then
+    STATE_FILE=$REF_FILE
+  fi
+fi
+echo "$STATE_FILE defined as STATE_FILE"
+
+count=`ls -l $LN_FILES 2>/dev/null | wc -l`
+if [ $count != 0 ] && [ $REF_FILE -nt $STATE_FILE ]
+then
+  for f in $LN_FILES; do {
+    [ -f "$f" ] && echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
+  }; done
+else
+  echo "$LN_FILES not found or too old trying to produce..."
+  echo "echo '1111 wlld' | b2plot"
+  echo "1111 wlld" | b2plot >/dev/null 2>&1
+  count=`ls -l $B2PL_DIR/$LN_FILES 2>/dev/null | wc -l`
+  if [ $count != 0 ]
+  then
+    for f in $LN_FILES; do {
+      [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $f && cp $f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$f" && cp "$f" "$WRK_DIR/$f"
+    }; done
+  else
+    echo "failed to produce $LN_FILES, no target data to plot or summarize"
+  fi
+fi
+
+# commented out since in principle file format should not brake anymore  
+#if [ -d "$WRK_DIR" ]
+#then
+#  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+#  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
+#  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
+#fi
+
+if [ -d "$WRK_DIR" ] && [ -f "$SEXEC" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
+then
+  echo "workspace is set, producing summary file $SUM_FILE..."
+  echo "python $SEXEC $WRK_DIR $SLOG"
+  python "$SEXEC" "$WRK_DIR" "$SLOG"
+  echo "cat $SLOG"
+  cat $SLOG
+  echo "rm -f $SLOG"
+  rm -f $SLOG
+  echo "start plotting..."
+  echo "python $PEXEC $PCMD $WRK_DIR $PLOG $PLOT_TRC_FMT"
+  python "$PEXEC" "$PCMD" "$WRK_DIR" "$PLOG" "$PLOT_TRC_FMT"
+  echo "cat $PLOG"
+  cat $PLOG
+  echo "rm -f $PLOG"
+  rm -f $PLOG
+else
+  echo "something went wrong, not all required files are setup"
+  echo "ls -l $SEXEC $PEXEC $PCMD $WRK_DIR"
+  ls -l "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR"
+fi
+
+if [ "$OUTPUT_FMT" = "pdf" ]
+then
+  if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
+  then
+    echo "mv $WRK_DIR/$ORIGIN_PDF $OUTPUT_FILE.$OUTPUT_FMT"
+    mv "$WRK_DIR/$ORIGIN_PDF" "$OUTPUT_FILE"."$OUTPUT_FMT"
+  else
+    echo "no $ORIGIN_PDF produced, trying .ps output instead"
+    OUTPUT_FMT=ps
+  fi
+fi
+
+if [ "$OUTPUT_FMT" = "ps" ]
+then
+  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ $count != 0 ]
+  then
+    echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
+    echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
+    gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps
+    echo "ps2pdf $OUTPUT_FILE.$OUTPUT_FMT $OUTPUT_FILE.pdf"
+    ps2pdf "$OUTPUT_FILE.$OUTPUT_FMT" "$OUTPUT_FILE.pdf"
+  else
+    echo "no *.ps produced, nothing to do"
+  fi
+fi
+
+echo "cleaning..."
+echo "rm -rf $SEXEC $PEXEC $PCMD $WRK_DIR $MARK"
+rm -rf "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR" "$MARK"
+
+if [ -f "$OUTPUT_FILE.$OUTPUT_FMT" ] && [ -f "$SUM_FILE" ]
+then
+  echo "plot_trg finished check $SUM_FILE and $OUTPUT_FILE.$OUTPUT_FMT for the result"
+else
+  echo "either $SUM_FILE or $OUTPUT_FILE.$OUTPUT_FMT was not produced, make sure that $LN_FILES are present (or can be produced from the run data) and that proper $CMD_FILE is supplied"
+fi

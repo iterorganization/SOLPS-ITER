@@ -1,7 +1,11 @@
 if ($?SOLPS_PATH) then
   setenv   OLD_SOLPS_PATH $SOLPS_PATH
-  setenv   FC $OLD_COMPILER
-  setenv   MPI_FC "$OLD_MPI_COMPILER"
+  if ($?OLD_COMPILER) then
+    setenv FC $OLD_COMPILER
+  endif
+  if ($?OLD_MPI_COMPILER) then
+    setenv MPI_FC "$OLD_MPI_COMPILER"
+  endif
   setenv   PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed 's|\.openmp||g'`
   setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
