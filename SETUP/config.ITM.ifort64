@@ -20,27 +20,25 @@
 # Add -DLEGACYCOMP to SOLPS_CPP
 #
 
-       NCDIR ?= ${ITM_NETCDF_DIR}
+       NCDIR ?= ${EBROOTNETCDFMINFORTRAN}
    MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl
        H5DIR ?= ${HDF5_HOME}
      GR_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
     GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
   NCARG_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
-#      NAGDIR ?= ${NAGFLIB_HOME}
-      NAGDIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/nag
- MDSPLUS_DIR ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/MDSPLUS
+      NAGDIR ?= ${EBROOTOPENBLAS}
+ MDSPLUS_DIR ?= ${EBROOTMDSPLUS}
 
 #
 # Variables for linking
 #
 
-LD_NETCDF  = `pkg-config --libs netcdf netcdf-fortran`
+LD_NETCDF  = `pkg-config --libs netcdf-fortran`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lxcb
-#LD_NAG     = -L${NAGDIR}/lib -lnag_nag
-LD_NAG     = -L${NAGDIR} -lnag
+LD_NAG     = `pkg-config openblas --libs`
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client -lxml2
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -59,7 +57,7 @@ MAKETAGS   = etags -o
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNCAR4 -DNO_F01AAF -DITM
+SOLPS_CPP      = -DNCAR4 -DNO_NAG -DITM
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
