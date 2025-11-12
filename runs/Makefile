@@ -244,7 +244,7 @@ endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
-	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null ; [ -e ../eirene_saved_sources ] && cp -p ../eirene_saved_sources . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
@@ -281,7 +281,6 @@ else
 	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${MNEXE}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
-	-[ -s b2mn.exe.dir/eirene_saved_sources ] && mv b2mn.exe.dir/eirene_saved_sources . || ( [ -e b2mn.exe.dir/eirene_saved_sources ] && rm b2mn.exe.dir/eirene_saved_sources || echo > /dev/null )
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
 endif
@@ -340,7 +339,6 @@ endif
 	-rm -f $(target_mn) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
 	-cd b2mn.exe.dir ; [ -s ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
-	-cd b2mn.exe.dir ; [ -s ../eirene_saved_sources ] && cp -p ../eirene_saved_sources . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
@@ -366,7 +364,6 @@ ifdef IMAS_VERSION
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
-	-[ -s b2mn.exe.dir/eirene_saved_sources ] && mv b2mn.exe.dir/eirene_saved_sources . || ( [ -e b2mn.exe.dir/eirene_saved_sources ] && rm b2mn.exe.dir/eirene_saved_sources || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
