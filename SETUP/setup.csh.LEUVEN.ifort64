@@ -43,6 +43,9 @@ module load ArmForge/22.1.2
 setenv DBX ddt
 # Compiler
 setenv FC ifort
+setenv MPI_FC mpiifort
+setenv CXX icpc
+setenv CC icc
 
 module load MATLAB/2023b-r1
 ###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
