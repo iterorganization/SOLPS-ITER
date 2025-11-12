@@ -22,7 +22,6 @@
        NCFDIR ?= ${NETCDF_FORTRAN_HOME}
     MSCL_ROOT ?= ${MSCL_HOME}
         H5DIR ?= ${HDF5_HOME}
-      GR_ROOT ?= ${GR_HOME}
      GLI_HOME ?= ${GLI_HOME}
    NCARG_ROOT ?= ${NCARG_ROOT}
        NAGDIR ?= ${LAPACK_DIR}
@@ -35,7 +34,7 @@ FREETYPE_HOME ?= ${FREETYPE_HOME}
 #
 
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -L${NCFDIR}/lib -lnetcdff
-LD_MSCL    = -L${MSCL_ROOT}/darwin.gfortran -lmscl
+LD_MSCL    = 
 LD_GR      = 
 LD_GKS     = 
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_HOME}/lib -lfreetype -L${LIBPNG_HOME}/lib -lpng
@@ -62,4 +61,3 @@ FFLAGSEXTRA    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

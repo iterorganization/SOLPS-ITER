@@ -23,30 +23,60 @@
 #       distinguish between lack of units provided and a.u. quantities)
 #==============================================================================
 
-sepdata : ne_sep    : 1. : ne_sep    : m^-3
-sepdata : Te_sep    : 1. : Te_sep    : eV
-sepdata : Ti_sep    : 1. : Ti_sep    : eV
-sepdata : Zef_sep   : 1. : Zeff_sep  : a.u.
-sepdata : nr_sep_H  : 1. : nr_sep_H  : a.u.
-sepdata : nr_sep_D  : 1. : nr_sep_D  : a.u.
-sepdata : nr_sep_T  : 1. : nr_sep_T  : a.u.
-sepdata : nr_sep_He : 1. : nr_sep_He : a.u.
-sepdata : nr_sep_Li : 1. : nr_sep_Li : a.u.
-sepdata : nr_sep_Be : 1. : nr_sep_Be : a.u.
-sepdata : nr_sep_C  : 1. : nr_sep_C  : a.u.
-sepdata : nr_sep_N  : 1. : nr_sep_N  : a.u.
-sepdata : nr_sep_Ne : 1. : nr_sep_Ne : a.u.
-sepdata : nr_sep_Ar : 1. : nr_sep_Ar : a.u.
-sepdata : nr_sep_W  : 1. : nr_sep_W  : a.u.
+sepdata  : ne_sep      : 1. : ne_sep     : m^-3
+sepdata  : Te_sep      : 1. : Te_sep     : eV
+sepdata  : Ti_sep      : 1. : Ti_sep     : eV
+sepdata  : Zef_sep     : 1. : Zeff_sep   : a.u.
+sepdata  : nr_sep_H    : 1. : nr_sep_H   : a.u.
+sepdata  : nr_sep_D    : 1. : nr_sep_D   : a.u.
+sepdata  : nr_sep_T    : 1. : nr_sep_T   : a.u.
+sepdata  : nr_sep_He   : 1. : nr_sep_He  : a.u.
+sepdata  : nr_sep_Li   : 1. : nr_sep_Li  : a.u.
+sepdata  : nr_sep_Be   : 1. : nr_sep_Be  : a.u.
+sepdata  : nr_sep_C    : 1. : nr_sep_C   : a.u.
+sepdata  : nr_sep_N    : 1. : nr_sep_N   : a.u.
+sepdata  : nr_sep_Ne   : 1. : nr_sep_Ne  : a.u.
+sepdata  : nr_sep_Ar   : 1. : nr_sep_Ar  : a.u.
+sepdata  : nr_sep_W    : 1. : nr_sep_W   : a.u.
+user_SPb : Te_min_LCFS : 1. : Te_sep_min : eV
 
 user_SPb : p_neut_PFR  : 1. : p_neut_av : Pa
 user_SPb : p_neut_PFRi : 1. : p_neut_i  : Pa
 user_SPb : p_neut_PFRo : 1. : p_neut_o  : Pa
 
-user_SPb : q_max_i   : 1.e-6 : q_pk_i   : MW
-user_SPb : q_max_o   : 1.e-6 : q_pk_o   : MW
-user_SPb : I_s_tot_i : 1.e-6 : I_sat_i  : MA
-user_SPb : I_s_tot_o : 1.e-6 : I_sat_o  : MA
+user_SPb : q_max_i   : 1.e-6 : q_pk_i    : MW/m^2
+user_SPb : q_max_o   : 1.e-6 : q_pk_o    : MW/m^2
+user     : pk_pwr_i  : 1.e-6 : qpk_shp_i : MW/m^2
+user     : pk_pwr_o  : 1.e-6 : qpk_shp_o : MW/m^2
+user_SPb : I_s_tot_i : 1.e-6 : I_sat_i   : MA
+user_SPb : I_s_tot_o : 1.e-6 : I_sat_o   : MA
+
+user     : Sp_DT     : 1. : Sp_DT     : m^-3s^-1
+user     : Sp_He     : 1. : Sp_He     : m^-3s^-1
+user     : DT_thrpt  : 1. : DT_thrpt  : Pa*m^-3s^-1
+user     : He_thrpt  : 1. : He_thrpt  : Pa*m^-3s^-1
+user     : Area_pump : 1. : A_pump    : m^2
+user     : n_H_pump  : 1. : n_H_pump  : m^-3
+user     : T_H_pump  : 1. : T_H_pump  : eV
+user     : p_H_pump  : 1. : P_H_pump  : Pa
+user     : n_D_pump  : 1. : n_D_pump  : m^-3
+user     : T_D_pump  : 1. : T_D_pump  : eV
+user     : p_D_pump  : 1. : P_D_pump  : Pa
+user     : n_T_pump  : 1. : n_T_pump  : m^-3
+user     : T_T_pump  : 1. : T_T_pump  : eV
+user     : p_T_pump  : 1. : P_T_pump  : Pa
+user     : n_H2_pump : 1. : n_H2_pump : m^-3
+user     : T_H2_pump : 1. : T_H2_pump : eV
+user     : p_H2_pump : 1. : P_H2_pump : Pa
+user     : n_D2_pump : 1. : n_D2_pump : m^-3
+user     : T_D2_pump : 1. : T_D2_pump : eV
+user     : p_D2_pump : 1. : P_D2_pump : Pa
+user     : n_T2_pump : 1. : n_T2_pump : m^-3
+user     : T_T2_pump : 1. : T_T2_pump : eV
+user     : p_T2_pump : 1. : P_T2_pump : Pa
+user     : n_He_pump : 1. : n_He_pump : m^-3
+user     : T_He_pump : 1. : T_He_pump : eV
+user     : p_He_pump : 1. : P_He_pump : Pa
 
 b2time   : nesepi_l : 1.    : ne_SP_i   : m^-3
 b2time   : nesepa_l : 1.    : ne_SP_o   : m^-3
@@ -263,6 +293,18 @@ integral : SSNIreg_01_W  : 1. : SNI_01_W   : s^-1
 integral : SSNIreg_02_W  : 1. : SNI_02_W   : s^-1
 integral : SSNIreg_03_W  : 1. : SNI_03_W   : s^-1
 integral : SSNIreg_04_W  : 1. : SNI_04_W   : s^-1
+
+integral : N_s_slt_H  : 1. : N_t_edge_H  : part.
+integral : N_s_slt_D  : 1. : N_t_edge_D  : part.
+integral : N_s_slt_T  : 1. : N_t_edge_T  : part.
+integral : N_s_slt_He : 1. : N_t_edge_He : part.
+integral : N_s_slt_Li : 1. : N_t_edge_Li : part.
+integral : N_s_slt_Be : 1. : N_t_edge_Be : part.
+integral : N_s_slt_C  : 1. : N_t_edge_C  : part.
+integral : N_s_slt_N  : 1. : N_t_edge_N  : part.
+integral : N_s_slt_Ne : 1. : N_t_edge_Ne : part.
+integral : N_s_slt_Ar : 1. : N_t_edge_Ar : part.
+integral : N_s_slt_W  : 1. : N_t_edge_W  : part.
 
 integral : N_a_tot_H  : 1. : N_a_tot_H  : part.
 integral : N_a_tot_D  : 1. : N_a_tot_D  : part.

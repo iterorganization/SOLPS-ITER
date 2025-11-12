@@ -20,8 +20,18 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
   export   USE_OPENMP="-D_OPENMP -DUSE_OPENMP"
   export   SOLPS_OPENMP="yes"
+  export   OLD_COMPILER=${FC}
+  export   OLD_MPI_COMPILER=${MPI_FC}
   if [ "$COMPILER" != "ifort64" ]; then
     export OMP_STACKSIZE="128M"
+  else
+    if [ "$FC" == "ifx" ]; then
+      export FC="ifort"
+      echo "Reverting to ifort compiler as ifx is unsafe with OpenMP"
+    fi
+    if [ "$MPI_FC" == "mpiifort -fc=mpiifx" ]; then
+      export MPI_FC="mpiifort"
+    fi
   fi
   export   KMP_STACKSIZE="128M"
   export   KMP_AFFINITY="noverbose,respect,compact"

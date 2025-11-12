@@ -30,6 +30,7 @@
 #     add_units - adds units to the quantity names in the output file title
 #======================================================================
 
+MARK=.GSD
 DGS_FILE=.series
 CMD_FILE=get_series.cmd
 GTS_SCRIPT=get_series.py
@@ -48,6 +49,15 @@ GSEXEC=get_series.exe.py
 GSGOV=series.exe
 GSCMD=get_series.exe.cmd
 GSLOG=get_series.exe.log
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
 
 echo "setting up workspace..."
 if [ -f "$SOURCE_DIR/$GTS_SCRIPT" ]
@@ -128,5 +138,5 @@ else
 fi
 
 echo "Work finished, cleaning..."
-echo "rm -rf $GSEXEC $GSCMD $GSGOV"
-rm -rf "$GSEXEC" "$GSCMD" "$GSGOV"
+echo "rm -rf $GSEXEC $GSCMD $GSGOV $MARK"
+rm -rf "$GSEXEC" "$GSCMD" "$GSGOV" "$MARK"

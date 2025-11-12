@@ -3,21 +3,26 @@
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
+set NODES=1
 set PROCS=1
 set THREADS=1
 set hours=24
 set mem=4GB
 set chain="unset"
+set job_count=0
 echo Your email is $EMAIL
 
-set compress=""
+set compress_arg=""
+set compress_suffix=""
 set MPIOPTS=""
-set standalone="no"
+set standalone_arg=""
+set coupled_suffix="_coupled"
 set LOOP_OPTS=""
+set exclusive=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
- setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
 endif
 
 argloop:
@@ -38,6 +43,7 @@ Available options are:
   -j <<JOB NAME>>    set the job name (default $JOB_NAME)
   -z                 compress run.log using gzip
   -s                 specify a standalone B2.5 run
+  -x                 requests an exclusive job allocation
   -c <<JOB_ID>>      job ID of the previous job in a chain submission
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
@@ -58,14 +64,16 @@ EOF
     goto argloop
   endif
   if ("X${1}X" == "X-zX") then
-    set compress="-gz"
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
     echo run.log will be compressed
     shift
     set LOOP_OPTS="-z ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-sX") then
-    set standalone="yes"
+    set standalone_arg="-s"
+    set coupled_suffix=""
     if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
     echo Asking for a B2.5 standalone run
     shift
@@ -128,34 +136,30 @@ EOF
   endif
   if ("X${1}X" == "X-cX") then
     shift
-    set chain="$1"
-    echo Chain submission following job number ${chain}
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
     shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
     goto argloop
   endif
 
 if ($1 == "") then
-  if (-s fort.1 && $standalone == "no") then
-    echo Assuming run with Eirene
-    echo No argument is specified. Looking for SLURM.ipp_coupled$compress
-    set QSUB=`climb_and_look_for SLURM.ipp_coupled$compress`
-    if ($QSUB == "//SLURM.ipp_coupled$compress") then
-      if (-s $SOLPSTOP/runs/SLURM.ipp_coupled$compress) then
-        set QSUB="$SOLPSTOP/runs/SLURM.ipp_coupled$compress"
-      else
-        set QSUB=""
-      endif
-    endif
-  else
-    if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
-    echo No argument is specified. Looking for SLURM.ipp$compress
-    set QSUB=`climb_and_look_for SLURM.ipp$compress`
-    if ($QSUB == "//SLURM.ipp$compress") then
-      if (-s $SOLPSTOP/runs/SLURM.ipp$compress) then
-        set QSUB="$SOLPSTOP/runs/SLURM.ipp$compress"
-      else
-        set QSUB=""
-      endif
+  echo No argument is specified. Looking for SLURM.ipp
+  set QSUB=`climb_and_look_for SLURM.ipp`
+  if ($QSUB == "//SLURM.ipp") then
+    if (-s $SOLPSTOP/runs/SLURM.ipp) then
+      set QSUB="$SOLPSTOP/runs/SLURM.ipp"
+    else
+      set QSUB=""
     endif
   endif
 else if (-s $1) then
@@ -185,6 +189,10 @@ endif
 echo Using submission file template $QSUB
 if ($chain == "unset") then
   echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
 endif
 
 # logic to determine the partition and qos on the IPP TOK cluster
@@ -213,6 +221,7 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#NODES#:'$NODES':g' \
   -e 's:#PROCS#:'$PROCS':g' \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
@@ -222,6 +231,10 @@ sed \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
   -e 's:#USER#:'$USER':g' \
   -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
   < $QSUB > $NAME
 
 if ($chain != "unset") then
@@ -241,7 +254,7 @@ endif
 update_solps_run_status -n "Submitted at `date`"
 
 if ($chain == "unset") then
-  sbatch --export=ALL $NAME
+  sbatch ${exclusive} --export=ALL $NAME
 else
-  sbatch --export=ALL --dependency=afterok:${chain} $NAME
+  sbatch ${exclusive} --export=ALL --dependency=afterok:${chain} $NAME
 endif

@@ -273,7 +273,7 @@ def READ_TRC(trc_file):
     "Try reading standard .trc file"
     "assuming: file begins with # marked comment lines and last of them contrains data headers"
     if ( file_read == False ):
-        logging.info('tring to read %s assuming text file in .trc standard format',input_file)
+        logging.info('trying to read %s assuming text file in .trc standard format',input_file)
         with open(input_file,"r") as ff:
             while True:
                 try:
@@ -302,7 +302,10 @@ def READ_TRC(trc_file):
         file_read = True
 
     "Get rid of potential NaN problems when plotting"
-    np.nan_to_num(trc_data)
+    testnan = np.isnan(trc_data)
+    if ( np.any(testnan) == True ):
+        logging.error('NaN values encountered and will be automatically replaced')
+        trc_data = np.nan_to_num(trc_data)
 
     "Check if there is more than one point in time and header size is consistent with data size"
     if ( np.ndim(trc_data) == 2 ):

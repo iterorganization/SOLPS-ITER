@@ -4,6 +4,7 @@
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+export NO_MANUAL="true"
 make FC=ifort listobj_nox depend_nox
 make FC=ifort divgeo_nox
 make FC=ifort MAKE_OPTIONS=-j8 solps_nox b25_nox

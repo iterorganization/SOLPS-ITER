@@ -1,0 +1,203 @@
+#!/bin/bash
+#
+# pshenoa version 2025/02/13
+# Adds special output produced by b2plot to the series produced by get_series.py
+#
+#======================================================================
+# USAGE:
+#
+# in the baserun directory (or any other directory really):
+# add_b2plot_to_series $series_file $b2pl.cmd
+#               First argument is the formatted series file 
+#               (see example in $SOLPSTOP/scripts directory)
+#               if absent the default .series file will be used
+#               second argument is the command file containing 
+#               the list of b2plot commands (see example in 
+#               $SOLPSTOP/scripts/commands) the local command 
+#               file will be used followed by (if absent) by
+#               the baserun one and then by the one in 
+#               $SOLPSTOP/scrits/commands
+#
+# Runs sequence of b2plot commands specified in the command file in every
+# directory specified in series files, fetched the output from 
+# b2pl.exe.dir/b2plot.write add appends it to the series data files
+# if b2plot fails zeros will be written
+#=======================================================================
+# EXAMPLE of series file ($AB2SER in this script)
+#
+# series: Example : add_units / scale
+# run   :  001    : ./
+# run   :  002    : ../2405.test
+#
+# keys ( "add_units" and "scale" for now) are optional
+#     scale     - perfoms the scaling according to .cmd file prescription
+#     add_units - adds units to the quantity names in the output file title
+#======================================================================
+# EXAMPLE of command file ($AB2CMD in this script)
+#
+# cmd   : write comp na 1 1 sumz vol m* sumx sumy -1 10 clvp surf : Output_file : Var_name_1
+# cmd   : write comp ne vol m* sumx sumy -1 10 clvp surf : Output_file : Var_name_2
+#
+#======================================================================
+
+MARK=.AB2S
+STAMP=.stamp
+CMD_FILE=add_b2plot_to_series.cmd
+DGS_FILE=.series
+TMP=ab2s.tmp
+
+CURRENT_DIR=${PWD##*/}
+GLOBCRT_DIR=${PWD}
+BASERUN_DIR=../baserun
+B2PDIR=b2pl.exe.dir/
+
+SOURCE_DIR=$(cd $(dirname "${BASH_SOURCE:-$0}") && pwd)
+SOURCE_FILE=$SOURCE_DIR/$(basename "${BASH_SOURCE:-$0}")
+
+CMD_DIR=$SOURCE_DIR/commands
+CMD_LOCAL_DIR=$SOLPSTOP/scripts.local/commands
+
+AB2SER=ab2series.exe
+AB2CMD=ab2series.exe.cmd
+
+[ "$SOLPSTOP" = "" ] && echo "solps envirnment is not loaded, cannot run b2plot, aborting..." && exit 1
+
+if [ ! -f "$MARK" ]
+then
+  echo "touch $MARK"
+  touch "$MARK"
+else
+  echo "$MARK found. Script already running?"
+  exit 2
+fi
+
+if [ -f "$CMD_FILE" ]
+then
+  echo "command file $CMD_FILE spotted in $CURRENT_DIR"
+  echo "ln -sf "$CMD_FILE" $AB2CMD"
+  ln -sf "$CMD_FILE" "$AB2CMD"
+else
+  echo "no command file $CMD_FILE in current $CURRENT_DIR"
+  echo "checking $CMD_LOCAL_DIR"
+  if [ -f "$CMD_LOCAL_DIR/$CMD_FILE" ]
+  then
+    echo "command file $CMD_FILE spotted in $CMD_LOCAL_DIR"
+    echo "ln -sf $CMD_LOCAL_DIR/$CMD_FILE $AB2CMD"
+    ln -sf "$CMD_LOCAL_DIR/$CMD_FILE" "$AB2CMD"
+  else
+    echo "checking $CMD_DIR"
+    if [ -f "$CMD_DIR/$CMD_FILE" ]
+    then
+      echo "command file $CMD_FILE spotted in $CMD_DIR"
+      echo "ln -sf $CMD_DIR/$CMD_FILE $AB2CMD"
+      ln -sf "$CMD_DIR/$CMD_FILE" "$AB2CMD"
+    else
+      echo "no command file $CMD_FILE found... no data will be added"
+      exit 1
+    fi
+  fi
+fi
+
+[ ! $# -eq 0 ] && {
+SFILE=$1 && echo "Working with series file: $SFILE "
+} || {
+SFILE=$DGS_FILE && echo "Working with default series file: $SFILE"
+}
+
+if [ -f "$SFILE" ]
+then
+  echo "grep -E series|run $SFILE >$AB2SER"
+  grep -E "series|run" $SFILE >"$AB2SER"
+else
+  echo "required series file $SFILE is absent... aborting"
+  exit 1
+fi
+
+scount=`grep series "$AB2SER" | wc -l`
+echo "$scount serie(s) in $AB2SER"
+ccount=`grep cmd "$AB2CMD" | wc -l`
+echo "$ccount command(s) in $AB2CMD"
+
+is=1
+sstart=1
+while [ "$scount" -ge "$is" ]; do {
+  sname=`grep -m $is series "$AB2SER" | tail -1 | cut -f 2 -d ":" | tr -d " "`
+  ext=`echo $sname | rev | cut -f 1 -d "." | rev`
+  [ ! "$ext" = "dat" ] && sname="$sname".dat
+  echo "Working on series $is, series file $sname" 
+  if [ "$is" -eq "$scount" ]
+  then
+    send=`cat "$AB2SER" | wc -l`
+    send=$((send+1))
+  else
+    send=`grep -n -m $((is+1)) series "$AB2SER" | tail -1 | cut -f 1 -d ":"`
+  fi
+  echo "rm -rf *.$TMP"
+  rm -rf *."$TMP"
+  echo "start = $sstart, end = $send"  
+  rcount=$((send-sstart-1))
+  echo "rcount = $rcount"
+  if [ -f "$sname" ]
+  then
+    fchk=`cat $sname | wc -l`
+    echo "fchk = $fchk"
+    [ ! "$fchk" = $((rcount+1)) ] && echo "Number of runs in data file $sname and series file $SFILE differ... aborting" && exit 1
+  else
+    echo "No data file $sname, aborting..."
+    exit 1
+  fi
+  ic=1
+  while [ "$ccount" -ge "$ic" ]; do {
+    cvar=`grep -m $ic cmd $AB2CMD | tail -1 | cut -f 4 -d ":" | tr -d " "`
+    echo "   $cvar " > "$is"."$ic"."$TMP"
+    let "ic=ic+1"
+  }; done;
+  ir=1
+  while [ "$rcount" -ge "$ir" ]; do {
+    rundir=`head -$((sstart+ir)) "$AB2SER" | tail -1 | cut -f 3 -d ":" | tr -d " "`
+    echo "ir = $ir, rundir=$rundir"
+    ic=1
+    while [ "$ccount" -ge "$ic" ]; do {
+      ( cd $rundir
+        export B2PLOT_DEV=ps
+        cvar=`grep -m $ic cmd $GLOBCRT_DIR/$AB2CMD | tail -1 | cut -f 4 -d ":" | tr -d " "`
+        cname=`grep -m $ic cmd $GLOBCRT_DIR/$AB2CMD | tail -1 | cut -f 3 -d ":" | tr -d " "`
+        cmd=`grep -m $ic cmd $GLOBCRT_DIR/$AB2CMD | tail -1 | cut -f 2 -d ":"` 
+	echo "Working on command <$ic>, adding variable <$cvar>, from file <$cname>, produced via command <$cmd>"
+	touch "$STAMP" && sleep 1
+        echo "echo $cmd | b2plot >b2pl.log 2>&1"
+        echo "$cmd" | b2plot >b2pl.log 2>&1
+        if [ "$B2PDIR"/"$CNAME" -nt "$STAMP" ]
+	then
+          val=`head -2 $B2PDIR/$cname | tail -1 | rev | cut -f 1 -d " " | rev`
+	  [ "$val" = "" ] && echo "ERROR command <"$cmd"> produced an empty file" && val="0.000000000000000E+000"
+	  [ ! "${val:0:1}" = "-" ] && val=" $val"
+	else
+          echo "ERROR: command <"$cmd"> did not produce the result"
+	  val=" 0.000000000000000E+000"
+        fi
+	echo "  $val " >> "$GLOBCRT_DIR"/"$is"."$ic"."$TMP" 
+	echo "rm -rf b2pl.log"
+        rm -rf b2pl.log )
+       let "ic=ic+1"
+    }; done;
+    let "ir=ir+1"
+  }; done ;
+  ic=1
+  while [ "$ccount" -ge "$ic" ]; do {
+    cvar=`grep -m $ic cmd $AB2CMD | tail -1 | cut -f 4 -d ":" | tr -d " "`
+    echo "Appending data for <$cvar> from <$is.$ic.$TMP> to <$sname>"
+    paste -d "" "$sname" "$is"."$ic"."$TMP" >$sname.$TMP
+    mv $sname.$TMP $sname
+    let "ic=ic+1"
+  }; done;
+  sstart=$send
+  let "is=is+1" 
+}; done;
+
+echo "Cleaning..."
+echo "rm -rf $AB2SER $AB2CMD $MARK *.$TMP"
+rm -rf $AB2SER $AB2CMD $MARK *.$TMP
+echo "Done"
+
+

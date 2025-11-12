@@ -60,6 +60,9 @@
 :nr_sep_Ar:\eta_{Ar}^{sep}:1.e+2
 @page: Separatrix density fraction W, \%
 :nr_sep_W:\eta_{W}^{sep}:1.e+2
+@file:user_SPb
+@page: Minimal temperature at LCFS, eV
+:Te_min_LCFS:T_{e,min}^{LCFS}:
 @file:blne
 @page: Power balance, MW
 :tot_core:from core:1.e-6
@@ -119,139 +122,200 @@
 :pwr_ionz_wl:ionization:1.e-6
 :pwr_diss_wl:dissociation:1.e-6
 :pwr_totl_wl:total:1.e-6
-@file:blnn_SPb
+@file:blnn
 @page: Flux balance total H, s^{-1}
-:ion_core_H:
-:ntr_core_H:
-:ntr_targ_spt_H:
-:ntr_targ_pmp_H::-1.
-:ntr_wall_spt_H:
-:ntr_wall_pmp_H::-1.
-:ntr_puff_H:
-:src_ext_H:
-:flux_tot_H:
-@page: H ion dn/dt, s^{-1}
-:ion_dn/dt_H:
+:ion_core_H:ion_core:
+:ntr_core_H:ntr_core:
+:ion_targ_H:ion_targ:
+:ntr_targ_H:ntr_targ:
+:ion_wall_H:ion_wall:
+:ntr_wall_H:ntr_wall:
+:ntr_puff_H:ntr_puff:
+:flux_tot_H:tot_flux:
+:flux_bln_H:err_totl:
+@page: H ion dN/dt, s^{-1}
+:flx_d/dt_H:dN/dt:
+@page: H content dln(N)/dt, s^{-1}
+:flux_ttr_H:dln(N)/dt:
+@page: Total relative error in H balance
+:bln_blnr_H:err/sum:
 @page: Flux balance total D, s^{-1}
-:ion_core_D:
-:ntr_core_D:
-:ntr_targ_spt_D:
-:ntr_targ_pmp_D::-1.
-:ntr_wall_spt_D:
-:ntr_wall_pmp_D::-1.
-:ntr_puff_D:
-:src_ext_D:
-:flux_tot_D:
-@page: D ion dn/dt, s^{-1}
-:ion_dn/dt_D:
+:ion_core_D:ion_core:
+:ntr_core_D:ntr_core:
+:ion_targ_D:ion_targ:
+:ntr_targ_D:ntr_targ:
+:ion_wall_D:ion_wall:
+:ntr_wall_D:ntr_wall:
+:ntr_puff_D:ntr_puff:
+:flux_tot_D:tot_flux:
+:flux_bln_D:err_totl:
+@page: D ion dN/dt, s^{-1}
+:flx_d/dt_D:dN/dt:
+@page: D content dln(N)/dt, s^{-1}
+:flux_ttr_D:dln(N)/dt:
+@page: Total relative error in D balance
+:bln_blnr_D:err/sum:
+@page: Flux balance total T, s^{-1}
+:ion_core_T:ion_core:
+:ntr_core_T:ntr_core:
+:ion_targ_T:ion_targ:
+:ntr_targ_T:ntr_targ:
+:ion_wall_T:ion_wall:
+:ntr_wall_T:ntr_wall:
+:ntr_puff_T:ntr_puff:
+:flux_tot_T:tot_flux:
+:flux_bln_T:err_totl:
+@page: T ion dN/dt, s^{-1}
+:flx_d/dt_T:dN/dt:
+@page: T content dln(N)/dt, s^{-1}
+:flux_ttr_T:dln(N)/dt:
+@page: Total relative error in T balance
+:bln_blnr_T:err/sum:
 @page: Flux balance total He, s^{-1}
-:ion_core_He:
-:ntr_core_He:
-:ntr_targ_spt_He:
-:ntr_targ_pmp_He::-1.
-:ntr_wall_spt_He:
-:ntr_wall_pmp_He::-1.
-:ntr_puff_He:
-:src_ext_He:
-:flux_tot_He:
-@page: He ion dn/dt, s^{-1}
-:ion_dn/dt_He:
+:ion_core_He:ion_core:
+:ntr_core_He:ntr_core:
+:ion_targ_He:ion_targ:
+:ntr_targ_He:ntr_targ:
+:ion_wall_He:ion_wall:
+:ntr_wall_He:ntr_wall:
+:ntr_puff_He:ntr_puff:
+:flux_tot_He:tot_flux:
+:flux_bln_He:err_totl:
+@page: He ion dN/dt, s^{-1}
+:flx_d/dt_He:dN/dt:
+@page: He content dln(N)/dt, s^{-1}
+:flux_ttr_He:dln(N)/dt:
+@page: Total relative error in He balance
+:bln_blnr_He:err/sum:
 @page: Flux balance total Li, s^{-1}
-:ion_core_Li:
-:ntr_core_Li:
-:ntr_targ_spt_Li:
-:ntr_targ_pmp_Li::-1.
-:ntr_wall_spt_Li:
-:ntr_wall_pmp_Li::-1.
-:ntr_puff_Li:
-:src_ext_Li:
-:flux_tot_Li:
-@page: Li ion dn/dt, s^{-1}
-:ion_dn/dt_Li:
+:ion_core_Li:ion_core:
+:ntr_core_Li:ntr_core:
+:ion_targ_Li:ion_targ:
+:ntr_targ_Li:ntr_targ:
+:ion_wall_Li:ion_wall:
+:ntr_wall_Li:ntr_wall:
+:ntr_puff_Li:ntr_puff:
+:flux_tot_Li:tot_flux:
+:flux_bln_Li:err_totl:
+@page: Li ion dN/dt, s^{-1}
+:flx_d/dt_Li:dN/dt:
+@page: Li content dln(N)/dt, s^{-1}
+:flux_ttr_Li:dln(N)/dt:
+@page: Total relative error in Li balance
+:bln_blnr_Li:err/sum:
 @page: Flux balance total Be, s^{-1}
-:ion_core_Be:
-:ntr_core_Be:
-:ntr_targ_spt_Be:
-:ntr_targ_pmp_Be::-1.
-:ntr_wall_spt_Be:
-:ntr_wall_pmp_Be::-1.
-:ntr_puff_Be:
-:src_ext_Be:
-:flux_tot_Be:
-@page: Be ion dn/dt, s^{-1}
-:ion_dn/dt_Be:
+:ion_core_Be:ion_core:
+:ntr_core_Be:ntr_core:
+:ion_targ_Be:ion_targ:
+:ntr_targ_Be:ntr_targ:
+:ion_wall_Be:ion_wall:
+:ntr_wall_Be:ntr_wall:
+:ntr_puff_Be:ntr_puff:
+:flux_tot_Be:tot_flux:
+:flux_bln_Be:err_totl:
+@page: Be ion dN/dt, s^{-1}
+:flx_d/dt_Be:dN/dt:
+@page: Be content dln(N)/dt, s^{-1}
+:flux_ttr_Be:dln(N)/dt:
+@page: Total relative error in Be balance
+:bln_blnr_Be:err/sum:
 @page: Flux balance total B, s^{-1}
-:ion_core_B:
-:ntr_core_B:
-:ntr_targ_spt_B:
-:ntr_targ_pmp_B::-1.
-:ntr_wall_spt_B:
-:ntr_wall_pmp_B::-1.
-:ntr_puff_B:
-:src_ext_B:
-:flux_tot_B:
-@page: B ion dn/dt, s^{-1}
-:ion_dn/dt_B:
+:ion_core_B:ion_core:
+:ntr_core_B:ntr_core:
+:ion_targ_B:ion_targ:
+:ntr_targ_B:ntr_targ:
+:ion_wall_B:ion_wall:
+:ntr_wall_B:ntr_wall:
+:ntr_puff_B:ntr_puff:
+:flux_tot_B:tot_flux:
+:flux_bln_B:err_totl:
+@page: B ion dN/dt, s^{-1}
+:flx_d/dt_B:dN/dt:
+@page: B content dln(N)/dt, s^{-1}
+:flux_ttr_B:dln(N)/dt:
+@page: Total relative error in B balance
+:bln_blnr_B:err/sum:
 @page: Flux balance total C, s^{-1}
-:ion_core_C:
-:ntr_core_C:
-:ntr_targ_spt_C:
-:ntr_targ_pmp_C::-1.
-:ntr_wall_spt_C:
-:ntr_wall_pmp_C::-1.
-:ntr_puff_C:
-:src_ext_C:
-:flux_tot_C:
-@page: C ion dn/dt, s^{-1}
-:ion_dn/dt_C:
+:ion_core_C:ion_core:
+:ntr_core_C:ntr_core:
+:ion_targ_C:ion_targ:
+:ntr_targ_C:ntr_targ:
+:ion_wall_C:ion_wall:
+:ntr_wall_C:ntr_wall:
+:ntr_puff_C:ntr_puff:
+:flux_tot_C:tot_flux:
+:flux_bln_C:err_totl:
+@page: C ion dN/dt, s^{-1}
+:flx_d/dt_C:dN/dt:
+@page: C content dln(N)/dt, s^{-1}
+:flux_ttr_C:dln(N)/dt:
+@page: Total relative error in C balance
+:bln_blnr_C:err/sum:
 @page: Flux balance total N, s^{-1}
-:ion_core_N:
-:ntr_core_N:
-:ntr_targ_spt_N:
-:ntr_targ_pmp_N::-1.
-:ntr_wall_spt_N:
-:ntr_wall_pmp_N::-1.
-:ntr_puff_N:
-:src_ext_N:
-:flux_tot_N:
-@page: N ion dn/dt, s^{-1}
-:ion_dn/dt_N:
+:ion_core_N:ion_core:
+:ntr_core_N:ntr_core:
+:ion_targ_N:ion_targ:
+:ntr_targ_N:ntr_targ:
+:ion_wall_N:ion_wall:
+:ntr_wall_N:ntr_wall:
+:ntr_puff_N:ntr_puff:
+:flux_tot_N:tot_flux:
+:flux_bln_N:err_totl:
+@page: N ion dN/dt, s^{-1}
+:flx_d/dt_N:dN/dt:
+@page: N content dln(N)/dt, s^{-1}
+:flux_ttr_N:dln(N)/dt:
+@page: Total relative error in N balance
+:bln_blnr_N:err/sum:
 @page: Flux balance total Ne, s^{-1}
-:ion_core_Ne:
-:ntr_core_Ne:
-:ntr_targ_spt_Ne:
-:ntr_targ_pmp_Ne::-1.
-:ntr_wall_spt_Ne:
-:ntr_wall_pmp_Ne::-1.
-:ntr_puff_Ne:
-:src_ext_Ne:
-:flux_tot_Ne:
-@page: Ne ion dn/dt, s^{-1}
-:ion_dn/dt_Ne:
+:ion_core_Ne:ion_core:
+:ntr_core_Ne:ntr_core:
+:ion_targ_Ne:ion_targ:
+:ntr_targ_Ne:ntr_targ:
+:ion_wall_Ne:ion_wall:
+:ntr_wall_Ne:ntr_wall:
+:ntr_puff_Ne:ntr_puff:
+:flux_tot_Ne:tot_flux:
+:flux_bln_Ne:err_totl:
+@page: Ne ion dN/dt, s^{-1}
+:flx_d/dt_Ne:dN/dt:
+@page: Ne content dln(N)/dt, s^{-1}
+:flux_ttr_Ne:dln(N)/dt:
+@page: Total relative error in Ne balance
+:bln_blnr_Ne:err/sum:
 @page: Flux balance total Ar, s^{-1}
-:ion_core_Ar:
-:ntr_core_Ar:
-:ntr_targ_spt_Ar:
-:ntr_targ_pmp_Ar::-1.
-:ntr_wall_spt_Ar:
-:ntr_wall_pmp_Ar::-1.
-:ntr_puff_Ar:
-:src_ext_Ar:
-:flux_tot_Ar:
-@page: Ar ion dn/dt, s^{-1}
-:ion_dn/dt_Ar:
+:ion_core_Ar:ion_core:
+:ntr_core_Ar:ntr_core:
+:ion_targ_Ar:ion_targ:
+:ntr_targ_Ar:ntr_targ:
+:ion_wall_Ar:ion_wall:
+:ntr_wall_Ar:ntr_wall:
+:ntr_puff_Ar:ntr_puff:
+:flux_tot_Ar:tot_flux:
+:flux_bln_Ar:err_totl:
+@page: Ar ion dN/dt, s^{-1}
+:flx_d/dt_Ar:dN/dt:
+@page: Ar content dln(N)/dt, s^{-1}
+:flux_ttr_Ar:dln(N)/dt:
+@page: Total relative error in Ar balance
+:bln_blnr_Ar:err/sum:
 @page: Flux balance total W, s^{-1}
-:ion_core_W:
-:ntr_core_W:
-:ntr_targ_spt_W:
-:ntr_targ_pmp_W::-1.
-:ntr_wall_spt_W:
-:ntr_wall_pmp_W::-1.
-:ntr_puff_W:
-:src_ext_W:
-:flux_tot_W:
-@page: W ion dn/dt, s^{-1}
-:ion_dn/dt_W:
+:ion_core_W:ion_core:
+:ntr_core_W:ntr_core:
+:ion_targ_W:ion_targ:
+:ntr_targ_W:ntr_targ:
+:ion_wall_W:ion_wall:
+:ntr_wall_W:ntr_wall:
+:ntr_puff_W:ntr_puff:
+:flux_tot_W:tot_flux:
+:flux_bln_W:err_totl:
+@page: W ion dN/dt, s^{-1}
+:flx_d/dt_W:dN/dt:
+@page: W content dln(N)/dt, s^{-1}
+:flux_ttr_W:dln(N)/dt:
+@page: Total relative error in W balance
+:bln_blnr_W:
+@file:blnn_SPb
 @page: Hydrogenic ionization source, s^{-1}
 :src_ioniz_H:H:
 :src_ioniz_D:D:
@@ -403,47 +467,47 @@
 :N_a_reg_03_W:inner:
 :N_a_reg_04_W:outer:
 @page: Total number of electrons in the egde
-:N_e_edge:N_{e}^{edge}:
+:N_s_sle:N_{e}^{edge}:
 @page: Total number of H ions in the egde
-:N_i_edge_H:N_{i,H}^{edge}:
+:N_s_sli_H:N_{i,H}^{edge}:
 @page: Total number of H particles in the egde
-:N_t_edge_H:N_{H}^{edge}:
+:N_s_slt_H:N_{H}^{edge}:
 @page: Total number of D ions in the egde
-:N_i_edge_D:N_{i,D}^{edge}:
+:N_s_sli_D:N_{i,D}^{edge}:
 @page: Total number of D particles in the egde
-:N_t_edge_D:N_{D}^{edge}:
+:N_s_slt_D:N_{D}^{edge}:
 @page: Total number of He ions in the egde
-:N_i_edge_He:N_{i,He}^{edge}:
+:N_s_sli_He:N_{i,He}^{edge}:
 @page: Total number of He particles in the egde
-:N_t_edge_He:N_{He}^{edge}:
+:N_s_slt_He:N_{He}^{edge}:
 @page: Total number of Li ions in the egde
-:N_i_edge_Li:N_{i,Li}^{edge}:
+:N_s_sli_Li:N_{i,Li}^{edge}:
 @page: Total number of Li particles in the egde
-:N_t_edge_Li:N_{Li}^{edge}:
+:N_s_slt_Li:N_{Li}^{edge}:
 @page: Total number of Be ions in the egde
-:N_i_edge_Be:N_{i,Be}^{edge}:
+:N_s_sli_Be:N_{i,Be}^{edge}:
 @page: Total number of Be particles in the egde
-:N_t_edge_Be:N_{Be}^{edge}:
+:N_s_slt_Be:N_{Be}^{edge}:
 @page: Total number of B ions in the egde
-:N_i_edge_B:N_{i,B}^{edge}:
+:N_s_sli_B:N_{i,B}^{edge}:
 @page: Total number of B particles in the egde
-:N_t_edge_B:N_{B}^{edge}:
+:N_s_slt_B:N_{B}^{edge}:
 @page: Total number of C ions in the egde
-:N_i_edge_C:N_{i,C}^{edge}:
+:N_s_sli_C:N_{i,C}^{edge}:
 @page: Total number of C particles in the egde
-:N_t_edge_C:N_{C}^{edge}:
+:N_s_slt_C:N_{C}^{edge}:
 @page: Total number of N ions in the egde
-:N_i_edge_N:N_{i,N}^{edge}:
+:N_s_sli_N:N_{i,N}^{edge}:
 @page: Total number of N particles in the egde
-:N_t_edge_N:N_{N}^{edge}:
+:N_s_slt_N:N_{N}^{edge}:
 @page: Total number of Ne ions in the egde
-:N_i_edge_Ne:N_{i,Ne}^{edge}:
+:N_s_sli_Ne:N_{i,Ne}^{edge}:
 @page: Total number of Ne particles in the egde
-:N_t_edge_Ne:N_{Ne}^{edge}:
+:N_s_slt_Ne:N_{Ne}^{edge}:
 @page: Total number of Ar ions in the egde
-:N_i_edge_Ar:N_{i,Ar}^{edge}:
+:N_s_sli_Ar:N_{i,Ar}^{edge}:
 @page: Total number of Ar particles in the egde
-:N_t_edge_Ar:N_{Ar}^{edge}:
+:N_s_slt_Ar:N_{Ar}^{edge}:
 @page: Internal source rescaling ratios H
 :sclrtio_01_H:
 :sclrtio_02_H:
@@ -2219,26 +2283,44 @@
 :I_tot_o:I_{net}^{outer}:1.e-6
 :I_tot_iu:I_{net}^{inner,up}:1.e-6
 :I_tot_ou:I_{net}^{outer,up}:1.e-6
-@page: Peak heat flux to the target, MW/m^{2}
-:q_max_i:q_{peak}^{inner}:1.e-6
-:q_max_o:q_{peak}^{outer}:1.e-6
-:q_max_iu:q_{peak}^{inner,up}:1.e-6
-:q_max_ou:q_{peak}^{outer,up}:1.e-6
-@page: Neutral pressure in PFR, Pa
-:p_neut_PFR:average:
-:p_neut_PFR_i:inner:
-:p_neut_PFR_o:outer:
+@page: Symmetric peak heat flux to the target, MW/m^{2}
+:q_max_i:q_{peak,sym}^{inner}:1.e-6
+:q_max_o:q_{peak,sym}^{outer}:1.e-6
+:q_max_iu:q_{peak,sym}^{inner,up}:1.e-6
+:q_max_ou:q_{peak,sym}^{outer,up}:1.e-6
 @file:user
-@page: Neutral pressure in PFR (ank), Pa
+@page: Shaped peak heat flux to the target, MW/m^{2}
+:pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
+:pk_pwr_o:q_{peak,shp}^{outer}:1.e-6
+:pk_pwr_iu:q_{peak,shp}^{inner,up}:1.e-6
+:pk_pwr_ou:q_{peak,shp}^{outer,up}:1.e-6
+@page: Neutral pressure in PFR, Pa
 :Pneu_PFR:average:
 :Pneu_PFRi:inner:
 :Pneu_PFRo:outer:
 @page: Neutral pressure at the pump H, Pa
-:p_H2_pump:p_{H2}{pump}:
-:p_H_pump:p_{H}{pump}:
+:p_H2_pump:p_{H2}^{pump}:
+:p_H_pump:p_{H}^{pump}:
 @page: Neutral pressure at the pump D, Pa
-:p_D2_pump:p_{D2}{pump}:
-:p_D_pump:p_{D}{pump}:
+:p_D2_pump:p_{D2}^{pump}:
+:p_D_pump:p_{D}^{pump}:
+@page: Neutral pressure at the pump T, Pa
+:p_T2_pump:p_{T2}^{pump}:
+:p_T_pump:p_{T}^{pump}:
+@page: Neutral pressure at the pump He, Pa
+:p_He_pump:p_{He}^{pump}:
+@page: DT throughput, Pa/m^{3}/s
+:DT_thrpt:DT_{thrpt}:
+@page: Total fuel flux through PFR, s^{-1}
+:PFR_flow_total_H:\Gamma_{H}^{PFR}:
+:PFR_flow_total_D:\Gamma_{D}^{PFR}:
+:PFR_flow_total_T:\Gamma_{T}^{PFR}:
+@page: Total He flux through PFR, s^{-1}
+:PFR_flow_total_He:\Gamma_{He}^{PFR}:
+@page: Total impurity flux through PFR, s^{-1}
+:PFR_flow_total_N:\Gamma_{N}^{PFR}:
+:PFR_flow_total_Ne:\Gamma_{Ne}^{PFR}:
+:PFR_flow_total_Ar:\Gamma_{Ar}^{PFR}:
 @file:blnm
 @page: Momentum balance lower inner (ank)
 :ref_resf_il:relative force tot:

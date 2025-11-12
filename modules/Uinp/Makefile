@@ -100,6 +100,11 @@ MAKES += ${SRCUIN}/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 MNEXTRA = ${OBJDIR}/libb25.a ${OBJDIR}/libeirene.a ${OBJDIR}/libgr_dummy.a
 
+# Verify that some needed variables are defined
+ifndef LD_MSCL
+$(error LD_MSCL not defined. Run the install_dependencies script first.)
+endif
+
 VPATH = ${SRCDIR}
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)

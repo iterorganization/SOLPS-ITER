@@ -325,14 +325,19 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \end{description}
 \end{sloppypar}
 
-For all the various libraries, it is recommended that they be installed as modules, so that they
-may be shared amongst multiple users on the same machine, so as not to duplicate large files and to
-centralize their management. Most, but not all, of these libraries are publicly available from the
-Internet.
+Most of the required libraries should be, in principle, already available in the various HPC clusters as modules. It is recommended for these to be loaded as modules rather than be locally re-built, so that they may be shared amongst multiple users on the same machine, so as not to duplicate large files and to centralize their management.
 
 \begin{sloppypar}
 If one uses local copies of these libraries, a copy or link to them should be put in the
 {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory.
+\end{sloppypar}
+
+\begin{sloppypar}
+Those libraries which are not available in a cluster must be necessarily locally built for the code to be used. By running the script:
+\begin{verbatim}
+> install_dependencies
+\end{verbatim}
+it is possible to automatically build the MSCL, GKS, and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -366,7 +371,7 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IPPCR] Institute for Plasma Physics - Czech Republic: *.tok.ipp.cas.cz
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
-  \item[ITM, MARCONI] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it
+  \item[ITM, MARCONI, PITAGORA] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it, *.pitagora.cineca.it
   \item[JET] JET domain: *.jet.uk
   \item[KEIO] Keio University of Yokohama: *.keio.ac.jp
   \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be
@@ -410,7 +415,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER and IPP
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER, IPP and MPCDF
   \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
   \item[g95] The g95 compiler, in use on the Marconi Gateway
   \item[nag\_f90] The NAG Fortran compiler
@@ -460,6 +465,8 @@ changes are required that should not be archived in the repository, then users s
 {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} which the {\tt Makefile} will load and use to
 overwrite the more general settings from the distributed {\tt config} files.
 \end{sloppypar}
+
+As a general rule, a {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}\allowbreak.local} file should not be a modified copy of the original {\tt config.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} file, but instead {\em only} contain those variable definitions that need to be locally modified.
 
 \begin{sloppypar}\index{easybuild}\label{sec:easybuild}
 For easier building of the {\tt gfortran} and {\tt ifort64} toolchains, including the IMAS\index{IMAS} modules and tools for \SOLPSITERns, a {\tt SETUP/easybuild-local.sh} script is provided. The script includes a complete list of modules as they appear on the ITER SDCC cluster and is convenient for standalone/local "builders" and for site administrators that want to build an ITER-equivalent installation on their machine. Example {\tt setup.csh.UL.gfortran} and {\tt setup.csh.UL.ifort64} are thus very similar to {\tt setup.csh.ITER.gfortran} and {\tt setup.csh.ITER.ifort64}, respectively. The configuration files {\tt config.UL.gfortran} and {\tt config.UL.ifort64} can then simply be symlinked to the corresponding {\tt config.ITER} versions.
@@ -632,53 +639,42 @@ and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 \subsection{MacOS support}
 \index{MacOS support}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a gfortran compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. The standalone version of B2.5 and the coupled B2.5-Eirene code can be compiled with graphics, while the standalone version of Eirene can be currently compiled only without graphics. Also DivGeo, Carre, Triang (only no graphics version), Uinp and amds can be successfully compiled. Sonnet-Light, at the moment, is not compatible yet with MacOS.
+The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
 
-First of all, the XQuartz package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
+First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
 
-The minimum set of required libraries for using SOLPS on MacOS is the following. Please install the various packages exactly from the sources specified in this list.
+The following external libraries must be then installed using Homebrew:
 
 \begin{description}
-\item[GNU compiler collection] It can be installed from Homebrew (formula: {\tt brew install gcc}).
-\item[Cross-platform make] It can be installed from Homebrew (formula: {\tt brew install cmake}).
-\item[ctags] It can be installed from Homebrew (formula: {\tt brew install ctags}).
-\item[Doxygen] It can be installed from Homebrew (formula: {\tt brew install doxygen}).
-\item[Freetype] It can be installed from Homebrew (formula: {\tt brew install freetype}).
-\item[Ghostscript] It can be installed from Homebrew (formula: {\tt brew install ghostscript}).
-\item[Graphics Language Interpreter] It must be manually downloaded and built from \href{https://pgi-jcns.fz-juelich.de/portal/pages/gli.html}{https://pgi-jcns.fz-juelich.de/portal\allowbreak/pages/gli.html}.
-\item[GNU plotting library] It can be installed from Homebrew (formula: {\tt brew install gnuplot}).
-\item[GR framework] Prebuilt binaries can be downloaded at (\href{https://gr-framework.org/downloads/}{https://gr-framework.org/downloads/}) Download a version corresponding to the device architecture (x86-64 or ARM64).
-\item[HDF5 data management and storage library] It can be installed from Homebrew (formula: {\tt brew install hdf5}).
-\item[Fortran JSON API] It can be installed from MacPorts (formula: {\tt sudo port install fortran-json}).
-\item[Blas/Lapack linear algebra library] It can be installed from Homebrew (formula: {\tt brew install lapack}).
-\item[PNG library] It can be installed from Homebrew (formula: {\tt brew install libpng}).
-\item[XPrint client library] It can be installed from Homebrew (formula: {\tt brew install libxp}).
-\item[MSCL utility library] It must be manually downloaded and built from \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl\allowbreak/browse}.
-\item[NCAR plotting library] It can be installed from MacPorts (formula: {\tt sudo port install ncarg}).
-\item[NETCDF data access library] It can be installed from Homebrew (formula: {\tt brew install netcdf}).
-\item[NETCDF data access library (Fortran version)] It can be installed from Homebrew (formula: {\tt brew install netcdf-fortran}).
-\item[MPI parallel computing library] It can be installed from Homebrew (formula: {\tt brew install open-mpi}).
-\item[MOTIF graphical user interface] It can be installed from MacPorts (formula: {\tt sudo port install openmotif}).
-\item[TeX typesetting system distrubtion TeXLive] It can be installed from Homebrew (formula: {\tt brew install texlive}).
+\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
+\item[Cross-platform make] using the formula: {\tt brew install cmake}.
+\item[ctags] using the formula: {\tt brew install ctags}.
+\item[Doxygen] using the formula: {\tt brew install doxygen}.
+\item[Freetype] using the formula: {\tt brew install freetype}.
+\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
+\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
+\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
+\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
+\item[PNG library] using the formula: {\tt brew install libpng}.
+\item[XPrint client library] using the formula: {\tt brew install libxp}.
+\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
+\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
+\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
+\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
 \end{description}
 
-After the installation of the libraries, the user must manually indicate the corresponding local home directories in the file {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.DARWIN.gfortran}. There the home directory of a Python installation (e.g.\ through Anaconda) must be also declared.
+Further external libraries must be instead installed using MacPorts:
 
-It is important to note that, currently, only a particular old version of the MSCL library, namely referred to the commit a64eba15137, allows to properly compile the code on MacOS. For a correct linking, the user should download such version of the library, at this (\href{https://git.iter.org/rest/api/latest/projects/LIB/repos/mscl/archive?at=a64eba151377b96091758d0d78e6c0d1cd37b623&format=zip}{link}). In the folder extracted from the downloaded .zip archive, the user must then create the file {\tt config/compiler.darwin.gfortran}, with content:
+\begin{description}
+\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
+\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
+\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
+\end{description}
 
-\VerbatimInput[fontsize=\footnotesize]{MacOS/compiler.darwin.gfortran}
-
-and then motify the content of the source file {\tt src/util/date2.c} to the following:
-
-\VerbatimInput[fontsize=\footnotesize]{MacOS/date2.c}
-
-After that, the library can be finally built executing, from the top of the downloaded mscl folder, the command
-
+The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
 \begin{verbatim}
-    make -e OBJECTCODE=darwin.gfortran
+> install_dependencies
 \end{verbatim}
-
-The linking can be now finally done specifying the absolute path of the downloadad mscl folder in {\tt \$\{SOLPSTOP\}\allowbreak/SETUP/setup.csh.DARWIN.gfortran} as the variable {\tt MSCL\_HOME}.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -1199,9 +1195,6 @@ relies on to compute things such as backscattering coefficients, atomic reaction
 As with {\tt B2.5}, a {\tt local} directory for the user that wishes to make code
 changes sheltered from GIT updates. The same procedures apply.
 
-Note that if you want to use the coupled version of the code, you
-should compile {\tt Eirene} first.
-
 If routines have been added or removed, if the dependencies have been
 altered or if this is the first compilation in a new tree, and you are not
 compiling using the \SOLPSITER master {\tt Makefile}, you should do
@@ -1362,6 +1355,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[convert\_from\_solps4.3 \#1]\index{convert\_from\_solps4.3} Converts run number \#1 from {\tt DEVICE} from the SOLPS4.3 ITER archive to a \SOLPSITER run in directory {\tt \$\{SOLPSTOP\}/runs/\$\{DEVICE\}/\#1} .
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
+  \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
@@ -1373,6 +1367,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
   \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
+  \item[mpcdfsubmit]\index{mpcdfsubmit} Command file to launch runs on the MPCDF clusters Raven and Viper. See Section~\ref{b2run} for details.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to update a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to archive a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
@@ -1661,6 +1656,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
 \item Utility
  \begin{description}
   \item[add\_central\_device DEVICE]\index{add\_central\_device} Creates writeable directories for a given {\tt DEVICE} for a centralized \SOLPSITER installation.
+  \item[add\_b2plot\_to\_series]\index{add\_b2plot\_to\_series} Appends b2plot data generated according to command file {\tt add\_b2plot\_to\_series.com} to multi-column file {\tt Series.dat} ganerated by {\tt get\_series} (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[ave.awk \#1]\index{ave.awk} Performs an average over the \#1 rows (default all).
   \item[awk.first+even]\index{awk.first+even} Selects the first and every even column from an array of data.
   \item[awk.integrate]\index{awk.integrate} Integrates an array of data.
@@ -1674,6 +1670,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[chop\_pwd \#1]\index{chop\_pwd} Truncates the name of the current directory to not exceed \#1 characters (default 60).
   \item[count]\index{count} Basic counting with advanced options ({\tt count -h} for help).
   \item[datestamp]\index{datestamp} Gets a date stamp from the machine.
+  \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
@@ -1682,6 +1679,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
   \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
@@ -1776,9 +1774,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
  \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
  \begin{description}
-  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.aug.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
@@ -1953,12 +1951,13 @@ produce all the output files in an orderly fashion, which then can be post-proce
 with the usual tools.
 
 When submitting jobs in a cluster environment, one will make use of the job submission commands provided
-in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*}
+in the {\tt \$\{SOLPSTOP\}/runs} directory ({\tt QSUB.*}, {\tt SBATCH.*},
 or {\tt SLURM.*} files). Currently, the following commands
 are provided:
 \begin{description}
   \item{cumulussubmit}\index{cumulussubmit} for submissions on the CCFE Cumulus cluster
   \item{csd3submit}\index{csd3submit} for submissions on the CCFE CSD3 cluster
+  \item{darwinsubmit}\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
   \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
@@ -1966,27 +1965,16 @@ are provided:
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
+  \item{mpcdfsubmit}\index{mpcdfsubmit} for submissions on the MPCDF clusters Raven and Viper
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts})
-and adapt them to their local environment, along
-with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts.
-Each submission command file can handle several possible cases:
-\index{QSUB files}\index{SLURM files}
-\begin{description}
-  \item{QSUB.*, SLURM.*} Runs a standalone {\tt B2.5} case.
-  \item{QSUB.*-gz, SLURM.*-gz} Runs a standalone {\tt B2.5} case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{QSUB.*\_coupled, SLURM.*\_coupled} Runs a coupled \SOLPSITER case.
-  \item{QSUB.*\_coupled-gz, SLURM.*\_coupled-gz} Runs a coupled \SOLPSITER case where the output log file has been compressed (activated with the {\tt -z} option).
-  \item{ } Any otherwise named file specified by the user and given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
-\end{description}
-where {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. The {\tt \_coupled} scripts are used when the presence of an {\tt Eirene} input file {\tt fort.1} (which should be a symbolic link pointing to either {\tt input.dat} or {\tt eirene.input.json}) is detected in the run directory.
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt mpcdf}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 
-Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH} and {\tt \$MANPATH}, see scripts {\tt SETUP/SETUP.itm\_*} and {\tt SLURM.itm*\_loop}.
-All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from
-outside the {\tt \$\{SOLPSTOP\}} file space is available.
+Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH\_FOR\_LOOP} and {\tt \$MANPATH\_FOR\_LOOP}, see scripts {\tt \$\{SOLPSTOP\}/setup.csh} and {\tt \$\{SOLPSTOP\}/runs/SLURM.itm*\_loop}.
+
+All the submission scripts make use of {\tt b2run} so the same possibility of submitting runs from outside the {\tt \$\{SOLPSTOP\}} file space is available.
 
 If, for instance, one is running on the ITER cluster, then, the instructions to follow would be to run the script
 \begin{verbatim}
@@ -2009,10 +1997,7 @@ where {\tt <<Job\_file>>} is a temporary modified copy of {\tt <<Submission\_fil
 %% $
 or stops if the submission file is not found.
 
-\begin{sloppypar}
-If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter\_coupled} or
-for {\tt SLURM.iter} depending on whether a coupled or a standalone run is required. To request a standalone run explicitly, the user can use the {\tt -s} option. Otherwise, the script will assume a coupled run is requested if a {\tt fort.1} file (symbolic link to either {\tt input.dat} or {\tt eirene.input.json}) for {\tt Eirene} input is present in the run directory, and a standalone run otherwise.
-\end{sloppypar}
+If {\tt <<Submission\_file>>} is not specified, {\tt itersubmit} looks for {\tt SLURM.iter}. To request a {\tt B2.5} standalone run explicitly, the user should use the {\tt -s} option. By default, the script will assume a run using the coupled code.
 
 In the case one wishes to run the code with MPI and needs to pass MPI options to the launching program, this is achieved by means of the {\tt -m} option, followed by the desired options inside double quotes, as follows:
 \begin{verbatim}
@@ -2046,9 +2031,9 @@ command, to obtain here a run using 8GB of memory. The {\tt B} (for "bytes") is 
 
 The partition on which the job will be run can be specified by means of the {\tt -Q} option. For example:
 \begin{verbatim}
-itersubmit -Q gen10_ib
+itersubmit -Q sirius
 \end{verbatim}
-chooses the {\tt gen10\_ib} partition, which is the default on the ITER SDCC cluster CentOS nodes. If running on a RedHat node, the default partition name is {\tt gen11}.
+chooses the {\tt sirius} partition, which is the default on the ITER SDCC cluster. Another usable partition on the cluster is {\tt sun}.
 
 When using the SLURM job submission engine, it is also possible to submit a chain of jobs simultaneously (or at least in very quick succession), in which jobs only start after the previous one has completed successfully. Chains can be of arbitrary length and each job in the chain will be added individually to the queue. On oversubscribed clusters, this chain submission option tends to launch the next job in the chain earlier than if resubmitted only after the preceding job has finished. In this context, a successful job completion means that the {\tt b2fstate\_OK\_bool}\index{b2fstate\_OK\_bool} returns {\tt 0}, i.e. the {\tt b2fstate} end state file and {\tt b2fstati} initial state file are of the same size and format. The relevant option has syntax:
 \begin{verbatim}
@@ -2662,8 +2647,9 @@ which contains
     ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
     {\tt 'ionising\_core'} switch is used,
     {\tt CONPAR(,,2)} is the strength of the feedback.
-  \item[14] sound speed velocity flux,
-    {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+  \item[14] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt CONPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$.
+    to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+    Recommended for cases with drifts.
   \item[15] prescribe a radial leakage velocity,
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2675,9 +2661,9 @@ which contains
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
   \item[21] prescribe the value of the density and add a poloidal density variation to get a solution which is as close as possible to neoclassical theory. It is recommended to use this boundary condition together with corresponding condition on ion temperature ({\tt BCENI=24}). The total desired density is summed over all {\tt BCCON=21} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
-  \item[22] Feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
+  \item[22] feedback boundary condition: given total particle flux with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=22} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
-  \item[23] Feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
+  \item[23] feedback boundary condition: given sum of integrated neutrals and main ion particle fluxes with constant average density. The poloidal density variation is added to make the solution as close as possible to the neoclassical value derived for pure H/D/T plasma. It is recommended to use this boundary condition with corresponding boundary condition on ion temperature ({\tt BCENI=23,24}). The total desired flux is summed over all {\tt BCCON=23} core boundaries.
     {\tt CONPAR(,,1)} specifies the desired particle flux in $s^{-1}$.
   \item[24] constant density feedback scaled by density on the ring {\tt bc\_type21\_ref} away
     {\tt CONPAR(,,1)} specifies the desired density in $m^{-3}$.
@@ -2723,7 +2709,9 @@ which contains
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[13] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
+    to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+    Recommended for cases with drifts.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
   \item[16] prescribe the average value of the parallel velocity,
@@ -2772,7 +2760,8 @@ which contains
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+    When {\tt bcene\_15\_style=1}, the electron flux is computed via the exponential of the sheath potential drop, and {\tt ENEPAR(:,1)} is used to artificially increase or decrease the sheath transmission coefficient for electrons (default = {\tt 0}).
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENEPAR(,2)}
@@ -2837,7 +2826,9 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, from {\tt b2stbc\_spb}, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
+    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14} and {\tt BCMOM=13} for all ion species.
+    Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
@@ -2858,8 +2849,8 @@ which contains
   \item[24] feedback boundary condition with prescribed total ion flux, constant poloidally averaged ion temperature and a poloidal variation as close as possible to neoclassical solution. It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=21,22,23}). The flux is summed over all core boundaries with {\tt BCENI=24}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
-    {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback.
+    {\tt ENIPAR(,1)} specifies the desired ion temperature in $eV$.
+    {\tt ENIPAR(,2)} is the strength of the feedback.
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
@@ -2900,8 +2891,8 @@ which contains
   \item[16] feedback condition of constant electric potential for a given prescribed current. The prescribed current (in $A$) is given by the sum of the {\tt POTPAR(,1)} of all the boundary conditions with {\tt BCPOT=16}. Still experimental, will not work for drift cases.
   \item[17] sheath condition for floating target. This BC provides a zero net current through the target. First, the total current through the surface is computed. Then, the potential is corrected by a factor of {\tt POTPAR(,1) * current} to reduce the current. {\tt POTPAR(,2)} used for storing the potential value, in $V$, during the iterative process and to provide an initial guess.
   \item[21] constant potential feedback scaled by potential on the ring {\tt bc\_type21\_ref} away,
-    {\tt POTPAR(,,1)} specifies the desired electric potential in $V$,
-    {\tt POTPAR(,,2)} is the strength of the feedback.
+    {\tt POTPAR(,1)} specifies the desired electric potential in $V$,
+    {\tt POTPAR(,2)} is the strength of the feedback.
   \end{description}
 \item[CONPAR]\index{CONPAR} {\tt real array, length NS * NBC * 3}, supplies
   the additional parameters needed for the option specified by
@@ -4652,12 +4643,13 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently five possible choices supported. They are:
+There are currently six possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -5371,11 +5363,11 @@ needs to be set --- consult your systems people about this, or the
 {\tt MDSplus} documentation.
 \end{sloppypar}
 
-[At IPP on the TOK Linux cluster, add the following to {\tt .login}:
+On many systems, it is sufficient to do
 \begin{verbatim}
-setenv MDSPLUS_DIR /afs/ipp-garching.mpg.de/home/d/dpc/@sys/mdsplus
-source $MDSPLUS_DIR/setup.csh
+module load MDSplus/7.153.3-GCCcore-13.2.0
 \end{verbatim}
+or whatever the latest version of MDSplus is.
 %% $
 
 {\tt b2md} requires as input {\tt b2md.dat} and this is searched for in the
@@ -5409,7 +5401,7 @@ the last number stored within.
 \index{tree structure in MDSplus}
 \index{MDSplus SOLPS tree structure}
 
-%%rsync -avP ~/afs/MDSPLUS_examples/*.TCL.index MDSPLUS/
+%%rsync -avP /shares/dmz/services/solps-mdsplus/MDS/TCL/. MDSPLUS/  [on srv-solps-1.dmz.ipp.mpg.de]
 
 The {\tt solps} tree consists of the main tree, {\tt SOLPS}, and six sub-trees: {\tt IDENT},
 {\tt SNAPSHOT}, {\tt TALLIES}, {\tt TIMEDEP}, {\tt MOVIES} and {\tt DIAG}.
@@ -5452,7 +5444,7 @@ Note that the {\tt SNAPSHOT::TOP.GRID:DSPAR} and {\tt SNAPSHOT::TOP.GRID:DSPOL} 
 
 \subsection{Using standard experimental data viewing programs}
 
-The {\tt MDSplus} server name is {\tt solps-mdsplus.aug.ipp.mpg.de:8001}.
+The {\tt MDSplus} server name is {\tt solps-mdsplus.ipp.mpg.de:8001}.
 
 The tree name is {\tt solps}.
 
@@ -5498,7 +5490,7 @@ graph in figure \ref{fig:cviewsolpsmdsplus} is produced.
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt solps}
 \item {\tt Signal:} = {\tt \\top.timedep.ne:ompsep}
@@ -5510,7 +5502,7 @@ You can also use
 \item start {\tt JETDSP}
 \item {\tt File|Read Signal}
 \item {\tt MDS+} option
-\item {\tt MDS+ server:} = {\tt solps-mdsplus.aug.ipp.mpg.de:8001}
+\item {\tt MDS+ server:} = {\tt solps-mdsplus.ipp.mpg.de:8001}
 \item {\tt Shot number:} = {\tt 4293}
 \item {\tt Tree:} = {\tt timedep}
 \item {\tt Signal:} = {\tt \\top.ne:ompsep}
@@ -5538,7 +5530,7 @@ Adding {\tt te:ompsep} and {\tt ti:ompsep}, the graph in figure
 \index{idl}
 
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 mdsopen,'solps',251
 te_coarse=mdsvalue('\top.snapshot:te')
 cr_coarse=mdsvalue('\top.snapshot.grid:cr')
@@ -5555,7 +5547,7 @@ oplot,cr_fine[*,10],te_fine[*,10],linestyle=2,psym=-2
 \index{matlab}
 
 \begin{verbatim}
-mdsopen('solps-mdsplus.aug.ipp.mpg.de:8001::solps',nshot);
+mdsopen('solps-mdsplus.ipp.mpg.de:8001::solps',nshot);
 onx= mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NX');
 ny = mdsvalue('\SOLPS::TOP.SNAPSHOT.DIMENSIONS:NY'); %number of radial cells
 ne = mdsvalue('\SOLPS::TOP.SNAPSHOT:NE');
@@ -5592,7 +5584,7 @@ You will need the MDSplus interface for python.
 \begin{verbatim}
 import MDSplus
 
-conn = MDSplus.Connection('solps-mdsplus.aug.ipp.mpg.de:8001')
+conn = MDSplus.Connection('solps-mdsplus.ipp.mpg.de:8001')
 conn.openTree('solps', 12380)
 r=conn.get('\\top.snapshot.grid:r')
 z=conn.get('\\top.snapshot.grid:z')
@@ -5665,7 +5657,7 @@ mencoder 'mf://frames/tmp_??????.png' -mf type=png:fps=30 -ovc lavc -lavcopts \
 \end{Verbatim}
 
 The resultant movie can be found at\\
-\href{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.aug.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
+\href{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}{http://solps-mdsplus.ipp.mpg.de/SOLPS/fb\_nesepm=5.0e19.ELM\_2cm\_X10.rqahesum.mpg}
 
 \section{Querying the database}
 \index{database}\index{querying database}
@@ -5673,18 +5665,13 @@ The resultant movie can be found at\\
 All cases are also entered into a {\tt MySQL}\index{MySQL}
 (\href{http://www.mysql.com/}{http://www.mysql.com/}) database.
 
-A Web interface to the database is available at
-\href{http://solps-mdsplus.aug.ipp.mpg.de/solps/}{http://solps-mdsplus.aug.ipp.mpg.de/solps/}
-via {\tt Zope}\index{Zope}\\
-(\href{http://www.zope.org/}{http://www.zope.org/}).
-
 The database can also be queried via {\tt MySQL} commands passed via {\tt MDSplus}. An {\tt IDL}
 example of querying the database to find the number of shots supplied by each
 user follows:
 
 \index{database query via IDL}
 \begin{verbatim}
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select user,count(*) from id group by user','solps')")
 mdsdisconnect
 help,ans
@@ -5694,7 +5681,7 @@ print,transpose(ans)
 Another, more complicated, {\tt IDL} example is:
 
 \begin{Verbatim}[fontsize=\footnotesize]
-mdsconnect,'solps-mdsplus.aug.ipp.mpg.de:8001'
+mdsconnect,'solps-mdsplus.ipp.mpg.de:8001'
 ans=mdsvalue("sql('select solpsindex,shot,time,ompsep_te,ompsep_ti,user,exp
    from id where ompsep_te>110.0 and ompsep_te<120.0','solps')")
 mdsdisconnect
@@ -5719,7 +5706,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_scatter.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Scatter plot for separatrix temperature versus density.}
     \label{fig:python_sql_scatter}
 \end{figure}
 
@@ -5729,7 +5716,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_lin.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_lin}
 \end{figure}
 
@@ -5739,7 +5726,7 @@ plots are given in figures \ref{fig:python_sql_scatter},
 \else
     \centerline{\includegraphics[height=8cm]{sql_hexbin_log.eps}}
 \fi
-    \caption{Comparison of profiles for a range of shots.}
+    \caption{Log histogram plot for separatrix temperature versus density.}
     \label{fig:python_sql_hexbin_log}
 \end{figure}
 
@@ -5777,7 +5764,7 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
       call getarg(1,arg)
       read(arg,*) ishot
 
-      call itdb_open(status,"solps-mdsplus.aug.ipp.mpg.de:8001",
+      call itdb_open(status,"solps-mdsplus.ipp.mpg.de:8001",
      1 "solps", ishot)
       call itdb_err_msg('itdb_open',status)
 
@@ -5910,31 +5897,35 @@ the {\tt SOLPS MDSplus} server and then writes geometry information in the stand
 The IPP MDSplus server is a dual processor 2.8~GHz AMD Opteron machine with 4~GB RAM
 running SUSE LINUX 10.1 (X86-64).  The data is stored in MR-AFS.
 
-%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.aug.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /afs/ipp-garching.mpg.de/home/d/dpc/MDS/models/shotid.sys` cases consisting of `/afs/ipp-garching.mpg.de/bin/fs lq ~/MDS/0/000/0?? | awk '/xxx/{kbytes+=$3}/files/{files+=$5}END{print kbytes/1024/1024" GB in "files" files"}'`.
+%% echo As of `date` the SOLPS MDSplus server \"solps-mdsplus.ipp.mpg.de:8001\" contained `hexdump -e '1/4 "%d\n"' < /shares/dmz/services/solps-mdsplus/MDS/models/shotid.sys` cases consisting of `du -hs /shares/dmz/services/solps-mdsplus/MDS/0` in `find /shares/dmz/services/solps-mdsplus/MDS/0 -type f | wc -l` files.
 
 As of Wed Jun 1 21:30:57 CEST 2005 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 12497 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 12497 cases consisting of
 387.158 GB in 261099 files.
 
 As of Wed Jul 26 19:12:53 CEST 2006 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 15999 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 15999 cases consisting of
 995.904 GB in 334534 files.
 
 As of Sat Mar 8 00:46:36 CET 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 22190 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 22190 cases consisting
 of 2824.17 GB in 464547 files.
 
 As of Tue Oct 7 19:45:57 CEST 2008 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 25623 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 25623 cases consisting
 of 3646.37 GB in 536644 files.
 
 As of Tue Jan 13 10:05:51 MET 2009 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 26448 cases consisting
+"solps-mdsplus.ipp.mpg.de:8001" contained 26448 cases consisting
 of 3802.68 GB in 553970 files.
 
 As of Thu Jun 8 11:22:51 CEST 2017 the SOLPS MDSplus server
-"solps-mdsplus.aug.ipp.mpg.de:8001" contained 95977 cases consisting of
+"solps-mdsplus.ipp.mpg.de:8001" contained 95977 cases consisting of
 19859.1 GB in 1929218 files.
+
+As of 2025-07-31T09:02:17 CEST the SOLPS MDSplus server
+"solps-mdsplus.ipp.mpg.de:8001" contained 186288 cases consisting of
+42 TB in 3909532 files.
 
 \chapter{Running DivGeo}
 \label{cha:divgeo}\index{DG, running}
@@ -8345,7 +8336,7 @@ D_{p,a}, & \ z_a \neq 0 \\
 \begin{matrix}
 \frac{D_{p,a}}
 {\left(1+\left(\frac{\frac{\sqrt{g}}{h_y} D_{p,a} \left| \frac{1}{h_y}\frac{\partial p_a}{\partial y} \right| }{\frac{\sqrt{g}}{h_y} \mathit{\alpha n}_a\frac{V_{T_i}} 4}\right)^{\gamma_1}\right)^{\frac{1}{\gamma_1}}},
-& \ V_{T_i}=\sqrt{\frac{8T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
+& \ V_{T_i}=\sqrt{\frac{8 T_i}{\mathit{\pi m}_a}}, & \ z_a = 0 \\
 D_{p,a}, & \ z_a \neq 0 \\
 \end{matrix} \right.
 \end{matrix}
@@ -8770,13 +8761,13 @@ V_{m_a}^{(\max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{
 \end{equation}
 
 \begin{align}\label{eq:mom_veta}
-\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
 \end{align}
 
 If {\tt 'b2trcl\_lluciani'} is set to {\tt '1'}, the Luciani flux limiter is given by:
 
 $\begin{matrix}
-c_{\eta_{ax}^{(CL)}}^{Luciani} & =
+c_{\eta^{(CL)}}^{Luciani} & =
 & \left\{
 \begin{matrix}
 \frac{1}{1 + \frac{7.5 \cdot 10^{16} \left( \frac{T_i}{e} \right)^2}
@@ -8790,10 +8781,31 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 For the plateau and banana transport regimes, the correction, with {\tt 'b2trcl\_lluciani'} set to {\tt '3'} (default), is given by:
 
 %-------- end of 7th page -------------
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '1'}(default):
 
 $
 \begin{matrix}
-c_{\eta_{ax}^{(CL)}}^{Luciani} & =
+c_{\eta^{(CL)}}^{Luciani} & =
+& \left\{
+\begin{matrix}
+\frac{1}{1 +
+\frac{1}
+{\varepsilon^{3/2}\nu_{\ast}}}
+\cdot
+\frac{1}{1 +
+\frac{1}
+{\nu_{\ast}}}
+, & \text{for ions on inner flux surfaces} \\
+1, & \text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+$
+
+if {\tt 'b2trcl\_luc\_et\_form'} set to {\tt '0'} (only valid for hydrogen-majority plasmas):
+
+$
+\begin{matrix}
+c_{\eta^{(CL)}}^{Luciani} & =
 & \left\{
 \begin{matrix}
 \frac{1}{1 +
@@ -8809,7 +8821,18 @@ c_{\eta_{ax}^{(CL)}}^{Luciani} & =
 \end{matrix}
 $
 
-$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \  $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}{\mathlarger{\oint} \sqrt g / h_y dx}$
+$
+\nu_{\ast} = \frac{c \left( y \right)}
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
+$c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1} dx$, \ \ \ \
+$\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
+{\mathlarger{\oint} \sqrt g / h_y dx}$,\ \ \ \ $
+\tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
+\frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
+\left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
+$
+
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -8880,7 +8903,7 @@ $
 q_{a \parallel}^{(0)} = - \frac{\widetilde{\widetilde{k}}_{ix}^{(CL)}}{b_x} \frac{\partial T_i}{h_x \partial x}
 $
 
-Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).
+Note that $\widetilde{\widetilde{k}}_{ix}^{(CL)}$ already contains a factor of $b_x^2$, see its definition below Eq.~(\ref{eq:eni_kapixCL}).%$
 
 $
 q_{ax}^{(dia)} = - \frac{5}{2} \frac{B_z}{B^2} \frac{\widetilde{n}_i T_i}{e} \frac{\partial T_i}{h_y \partial y}
@@ -8914,7 +8937,7 @@ $\alpha^{NEO} = \frac{8}{15}
 the temperature gradient in the neoclassical electric field in the plateau and banana regime
 
 $\nu_{\ast} = \frac{c \left( y \right)}
-{2 \pi \varepsilon^{3/2} \tau_a^{(Br)} \sqrt{T_i/m_a}}$,\ \ \ \
+{2 \pi \varepsilon^{3/2} \tau_{main}^{(Br)} \sqrt{T_i/m_{main}}}$,\ \ \ \
 $c \left( y \right) = \mathlarger{\oint} h_x |b_x|^{-1}dx$, \ \ \ \
 $\varepsilon = \frac{\left(\mathlarger{\oint} h_x dx \right)^2}
 {\mathlarger{\oint} \sqrt g /h_y dx}$
@@ -9622,7 +9645,7 @@ If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde f_{ix} $ i
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
 \end{equation}
 
-\begin{equation}\label{eq:eni_qix}\begin{split}
+\begin{multline}\label{eq:eni_qix}
 q_{ix} = \left[
         \frac{3}{2} \Gamma_{ix} +
         \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} n_a \widetilde V_{ax}^{(dia)} +
@@ -9630,8 +9653,7 @@ q_{ix} = \left[
         \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \right] T_i
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
-\end{split}
-\end{equation}
+\end{multline}
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix} $ is applied according to section \ref{sec:Zhdanov}.
 
@@ -10689,7 +10711,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \right|_W
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10705,7 +10727,7 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_W
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
 
 \subsubsection{East}
 
@@ -10752,7 +10774,7 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \right|_E
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -10768,7 +10790,7 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \right|_E
 \end{equation*}
 
-$p_{n,a,1} = +1 $
+$p_{n,a,1} = +1$
 
 \subsection{Parallel momentum balance for ions}
 
@@ -10953,7 +10975,7 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11029,7 +11051,7 @@ $u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11789,7 +11811,7 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -11875,7 +11897,7 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
@@ -12234,7 +12256,7 @@ Old form of  $\left( \nabla \pi_a^{\parallel}\right)_{\parallel}$ was
 
 -\frac{4}{3} b_x B^{\frac{3}{2}} \frac{\partial}{h_x \partial x} \left(
         \frac{
-                c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x
+                c_{\eta_{ax}^{(CL)}} c_{\eta^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x
         }{B^2}
         \frac{
                 \partial \left(
@@ -12262,7 +12284,7 @@ Because of $\eta^{(AN)}_a \ll \widetilde{\widetilde{\eta}}^{(CL)}_{ax}$, $\eta_{
 
 \begin{equation}\begin{matrix}
 -\frac{4}{3} b_x B^{\frac{3}{2}} & \frac{\partial}{h_x \partial x} \left(
-        \frac{c_{\eta_{ax}^{(CL)}} c_{\eta_{ax}^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x}{B^2}
+        \frac{c_{\eta_{ax}^{(CL)}} c_{\eta^{(CL)}}^{(Luciani)} \eta^{(CL)}_{ax} b_x}{B^2}
         \frac{ \partial \left( B^{\frac{1}{2}} V_{a \parallel} \right)}{h_x \partial x}
 \right)
 & = \\
@@ -12383,8 +12405,10 @@ The relevant switches for the Zhdanov closure are:
   \item[b2tral\_Zhdanov\_visu] If {\tt '1'} (default), the Zhdanov velocity-dependent viscous stress formulation is applied instead of the Braginskii expression.
   \item[b2tral\_Zhdanov\_vish] If {\tt '1'} (default), the Zhdanov heat flux dependent viscous stress formulation is applied instead of the Braginskii expression.
   \item[b2tral\_zh\_tf\_toff] String of integers with (nspecies*(nspecies+1))/2-nspecies digits. If a digit is {\tt 1}, turn off the thermal force between corresponding species starting from 1 and 2; 1 and 3;....; up to nspecies-1 and nspecies. Default is {\tt '0'}.
-  \item[b2tral\_zh\_vis\_type] If {\tt '0'} (default), the Braginskii-like velocity-dependent stress-viscosity is used.  If {\tt '1'}, the Zhdanov-like velocity-dependent stress-viscosity is used.
+  \item[b2tral\_zh\_vis\_type] If {\tt '0'} (default), the Braginskii-like velocity-dependent stress-viscosity is used.  If {\tt '1'}, the Zhdanov-like velocity-dependent stress-viscosity is used. If {\tt '2'}, the Makarov-like velocity-dependent stress-viscosity is used \cite{MakarovPhD}.
   \item[b2npmo\_smbvi\_factor] This switch defines the fraction of the cross-ion part of the stress-viscosity term (Eq.~(\ref{eq:mom_zh_visai})) which is applied. The cross-ion part of the stress-viscosity term can lead to numerical problems. If so, it is recommended to start from {\tt '0.0'} and increase it step by step. Default is {\tt '1.0'}.
+   \item[b2tral\_amfact\_on] If {\tt '1'}, the mass correction for the thermal and friction force calculation is applied (for details see \cite{Makarov2023}). Default is {\tt '0'}.
+   \item[b2tral\_amfact\_***] If {\tt b2tral\_amfact\_on.eq.1}, this multiplier is applied for the mass of the isonuclear sequence with number {\tt '***'}. Recall the numbering of the isonuclear sequences starts at zero (e.g. {\tt b2tral\_amfact\_000}, {\tt b2tral\_amfact\_001}, ...). Default is {\tt '1.0'}.
 \end{description}
 
 \begin{sloppypar}
@@ -13108,39 +13132,94 @@ S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel}
 \end{matrix}
 \end{equation}
 
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\left( {\nabla \cdot \overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} =
+ -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\widetilde{\widetilde{\eta}}^{(CL)}_{a x}\frac{1}{B^{2}b_x}\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel a}\bigg)\Bigg]\\
+-\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
+\bigg]\Bigg]
+\end{multline}
+
+\begin{align}
+\left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{full}_{\parallel} = \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} + \left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_visres_2}
+\left( { \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} =
+- \frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \ln \left( h_z B^{\frac{1}{2}} \right) }{B^{\frac{1}{2}} h_x \partial x} \right)
+B^{\frac{1}{2}} V_{\parallel a}
+\end{align}
+
+\begin{multline}\label{eq:mom_zh_visai_2}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel} = -\frac{4}{3}b_xB^{3/2}\frac{\partial}{h_x\partial x}\Bigg[\frac{1}{B^{2}b_x}\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel (\alpha \zeta)}\bigg)
+\bigg]\Bigg]
+\end{multline}
+
+\begin{multline}
+\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{div}_{\parallel} =
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\left(\frac{\partial \ln h_z}{h_x \partial x}  V_{\parallel a}
+- \frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right) = \\
+\frac{1}{h_z \sqrt g} \frac{\partial}{\partial x}
+\left( \frac{h_z \sqrt g}{h_x} \left(\frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\frac{ \partial \ln h_z}{h_x \partial x} V_{\parallel a} - \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}\frac{\partial V_{\parallel a}}{h_x \partial x} \right) \right)
+\end{multline}
+
+Thus the momentum flux is:
+
+\begin{equation}\label{eq:mom_zh_fluxx_2}
+\Gamma^m_{ax} = \left\{
+\begin{matrix}
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} + \frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \frac{\partial \ln h_z}{h_x \partial x} V_{\parallel a} - \eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a \neq 0\\
+m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
+\eta_{ax} \frac{\partial V_{\parallel a}}{h_x \partial x}, & z_a = 0 \\
+\end{matrix}
+\right.
+\end{equation}
+
+where:
+
+\begin{equation}
+\eta_{ax}=\eta^{(AN)}_{ax}+\frac{4}{3} \widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\end{equation}
+
+and the momentum source is:
+
+\begin{equation}
+\begin{matrix}
+S_{a \parallel}^m = -\left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel} \right)_{\parallel} & =
+& \left\{
+\begin{matrix}
+- \left( {\nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{res}_{\parallel} -\left({ \nabla \cdot\overset\leftrightarrow\pi_a^{V_\parallel}} \right)^{ai}_{\parallel}-
+\left( \nabla \cdot\overset\leftrightarrow\pi_a^{h_i} \right)_{\parallel},
+& \ z_a \neq 0 \\
+\\
+0, & z_a = 0 \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
 \ \ \textbf{\textit{end}}
 
 Where the viscous stress coefficient is:
 
+\ \ \textbf{\textit{If {\tt zh\_vis\_type.eq.0} or {\tt zh\_vis\_type.eq.1} then}}
+
 \begin{align}\label{eq:mom_zh_ddveta}
-\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
 \end{align}
 
 \begin{align}\label{eq:mom_zh_dveta}
-\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{x}^{(CL)}} \eta^{(CL)}_{ax}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \eta^{(CL)}_{ax}
 \end{align}
 
-\begin{align}
-\begin{matrix}
-c_{\eta_{x}^{(CL)}}^{Luciani} & =
-& \left\{
-\begin{matrix}
-\frac{1}{1 +
-\frac{15.12 \cdot 10^{16} \left( \frac{T_i}{e} \right)^2}
-{c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}}
-\cdot
-\frac{1}{1 +
-\frac{15.12 \cdot 10^{16} \cdot \varepsilon^{3/2} \left( \frac{T_i}{e} \right)^2}
-{c(y) \sum \limits_{a=0}^{ns-1} z_a^2 n_a}}
-, & \text{for ions on inner flux surfaces} \\
-1, & \text{for all other cases} \\
-\end{matrix} \right.
-\end{matrix}
-\end{align}
-
-\begin{align}
-c \left( y \right) = \oint h_x {\left| b_x \right|}^{-1} dx, \ \ \ \  \varepsilon = \frac{\left( \oint h_x dx \right)^2}{\oint \frac{\sqrt{g}}{h_y} dx}
-\end{align}
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
 
 \begin{equation}
 \begin{matrix}
@@ -13177,6 +13256,73 @@ V_{m_a}^{(\max)} = c_{flim_2} n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \eta^{(CL)}_{a} = n_{a} T_i \left[ \sum_{\beta} \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta} \frac{\overline{n}_{\beta}}{\overline{n}_{\alpha}} + zhcscorr \cdot 2 c^{(\pi_u^B)}_{\alpha} \tau_{\alpha \alpha }^{(Zh)} \left( \frac{\overline{Z_\alpha^2}}{Z^2} - 1 \right) \right]
 \end{align}
 
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{align}\label{eq:mom_zh_ddveta_2}
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \widetilde{\eta}^{(CL)}_{ax}
+\end{align}
+
+\begin{align}\label{eq:mom_zh_dveta_2}
+\widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{\alpha x}^{(CL)}} \eta^{(CL)}_{ax}
+\end{align}
+
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
+
+\begin{equation}
+\begin{matrix}
+c_{\eta_{\alpha x}^{(CL)}} & =
+& \left\{
+\begin{matrix}
+1, & \ z_a \neq 0 \; \text{and only for inner flux surfaces} \\
+\frac 1
+{\left(1 + \left( \frac{
+\eta^{(CL) eff}_{\alpha}
+  \left| b_x \frac{\partial V_{\parallel}}{h_x \partial x} \right|
+}
+{V_{m_\alpha}^{(\max)}} \right)^{\gamma_1} \right)^{\frac{1}{\gamma_1}}
+}, &
+\text{for all other cases} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}
+V_{m_\alpha}^{(\max)} = c_{flim_2} \overline{n}_\alpha T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+\end{equation}
+
+\begin{equation}
+\eta^{(CL) eff}_{\alpha}=\sum_\beta \frac{\eta^{(u_iA)}_{\alpha \beta}}{p_\alpha} \overline{n}_\beta T_i
+\end{equation}
+
+\begin{equation}\label{eq:mom_zh_veta_2}
+\eta^{(CL)}_{ax} =
+\left\{
+\begin{aligned}
+0, & \ z_a = 0 \\
+ \eta^{(CL)}_{a} b_x^2, & \ z_a \neq 0  \\
+\end{aligned} \right.
+\end{equation}
+
+\begin{align}
+\eta^{(CL)}_{a} = \left[ a \rightarrow \alpha Z \right] = \Bigg[\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}+
+zhcscorr\cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\left(\frac{1}{I_{a}}-1\right)\Bigg]\frac{n_{a}}{\overline{n}_{\alpha}} n_{a}T_i
+\end{align}
+
+\begin{align}
+\frac{\widetilde{\widetilde{\eta}}^{(u_iA)}_{\alpha \beta x}}{p_\alpha}= c_{\eta^{(CL)}}^{Luciani} \frac{\widetilde{\eta}^{(u_iA)}_{\alpha \beta x}}{p_\alpha},\ \ \ \ \frac{\widetilde{\widetilde{\eta}}^{(u_iB)}_{\alpha x}}{p_\alpha}= c_{\eta^{(CL)}}^{Luciani} \frac{\widetilde{\eta}^{(u_iB)}_{\alpha x}}{p_\alpha}
+\end{align}
+
+\begin{align}
+\frac{\widetilde{\eta}^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = c_{\eta_{\alpha x}^{(CL)}} \frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha},\ \ \ \frac{\widetilde{\eta}^{(u_iB)}_{\alpha x}}{p_\alpha} = c_{\eta_{\alpha x}^{(CL)}} \frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}
+\end{align}
+
+\begin{align}
+\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(u_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_u^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta};\ \ \
+\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(u_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_u^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha},
+\end{align}
+
+\ \ \textbf{\textit{end}}
+
 where:
 
 \begin{align}
@@ -13186,15 +13332,15 @@ where:
 Heat viscosity:
 
 \begin{multline}
- \left( \nabla \cdot\overset\leftrightarrow\pi _a^{h_i} \right)_{\parallel} = -B^{3/2} b_x \frac{\partial}{h_x \partial x} \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}\frac{1}{b_x B^{2}}\frac{h_x}{h_z \sqrt g} \frac{\partial}{h_x \partial x}\left(\sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\beta x}}}{b_x} \right) \right) \right] + \\
+ \left( \nabla \cdot\overset\leftrightarrow\pi _a^{h_i} \right)_{\parallel} = -B^{3/2} b_x \frac{\partial}{h_x \partial x} \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}\frac{1}{b_x B^{2}}\frac{h_x}{h_z \sqrt g} \frac{\partial}{h_x \partial x}\left(\sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right] + \\
 zhcscorr \cdot zhcscorr\_vq \cdot \\
-\left( -B^{3/2} b_x \frac{\partial}{h_x\partial x} \left[ \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{1}{b_x B^{2}} \frac{h_x}{h_z \sqrt g} \left( \frac{1}{I_a} \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\alpha x}}}{b_x} \right) \right) \right] \right)
+\left( -B^{3/2} b_x \frac{\partial}{h_x\partial x} \left[ \frac{n_{a}}{\overline n_{\alpha}} \frac{h_z \sqrt g}{h_x} \frac{8}{15} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \frac{1}{b_x B^{2}} \frac{h_x}{h_z \sqrt g} \left( \frac{1}{I_a} \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x \partial x} \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right] \right)
 \end{multline}
 
 where the heat fluxes are given by:
 
 \begin{align}
-\frac{\widetilde{\overline{h}^{(0)}_{\beta x}}}{b_x} = \overline{h}^{(1)}_{\beta} \arctan{\left( \frac{1}{\overline{h}^{(1)}_{\beta}} \frac{\overline{h}^{(0)}_{\beta x}}{b_x} \right)},\ \ \ \overline{h}^{(1)}_{\beta} = c_{q1} \overline{n}_\beta T_i \sqrt{\frac{T_i + T_e}{m_\beta}}
+\frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} = \overline{h}^{(1)}_{\beta} \arctan{\left( \frac{1}{\overline{h}^{(1)}_{\beta}} \frac{\overline{h}^{\ast(0)}_{\beta x}}{b_x} \right)},\ \ \ \overline{h}^{(1)}_{\beta} = c_{q1} \overline{n}_\beta T_i \sqrt{\frac{T_i + T_e}{m_\beta}}
 \end{align}
 
 \begin{align}
@@ -13205,12 +13351,12 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 
 \begin{equation}
 \begin{matrix}
-\frac{\overline h^{(0)}_{\beta x}}{b_x} =
-\frac{\overline {\tilde h^{(dia)}_{\beta x}}}{b_x} & =
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\frac{\overline {\tilde h}^{\ast(dia)}_{\beta x}}{b_x} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{\overline{(Z^{-1})}_\beta\overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+-\frac{5}{2} \frac{B_z B}{B_x \left\langle B^2 \right\rangle} \frac{\overline{(Z^{-1})}^\ast_\beta\overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -13232,12 +13378,12 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '0'} in {\tt b2mn.dat}:
 In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 \begin{equation}
 \begin{matrix}
-\frac{\overline h^{(0)}_{\beta x}}{b_x} =
-\overline h_{\beta\parallel} + \frac{\overline {h^{(dia)}_{\beta x}}}{b_x} & =
+\frac{\overline h^{\ast(0)}_{\beta x}}{b_x} =
+\overline h^\ast_{\beta\parallel} + \frac{\overline {h}^{\ast(dia)}_{\beta x}}{b_x} & =
 & \left\{
 \begin{matrix}
 0 & \text{outside the separatrix} \\
--\frac{\overline{\tilde{\tilde{\kappa}}^{CL}_{\beta x}}}{b_x} \frac{\partial T_i}{h_x \partial x} - \frac{5}{2} \frac{B_z B}{B_x B^2} \frac{\overline{(Z^{-1})}_\beta \overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
+-\frac{\overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}}{b_x} \frac{\partial T_i}{h_x \partial x} - \frac{5}{2} \frac{B_z B}{B_x B^2} \frac{\overline{(Z^{-1})}^\ast_\beta \overline{n}_\beta T_i}{e} \frac{\partial T_i}{h_y \partial y}
 & \text{inside the separatrix}
 \end{matrix} \right.
 \end{matrix}
@@ -13257,17 +13403,17 @@ In case {\tt 'b2siav\_style\_qip'} is set to {\tt '1'} in {\tt b2mn.dat}:
 \end{equation}
 
 \begin{align}
-\overline{(Z^{-1})}_\beta = \sum_\zeta \frac{I_{b(\beta,\zeta)}}{\zeta}
+\overline{(Z^{-1})}^\ast_\beta = \frac{1}{\overline{n}_{\beta}}\sum_\zeta \frac{n_{b(\beta,\zeta)}}{\zeta},\ \ \ \  \overline{\tilde{\tilde{\kappa}}}^{\ast CL}_{\beta x}=\sum_\zeta\tilde{\tilde{\kappa}}^{CL}_{\beta \zeta x}
 \end{align}
 
 And the viscosity coefficients are:
 
 \begin{align}\label{eq:mom_zh_veta_hA}
-\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta_{x}^{(CL)}}^{Luciani} \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_h^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta}
+\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta^{(CL)}}^{Luciani} \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta x}}{p_\alpha} = b_x^2 \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha};\ \ \ \frac{\eta^{(h_iA)}_{\alpha \beta }}{p_\alpha} = \check{c}^{(\pi_h^A)}_{\alpha \beta} \tau^{(Zh)}_{\alpha \beta}
 \end{align}
 
 \begin{align}\label{eq:mom_zh_veta_hB}
-\frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta_{x}^{(CL)}}^{Luciani} \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_h^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha}
+\frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} = \tilde{\alpha}^{neo} c_{\eta^{(CL)}}^{Luciani} \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha x}}{p_\alpha} = b_x^2\frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha};\ \ \ \frac{\eta^{(h_iB)}_{\alpha}}{p_\alpha} = 2 c^{(\pi_h^B)}_{\alpha} \tau^{(Zh)}_{\alpha \alpha}
 \end{align}
 
 \begin{align}
@@ -13547,6 +13693,24 @@ Q_{vis}=\sum \limits^{ns-1}_{\substack{a = 0 \\ z_a\neq 0}} \left(
 \right)
 \end{multline}
 
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+Q_{vis} = \sum \limits_{fluid~species}\Bigg[
+          \eta_{ax} \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)^2
+        + \eta^{(AN)}_{a} \left(
+                \frac{\partial V_{a \parallel}}{h_y \partial y}
+        \right)^2+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(V_{\parallel(\alpha \zeta)}\bigg)
+\bigg] \left(
+                \frac{\partial V_{a \parallel}}{h_x \partial x}
+        \right)\Bigg]
+\end{multline}
+
 \ \ \textbf{\textit{end}}
 
 \subsection{Currents}
@@ -13592,6 +13756,26 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
 
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\widetilde j_{ax}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+- \frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_y \partial y}
+\left( \frac{1}{B^2} \right)\Bigg[
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
+\bigg]\Bigg], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
 \ \ \textbf{\textit{end}}
 
 \begin{equation}
@@ -13630,6 +13814,26 @@ If {\tt Zhdanov\_visu.eq.1}, then:
 \left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
 \end{multline}
 
+\ \ \textbf{\textit{elseif {\tt zh\_vis\_type.eq.2} then}}
+
+\begin{multline}
+\widetilde j_{ay}^{(vis \parallel)} =
+\left\{
+\begin{aligned}
+\frac{B_z \sqrt{B}}{3 B_x}
+\frac{\partial}{h_x \partial x}
+\left( \frac{1}{B^2} \right)\Bigg[
+\widetilde{\widetilde{\eta}}^{(CL)}_{ax}
+\frac{\partial \left( \sqrt{B} V_{a \parallel} \right)}{h_x \partial x}+\\
+\frac{n_{a}}{\overline{n}_{\alpha}}\bigg[
+\sum_{\beta\neq\alpha}\frac{\eta^{(u_iA)}_{\alpha \beta x}}{p_\alpha}\sum_{\zeta} n_{(\beta\zeta)} T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\beta \zeta)}\bigg)+\\
+ \left(\frac{\eta^{(u_iA)}_{\alpha \alpha x}}{p_\alpha}-zhcscorr \cdot\frac{\eta^{(u_iB)}_{\alpha x}}{p_\alpha}\right)\sum_{\zeta\neq Z} n_{(\alpha\zeta)}T_i\frac{\partial}{h_x\partial x}\bigg(\sqrt{B}V_{\parallel(\alpha \zeta)}\bigg)
+\bigg]\Bigg], &\ z_a \neq 0 \\
+0, &\ z_a = 0
+\end{aligned} \right.\\
+\left( \widetilde{\widetilde{\eta}}^{(CL)}_{ax} \text{already contains a factor of } \rho^{rel}_a b_x^2 \right)
+\end{multline}
+
 \ \ \textbf{\textit{end}}
 
 If {\tt Zhdanov\_vish.eq.1}, then:
@@ -13649,14 +13853,14 @@ If {\tt Zhdanov\_vish.eq.1}, then:
   \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}
                            \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha}
                            \frac{\partial}{h_x\partial x}
-                                \left( \sqrt{B} \frac{\widetilde{\overline h^{(0)}_{\beta x}}}{b_x} \right) \right) \right. + \\
+                                \left( \sqrt{B} \frac{\widetilde{\overline h^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. + \\
          \left. zhcscorr \cdot zhcscorr\_vq \cdot
          \frac{n_{a}}{\overline n_{\alpha}}
          \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha}
          \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x}
                 \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right)
               - \frac{\partial}{h_x\partial x}
-                     \left( \sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\alpha x}}}{b_x} \right)
+                     \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right)
                \right) \right], &\ z_a \neq 0 \\
 0, &\ z_a = 0
 \end{aligned} \right.\\
@@ -13674,9 +13878,9 @@ If {\tt Zhdanov\_vish.eq.1}, then:
 \begin{aligned}
 \frac{2}{5} \frac{B_z \sqrt{B}}{3 B_x}
 \frac{\partial}{h_x \partial x}
-\left( \frac{1}{B^2} \right) \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\partial}{h_x\partial x} \left(\sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\beta x}}}{b_x} \right) \right) \right. +\\
+\left( \frac{1}{B^2} \right) \left[ \sum_{\beta} \left( \frac{n_{a}}{\overline n_{\alpha}}\frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha} \frac{\partial}{h_x\partial x} \left(\sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\beta x}}}{b_x} \right) \right) \right. +\\
  \left. zhcscorr \cdot zhcscorr\_vq \cdot
- \frac{n_{a}}{\overline{n}_{\alpha}} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{\overline{h}^{(0)}_{\alpha x}}}{b_x} \right) \right) \right], &\ z_a \neq 0 \\
+ \frac{n_{a}}{\overline{n}_{\alpha}} \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \left( \frac{1}{I_a} \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{h^{(0)}_{a x}}}{b_x} \right) - \frac{\partial}{h_x\partial x} \left( \sqrt{B} \frac{\widetilde{\overline{h}^{\ast(0)}_{\alpha x}}}{b_x} \right) \right) \right], &\ z_a \neq 0 \\
 0, &\ z_a = 0
 \end{aligned} \right.\\
 \left( \frac{\widetilde{\eta}^{(h_iA)}_{\alpha \beta x}}{p_\alpha},\ \frac{\widetilde{\eta}^{(h_iB)}_{\alpha x}}{p_\alpha} \text{already contain a factor of } b_x^2 \right)
@@ -15774,7 +15978,7 @@ Volume regions:
 ++-----------------------------++
 
 region 1 === core
-region 2 === SOL
+region 2 === Scrape-Off Layer
 \end{verbatim}
 
 $X$-directed regions:
@@ -15833,7 +16037,7 @@ See also section \ref{lab:b2:numerics:parameters} for a specific example.
 +-------+---------------+-------+
 
 region 1 === core
-region 2 === SOL
+region 2 === Scrape-Off Layer
 region 3 === Western divertor (inboard for LSN, outboard for USN)
 region 4 === Eastern divertor (outboard for LSN, inboard for USN)
 \end{verbatim}
@@ -16091,7 +16295,7 @@ Volume regions:
 +-------+---------------+-------+
 
 region 1 === core
-region 2 === SOL
+region 2 === Scrape-Off Layer
 region 3 === inboard divertor
 region 4 === outboard divertor
 region 5 === island
@@ -16168,7 +16372,7 @@ Volume regions:
 +-------+-----------------------+-------+-------++-------+-------+
 
 region 1 === core
-region 2 === SOL
+region 2 === Scrape-Off Layer
 region 3 === inboard divertor
 region 4 === outboard divertor entrance
 region 5 === outboard divertor leg 1
@@ -21090,6 +21294,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
 \item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
+\item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -21141,9 +21346,9 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
+B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\
@@ -21204,6 +21409,7 @@ GFORTRAN & broadcast/eirmod\_calstr\_buffered.F90 \\
 GFORTRAN & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
 GFORTRAN & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
 GFORTRAN & modules/eirmod\_balanced\_strategy.F90 \\
+GFORTRAN & modules/eirmod\_improved\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_cadgeo.F \\
 GFORTRAN & modules/eirmod\_cai.F \\
 GFORTRAN & modules/eirmod\_ccona.F \\
@@ -21291,6 +21497,47 @@ NO\_JSON & startup-routines/read\_reaclines.F \\
 NO\_JSON & startup-routines/write\_json\_amdata.f \\
 NO\_JSON & startup-routines/write\_json\_file.F \\
 NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
+OPEN\_MPI & broadcast/broad\_iestr.F \\
+OPEN\_MPI & broadcast/broadcast.F \\
+OPEN\_MPI & broadcast/broadsput.F \\
+OPEN\_MPI & broadcast/calstr.F \\
+OPEN\_MPI & broadcast/collect\_census.F \\
+OPEN\_MPI & broadcast/collect\_coutau.F \\
+OPEN\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
+OPEN\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
+OPEN\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_improved\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_cadgeo.F \\
+OPEN\_MPI & modules/eirmod\_cai.F \\
+OPEN\_MPI & modules/eirmod\_ccona.F \\
+OPEN\_MPI & modules/eirmod\_cestim.F \\
+OPEN\_MPI & modules/eirmod\_cgeom.F \\
+OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
+OPEN\_MPI & modules/eirmod\_clgin.F \\
+OPEN\_MPI & modules/eirmod\_clogau.F \\
+OPEN\_MPI & modules/eirmod\_comnnl.F \\
+OPEN\_MPI & modules/eirmod\_comsig.F \\
+OPEN\_MPI & modules/eirmod\_comsou.F \\
+OPEN\_MPI & modules/eirmod\_comspl.F \\
+OPEN\_MPI & modules/eirmod\_comusr.F \\
+OPEN\_MPI & modules/eirmod\_comxs.F \\
+OPEN\_MPI & modules/eirmod\_coutau.F \\
+OPEN\_MPI & modules/eirmod\_cpes.F \\
+OPEN\_MPI & modules/eirmod\_cpolyg.F \\
+OPEN\_MPI & modules/eirmod\_cref.F \\
+OPEN\_MPI & modules/eirmod\_csdvi.F \\
+OPEN\_MPI & modules/eirmod\_cstep.F \\
+OPEN\_MPI & modules/eirmod\_ctetra.F \\
+OPEN\_MPI & modules/eirmod\_ctext.F \\
+OPEN\_MPI & modules/eirmod\_ctrcei.F \\
+OPEN\_MPI & modules/eirmod\_ctrig.F \\
+OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_parmmod.F \\
+OPEN\_MPI & photons/eirmod\_photon.F \\
+OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
+OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 PGF90 & assistant/exit\_own.F \\
 PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\
@@ -21300,7 +21547,9 @@ TRACE & geometry/time-routines/timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+TRACE & modules/eirmod\_improved\_strategy.F90 \\
 USE\_EXT\_OPENMP & assistant/exit\_own.F \\
+USE\_EXT\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
 USE\_EXT\_OPENMP & diagno/eirmod\_linint.F \\
 USE\_EXT\_OPENMP & geometry/eirmod\_learc1.F \\
 USE\_EXT\_OPENMP & geometry/learc2.F \\
@@ -21381,6 +21630,7 @@ USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
 USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
 USE\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+USE\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_cadgeo.F \\
 USE\_MPI & modules/eirmod\_cai.F \\
 USE\_MPI & modules/eirmod\_ccona.F \\
@@ -21415,6 +21665,7 @@ USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 USE\_OPENMP & assistant/eirmod\_second\_own.F \\
 USE\_OPENMP & assistant/exit\_own.F \\
+USE\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
 USE\_OPENMP & diagno/eirmod\_linint.F \\
 USE\_OPENMP & geometry/eirmod\_learc1.F \\
 USE\_OPENMP & geometry/learc2.F \\

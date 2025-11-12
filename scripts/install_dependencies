@@ -1,0 +1,324 @@
+#! /usr/bin/env tcsh
+
+if ( ! $?INSTALL_NEW ) set INSTALL_NEW = 0
+
+# Create local configuration files, if they do not already exist, where to append the new library paths
+
+# General
+if (! -e "${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# B2.5
+if (! -e "${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Eirene
+if (! -e "${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# DivGeo/convert
+if (! -e "${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# DivGeo/equtrn
+if (! -e "${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}//modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}//modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}//modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Carre
+if (! -e "${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Carre2
+if (-d "${SOLPSTOP}/modules/Carre2") then
+ if (! -e "${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+ else
+  cp ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local.bak
+ endif
+endif
+
+# Triang
+if (! -e "${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Uinp
+if (! -e "${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# solps4-5
+if (! -e "${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# fxdr
+if (! -e "${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Create local libraries folder if it does not exist
+
+if (! -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}" ) then
+  mkdir -p "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}"
+endif
+
+# Clone and compile MSCL library
+
+if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version of the library
+
+  if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/lib/libmscl.a" ) then   # Check if the compiled library already exists locally
+
+    echo MSCL library not locally installed.
+    echo -n "Do you wish to install it? (y/n) [y] "
+    set MSCL_INSTALL = $<
+
+    if ( "$MSCL_INSTALL" == "" ) then
+        set MSCL_INSTALL = "y"
+    endif
+
+    if ( "$MSCL_INSTALL" == "y" ) then
+      define_compilers
+      set INSTALL_NEW = 1
+      cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+      if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
+        rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
+      endif
+      git clone ssh://git@git.iter.org/lib/mscl.git mscl
+      cd mscl
+      ./bootstrap
+      ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl F77=${FC} CC=${CC}
+      make all
+      make install
+      echo MSCL_ROOT  = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL    = -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      if (-d "${SOLPSTOP}/modules/Carre2") then
+        echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+        echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      endif
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib >> ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/lib -lmscl >> ${SOLPSTOP}/modules/fxdr/config/config.${HOST_NAME}.${COMPILER}.local
+      cd $SOLPSTOP
+      echo MSCL library successfully installed.
+    endif
+
+  else
+    echo MSCL library already locally installed.
+
+  endif
+
+else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresponding to the commit a64eba15137 (most recent version does not work)
+
+  if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran/libmscl.a" ) then   # Check if the compiled library already exists locally
+
+    echo MSCL library not locally installed.
+    echo -n "Do you wish to install it? (y/n) [y] "
+    set MSCL_INSTALL = $<
+
+    if ( "$MSCL_INSTALL" == "" ) then
+        set MSCL_INSTALL = "y"
+    endif
+
+    if ( "$MSCL_INSTALL" == "y" ) then
+      define_compilers
+      set INSTALL_NEW = 1
+      cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+      if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
+        rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
+      endif
+      git clone ssh://git@git.iter.org/lib/mscl.git mscl
+      cd mscl
+      git checkout a64eba15137
+      cp ${SOLPSTOP}/doc/solps/MacOS/compiler.darwin.gfortran config/compiler.darwin.gfortran
+      sed -i '' '/^CC=cc -c$/d' Makefile
+      sed -i '' 's/$(CC) -o ${OBJECTCODE}\/\$\*.o \$</$(CC) -c -o ${OBJECTCODE}\/\$\*.o \$</' Makefile
+      cp ${SOLPSTOP}/doc/solps/MacOS/date2.c src/util/date2.c
+      make -e OBJECTCODE=darwin.gfortran
+      echo MSCL_ROOT  = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL    = -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/DivGeo/convert/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/DivGeo/equtrn/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+      if (-d "${SOLPSTOP}/modules/Carre2") then
+        echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+        echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      endif
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/Uinp/config/config.${HOST_NAME}.${COMPILER}.local
+      echo MSCL_ROOT \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_MSCL   \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/mscl/darwin.gfortran -lmscl >> ${SOLPSTOP}/modules/solps4-5/config/config.${HOST_NAME}.${COMPILER}.local
+      cd $SOLPSTOP
+      echo MSCL library successfully installed.
+    endif
+  
+  else
+    echo MSCL library already locally installed.
+
+  endif
+
+endif
+
+# Clone and compile GKS library
+
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks/libgks.a" ) then   # Check if the compiled library already exists locally
+
+  echo GKS library not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set GKS_INSTALL = $<
+
+  if ( "$GKS_INSTALL" == "" ) then
+      set GKS_INSTALL = "y"
+  endif
+
+  if ( "$GKS_INSTALL" == "y" ) then
+    define_compilers
+    set INSTALL_NEW = 1
+    cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+    if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli" ) then
+      rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gli"
+    endif
+    wget -P $SOLPSTOP/lib/${HOST_NAME}.${COMPILER} http://iffwww.iff.kfa-juelich.de/pub/gli/gli-4.5.31.tar.gz
+    tar xvf $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/gli-4.5.31.tar.gz
+    rm $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/gli-4.5.31.tar.gz
+    cd gli/src/gks
+    sed -i.bak 's/F77="g77" SEGLD="g77"/F77=$(FC) SEGLD=$(FC)/' Makefile
+    make
+    echo GLI_HOME   = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GKS     = -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+    echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+    echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    if (-d "${SOLPSTOP}/modules/Carre2") then
+      echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+    endif
+    echo GLI_HOME  \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GKS    \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gli/src/gks -lgks >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
+    cd $SOLPSTOP
+    echo GKS library successfully installed.
+  endif
+
+else
+  echo GKS library already locally installed.
+
+endif
+
+# Clone and compile GR library
+
+if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check if the compiled library already exists locally
+
+  echo GR library not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set GR_INSTALL = $<
+
+  if ( "$GR_INSTALL" == "" ) then
+      set GR_INSTALL = "y"
+  endif
+
+  if ( "$GR_INSTALL" == "y" ) then
+    define_compilers
+    set INSTALL_NEW = 1
+    cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+    if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr" ) then
+      rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr"
+    endif
+    git clone ssh://git@git.iter.org/lib/gr-software.git gr
+    cd gr
+    sed -i '' 's/^all: libgr.a install$/all: libgr.a/' Makefile
+    sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
+    if ("$OSTYPE" == "linux") then
+      make linux.${COMPILER}
+    else if ("$OSTYPE" == "darwin") then
+      cat <<EOF >> Makefile
+darwin.gfortran:
+	@make all F77="gfortran" \\
+	CFLAGS="-Wno-implicit-int -Wno-implicit-function-declaration" \\
+	F77FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+	F90="gfortran" \\
+	F90FLAGS="-O3 -std=legacy -fdefault-real-8 -fno-range-check -fallow-argument-mismatch -ffree-line-length-0" \\
+	F90OBJS="" \\
+	RANLIB="echo" \\
+	BLDFLAG="ar cr"
+EOF
+      make darwin.gfortran
+    endif
+    echo GR_ROOT    = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GR      = -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+    echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/B2.5/config/config.${HOST_NAME}.${COMPILER}.local
+    echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
+    echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Carre/config/config.${HOST_NAME}.${COMPILER}.local
+    if (-d "${SOLPSTOP}/modules/Carre2") then
+      echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+      echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Carre2/config/config.${HOST_NAME}.${COMPILER}.local
+    endif
+    echo GR_ROOT   \?= \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
+    echo LD_GR     \?= -L\$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gr -lgr >> ${SOLPSTOP}/modules/Triang/config/config.${HOST_NAME}.${COMPILER}.local
+    cd $SOLPSTOP
+    echo GR library successfully installed.
+  endif
+
+else
+  echo GR library already locally installed.
+
+endif
+
+# If at least one of the libraries was absent and was compiled, then warn the user to restart the session to re-initialize variables 
+# in order to avoid clashes with the shortcuts to compiler variables
+
+if ( $?INSTALL_NEW && "$INSTALL_NEW" == "1" ) then
+
+      echo Installation of missing external dependencies completed.
+      echo The variables linking the installed libraries have been
+      echo written to \$\{SOLPSTOP\}/SETUP/config.${HOST_NAME}.${COMPILER}.local.
+      echo Please close your SOLPS-ITER session and restart it.
+
+endif

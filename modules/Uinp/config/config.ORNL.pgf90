@@ -1,15 +1,10 @@
 # Test whether necessary variables are defined
-ifndef GR_ROOT
-  $(error GR_ROOT not defined)
+ifdef GR_ROOT
+  LD_GR   ?= -L${GR_ROOT} -lgr
 endif
-ifndef GLI_HOME
-  $(error GLI_HOME not defined)
+ifdef GLI_HOME
+  LD_GKS  ?= -L${GLI_HOME} -lgks
 endif
-ifndef LD_MSCL
-  $(error LD_MSCL not defined)
-endif
-LD_GR   ?= -L${GR_ROOT} -lgr
-LD_GKS  ?= -L${GLI_HOME} -lgks
 
 CPP      = /lib/cpp -traditional
 

@@ -150,17 +150,29 @@ touch b2fstati
 b2run b2ar
 b2run b2mn > run.log
 [ "$DEVICE" = 'iter' ] && {
+  export IMAS_AL_DISABLE_VALIDATE=1
   [ $AL_MAJOR_VERSION = 5 ] && {
-    uri_destination='imas:mdsplus?shot=${shotnumber};run=1;user=${USER};database=${DATABASE};version=3'
+    uri_src_mdsplus='imas:mdsplus?shot='${shotnumber}';run=1;user='${USER}';database='${DATABASE}';version='${IMAS_MAJOR_VERSION}
+    uri_dest_hdf5='imas:hdf5?shot='${shotnumber}';run=1;user='${USER}';database='${DATABASE}';version='${IMAS_MAJOR_VERSION}
+    idscp -s ${uri_src_mdsplus} -d ${uri_dest_hdf5}
     uri_source='imas:mdsplus?shot=116000;run=1;user=public;database=ITER_MD;version=3'
-    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} wall
+    [ $IMAS_MAJOR_VERSION = 4 ] && {
+      idscp -s ${uri_source} -d ${uri_dest_hdf5} --dd-update wall
+    } || {
+      idscp --set-dataset-version -s ${uri_source} -d ${uri_dest_hdf5} --dd-update wall
+    }
 # For full-field cases, use:
     uri_source='imas:mdsplus?shot=131035;run=124;user=bonninx;database=iter;version=3'
 # For half-field cases, use:
 #   uri_source='imas:mdsplus?shot=131035;run=125;user=bonninx;database=iter;version=3'
 # For third-field cases, use:
 #   uri_source='imas:mdsplus?shot=131035;run=126;user=bonninx;database=iter;version=3'
-    idscp --setDatasetVersion -s ${uri_source} -d ${uri_destination} equilibrium
+    [ $IMAS_MAJOR_VERSION = 4 ] && {
+      idscp -s ${uri_source} -d ${uri_dest_hdf5} --dd-update equilibrium
+    } || {
+      idscp --set-dataset-version -s ${uri_source} -d ${uri_dest_hdf5} --dd-update equilibrium
+    }
+    create_db_entry -b HDF5 -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1 -v ${IMAS_MAJOR_VERSION}
   } || {
     idscp --setDatasetVersion -si 116000 -ri 1 -so ${shotnumber} -ro 1 -u public -d ITER_MD -do ${DATABASE} wall
 # For full-field cases, use:
@@ -169,9 +181,11 @@ b2run b2mn > run.log
 #   idscp --setDatasetVersion -si 131035 -ri 125 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
 # For third-field cases, use:
 #   idscp --setDatasetVersion -si 131035 -ri 126 -so ${shotnumber} -ro 1 -u bonninx -d iter -do ${DATABASE} equilibrium
+    create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1 -v ${IMAS_MAJOR_VERSION}
   }
+} || {
+  create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1 -v ${IMAS_MAJOR_VERSION}
 }
-create_db_entry -u ${USER} -d ${DATABASE} -s ${shotnumber} -r 1
 yaml=ids_${shotnumber}0001.yaml
 typeset -i reference_line
 reference_line=`grep -n "reference_name" ${yaml} | cut -d ':' -f 1`
