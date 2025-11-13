@@ -49,7 +49,7 @@ else
   exit 2
 fi
 
-if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+if [ "$PLOT_TRC_FMT" == "ps" ] || [ "$PLOT_TRC_FMT" == "pdf" ]
 then
   OUTPUT_FMT=$PLOT_TRC_FMT
   echo "Output will be written to Series_name.$OUTPUT_FMT"
@@ -144,7 +144,7 @@ else
   ls -l "$PEXEC" "$PCMD" "$WRK_DIR/"
 fi
 
-if [ "$OUTPUT_FMT" = "pdf" ]
+if [ "$OUTPUT_FMT" == "pdf" ]
 then
   if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
   then
@@ -156,10 +156,10 @@ then
   fi
 fi
 
-if [ "$OUTPUT_FMT" = "ps" ]
+if [ "$OUTPUT_FMT" == "ps" ]
 then
-  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
-  if [ $count != 0 ]
+  count=`ls -l $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ "$count" -ne 0 ]
   then
     echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
     echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"
