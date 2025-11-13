@@ -127,7 +127,7 @@ then
   echo "rm -rf $WRK_DIR/*.i"
   rm -rf "$WRK_DIR"/*.i
   count=`ls -1 $WRK_DIR/user.trc* 2>/dev/null | wc -l`
-  if [ $count > 1 ]
+  if [ $count -gt 1 ]
   then
     USER_TMP=`ls -1 $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
     echo "temproary $LL_USER file = $USER_TMP spotted"
