@@ -34,7 +34,7 @@ LL_USER='user.trc'
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}
 BASERUN_DIR=../baserun
-if [ $CURRENT_DIR = $B2EXE_DIR ]
+if [ $CURRENT_DIR == $B2EXE_DIR ]
 then
   BASERUN_DIR=../$BASERUN_DIR
 fi
@@ -123,15 +123,15 @@ then
 #  sed -i 's/[0-9]+/E+/g' $WRK_DIR/*
   echo "rm -rf $WRK_DIR/*.i"
   rm -rf "$WRK_DIR"/*.i
-  count=`ls -1 $WRK_DIR/user.trc* 2>/dev/null | wc -l`
-  if [ $count > 1 ]
+  count=`ls -l $WRK_DIR/user.trc* 2>/dev/null | wc -l`
+  if [ "$count" -gt 1 ]
   then
-    USER_TMP=`ls -1 $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
+    USER_TMP=`ls -l $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
     echo "temproary user.trc file = $USER_TMP spotted"
     echo "cp -rf $USER_TMP $WRK_DIR/$LL_USER"
     cp -rf  "$USER_TMP" "$WRK_DIR"/"$LL_USER"
   fi
-  if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
+  if [ "$CURRENT_DIR" == "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
       if [ -f "$f" ]
