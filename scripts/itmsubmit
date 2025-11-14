@@ -7,7 +7,7 @@ set NODES=1
 set PROCS=1
 set THREADS=1
 set hours=48
-set mem=8GB
+set mem=16GB
 set chain="unset"
 set job_count=0
 echo Your email is $EMAIL
@@ -33,7 +33,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the Marconi Gateway cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the EFGW machine.
 
 Usage:
 

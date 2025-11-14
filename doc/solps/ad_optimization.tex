@@ -13,9 +13,9 @@ The user must be aware that the AD differentiated code, available in {\tt B2.5/s
 
 An additional caveat must be known by the user: this manual version and the procedure described here are valid and have been proven to work with specific {\tt Tapenade} and \SOLPSITER versions. New {\tt Tapenade} releases and \SOLPSITER development can make some of the procedure below obsolete or require modifications. Therefore, here are listed the git hash of both \SOLPSITER and {\tt B2.5}, and the {\tt Tapenade} version that have been verified to work with this manual version:
 \begin{description}
-  \item{\SOLPSITER} \href{https://git.iter.org/projects/BND/repos/solps-iter/commits/9bc274af132fb79d2e2ed9d4735b487d9383a189}{9bc274af132}
-  \item{B2.5} \href{https://git.iter.org/projects/BND/repos/b2.5/commits/0989b83a16677b22a8fada69013397a1e8727cbe}{0989b83a166}
-  \item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/29c2bf30f4de2b5f0f624d3f36026a77e167068a}{3.16-develop-29c2bf30}
+  \item{\SOLPSITER} \href{https://git.iter.org/projects/BND/repos/solps-iter/commits/729aa9c6464006dbdabf95d3e292a73328fac3c4}{729aa9c6464}
+  \item{B2.5} \href{https://git.iter.org/projects/BND/repos/b2.5/commits/d8281a36fb37b2b1bd4b8fa63f2d71ed6e52745f}{d8281a36fb3}
+  \item{Tapenade} \href{https://gitlab.inria.fr/tapenade/tapenade/-/commit/54b6a9c9c1ae2e4dbe0b1fcb61d0105271589b8a}{3.16-v2-911-g54b6a9c9c}
 \end{description}
 
 \subsubsection{Acknowledgments}
@@ -587,6 +587,11 @@ $ setenv TAO_OPT "list-of-valid-options"
   \item Scaling of the problem is quite important! Therefore, aim at parameters which are in a similar range of order of magnitude, using {\tt PAR\_RESCALE};
   \item {\tt PETSc/TAO} requires by default the strong Wolfe conditions for the line search, which may be too strict or be affected by gradient discontinuities. It may be better to require the Armijo condition only with setting the option {\tt setenv TAO\_OPT "-tao\_ls\_type armijo"};
   \item the BFGS method with {\tt PETSc/TAO} seems so far the most performing option, with other {\tt PETSc/TAO} methods more demanding.
+  \item Running simulations with drifts sometimes introduces instabilities. Running an optimization with drifts makes things even more unstable, as sharp changes in the optimization parameters $\theta$, e.g. $D_\perp$, may provoke or enhance these instabilities. To partially alleviate these issues, two strategies have been implemented:
+  \begin{itemize}
+  	\item Resetting the drifts. With this strategy, the drift strength is reduced to a certain value (defined by the switch {\tt b2optim\_reset\_drift}) at each function or gradient evaluation. The strength is then gradually increased back to 100\% in {\tt b2mndr\_ntim/b2optim\_reset\_drift\_iter} iterations, with {\tt b2optim\_reset\_drift\_iter} being an integer switch. This strategy is similar to the multiplier strategy to ramp-up drifts, which uses switches like {\tt fac\_exb\_inc}. Note that BY DEFAULT this strategy is active, with {\tt b2optim\_reset\_drift=0.4} and {\tt b2optim\_reset\_drift\_iter=2}, which means drifts are reduced to 40\% and are ramped up to 100\% in half of the desired total {\tt B2.5} iterations {\tt b2mndr\_ntim}.
+  	\item Gradual parameter change. With this strategy, instead of immediately employing the new parameter set $\theta$ in the next gradient or function evaluation, the parameters are gradually changed from their values at the previous optimization iteration $\theta^k$ to their new value $\theta^{k+1}$. The user can control how many iterations are needed for this change with the switch {\tt b2optim\_reset\_param\_iter}, which works in the same way as {\tt b2optim\_reset\_drift\_iter}: the parameter set $\theta$ will change from $\theta^k$ to $\theta^{k+1}$ in {\tt b2mndr\_ntim/b2optim\_reset\_param\_iter} iterations. By default this strategy is NOT active, i.e. {\tt b2optim\_reset\_param\_iter=1}
+  \end{itemize} 
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

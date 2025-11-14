@@ -56,6 +56,15 @@ setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
 module load Java/1.8.0_192
 # setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
 # setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
+if ($?PETSC_DIR) then
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
+  setenv PETSC_VERSION_MAJOR `grep -i PETSC_VERSION_MAJOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION_MINOR `grep -i PETSC_VERSION_MINOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
+  setenv PETSC_VERSION $PETSC_VERSION_MAJOR$PETSC_VERSION_MINOR
+  unsetenv PETSC_VERSION_MAJOR PETSC_VERSION_MINOR
+  if ($PETSC_VERSION > 316) then
+    setenv TAO_NEW yes
+  endif
+endif
 alias set_d 'source $SOLPSTOP/scripts/diff_d'
 alias set_b 'source $SOLPSTOP/scripts/diff_b'

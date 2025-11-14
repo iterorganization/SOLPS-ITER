@@ -733,7 +733,9 @@ The cases stored for retrieval include:
   \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
   \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code
-  \item[COMPASS\_sensitivity] Demo cases for the optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above
+  \item[COMPASS\_sensitivity] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with Advanced Fluid Neutrals and k-model
+  \item[COMPASS\_sensitivity\_D+T] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with coareser mesh, deuterium+tritium species, drifts, Advanced Fluid Neutrals, Zhdanov closure and k-model
+  \item[COMPASS\_optimization] Demo cases for the optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection and Be sputtering
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
@@ -1360,13 +1362,14 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
   \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
+  \item[efgwmake]\index{efgwmake} Command file to launch a batch compilation script on the EFGW machine. A {\tt -o} option allows to pass Makefile options. Other options are as per the submission scripts. The list of objects to be compiled should form the end of the list of arguments.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is run again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
   \item[itermake]\index{itermake} Command file to launch a batch compilation script on the ITER SDCC cluster. A {\tt -o} option allows to pass Makefile options. Other options are as per the submission scripts. The list of objects to be compiled should form the end of the list of arguments.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER SDCC cluster. See Section~\ref{b2run} for details.
-  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section~\ref{b2run} for details.
+  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the EFGW machine. See Section~\ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section~\ref{b2run} for details.
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
@@ -1688,7 +1691,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[plot\_trg]\index{plot\_trg} Produces {\tt trg.pdf} file (or {\tt trg.pdf} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt ld\_tg\_*.dat} and {\tt fp\_tg\_*.dat} (potentially other similarly formatted files as well) according to {\tt plot\_trg.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Also produces {\tt trg\_sum.dat} file containing some integral, peak and average quantities at the targets. Read the script header for further details.
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
   \item[rlndr]\index{rlndr} Replaces a link address by another.
-  \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space.
+  \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space. The script can also be used to setup a workspace on scratch, copy results back and clean-up the workspace.
   \item[STIME]\index{STIME} Auxiliary script to handle {\tt b2mndr\_stime} with {\tt saveb2} workflow, run {\tt STIME -h} for details.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
  \end{description}
@@ -1699,6 +1702,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[collect\_nodiff\_d\_multi.sh]\index{collect\_nodiff\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent vector mode.
   \item[collect\_nodiff\_d\_d\_multi.sh]\index{collect\_nodiff\_d\_d\_multi.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for tangent over tangent vector mode.
   \item[collect\_nodiff\_p.sh]\index{collect\_nodiff\_p.sh} Executes similar commands as {\tt collect\_nodiff\_d.sh}, but for AD pre-processing mode.
+  \item[copy\_nodiff\_files.sh]\index{copy\_nodiff\_files.sh} A unified script called by {\tt collect\_nodiff\_d\_multi.sh}, {\tt collect\_nodiff\_b.sh} and {\tt collect\_nodiff\_d\_d\_multi.sh}, to grab files that have not been diff'ed.
   \item[collect\_tapenade\_files.sh]\index{collect\_tapenade\_files.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated.
   \item[collect\_tapenade\_files\_tgt.sh]\index{collect\_tapenade\_files\_tgt.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over tangent vector mode.
   \item[collect\_tapenade\_files\_adj.sh]\index{collect\_tapenade\_files\_adj.sh} Provides {\tt Tapenade} with the name and path of the source files to be differentiated when doing tangent over adjoint mode.
@@ -1715,6 +1719,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[postprocess\_tapenade\_tgt\_multi.sh]\index{postprocess\_tapenade\_tgt\_multi.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector mode.
   \item[postprocess\_tapenade\_hess\_tgt.sh]\index{postprocess\_tapenade\_hess\_tgt.sh} Applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent over tangent vector mode.
   \item[remove\_initializations\_d.sh]\index{remove\_initializations\_d.sh} In {\tt b2mod\_driver\_diff.F90}, looks for which plasma state variables are read in {\tt read\_plasma\_state\_diff.F} and makes sure their initialization in {\tt b2mod\_driver\_diff.F90} is removed.
+  \item[clean\_tapenade\_log.sh]\index{clean\_tapenade\_log.sh} Cleans some of the harmless output messages of {\tt Tapenade} from the log file of the differentiation.
+  \item[postprocess\_tapenade\_tgt\_debug.sh]\index{postprocess\_tapenade\_tgt\_debug.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent DEBUG mode. EXPERIMENTAL!
+  \item[postprocess\_tapenade\_tgt\_multi\_debug.sh]\index{postprocess\_tapenade\_tgt\_multi\_debug.sh} Script that automatically applies corrections to the diff'ed files obtained from {\tt Tapenade} in tangent vector DEBUG mode. EXPERIMENTAL!
   \item[resall\_D\_diff]\index{resall\_D\_diff} Plots the evolution of the residuals of all the diff'ed equations for D only cases (in tangent mode only).
   \item[resall\_D\_diff\_diff]\index{resall\_D\_diff\_diff} Plots the evolution of the residuals of all the second order diff'ed equations for D only cases (in tangent over tangent mode only).
   \item[resco\_diff]\index{resco\_diff} Plots the evolution of the residuals of the diff'ed continuity equation (in tangent mode only).
@@ -1775,6 +1782,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
   \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
+  \item[SLURM.efgw\_compile]\index{SLURM.efgw\_compile} Template file for batch compilation on the EFGW machine.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
@@ -1996,7 +2004,7 @@ are provided:
   \item{darwinsubmit}\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
-  \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
+  \item{itmsubmit}\index{itmsubmit} for submissions on the EFGW machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
@@ -7745,9 +7753,9 @@ The version of the equations shown in this Appendix represents the best availabl
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
-\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}\index{e2d}
 
-The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $B_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $B_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
+The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $B_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $B_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This forms a right-handed poloidal coordinate system $(x, y, z)$ equivalent to $(\theta, \rho, \phi)$. In terms of the conventions laid out in \cite{COCOS}, the magnetic field is calculated from the provided magnetic equilibrium solution according to a {\em COCOS} index of {\bf 4}. To ensure the correct orientation of $B_x$ and $B_z$, either provide the magnetic equilibrium solution converted to {\em COCOS} index of {\bf 4}, or manually check and invert the orientations as suggested by the hints provided in {\tt b2ag.log}. Equilibrium file format conversion tools such as {\tt e2d} do not apply any {\em COCOS} convention conversion unless explicitly specified.
 
 Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |B_x|/B_x$.
 

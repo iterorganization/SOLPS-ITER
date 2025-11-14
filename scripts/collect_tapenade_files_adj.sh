@@ -1,8 +1,8 @@
 string=''
 
-dir="$SOLPSTOP/modules/B2.5/builds/standalone.$HOST_NAME.$COMPILER.tgt"
+dir="$SOLPSTOP/modules/B2.5/builds/standalone.$HOST_NAME.$COMPILER.adj"
 
-cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_exclude_tgt.txt > excluded.txt
+cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_exclude_adj.txt > excluded.txt
 
 find $dir -name \*.f -exec basename \{} .f \;| ( while read filename 
 do
@@ -35,9 +35,10 @@ done
 
 echo $string >> testfile)
 
-echo "$SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_tgt.f" >> testfile
+echo "$SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_adj.f" >> testfile
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/dim.f" >> testfile
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/solve_covariance.f" >> testfile
+echo "$SOLPSTOP/modules/B2.5/src/differentiation/b2uxus_b.f" >> testfile
 echo "$SOLPSTOP/modules/B2.5/src/differentiation/invert_matrix.f" >> testfile
 
 cat testfile

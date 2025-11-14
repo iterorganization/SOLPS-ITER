@@ -54,9 +54,9 @@ wlld_name_pkv  = ['q total [MW/m^2]', 'q plasma [MW/m^2]', 'q neutral [MW/m^2]',
 fptg_quan_int  = ['H_flux_ion',       'H_flux_atm',        'H2_flux_mol',       'D_flux_ion',       'D_flux_atm',        'D2_flux_mol',       'T_flux_ion',       'T_flux_atm',        'T2_flux_mol',       'He_ion_flux',       'Be_ion_flux',       'Li_ion_flux',       'C_ion_flux',       'N_ion_flux',       'Ne_ion_flux',       'Ar_ion_flux',       'W_ion_flux' ]
 fptg_name_int  = ['H ion flux [1/s]', 'H atom flux [1/s]', 'H2 mol flux [1/s]', 'D ion flux [1/s]', 'D atom flux [1/s]', 'D2 mol flux [1/s]', 'T ion flux [1/s]', 'T atom flux [1/s]', 'T2 mol flux [1/s]', 'He ion flux [1/s]', 'Be ion flux [1/s]', 'Li ion flux [1/s]', 'C ion flux [1/s]', 'N ion flux [1/s]', 'Ne ion flux [1/s]', 'Ar ion flux [1/s]', 'W ion flux [1/s]' ]
 fptg_quan_avg  = ['H_pres_atm',           'H2_pres_mol',               'D_pres_atm',           'D2_pres_mol',               'T_pres_atm',           'T2_pres_mol' ]
-fptg_name_avg  = ['H atom pressure [Pa]', 'H2 mol pressure [Pa]', 'D atom pressure [Pa]', 'D2 mol pressure [Pa]', 'T atom pressure [Pa]', 'T2 mol pressure [Pa]' ]
+fptg_name_avg  = ['H atom pressure [Pa]', 'H2 molecule pressure [Pa]', 'D atom pressure [Pa]', 'D2 molecule pressure [Pa]', 'T atom pressure [Pa]', 'T2 molecule pressure [Pa]' ]
 fptg_quan_pkv  = ['H_pres_atm',           'H2_pres_mol',               'D_pres_atm',           'D2_pres_mol',               'T_pres_atm',           'T2_pres_mol' ]
-fptg_name_pkv  = ['H atom pressure [Pa]', 'H2 mol pressure [Pa]', 'D atom pressure [Pa]', 'D2 mol pressure [Pa]', 'T atom pressure [Pa]', 'T2 mol pressure [Pa]' ]
+fptg_name_pkv  = ['H atom pressure [Pa]', 'H2 molecule pressure [Pa]', 'D atom pressure [Pa]', 'D2 molecule pressure [Pa]', 'T atom pressure [Pa]', 'T2 molecule pressure [Pa]' ]
 
 "Length of string in 10 symbols per unit cannot be lower than 4"
 str_len = 7
@@ -127,10 +127,7 @@ def READ_FLE(in_file):
         file_read = True
 
     "Get rid of potential NaN problems when plotting"
-    testnan = np.isnan(data)
-    if ( np.any(testnan) == True ):
-        logging.error('NaN values encountered and will be automatically replaced')
-        data = np.nan_to_num(data)
+    np.nan_to_num(data)
 
     "Check if header size is consistent with data size"
     if ( len(header) != len(data[:,0]) ):
@@ -187,11 +184,7 @@ def SET_GEOM(data_head,data):
     dlen = 0.
     dsurf = 0.
 
-    print('data_head',data_head)
-    print('data',data)
-
     found, x_ind = choose_raw(data_head,'x')
-    print('x_ind =',x_ind)
     if (found == False):
         logging.critical('data for coordinate along the target (x) not found, cannot setup geometry')
         return found, stp_ind, dlen, dsurf;
@@ -541,7 +534,6 @@ def main():
         logging.info('working on %s',div_names[k])
 
         file_read, wlld_head, wlld_data = READ_FLE(wlld_names[k])
-        print('data_wlld',wlld_data)
         if (file_read == True):
             geom_set, stp_ind, dlen, dsurf = SET_GEOM(wlld_head,wlld_data)
             if (geom_set == True):
