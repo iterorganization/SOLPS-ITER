@@ -1,16 +1,11 @@
 #! /usr/bin/env tcsh
 
-set os=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
 set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
-set hours=2
-set mem=4GB
-if ($os == "CentOS") then
-  set part="altair"
-else
-  set part="sirius"
-endif
+set hours=4
+set mem=10GB
+set part="gw"
 set objects=""
 set options=""
 set chain="unset"
@@ -25,7 +20,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the ITER SDCC cluster.
+This script is used to submit SOLPS-ITER compilation jobs to the SLURM batch system on the EFGW machine.
 
 Usage:
 
@@ -105,7 +100,7 @@ EOF
 # logic to determine the partition on the ITER SDCC cluster
 set nodename=`hostname`
 set job_prefix="SLURM"
-set QSUB="$SOLPSTOP/scripts/$job_prefix.iter_compile"
+set QSUB="$SOLPSTOP/scripts/$job_prefix.efgw_compile"
 
 echo Using submission file template $QSUB
 
