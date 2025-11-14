@@ -421,9 +421,9 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER, IPP and MPCDF
-  \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
-  \item[g95] The g95 compiler, in use on the Marconi Gateway
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER
+  \item[gfortran] The gfortran compiler, in use at IPP, EFGW (EUROfusion Gateway), FZ-J{\"u}lich, and KU-Leuven
+  \item[g95] The g95 compiler
   \item[nag\_f90] The NAG Fortran compiler
 \end{description}
 
@@ -614,6 +614,8 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[VERSION] Updates the GIT version number included in the source code and output
   \item[clean] Alias to {\bf clean\_solps}
   \item[solps\_nox] Alias to {\bf nox}
+  \item[help] Lists the available targets that can be built
+  \item[echo] Provides debugging information about internal {\tt Makefile} variables
 \end{description}
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
