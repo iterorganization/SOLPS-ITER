@@ -1122,3 +1122,4 @@ help:
 echo:
 	@echo SOLPS_CPP = ${SOLPS_CPP}
 	@echo MAKES = ${MAKES}
+	@echo MAKETAGS = ${MAKETAGS}
