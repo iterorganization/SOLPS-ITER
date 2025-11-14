@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem=#MEM#
+#SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
