@@ -28,11 +28,9 @@ case "FZJ":
 case "GA":
 case "IFERC":
 case "IN-DA":
-case "IPP":
 case "IPP-HGW":
 case "IPR":
 case "ITER":
-case "ITM":
 case "JET":
 case "KEIO":
 case "KSTAR":
@@ -46,7 +44,9 @@ case "SWIP":
   breaksw
 case "CONTAINER":
 case "DARWIN":
+case "IPP":
 case "IPPCR":
+case "ITM":
 case "JFRS":
 case "LINUX":
 case "MARCONI":
