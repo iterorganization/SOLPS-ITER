@@ -11,6 +11,7 @@
 [ -s b2movies.nc ] && cp b2movies.nc b2movies.nc.i || echo > /dev/null
 [ -s eirenemovies.nc ] && cp eirenemovies.nc eirenemovies.nc.i || echo > /dev/null
 [ -s b2tallies.nc ] && cp b2tallies.nc b2tallies.nc.i || echo > /dev/null
+[ -s b2favere ] && cp b2favere b2faveri || echo > /dev/null
 [ -z "$STAND_ALONE" ] && {
   [ $COMPILER != "HP" ] && {
     [ -s fort.10 ] && cp fort.10 fort.10.i || echo > /dev/null
@@ -21,7 +22,6 @@
     [ -s fort.15 ] && cp fort.15 fort.15.i || echo > /dev/null
     [ -s fort.44 ] && cp fort.44 fort.44.i || echo > /dev/null
     [ -s fort.46 ] && cp fort.46 fort.46.i || echo > /dev/null
-    [ -s b2favere ] && cp b2favere b2faveri || echo > /dev/null
   } || {
     [ -s ftn10 ] && cp ftn10 ftn10.i || echo > /dev/null
     [ -s ftn11 ] && cp ftn11 ftn11.i || echo > /dev/null
