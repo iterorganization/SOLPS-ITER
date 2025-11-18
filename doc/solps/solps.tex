@@ -365,7 +365,7 @@ Those libraries which are not available in a cluster must be necessarily locally
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
-it is possible to automatically obtain the Blas/Lapack, NetCDF and NCARG libraries, which might be not already available in some HPC clusters, using a local Conda installation, and the JSON-Fortran, MSCL, GKS, and GR libraries, which are usually not already available in most of the HPC clusters, building these from source in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Note the NCARG library can be obtained only for cluster installations using a {\tt gfortran} compiler. The compiling flags needed to correctly link these libraries are also automatically set.
+it is possible to automatically obtain several libraries which might be not already available in some HPC clusters. In particular, the Blas/Lapack, NetCDF and NCARG libraries (using a local Conda installation based on {\tt miniforge}), and the Gnuplot, JSON-Fortran, MSCL, GKS, and GR libraries (which are locally built from source). Both the local Conda installation and the locally compiled libraries will reside in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Note the NCARG library can be obtained only for cluster installations using a {\tt gfortran} compiler. The paths and the compiling flags needed to correctly find and link these libraries are also automatically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.

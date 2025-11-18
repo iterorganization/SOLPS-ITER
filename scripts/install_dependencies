@@ -113,9 +113,8 @@ if ("$OSTYPE" == "linux") then
         echo "and relaunch the install_dependencies script."
         exit 1
       else
-        echo
-        echo "You need to install miniforge in order to continue using this script!"
-        exit 1
+        set MISSING_DEPENDENCY = 1
+        sleep 1
       endif
     endif
 
@@ -145,9 +144,8 @@ if ("$OSTYPE" == "linux") then
         echo "and relaunch the install_dependencies script."
         exit 1
       else
-        echo
-        echo "You need to install miniforge in order to continue using this script!"
-        exit 1
+        set MISSING_DEPENDENCY = 1
+        sleep 1
       endif
     endif
 
@@ -656,33 +654,87 @@ endif
 
 # Install Gnuplot library
 
-if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+if ("$OSTYPE" == "linux") then
 
-  set pkg_check = `dpkg -l | grep -w gnuplot`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    echo
-    echo Gnuplot library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set GNUPLOT_INSTALL = $<
+    set pkg_check = `dpkg -l | grep -w gnuplot`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-    if ( "$GNUPLOT_INSTALL" == "" ) then
-      set GNUPLOT_INSTALL = "y"
-    endif
+      echo
+      echo Gnuplot library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set GNUPLOT_INSTALL = $<
 
+      if ( "$GNUPLOT_INSTALL" == "" ) then
+        set GNUPLOT_INSTALL = "y"
+      endif
+
+      if ( "$GNUPLOT_INSTALL" == "y" ) then 
+        sudo apt-get install -y gnuplot
+        echo Gnuplot library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
+<<<<<<< HEAD
     if ( "$GNUPLOT_INSTALL" == "y" ) then 
       sudo apt-get install -y gnuplot
       echo Gnuplot library successfully installed.
       sleep 1
+=======
+>>>>>>> 7b9454fc (Added possibility to locally build and install gnuplot from source, if missing in any HPC clusters)
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo Gnuplot library already locally installed.
       sleep 1
+
     endif
 
-  else
-    echo
-    echo Gnuplot library already locally installed.
-    sleep 1
+  else   # HPC cluster
+
+    if ( `which gnuplot >& /dev/null; echo $status` != 0  && ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3/bin/gnuplot" ) then   # Check if the compiled library already exists locally
+
+      echo
+      echo Gnuplot library not locally installed.
+      echo -n "Do you wish to install it? It will be cloned and locally compiled in SOLPSLIB. (y/n) [y] "
+      set GNUPLOT_INSTALL = $<
+
+      if ( "$GNUPLOT_INSTALL" == "" ) then
+          set GNUPLOT_INSTALL = "y"
+      endif
+
+      if ( "$GNUPLOT_INSTALL" == "y" ) then
+        define_compilers
+        set RESTART_SOLPS = 1
+        cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+        if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3" ) then
+          rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3"
+        endif
+        wget https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.3/gnuplot-6.0.3-c23.tar.gz
+        tar xvf gnuplot-6.0.3-c23.tar.gz
+        cd "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3"
+        ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3 --without-x --without-readline --disable-wxwidgets --without-lua --with-qt=no --without-latex
+        make
+        make install
+        rm $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3-c23.tar.gz
+        echo setenv PATH \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3/bin:\$\{PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        cd $SOLPSTOP
+        echo Gnuplot library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
+    else
+      echo
+      echo Gnuplot library already locally installed.
+      sleep 1
+
+    endif
 
   endif
 
