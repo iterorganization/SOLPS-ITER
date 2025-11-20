@@ -679,13 +679,6 @@ if ("$OSTYPE" == "linux") then
         sleep 1
       endif
 
-<<<<<<< HEAD
-    if ( "$GNUPLOT_INSTALL" == "y" ) then 
-      sudo apt-get install -y gnuplot
-      echo Gnuplot library successfully installed.
-      sleep 1
-=======
->>>>>>> 7b9454fc (Added possibility to locally build and install gnuplot from source, if missing in any HPC clusters)
     else
       echo
       echo Gnuplot library already locally installed.
