@@ -14,59 +14,12 @@ make MAKE_OPTIONS=-j8 b25_nox_openmp b25_nox
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh
 
-# For now, comment out until OpenMP is included again
+export DEVICE=compass
+${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh COMPASS_16515_1150ms_D_drift_AFN run_AFN_drift 100 6 || exit 1
+
 #export DEVICE=upgrade
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 1
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 2
 
 #export DEVICE=iter
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 6 || exit 2
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 7 || exit 3
-
-## new test for WG version based on COMPASS case
-
-cd ${SOLPSTOP}/runs/examples
-
-make COMPASS_16515_1150ms_D_drift_AFN
-
-cd ${SOLPSTOP}/runs/examples/COMPASS_16515_1150ms_D_drift_AFN
-
-
-# setup first directory (no openmp)
-mkdir run_AFN_test_no_openmp
-cd run_AFN_test_no_openmp
-cp ../run_AFN_drift/b2fstati .
-cp ../run_AFN_drift/b2mn.dat .
-cp ../run_AFN_drift/b2.*.parameters .
-cp ../run_AFN_drift/b2time.nc.i b2time.nc
-cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
-cd .. 
-
-# setup second directory (openmp)
-mkdir run_AFN_test_openmp
-cd run_AFN_test_openmp
-cp ../run_AFN_drift/b2fstati .
-cp ../run_AFN_drift/b2mn.dat .
-cp ../run_AFN_drift/b2.*.parameters .
-cp ../run_AFN_drift/b2time.nc.i b2time.nc
-cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
-cd ..
-
-correct_baserun_timestamps
-
-# run case without openmp
-cd run_AFN_test_no_openmp
-touch b2fstati
-setup_baserun_B25_links
-echo "'b2mndr_ntim' '10'" >> b2mn.dat
-b2run -s b2mn
-cd ..
-
-# run case with openmp (4 threads)
-cd run_AFN_test_openmp
-touch b2fstati
-setup_baserun_B25_links
-echo "'b2mndr_ntim' '10'" >> b2mn.dat
-b2run -s -t 4 b2mn
-
-# compare results
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_no_openmp/ ./ || exit 2
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 6 || exit 3
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 7 || exit 4
