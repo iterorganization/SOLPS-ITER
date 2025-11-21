@@ -37,7 +37,7 @@ LN_FILES='ld_tg_i.dat ld_tg_o.dat ld_tg_iu.dat ld_tg_ou.dat fp_tg_i.dat fp_tg_o.
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}
 BASERUN_DIR=../baserun
-if [ $CURRENT_DIR = $B2EXE_DIR ]
+if [ $CURRENT_DIR == $B2EXE_DIR ]
 then
   BASERUN_DIR=../$BASERUN_DIR
 fi
@@ -64,7 +64,7 @@ else
   exit 2
 fi
 
-if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+if [ "$PLOT_TRC_FMT" == "ps" ] || [ "$PLOT_TRC_FMT" == "pdf" ]
 then
   OUTPUT_FMT=$PLOT_TRC_FMT
   echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
@@ -133,11 +133,11 @@ echo "mkdir $WRK_DIR"
 mkdir "$WRK_DIR"
 
 count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
-if [ $count = 0 ]
+if [ "$count" -eq 0 ]
 then
   STATE_FILE=b2fstati
   count=`ls -l $STATE_FILE 2>/dev/null | wc -l`
-  if [ $count = 0 ]
+  if [ "$count" -eq 0 ]
   then
     STATE_FILE=$REF_FILE
   fi
@@ -145,7 +145,7 @@ fi
 echo "$STATE_FILE defined as STATE_FILE"
 
 count=`ls -l $LN_FILES 2>/dev/null | wc -l`
-if [ $count != 0 ] && [ $REF_FILE -nt $STATE_FILE ]
+if [ "$count" -ne 0 ] && [ "$REF_FILE" -nt "$STATE_FILE" ]
 then
   for f in $LN_FILES; do {
     [ -f "$f" ] && echo "cp $f $WRK_DIR/$f" && cp "$f" "$WRK_DIR/$f"
@@ -155,7 +155,7 @@ else
   echo "echo '100 wlld' | b2plot"
   echo "100 wlld" | b2plot >/dev/null 2>&1
   count=`ls -l $B2PL_DIR/$LN_FILES 2>/dev/null | wc -l`
-  if [ $count != 0 ]
+  if [ "$count" -ne 0 ]
   then
     for f in $LN_FILES; do {
       [ -f "$B2PL_DIR/$f" ] && echo "cp $B2PL_DIR/$f $f && cp $f $WRK_DIR/$f" && cp "$B2PL_DIR/$f" "$f" && cp "$f" "$WRK_DIR/$f"
@@ -165,12 +165,13 @@ else
   fi
 fi
 
-if [ -d "$WRK_DIR" ]
-then
-  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
-  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
-  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
-fi
+# commented out since in principle file format should not brake anymore  
+#if [ -d "$WRK_DIR" ]
+#then
+#  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+#  sed -i.tmp 's/[0-9]-/E-/g' $WRK_DIR/*
+#  sed -i.tmp 's/[0-9]+/E+/g' $WRK_DIR/*
+#fi
 
 if [ -d "$WRK_DIR" ] && [ -f "$SEXEC" ] && [ -f "$PEXEC" ] && [ -f "$PCMD" ]
 then
@@ -194,7 +195,7 @@ else
   ls -l "$SEXEC" "$PEXEC" "$PCMD" "$WRK_DIR"
 fi
 
-if [ "$OUTPUT_FMT" = "pdf" ]
+if [ "$OUTPUT_FMT" == "pdf" ]
 then
   if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
   then
@@ -206,10 +207,10 @@ then
   fi
 fi
 
-if [ "$OUTPUT_FMT" = "ps" ]
+if [ "$OUTPUT_FMT" == "ps" ]
 then
-  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
-  if [ $count != 0 ]
+  count=`ls -l $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ "$count" -ne 0 ]
   then
     echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
     echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"

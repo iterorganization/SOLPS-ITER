@@ -337,7 +337,7 @@ Those libraries which are not available in a cluster must be necessarily locally
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
-it is possible to automatically build the MSCL, GKS, and GR libraries, which are usually not already available in many HPC clusters, in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. The compiling flags needed to correctly link these libraries are also automayically set.
+it is possible to automatically obtain several libraries which might be not already available in some HPC clusters. In particular, the Blas/Lapack, NetCDF and NCARG libraries (using a local Conda installation based on {\tt miniforge}), and the Gnuplot, JSON-Fortran, MSCL, GKS, and GR libraries (which are locally built from source). Both the local Conda installation and the locally compiled libraries will reside in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Note the NCARG library can be obtained only for cluster installations using a {\tt gfortran} compiler. The paths and the compiling flags needed to correctly find and link these libraries are also automatically set.
 \end{sloppypar}
 
 For fuller code capability, it is also recommended to load the IMAS (Integrated Modelling and Analysis Suite)\index{IMAS} environment, provided by the IO, whenever possible.
@@ -361,8 +361,9 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
 \begin{description}\index{Hostnames}
   \item[ASIPP] Academica Sinica, Hefei: *.ipp.cas.cn
   \item[CCFE] Culham Centre for Fusion Energy: *.ccfe.ac.uk
+  \item[DARWIN] Stand-in for a MacOS Darwin operating system on a stand-alone laptop
   \item[FZJ] Forschungszentrum J{\"u}lich: *.fz-juelich.de, *.ipp.kfa-juelich.de
-  \item[GA] General Atomics: *.fusion.gat.com
+  \item[GA] General Atomics: *.gat.com
   \item[IAEA] Internal Atomic Energy Agency: *.iaea.org
   \item[IFERC] IFERC supercomputer: *.iferc-csc.org
   \item[IN-DA] ITER-India: *.iter-india.org
@@ -371,16 +372,21 @@ The current list of recognized hostnames, deduced by means of the {\tt whereami}
   \item[IPPCR] Institute for Plasma Physics - Czech Republic: *.tok.ipp.cas.cz
   \item[IPR] Institute for Plasma Research, Gandhinagar: *.ipr.res.in
   \item[ITER] ITER domain: *.iter.org
-  \item[ITM, MARCONI, PITAGORA] ITM Gateway machine: *.eufus.eu, *.efda-itm.eu, *.marconi.cineca.it, *.pitagora.cineca.it
+  \item[ITM] ITM Gateway machine: *.efgw.local, *.eufus.eu, *.efda-itm.eu
   \item[JET] JET domain: *.jet.uk
   \item[KEIO] Keio University of Yokohama: *.keio.ac.jp
-  \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be
+  \item[LEUVEN] KU-Leuven: *.mech.kuleuven.be, *.hpc.kuleuven.be
+  \item[LINUX] Stand-in for a Linux-based operating system on a stand-alone laptop
+  \item[MARCONI] MARCONI supercomputer: *.marconi.cineca.it
   \item[MEPHI] Moscow Engineering Physics Institute: *.mephi.ru
   \item[MPCDF] Max Planck Computing and Data Facility: *.mpcdf.mpg.de
-  \item[NERSC] DOE supercomputer center: *.nersc.gov
+  \item[NERSC] DoE supercomputer center: *.nersc.gov
+  \item[NSCC] National Supercomputing Center: *.nscc-hf.cn
   \item[ORNL] Oak Ridge National Laboratory: *.ornl.gov
+  \item[PITAGORA] PITAGORA supercomputer: *.pitagora.cineca.it
   \item[PPPL] PPPL domain: *.pppl.gov
   \item[SPBSTU] St. Petersburg State Polytechnical University: *.spbstu.ru
+  \item[SURFSARA] Snellius National Supercomputer: *.snellius.surf.nl
   \item[SWIP] SouthWestern Institute of Plasma Physics, Chengdu: *.swip.ac.cn
   \item[UL] University of Ljubljana, *.uni-lj.si
   \item[WM] College of William and Mary: *.wm.edu
@@ -415,9 +421,9 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER, IPP and MPCDF
-  \item[gfortran] The gfortran compiler, in use at FZ-J{\"u}lich, KU-Leuven
-  \item[g95] The g95 compiler, in use on the Marconi Gateway
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER
+  \item[gfortran] The gfortran compiler, in use at IPP, EFGW (EUROfusion Gateway), FZ-J{\"u}lich, and KU-Leuven
+  \item[g95] The g95 compiler
   \item[nag\_f90] The NAG Fortran compiler
 \end{description}
 
@@ -608,6 +614,8 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[VERSION] Updates the GIT version number included in the source code and output
   \item[clean] Alias to {\bf clean\_solps}
   \item[solps\_nox] Alias to {\bf nox}
+  \item[help] Lists the available targets that can be built
+  \item[echo] Provides debugging information about internal {\tt Makefile} variables
 \end{description}
 
 Adding the {\tt \_mpi} suffix at the end of any build target will execute the command
@@ -636,45 +644,17 @@ fs sysname
 \end{verbatim}
 and copy the result in {\tt \$\{SOLPSTOP\}/modules/Sonnet-light/Makefile}.
 
-\subsection{MacOS support}
-\index{MacOS support}
+\subsection{Installation on local machines}
+\index{Installation on local machines}
 
-The code can be compiled also on devices with Apple MacOS systems (Darwin OS), using a {\tt gfortran} compiler. Assuming that this is the case of local devices (i.e.\ no HPC clusters), the user will need to install the libraries required for the code to be fully operational. For this, it is strongly recommended to install and use the package managers Homebrew (\href{https://brew.sh/}{https://brew.sh/}) and MacPorts (\href{https://ports.macports.org/}{https://ports.macports.org/}) to automatically download and build most of the necessary libraries. The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested, at least for ARM64 architecture (devices with Apple Silicon CPU). Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used. Sonnet-Light, at the moment, is not compatible yet with MacOS.
-
-First of all, the {\tt XQuartz} package, which includes applications necessary for the compilation, must be installed (\href{https://www.xquartz.org/}{https://www.xquartz.org/}).
-
-The following external libraries must be then installed using Homebrew:
-
-\begin{description}
-\item[GNU compiler collection] using the formula: {\tt brew install gcc}.
-\item[Cross-platform make] using the formula: {\tt brew install cmake}.
-\item[ctags] using the formula: {\tt brew install ctags}.
-\item[Doxygen] using the formula: {\tt brew install doxygen}.
-\item[Freetype] using the formula: {\tt brew install freetype}.
-\item[Ghostscript] using the formula: {\tt brew install ghostscript}.
-\item[GNU plotting library] using the formula: {\tt brew install gnuplot}.
-\item[HDF5 data management and storage library] using the formula: {\tt brew install hdf5}.
-\item[Blas/Lapack linear algebra library] using the formula: {\tt brew install lapack}.
-\item[PNG library] using the formula: {\tt brew install libpng}.
-\item[XPrint client library] using the formula: {\tt brew install libxp}.
-\item[NETCDF data access library] using the formula: {\tt brew install netcdf}.
-\item[NETCDF data access library (Fortran version)] using the formula: {\tt brew install netcdf-fortran}.
-\item[MPI parallel computing library] using the formula: {\tt brew install open-mpi}.
-\item[TeX typesetting system distrubtion TeXLive] using the formula: {\tt brew install texlive}.
-\end{description}
-
-Further external libraries must be instead installed using MacPorts:
-
-\begin{description}
-\item[Fortran JSON API] using the formula: {\tt sudo port install fortran-json}.
-\item[NCAR plotting library] using the formula: {\tt sudo port install ncarg}.
-\item[MOTIF graphical user interface] using the formula: {\tt sudo port install openmotif}.
-\end{description}
-
-The additional libraries MSCL, GKS, and GR can be automatically downloaded and built running the script
+The code can be compiled also on local machines for full offline usage, provided that the user attempting the installation has admin rights. Different Unix-based environments are supported, namely Linux (e.g.\ for Ubuntu computers) and Darwin (for Apple MacOS computers), and different CPU architectures (x86\_64 and arm64). The corresponding hostnames are {\bf LINUX} and {\bf DARWIN}, respectively, and the used compiler is {\tt gfortran}. The various setup and configuration files for both the main code and the submodules are already provided.\\
+On Linux systems a Conda-based package manager needs to be installed, which is automatically done while building the various libraries (see next paragraph). On Darwin systems, instead, as a prerequirement the user will need to install the {\tt XQuartz} package (\href{https://www.xquartz.org/}{https://www.xquartz.org/}), the {\tt Homebrew} package manager (\href{https://brew.sh/}{https://brew.sh/}) and the {\tt MacPorts} package manager (\href{https://ports.macports.org/}{https://ports.macports.org/}). A python installation also needs to be present.\\
+The various libraries required for the code to be fully operational need to be installed, before attempting to compile the code. All required libraries, for both Linux and Darwin systems, can be completely automatically downloaded and/or compiled by running the script
 \begin{verbatim}
 > install_dependencies
 \end{verbatim}
+which will guide the user through all the required installation steps. The provided setup and configuration files already recognize the paths to the compiled libraries as automatically provided by the above script.\\
+The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested. Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used.
 
 \section{Before every \SOLPSITER session}
 \index{Run set-up}\label{sec:session}
@@ -1356,18 +1336,20 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[csd3submit]\index{csd3submit} Command file to launch runs on the CCFE CSD3 cluster. See Section~\ref{b2run} for details.
   \item[cumulussubmit]\index{cumulussubmit} Command file to launch runs on the CCFE Cumulus cluster. See Section~\ref{b2run} for details.
   \item[darwinsubmit]\index{darwinsubmit} Command file to launch runs on MacOS devices (DarwinOS). See Section~\ref{b2run} for details.
+  \item[efgwmake]\index{efgwmake} Command file to launch a batch compilation script on the EFGW machine. A {\tt -o} option allows to pass Makefile options. Other options are as per the submission scripts. The list of objects to be compiled should form the end of the list of arguments.
   \item[eirobj]\index{eirobj} Alias to run {\tt Eirene} standalone with graphics.
   \item[eirobjx]\index{eirobjx} Alias to run {\tt Eirene} standalone without graphics.
   \item[ippsubmit]\index{ippsubmit} Command file to launch runs on the new (2019) IPP cluster. See Section~\ref{b2run} for details.
   \item[ITER\_divertor\_HTM]\index{ITER\_divertor\_HTM} Performs the thermal calculation of the divertor target monoblocks and reflector plate hypervapotron channels. It requires {\tt b2ymb.dat} and {\tt b2yrp.dat} to be present in the run directory. It runs \btwoplot to produce the heat load profile data of the targets and reflector plates. Then it runs {\tt b2ymb} to produce the input files (see \ref{sec:b2ymb}) for the {\tt FreeFem++}\cite{MR3043640} heat transfer model of the monoblock {\tt Monoblock\_HTM.edp} for the outer target. Afterwards, {\tt b2ymb} is run again to produce the input files to run {\tt Monoblock\_HTM.edp} for the inner target. When the inner target is completed, {\tt b2yrp} (see \ref{sec:b2yrp}) is run to produce the input files for the inner reflector plate heat transfer model {\tt ReflectorPlate\_HTM.edp}. Finally, {\tt b2yrp} is executed one last time to produce the input files for the thermal analysis of the outer reflector plate.
   \item[itermake]\index{itermake} Command file to launch a batch compilation script on the ITER SDCC cluster. A {\tt -o} option allows to pass Makefile options. Other options are as per the submission scripts. The list of objects to be compiled should form the end of the list of arguments.
   \item[itersubmit]\index{itersubmit} Command file to launch runs on the ITER SDCC cluster. See Section~\ref{b2run} for details.
-  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the Marconi ITM Gateway machine. See Section~\ref{b2run} for details.
+  \item[itmsubmit]\index{itmsubmit} Command file to launch runs on the EFGW machine. See Section~\ref{b2run} for details.
   \item[jetsubmit]\index{jetsubmit} Command file to launch runs on the JET Analysis Cluster (JAC). See Section~\ref{b2run} for details.
   \item[jfrssubmit]\index{jfrssubmit} Command file to launch runs on the JFRS IFERC-CSC supercomputer. See Section~\ref{b2run} for details.
   \item[localsubmit]\index{localsubmit} Command file to launch runs on the local machine. See Section~\ref{b2run} for details.
   \item[marconisubmit]\index{marconisubmit} Command file to launch runs on the Marconi supercomputer. See Section~\ref{b2run} for details.
   \item[mpcdfsubmit]\index{mpcdfsubmit} Command file to launch runs on the MPCDF clusters Raven and Viper. See Section~\ref{b2run} for details.
+  \item[pitagorasubmit]\index{pitagorasubmit} Command file to launch runs on the Pitagora supercomputer. See Section~\ref{b2run} for details.
   \item[resave\_mds]\index{resave\_mds} Update an archived {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to update a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[save\_mds]\index{save\_mds} Archive an {\tt MDSplus} case. A {\tt -n} option allows for dry-run tests. A {\tt -d} option allows to run within the chosen debugger. A {\tt -s} option allows to archive a {\tt B2.5} standalone case. A {\tt -r} option allows to pass variable redefinitions to the underlying Makefile.
   \item[sgesubmit]\index{sgesubmit} Command file to launch runs on an SGE system. See Section~\ref{b2run} for details.
@@ -1679,7 +1661,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[gtfl]\index{gtfl} Replaces the specified links by the files to which they are linked.
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
-  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs the external libraries MSCL, GKS, and GR, if not already present, and automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file.
+  \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs all external dependencies needed to correctly compile and run \SOLPSITER, if not already present, in a fully automatized way. Additionally, if needed, it automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file and in the corresponding configuration files of the various submodules. For local \SOLPSITER installations, all required external dependencies can be locally provided. For installations on HPC clusters, only the dependencies which may be missing are provided, namely the Blas/Lapack, NetCDF, NCARG, JSON-Fortran, MSCL, GKS, and GR libraries. Note that the NCARG library can be built only for cluster installations using a {\tt gfortran} compiler.
+  \item[install\_miniforge]\index{install\_miniforge} This script installs a \SOLPSITER-specific local Conda installation, based on {\tt miniforge}, located in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Such installation is required to obtain some external packages needed by the compilation of the code, namely Blas/Lapack, NetCDF and NCARG, using the {\tt install\_dependencies} script.
   \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
@@ -1689,7 +1672,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[plot\_trg]\index{plot\_trg} Produces {\tt trg.pdf} file (or {\tt trg.pdf} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt ld\_tg\_*.dat} and {\tt fp\_tg\_*.dat} (potentially other similarly formatted files as well) according to {\tt plot\_trg.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Also produces {\tt trg\_sum.dat} file containing some integral, peak and average quantities at the targets. Read the script header for further details.
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
   \item[rlndr]\index{rlndr} Replaces a link address by another.
-  \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space.
+  \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space. The script can also be used to setup a workspace on scratch, copy results back and clean-up the workspace.
   \item[STIME]\index{STIME} Auxiliary script to handle {\tt b2mndr\_stime} with {\tt saveb2} workflow, run {\tt STIME -h} for details.
   \item[wavelength\_to\_energy]\index{wavelength\_to\_energy} Converts a wavelength (in $m$) to an energy (in $eV$) (and the reverse).
  \end{description}
@@ -1748,22 +1731,24 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
   \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the formatted variant of the main {\tt Eirene} input file ({\tt input.dat}).
   \item[setup\_baserun\_eirene\_json\_links]\index{setup\_baserun\_eirene\_json\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the JSON variant of the main {\tt Eirene} input file ({\tt eirene.input.json}).
+  \item[SLURM.efgw\_compile]\index{SLURM.efgw\_compile} Template file for batch compilation on the EFGW machine.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
   \item[SLURM.postprocess\_coupled]\index{SLURM.postprocess\_coupled} Alias to {\tt QSUB.postprocess\_coupled}.
   \item[SOLPS4to5]\index{SOLPS4to5} Script to convert a \SOLPSfour run directory into a \SOLPSfive one.
-  \item[SOLPS-ITER\_CI\_env]\index{SOLPS-ITER\_CI\_env} Script used to set up the common environment for all continuous integration (CI) tests at ITER
-  \item[SOLPS-ITER\_CI\_test]\index{SOLPS-ITER\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER in standard mode
-  \item[SOLPS-ITER\_debug\_CI\_test]\index{SOLPS-ITER\_debug\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER in debug mode
-  \item[SOLPS-ITER\_MPI\_CI\_test]\index{SOLPS-ITER\_MPI\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with MPI options turned on
-  \item[SOLPS-ITER\_OpenMP\_CI\_test]\index{SOLPS-ITER\_OpenMP\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with OpenMP options turned on
+  \item[SOLPS-ITER\_CI\_env]\index{SOLPS-ITER\_CI\_env} Script used to set up the common environment for all continuous integration (CI) tests at ITER.
+  \item[SOLPS-ITER\_CI\_test]\index{SOLPS-ITER\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER in standard mode.
+  \item[SOLPS-ITER\_debug\_CI\_test]\index{SOLPS-ITER\_debug\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER in debug mode.
+  \item[SOLPS-ITER\_MPI\_CI\_test]\index{SOLPS-ITER\_MPI\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with MPI options turned on.
+  \item[SOLPS-ITER\_OpenMP\_CI\_test]\index{SOLPS-ITER\_OpenMP\_CI\_test} Script used by the continuous integration (CI) server to test \SOLPSITER with OpenMP options turned on.
   \item[solps-iter\_update]\index{solps-iter\_update} Script to update to the latest \SOLPSITER master distribution.
   \item[solps-iter\_update\_develop]\index{solps-iter\_update\_develop} Script to switch to the up-to-date \SOLPSITER develop branch.
   \item[solps-iter\_update\_3.0.9\_release]\index{solps-iter\_update\_3.0.9\_release} Script to switch to the \SOLPSITER 3.0.9 release candidate code branch.
   \item[solps-iter\_update\_3.1.0\_release]\index{solps-iter\_update\_3.1.0\_release} Script to switch to the up-to-date \SOLPSITER 9-point-stencil 3.1.0 code branch.
   \item[solps-iter\_update\_3.1.1\_release]\index{solps-iter\_update\_3.1.1\_release} Script to switch to the \SOLPSITER 9-point-stencil 3.1.1 release candidate code branch.
-  \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch.
-  \item[str2ogr]\index{str2ogr} Converts a .str structure file into a {\tt DG} .ogr template file.
+  \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch (slow-moving reference branch).
+  \item[solps-iter\_update\_wg\_workflow]\index{solps-iter\_update\_wg\_workflow} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg\_workflow} branch (fast-moving development branch).
+  \item[str2ogr]\index{str2ogr} Converts a {\tt .str} structure file into a {\tt DG} {\tt .ogr} template file.
   \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
@@ -1960,17 +1945,18 @@ are provided:
   \item{darwinsubmit}\index{darwinsubmit} for submissions on MacOS devices (DarwinOS)
   \item{ippsubmit}\index{ippsubmit} for submissions on the new (2019) IPP cluster
   \item{itersubmit}\index{itersubmit} for submissions on the ITER SDCC cluster
-  \item{itmsubmit}\index{itmsubmit} for submissions on the Marconi ITM Gateway machine
+  \item{itmsubmit}\index{itmsubmit} for submissions on the EFGW machine
   \item{jetsubmit}\index{jetsubmit} for submissions on the JET Analysis Cluster (JAC)
   \item{jfrssubmit}\index{jfrssubmit} for submissions on the JFRS IFERC-CSC supercomputer
   \item{localsubmit}\index{localsubmit} for local submission
   \item{marconisubmit}\index{marconisubmit} for submissions on the Marconi supercomputer
   \item{mpcdfsubmit}\index{mpcdfsubmit} for submissions on the MPCDF clusters Raven and Viper
+  \item{pitagorasubmit}\index{pitagorasubmit} for submissions on the Pitagora supercomputer
   \item{sgesubmit}\index{sgesubmit} for submissions on a system running SGE
   \item{spbstusubmit}\index{spbstusubmit} for submissions on the SPbSPU HPC cluster in Saint Petersburg, Russia
   \item{ustcsubmit}\index{ustcsubmit} for submissions on the USTC computer cluster
 \end{description}
-Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt mpcdf}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
+Users on other systems are encouraged to recopy these command scripts (found in {\tt \$\{SOLPSTOP\}/scripts}) and adapt them to their local environment, along with the needed modifications to the {\tt \$\{SOLPSTOP\}/runs/QSUB.*} or {\tt \$\{SOLPSTOP\}/runs/SLURM.*} actual submission scripts. Here, {\tt *} stands for {\tt csd3}, {\tt cumulus}, {\tt ipp}, {\tt iter}, {\tt itm}, {\tt jet}, {\tt jfrs}, {\tt lsf}, {\tt marconi}, {\tt mpcdf}, {\tt pitagora}, {\tt sge}, or {\tt spbstu}, referring to the machine system on which the submission script is to be used. Any otherwise named file specified by the user can also be given as an argument to the submission command (in which case the {\tt -z} option is ineffective). The specified file must be located in the {\tt \$\{SOLPSTOP\}/runs} directory, or in the actual run directory, or one above it.
 
 Looping scripts, with a {\tt \_loop} extension, are also available for some systems. These will automatically relaunch a case at the end of the time allotted to an individual job submission, provided the run appears to have finished cleanly. If the run appears to have failed, the looping script will stop. It may happen on some systems that some environment variables are appended to or duplicated on job resubmission, which leads to the loop breaking when the maximum allowed length for the environment variable is exceeded --- in this case the recommended solution is to save the value of the environment variable at its initialization within the {\tt setup.csh} scripts and reload it at the beginning of the {\tt SLURM.*\_loop} script. Please refer to the solution suggested for the ITM Gateway concerning environment variables {\tt \$PATH\_FOR\_LOOP} and {\tt \$MANPATH\_FOR\_LOOP}, see scripts {\tt \$\{SOLPSTOP\}/setup.csh} and {\tt \$\{SOLPSTOP\}/runs/SLURM.itm*\_loop}.
 
@@ -2046,6 +2032,12 @@ A listing of the available options for each submission script can be obtained by
 itersubmit -h
 \end{verbatim}
 command. All options (except {\tt -h}) can be used simultaneously and in any order, provided the name of the (optional) submission file is given last.
+
+Some submission scripts (currently only {\tt ippsubmit} and {\tt mpcdfsubmit}) also allow to launch several runs within one single SLURM job, by means of the {\tt -b} option, if the runs share the same {\tt baserun}. This is done executing the script from the directory above the run and {\tt baserun} directories, specifying the names of the run directories from which the jobs should be launched through a comma-separated list. For example:
+\begin{verbatim}
+ippsubmit -b 'run1,run2'
+\end{verbatim}
+This option should be used with careful consideration, in order to request CPU resources in an appropriate way. The ideal situation in which such option could be used is in case of reasonably similar runs, and with all launched runs asked to be stopped after the same wallclock time, so that no allocated CPUs end up being in idle state. Users are encouraged to refer to the possible options, within the above mentioned submission scripts, for the specification of the requested job properties (e.g.\ requested number of CPUs per run and memory).
 
 The {\tt SLURM.iter} script first of all changes directory to
 {\tt \$\{SOLPSTOP\}} with the help of the {\tt SOLPSTOP} file
@@ -2647,9 +2639,10 @@ which contains
     ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the
     {\tt 'ionising\_core'} switch is used,
     {\tt CONPAR(,,2)} is the strength of the feedback.
-  \item[14] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt CONPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$.
+  \item[14] if {\tt MOMPAR(,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt CONPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
     to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
-    Recommended for cases with drifts.
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,a}$;
+    to be used in conjunction with {\tt BCMOM=13}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCENI=15}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[15] prescribe a radial leakage velocity,
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2709,9 +2702,10 @@ which contains
   \item[11] Rozhansky viscosity condition for the parallel momentum,
     {\tt MOMPAR(,,1)} is not used.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-  \item[13] collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
+  \item[13] if {\tt MOMPAR(,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
     to be used in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
-    Recommended for cases with drifts.
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,a}$;
+    to be used in conjunction with {\tt BCCON=14}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCENI=15}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
   \item[16] prescribe the average value of the parallel velocity,
@@ -2826,9 +2820,10 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
+  \item[15] sheath boundary condition. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
     the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14} and {\tt BCMOM=13} for all ion species.
-    Recommended for cases with drifts.
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; the ion heat flux is computed using the target particle flux and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5});
+    to be used in conjunction with {\tt BCMOM=13}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCCON=14}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the flux surface
     with index {\tt b2stbc\_type16\_ref} (default is {\tt -1}), {\tt ENIPAR(,2)}
@@ -4217,7 +4212,7 @@ omissions to the developer team are always welcome.
 
 \newpage
 \section{b2co, recovering from a crash}
-\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
+\label{sec:b2co}\index{b2co}\index{plasmastate}\index{B2.5, run recovery}\index{b2fstate}\index{recover\_initial\_files}\index{tracing}\index{b2movies.nc}\index{eirenemovies.nc}\index{b2tallies.nc}\index{b2wall.nc}\index{b2time.nc}\index{b2run}\index{inspect\_plasmastate}
 
 \begin{sloppypar}
 In case of a computer crash during a run, it may be possible to recover
@@ -4242,7 +4237,7 @@ a crash, the user should then:
 
 If the crash happened early on in the simulation and one wishes to return to the initial state of the simulation to re-launch the run cleanly, one may use the {\tt recover\_initial\_files} script instead.
 
-This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, and {\tt b2movies.nc}, as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
+This procedure will produce the files necessary to re-start the run from the point at which the {\tt plasmastate} file was written. In cases with feedback schemes active, the feedback values will be grabbed from the relevant {\tt b2.*\_save.parameters.XXXX} files and a new set of {\tt b2.*\_save.parameters} files will be created. Optional output files (i.e the NetCDF files {\tt b2time.nc}, {\tt b2tallies.nc}, {\tt b2wall.nc}, {\tt b2movies.nc} and {\tt eirenemovies.nc} (the last one only for runs with {\tt Eirene}) , as well as the {\tt *.trc} files in the {\tt tracing} directory), if present, will be truncated to be synchronized with the recovered plasma state file.
 
 \begin{sloppypar}
 It is also possible to use the {\tt b2co} utility {\em while} {\tt SOLPS} is running, in order to obtain a {\tt b2fstate} file in the run directory that one may use to plot certain plasma quantities and monitor the current status of the run. However, to do this and not overwrite the current tracing files, {\tt b2co} {\em must} be invoked as follows:
@@ -7782,9 +7777,9 @@ The version of the equations shown in this Appendix represents the best availabl
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
-\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}
+\section{Sign conventions}\index{sign conventions}\label{sec:signs}\index{COCOS}\index{e2d}
 
-The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $B_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $B_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This corresponds, following the conventions laid out in \cite{COCOS}, to a {\em COCOS} index of {\bf 6}.
+The radial coordinate $y$ increases as one crosses the separatrix from the core (or private flux) region into the main SOL region (and so is minimum at the magnetic axis). The poloidal coordinate $x$ increases in the {\em clockwise} direction when viewing the poloidal plane with the central axis line on its left. The toroidal magnetic field component $B_z$ is taken as positive if the toroidal magnetic field is directed {\em clockwise} when viewing the tokamak from above. The poloidal magnetic field component $B_x$ follows the same convention as the $x$ component and is positive when directed in the direction of increasing poloidal index, i.e. {\em clockwise}. This forms a right-handed poloidal coordinate system $(x, y, z)$ equivalent to $(\theta, \rho, \phi)$. In terms of the conventions laid out in \cite{COCOS}, the magnetic field is calculated from the provided magnetic equilibrium solution according to a {\em COCOS} index of {\bf 4}. To ensure the correct orientation of $B_x$ and $B_z$, either provide the magnetic equilibrium solution converted to {\em COCOS} index of {\bf 4}, or manually check and invert the orientations as suggested by the hints provided in {\tt b2ag.log}. Equilibrium file format conversion tools such as {\tt e2d} do not apply any {\em COCOS} convention conversion unless explicitly specified.
 
 Is it important to know, that, in the equations below, the parallel velocity $V_\parallel$ is a true parallel velocity, i.e. it changes sign if the poloidal magnetic field component does, namely: $V_\parallel = \vec{V} \cdot \vec{B} / \left| B \right|$. This applies to all species, including electrons, meaning $V_{\parallel a}$ and $V_{\parallel e}$. However, the poloidal projections of the fluxes and currents, such as $\Gamma_{ax}$, are positive when they are colinear with $\vec{e}_x$, i.e. point in the direction of increasing $x$. The exception to this is the parallel current, $j_\parallel$. In the equations below, it has the same sign convention as the parallel velocity. In the actual code, because it is treated as a flux, it follows the sign convention of the fluxes. This therefore means that the code does not follow $j_\parallel$, but rather $j_\parallel \cdot |B_x|/B_x$.
 
@@ -10785,6 +10780,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
@@ -10800,6 +10797,32 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \end{equation*}
 
 $p_{n,a,1} = +1$
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
+=
+\left. \left[
+- \frac{\sqrt g}{h_x} |b_x|
+U_{out} n_a
+-
+\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\right]
+\right|_W
+\end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( -u_{\parallel,a}^{extrap}- \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \subsubsection{East}
 
@@ -10848,6 +10871,8 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
 
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
@@ -10863,6 +10888,32 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
 \end{equation*}
 
 $p_{n,a,1} = +1$
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
+=
+\left. \left[
+- \frac{\sqrt g}{h_x} |b_x|
+U_{out} n_a
++
+\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\right]
+\right|_E
+\end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \subsection{Parallel momentum balance for ions}
 
@@ -11049,6 +11100,8 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
@@ -11068,6 +11121,28 @@ V_{West} =
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCCON = 14}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+  \left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} U_{out} \frac{B_x}{|B_x|}
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel,a}
+  \right]
+  \right|_W
+  \end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( -u_{\parallel,a}^{extrap} - \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \underline{If $z_a = 0$}
 
@@ -11125,6 +11200,8 @@ $u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
 
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
 $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
@@ -11140,6 +11217,28 @@ V_{East} =
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with BCCON=14, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+  -\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+          \frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} U_{out} \frac{B_x}{|B_x|}
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel,a}
+  \right]
+  \right|_E
+  \end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
 
 \underline{If $z_a = 0$}
 
@@ -11559,7 +11658,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11567,6 +11666,8 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
 \end{equation*}
+
+with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11634,7 +11735,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11642,6 +11743,8 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
 \end{equation*}
+
+with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11885,6 +11988,8 @@ $c_{h_i,a,2} = -10^{-2}$
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} < 0.5$
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
@@ -11900,6 +12005,27 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 $p_{h_i,1} = +1.5$
 
 In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCCON = 14}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient.
+
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,1)}.
+
+\begin{equation*}
+  \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( -\widetilde{\Gamma}_{ax} - D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  -
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_W
+\end{equation*}
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+\bigskip
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -11971,6 +12097,8 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 {\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
 
+{\em - Marginal imposition, with collective sound speed:} MOMPAR(ismain,,2) = $p_{m,ismain,2} < 0.5 $
+
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
 
 \begin{equation*}
@@ -11986,6 +12114,25 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 
 $p_{h_i,1} = +1.5$
 
 In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} \geq 0.5 $
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE=15} with {\tt bcene\_15\_style = 1}, {\tt BCCON = 14}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient.
+
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,1)}.
+
+\begin{equation*}
+  -\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( \widetilde{\Gamma}_{ax} + D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  +
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_E
+\end{equation*}
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -15131,6 +15278,164 @@ pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for max
     \label{tab:b2timeav}
   \end{longtable}
 \end{center}
+
+\clearpage
+
+\chapter{Quantities stored in b2movies.nc and eirenemovies.nc}
+\label{cha:b2movies}\index{b2movies.nc and eirenemovies.nc, quantities stored
+  in}\index{movie frames, b2movies.nc, eirenemovies.nc}\index{b2movies.nc, eirenemovies.nc}
+
+Several relevant multi-dimensional arrays, i.e.\ covering the entire {\tt B2.5} grid, are stored in {\tt b2movies.nc}. Similarly, several relevant multi-dimensional arrays covering the entire {\tt Eirene} triangular grid, in case of runs with {\tt Eirene}, are stored in {\tt eirenemovies.nc}.
+The real-time interval between writes of the movie frames of these quantities is controlled by the {\tt 'b2mndr\_cdfmovietim'} switch.
+
+If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPSITER run will be appended to the existing {\tt b2movies.nc} and {\tt eirenemovies.nc} files, otherwise the files are created anew.
+
+The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of switches (which can be simultaneously used) as described in the below Table
+\ref{tab:b2moviesarrays}.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1} \\
+    \hline
+    na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
+    ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
+    te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
+    ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
+    po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1} \\
+    \hline
+    fnax \index{fnax}\index{b2movies.nc, fnax} & Poloidal particle flux (for each fluid species) & $s^{-1}$ \\
+    fnay \index{fnay}\index{b2movies.nc, fnay} & Radial particle flux (for each fluid species) & $s^{-1}$ \\
+    fhex \index{fhex}\index{b2movies.nc, fhex} & Poloidal electron heat flux & $W$ \\
+    fhey \index{fhey}\index{b2movies.nc, fhey} & Radial electron heat flux & $W$ \\
+    fhix \index{fhix}\index{b2movies.nc, fhix} & Poloidal ion heat flux & $W$ \\
+    fhiy \index{fhiy}\index{b2movies.nc, fhiy} & Radial ion heat flux & $W$ \\
+    fchx \index{fchx}\index{b2movies.nc, fchx} & Poloidal electric current & $A$ \\
+    fchy \index{fchy}\index{b2movies.nc, fchy} & Radial electric current & $A$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_sources} $\ge$ 1} \\
+    \hline
+    rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
+    rrana \index{rrana}\index{b2movies.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{rrahi}\index{b2movies.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rrahisum \index{rrahisum}\index{b2movies.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
+    rcxna \index{rcxna}\index{b2movies.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{rcxhi}\index{b2movies.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rcxhisum \index{rcxhisum}\index{b2movies.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
+    rqahe \index{rqahe}\index{b2movies.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
+    rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
+    tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
+    dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
+    tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    rfluxa \index{rfluxa}\index{b2movies.nc, rfluxa} & Atomic radial flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    pfluxa \index{pfluxa}\index{b2movies.nc, pfluxa} & Atomic poloidal flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    refluxa \index{refluxa}\index{b2movies.nc, refluxa} & Atomic radial energy flux density (for each atom species) & $W m^{-2}$ \\
+    pefluxa \index{pefluxa}\index{b2movies.nc, pefluxa} & Atomic poloidal energy flux density (for each atom species) & $W m^{-2}$ \\
+    rfluxm \index{rfluxm}\index{b2movies.nc, rfluxm} & Molecular radial flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    pfluxm \index{pfluxm}\index{b2movies.nc, pfluxm} & Molecular poloidal flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    refluxm \index{refluxm}\index{b2movies.nc, refluxm} & Molecular radial energy flux density (for each molecule species) & $W m^{-2}$ \\
+    pefluxm \index{pefluxm}\index{b2movies.nc, pefluxm} & Molecular poloidal energy flux density (for each molecule species) & $W m^{-2}$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    eirene\_papl\_sna \index{eirene\_papl\_sna}\index{b2movies.nc, eirene\_papl\_sna} & Particle source density from atom-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pmpl\_sna \index{eirene\_pmpl\_sna}\index{b2movies.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pppl\_sna \index{eirene\_pppl\_sna}\index{b2movies.nc, eirene\_pppl\_sna} & Particle source density from recombinations & \\
+                                                                                & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_eael\_she \index{eirene\_eael\_she}\index{b2movies.nc, eirene\_eael\_she} & Electron energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_emel\_she \index{eirene\_emel\_she}\index{b2movies.nc, eirene\_emel\_she} & Electron energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_epel\_she \index{eirene\_epel\_she}\index{b2movies.nc, eirene\_epel\_she} & Electron energy source density from recombinations & $W m^{-3}$ \\
+    eirene\_eapl\_shi \index{eirene\_eapl\_shi}\index{b2movies.nc, eirene\_eapl\_shi} & Ion energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_empl\_shi \index{eirene\_empl\_shi}\index{b2movies.nc, eirene\_empl\_shi} & Ion energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_eppl\_shi \index{eirene\_eppl\_shi}\index{b2movies.nc, eirene\_eppl\_shi} & Ion energy source density from recombinations & $W m^{-3}$ \\
+    eneutrad \index{eneutrad}\index{b2movies.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms & \\
+                                                           & \hspace{0.5cm} (for each atom species) & $W m^{-3}$ \\
+    eneutradsum \index{eneutradsum}\index{b2movies.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms & $W m^{-3}$ \\
+    emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules & \\
+                                                        & \hspace{0.5cm} (for each molecule species) & $W m^{-3}$ \\
+    emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules & $W m^{-3}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
+    \label{tab:b2moviesarrays}
+  \end{longtable}
+\end{center}
+
+Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. The following list summarizes the additional filesize which can be roughly expected, on a $96 \times 36$ grid, for each of the requested data groups:
+\begin{itemize}
+\item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1: 120 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\item If {\tt cdfmovie\_eirene\_sources} $\ge$ 1: 100 kB per {\tt B2.5} fluid species + 45 kB per {\tt Eirene} atom/molecule species per outputted timestep.
+\end{itemize}
+Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (12 {\tt B2.5} fluid species, 3 {\tt Eirene} atom species, and 1 {\tt Eirene} molecule species):
+\begin{itemize}
+\item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
+\end{itemize}
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 6.5 GB can be expected after 1000 outputted timesteps.
+
+The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
+\ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
+
+\begin{center}
+    \begin{longtable}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+    \hline quantity & description & units \\
+    \hline \endhead
+    \hline quantity & description & units \\
+    \hline \endfirsthead
+    \hline
+    \multicolumn{3}{|l|}{\small\it continued on next page} \\
+    \hline \endfoot
+    \endlastfoot
+    pdena \index{pdena}\index{eirenemovies.nc, pdena} & Atom particle density (for each atom species) & $m^{-3}$ \\
+    pdenm \index{pdenm}\index{eirenemovies.nc, pdenm} & Molecule particle density (for each molecule species) & $m^{-3}$ \\
+    edena \index{edena}\index{eirenemovies.nc, edena} & Atom energy density (for each atom species) & $eV m^{-3}$ \\
+    edenm \index{edenm}\index{eirenemovies.nc, edenm} & Molecule energy density (for each molecule species) & $eV m^{-3}$ \\
+    vxdena \index{vxdena}\index{eirenemovies.nc, vxdena} & Atom x-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vxdenm \index{vxdenm}\index{eirenemovies.nc, vxdenm} & Molecule x-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vydena \index{vydena}\index{eirenemovies.nc, vydena} & Atom y-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vydenm \index{vydenm}\index{eirenemovies.nc, vydenm} & Molecule y-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vzdena \index{vzdena}\index{eirenemovies.nc, vzdena} & Atom z-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vzdenm \index{vzdenm}\index{eirenemovies.nc, vzdenm} & Molecule z-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    \hline
+    \caption{Multi-dimensional time-dependent quantities stored in eirenemovies.nc}
+    \label{tab:eirenemoviesarrays}
+  \end{longtable}
+\end{center}
+
+Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy. For example, on a grid consisting of 10000 triangles, the filesize can be roughly expected to be 360 kB per {\tt Eirene} atom/molecule species per outputted timestep. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (3 {\tt Eirene} atom species and 1 {\tt Eirene} molecule species), a filesize of roughly 1.4 GB can be expected.
 
 \clearpage
 
@@ -21200,6 +21505,7 @@ NO\_SAVE & include/EIRDIAG.H \\
 \_OPENMP & solvers/b2ux9p.F \\
 \_OPENMP & solvers/b2uxm11.F \\
 \_OPENMP & solvers/b2uxm9.F \\
+\_OPENMP & sources/b2mod\_eirene.F \\
 \_OPENMP & sources/b2scdt.F \\
 \_OPENMP & sources/b2shdt.F \\
 \_OPENMP & sources/b2sian.F \\
@@ -21421,6 +21727,7 @@ ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & main-routines/eirmod\_eirene.F \\
+B25\_EIRENE & output/outflx.F \\
 CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\

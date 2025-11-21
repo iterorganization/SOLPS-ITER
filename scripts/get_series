@@ -110,10 +110,10 @@ fi
 
 echo "checking the run data..."
 count=`grep run $GSGOV | wc -l`
-if [ $count != 0 ]
+if [ "$count" -ne 0 ]
 then
   i=1
-  while [ $count -ge $i ]; do {
+  while [ "$count" -ge $i ]; do {
        path=`grep run $GSGOV | head -$((count+1-i)) | tail -1 | cut -d ':' -f 3 | tr -d ' '`
        ( cd $path && [ ! -f $L2D_RAW ] && echo "$L2D_RAW absent in $path" && echo "running $L2D_SCRIPT in $path" && $L2D_SCRIPT >/dev/null 2>&1 && [ ! -f $L2D_RAW ] && echo "failed to produce $L2D_RAW in $path" )
        let "i=i+1"

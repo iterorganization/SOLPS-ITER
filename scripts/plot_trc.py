@@ -483,9 +483,15 @@ def PLT(slog,sgrid,sline,smark,ymaxx,yminn,xmaxx,xminn,pnum,xmass,ymass,labelmas
         mini = mini - 1.
         maxi = maxi + 1.
 
-    size_legend = default_size_legend
-    if (pnum > 15):
-        size_legend = size_legend - 2
+    if (pnum > 1):
+        lnum = 0
+        for i in range(0,pnum):
+            if (ymaskmass[i] >= 0):
+                lnum = lnum + 1
+    else:
+        lnum = 1
+
+    size_legend = max(2,default_size_legend - int(lnum/6))
 
     plt.locator_params(axis='y', nbins=8)
     plt.locator_params(axis='x', nbins=6)

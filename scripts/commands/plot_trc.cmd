@@ -54,6 +54,8 @@
 :nr_sep_C:\eta_{C}^{sep}:1.e+2
 @page: Separatrix density fraction N, \%
 :nr_sep_N:\eta_{N}^{sep}:1.e+2
+@page: Separatrix density fraction O, \%
+:nr_sep_O:\eta_{O}^{sep}:1.e+2
 @page: Separatrix density fraction Ne, \%
 :nr_sep_Ne:\eta_{Ne}^{sep}:1.e+2
 @page: Separatrix density fraction Ar, \%
@@ -85,6 +87,7 @@
 :imp_rad_B:B:1.e-6
 :imp_rad_C:C:1.e-6
 :imp_rad_N:N:1.e-6
+:imp_rad_O:O:1.e-6
 :imp_rad_Ne:Ne:1.e-6
 :imp_rad_Ar:Ar:1.e-6
 :imp_rad_W:W:1.e-6
@@ -267,6 +270,22 @@
 :flux_ttr_N:dln(N)/dt:
 @page: Total relative error in N balance
 :bln_blnr_N:err/sum:
+@page: Flux balance total O, s^{-1}
+:ion_core_O:ion_core:
+:ntr_core_O:ntr_core:
+:ion_targ_O:ion_targ:
+:ntr_targ_O:ntr_targ:
+:ion_wall_O:ion_wall:
+:ntr_wall_O:ntr_wall:
+:ntr_puff_O:ntr_puff:
+:flux_tot_O:tot_flux:
+:flux_bln_O:err_totl:
+@page: O ion dN/dt, s^{-1}
+:flx_d/dt_O:dN/dt:
+@page: O content dln(N)/dt, s^{-1}
+:flux_ttr_O:dln(N)/dt:
+@page: Total relative error in O balance
+:bln_blnr_O:err/sum:
 @page: Flux balance total Ne, s^{-1}
 :ion_core_Ne:ion_core:
 :ntr_core_Ne:ntr_core:
@@ -436,6 +455,16 @@
 :N_a_reg_02_N:SOL:
 :N_a_reg_03_N:inner:
 :N_a_reg_04_N:outer:
+@page: Total number of O ions per region
+:N_i_reg_01_O:core:
+:N_i_reg_02_O:SOL:
+:N_i_reg_03_O:inner:
+:N_i_reg_04_O:outer:
+@page: Total number of O neutrals per region
+:N_a_reg_01_O:core:
+:N_a_reg_02_O:SOL:
+:N_a_reg_03_O:inner:
+:N_a_reg_04_O:outer:
 @page: Total number of Ne ions per region
 :N_i_reg_01_Ne:core:
 :N_i_reg_02_Ne:SOL:
@@ -500,6 +529,10 @@
 :N_s_sli_N:N_{i,N}^{edge}:
 @page: Total number of N particles in the egde
 :N_s_slt_N:N_{N}^{edge}:
+@page: Total number of O ions in the egde
+:N_s_sli_O:N_{i,O}^{edge}:
+@page: Total number of O particles in the egde
+:N_s_slt_O:N_{O}^{edge}:
 @page: Total number of Ne ions in the egde
 :N_s_sli_Ne:N_{i,Ne}^{edge}:
 @page: Total number of Ne particles in the egde
@@ -508,6 +541,10 @@
 :N_s_sli_Ar:N_{i,Ar}^{edge}:
 @page: Total number of Ar particles in the egde
 :N_s_slt_Ar:N_{Ar}^{edge}:
+@page: Total number of W ions in the egde
+:N_s_sli_W:N_{i,W}^{edge}:
+@page: Total number of W particles in the egde
+:N_s_slt_W:N_{W}^{edge}:
 @page: Internal source rescaling ratios H
 :sclrtio_01_H:
 :sclrtio_02_H:
@@ -1324,6 +1361,108 @@
 :sclfact_48_N:
 :sclfact_49_N:
 :sclfact_50_N:
+@page: Internal source rescaling ratios O
+:sclrtio_01_O:
+:sclrtio_02_O:
+:sclrtio_03_O:
+:sclrtio_04_O:
+:sclrtio_05_O:
+:sclrtio_06_O:
+:sclrtio_07_O:
+:sclrtio_08_O:
+:sclrtio_09_O:
+:sclrtio_10_O:
+:sclrtio_11_O:
+:sclrtio_12_O:
+:sclrtio_13_O:
+:sclrtio_14_O:
+:sclrtio_15_O:
+:sclrtio_16_O:
+:sclrtio_17_O:
+:sclrtio_18_O:
+:sclrtio_19_O:
+:sclrtio_20_O:
+:sclrtio_21_O:
+:sclrtio_22_O:
+:sclrtio_23_O:
+:sclrtio_24_O:
+:sclrtio_25_O:
+:sclrtio_26_O:
+:sclrtio_27_O:
+:sclrtio_28_O:
+:sclrtio_29_O:
+:sclrtio_30_O:
+:sclrtio_31_O:
+:sclrtio_32_O:
+:sclrtio_33_O:
+:sclrtio_34_O:
+:sclrtio_35_O:
+:sclrtio_36_O:
+:sclrtio_37_O:
+:sclrtio_38_O:
+:sclrtio_39_O:
+:sclrtio_40_O:
+:sclrtio_41_O:
+:sclrtio_42_O:
+:sclrtio_43_O:
+:sclrtio_44_O:
+:sclrtio_45_O:
+:sclrtio_46_O:
+:sclrtio_47_O:
+:sclrtio_48_O:
+:sclrtio_49_O:
+:sclrtio_50_O:
+@page: Internal source rescaling factors O
+:sclfact_01_O:
+:sclfact_02_O:
+:sclfact_03_O:
+:sclfact_04_O:
+:sclfact_05_O:
+:sclfact_06_O:
+:sclfact_07_O:
+:sclfact_08_O:
+:sclfact_09_O:
+:sclfact_10_O:
+:sclfact_11_O:
+:sclfact_12_O:
+:sclfact_13_O:
+:sclfact_14_O:
+:sclfact_15_O:
+:sclfact_16_O:
+:sclfact_17_O:
+:sclfact_18_O:
+:sclfact_19_O:
+:sclfact_20_O:
+:sclfact_21_O:
+:sclfact_22_O:
+:sclfact_23_O:
+:sclfact_24_O:
+:sclfact_25_O:
+:sclfact_26_O:
+:sclfact_27_O:
+:sclfact_28_O:
+:sclfact_29_O:
+:sclfact_30_O:
+:sclfact_31_O:
+:sclfact_32_O:
+:sclfact_33_O:
+:sclfact_34_O:
+:sclfact_35_O:
+:sclfact_36_O:
+:sclfact_37_O:
+:sclfact_38_O:
+:sclfact_39_O:
+:sclfact_40_O:
+:sclfact_41_O:
+:sclfact_42_O:
+:sclfact_43_O:
+:sclfact_44_O:
+:sclfact_45_O:
+:sclfact_46_O:
+:sclfact_47_O:
+:sclfact_48_O:
+:sclfact_49_O:
+:sclfact_50_O:
 @page: Internal source rescaling ratios Ne
 :sclrtio_01_Ne:
 :sclrtio_02_Ne:
@@ -1676,6 +1815,14 @@
 :resco01_05_N:
 :resco01_06_N:
 :resco01_07_N:
+:resco01_01_O:
+:resco01_02_O:
+:resco01_03_O:
+:resco01_04_O:
+:resco01_05_O:
+:resco01_06_O:
+:resco01_07_O:
+:resco01_08_O:
 :resco01_01_Ne:
 :resco01_02_Ne:
 :resco01_03_Ne:
@@ -1695,6 +1842,7 @@
 :resco01_07_Ar:
 :resco01_08_Ar:
 :resco01_09_Ar:
+:resco01_10_Ar:
 :resco01_11_Ar:
 :resco01_12_Ar:
 :resco01_13_Ar:
@@ -1712,6 +1860,7 @@
 :resco01_07_W:
 :resco01_08_W:
 :resco01_09_W:
+:resco01_10_W:
 :resco01_11_W:
 :resco01_12_W:
 :resco01_13_W:
@@ -1722,6 +1871,26 @@
 :resco01_18_W:
 :resco01_19_W:
 :resco01_20_W:
+:resco01_21_W:
+:resco01_22_W:
+:resco01_23_W:
+:resco01_24_W:
+:resco01_25_W:
+:resco01_26_W:
+:resco01_27_W:
+:resco01_28_W:
+:resco01_29_W:
+:resco01_30_W:
+:resco01_31_W:
+:resco01_32_W:
+:resco01_33_W:
+:resco01_34_W:
+:resco01_35_W:
+:resco01_36_W:
+:resco01_37_W:
+:resco01_38_W:
+:resco01_39_W:
+:resco01_40_W:
 @page: Continuity balance equation residuals SOL
 @iter:100
 @log:
@@ -1753,6 +1922,14 @@
 :resco02_05_N:
 :resco02_06_N:
 :resco02_07_N:
+:resco02_01_O:
+:resco02_02_O:
+:resco02_03_O:
+:resco02_04_O:
+:resco02_05_O:
+:resco02_06_O:
+:resco02_07_O:
+:resco02_08_O:
 :resco02_01_Ne:
 :resco02_02_Ne:
 :resco02_03_Ne:
@@ -1772,6 +1949,7 @@
 :resco02_07_Ar:
 :resco02_08_Ar:
 :resco02_09_Ar:
+:resco02_10_Ar:
 :resco02_11_Ar:
 :resco02_12_Ar:
 :resco02_13_Ar:
@@ -1789,6 +1967,7 @@
 :resco02_07_W:
 :resco02_08_W:
 :resco02_09_W:
+:resco02_10_W:
 :resco02_11_W:
 :resco02_12_W:
 :resco02_13_W:
@@ -1799,6 +1978,26 @@
 :resco02_18_W:
 :resco02_19_W:
 :resco02_20_W:
+:resco02_21_W:
+:resco02_22_W:
+:resco02_23_W:
+:resco02_24_W:
+:resco02_25_W:
+:resco02_26_W:
+:resco02_27_W:
+:resco02_28_W:
+:resco02_29_W:
+:resco02_30_W:
+:resco02_31_W:
+:resco02_32_W:
+:resco02_33_W:
+:resco02_34_W:
+:resco02_35_W:
+:resco02_36_W:
+:resco02_37_W:
+:resco02_38_W:
+:resco02_39_W:
+:resco02_40_W:
 @page: Continuity balance equation residuals inner
 @iter:100
 @log:
@@ -1830,6 +2029,14 @@
 :resco03_05_N:
 :resco03_06_N:
 :resco03_07_N:
+:resco03_01_O:
+:resco03_02_O:
+:resco03_03_O:
+:resco03_04_O:
+:resco03_05_O:
+:resco03_06_O:
+:resco03_07_O:
+:resco03_08_O:
 :resco03_01_Ne:
 :resco03_02_Ne:
 :resco03_03_Ne:
@@ -1849,6 +2056,7 @@
 :resco03_07_Ar:
 :resco03_08_Ar:
 :resco03_09_Ar:
+:resco03_10_Ar:
 :resco03_11_Ar:
 :resco03_12_Ar:
 :resco03_13_Ar:
@@ -1866,6 +2074,7 @@
 :resco03_07_W:
 :resco03_08_W:
 :resco03_09_W:
+:resco03_10_W:
 :resco03_11_W:
 :resco03_12_W:
 :resco03_13_W:
@@ -1876,6 +2085,26 @@
 :resco03_18_W:
 :resco03_19_W:
 :resco03_20_W:
+:resco03_21_W:
+:resco03_22_W:
+:resco03_23_W:
+:resco03_24_W:
+:resco03_25_W:
+:resco03_26_W:
+:resco03_27_W:
+:resco03_28_W:
+:resco03_29_W:
+:resco03_30_W:
+:resco03_31_W:
+:resco03_32_W:
+:resco03_33_W:
+:resco03_34_W:
+:resco03_35_W:
+:resco03_36_W:
+:resco03_37_W:
+:resco03_38_W:
+:resco03_39_W:
+:resco03_40_W:
 @page: Continuity balance equation residuals outer
 @iter:100
 @log:
@@ -1907,6 +2136,14 @@
 :resco04_05_N:
 :resco04_06_N:
 :resco04_07_N:
+:resco04_01_O:
+:resco04_02_O:
+:resco04_03_O:
+:resco04_04_O:
+:resco04_05_O:
+:resco04_06_O:
+:resco04_07_O:
+:resco04_08_O:
 :resco04_01_Ne:
 :resco04_02_Ne:
 :resco04_03_Ne:
@@ -1926,6 +2163,7 @@
 :resco04_07_Ar:
 :resco04_08_Ar:
 :resco04_09_Ar:
+:resco04_10_Ar:
 :resco04_11_Ar:
 :resco04_12_Ar:
 :resco04_13_Ar:
@@ -1943,6 +2181,7 @@
 :resco04_07_W:
 :resco04_08_W:
 :resco04_09_W:
+:resco04_10_W:
 :resco04_11_W:
 :resco04_12_W:
 :resco04_13_W:
@@ -1953,6 +2192,26 @@
 :resco04_18_W:
 :resco04_19_W:
 :resco04_20_W:
+:resco04_21_W:
+:resco04_22_W:
+:resco04_23_W:
+:resco04_24_W:
+:resco04_25_W:
+:resco04_26_W:
+:resco04_27_W:
+:resco04_28_W:
+:resco04_29_W:
+:resco04_30_W:
+:resco04_31_W:
+:resco04_32_W:
+:resco04_33_W:
+:resco04_34_W:
+:resco04_35_W:
+:resco04_36_W:
+:resco04_37_W:
+:resco04_38_W:
+:resco04_39_W:
+:resco04_40_W:
 @page: Momentum balance equation residuals core
 @iter:100
 @log:
@@ -1984,6 +2243,14 @@
 :resmo01_05_N:
 :resmo01_06_N:
 :resmo01_07_N:
+:resmo01_01_O:
+:resmo01_02_O:
+:resmo01_03_O:
+:resmo01_04_O:
+:resmo01_05_O:
+:resmo01_06_O:
+:resmo01_07_O:
+:resmo01_08_O:
 :resmo01_01_Ne:
 :resmo01_02_Ne:
 :resmo01_03_Ne:
@@ -2003,6 +2270,7 @@
 :resmo01_07_Ar:
 :resmo01_08_Ar:
 :resmo01_09_Ar:
+:resmo01_10_Ar:
 :resmo01_11_Ar:
 :resmo01_12_Ar:
 :resmo01_13_Ar:
@@ -2020,6 +2288,7 @@
 :resmo01_07_W:
 :resmo01_08_W:
 :resmo01_09_W:
+:resmo01_10_W:
 :resmo01_11_W:
 :resmo01_12_W:
 :resmo01_13_W:
@@ -2030,6 +2299,26 @@
 :resmo01_18_W:
 :resmo01_19_W:
 :resmo01_20_W:
+:resmo01_21_W:
+:resmo01_22_W:
+:resmo01_23_W:
+:resmo01_24_W:
+:resmo01_25_W:
+:resmo01_26_W:
+:resmo01_27_W:
+:resmo01_28_W:
+:resmo01_29_W:
+:resmo01_30_W:
+:resmo01_31_W:
+:resmo01_32_W:
+:resmo01_33_W:
+:resmo01_34_W:
+:resmo01_35_W:
+:resmo01_36_W:
+:resmo01_37_W:
+:resmo01_38_W:
+:resmo01_39_W:
+:resmo01_40_W:
 @page: Momentum balance equation residuals SOL
 @iter:100
 @log:
@@ -2061,6 +2350,14 @@
 :resmo02_05_N:
 :resmo02_06_N:
 :resmo02_07_N:
+:resmo02_01_O:
+:resmo02_02_O:
+:resmo02_03_O:
+:resmo02_04_O:
+:resmo02_05_O:
+:resmo02_06_O:
+:resmo02_07_O:
+:resmo02_08_O:
 :resmo02_01_Ne:
 :resmo02_02_Ne:
 :resmo02_03_Ne:
@@ -2080,6 +2377,7 @@
 :resmo02_07_Ar:
 :resmo02_08_Ar:
 :resmo02_09_Ar:
+:resmo02_10_Ar:
 :resmo02_11_Ar:
 :resmo02_12_Ar:
 :resmo02_13_Ar:
@@ -2097,6 +2395,7 @@
 :resmo02_07_W:
 :resmo02_08_W:
 :resmo02_09_W:
+:resmo02_10_W:
 :resmo02_11_W:
 :resmo02_12_W:
 :resmo02_13_W:
@@ -2107,6 +2406,26 @@
 :resmo02_18_W:
 :resmo02_19_W:
 :resmo02_20_W:
+:resmo02_21_W:
+:resmo02_22_W:
+:resmo02_23_W:
+:resmo02_24_W:
+:resmo02_25_W:
+:resmo02_26_W:
+:resmo02_27_W:
+:resmo02_28_W:
+:resmo02_29_W:
+:resmo02_30_W:
+:resmo02_31_W:
+:resmo02_32_W:
+:resmo02_33_W:
+:resmo02_34_W:
+:resmo02_35_W:
+:resmo02_36_W:
+:resmo02_37_W:
+:resmo02_38_W:
+:resmo02_39_W:
+:resmo02_40_W:
 @page: Momentum balance equation residuals inner
 @iter:100
 @log:
@@ -2138,6 +2457,14 @@
 :resmo03_05_N:
 :resmo03_06_N:
 :resmo03_07_N:
+:resmo03_01_O:
+:resmo03_02_O:
+:resmo03_03_O:
+:resmo03_04_O:
+:resmo03_05_O:
+:resmo03_06_O:
+:resmo03_07_O:
+:resmo03_08_O:
 :resmo03_01_Ne:
 :resmo03_02_Ne:
 :resmo03_03_Ne:
@@ -2157,6 +2484,7 @@
 :resmo03_07_Ar:
 :resmo03_08_Ar:
 :resmo03_09_Ar:
+:resmo03_10_Ar:
 :resmo03_11_Ar:
 :resmo03_12_Ar:
 :resmo03_13_Ar:
@@ -2174,6 +2502,7 @@
 :resmo03_07_W:
 :resmo03_08_W:
 :resmo03_09_W:
+:resmo03_10_W:
 :resmo03_11_W:
 :resmo03_12_W:
 :resmo03_13_W:
@@ -2184,6 +2513,26 @@
 :resmo03_18_W:
 :resmo03_19_W:
 :resmo03_20_W:
+:resmo03_21_W:
+:resmo03_22_W:
+:resmo03_23_W:
+:resmo03_24_W:
+:resmo03_25_W:
+:resmo03_26_W:
+:resmo03_27_W:
+:resmo03_28_W:
+:resmo03_29_W:
+:resmo03_30_W:
+:resmo03_31_W:
+:resmo03_32_W:
+:resmo03_33_W:
+:resmo03_34_W:
+:resmo03_35_W:
+:resmo03_36_W:
+:resmo03_37_W:
+:resmo03_38_W:
+:resmo03_39_W:
+:resmo03_40_W:
 @page: Momentum balance equation residuals outer
 @iter:100
 @log:
@@ -2216,6 +2565,14 @@
 :resmo04_05_N:
 :resmo04_06_N:
 :resmo04_07_N:
+:resmo04_01_O:
+:resmo04_02_O:
+:resmo04_03_O:
+:resmo04_04_O:
+:resmo04_05_O:
+:resmo04_06_O:
+:resmo04_07_O:
+:resmo04_08_O:
 :resmo04_01_Ne:
 :resmo04_02_Ne:
 :resmo04_03_Ne:
@@ -2235,6 +2592,7 @@
 :resmo04_07_Ar:
 :resmo04_08_Ar:
 :resmo04_09_Ar:
+:resmo04_10_Ar:
 :resmo04_11_Ar:
 :resmo04_12_Ar:
 :resmo04_13_Ar:
@@ -2252,6 +2610,7 @@
 :resmo04_07_W:
 :resmo04_08_W:
 :resmo04_09_W:
+:resmo04_10_W:
 :resmo04_11_W:
 :resmo04_12_W:
 :resmo04_13_W:
@@ -2262,6 +2621,26 @@
 :resmo04_18_W:
 :resmo04_19_W:
 :resmo04_20_W:
+:resmo04_21_W:
+:resmo04_22_W:
+:resmo04_23_W:
+:resmo04_24_W:
+:resmo04_25_W:
+:resmo04_26_W:
+:resmo04_27_W:
+:resmo04_28_W:
+:resmo04_29_W:
+:resmo04_30_W:
+:resmo04_31_W:
+:resmo04_32_W:
+:resmo04_33_W:
+:resmo04_34_W:
+:resmo04_35_W:
+:resmo04_36_W:
+:resmo04_37_W:
+:resmo04_38_W:
+:resmo04_39_W:
+:resmo04_40_W:
 @file:user_SPb
 @page: Maximum T_{e} at the target, eV
 :Te_max_i:inner:
@@ -2289,6 +2668,39 @@
 :q_max_iu:q_{peak,sym}^{inner,up}:1.e-6
 :q_max_ou:q_{peak,sym}^{outer,up}:1.e-6
 @file:user
+@page: Shaped peak heat flux to the target, MW/m^{2}
+:pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
+:pk_pwr_o:q_{peak,shp}^{outer}:1.e-6
+:pk_pwr_iu:q_{peak,shp}^{inner,up}:1.e-6
+:pk_pwr_ou:q_{peak,shp}^{outer,up}:1.e-6
+@page: Neutral pressure in PFR, Pa
+:Pneu_PFR:average:
+:Pneu_PFRi:inner:
+:Pneu_PFRo:outer:
+@page: Neutral pressure at the pump H, Pa
+:p_H2_pump:p_{H2}^{pump}:
+:p_H_pump:p_{H}^{pump}:
+@page: Neutral pressure at the pump D, Pa
+:p_D2_pump:p_{D2}^{pump}:
+:p_D_pump:p_{D}^{pump}:
+@page: Neutral pressure at the pump T, Pa
+:p_T2_pump:p_{T2}^{pump}:
+:p_T_pump:p_{T}^{pump}:
+@page: Neutral pressure at the pump He, Pa
+:p_He_pump:p_{He}^{pump}:
+@page: DT throughput, Pa/m^{3}/s
+:DT_thrpt:DT_{thrpt}:
+@page: Total fuel flux through PFR, s^{-1}
+:PFR_flow_total_H:\Gamma_{H}^{PFR}:
+:PFR_flow_total_D:\Gamma_{D}^{PFR}:
+:PFR_flow_total_T:\Gamma_{T}^{PFR}:
+@page: Total He flux through PFR, s^{-1}
+:PFR_flow_total_He:\Gamma_{He}^{PFR}:
+@page: Total impurity flux through PFR, s^{-1}
+:PFR_flow_total_N:\Gamma_{N}^{PFR}:
+:PFR_flow_total_Ne:\Gamma_{Ne}^{PFR}:
+:PFR_flow_total_Ar:\Gamma_{Ar}^{PFR}:
+@file:user.trc.n.01
 @page: Shaped peak heat flux to the target, MW/m^{2}
 :pk_pwr_i:q_{peak,shp}^{inner}:1.e-6
 :pk_pwr_o:q_{peak,shp}^{outer}:1.e-6

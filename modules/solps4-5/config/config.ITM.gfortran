@@ -4,6 +4,9 @@ ifdef SOLPS_DEBUG
 FCOPTS = -g -fbounds-check -fbacktrace -fdefault-real-8 -ffpe-trap=denormal
 endif
 
+SOLPSINCLUDE += `pkg-config libtirpc --cflags`
+LD_SONNET += `pkg-config libtirpc --libs`
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:

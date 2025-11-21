@@ -1,0 +1,296 @@
+#! /usr/bin/env tcsh
+
+set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
+set EMAIL=`get_git_email`
+set JOB_NAME="SOLPS-ITER"
+set NODES=1
+set PROCS=1
+set THREADS=1
+set hours=24
+set mem=4GB
+set part="unset"
+set account="unset"
+set chain="unset"
+set job_count=0
+echo Your email is $EMAIL
+
+set compress_arg=""
+set compress_suffix=""
+set MPIOPTS=""
+set standalone_arg=""
+set coupled_suffix="_coupled"
+set LOOP_OPTS=""
+set exclusive=""
+
+setenv SOLPSTOP "`determine_SOLPSTOP`"
+if ($SOLPSTOP == "") then
+  setenv SOLPSTOP "`echo $PWD | sed 's:/runs/.*::'`"
+endif
+
+argloop:
+  if ("X${1}X" == "X-hX") then
+    cat <<EOF
+
+Help for $0
+
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the Pitagora HPC cluster.
+
+Usage:
+
+  `basename $0` {options} {<<SCRIPT>>}
+
+where the optional <<SCRIPT>> is the SLURM submission file to be used
+
+Available options are:
+  -j <<JOB NAME>>    set the job name (default $JOB_NAME)
+  -z                 compress run.log using gzip
+  -s                 specify a standalone B2.5 run
+  -x                 requests an exclusive job allocation
+  -c <<JOB_ID>>      job ID of the previous job in a chain submission
+  -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
+  -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
+  -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -M <<MEM_SIZE>>    memory size (default $mem)
+  -N <<NODES>>       number of nodes requested (default $NODES)
+  -Q <<PARTITION>>   partition on which to submit the job (default dcgp_fua_prod for short and long jobs)
+  -A <<ACCOUNT>>     account name (mandatory!)
+
+EOF
+    exit
+  endif
+  if ("X${1}X" == "X-jX") then
+    shift
+    set JOB_NAME="$1"
+    echo Job name is ${JOB_NAME}
+    shift
+    set HELP_STRING=\"${JOB_NAME}\"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-j ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-zX") then
+    set compress_arg="| gzip -9"
+    set compress_suffix=".gz"
+    echo run.log will be compressed
+    shift
+    set LOOP_OPTS="-z ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-sX") then
+    set standalone_arg="-s"
+    set coupled_suffix=""
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5"
+    echo Asking for a B2.5 standalone run
+    shift
+    set LOOP_OPTS="-s ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-mX") then
+    shift
+    if (! $?SOLPS_MPI) then
+      source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
+    endif
+    set MPIOPTS="$1"
+    echo Using MPI options: $MPIOPTS
+    set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
+    echo Asking for MPI run with a total of $PROCS processors
+    shift
+    set HELP_STRING="${MPIOPTS}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-m '${HELP_STRING}' ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-tX") then
+    shift
+    if (! $?SOLPS_OPENMP) then
+      source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
+    endif
+    set THREADS="$1"
+    echo Asking for OpenMP run with $THREADS threads
+    shift
+    set HELP_STRING="${THREADS}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-t ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    echo Asking for run over $NODES nodes
+    shift
+    set HELP_STRING="${NODES}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-N ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-TX") then
+    shift
+    set hours="$1"
+    if ( $hours == 1) then
+      echo Requested time is ${hours} hour
+    else
+      echo Requested time is ${hours} hours
+    endif
+    shift
+    set HELP_STRING="${hours}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-T ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-MX") then
+    shift
+    set mem="$1"
+    echo Requested memory is ${mem}
+    shift
+    set HELP_STRING="${mem}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-M ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-QX") then
+    shift
+    set part="$1"
+    echo Requested partition is ${part}
+    shift
+    set HELP_STRING="${part}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-Q ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-AX") then
+    shift
+    set account="$1"
+    echo Requested account is ${account}
+    shift
+    set HELP_STRING="${account}"
+#    echo $HELP_STRING
+    set LOOP_OPTS="-A ${HELP_STRING} ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-cX") then
+    shift
+    if ($chain == "unset") then
+      set chain="$1"
+    else
+      set chain="$chain,$1"
+    endif
+    @ job_count= ( $job_count + 1 )
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-xX") then
+    shift
+    set exclusive="--exclusive"
+    echo Requesting an exclusive job allocation
+    goto argloop
+  endif
+
+# Determine Tasks
+@ TASKS = ( $PROCS / $NODES  )
+
+# logic to determine the partition on the Pitagora HPC cluster
+@ cpu = ( $hours * $PROCS )
+if ($part == "unset") then
+  if ($hours > 24 ) then
+    set part=dcgp_fua_prod
+  else
+    set part=dcgp_fua_prod
+  endif
+endif
+set job_prefix="SLURM"
+
+# check that account field has been provided
+if ($account == "unset" ) then
+  echo Account needs to be set with -A option
+  exit 1
+endif
+
+if ($1 == "") then
+  echo No argument is specified. Looking for $job_prefix.pitagora
+  set QSUB=`climb_and_look_for $job_prefix.pitagora`
+  if ($QSUB == "//$job_prefix.pitagora") then
+    if (-s $SOLPSTOP/runs/$job_prefix.pitagora) then
+      set QSUB="$SOLPSTOP/runs/$job_prefix.pitagora"
+    else
+      set QSUB=""
+    endif
+  endif
+else if (-s $1) then
+  echo Submission file $1 is specified as an argument.
+  echo Submission file $1 is found in current directory
+  set QSUB=$1
+else
+  echo Submission file $1 is specified as an argument.
+  echo Looking for submission file $1
+  set QSUB=`climb_and_look_for $1`
+  if ($QSUB == "//"$1) then
+    if (-s $SOLPSTOP/runs/$1) then
+      set QSUB="$SOLPSTOP/runs/$1"
+      echo Submission file $QSUB is found
+    else
+      set QSUB=""
+    endif
+  else
+    echo Submission file $QSUB is found
+  endif
+endif
+if($QSUB == "") then
+  echo No Pitagora submission file $1 found. Exiting.
+  exit 1
+endif
+
+echo Using submission file template $QSUB
+if ($chain == "unset") then
+  echo For loop resubmission following options will be used: $LOOP_OPTS
+else if ($job_count == 1) then
+  echo Chain submission following job number ${chain}
+else if ($job_count > 1) then
+  echo Chain submission following job numbers ${chain}
+endif
+
+sed \
+  -e 's:#PWD#:'$PWD':g' \
+  -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
+  -e 's:#EMAIL#:'$EMAIL':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
+  -e 's:#NODES#:'$NODES':g' \
+  -e 's:#TASKS#:'$TASKS':g' \
+  -e 's:#PROCS#:'$PROCS':g' \
+  -e 's:#THREADS#:'$THREADS':g' \
+  -e 's:#MEM#:'$mem':g' \
+  -e 's:#HOURS#:'$hours':g' \
+  -e 's:#PART#:'$part':g' \
+  -e 's:#ACCOUNT#:'$account':g' \
+  -e 's:#CPU#:'$cpu':g' \
+  -e 's:#JOBNAME#:'$JOB_NAME':g' \
+  -e 's:#USER#:'$USER':g' \
+  -e 's:#LOOPOPTS#:'"$LOOP_OPTS"':g' \
+  -e 's:#COMPRESS_ARG#:'"$compress_arg"':g' \
+  -e 's:#COMPRESS_SUFFIX#:'"$compress_suffix"':g' \
+  -e 's:#STANDALONE_ARG#:'"$standalone_arg"':g' \
+  -e 's:#COUPLED_SUFFIX#:'"$coupled_suffix"':g' \
+  < $QSUB > $NAME
+
+if ($chain != "unset") then
+  set b2run_line=`grep -n "b2run" $NAME | cut -d ':' -f 1`
+  @ before_line = $b2run_line - 1
+  head -n ${before_line} $NAME > $job_prefix.pitagora.after_$chain
+  echo "mv run.log.gz run.log.$chain.gz" >> $job_prefix.pitagora.after_$chain
+  echo "mv b2mn.prt b2mn.prt.$chain" >> $job_prefix.pitagora.after_$chain
+  echo "mv b2fstate b2fstati" >> $job_prefix.pitagora.after_$chain
+  echo "if (-e b2favere) mv b2favere b2faveri" >> $job_prefix.pitagora.after_$chain
+  set all_lines=`cat $NAME | wc -l`
+  @ tail_lines = $all_lines - $before_line
+  tail -n $tail_lines $NAME >> $job_prefix.pitagora.after_$chain
+  set NAME=$job_prefix.pitagora.after_$chain
+endif
+
+update_solps_run_status -n "Submitted at `date`"
+
+if ($chain == "unset") then
+  sbatch ${exclusive} $NAME
+else
+  sbatch ${exclusive} --dependency=afterok:${chain} $NAME
+endif

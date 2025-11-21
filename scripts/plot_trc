@@ -34,7 +34,7 @@ LL_USER='user.trc'
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}
 BASERUN_DIR=../baserun
-if [ $CURRENT_DIR = $B2EXE_DIR ]
+if [ $CURRENT_DIR == $B2EXE_DIR ]
 then
   BASERUN_DIR=../$BASERUN_DIR
 fi
@@ -60,7 +60,7 @@ else
   exit 2
 fi
 
-if [ "$PLOT_TRC_FMT" = "ps" ] || [ "$PLOT_TRC_FMT" = "pdf" ]
+if [ "$PLOT_TRC_FMT" == "ps" ] || [ "$PLOT_TRC_FMT" == "pdf" ]
 then
   OUTPUT_FMT=$PLOT_TRC_FMT
   echo "Output will be written to $OUTPUT_FILE.$OUTPUT_FMT"
@@ -125,18 +125,21 @@ if [ -d "$TRC_DIR" ]
 then
   echo "cp -rf $TRC_DIR/* $WRK_DIR"
   cp -rf "$TRC_DIR"/* "$WRK_DIR"
-  echo "fixing format: sed -i 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
-  sed -i 's/[0-9]-/E-/g' $WRK_DIR/*
-  sed -i 's/[0-9]+/E+/g' $WRK_DIR/*
-  count=`ls -1 $WRK_DIR/user.trc* 2>/dev/null | wc -l`
-  if [ $count > 1 ]
+# commented out since in principle file format should not brake anymore  
+#  echo "fixing format: sed -i 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
+#  sed -i 's/[0-9]-/E-/g' $WRK_DIR/*
+#  sed -i 's/[0-9]+/E+/g' $WRK_DIR/*
+  echo "rm -rf $WRK_DIR/*.i"
+  rm -rf "$WRK_DIR"/*.i
+  count=`ls -l $WRK_DIR/user.trc* 2>/dev/null | wc -l`
+  if [ "$count" -gt 1 ]
   then
-    USER_TMP=`ls -1 $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
+    USER_TMP=`ls -l $WRK_DIR/user.trc* | tail -1 | rev | cut -d " " -f 1 | rev`
     echo "temproary $LL_USER file = $USER_TMP spotted"
     echo "cp -rf $USER_TMP $WRK_DIR/$LL_USER"
     cp -rf  "$USER_TMP" "$WRK_DIR"/"$LL_USER"
   fi
-  if [ "$CURRENT_DIR" = "$B2EXE_DIR" ]
+  if [ "$CURRENT_DIR" == "$B2EXE_DIR" ]
   then
     for f in $LN_FILES; do {
       if [ -f "$f" ]
@@ -266,7 +269,7 @@ else
   ls -l "$PEXEC" "$PCMD" "$WRK_DIR/"
 fi
 
-if [ "$OUTPUT_FMT" = "pdf" ]
+if [ "$OUTPUT_FMT" == "pdf" ]
 then
   if [ -f "$WRK_DIR/$ORIGIN_PDF" ]
   then
@@ -278,10 +281,10 @@ then
   fi
 fi
 
-if [ "$OUTPUT_FMT" = "ps" ]
+if [ "$OUTPUT_FMT" == "ps" ]
 then
-  count=`ls -1 $WRK_DIR/*.ps 2>/dev/null | wc -l`
-  if [ $count != 0 ]
+  count=`ls -l $WRK_DIR/*.ps 2>/dev/null | wc -l`
+  if [ "$count" -ne 0 ]
   then
     echo "producing $OUTPUT_FILE.$OUTPUT_FMT"
     echo "gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=ps2write -o $OUTPUT_FILE.$OUTPUT_FMT $WRK_DIR/*.ps"

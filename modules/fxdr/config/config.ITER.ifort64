@@ -4,6 +4,14 @@
 LD_MSCL   ?= `pkg-config mscl --libs`
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet
 
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+# FC        = ifx
+# else
+FC        = ifort
+# endif
+
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
@@ -19,11 +27,11 @@ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
 FFLAGS    += -vec_report0
 endif
 
-INCLUDE    = -Isrc
+INCLUDE    = -Isrc `pkg-config libtirpc --cflags`
 COMPILE    = ${FC} -c ${FFLAGS}
 CPP        = /lib/cpp -traditional
 
-LDLIBS     = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDLIBS     = ${LD_SONNET} ${LD_MSCL} `pkg-config libtirpc --libs`
 LDEXTRA    =
 
 #!!!Local Variables:
