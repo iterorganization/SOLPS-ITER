@@ -1,7 +1,7 @@
 # European Union Public Licence v. 1.1
 EUPL © the European Community 2007
 
-This European Union Public Licence (the “EUPL”) applies to the Work or Software (as defined below) which is provided under the terms of this Licence. Any use of the Work, other than as authorised under this Licence is prohibited (to the extent such use is covered by a right of the copyright holder of the Work).
+This European Union Public Licence (the "EUPL") applies to the Work or Software (as defined below) which is provided under the terms of this Licence. Any use of the Work, other than as authorised under this Licence is prohibited (to the extent such use is covered by a right of the copyright holder of the Work).
 The Original Work is provided under the terms of this Licence when the Licensor (as defined below) has placed the following notice immediately following the copyright notice for the Original Work:
 
 Licensed under the EUPL v.1.1
@@ -18,7 +18,7 @@ In this Licence, the following terms have the following meaning:
 - *The Executable Code*: any code which has generally been compiled and which is meant to be interpreted by a computer as a program.
 - *The Licensor*: the natural or legal person that distributes and/or communicates the Work under the Licence.
 - *Contributor(s)*: any natural or legal person who modifies the Work under the Licence, or otherwise contributes to the creation of a Derivative Work.
-- *The Licensee* or “*You*”: any natural or legal person who makes any usage of the Software under the terms of the Licence.
+- *The Licensee* or "*You*": any natural or legal person who makes any usage of the Software under the terms of the Licence.
 - *Distribution and/or Communication*: any act of selling, giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, on-line or off-line, copies of the Work or providing access to its essential functionalities at the disposal of any other natural or legal person.
 
 ## 2. Scope of the rights granted by the Licence
@@ -112,7 +112,7 @@ This licence shall be governed by the Belgian law if:
 - the Licensor, other than the European Commission, has no residence or registered office inside a European Union country.
 
 ## Appendix
-“Compatible Licences” according to article 5 EUPL are:
+"Compatible Licences" according to article 5 EUPL are:
 - *GNU General Public License (GNU GPL) v. 2 - Open Software License (OSL) v. 2.1, v. 3.0*
 - *Common Public License v. 1.0*
 - *Eclipse Public License v. 1.0*

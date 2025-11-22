@@ -244,7 +244,7 @@ endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
-	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null ; [ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
