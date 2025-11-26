@@ -25,8 +25,9 @@ set RUN_DIRS = "#RUN_DIRS#"
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpirun
   set MPI_PREFLAGS="--mpi=mpi2"
-  set USE_MPI="-m srun"
+  set USE_MPI="-m ${MPI_EXEC}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 else
   set MPI_PREFLAGS=""
