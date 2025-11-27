@@ -4772,16 +4772,23 @@ web site
 
 To activate a coupled run, the master switch is {\tt 'b2mndr\_eirene'} which should be set to {\tt '1'}. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches {\tt 'b2mndr\_rescale\_neutrals'} and {\tt 'b2mndr\_rescale\_neutral\_sources'}. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replenished.
 
-In order to attempt to improve convergence of coupled \SOLPSITER runs, currently three
-averaging schemes are available to reduce the impact of the Monte Carlo noise intrinsic
-to the {\tt Eirene} sources. The user may want to activate one of these schemes,
+In order to attempt to improve convergence of coupled \SOLPSITER runs, currently four
+averaging schemes are available to reduce the impact of the Monte Carlo noise, which is intrinsic
+to the {\tt Eirene} sources, to the plasma solution (especially concerning the particle
+balance of impurities, which may be worsened because of bias errors derived from high levels
+of noise in their {\tt Eirene} source terms). The user may want to activate one of these schemes,
 although there is no firm recommendation as to which will perform best. The switches
 for those are:
 \begin{description}
   \item[eirene\_neutr\_avg] The neutral sources are averaged over the last up to $neutr\_avg$ {\tt Eirene} calls. After $neutr\_avg$ calls, the history is cleared and the average arrays are rebuilt progressively again (ratcheting average scheme).
   \item[eirene\_underrelax] The neutral sources are multiplied by an under-relaxation factor of $1/eirene\_underrelax$ and added to the sources from the previous timestep (under-relaxation scheme).
   \item[b2stbr\_eir\_src\_nhist] The neutral sources are averaged over the last $nhist$ {\tt Eirene} calls (moving average scheme).
+  \item[eirene\_averaging\_multiple\_calls] {\tt Eirene} is called $multiple\_calls$ times within a single time step, before a new plasma solution is computed by {\tt B2.5}, and the {\tt Eirene} sources are averaged over all performed calls before being used to compute the new plasma solution.
 \end{description}
+The first three schemes should be used only when converged steady-state solution is of interest, since sources
+computed in previous time steps also contribute to the neutral background in use for any current time step.
+The last scheme, despite coming at the cost of a significant increase in computation time, may also be used
+for time-dependent simulations.
 
 In addition to those, please see the recommended averaging scheme described in
 Section~\ref{sec:B2Eirene:averaging}.
