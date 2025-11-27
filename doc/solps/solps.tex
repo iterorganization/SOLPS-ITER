@@ -8695,7 +8695,7 @@ $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the
 
 \subsubsection{Neoclassical corrections for high Z impurity transport}
 
-These corrections~\cite{korzueva_solps-iter_2025}  are based on the Zhdanov-Grad module (see section \ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
+These corrections (see~\cite{KORZUEVA2025} for a full derivation) are based on the Zhdanov-Grad module (see section \ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
 
 \begin{sloppypar}
 If {\tt 'b2tral\_Zhdanov\_nc'} is set to {\tt '1'}, neoclassical corrections for impurity transport are applied for a chosen impurity isonuclear sequence, {\tt 'b2tral\_Zhdanov\_nc\_spec'}, e.g. for Ne in case of a {\tt D+Ne} plasma {\tt 'b2tral\_Zhdanov\_nc\_spec'} should be set to {\tt '2'}. The corrections are more accurate for impurity species with at least Z=10.
@@ -8755,7 +8755,7 @@ c_{2,a}=\frac{1.6\varepsilon^3 g^2}{1+\varepsilon^{1.5}g^2}
 g=\frac{\nu_{\ast} \varepsilon^{1.5}}{Z_{eff}}
 \end{equation}
 
-Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in \ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in section \ref{sec:Zhdanov}.
+Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in Section~\ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in section \ref{sec:Zhdanov}.
 
 If {\tt 'b2sifr\_Zhdanov\_test'} is set to {\tt '1'}, the Zhdanov-Grad variables are calculated but used only for the friction and thermal force. Additionally, the velocity-dependent ion heat flux, see Eq.~(\ref{eq:eni_tifix}), is included. Other parts of the Zhdanov-Grad module are not used.
 
