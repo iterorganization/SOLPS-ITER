@@ -8716,9 +8716,9 @@ S^{m}_{fr,ia} = S^{m}_{fr,ia}\cdot c^{fr}_a
 c_{a}^{tf} & =
 & \left\{
 \begin{matrix}
-	\frac{c_{0,a}*c_{1,a}+c_{2,a}}{K_2} , &  \text{\small{if $Z_a \ge Z^{min}_a$}} \\
-	1 , &  \text{\small{for all other non-main ion species}} \\
-	\frac{1}{\overline{Z_{\beta_I}^2 n_{\beta_I}}} \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{tf} , & \text{for main ions} \\
+  \frac{c_{0,a}*c_{1,a}+c_{2,a}}{K_2} , &  \text{\small{if $Z_a \ge Z^{min}_a$}} \\
+  1 , &  \text{\small{for all other non-main ion species}} \\
+  \frac{1}{\overline{Z_{\beta_I}^2 n_{\beta_I}}} \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{tf} , & \text{for main ions} \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -8728,9 +8728,9 @@ c_{a}^{tf} & =
 c_{a}^{fr} & =
 & \left\{
 \begin{matrix}
-	1+\frac{ 0.01-0.36 \cdot \alpha_{H,a}+0.44\cdot \alpha_{H,a}^{0.77} }{1+g^2} , &  \text{if $Z_a \ge Z^{min}_a$} \\
-	1, &  \text{for all other non-main ion species} \\
-	\frac{1}{\overline{Z_{\alpha_I}^2 n_{\alpha_I}}}  \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{fr} , & \text{for main ions}  \\
+  1 + \frac{ 0.01-0.36 \cdot \alpha_{H,a}+0.44\cdot \alpha_{H,a}^{0.77} }{1+g^2} , &  \text{if $Z_a \ge Z^{min}_a$} \\
+  1, &  \text{for all other non-main ion species} \\
+  \frac{1}{\overline{Z_{\alpha_I}^2 n_{\alpha_I}}}  \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{fr} , & \text{for main ions}  \\
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
@@ -8738,11 +8738,11 @@ c_{a}^{fr} & =
 \begin{equation}\label{eq:mom_neoctermi_0}
 c_{0,a}=\frac{\sqrt{2}c^{hTA,an}_{\beta_{main}}}{2.5 c^{RTA,an}_{\beta_{main},\alpha Z}}
 \end{equation}
-	
+
 \begin{equation}\label{eq:mom_neoctermi_1}
 c_{1,a}=\frac{2.4\varepsilon^{1.5}}{1+(0.36+0.4\alpha_{H,a})g^2}
 \end{equation}
-	
+
 \begin{equation}\label{eq:mom_neoctermi_2}
 c_{2,a}=\frac{1.6\varepsilon^3 g^2}{1+\varepsilon^{1.5}g^2}
 \end{equation}
@@ -21436,7 +21436,8 @@ NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NPMO & equations/b2npmo.F \\
-NO\_OPENMP\_B2SIFRTF & sources/b2sifrtf.F \\
+NO\_OPENMP\_B2SIFRTF\_LOOP1 & sources/b2sifrtf.F \\
+NO\_OPENMP\_B2SIFRTF\_LOOP2 & sources/b2sifrtf.F \\
 NO\_OPENMP\_B2SIHS & sources/b2sihs.F \\
 NO\_OPENMP\_B2SPCX & sources/b2spcx.F \\
 NO\_OPENMP\_B2SPEL & sources/b2spel.F \\

@@ -12,7 +12,7 @@
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
-#SBATCH  --no-requeue
+#SBATCH --no-requeue
 
 ### This script submits the job, which launches the B2.5 code, to the IPP cluster,
 ### and resubmits the job again after successful finish of B2.5 in a loop manner.
