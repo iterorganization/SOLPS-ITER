@@ -2633,9 +2633,10 @@ which contains
   \item[13] particle density to achieve specified total flux,
     {\tt CONPAR(,,1)} is the specified radial flux crossing the boundary surface, to which is added the returning flux of ionised neutrals that crossed into the plasma core ({\it via} {\tt CONPAR(,,3)}) when running with {\tt Eirene} and the {\tt 'ionising\_core'} switch is used,
     {\tt CONPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref} will be used).
-  \item[14] sound speed velocity flux,
-    {\tt CONPAR(,,1)} is a multiplier to the outgoing sound speed $C_{s, \mbox{collective}}$. Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
+  \item[14] if {\tt MOMPAR(,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$.
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,a}$.
     If {\tt CONPAR(,,2).gt.0}, an additional decay length loss is added, where {\tt CONPAR(,,2)} is the decay length.
+    Recommended sheath boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15} with {\tt bcene\_15\_style=1}, {\tt BCPOT=11}, and {\tt BCMOM=13}.
   \item[15] prescribe a radial leakage velocity,
     {\tt CONPAR(,,1)} specifies the leakage velocity in units of the local thermal velocity.
   \item[16] particle density to achieve specified total flux, used with {\tt ASTRA} coupling. The total desired flux is summed over all {\tt BCCON=16} core boundaries.
@@ -2709,7 +2710,9 @@ which contains
     {\tt MOMPAR(,,1)} is not used.
     Not yet available for WG.
   \item[12] condition from {\tt b2stbc\_spb} for the parallel momentum.
-  \item[13] sheath boundary condition from {\tt b2stbc\_spb} for the parallel momentum. Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15}, {\tt BCPOT=11}, and {\tt BCCON=14}.
+  \item[13] if {\tt MOMPAR(,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing collective sound speed $C_s$;
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; {\tt MOMPAR(,,1)} is a multiplier to the outgoing specific species sound speed $C_{s,a}$;
+    Recommended boundary condition for use with drifts, in conjunction with {\tt BCENE/I=15} with {\tt bcene\_15\_style=1}, {\tt BCPOT=11}, and {\tt BCCON=14}.
   \item[14] condition from {\tt b2stbc\_spb} for the parallel momentum.
   \item[15] prescribe the value of the parallel velocity as a function of poloidal coordinate, scaling with $\frac{\langle B\rangle}{B}$.
     Not yet available for WG.
@@ -2757,7 +2760,8 @@ which contains
     {\tt ENEPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for electron energy, {\tt ENEPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s, \mbox{collective}} n_e T_e$
-  \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bcene} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition, recommended when using drifts. Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENI=15}, and {\tt BCPOT=11}.
+    When {\tt bcene\_15\_style=1}, the electron flux is computed via the exponential of the sheath potential drop, and {\tt ENEPAR(:,1)} is used to artificially increase or decrease the sheath transmission coefficient for electrons (default = {\tt 0}).
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the boundary surface,
     {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
@@ -2827,7 +2831,10 @@ which contains
    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
-  \item[15] sheath boundary condition, recommended when using drifts (see Section~\ref{sec:bceni} for details). Linked to using {\tt BCCON=14} and {\tt BCMOM=13} for all ion species, {\tt BCENE=15}, and {\tt BCPOT=11}.
+  \item[15] sheath boundary condition. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
+    the ion heat flux is computed using the collective sound speed and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5}); to be used in conjunction with {\tt BCENE=15}, {\tt BCPOT=11}, {\tt BCCON=14} and {\tt BCMOM=13} for all ion species.
+    If {\tt MOMPAR(,,2)} $\geq 0.5$, single species sound speed velocity flux, non-marginal imposition of the Bohm-Chodura sheath entrance condition; the ion heat flux is computed using the target particle flux and {\tt ENIPAR(:,1)} sets the ion sheath transmission coefficient (default {\tt 1.5});
+    to be used in conjunction with {\tt BCMOM=13}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCCON=14}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the boundary surface,
     {\tt ENIPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
@@ -10955,11 +10962,13 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1,\;\; p_{n_a,a,1} = 0 $
 \right|_W
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
+
+{\em If the sine of the incident field line angle is larger than {\tt Qalfmin}:}
+
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
-
-If the sine of the incident field line angle is larger than {\tt Qalfmin}:
 
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
@@ -10975,7 +10984,33 @@ If the sine of the incident field line angle is larger than {\tt Qalfmin}:
 
 $p_{n,a,1} = +1$
 
-For nearly tangent field lines, we use instead:
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+\left. \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_W
+=
+\left. \left[
+- \frac{\sqrt g}{h_x} |b_x|
+U_{out} n_a
+-
+\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\right]
+\right|_W
+\end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( -u_{\parallel,a}^{extrap}- \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
+
+{\em For nearly tangent field lines, we use instead:}
 
 \begin{equation}
 \begin{matrix}
@@ -11041,11 +11076,13 @@ $r_{rec,0,0} = 0,\;\; r_{rec,1,0} = 1$
 \right|_E
 \end{equation*}
 
-{\em Imposing a sound speed outgoing flux:} {\tt BCCON = 14}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCCON = 14}
+
+{\em If the sine of the incident field line angle is larger} {\tt Qalfmin}:
+
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
-
-If the sine of the incident field line angle is larger {\tt Qalfmin}:
 
 \begin{equation*}
 \left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
@@ -11061,7 +11098,33 @@ If the sine of the incident field line angle is larger {\tt Qalfmin}:
 
 $p_{n,a,1} = +1$
 
-For nearly tangent field lines, we use instead:
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+\left. - \frac{\sqrt g}{h_x} \widetilde{\Gamma}_{ax} \right|_E
+=
+\left. \left[
+- \frac{\sqrt g}{h_x} |b_x|
+U_{out} n_a
++
+\frac{\sqrt g}{h_x} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i}{\partial y}
+\right]
+\right|_E
+\end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
+
+{\em For nearly tangent field lines, we use instead:}
 
 \begin{equation}
 \begin{matrix}
@@ -11261,7 +11324,11 @@ $c_{m,a,3} = 0$, $c_{m,a,6} = -1$
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition on the velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
+
+{\em If the sine of the incident field line angle is larger than} {\tt Qalfmin}:
+
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11275,18 +11342,37 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 
 
 with $u_{big} = 10^{10} \sqrt{\frac{100 \text{eV}}{m_p}}$ and $\epsilon = 10^{-10}$.
 
-If the sine of the incident field line angle is larger than {\tt Qalfmin}:
-
 \begin{equation*}
 V_{West} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
-\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} \min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 - h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
 
-For nearly tangent field lines, we apply a no radial shear velocity condition.
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCCON = 14}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCENI = 15}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+  \left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_W = \left. \left[
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} U_{out} \frac{B_x}{|B_x|}
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel,a}
+  \right]
+  \right|_W
+  \end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( -u_{\parallel,a}^{extrap} - \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
+
+{\em For nearly tangent field lines}, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11342,7 +11428,11 @@ $u_{p_{out}} = \max \left\{ 0, u_{u_{out}} + u_a^{(dia)} \frac{b_z}{b_x} \right\
 
 \underline{If $z_a \neq 0$}, $p_{m,a,1} = 1$
 
-{\em Imposing the {\tt b2stbc\_spb} style boundary condition for parallel velocity:} {\tt BCMOM = 13}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCMOM = 13}
+
+{\em If the sine of the incident field line angle is larger than} {\tt Qalfmin}:
+
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} < 0.5$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCCON = 14}, and {\tt BCPOT = 11}.
 
@@ -11352,18 +11442,37 @@ $\left. -h_z \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
 \right]
 \right|_E$
 
-If the sine of the incident field line angle is larger than {\tt Qalfmin}:
-
 \begin{equation*}
 V_{East} =
-- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x}
-\min \left( 2 c_s, V_{ax}^{(\exb)} \right)
+- h_z \frac{\sqrt g}{h_x} \frac{|b_x|}{b_x} \min \left( 2 c_s, V_{ax}^{(\exb)} \right)
 + h_z \frac{\sqrt g}{h_x} b_x
 \sqrt{\frac{\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} p_a}
 {\sum \limits_{\substack{a = 0 \\ z_a \neq 0}}^{ns-1} m_a n_a}}
 \end{equation*}
 
-For nearly tangent field lines, we apply a no radial shear velocity condition.
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(,,2)} = $p_{m,a,2} \geq 0.5$
+
+to be used in conjunction with BCCON=14, BCENE=15 with {\tt bcene\_15\_style=1}, BCENI=15, BCPOT=3 or BCPOT=11 with {\tt istyle\_fchi=0}.
+
+This condition imposes that the sum of the poloidal projection of the parallel velocity and the poloidal $\exb$ velocity (restricted to not exceed $\pm 2 c_{s,a} |b_x|$), equals \textit{at least} the specific species sound speed $c_{s,a}$, reprojected in the the poloidal direction.
+
+The parameter $p_{m,a,1}$ is set by {\tt MOMPAR(,,1)}. The parameter $\chi$ is set by {\tt GAMMAI}.
+
+\begin{equation*}
+  -\left. \frac{\sqrt g}{h_x} \Gamma_{ax}^m \right|_E = \left. \left[
+          \frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} U_{out} \frac{B_x}{|B_x|}
+          -\frac{u_{big}}{\epsilon^2} n_a m_a \frac{\sqrt{g}}{h_x} V_{\parallel,a}
+  \right]
+  \right|_E
+  \end{equation*}
+
+\begin{equation*}
+  U_{out} = \max \left( u_{\parallel,a}^{extrap} + \frac{V_{\exb}^{restr}}{|b_x|}, p_{m,a,1} \cdot \sqrt{\frac{\chi T_i + z_a T_e}{m_a}} \right)
+\end{equation*}
+
+where $u_{\parallel,a}^{extrap}$ is the extrapolated parallel velocity at the target, and $V_{\exb}^{restr}$ is the poloidal $\exb$ velocity restricted to not exceed $\pm 2 c_{s,a} |b_x|$.
+
+{\em For nearly tangent field lines}, we apply a no radial shear velocity condition.
 
 \underline{If $z_a = 0$}
 
@@ -11768,7 +11877,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_West_style1}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11776,6 +11885,8 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_W
 \end{equation}
+
+with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_West_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_West_style1}).
 
@@ -11845,7 +11956,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_East_style1}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e \right) T_e +
+                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11853,6 +11964,8 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
         \frac{\sqrt g}{h_x} q_{ex}^{P.Sch}
 \right] \right|_E
 \end{equation}
+
+with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_East_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_East_style1}).
 
@@ -12096,11 +12209,13 @@ $c_{h_i,a,2} = -10^{-2}$
 
 \subsubsection{West}
 
-{\em Boundary condition from {\tt b2stbc\_spb}:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
+
+{\em If the sine of the incident field line angle is larger than} {\tt Qalfmin}:
+
+{\em - Marginal imposition, with collective sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} < 0.5$
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
-
-If the sine of the incident field line angle is larger than {\tt Qalfmin}:
 
 \begin{equation}\label{eq:sheath_ion_bc_West}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
@@ -12116,7 +12231,30 @@ $p_{h_i,1} = +1.5$
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_West}).
 
-For nearly tangent field lines, we use instead:
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} \geq 0.5$
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE = 15} with {\tt bcene\_15\_style = 1}, {\tt BCCON = 14}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient.
+
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,1)}.
+
+\begin{equation*}
+  \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( -\widetilde{\Gamma}_{ax} - D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  -
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_W
+\end{equation*}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_West}).
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em For nearly tangent field lines}, we use instead:
 
 \begin{equation}\label{eq:sheath_ion_bc_tangent_West}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_W = \left.
@@ -12129,7 +12267,7 @@ For coupled runs, if {\tt b2stbc\_bceni\_15\_style} is set to {\tt 1} (default i
 
 $p_{h_i,1} = 2 + \nu^2_\tau + \nu^2_\nu + 0.5 \frac{g \left( \nu_\nu \right) - 1}{g \left( \nu_\nu \right)}$
 
-In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+\bigskip
 
 {\em Boundary condition from {\tt b2stbc\_spb}:}
 
@@ -12199,11 +12337,13 @@ $p_{h_i,2} = 10^{-3}$ with drifts, should be $p_{h_i,2} = 0$
 
 \subsubsection{East}
 
-{\em Imposing a {\tt b2stbc\_spb} style boundary condition:} {\tt BCENI = 15}
+{\em Drift-compatible, Bohm-Chodura sheath entrance condition} {\tt BCENI = 15}
+
+{\em If the sine of the incident field line angle is larger than} {\tt Qalfmin}:
+
+{\em - Marginal imposition, with collective sound speed:} MOMPAR(ismain,,2) = $p_{m,ismain,2} < 0.5 $
 
 To be used in conjunction with {\tt BCENE = 15}, {\tt BCCON = 14}, {\tt BCMOM = 13}, and {\tt BCPOT = 11}.
-
-If the sine of the incident field line angle is larger than {\tt Qalfmin}:
 
 \begin{equation}\label{eq:sheath_ion_bc_East}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
@@ -12219,7 +12359,30 @@ $p_{h_i,1} = +1.5$
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included inside the species summation on the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_East}).
 
-For nearly tangent field lines, we use instead:
+In case of ion temperature oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em - Non-marginal imposition, with individual species sound speed:} {\tt MOMPAR(ismain,,2)} = $p_{m,ismain,2} \geq 0.5 $
+
+to be used in conjunction with {\tt BCMOM = 13}, {\tt BCENE=15} with {\tt bcene\_15\_style = 1}, {\tt BCCON = 14}, {\tt BCPOT = 3} or {\tt BCPOT = 11} with {\tt istyle\_fchi = 0}.
+
+This condition imposes that the ion heat flux, minus its Pfirsch-Schlueter component, is equal to the ion convective particle flux (excluding its Pfirsch-Schlueter component) times the ion sheath transmission coefficient.
+
+The parameter $p_{i,1}$ is set by {\tt ENIPAR(:,1)}.
+
+\begin{equation*}
+  -\left. \frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
+  - p_{i,1} \frac{\sqrt g}{h_x}
+  \sum_a \left( \widetilde{\Gamma}_{ax} + D_{axy}\frac{1}{h_y}\frac{\partial n_aT_i}{\partial y} \right) T_i
+  +
+  \frac{\sqrt g}{h_x} q_{ix}^{P.Sch}
+  \right|_E
+\end{equation*}
+
+If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} n_a$ is included inside the species summation on the r.h.s. of Eq.~(\ref{eq:sheath_ion_bc_East}).
+
+In case of ion temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_ti} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
+
+{\em For nearly tangent field lines}, we use instead:
 
 \begin{equation}\label{eq:sheath_ion_bc_tangent_East}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ix} \right|_E = \left.
@@ -15131,7 +15294,7 @@ The following are vector time-dependent quantities stored in
 inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
 (outer for LSN, inner for USN, and lower outer for DN configurations).  The
 positions of the inner and outer midplanes are defined by the
-{\tt RZIMP} and {\tt RZOMP} vraiables, respectively, in
+{\tt RZIMP} and {\tt RZOMP} variables, respectively, in
 {\tt b2.user.parameters}.
 
 Again, the total internal energy flux quantities {\tt ft3d..} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
@@ -17421,10 +17584,10 @@ are not met, an error is returned and no action is taken.
     drop \index{b2plot, drop}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:drop}  & Drop array on top of stack \\
     dup \index{b2plot, dup}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:dup}   & Duplicate array on top of stack \\
     eirc \index{b2plot, eirc}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:eirc}  & Copy {\tt Eirene} data onto {\tt B2.5} data \\
-    f.imp \index{b2plot, f.imp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.imp}  & Plot along the inner midplane \\
+    f.imp \index{b2plot, f.imp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.imp} & Plot along the inner midplane \\
     f.lx \index{b2plot, f.lx}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.lx}  & Plot against $\log(x)$ \\
     f.ly \index{b2plot, f.ly}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.ly}  & Plot against $\log(y)$ \\
-    f.omp \index{b2plot, f.omp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.omp}  & Plot along the outer midplane \\
+    f.omp \index{b2plot, f.omp}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.omp} & Plot along the outer midplane \\
     f.t \index{b2plot, f.t}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.t}   & Plot along a flux tube \\
     f.x \index{b2plot, f.x}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.x}   & Plot against $x$ \\
     f.y \index{b2plot, f.y}        & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:f.y}   & Plot against $y$ \\
@@ -17481,7 +17644,7 @@ are not met, an error is returned and no action is taken.
     stoe \index{b2plot, stoe}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stoe}  & Copy top of matrix stack to \\
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} Eirene stack \\
     stow \index{b2plot, stow}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:stow}  & Copy top of matrix stack to wall stack \\
-    sumft \index{b2plot, sumft}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumft}  & Sum over flux tube \\
+    sumft \index{b2plot, sumft}    & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumft} & Sum over flux tube \\
     sumx \index{b2plot, sumx}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumx}  & Sum over $x$ \\
     sumy \index{b2plot, sumy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumy}  & Sum over $y$ \\
     sumz \index{b2plot, sumz}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:sumz}  & Sum over species \\
@@ -17491,7 +17654,7 @@ are not met, an error is returned and no action is taken.
                                    &   &   &   &   &   &   &   &  & \hspace{1cm}to launch trajectories \\
     tese \index{b2plot, tese}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:tese}  & Copy top of stack onto \\
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} electron temperature \\
-    traj \index{b2plot, traj}      & 3+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj}  & Trajectories \\
+    traj \index{b2plot, traj}      & 3+* & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:traj} & Trajectories \\
     uuse \index{b2plot, uuse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:uuse}  & Set $X$-component of trajectory flows \\
     vvse \index{b2plot, vvse}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:vvse}  & Set $Y$-component of trajectory flows \\
     wtos \index{b2plot, wtos}      & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wtos}  & Copy wall stack array onto \\
@@ -17762,7 +17925,7 @@ commands take one value off the "string" stack.
     chvl \index{b2plot, chvl}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:chvl}     & Value at positions \\
     cltb \index{b2plot, cltb}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cltb}     & Filename for a colour table \\
     cmd \index{b2plot, cmd}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmd}      & Filename from which to take commands \\
-    cmdcdf \index{b2plot, cmdcdf} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmdcdf}   & Loop command file on {\tt CDF} data \\
+    cmdcdf \index{b2plot, cmdcdf} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cmdcdf}  & Loop command file on {\tt CDF} data \\
     ecam \index{b2plot, ecam}    & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:ecam}     & Camera plot for Eirene stack data \\
     echbx \index{b2plot, echbx}  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & \ref{sec:echbx}    & Boxcar average of chords for \\
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} Eirene stack data \\
@@ -17778,11 +17941,11 @@ commands take one value off the "string" stack.
     movi \index{b2plot, movi}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movi}     & Movie \\
     movie\index{b2plot, movie}, nmovie \index{b2plot, nmovie} & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:movie} & New movie option \\
     mprt \index{b2plot, mprt}    & 0 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mprt}     & Output top of matrix stack to a file \\
-    mtab \index{b2plot, mtab}    & 2 or 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab}     & Output part of the matrix on top \\
+    mtab \index{b2plot, mtab}    & 2 or 4 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:mtab} & Output part of the matrix on top \\
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} of the stack to a file \\
-    omovie \index{b2plot, omovie} & 2 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:omovie}   & Old movie option \\
+    omovie \index{b2plot, omovie} & 2 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:omovie}  & Old movie option \\
     oson \index{b2plot, oson}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:oson}     & Output geometry in {\tt Sonnet} format \\
-    outp \index{b2plot, outp}    & 1 or 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp}     & Prints value of specific element \\
+    outp \index{b2plot, outp}    & 1 or 2 & 0 & 1 & 1 & 0 & 0 & 0 & \ref{sec:outp} & Prints value of specific element \\
     pdev \index{b2plot, pdev}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:pdev}     & {\tt PLPLOT} device name \\
     saw \index{b2plot, saw}      & 2 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:saw}      & Read external data \\
                                  &   &   &   &   &   &   &   &   & \hspace{1cm} onto the matrix stack \\
@@ -17801,7 +17964,7 @@ commands take one value off the "string" stack.
     sswap \index{b2plot, sswap}  & 0 & 0 & 2 & 0 & 0 & 0 & 0 & \ref{sec:sswap}    & Swap the top two elements of the \\
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} string stack \\
     tlbl \index{b2plot, tlbl}    & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:tlbl}     & Set target graph label \\
-    trgblbl \index{b2plot, trgblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:trgblbl}  & Set target bar label \\
+    trgblbl \index{b2plot, trgblbl} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:trgblbl} & Set target bar label \\
     trgprt \index{b2plot, trgprt} & 0 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgprt}  & Output top of target stack to a file \\
     trgtab \index{b2plot, trgtab} & 4 & 0 & 1 & 0 & 0 & 0 & 1 & \ref{sec:trgtab}  & Output part of the top of the \\
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} target stack to a file \\
