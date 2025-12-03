@@ -8,20 +8,20 @@
 [submodule "B2.5"]
 	path = modules/B2.5
 	url = https://github.com/iterorganization/B2.5.git
-	branch = .
+	branch = develop
 [submodule "Carre"]
 	path = modules/Carre
 	url = https://github.com/iterorganization/CARRE.git
-	branch = .
+	branch = develop
 [submodule "DivGeo"]
 	path = modules/DivGeo
 	url = https://github.com/iterorganization/DivGeo.git
-	branch = .
+	branch = develop
 [submodule "Eirene"]
 	path = modules/Eirene
 	url = https://github.com/iterorganization/EIRENE.git
-	branch = .
+	branch = SOLPS_develop
 [submodule "ADAS"]
 	path = modules/adas
 	url = https://github.com/iterorganization/AMNS-ADAS.git
-	branch = .
+	branch = develop
