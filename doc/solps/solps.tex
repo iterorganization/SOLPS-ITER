@@ -4774,16 +4774,23 @@ web site
 
 To activate a coupled run, the master switch is {\tt 'b2mndr\_eirene'} which should be set to {\tt '1'}. In addition, the densities of the fluid neutral species need to be scaled down, along with the sources that affect them. This is achieved, respectively, by use of the switches {\tt 'b2mndr\_rescale\_neutrals'} and {\tt 'b2mndr\_rescale\_neutral\_sources'}. Typically, it is recommended to use a value of the order of $10^{-10}$ for scaling down the fluid neutral sources. For the fluid neutral densities, one can scale them down only on the first run, by the same amount as the sources, and then turn off the rescaling, as they are no longer being replenished.
 
-In order to attempt to improve convergence of coupled \SOLPSITER runs, currently three
-averaging schemes are available to reduce the impact of the Monte Carlo noise intrinsic
-to the {\tt Eirene} sources. The user may want to activate one of these schemes,
+In order to attempt to improve convergence of coupled \SOLPSITER runs, currently four
+averaging schemes are available to reduce the impact of the Monte Carlo noise, which is intrinsic
+to the {\tt Eirene} sources, to the plasma solution (especially concerning the particle
+balance of impurities, which may be worsened because of bias errors derived from high levels
+of noise in their {\tt Eirene} source terms). The user may want to activate one of these schemes,
 although there is no firm recommendation as to which will perform best. The switches
 for those are:
 \begin{description}
   \item[eirene\_neutr\_avg] The neutral sources are averaged over the last up to $neutr\_avg$ {\tt Eirene} calls. After $neutr\_avg$ calls, the history is cleared and the average arrays are rebuilt progressively again (ratcheting average scheme).
   \item[eirene\_underrelax] The neutral sources are multiplied by an under-relaxation factor of $1/eirene\_underrelax$ and added to the sources from the previous timestep (under-relaxation scheme).
   \item[b2stbr\_eir\_src\_nhist] The neutral sources are averaged over the last $nhist$ {\tt Eirene} calls (moving average scheme).
+  \item[eirene\_averaging\_multiple\_calls] {\tt Eirene} is called $multiple\_calls$ times within a single time step, before a new plasma solution is computed by {\tt B2.5}, and the {\tt Eirene} sources are averaged over all performed calls before being used to compute the new plasma solution.
 \end{description}
+The first three schemes should be used only when converged steady-state solution is of interest, since sources
+computed in previous time steps also contribute to the neutral background in use for any current time step.
+The last scheme, despite coming at the cost of a significant increase in computation time, may also be used
+for time-dependent simulations.
 
 In addition to those, please see the recommended averaging scheme described in
 Section~\ref{sec:B2Eirene:averaging}.
@@ -8689,6 +8696,72 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 
 $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the 21-moment approximation is not used.
 
+\subsubsection{Neoclassical corrections for high Z impurity transport}
+
+These corrections (see~\cite{KORZUEVA2025} for a full derivation) are based on the Zhdanov-Grad module (see section \ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
+
+\begin{sloppypar}
+If {\tt 'b2tral\_Zhdanov\_nc'} is set to {\tt '1'}, neoclassical corrections for impurity transport are applied for a chosen impurity isonuclear sequence, {\tt 'b2tral\_Zhdanov\_nc\_spec'}, e.g. for Ne in case of a {\tt D+Ne} plasma {\tt 'b2tral\_Zhdanov\_nc\_spec'} should be set to {\tt '2'}. The corrections are more accurate for impurity species with at least Z=10.
+\end{sloppypar}
+
+{\tt 'b2tral\_Zhdanov\_nc\_min'} sets $Z^{min}_a$ ('6' by default). Lower values are not recommended. The corrections are applied for the ion thermal force (see Eq. (\ref{eq:mom_termi})) and friction terms (see Eq. (\ref{eq:mom_sorfri})) as follows:
+
+\begin{equation}
+S^{m}_ {Therm,ia} = S^{m}_ {Therm,ia}\cdot c^{tf}_a
+\end{equation}
+
+\begin{equation}
+S^{m}_{fr,ia} = S^{m}_{fr,ia}\cdot c^{fr}_a
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi}
+\begin{matrix}
+c_{a}^{tf} & =
+& \left\{
+\begin{matrix}
+  \frac{c_{0,a}*c_{1,a}+c_{2,a}}{K_2} , &  \text{\small{if $Z_a \ge Z^{min}_a$}} \\
+  1 , &  \text{\small{for all other non-main ion species}} \\
+  \frac{1}{\overline{Z_{\beta_I}^2 n_{\beta_I}}} \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{tf} , & \text{for main ions} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neocfri}
+\begin{matrix}
+c_{a}^{fr} & =
+& \left\{
+\begin{matrix}
+  1 + \frac{ 0.01-0.36 \cdot \alpha_{H,a}+0.44\cdot \alpha_{H,a}^{0.77} }{1+g^2} , &  \text{if $Z_a \ge Z^{min}_a$} \\
+  1, &  \text{for all other non-main ion species} \\
+  \frac{1}{\overline{Z_{\alpha_I}^2 n_{\alpha_I}}}  \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{fr} , & \text{for main ions}  \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_0}
+c_{0,a}=\frac{\sqrt{2}c^{hTA,an}_{\beta_{main}}}{2.5 c^{RTA,an}_{\beta_{main},\alpha Z}}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_1}
+c_{1,a}=\frac{2.4\varepsilon^{1.5}}{1+(0.36+0.4\alpha_{H,a})g^2}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_2}
+c_{2,a}=\frac{1.6\varepsilon^3 g^2}{1+\varepsilon^{1.5}g^2}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoc_alpha}
+\alpha_{H,a}=\frac{Z^2_a n_a}{Z^2_{a_{main}} n_{a_{main}}}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoc_collis}
+g=\frac{\nu_{\ast} \varepsilon^{1.5}}{Z_{eff}}
+\end{equation}
+
+Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in Section~\ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in section \ref{sec:Zhdanov}.
+
+If {\tt 'b2sifr\_Zhdanov\_test'} is set to {\tt '1'}, the Zhdanov-Grad variables are calculated but used only for the friction and thermal force. Additionally, the velocity-dependent ion heat flux, see Eq.~(\ref{eq:eni_tifix}), is included. Other parts of the Zhdanov-Grad module are not used.
+
 \subsection{Parallel momentum fluxes}
 
 \begin{equation}\label{eq:mom_fluxx}
@@ -8828,7 +8901,7 @@ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
 \left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
-$
+$\label{eq:mom_nu_vareps_etc}
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
@@ -21366,7 +21439,8 @@ NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP3 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_.F \\
 NO\_OPENMP\_B2NEWS\_UNDERSCORE\_LOOP4 & equations/b2news\_m.F \\
 NO\_OPENMP\_B2NPMO & equations/b2npmo.F \\
-NO\_OPENMP\_B2SIFRTF & sources/b2sifrtf.F \\
+NO\_OPENMP\_B2SIFRTF\_LOOP1 & sources/b2sifrtf.F \\
+NO\_OPENMP\_B2SIFRTF\_LOOP2 & sources/b2sifrtf.F \\
 NO\_OPENMP\_B2SIHS & sources/b2sihs.F \\
 NO\_OPENMP\_B2SPCX & sources/b2spcx.F \\
 NO\_OPENMP\_B2SPEL & sources/b2spel.F \\
