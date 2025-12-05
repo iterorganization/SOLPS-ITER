@@ -8680,6 +8680,72 @@ n_{e^2 }= \sum \limits^{ns-1}_{a=0} z_a^2 n_a, \;\;\;\ l_{t_e}=0.3; \;\;\;\;\; l
 
 $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the 21-moment approximation is not used.
 
+\subsubsection{Neoclassical corrections for high Z impurity transport}
+
+These corrections (see~\cite{KORZUEVA2025} for a full derivation) are based on the Zhdanov-Grad module (see section \ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
+
+\begin{sloppypar}
+If {\tt 'b2tral\_Zhdanov\_nc'} is set to {\tt '1'}, neoclassical corrections for impurity transport are applied for a chosen impurity isonuclear sequence, {\tt 'b2tral\_Zhdanov\_nc\_spec'}, e.g. for Ne in case of a {\tt D+Ne} plasma {\tt 'b2tral\_Zhdanov\_nc\_spec'} should be set to {\tt '2'}. The corrections are more accurate for impurity species with at least Z=10.
+\end{sloppypar}
+
+{\tt 'b2tral\_Zhdanov\_nc\_min'} sets $Z^{min}_a$ ('6' by default). Lower values are not recommended. The corrections are applied for the ion thermal force (see Eq. (\ref{eq:mom_termi})) and friction terms (see Eq. (\ref{eq:mom_sorfri})) as follows:
+
+\begin{equation}
+S^{m}_ {Therm,ia} = S^{m}_ {Therm,ia}\cdot c^{tf}_a
+\end{equation}
+
+\begin{equation}
+S^{m}_{fr,ia} = S^{m}_{fr,ia}\cdot c^{fr}_a
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi}
+\begin{matrix}
+c_{a}^{tf} & =
+& \left\{
+\begin{matrix}
+  \frac{c_{0,a}*c_{1,a}+c_{2,a}}{K_2} , &  \text{\small{if $Z_a \ge Z^{min}_a$}} \\
+  1 , &  \text{\small{for all other non-main ion species}} \\
+  \frac{1}{\overline{Z_{\beta_I}^2 n_{\beta_I}}} \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{tf} , & \text{for main ions} \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neocfri}
+\begin{matrix}
+c_{a}^{fr} & =
+& \left\{
+\begin{matrix}
+  1 + \frac{ 0.01-0.36 \cdot \alpha_{H,a}+0.44\cdot \alpha_{H,a}^{0.77} }{1+g^2} , &  \text{if $Z_a \ge Z^{min}_a$} \\
+  1, &  \text{for all other non-main ion species} \\
+  \frac{1}{\overline{Z_{\alpha_I}^2 n_{\alpha_I}}}  \sum_{b, b\neq b_{main}} {Z_{b}^2 n_{b}}c_{b}^{fr} , & \text{for main ions}  \\
+\end{matrix} \right.
+\end{matrix}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_0}
+c_{0,a}=\frac{\sqrt{2}c^{hTA,an}_{\beta_{main}}}{2.5 c^{RTA,an}_{\beta_{main},\alpha Z}}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_1}
+c_{1,a}=\frac{2.4\varepsilon^{1.5}}{1+(0.36+0.4\alpha_{H,a})g^2}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoctermi_2}
+c_{2,a}=\frac{1.6\varepsilon^3 g^2}{1+\varepsilon^{1.5}g^2}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoc_alpha}
+\alpha_{H,a}=\frac{Z^2_a n_a}{Z^2_{a_{main}} n_{a_{main}}}
+\end{equation}
+
+\begin{equation}\label{eq:mom_neoc_collis}
+g=\frac{\nu_{\ast} \varepsilon^{1.5}}{Z_{eff}}
+\end{equation}
+
+Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in Section~\ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in section \ref{sec:Zhdanov}.
+
+If {\tt 'b2sifr\_Zhdanov\_test'} is set to {\tt '1'}, the Zhdanov-Grad variables are calculated but used only for the friction and thermal force. Additionally, the velocity-dependent ion heat flux, see Eq.~(\ref{eq:eni_tifix}), is included. Other parts of the Zhdanov-Grad module are not used.
+
 \subsection{Parallel momentum fluxes}
 
 \begin{equation}\label{eq:mom_fluxx}
@@ -8831,7 +8897,7 @@ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
 \tau_a^{(Br)} = \frac{3}{4 \sqrt{\pi} }
 \frac{ \sqrt{m_a} T_i^{\frac{3}{2}} }{ z_a^2 z_{eff} n_e \ln \Lambda }
 \left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
-$
+$\label{eq:mom_nu_vareps_etc}
 
 If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
