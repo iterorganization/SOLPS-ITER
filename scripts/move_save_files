@@ -10,6 +10,9 @@ if ($?B2FSTATE_ONLY) then
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2neo.nc:'`)
+    [ -e $i ] && rm $i || echo > /dev/null
+  end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2movies.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
@@ -103,6 +106,9 @@ foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2batch.nc:'`)
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2wall.nc:'`)
   [ -s $i ] && mv -v $i ../b2wall.nc || echo > /dev/null
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2neo.nc:'`)
+  [ -s $i ] && mv -v $i ../b2neo.nc || echo > /dev/null
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2movies.nc:'`)
   [ -s $i ] && mv -v $i ../b2movies.nc || echo > /dev/null
