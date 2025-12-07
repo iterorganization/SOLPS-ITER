@@ -29,6 +29,7 @@ OUTPUT_FILE=trc
 OUTPUT_FMT=pdf
 ORIGIN_PDF=multipage.pdf
 LN_FILES='b2time.nc b2tallies.nc'
+LL_USER='user.trc'
 
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}

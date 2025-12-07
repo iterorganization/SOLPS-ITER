@@ -29,6 +29,7 @@ TRC_DIR=tracing
 OUTPUT_RAW=last_2d_out
 OUTPUT_FMT=last_2d_out_f
 LN_FILES='b2time.nc b2tallies.nc'
+LL_USER='user.trc'
 
 B2EXE_DIR=b2mn.exe.dir
 CURRENT_DIR=${PWD##*/}

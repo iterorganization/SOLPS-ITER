@@ -312,7 +312,7 @@ if strata_plot
                       {'Strata decomp. of \int_d^uS_{mom}^{EIR}ds_{||} in radial direction',...
                        'Strata decomp. of S_{mom}^{EIR}ds_{||} in poloidal direction'},...
                       {''},comuse,indrad,indpol,nstra,axstrat,axbal,bm.area_divide,areadownpol,reverse,true);
-end    
+end
 %%
 end
 
