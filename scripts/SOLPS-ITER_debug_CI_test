@@ -18,6 +18,7 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
+make VERSION
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug
