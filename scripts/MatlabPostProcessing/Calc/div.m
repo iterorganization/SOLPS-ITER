@@ -11,7 +11,7 @@ function div = div(gmtry,flow)
 % November 2016
 
 
-disp('div -- warning: assuming version 03.001.000')
+disp('div -- warning: assuming version 03.001.001')
 
 % Some local variables
 nx  = size(flow,1) - 2;
