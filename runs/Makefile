@@ -278,6 +278,7 @@ endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2neo.nc ] && mv b2mn.exe.dir/b2neo.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
@@ -378,6 +379,7 @@ endif
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2neo.nc ] && mv b2mn.exe.dir/b2neo.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null

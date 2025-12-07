@@ -1,12 +1,6 @@
 #! /bin/tcsh -f
 
-setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
-setenv PRINT_PLOT resrest.ps ; resrest && rm -f gnuplot.data gnuplot.cmd
-setenv PRINT_PLOT resco.ps ; resco && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
-setenv PRINT_PLOT resmo.ps ; resmo && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
-setenv PRINT_PLOT rqahereg.ps ; rqahereg && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
-setenv PRINT_PLOT energy_analysis_total.ps ; energy_analysis_total && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
-setenv PRINT_PLOT density.ps ; density l && rm -f gnuplot.data gnuplot.cmd PLOT_FROM_FILE
 2d_profiles
 2d_plots
+plot_residuals
 last10

@@ -1,0 +1,20 @@
+#! /bin/tcsh -f
+
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv GNUPLOT_BATCH yes
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
+setenv PRINT_PLOT residuals.ps
+rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
+echo 0 > ${tmpdir}GNUPLOT_COUNT
+
+resco
+resmo
+reshe
+reshi
+
+gnuplot ${tmpdir}gnuplot.cmd
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd
