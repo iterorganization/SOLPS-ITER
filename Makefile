@@ -1,746 +1,1125 @@
-# GNU Makefile for B2.5; part 2--execution.
-# Please see the general comments in the companion Makefile, part 1,
-# which controls compile and load.
-#-----------------------------------------------------------------------
-# Variables.
+# Test whether required environment variables are set
+# If not, attempt to determine them automatically
 
-SHELL = /bin/bash
-TIME ?= time
-RUN_OPTIONS =
-BLANK =
+UNAME := $(shell uname)
 
-# Default debugger
-DBX ?= dbx
-
-ifdef SOLPS_OPENMP
-EXT_OPENMP = .openmp
+# Identify HOST_NAME
+ifndef HOST_NAME
+  ifneq ($(UNAME),Darwin)
+  # Assuming to work on some HPC cluster
+    ifeq ($(shell [ -e whereami ] && echo yes || echo no ),yes)
+      # Identify host from whereami-script
+      HOST_NAME = $(shell echo `./whereami|tail -1`)
+      ifneq (,$(findstring UNKNOWN,${HOST_NAME}))
+        # If no specific host identified, use default settings
+        HOST_NAME = default
+      endif
+    else
+      # If whereami-script not found, use default settings
+      HOST_NAME = default
+    endif
+    export HOST_NAME
+    ifeq (${HOST_NAME},default)
+      $(warning HOST_NAME not recognized. Using ${HOST_NAME})
+    endif
+  else
+  # Using MacOS, so assuming to work on a local device
+    HOST_NAME = DARWIN
+  endif
 endif
+
+# Identify compiler
+ifndef COMPILER
+  ifeq ($(shell [ -e default_compiler ] && echo yes || echo no ),yes)
+    # Identify compiler from default_compiler-script
+    COMPILER = $(shell echo `./default_compiler|tail -1`)
+  else
+    # If script not found, use default compiler ifort64
+    COMPILER = ifort64
+    $(warning Using default compiler ${COMPILER})
+  endif
+  export COMPILER
+endif
+
+# Set SOLPSTOP and SOLPSLIB if not already defined in the environment
+export SOLPSTOP ?= ${PWD}
+export SOLPSLIB ?= ${PWD}/lib/${HOST_NAME}.${COMPILER}
+
+# Include compiler settings
+MAKES = ${SOLPSTOP}/Makefile
+ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST_NAME}.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+else
+  $(warning SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+endif
+ifeq ($(shell [ -e SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+  include SETUP/config.common.${COMPILER}
+  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+endif
+
+# Include local compiler settings, if present
+ifeq ($(shell [ -e SETUP/config.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  include SETUP/config.${HOST_NAME}.${COMPILER}.local
+  MAKES += ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}.local
+endif
+ifeq ($(shell [ -e SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
+  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+endif
+
+MAKETAGS ?= ctags -e -f
+export MAKETAGS
+
+# Setup debug flags
+EXT_DBG =
+ifdef SOLPS_DEBUG
+EXT_DBG = .debug
+OPT_DBG = -DTRACE=ON
+endif
+
+# Setup MPI flags
+EXT_MPI =
+MPI_OPTS = USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
+OPT_MPI = -DMPI=ON
+else
+OPT_MPI = -DMPI=OFF
 endif
-ifdef USE_IMPGYRO
-EXT_IMPGYRO = .ig
+
+# Setup OpenMP flag
+EXT_OPENMP =
+ifdef SOLPS_OPENMP
+EXT_OPENMP = .openmp
+OPT_OPENMP = -DOPENMP=ON
+endif
+OMP_OPTB = USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
+OMP_OPTE = USE_OPENMP=-DUSE_OPENMP SOLPS_OPENMP=yes
+
+OPT_NOX = LD_GR="" LD_GKS=""
+
+TOOLSHORT = ${HOST_NAME}.${COMPILER}
+TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
+
+ifdef LD_NETCDF
+NCEXECS = nc2text_simple nc_reduce
+endif
+B25_SERIAL = mods ${NCEXECS}
+
+DEFLIBS =
+DEGLIBS = -DGRAPHICS=ON
+ifdef LIBGRS
+DEGLIBS += -DLibGRS=${LIBGRS}
+endif
+ifdef LIBGKS
+DEGLIBS += -DLibGKS=${LIBGKS}
+endif
+ifdef LIBX11
+DEGLIBS += -DLibX11=${LIBX11}
+endif
+ifdef LIBXT
+DEGLIBS += -DLibXt=${LIBXT}
+endif
+ifdef LIBZ
+DEGLIBS += -DLibz=${LIBZ}
+endif
+ifdef LIBJSON
+DEFLIBS += -DLibJSON=${LIBJSON}
+endif
+ifdef MODJSON
+DEFLIBS += -DJSON_MODULES=${MODJSON}
+endif
+ifdef ADDLIBS
+DEGLIBS += -DADD_LIBS="${ADDLIBS}"
+endif
+DEFOPTS =
+ifdef LINK_OPTS
+DEFOPTS += -DLINK_OPTIONS=${LINK_OPTS}
+endif
+ifdef FFLAGSEXTRA
+DEFOPTS += -DFLAGS_EXTRA="${FFLAGSEXTRA}"
 endif
 ifdef SOLPS_DEBUG
-EXT_DEBUG = .debug
+DEFOPTS += -DCMAKE_BUILD_TYPE=Debug
+endif
+DEFMAKES = -DMAKES="${MAKES}"
+
+CPLOPTS  = -DB25_EIRENE=ON
+DIMENSIONS = 0
+ifeq ($(shell [ -s modules/B2.5/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
+DIMENSIONS = 1
+CPLOPTS += -DDIMENSIONS_MODULE=yes
 endif
 
-ifndef STAND_ALONE
-B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
-EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
-ifneq (${DBX},totalview)
-INC = -I ${DBGOBJ} -I ${EDBOBJ}
+ifeq ($(UNAME),Darwin)
+NO_CMAKE := 1
 endif
+
+MAKEO = ${MAKE} ${MAKE_OPTIONS}
+MAKEF = ${MAKEO} -f config/Makefile
+ifndef NO_CMAKE
+MAKEE = ${MAKEO}
 else
-B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/standalone.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
-ifneq (${DBX},totalview)
-INC = -I ${DBGOBJ}
+MAKEE = ${MAKEF}
 endif
+ifeq (${DIMENSIONS},1)
+MAKEE += DIMENSIONS_MODULE=yes
 endif
-ifneq (${COMPILER},HP)
-fort_lc = fort.
+ifdef NO_CMAKE
+MAKEC = ${MAKEE}
+MAKEX = ${MAKEE} ${OPT_NOX}
 else
-fort_lc = ftn
+ifndef NO_MPI
+include ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
 endif
-
-prints = b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
- b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
- b2yr.prt b2yt.prt b2yi_gnuplot.prt
-
-target_ag = b2ag.prt b2fgmtry ${fort_lc}30
-target_ah = b2ah.prt b2fpardf
-target_ai = b2ai.prt b2fstati
-target_ar = b2ar.prt b2frates
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma
-ifdef USE_IMPGYRO
-target_mn += restart_ext
+ifdef SOLPS_MPI
+OPT_MPI += -DMPI_VERSION=${MPI_VERSION}
+ifdef OPEN_MPI
+OPT_MPI += -DOPEN_MPI=${OPEN_MPI}
 endif
-target_astra = b2mnastra.prt
-target_uf = b2uf.prt
-target_fu = b2fu.prt
-target_co = b2co.prt b2co.files
-target_pl = b2pl.prt b2plot.ps
-target_ts = b2ts.prt
-target_ye = b2ye.prt
-target_yg = b2yg.prt b2yg.plt
-target_yh = b2yh.prt
-target_yi = b2yi.prt b2yi.plt
-target_yi_gnuplot = b2yi_gnuplot.prt
-target_ym = b2ym.prt b2ym.plt
-target_yn = b2yn.prt b2yn.plt
-target_yp = b2yp.prt b2yp.plt b2specp
-target_yq = b2yq.prt b2yq.plt
-target_yr = b2yr.prt b2yr.plt
-target_yt = b2yt.prt b2fstatt b2yt.files
-target_xd = B2SXDR
-target_rd = b2rd.prt
-target_ual = b2_ual_write.prt
-target_rew = b2_ual_rewrite.prt
-
-scandir := $(shell cd .. ; pwd)
-projdir := $(shell cd ../.. ; pwd)
-ifeq ($(shell [ -d ${scandir}/TRIANG ] && echo yes || echo no ),yes)
-triangdir := $(shell cd $(scandir)/TRIANG ; pwd)
+endif
+CMAKE_STEM = cmake ../../src -DEIRENE_INTERFACE=SOLPS-ITER -DEIRENE_USER-ROUTINES=iter ${DEFLIBS} ${DEFOPTS} ${DEFMAKES}
+CMAKX_STEM = ${CMAKE_STEM} -DGRAPHICS=OFF -DLibGRS="" -DLibGKS=""
+MAKEC = FC=${FC} ${CMAKE_STEM} ${DEGLIBS}
+MAKEM = FC="${MPI_FC}" ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
+MAKEX = FC=${FC} ${CMAKX_STEM}
+MAKEY = FC="${MPI_FC}" ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
+ifdef OPEN_MPI
+MAKEM += -DOPEN_MPI=${OPEN_MPI}
+MAKEY += -DOPEN_MPI=${OPEN_MPI}
+endif
+# Special treatment to avoid using ifx with OpenMP options
+ifneq (${FC},ifx)
+MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
+MAKEP = ${MAKEM} -DOPENMP=ON
+MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
+MAKEA = ${MAKEY} -DOPENMP=ON
 else
-triangdir := $(shell cd $(scandir)/baserun ; pwd)
+MAKEN = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=OFF -DOPENMP=ON
+MAKEP = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
+MAKEZ = FC=mpiifort ${CMAKX_STEM} -DMPI=OFF -DOPENMP=ON
+MAKEA = FC=mpiifort ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
+ifdef OPEN_MPI
+MAKEP += -DOPEN_MPI=${OPEN_MPI}
+MAKEA += -DOPEN_MPI=${OPEN_MPI}
 endif
-baserundir := $(shell cd $(scandir)/baserun ; pwd)
-savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.*_save.parameters:')
-fort13file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}13:')
-fort15file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}15:')
-fort44file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}44:')
-fort44avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}44_aver:')
-fort46file := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}46:')
-fort46avfile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:${fort_lc}46_aver:')
-ifeq ($(shell [ -e $(fort13file) ] && echo yes || echo no ),yes)
-savefiles += $(fort13file)
 endif
-ifeq ($(shell [ -e $(fort15file) ] && echo yes || echo no ),yes)
-savefiles += $(fort15file)
-endif
-ifeq ($(shell [ -e $(fort44file) ] && echo yes || echo no ),yes)
-savefiles += $(fort44file)
-endif
-ifeq ($(shell [ -e $(fort44avfile) ] && echo yes || echo no ),yes)
-savefiles += $(fort44avfile)
-endif
-ifeq ($(shell [ -e $(fort46file) ] && echo yes || echo no ),yes)
-savefiles += $(fort46file)
-endif
-ifeq ($(shell [ -e $(fort46avfile) ] && echo yes || echo no ),yes)
-savefiles += $(fort46avfile)
-endif
-conbefile := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:conbe.dat:')
-ifeq ($(shell [ -e $(conbefile) ] && echo yes || echo no ),yes)
-savefiles += $(conbefile)
 endif
 
+.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi all_mpi_nox carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_openmp eirene_openmp_mpi eirene_nox eirene_openmp_nox eirene_nox_mpi eirene_nox_openmp_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp
+
+DEFAULT: solps
+
+
+# Basic compile targets
+#----------------------
+
+
+solps: carre divgeo b25eirene uinp triang amds manual
+
+solps_nox: nox
+
+solps_openmp: carre divgeo b25eirene_openmp uinp_openmp triang amds_openmp manual
+
+solps_mpi: carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+
+solps_openmp_mpi: carre divgeo b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
+
+solps_mpi_openmp: solps_openmp_mpi
+
+nox: carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
+
+nox_openmp: carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+
+solps_nox_openmp: nox_openmp
+
+solps_openmp_nox: nox_openmp
+
+nox_mpi: carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+
+solps_nox_mpi: nox_mpi
+
+solps_mpi_nox: nox_mpi
+
+nox_openmp_mpi: carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+
+nox_mpi_openmp: nox_openmp_mpi
+
+solps_openmp_mpi_nox: nox_openmp_mpi
+
+solps_mpi_openmp_nox: nox_openmp_mpi
+
+solps_nox_openmp_mpi: nox_openmp_mpi
+
+solps_nox_mpi_openmp: nox_openmp_mpi
+
+all: carre divgeo b25 eirene b25eirene uinp triang amds manual
+
+all_nox: carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+
+all_openmp: carre divgeo b25_openmp eirene_openmp b25eirene_openmp uinp_openmp triang amds_openmp manual
+
+all_mpi: carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+
+all_nox_openmp: carre_nox divgeo_nox b25_nox_openmp eirene_nox_openmp b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+
+all_openmp_nox: all_nox_openmp
+
+all_nox_mpi: carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+
+all_mpi_nox: all_nox_mpi
+
+all_openmp_mpi: carre divgeo b25_openmp_mpi eirene_openmp_mpi b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
+
+all_mpi_openmp: all_openmp_mpi
+
+all_nox_openmp_mpi: carre_nox divgeo_nox b25_nox_openmp_mpi eirene_nox_openmp_mpi b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+
+all_nox_mpi_openmp: all_nox_openmp_mpi
+
+all_openmp_mpi_nox: all_nox_openmp_mpi
+
+all_mpi_openmp_nox: all_nox_openmp_mpi
+
+carre:
+	cd modules/Carre; ${MAKE}
+
+carre_nox:
+	cd modules/Carre; ${MAKE} NCARG_ROOT="" LD_NCARG=""
+
+divgeo:
+ifndef NO_MOTIF
+	cd modules/DivGeo;         ${MAKEO}
+else
+	$(warning DivGeo will not be compiled because Motif library is not installed.)
+endif
+	cd modules/DivGeo/equtrn;  ${MAKEO}
+	cd modules/DivGeo/convert; ${MAKEO}
+
+divgeo_nox:
+	cd modules/DivGeo/equtrn;  ${MAKEO}
+	cd modules/DivGeo/convert; ${MAKEO}
+
+ifndef NO_CMAKE
+
+eirene:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
+	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+
+eirene_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
+
+eirene_openmp:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
+
+eirene_openmp_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
+
+eirene_nox:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
+	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+
+eirene_nox_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
+
+eirene_nox_openmp:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
+
+eirene_nox_openmp_mpi:
+	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
+
+else
+
+eirene:
+	cd modules/Eirene; ${MAKEE}
+
+eirene_mpi:
+	cd modules/Eirene; ${MAKEE} ${MPI_OPTS}
+
+eirene_openmp:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE}
+
+eirene_openmp_mpi:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS}
+
+eirene_nox:
+	cd modules/Eirene; ${MAKEE} ${OPT_NOX}
+
+eirene_nox_mpi:
+	cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
+
+eirene_nox_openmp:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${OPT_NOX}
+
+eirene_nox_openmp_mpi:
+	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+
+endif
+
+eirene_mpi_openmp: eirene_openmp_mpi
+
+eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
+
+b25: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO}
+
+b25_all: ${NCEXECS}
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} ALL
+
+b25_openmp: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
+
+b25_mpi: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
+
+b25_openmp_mpi: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+
+b25_mpi_openmp: b25_openmp_mpi
+
+b25_nox: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} NOPLOT
+
+b25_ig: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
+
+b25_all_openmp: ${NCEXECS}
+	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
+
+b25_nox_openmp: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
+
+b25_openmp_nox: b25_nox_openmp
+
+b25_nox_mpi: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
+
+b25_mpi_nox: b25_nox_mpi
+
+b25_nox_openmp_mpi: ${NCEXECS}
+	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
+
+b25_nox_mpi_openmp: b25_nox_openmp_mpi
+
+b25_mpi_openmp_nox: b25_nox_openmp_mpi
+
+b25_openmp_mpi_nox: b25_nox_openmp_mpi
+
+b25_all_mpi: ${NCEXECS}
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
+
+b25_all_openmp_mpi: ${NCEXECS}
+	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
+
+b25_all_mpi_openmp: b25_all_openmp_mpi
+
+b25eirene: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
+
+b25eirene_all: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
+endif
+	cd modules/solps4-5; ${MAKE}  links
+	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
+
+b25eirene_nox: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
+
+b25eirene_openmp: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
+
+b25eirene_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
+
+b25eirene_openmp_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
+
+b25eirene_mpi_openmp: b25eirene_openmp_mpi
+
+b25eirene_nox_openmp: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
+
+b25eirene_nox_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
+
+b25eirene_ig: ${NCEXECS}
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
+	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+
+b25eirene_all_openmp: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+endif
+	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
+
+b25eirene_all_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
+endif
+	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
+	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
+
+b25eirene_all_openmp_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
+endif
+	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
+	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
+
+b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
+
+b25eirene_nox_openmp_mpi: ${NCEXECS}
+ifndef NO_CMAKE
+	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+else
+	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
+endif
+	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
+	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} NOPLOT
+
+b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
+
+uinp: b25eirene
+	cd modules/Uinp; ${MAKEO}
+
+uinp_nox: b25eirene_nox
+	cd modules/Uinp; ${MAKEO}
+
+uinp_openmp: b25eirene_openmp
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
+
+uinp_mpi: b25eirene_mpi
+	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
+
+uinp_openmp_mpi: b25eirene_openmp_mpi
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+
+uinp_mpi_openmp: uinp_openmp_mpi
+
+uinp_nox_openmp: b25eirene_nox_openmp
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
+
+uinp_openmp_nox: uinp_nox_openmp
+
+uinp_nox_mpi: b25eirene_nox_mpi
+	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
+
+uinp_mpi_nox: uinp_nox_mpi
+
+uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi
+	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+
+uinp_nox_mpi_openmp: uinp_nox_openmp_mpi
+
+uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
+
+uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
+
+triang: eirene_nox
+	cd modules/Triang; ${MAKE}
+
+triang_mpi: eirene_nox_mpi
+	cd modules/Triang; ${MAKE} ${MPI_OPTS}
+
+triang_nox: eirene_nox
+	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
+	cd modules/Triang; ${MAKE} ${OPT_NOX}
+
+triang_nox_mpi: eirene_nox_mpi
+	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
+	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
+
+ifndef NO_MOTIF
+amds: b25eirene
+	cd modules/amds; ${MAKEO}
+
+amds_mpi: b25eirene_mpi
+	cd modules/amds; ${MAKEO} ${MPI_OPTS}
+
+amds_openmp: b25eirene_openmp
+	cd modules/amds; ${MAKEO} ${OMP_OPTB}
+
+amds_openmp_mpi: b25eirene_openmp_mpi
+	cd modules/amds; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+else
+amds:
+amds_mpi:
+amds_openmp:
+amds_openmp_mpi:
+	$(warning AMDS will not be compiled because Motif library file is not installed.)
+endif
+
+fxdr: sonnet-light
+	cd modules/fxdr; ${MAKEO}
+
+sonnet-light:
+	@-mkdir -p ${SOLPSLIB}
+	cd modules/Sonnet-light; ${MAKE} all INSTALL_USERAREA=${SOLPSLIB}
+
+nc2text: nc2text_simple
+
+nc2text_simple:
+	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
+	cd modules/B2.5; ${MAKE} nc2text
+
+nc_reduce:
+	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
+	cd modules/B2.5; ${MAKE} nc_reduce
+
+b2sxdr: b25eirene sonnet-light
+	cd modules/solps4-5; ${MAKE} links
+	cd modules/solps4-5; ${MAKE} tags
+	cd modules/solps4-5; ${MAKE} listobj
+	cd modules/solps4-5; ${MAKE} depend
+	cd modules/solps4-5; ${MAKE}
+
+manual:
+ifndef NO_MANUAL
+ifeq ($(shell [ -e ${SOLPSTOP}/doc/solps/b2cdci.F ] && echo yes || echo no ),no)
+	cd doc/solps; ${MAKE} complete
+else
+	cd doc/solps; ${MAKE}
+endif
+	cd modules/Eirene/Manual; latexmk -f -pdfdvi eirene.tex
+else
+	$(warning SOLPS-ITER and Eirene manuals will not be produced because NO_MANUAL switch is activated.)
+endif
+
+local:
+	cd modules/Eirene;   ${MAKEF} local links
+	cd modules/B2.5;     ${MAKE} local
+	cd modules/solps4-5; ${MAKE} local
+
+tags:
+	cd modules/Carre;          ${MAKE} tags
+	cd modules/Eirene;         ${MAKEF} tags
+	cd modules/B2.5;           ${MAKE} tags
+	cd modules/Uinp;           ${MAKE} tags
+	cd modules/Triang;         ${MAKE} tags
+	cd modules/DivGeo;         ${MAKE} tags
+	cd modules/DivGeo/convert; ${MAKE} tags
+	cd modules/DivGeo/equtrn;  ${MAKE} tags
+#	cd modules/solps4-5;       ${MAKE} tags
+	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.[fF] modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[fF] modules/Eirene/src/user-routines/user_iter/*.[fF] modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/amds/src/*.[ch] modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
+
+listobj:
+	cd modules/Carre;          ${MAKE} listobj
+	cd modules/Eirene;         ${MAKEF} listobj
+	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE}
+	cd modules/B2.5;           ${MAKE} listobj
+	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB}
+	cd modules/Uinp;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
+	cd modules/Triang;         ${MAKE} listobj
+	cd modules/DivGeo;         ${MAKE} listobj
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
+ifndef NO_MPI
+	cd modules/Eirene;         ${MAKEF} listobj ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} listobj ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+endif
+#	cd modules/solps4-5;       ${MAKE} listobj
+
+listobj_nox:
+	cd modules/Carre;          ${MAKE} listobj NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene;         ${MAKEF} listobj ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${OPT_NOX}
+	cd modules/Uinp;           ${MAKE} listobj
+	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
+	cd modules/Triang;         ${MAKE} listobj ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
+ifndef NO_MPI
+	cd modules/Eirene;         ${MAKEF} listobj ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Uinp;           ${MAKE} listobj ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
+endif
+#	cd modules/solps4-5;       ${MAKE} listobj
+
+depend:
+	cd modules/Carre;          ${MAKE} depend
+	cd modules/Eirene;         ${MAKEF} depend
+	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE}
+	cd modules/B2.5;           ${MAKE} depend
+	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB}
+	cd modules/Uinp;           ${MAKE} depend
+	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
+	cd modules/Triang;         ${MAKE} depend
+	cd modules/DivGeo/equtrn;  ${MAKE} depend
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
+ifndef NO_MOTIF
+	cd modules/DivGeo;         ${MAKE} depend
+	cd modules/amds;           ${MAKE} depend
+endif
+ifndef NO_MPI
+	cd modules/Eirene;         ${MAKEF} depend ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS}
+	cd modules/B2.5;	   ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} depend ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
+	cd modules/B2.5;	   ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+endif
+#	cd modules/solps4-5;       ${MAKE} depend
+
+depend_nox:
+	cd modules/Carre;          ${MAKE} depend NCARG_ROOT="" LD_NCARG=""
+	cd modules/Eirene;         ${MAKEF} depend ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB} ${OPT_NOX}
+	cd modules/Uinp;           ${MAKE} depend
+	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
+	cd modules/Triang;         ${MAKE} depend ${OPT_NOX}
+	cd modules/DivGeo/equtrn;  ${MAKE} depend
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
+ifndef NO_MPI
+	cd modules/Eirene;         ${MAKEF} depend ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Uinp;           ${MAKE} depend ${MPI_OPTS}
+	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
+	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${OPT_NOX}
+endif
+
+VERSION:
+	cd modules/B2.5;   ${MAKE} VERSION
+	cd modules/Eirene; ${MAKEF} VERSION
+	cd modules/Carre;  ${MAKE} VERSION
+	cd modules/DivGeo; ${MAKE} VERSION
+	cd modules/Uinp;   ${MAKE} VERSION
+
+${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk: ${MAKES}
+	@mkdir -p ${SOLPSTOP}/modules/Eirene/builds/binRelease
+ifdef NO_MPI
+	echo 'MPI_VERSION=0' > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
+else
+	printf "use mpi\ninteger OPEN_MPI\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nif (OPEN_MPI.ne.0) WRITE(*,fmt='(A10)') 'OPEN_MPI=1'\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90
+	( ${MPI_FC} ${FCOPTS} ${FCVOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} &> /dev/null && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || \
+	( printf "include 'mpif.h'\nWRITE(*,fmt='(A12,I1)') 'MPI_VERSION=', MPI_VERSION\nEND\n" > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ; \
+	( ${MPI_FC} ${FCOPTS} ${FCVOPTS} ${INCLUDE} -o ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.f90 ${LD_MPI} && ( ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version | tail -n2 ) || ( echo MPI_VERSION=0 ) ) ) ) > ${SOLPSTOP}/modules/Eirene/builds/binRelease/mpi_version.mk
+endif
+
+
+# Debug targets
+#--------------
+
+debug: solps_debug
+
+%_debug:
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
+
+
+# CI build tests
+#---------------
+
+# Dependencies are not duplicated across build targets
+
+nox_build:     clean_build listobj_nox depend_nox carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox
+
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi
+
+nox_build_openmp: clean_build_openmp listobj_nox depend_nox b25eirene_nox_openmp uinp_nox_openmp
+
+nox_build_openmp_mpi: clean_build_openmp_mpi listobj_nox depend_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi
+
+nox_build_mpi_openmp: nox_build_openmp_mpi
+
+# Clean targets
+#--------------
+
+clean: clean_solps
+
+clean_solps: clean_carre clean_divgeo clean_b25eirene clean_uinp clean_triang clean_manual clean_amds
+
+clean_solps_nox: clean_nox
+
+clean_solps_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_solps_openmp: clean_carre clean_divgeo clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
+
+clean_solps_openmp_mpi: clean_carre clean_divgeo clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_solps_mpi_openmp: clean_solps_openmp_mpi
+
+clean_build: clean_carre clean_b25eirene clean_uinp clean_triang_nox
+
+clean_build_mpi: clean_b25eirene_mpi clean_uinp_mpi
+
+clean_build_openmp: clean_b25eirene_openmp clean_uinp_openmp
+
+clean_build_openmp_mpi: clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi
+
+clean_build_mpi_openmp: clean_build_openmp_mpi
+
+clean_nox: clean_carre_nox clean_divgeo_nox clean_b25eirene_nox clean_uinp clean_triang_nox clean_manual
+
+clean_mpi: clean_carre clean_divgeo clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
+
+clean_openmp: clean_carre clean_divgeo clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
+
+clean_nox_openmp: clean_carre_nox clean_divgeo_nox clean_b25eirene_nox_openmp clean_uinp_openmp clean_triang_nox clean_manual
+
+clean_openmp_mpi: clean_carre clean_divgeo clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_nox_openmp_mpi: clean_carre_nox clean_divgeo_nox clean_b25eirene_nox_openmp_mpi clean_uinp_openmp_mpi clean_triang_nox_mpi clean_manual
+
+clean_mpi_openmp: clean_openmp_mpi
+
+clean_nox_mpi_openmp: clean_nox_openmp_mpi
+
+clean_all: clean_carre clean_divgeo clean_b25 clean_eirene clean_b25eirene clean_uinp clean_triang clean_manual clean_amds
+
+clean_all_nox: clean_carre_nox clean_divgeo_nox clean_b25_nox clean_eirene_nox clean_b25eirene_nox clean_uinp clean_triang_nox clean_manual
+
+clean_all_mpi: clean_carre clean_divgeo clean_b25_mpi clean_eirene_mpi clean_b25eirene_mpi clean_uinp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_all_nox_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_mpi clean_eirene_nox_mpi clean_b25eirene_nox_mpi clean_uinp_mpi clean_triang_nox_mpi clean_manual
+
+clean_all_mpi_nox: clean_all_nox_mpi
+
+clean_all_openmp: clean_carre clean_divgeo clean_b25_openmp clean_eirene_openmp clean_b25eirene_openmp clean_uinp_openmp clean_triang clean_manual clean_amds
+
+clean_all_nox_openmp: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp clean_eirene_nox_openmp clean_b25eirene_nox_openmp clean_uinp_openmp clean_triang_nox clean_manual
+
+clean_all_openmp_nox: clean_all_nox_openmp
+
+clean_all_openmp_mpi: clean_carre clean_divgeo clean_b25_openmp_mpi clean_eirene_openmp_mpi clean_b25eirene_openmp_mpi clean_uinp_openmp_mpi clean_triang_mpi clean_manual clean_amds
+
+clean_all_nox_openmp_mpi: clean_carre_nox clean_divgeo_nox clean_b25_nox_openmp_mpi clean_eirene_nox_openmp_mpi clean_b25eirene_nox_openmp_mpi clean_uinp_openmp_mpi clean_triang_nox_mpi clean_manual
+
+clean_all_mpi_openmp: clean_all_openmp_mpi
+
+clean_all_nox_mpi_openmp: clean_all_nox_openmp_mpi
+
+clean_all_openmp_mpi_nox: clean_all_nox_openmp_mpi
+
+clean_all_mpi_openmp_nox: clean_all_nox_openmp_mpi
+
+clean_carre:
+	cd modules/Carre; ${MAKE} clean
+
+clean_carre_nox:
+	cd modules/Carre; ${MAKE} clean NCARG_ROOT="" LD_NCARG=""
+
+clean_divgeo:
+	cd modules/DivGeo;         ${MAKE} clean
+	cd modules/DivGeo/equtrn;  ${MAKE} clean
+	cd modules/DivGeo/convert; ${MAKE} clean
+
+clean_divgeo_nox:
+	cd modules/DivGeo/equtrn;  ${MAKE} clean
+	cd modules/DivGeo/convert; ${MAKE} clean
+
+clean_eirene:
+	cd modules/Eirene; ${MAKEF} clean
+
+clean_eirene_nox:
+	cd modules/Eirene; ${MAKEF} clean ${OPT_NOX}
+
+clean_eirene_mpi:
+	cd modules/Eirene; ${MAKEF} clean ${MPI_OPTS}
+
+clean_eirene_nox_mpi:
+	cd modules/Eirene; ${MAKEF} clean ${MPI_OPTS} ${OPT_NOX}
+
+clean_eirene_openmp:
+	cd modules/Eirene; ${MAKEF} clean ${OMP_OPTE}
+
+clean_eirene_nox_openmp:
+	cd modules/Eirene; ${MAKEF} clean ${OMP_OPTE} ${OPT_NOX}
+
+clean_eirene_openmp_mpi:
+	cd modules/Eirene; ${MAKEF} clean ${OMP_OPTE} ${MPI_OPTS}
+
+clean_eirene_nox_openmp_mpi:
+	cd modules/Eirene; ${MAKEF} clean ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+
+clean_eirene_mpi_openmp: clean_eirene_openmp_mpi
+
+clean_eirene_nox_mpi_openmp: clean_eirene_nox_openmp_mpi
+
+clean_b25:
+	cd modules/B2.5; ${MAKE} clean
+
+clean_b25_openmp:
+	cd modules/B2.5; ${MAKE} clean ${OMP_OPTB}
+
+clean_b25_mpi:
+	cd modules/B2.5; ${MAKE} clean ${MPI_OPTS}
+
+clean_b25_openmp_mpi:
+	cd modules/B2.5; ${MAKE} clean ${OMP_OPTB} ${MPI_OPTS}
+
+clean_b25_mpi_openmp: clean_b25_openmp_mpi
+
+clean_b25_nox:
+	cd modules/B2.5; ${MAKE} clean ${OPT_NOX}
+
+clean_b25_nox_mpi:
+	cd modules/B2.5; ${MAKE} clean ${MPI_OPTS} ${OPT_NOX}
+
+clean_b25_nox_openmp:
+	cd modules/B2.5; ${MAKE} clean ${OMP_OPTB} ${OPT_NOX}
+
+clean_b25_nox_openmp_mpi:
+	cd modules/B2.5; ${MAKE} clean ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+
+clean_b25_nox_mpi_openmp: clean_b25_openmp_mpi
+
+clean_b25_ig:
+	cd modules/B2.5; ${MAKE} clean USE_IMPGYRO=-DUSE_IMPGYRO
+
+clean_b25eirene:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE
+
+clean_b25eirene_mpi:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${MPI_OPTS}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
+
+clean_b25eirene_openmp:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${OMP_OPTE}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
+
+clean_b25eirene_nox_openmp:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${OMP_OPTE} ${OPT_NOX}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${OPT_NOX}
+
+clean_b25eirene_openmp_mpi:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
+
+clean_b25eirene_nox_openmp_mpi:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
+
+clean_b25eirene_mpi_openmp: clean_b25eirene_openmp_mpi
+
+clean_b25eirene_nox_mpi_openmp: clean_b25eirene_nox_openmp_mpi
+
+clean_b25eirene_nox:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${OPT_NOX}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
+
+clean_b25eirene_nox_mpi:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+
+clean_b25eirene_ig:
+	cd modules/Eirene; ${MAKEF} clean USE_B25=-DB25_EIRENE   USE_IMPGYRO=-DUSE_IMPGYRO
+	cd modules/B2.5;   ${MAKE} clean USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+
+clean_uinp:
+	cd modules/Uinp; ${MAKE} clean
+
+clean_uinp_openmp:
+	cd modules/Uinp; ${MAKE} clean ${OMP_OPTB}
+
+clean_uinp_mpi:
+	cd modules/Uinp; ${MAKE} clean ${MPI_OPTS}
+
+clean_uinp_openmp_mpi:
+	cd modules/Uinp; ${MAKE} clean ${OMP_OPTB} ${MPI_OPTS}
+
+clean_uinp_mpi_openmp: clean_uinp_openmp_mpi
+
+clean_triang:
+	cd modules/Triang; ${MAKE} clean
+
+clean_triang_nox:
+	cd modules/Triang; ${MAKE} clean ${OPT_NOX}
+
+clean_triang_mpi:
+	cd modules/Triang; ${MAKE} clean ${MPI_OPTS}
+
+clean_triang_nox_mpi:
+	cd modules/Triang; ${MAKE} clean ${MPI_OPTS} ${OPT_NOX}
+
+clean_amds:
+	cd modules/amds; ${MAKE} clean
+
+clean_fxdr:
+	cd modules/fxdr; ${MAKE} clean
+
+clean_sonnet-light:
+	cd modules/Sonnet-light; ${MAKE} clean
+
+clean_b2sxdr:
+	cd modules/solps4-5; ${MAKE} clean
+
+clean_manual:
+	cd doc/solps; ${MAKE} clean
+	cd modules/Eirene; ${MAKE} -f config/Makefile clean_manual
+
+# help
+help:
+	@echo "                 solps : compile serial version (main codes)"
+	@echo "             solps_mpi : compile MPI version (main codes)"
+	@echo "          solps_openmp : compile OpenMP version (main codes)"
+	@echo "      solps_openmp_mpi : compile OpenMP+MPI version (main codes)"
+	@echo "           solps_debug : compile debug version (serial) (main codes)"
+	@echo "       solps_mpi_debug : compile debug version (MPI) (main codes)"
+	@echo "    solps_openmp_debug : compile debug version (OpenMP) (main codes)"
+	@echo "solps_openmp_mpi_debug : compile debug version (OpenMP+MPI) (main codes)"
+	@echo "                   all : compile serial version (all codes)"
+	@echo "               all_mpi : compile MPI version (all codes)"
+	@echo "            all_openmp : compile OpenMP version (all codes)"
+	@echo "             all_debug : compile debug version (serial) (all codes)"
+	@echo "         all_mpi_debug : compile debug version (MPI) (all codes)"
+	@echo "      all_openmp_debug : compile debug version (OpenMP) (all codes)"
+	@echo "  all_openmp_mpi_debug : compile debug version (OpenMP+MPI) (all codes)"
+	@echo "                   nox : compile serial version (no X main codes)"
+	@echo "               all_nox : compile serial version (all no X codes)"
+	@echo "               nox_mpi : compile MPI version (no X main codes)"
+	@echo "           all_nox_mpi : compile MPI version (all no X codes)"
+	@echo "            nox_openmp : compile OpenMP version (no X main codes)"
+	@echo "        nox_openmp_mpi : compile OpenMP+MPI version (no X main codes)"
+	@echo "             nox_debug : compile debug version (serial) (no X main codes)"
+	@echo "         all_nox_debug : compile debug version (serial) (all no X codes)"
+	@echo "         nox_mpi_debug : compile debug version (MPI) (no X main codes)"
+	@echo "      nox_openmp_debug : compile debug version (OpenMP) (no X main codes)"
+	@echo "     all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
+	@echo "  nox_openmp_mpi_debug : compile debug version (OpenMP+MPI) (no X main codes)"
+
+# debugging aids
 echo:
-	@echo scandir=${scandir}
-	@echo projdir=${projdir}
-	@echo baserundir=${baserundir}
-	@echo savefiles=${savefiles}
-	@echo triangdir=${triangdir}
-
-#-----------------------------------------------------------------------
-# Directives.
-
-vpath %.dat .:$(baserundir)
-vpath b2fgmtry .:$(baserundir)
-vpath b2fpardf .:$(baserundir)
-vpath b2fstati .:$(baserundir)
-vpath ${fort_lc}30  .:$(baserundir)
-vpath ${fort_lc}33  .:$(baserundir):$(triangdir)
-vpath ${fort_lc}34  .:$(baserundir):$(triangdir)
-vpath ${fort_lc}35  .:$(baserundir):$(triangdir)
-vpath stra.dat .:$(baserundir)
-vpath weis.dat .:$(baserundir)
-vpath AMJUEL   .:$(baserundir)
-vpath b2frates .:$(baserundir)
-
-#-----------------------------------------------------------------------
-# Rules.
-
-default : b2mn.prt
-all : $(prints)
-prt : $(prints)
-
-.PHONY : default all prt clean realclean testvars fetch
-.PRECIOUS : $(prints)
-.SUFFIXES : $(nil)
-
-
-fetch:
-	make -C examples
-
-$(target_xd) : b2fgmtry b2fparam b2fstate b2fplasma
-	rm -rf b2xd.exe.dir >& /dev/null ; mkdir b2xd.exe.dir ; cp $^ b2xd.exe.dir
-	rm -f $(target_xd)
-	cd b2xd.exe.dir ; ${TIME} ${B2OBJ}/b2xd.exe ${RUN_OPTIONS} ; mv $(target_xd) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2xd.exe.dir
-
-$(target_ag) : b2ag.dat
-	rm -rf b2ag.exe.dir >& /dev/null ; mkdir b2ag.exe.dir ; cp $^ b2ag.exe.dir
-	rm -f $(target_ag)
-	cd b2ag.exe.dir ; ${TIME} ${B2OBJ}/b2ag.exe ${RUN_OPTIONS} ; mv $(target_ag) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2ag.exe.dir
-
-$(target_ah) : b2ah.dat b2fgmtry
-	rm -rf b2ah.exe.dir >& /dev/null ; mkdir b2ah.exe.dir ; cp $^ b2ah.exe.dir
-	rm -f $(target_ah)
-	cd b2ah.exe.dir ; ${TIME} ${B2OBJ}/b2ah.exe ${RUN_OPTIONS} ; mv $(target_ah) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2ah.exe.dir
-
-$(target_ai) : b2ag.dat b2ai.dat b2fgmtry
-	rm -rf b2ai.exe.dir >& /dev/null ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
-	rm -f $(target_ai)
-	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ${RUN_OPTIONS} ; mv $(target_ai) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2ai.exe.dir
-
-$(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf b2fgmtry
-	rm -rf b2ar.exe.dir >& /dev/null ; mkdir b2ar.exe.dir ; cp $^ b2ar.exe.dir
-	rm -f $(target_ar)
-	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2ar.exe.dir
-
-$(target_astra) : b2mn.prt
-
-ifndef STAND_ALONE
-$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ${fort_lc}30 AMJUEL
-else
-$(target_mn) : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
-endif
-	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
-	save_initial_files
-	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null ; [ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
-ifndef STAND_ALONE
-ifdef SOLPS_MPI
-	-rm -f output.* >& /dev/null
-else
-ifdef SOLPS_OPENMP
-	-rm -f output.* >& /dev/null
-endif
-endif
-	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
-	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
-	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
-	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}12 ] && cp -p ../${fort_lc}12 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}11 ] && cp -p ../${fort_lc}11 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}10 ] && cp -p ../${fort_lc}10 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44 ] && cp -p ../${fort_lc}44 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44_aver ] && cp -p ../${fort_lc}44_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
-	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null ; \
-	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
-	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
-endif
-ifdef IMAS_VERSION
-	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
-endif
-ifdef USE_IMPGYRO
-	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/${B2EX}.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
-	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
-	mpiexec -verbose -config b2ig.conf ; \
-	move_optional_files ; \
-	mv $(target_mn) .. >& /dev/null ; \
-	rm -f b2ig.conf use_impgyro config pre ; [ -e restart_ext ] && cp restart_ext ../. || echo > /dev/null ; \
-	mv .*.?* ${WD_EXT}/. ; mv ${fort_lc}150 ${WD_EXT}/. ; \
-	mv impgyro.* ${WD_EXT}/. ; mv preg ${WD_EXT}/. ; cp restart ${WD_EXT}/. ; mv restart ../.
-else
-	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${B2EX}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
-endif
-	-[ -s ${fort_lc}30 ] || ( [ -s ../baserun/${fort_lc}30 ] || ( [ -s b2mn.exe.dir/${fort_lc}30 ] && mv b2mn.exe.dir/${fort_lc}30 . || ( [ -e b2mn.exe.dir/${fort_lc}30 ] && rm b2mn.exe.dir/${fort_lc}30 || echo > /dev/null ) ) )
-	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
-ifdef NCDIR
-	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
-endif
-	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
-ifndef STAND_ALONE
-	-[ -s b2mn.exe.dir/${fort_lc}10 ] && mv b2mn.exe.dir/${fort_lc}10 . || ( [ -e b2mn.exe.dir/${fort_lc}10 ] && rm b2mn.exe.dir/${fort_lc}10 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}11 ] && mv b2mn.exe.dir/${fort_lc}11 . || ( [ -e b2mn.exe.dir/${fort_lc}11 ] && rm b2mn.exe.dir/${fort_lc}11 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}12 ] && mv b2mn.exe.dir/${fort_lc}12 . || ( [ -e b2mn.exe.dir/${fort_lc}12 ] && rm b2mn.exe.dir/${fort_lc}12 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}13 ] && mv b2mn.exe.dir/${fort_lc}13 . || ( [ -e b2mn.exe.dir/${fort_lc}13 ] && rm b2mn.exe.dir/${fort_lc}13 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}14 ] && mv b2mn.exe.dir/${fort_lc}14 . || ( [ -e b2mn.exe.dir/${fort_lc}14 ] && rm b2mn.exe.dir/${fort_lc}14 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}15 ] && mv b2mn.exe.dir/${fort_lc}15 . || ( [ -e b2mn.exe.dir/${fort_lc}15 ] && rm b2mn.exe.dir/${fort_lc}15 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}44 ] && mv b2mn.exe.dir/${fort_lc}44 . || ( [ -e b2mn.exe.dir/${fort_lc}44 ] && rm b2mn.exe.dir/${fort_lc}44 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}46 ] && mv b2mn.exe.dir/${fort_lc}46 . || ( [ -e b2mn.exe.dir/${fort_lc}46 ] && rm b2mn.exe.dir/${fort_lc}46 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}44_aver ] && mv b2mn.exe.dir/${fort_lc}44_aver . || ( [ -e b2mn.exe.dir/${fort_lc}44_aver ] && rm b2mn.exe.dir/${fort_lc}44_aver || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}46_aver ] && mv b2mn.exe.dir/${fort_lc}46_aver . || ( [ -e b2mn.exe.dir/${fort_lc}46_aver ] && rm b2mn.exe.dir/${fort_lc}46_aver || echo > /dev/null )
-	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 graphite_ext.dat mo_ext.dat ${fort_lc}85 ${fort_lc}78 ${fort_lc}1 ${fort_lc}29 vtk.out
-	-[ -e b2mn.exe.dir/${fort_lc}33 ] && rm b2mn.exe.dir/${fort_lc}33 || echo > /dev/null
-	-[ -e b2mn.exe.dir/${fort_lc}34 ] && rm b2mn.exe.dir/${fort_lc}34 || echo > /dev/null
-	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
-ifdef SOLPS_MPI
-	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
-else
-ifdef SOLPS_OPENMP
-	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
-endif
-endif
-	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
-	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
-	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
-	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
-endif
-	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2neo.nc ] && mv b2mn.exe.dir/b2neo.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
-	-[ -s b2mn.exe.dir/astra_to_b2.dat ] && mv b2mn.exe.dir/astra_to_b2.dat . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
-	-[ -s b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
-	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
-	-[ -e b2mn.exe.dir/output/__1__.dat ] && rm b2mn.exe.dir/output/__1__.dat || echo > /dev/null
-	-[ -e b2mn.exe.dir/output ] && rmdir b2mn.exe.dir/output || echo > /dev/null
-	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
-	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua . ; cp -up b2fstati_with-ua b2fstati ; touch b2fstate ) || echo > /dev/null
-ifdef IMAS_VERSION
-	-[ -s b2mn.exe.dir/shotnumber.history ] && mv b2mn.exe.dir/shotnumber.history . || echo > /dev/null
-endif
-	-rmdir b2mn.exe.dir
-
-ifndef STAND_ALONE
-dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates ${fort_lc}30 AMJUEL
-else
-dbx.b2mn : b2mn.dat b2fgmtry b2fpardf b2fstati b2frates
-endif
-	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
-	-rm -f $(target_mn) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
-	save_initial_files
-	-cd b2mn.exe.dir ; [ -s ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
-ifndef STAND_ALONE
-ifdef SOLPS_MPI
-	-rm -f output.* >& /dev/null
-else
-ifdef SOLPS_OPENMP
-	-rm -f output.* >& /dev/null
-endif
-endif
-	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
-	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
-	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
-	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}12 ] && cp -p ../${fort_lc}12 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}11 ] && cp -p ../${fort_lc}11 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}10 ] && cp -p ../${fort_lc}10 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44 ] && cp -p ../${fort_lc}44 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44_aver ] && cp -p ../${fort_lc}44_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
-	[ -s ../conbe.dat ] && cp -p ../conbe.dat . || echo > /dev/null ; \
-	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
-	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
-endif
-ifdef IMAS_VERSION
-	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
-endif
-	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
-	-[ -s ${fort_lc}30 ] || ( [ -s ../baserun/${fort_lc}30 ] || ( [ -s b2mn.exe.dir/${fort_lc}30 ] && mv b2mn.exe.dir/${fort_lc}30 . || ( [ -e b2mn.exe.dir/${fort_lc}30 ] && rm b2mn.exe.dir/${fort_lc}30 || echo > /dev/null ) ) )
-	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
-	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
-ifdef NCDIR
-	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
-endif
-ifndef STAND_ALONE
-	-[ -s b2mn.exe.dir/${fort_lc}10 ] && mv b2mn.exe.dir/${fort_lc}10 . || ( [ -e b2mn.exe.dir/${fort_lc}10 ] && rm b2mn.exe.dir/${fort_lc}10 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}11 ] && mv b2mn.exe.dir/${fort_lc}11 . || ( [ -e b2mn.exe.dir/${fort_lc}11 ] && rm b2mn.exe.dir/${fort_lc}11 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}12 ] && mv b2mn.exe.dir/${fort_lc}12 . || ( [ -e b2mn.exe.dir/${fort_lc}12 ] && rm b2mn.exe.dir/${fort_lc}12 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}13 ] && mv b2mn.exe.dir/${fort_lc}13 . || ( [ -e b2mn.exe.dir/${fort_lc}13 ] && rm b2mn.exe.dir/${fort_lc}13 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}14 ] && mv b2mn.exe.dir/${fort_lc}14 . || ( [ -e b2mn.exe.dir/${fort_lc}14 ] && rm b2mn.exe.dir/${fort_lc}14 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}15 ] && mv b2mn.exe.dir/${fort_lc}15 . || ( [ -e b2mn.exe.dir/${fort_lc}15 ] && rm b2mn.exe.dir/${fort_lc}15 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}44 ] && mv b2mn.exe.dir/${fort_lc}44 . || ( [ -e b2mn.exe.dir/${fort_lc}44 ] && rm b2mn.exe.dir/${fort_lc}44 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}46 ] && mv b2mn.exe.dir/${fort_lc}46 . || ( [ -e b2mn.exe.dir/${fort_lc}46 ] && rm b2mn.exe.dir/${fort_lc}46 || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}44_aver ] && mv b2mn.exe.dir/${fort_lc}44_aver . || ( [ -e b2mn.exe.dir/${fort_lc}44_aver ] && rm b2mn.exe.dir/${fort_lc}44_aver || echo > /dev/null )
-	-[ -s b2mn.exe.dir/${fort_lc}46_aver ] && mv b2mn.exe.dir/${fort_lc}46_aver . || ( [ -e b2mn.exe.dir/${fort_lc}46_aver ] && rm b2mn.exe.dir/${fort_lc}46_aver || echo > /dev/null )
-	-cd b2mn.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22 graphite_ext.dat mo_ext.dat ${fort_lc}85 ${fort_lc}78 ${fort_lc}1 ${fort_lc}29 vtk.out
-	-[ -e b2mn.exe.dir/${fort_lc}33 ] && rm b2mn.exe.dir/${fort_lc}33 || echo > /dev/null
-	-[ -e b2mn.exe.dir/${fort_lc}34 ] && rm b2mn.exe.dir/${fort_lc}34 || echo > /dev/null
-	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
-ifdef SOLPS_MPI
-	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
-else
-ifdef SOLPS_OPENMP
-	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
-endif
-endif
-	-[ -e b2mn.exe.dir/conbe.dat ] && mv b2mn.exe.dir/conbe.dat . || echo > /dev/null
-	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
-	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
-	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
-endif
-	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2neo.nc ] && mv b2mn.exe.dir/b2neo.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fstate_add ] && mv b2mn.exe.dir/b2fstate_add . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2favere ] && mv b2mn.exe.dir/b2favere . || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fplasmf.0000 ] && mv b2mn.exe.dir/b2fplasmf.* . || echo > /dev/null
-	-[ -s b2mn.exe.dir/tran ] && mv b2mn.exe.dir/tran b2mn.exe.dir/tran?? . || echo > /dev/null
-	-[ -e b2mn.exe.dir/tracing ] && rmdir b2mn.exe.dir/tracing || echo > /dev/null
-	-[ -e b2mn.exe.dir/output/__1__.dat ] && rm b2mn.exe.dir/output/__1__.dat || echo > /dev/null
-	-[ -e b2mn.exe.dir/output ] && rmdir b2mn.exe.dir/output || echo > /dev/null
-	-[ -e b2mn.exe.dir/batch_av ] && rmdir b2mn.exe.dir/batch_av || echo > /dev/null
-	-[ -e b2mn.exe.dir/run_av ] && rmdir b2mn.exe.dir/run_av || echo > /dev/null
-	-[ -s b2mn.exe.dir/b2fstati_with-ua ] && ( mv b2fstati b2fstati_with+ua ; mv b2mn.exe.dir/b2fstati_with-ua b2fstati ) || echo > /dev/null
-ifdef IMAS_VERSION
-	-[ -s b2mn.exe.dir/shotnumber.history ] && mv b2mn.exe.dir/shotnumber.history . || echo > /dev/null
-endif
-	-rmdir b2mn.exe.dir
-
-ifndef STAND_ALONE
-$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}1 AMJUEL
-else
-$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
-endif
-	-rm -rf b2co.exe.dir >& /dev/null ; mkdir b2co.exe.dir ; cp $^ b2co.exe.dir
-	inspect_plasmastate ${PLASMASTATE}
-	-cd b2co.exe.dir ; mkdir tracing
-	obtain_tracing_files
-	rm -f $(target_co)
-	cd b2co.exe.dir ; ${TIME} ${B2OBJ}/b2co.exe ${RUN_OPTIONS} `basename ${PLASMASTATE}` ; truncate_tracing_files ; mv $(target_co) b2fstate .. ; move_save_files ; rm -f $(notdir $^) ds? .quit >& /dev/null
-ifndef STAND_ALONE
-	cd b2co.exe.dir ; rm -f ${fort_lc}85 >& /dev/null
-endif
-	-[ -e b2co.exe.dir/tracing/blne.trc ] && rm b2co.exe.dir/tracing/blne.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/blnm.trc ] && rm b2co.exe.dir/tracing/blnm.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/blnn.trc ] && rm b2co.exe.dir/tracing/blnn.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/integral.trc ] && rm b2co.exe.dir/tracing/integral.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/intshrt.trc ] && rm b2co.exe.dir/tracing/intshrt.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/sepdata.trc ] && rm b2co.exe.dir/tracing/sepdata.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/residuals.trc ] && rm b2co.exe.dir/tracing/residuals.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/sources.trc ] && rm b2co.exe.dir/tracing/sources.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/test.trc ] && rm b2co.exe.dir/tracing/test.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/user.trc ] && rm b2co.exe.dir/tracing/user.trc || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing/user.trc.n.01 ] && rm b2co.exe.dir/tracing/user.trc.n.01 || echo > /dev/null
-	-[ -e b2co.exe.dir/tracing ] && rmdir b2co.exe.dir/tracing || echo > /dev/null
-	-[ -e b2co.exe.dir/b2time.nc ] && rm b2co.exe.dir/b2time.nc || echo > /dev/null
-	-[ -e b2co.exe.dir/b2wall.nc ] && rm b2co.exe.dir/b2wall.nc || echo > /dev/null
-	-[ -e b2co.exe.dir/b2batch.nc ] && rm b2co.exe.dir/b2batch.nc || echo > /dev/null
-	-[ -e b2co.exe.dir/b2movies.nc ] && rm b2co.exe.dir/b2movies.nc || echo > /dev/null
-	-[ -e b2co.exe.dir/eirenemovies.nc ] && rm b2co.exe.dir/eirenemovies.nc || echo > /dev/null
-	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
-	-rmdir b2co.exe.dir
-
-$(target_uf) : b2fgmtry b2fparam b2fstate b2fplasma
-	rm -rf b2uf.exe.dir >& /dev/null ; mkdir b2uf.exe.dir ; cp $^ b2uf.exe.dir
-	rm -f $(target_uf)
-	cd b2uf.exe.dir ; ${TIME} ${B2OBJ}/b2uf.exe ${RUN_OPTIONS} ; mv $(target_uf) b2fplasmf .. ; rm -f $(notdir $^) .quit >& /dev/null
-	-rmdir b2uf.exe.dir
-
-$(target_fu) : b2fgmtry b2fparam b2fstate b2fplasmf
-	rm -rf b2fu.exe.dir >& /dev/null ; mkdir b2fu.exe.dir ; cp $^ b2fu.exe.dir
-	rm -f $(target_fu)
-	cd b2fu.exe.dir ; ${TIME} ${B2OBJ}/b2fu.exe ${RUN_OPTIONS} ; mv $(target_fu) b2fplasma .. ; rm -f $(notdir $^) .quit >& /dev/null
-	-rmdir b2fu.exe.dir
-
-ifndef STAND_ALONE
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}44 ${fort_lc}46
-else
-$(target_pl) : b2mn.dat b2fgmtry b2fparam b2fstate b2fplasma b2frates AMJUEL
-endif
-	rm -rf b2pl.exe.dir >& /dev/null ; mkdir b2pl.exe.dir ; cp $^ b2pl.exe.dir
-	rm -f $(target_pl)
-	cd b2pl.exe.dir ; ${TIME} ${B2OBJ}/b2pl.exe ${RUN_OPTIONS} ; mv $(target_pl) .. ; rm -f $(notdir $^) .quit >& /dev/null
-	-rmdir b2pl.exe.dir
-
-$(target_rd) : shotnumber.history
-	rm -rf b2rd.exe.dir >& /dev/null ; mkdir b2rd.exe.dir ; cp $^ b2rd.exe.dir
-	rm -f $(target_rd)
-	cd b2rd.exe.dir ; ${TIME} ${B2OBJ}/b2rd.exe ${RUN_OPTIONS} ; mv $(target_rd) b2fstate b2fgmtrt .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -e b2rd.exe.dir/*.txt ] && mv b2rd.exe.dir/*.txt . || echo > /dev/null
-	-rmdir b2rd.exe.dir
-
-$(target_ts) : b2fparam b2fgmtry b2fstate b2fplasma
-	rm -rf b2ts.exe.dir >& /dev/null ; mkdir b2ts.exe.dir ; cp $^ b2ts.exe.dir
-	rm -f $(target_ts)
-	cd b2ts.exe.dir ; ${TIME} ${B2OBJ}/b2ts.exe ${RUN_OPTIONS} ; mv $(target_ts) b2fstate .. ; rm -f $(notdir $^) .quit >& /dev/null
-	-rmdir b2ts.exe.dir
-
-$(target_ye) : b2favere
-	rm -rf b2ye.exe.dir >& /dev/null ; mkdir b2ye.exe.dir
-	-[ -e b2favere ] && cp b2favere b2ye.exe.dir || echo > /dev/null
-	-[ -e b2batch.nc ] && cp b2batch.nc b2ye.exe.dir || echo > /dev/null
-	-[ -e b2time.nc ] && cp b2time.nc b2ye.exe.dir || echo > /dev/null
-	echo "B2OBJ=" ${B2OBJ}
-	cd b2ye.exe.dir ; ${TIME} ${B2OBJ}/b2ye.exe ${RUN_OPTIONS} ; mv b2ye.prt .. ; rm b2favere b2batch.nc b2time.nc
-	-rmdir b2ye.exe.dir
-
-$(target_yg) : b2yg.dat b2fgmtry
-	rm -rf b2yg.exe.dir >& /dev/null ; mkdir b2yg.exe.dir ; cp $^ b2yg.exe.dir
-	rm -f $(target_yg)
-	NCARG_GKS_OUTPUT=b2yg.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yg.exe.dir ; ${TIME} ${B2OBJ}/b2yg.exe ${RUN_OPTIONS} ; mv $(target_yg) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2yg.exe.dir
-
-$(target_yh) : b2yh.dat b2fpardf b2fgmtry
-	rm -rf b2yh.exe.dir >& /dev/null ; mkdir b2yh.exe.dir ; cp $^ b2yh.exe.dir
-	-[ -e b2fparam ] && cp b2fparam b2yh.exe.dir || echo > /dev/null
-	rm -f $(target_yh)
-	NCARG_GKS_OUTPUT=b2yh.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yh.exe.dir ; ${TIME} ${B2OBJ}/b2yh.exe ${RUN_OPTIONS} ; mv $(target_yh) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -e b2yh.exe.dir/b2fparam ] && rm b2yh.exe.dir/b2fparam || echo > /dev/null
-	-rmdir b2yh.exe.dir
-
-$(target_yi) : b2yi.dat b2fstati b2frates b2fgmtry
-	rm -rf b2yi.exe.dir >& /dev/null ; mkdir b2yi.exe.dir ; cp $^ b2yi.exe.dir
-	-[ -e b2fstate ] && cp b2fstate b2yi.exe.dir || echo > /dev/null
-	-[ -e b2mn.dat ] && cp b2mn.dat b2yi.exe.dir || echo > /dev/null
-	rm -f $(target_yi)
-	NCARG_GKS_OUTPUT=b2yi.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yi.exe.dir ; ${TIME} ${B2OBJ}/b2yi.exe ${RUN_OPTIONS} ; mv $(target_yi) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -e b2yi.exe.dir/b2fstate ] && rm b2yi.exe.dir/b2fstate || echo > /dev/null
-	-[ -e b2yi.exe.dir/b2mn.dat ] && rm b2yi.exe.dir/b2mn.dat || echo > /dev/null
-	-rmdir b2yi.exe.dir
-
-$(target_yi_gnuplot) : b2fstati b2frates b2fgmtry
-	rm -rf b2yi_gnuplot.exe.dir >& /dev/null ; mkdir b2yi_gnuplot.exe.dir ; cp $^ b2yi_gnuplot.exe.dir
-	-[ -e b2fstate ] && cp b2fstate b2yi_gnuplot.exe.dir || echo > /dev/null
-	-[ -e b2mn.dat ] && cp b2mn.dat b2yi_gnuplot.exe.dir || echo > /dev/null
-	rm -f $(target_yi_gnuplot)
-	cd b2yi_gnuplot.exe.dir ; ${TIME} ${B2OBJ}/b2yi_gnuplot.exe ${RUN_OPTIONS} ; mv $(target_yi_gnuplot) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -e b2yi_gnuplot.exe.dir/b2fstate ] && rm b2yi_gnuplot.exe.dir/b2fstate || echo > /dev/null
-	-[ -e b2yi_gnuplot.exe.dir/b2mn.dat ] && rm b2yi_gnuplot.exe.dir/b2mn.dat || echo > /dev/null
-	-rmdir b2yi_gnuplot.exe.dir
-
-$(target_ym) : b2ym.dat b2fmovie
-	rm -rf b2ym.exe.dir >& /dev/null ; mkdir b2ym.exe.dir ; cp $^ b2ym.exe.dir
-	rm -f $(target_ym)
-	NCARG_GKS_OUTPUT=b2ym.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2ym.exe.dir ; ${TIME} ${B2OBJ}/b2ym.exe ${RUN_OPTIONS} ; mv $(target_ym) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2ym.exe.dir
-
-$(target_yn) : b2yn.dat b2mn.dat b2ftrack b2frates b2fstate
-	rm -rf b2yn.exe.dir >& /dev/null ; mkdir b2yn.exe.dir ; cp $^ b2yn.exe.dir
-	rm -f $(target_yn)
-	NCARG_GKS_OUTPUT=b2yn.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yn.exe.dir ; ${TIME} ${B2OBJ}/b2yn.exe ${RUN_OPTIONS} ; mv $(target_yn) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2yn.exe.dir
-
-$(target_yp) : b2yp.dat b2mn.dat b2fgmtry b2fparam b2fstate b2frates
-	rm -rf b2yp.exe.dir >& /dev/null ; mkdir b2yp.exe.dir ; cp $^ b2yp.exe.dir
-	rm -f $(target_yp)
-	NCARG_GKS_OUTPUT=b2yp.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yp.exe.dir ; ${TIME} ${B2OBJ}/b2yp.exe ${RUN_OPTIONS} ; mv $(target_yp) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2yp.exe.dir
-
-$(target_yq) : b2yq.dat b2ftrace
-	rm -rf b2yq.exe.dir >& /dev/null ; mkdir b2yq.exe.dir ; cp $^ b2yq.exe.dir
-	rm -f $(target_yq)
-	NCARG_GKS_OUTPUT=b2yq.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yq.exe.dir ; ${TIME} ${B2OBJ}/b2yq.exe ${RUN_OPTIONS} ; mv $(target_yq) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2yq.exe.dir
-
-$(target_yr) : b2yr.dat b2frates b2fpardf b2fgmtry
-	rm -rf b2yr.exe.dir >& /dev/null ; mkdir b2yr.exe.dir ; cp $^ b2yr.exe.dir
-	rm -f $(target_yr)
-	NCARG_GKS_OUTPUT=b2yr.plt ; export NCARG_GKS_OUTPUT ;\
-	cd b2yr.exe.dir ; ${TIME} ${B2OBJ}/b2yr.exe ${RUN_OPTIONS} ; mv $(target_yr) .. ; rm -f $(notdir $^) >& /dev/null
-	-rmdir b2yr.exe.dir
-
-ifndef STAND_ALONE
-$(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf AMJUEL
-else
-$(target_yt) : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
-endif
-	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
-	rm -f $(target_yt)
-ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
-else
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
-endif
-	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22
-	-[ -e b2yt.exe.dir/${fort_lc}33 ] && rm b2yt.exe.dir/${fort_lc}33 || echo > /dev/null
-	-[ -e b2yt.exe.dir/${fort_lc}34 ] && rm b2yt.exe.dir/${fort_lc}34 || echo > /dev/null
-	-[ -e b2yt.exe.dir/${fort_lc}35 ] && rm b2yt.exe.dir/${fort_lc}35 || echo > /dev/null
-	-rmdir b2yt.exe.dir
-
-ifndef STAND_ALONE
-dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf AMJUEL
-else
-dbx.b2yt : b2yt.dat b2fstate b2mn.dat b2ah.dat b2ai.dat b2ag.dat b2fgmtry b2frates b2fpardf
-endif
-	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
-	rm -f $(target_yt)
-ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}44_aver ] && ln -s ../${fort_lc}44_aver . || echo > /dev/null ; [ -e ../${fort_lc}46_aver ] && ln -s ../${fort_lc}46_aver . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}44_aver ${fort_lc}46_aver ${fort_lc}85 >& /dev/null ; mv *.2 ..
-else
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
-endif
-	-cd b2yt.exe.dir ; rm -f HYDHEL METHANE SPUTER H2VIBR AMMONX ${fort_lc}21 ${fort_lc}22
-	-[ -e b2yt.exe.dir/${fort_lc}33 ] && rm b2yt.exe.dir/${fort_lc}33 || echo > /dev/null
-	-[ -e b2yt.exe.dir/${fort_lc}34 ] && rm b2yt.exe.dir/${fort_lc}34 || echo > /dev/null
-	-[ -e b2yt.exe.dir/${fort_lc}35 ] && rm b2yt.exe.dir/${fort_lc}35 || echo > /dev/null
-	-rmdir b2yt.exe.dir
-
-ifndef STAND_ALONE
-$(target_ual) : ${fort_lc}1 AMJUEL
-else
-$(target_ual) :
-endif
-	rm -rf b2_ual_write.exe.dir ; mkdir b2_ual_write.exe.dir
-	cp b2fstate b2_ual_write.exe.dir/b2fstati
-	cp b2fparam b2_ual_write.exe.dir/b2fpardf
-	cp b2mn.dat b2_ual_write.exe.dir/
-	[ -s b2fgmtry ] && cp b2fgmtry b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2fgmtry ] && cp $(baserundir)/b2fgmtry b2_ual_write.exe.dir/ )
-	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
-	cp b2fplasma b2_ual_write.exe.dir/
-ifndef STAND_ALONE
-	cp ${fort_lc}1 b2_ual_write.exe.dir/
-	cp AMJUEL b2_ual_write.exe.dir/
-endif
-	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
-ifndef STAND_ALONE
-	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
-	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
-	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
-	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}12 ] && cp -p ../${fort_lc}12 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}11 ] && cp -p ../${fort_lc}11 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}10 ] && cp -p ../${fort_lc}10 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44 ] && cp -p ../${fort_lc}44 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44_aver ] && cp -p ../${fort_lc}44_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
-endif
-	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}
-	rm -rf b2_ual_write.exe.dir
-
-ifndef STAND_ALONE
-$(target_rew) : ${fort_lc}1 AMJUEL
-else
-$(target_rew) :
-endif
-	rm -rf b2_ual_rewrite.exe.dir ; mkdir b2_ual_rewrite.exe.dir
-	cp b2fstate b2_ual_rewrite.exe.dir/b2fstati
-	cp b2fparam b2_ual_rewrite.exe.dir/b2fpardf
-	cp b2mn.dat b2_ual_rewrite.exe.dir/
-	[ -s b2fgmtry ] && cp b2fgmtry b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2fgmtry ] && cp $(baserundir)/b2fgmtry b2_ual_rewrite.exe.dir/ )
-	[ -s b2frates ] && cp b2frates b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_rewrite.exe.dir/ )
-	cp b2fplasma b2_ual_rewrite.exe.dir/
-ifndef STAND_ALONE
-	cp ${fort_lc}1 b2_ual_rewrite.exe.dir/
-	cp AMJUEL b2_ual_rewrite.exe.dir/
-endif
-	-cd b2_ual_rewrite.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
-ifndef STAND_ALONE
-	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
-	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
-	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
-	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}12 ] && cp -p ../${fort_lc}12 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}11 ] && cp -p ../${fort_lc}11 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}10 ] && cp -p ../${fort_lc}10 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44 ] && cp -p ../${fort_lc}44 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}44_aver ] && cp -p ../${fort_lc}44_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}46_aver ] && cp -p ../${fort_lc}46_aver . || echo > /dev/null ; \
-	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
-endif
-	cd b2_ual_rewrite.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_rewrite.exe ${RUN_OPTIONS}
-	-[ -s b2_ual_rewrite.exe.dir/ids_*.yaml ] && mv b2_ual_rewrite.exe.dir/ids_*.yaml . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.yaml ] && rm b2_ual_rewrite.exe.dir/ids_*.yaml || echo > /dev/null )
-	-[ -s b2_ual_rewrite.exe.dir/ids_*.watcher ] && mv b2_ual_rewrite.exe.dir/ids_*.watcher . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.watcher ] && rm b2_ual_rewrite.exe.dir/ids_*.watcher || echo > /dev/null )
-	rm -rf b2_ual_rewrite.exe.dir
-
-stra.dat :
-	ln -sf ${SOLPSTOP}/modules/B2.5/Database/stra.dat .
-
-weis.dat :
-	ln -sf ${SOLPSTOP}/modules/B2.5/Database/weis.dat .
-
-AMJUEL:
-	ln -sf ${SOLPSTOP}/modules/Eirene/Database/AMJUEL .
-
-$(savefiles):
-	touch $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.dummy_save.parameters:')
-	$(eval savefiles := $(shell echo ${PLASMASTATE} | sed -e 's:plasmastate:b2.dummy_save.parameters:'))
-
-clean :
-	rm -f *.prt* *.plt* *~
-	rm -rf *.exe.dir
-
-realclean : clean
-	rm -f b2fgmtry b2fpar* b2frates b2fstat* b2ftra* b2fmovie b2specp b2faver* *.nc
-
-# The target testvars is present only for testing purposes.
-testvars :
-	@echo scandir: $(scandir)
-	@echo projdir: $(projdir)
-	@echo baserundir: $(baserundir)
-	@echo codedir: $(codedir)
-
-help help.prt:
-	@echo "Available targets are:"
-	@echo "  ${target_ag} : "
-	@echo "     produce the geometry information"
-	@echo "  ${target_ah} : "
-	@echo "     produce the default physics information"
-	@echo "  ${target_ai} : "
-	@echo "     produce the initial plasma state"
-	@echo "  ${target_ar} : "
-	@echo "     produce the atomic physics rate information"
-	@echo "  ${target_mn} : "
-	@echo "     run the main code"
-	@echo "  ${target_co} : "
-	@echo "     prepare a b2fstate file from a plasmastate file"
-	@echo "  ${target_rd} : "
-	@echo "     prepare a b2fstate file from a saved MDSPLUS archive"
-	@echo "  ${target_uf} : "
-	@echo "     convert an unformatted b2fplasma file to a formatted b2fplasmf file"
-	@echo "  ${target_fu} : "
-	@echo "     convert a formatted b2fplasmf file to an unformatted b2fplasma file"
-	@echo "  ${target_pl} : "
-	@echo "     run b2plot"
-	@echo "  ${target_ts} : "
-	@echo "     run a dummy example of a post-processor"
-	@echo "  ${target_ye} : "
-	@echo "     provide an error assessment for a coupled run"
-	@echo "  ${target_yg} : "
-	@echo "     display geometry and magnetic field"
-	@echo "  ${target_yh} : "
-	@echo "     display the physics parameters"
-	@echo "  ${target_yi} : "
-	@echo "     display the initial plasma state"
-	@echo "  ${target_yi_gnuplot} : "
-	@echo "     display the plasma state via gnuplot"
-	@echo "  ${target_ym} : "
-	@echo "     display a movie [not tested]"
-	@echo "  ${target_yn} : "
-	@echo "     display the progress of the inner b2 iterations"
-	@echo "  ${target_yp} : "
-	@echo "     display the final plasma state"
-	@echo "  ${target_yq} : "
-	@echo "     display a quick view of the evolution data"
-	@echo "  ${target_yr} : "
-	@echo "     display the atomic physics rates"
-	@echo "  ${target_yt} : "
-	@echo "     transfer the plasma state to a mesh of a different size and/or re-order or remove species"
-	@echo "  ${target_xd} : "
-	@echo "     convert the plasma state to a SOLPS4.0 B2SXDR file [obsolete]"
-
+	@echo SOLPS_CPP = ${SOLPS_CPP}
+	@echo MAKES = ${MAKES}
+	@echo MAKETAGS = ${MAKETAGS}
