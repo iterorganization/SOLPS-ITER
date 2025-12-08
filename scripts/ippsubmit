@@ -322,9 +322,9 @@ if ( $mem_tot > 370 ) then
 endif
 
 if ($batch_flag == 0) then
-  if ($standalone == "yes") then
+  if ("$standalone_arg" == "-s") then
     echo Asking for a B2.5 standalone run
-  else if (-s fort.1 && $standalone == "no") then
+  else if (-s fort.1 && $standalone_arg == "") then
     echo Assuming run with Eirene
   else 
     echo Asking run with Eirene but no fort.1 file found: reverting to a standalone run
@@ -332,9 +332,9 @@ if ($batch_flag == 0) then
     set coupled_suffix=""
   endif
 else if ($batch_flag == 1) then
-  if ($standalone == "yes") then
+  if ($standalone_arg == "-s") then
     echo Asking for B2.5 standalone runs
-  else if ($standalone == "no") then
+  else if ($standalone_arg == "") then
     set all_have_fort1 = 1
     foreach dir ($run_dirs)
       if (! -s $dir/fort.1) then
