@@ -15875,12 +15875,33 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
     \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_transport} $\ge$ 1} \\
+    \hline
+    dna \index{dna}\index{b2movies.nc, dna} & Particle density-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    dpa \index{dna}\index{b2movies.nc, dpa} & Particle pressure-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    hci \index{hci}\index{b2movies.nc, hci} & Ion thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    hce \index{hce}\index{b2movies.nc, hce} & Electron thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    vlax \index{vlax}\index{b2movies.nc, vlax} & Poloidal anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vlay \index{vlay}\index{b2movies.nc, vlay} & Radial anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vsa \index{vsa}\index{b2movies.nc, vsa} & Anomalous viscosity (for each fluid species) & $m kg^{-1} s^{-1}$ \\
+    \hline
     \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
     \hline
     dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
     tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
     dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
     tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 (if {\tt Eirene} is used)} \\
+    \hline
+    rfluxa \index{rfluxa}\index{b2movies.nc, rfluxa} & Atomic radial flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    pfluxa \index{pfluxa}\index{b2movies.nc, pfluxa} & Atomic poloidal flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    refluxa \index{refluxa}\index{b2movies.nc, refluxa} & Atomic radial energy flux density (for each atom species) & $W m^{-2}$ \\
+    pefluxa \index{pefluxa}\index{b2movies.nc, pefluxa} & Atomic poloidal energy flux density (for each atom species) & $W m^{-2}$ \\
+    rfluxm \index{rfluxm}\index{b2movies.nc, rfluxm} & Molecular radial flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    pfluxm \index{pfluxm}\index{b2movies.nc, pfluxm} & Molecular poloidal flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    refluxm \index{refluxm}\index{b2movies.nc, refluxm} & Molecular radial energy flux density (for each molecule species) & $W m^{-2}$ \\
+    pefluxm \index{pefluxm}\index{b2movies.nc, pefluxm} & Molecular poloidal energy flux density (for each molecule species) & $W m^{-2}$ \\
     \hline
     \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
     \hline
@@ -15913,6 +15934,7 @@ Users should be careful when requesting the generation of {\tt b2movies.nc}, bec
 \item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_transport} $\ge$ 1: 160 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1: 120 kB per {\tt Eirene} atom/molecule species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_sources} $\ge$ 1: 100 kB per {\tt B2.5} fluid species + 45 kB per {\tt Eirene} atom/molecule species per outputted timestep.
@@ -15922,11 +15944,12 @@ Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C
 \item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_transport} $\ge$ 1 will cause additional 1.9 GB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
 \end{itemize}
-If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 6.5 GB can be expected after 1000 outputted timesteps.
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 8.4 GB can be expected after 1000 outputted timesteps.
 
 The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
 \ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
