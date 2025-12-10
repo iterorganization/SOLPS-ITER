@@ -15943,7 +15943,7 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
 Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. The following list summarizes the additional filesize which can be roughly expected, on a $96 \times 36 = 3456$ control volumes grid, for each of the requested data groups:
 \begin{itemize}
 \item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
-\item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 150 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_transport} $\ge$ 1: 160 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
@@ -15953,14 +15953,14 @@ Users should be careful when requesting the generation of {\tt b2movies.nc}, bec
 Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (12 {\tt B2.5} fluid species, 3 {\tt Eirene} atom species, and 1 {\tt Eirene} molecule species):
 \begin{itemize}
 \item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
-\item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 1.8 GB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_transport} $\ge$ 1 will cause additional 1.9 GB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
 \end{itemize}
-If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 8.4 GB can be expected after 1000 outputted timesteps.
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 9.3 GB can be expected after 1000 outputted timesteps.
 
 The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
 \ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
