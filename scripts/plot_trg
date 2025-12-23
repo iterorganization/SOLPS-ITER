@@ -165,7 +165,7 @@ else
   fi
 fi
 
-# commented out since in principle file format should not brake anymore  
+# commented out since in principle file format should not break anymore
 #if [ -d "$WRK_DIR" ]
 #then
 #  echo "fixing format: sed -i.tmp 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
