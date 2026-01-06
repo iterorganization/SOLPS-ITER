@@ -38,21 +38,21 @@ EIRDIR   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${CO
 MAKES = ${SRCTRI}/Makefile 
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  else
+    $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+  endif
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 else
-  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
-endif
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
-else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -113,7 +113,6 @@ ifeq ($(shell [ -e ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPI
 MAKES += ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-
 MODULES := ${patsubst ${SRCDIR}/modules/%.f,%,${shell echo ${SRCDIR}/modules/*.f}}
 MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
@@ -159,7 +158,6 @@ ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${
 
 ${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.x
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${GKS}
-
 else
 ${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
@@ -174,7 +172,6 @@ ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${
 
 ${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
-
 endif
 else
 ${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${EGROBJS} ${MAKES}
@@ -190,7 +187,6 @@ ${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${
 
 ${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
 	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
-
 endif
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
@@ -495,8 +491,8 @@ echo:
 	@echo ALLOBJS=${ALLOBJS}
 	@echo EIROBJS=${EIROBJS}
 	@echo EGROBJS=${EGROBJS}
-#	@echo OBJS=${OBJS}
-#	@echo OBJF=${OBJF}
+	@echo OBJS=${OBJS}
+	@echo OBJF=${OBJF}
 	@echo DEST=${DEST}
 	@echo MODULES=${MODULES}
 #	@echo MODLOCASE=${MODLOCASE}
