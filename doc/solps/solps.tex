@@ -22015,6 +22015,7 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
+B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_init.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
 B25\_EIRENE & main-routines/eirmod\_eirene.F \\
@@ -22035,6 +22036,7 @@ CRAY & broadcast/calstr.F \\
 CRAY & broadcast/collect\_census.F \\
 CRAY & broadcast/collect\_coutau.F \\
 CRAY & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
+CRAY & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
 CRAY & modules/eirmod\_cadgeo.F \\
 CRAY & modules/eirmod\_cai.F \\
 CRAY & modules/eirmod\_ccona.F \\
@@ -22067,7 +22069,6 @@ CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
 DBG & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/couple\_param.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS-ITER/eirmod\_extrab25.F90 \\
-GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & assistant/exit\_own.F \\
 GFORTRAN & broadcast/broad\_iestr.F \\
 GFORTRAN & broadcast/broadcast.F \\
@@ -22077,7 +22078,7 @@ GFORTRAN & broadcast/collect\_census.F \\
 GFORTRAN & broadcast/collect\_coutau.F \\
 GFORTRAN & broadcast/eirmod\_calstr\_buffered.F90 \\
 GFORTRAN & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
-GFORTRAN & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
+GFORTRAN & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
 GFORTRAN & modules/eirmod\_balanced\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_improved\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_cadgeo.F \\
@@ -22106,6 +22107,7 @@ GFORTRAN & modules/eirmod\_ctext.F \\
 GFORTRAN & modules/eirmod\_ctrcei.F \\
 GFORTRAN & modules/eirmod\_ctrig.F \\
 GFORTRAN & modules/eirmod\_czt1.F \\
+GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & modules/eirmod\_parmmod.F \\
 GFORTRAN & photons/eirmod\_photon.F \\
 GFORTRAN & user-routines/user\_iter/broad\_usr.F \\
@@ -22213,7 +22215,7 @@ PGF90 & particle-tracing/folion.F \\
 PGF90 & particle-tracing/velocs.F \\
 PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
-TRACE & geometry/time-routines/timea.F \\
+TRACE & geometry/time-routines/eirmod\_timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
@@ -22298,7 +22300,8 @@ USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_ccoupl.F \\
 USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_eirbra.F \\
 USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_infcop.F \\
 USE\_MPI & interfaces/couple\_SOLPS-ITER/eirmod\_wneutrals.F \\
-USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.f \\
+USE\_MPI & interfaces/couple\_SOLPS-ITER/eirsrt.F \\
+USE\_MPI & main-routines/eirene\_main.F \\
 USE\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_cadgeo.F \\
@@ -22402,7 +22405,6 @@ USE\_OPENMP & surface-processes/reflec\_photon.F \\
 USE\_OPENMP & tetrahedra/learct.F \\
 USE\_OPENMP & user-routines/user\_iter/eirmod\_uptusr.F \\
 USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
-WINDOWS & main-routines/eirmod\_eirene.f \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
     \hline
     \caption{Defines for Eirene and where they are used.}
