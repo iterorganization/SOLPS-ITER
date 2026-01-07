@@ -9,13 +9,15 @@ ifndef LD_NAG
   $(error LD_NAG not defined)
 endif
 
-EQUIV5 = -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Dscopy=dcopy -Dsgbtrf=dgbtrf -Dsgbtrs=dgbtrs -DGRREAL=4
+DEFINES =
 
-CPP = /lib/cpp -C -traditional -ffreestanding
+CPP     = -/lib/cpp -traditional
 
-GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
+GKS     = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-LDLIBS    =
+#LDLIBS = ${LD_MSCL} -L/usr/local/lib -L/usr/X11R6/lib64
+LDLIBS  = -L/usr/local/lib -L/usr/X11R6/lib64
+
 
 #!!!Local Variables:
 #!!! mode: Makefile
