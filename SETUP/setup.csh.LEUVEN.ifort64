@@ -15,7 +15,8 @@ module load Pango/1.48.5-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
 module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
-module load MATLAB/2020a-r3
+module load MATLAB/2023a-r7
+# module load cluster/genius/batch
 
 # Debugger env var
 setenv DBX ddt
@@ -26,7 +27,7 @@ setenv FC ifort
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
-module load Java/1.8.0_192
+#module load Java/1.8.0_192
 # setenv PETSC_DIR /staging/leuven/stg_00030/petsc_wice # set this only if using local PETCs installation
 # setenv PETSC_ARCH arch-linux-c-debug # set this only if using local PETCs installation
 if ($?PETSC_DIR) then
