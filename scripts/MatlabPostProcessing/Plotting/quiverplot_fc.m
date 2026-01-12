@@ -1,4 +1,4 @@
-function [h,vx,vy] = quiverplot_fc(gmtry,uu,vv)
+function [h,vx,vy] = quiverplot_fc(gmtry,uu,vv,scalefactor)
 % h = quiverplot_fc(gmtry,uu,vv)
 %
 % Routine to make quiver plot of a face-centered quantity (e.g. fna, fhe,
@@ -23,6 +23,11 @@ function [h,vx,vy] = quiverplot_fc(gmtry,uu,vv)
 % April 2025
 
 % Check current status of hold
+if ~exist('scalefactor','var') || isempty(scalefactor)
+    scalefactor = 1;
+    fprintf('\n quiverplot_fc - scalefactor not specified. Using default 1. \n')
+end
+
 hs = ishold;
 
 % Face vertices coordinates
@@ -49,7 +54,9 @@ x_c = (x1 + x2) / 2;
 y_c = (y1 + y2) / 2;
 
 % Plot velocity field using quiver
-h = quiver(x_c, y_c, vx, vy, 'k')
+h = quiver(x_c, y_c, vx, vy, 'k');
+h.AutoScale = 'on';
+h.AutoScaleFactor = scalefactor;   % default is 1
 axis equal
 
 % Reset status of hold

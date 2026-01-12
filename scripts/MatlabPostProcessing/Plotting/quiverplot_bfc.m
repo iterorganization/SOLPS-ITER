@@ -1,4 +1,4 @@
-function quiverplot_bfc(gmtry,uu,vv)
+function [h,vx,vy] = quiverplot_bfc(gmtry,uu,vv,scalefactor)
 % h = quiverplot_bfc(gmtry,uu,vv)
 %
 % Routine to make quiver plot of a face-centered quantity (e.g. fna, fhe,
@@ -22,16 +22,25 @@ function quiverplot_bfc(gmtry,uu,vv)
 % E-mail: anthony.piras@kuleuven.be
 % April 2025
 
+if ~exist('scalefactor','var') || isempty(scalefactor)
+    scalefactor = 1;
+    fprintf('\n quiverplot_bfc - scalefactor not specified. Using default 1. \n')
+end
+
 % Check current status of hold
 hs = ishold;
 
 % Face vertices coordinates
 vx1 = [];
 vx2 = [];
+boundfacelist = [];
 for iFc = 1:gmtry.nFc
     if gmtry.fcCv(iFc,2)>gmtry.nCi
         vx1 = [vx1, gmtry.fcVx(iFc,1)]; % first vertex of face
         vx2 = [vx2, gmtry.fcVx(iFc,2)]; % second vertex of face
+        if gmtry.fcCv(iFc,1) > gmtry.nCi || gmtry.fcCv(iFc,2) > gmtry.nCi
+            boundfacelist = [boundfacelist, iFc];
+        end
     end
 end
 
@@ -45,19 +54,22 @@ y2 = gmtry.vxY(vx2); % y-coord of second vertex
 gmtry = calc_fcEb(gmtry);
 
 % Normalise fcEb
-normm = sqrt(gmtry.fcEb(find(gmtry.fcLbl<0),1).^2 + gmtry.fcEb(find(gmtry.fcLbl<0),2).^2);
-fcEb(:,1)=gmtry.fcEb(find(gmtry.fcLbl<0),1)./normm;
-fcEb(:,2)=gmtry.fcEb(find(gmtry.fcLbl<0),2)./normm;
 
-vx = uu(find(gmtry.fcLbl<0)).*fcEb(:,1) - vv(find(gmtry.fcLbl<0)).*fcEb(:,2)*gmtry.sbf;
-vy = uu(find(gmtry.fcLbl<0)).*fcEb(:,2) + vv(find(gmtry.fcLbl<0)).*fcEb(:,1)*gmtry.sbf;
+normm = sqrt(gmtry.fcEb(boundfacelist,1).^2 + gmtry.fcEb(find(boundfacelist),2).^2);
+fcEb(:,1)=gmtry.fcEb(boundfacelist,1)./normm;
+fcEb(:,2)=gmtry.fcEb(boundfacelist,2)./normm;
+
+vx = uu(boundfacelist).*fcEb(:,1) - vv(boundfacelist).*fcEb(:,2)*gmtry.sbf;
+vy = uu(boundfacelist).*fcEb(:,2) + vv(boundfacelist).*fcEb(:,1)*gmtry.sbf;
 
 % Coordinates of face centers
 x_c = (x1 + x2) / 2;
 y_c = (y1 + y2) / 2;
 
 % Plot velocity field using quiver
-h = quiver(x_c, y_c, vx, vy, 'k')
+h = quiver(x_c, y_c, vx, vy, 'k');
+h.AutoScale = 'on';
+h.AutoScaleFactor = scalefactor;   % default is 1
 axis equal
 
 % Reset status of hold
