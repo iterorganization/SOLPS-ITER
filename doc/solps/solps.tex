@@ -22069,13 +22069,15 @@ We list below where the {\tt Eirene} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
+ALLOCATE\_AND\_NAMELIST & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
+ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param\_fixform.F \\
 B25\_EIRENE & file-handling/wrmesh.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
+B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
 B25\_EIRENE & main-routines/eirmod\_eirene.F \\
 B25\_EIRENE & plotting/plmesh.F \\
-B25\_EIRENE & startup-routines/find\_param.F \\
+B25\_EIRENE & startup-routines/read\_fixform.F \\
 CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\
@@ -22164,6 +22166,8 @@ GFORTRAN & photons/eirmod\_photon.F \\
 GFORTRAN & user-routines/user\_iter/broad\_usr.F \\
 GFORTRAN & user-routines/user\_iter/eirmod\_refusr.F \\
 G95 & assistant/exit\_own.F \\
+G95 & startup-routines/find\_tet\_dim.F \\
+G95 & startup-routines/find\_triang\_dim.F \\
 HPUX & modules/eirmod\_cinit.F \\
 LEGACYCOMP & assistant/eirmod\_algebra.F \\
 LEGACYCOMP & file-handling/wrplam\_shrt.F \\
@@ -22171,10 +22175,14 @@ LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
 LEGACYCOMP & output/outildsrf.f \\
 LEGACYCOMP & particle-tracing/eirmod\_samsrf.F \\
+LEGACYCOMP & startup-routines/find\_tet\_dim.F \\
+LEGACYCOMP & startup-routines/find\_triang\_dim.F \\
+LEGACYCOMP & startup-routines/read\_fixform.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
+MPI\_VERSION & startup-routines/read\_fixform.F \\
+NAGFOR & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
 NAGFOR & main-routines/eirmod\_eirene.F \\
-NAGFOR & startup-routines/find\_param.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 NO\_GETENV & file-handling/get\_solpstop.F \\
 OPEN\_MPI & broadcast/broad\_iestr.F \\
