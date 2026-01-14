@@ -869,8 +869,8 @@ c*** 11
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trclst, trcbla, trcblm, trcbli, trcblp, trcble,trcblph /
      /    .false.,.false.,.false.,.false.,.false.,.false.,.false. /,
-     ,     trctal, trcoct, trccen, trcrnf,trchktim /
-     /    .false.,.false.,.false.,.false.,.false. /,
+     ,     trctal, trcoct, trccen, trcrnf,trchktim,trcscl /
+     /    .false.,.false.,.false.,.false.,.false.,.false. /,
      ,     trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl /
      /    .false.,.false.,.false.,.false.,.false. /,
      ,     trcdbgs,trcdbgg,trcdbgmpi,trcdbgc /
@@ -982,8 +982,8 @@ c*** Data for Eirene test run
      / .true.,.true. ,.true.,.true.,.true. /,
      , ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,ttcdbgl,ttcdbgs /
      / .true. ,.true. ,.true. ,.true. ,.true. ,.true.  /,
-     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim /
-     / .true. ,.true.   ,.true. , .false. /,
+     , ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcscl /
+     / .true. ,.true.   ,.true. , .false.,.true. /,
      , ttpl1st,ttpl2nd,ttpladd,ttplhst,        ttplcut       ,ttplnums/
      / .true. ,.true. ,.true. ,.true. ,.false.,.false.,.true.,.true.  /,
      , ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl /
