@@ -118,7 +118,7 @@ MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_clogau.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
+EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_clogau.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o ioflush_usr.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
 EGROBJS = ${patsubst %.o,${OBJDIR}/%.o,graxs.o grdrw.o grend.o grjmp.o grnwpn.o grsclc.o grsclv.o grspts.o grstrt.o gr90dg.o}
 
 MAINLIST = tria.o triageom.o triainq.o triainp.o
@@ -311,6 +311,10 @@ ${OBJDIR}/grstrt.o:
 
 ${OBJDIR}/gr90dg.o:
 	ln -sf ${EIROBJ}/gr90dg.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/ioflush_usr.o:
+	ln -sf ${EIROBJ}/ioflush_usr.o ${OBJDIR}
 	@gtfl $@
 
 ${OBJDIR}/leer.o: ${OBJDIR}/eirmod_comprt.${MOD}
