@@ -3,7 +3,7 @@ function [gmtry] = compute_cvFpsi(gmtry)
 %
 % Routine to compute the cvFpsi quantity and add it to the gmtry structure.
 % This quantity is not automatically written in the b2fgmtry file but it
-% can be recomputed from vxFpsi as done in b2agmt routine.
+% can be recomputed from vxFpsi as done in b2us_geo::init_geometry routine.
 %
 % Input arguments:
 %
@@ -19,9 +19,9 @@ function [gmtry] = compute_cvFpsi(gmtry)
 % January 2026
 
 for iCv = 1:gmtry.nCv
-    nv = gmtry.cvVxP(iCv,2);
-    verts = gmtry.cvVx(gmtry.cvVxP(iCv,1):gmtry.cvVxP(iCv,1)+nv-1);
-    gmtry.cvFpsi(iCv) = sum(gmtry.vxFpsi(verts)) / nv;
+    verts = gmtry.cvVx(gmtry.cvVxP(iCv,1):gmtry.cvVxP(iCv,1)+gmtry.cvVxP(iCv,2)-1);
+    gmtry.cvFpsi(iCv) = 0.5*( max(gmtry.vxFpsi(verts(1:gmtry.cvVxP(iCv,2)))) ...
+                              + min(gmtry.vxFpsi(verts(1:gmtry.cvVxP(iCv,2)))) );
 end
 
 end
