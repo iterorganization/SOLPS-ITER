@@ -1,4 +1,4 @@
-function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold)
+function [p] = Patchplot2(gmtry,field,scale,fmin,fmax,check_type,threshold)
 % [p] = Patchplot(gmtry,field,options)
 %
 % Routine to make patchplot of cell-centered quantity.
@@ -16,9 +16,9 @@ function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold)
 % - p       : handle to the patch plot object
 % 
 
-% Author: Wouter Dekeyser
-% E-mail: wouter.dekeyser@kuleuven.be
-% November 2016
+% Author: Anthony Piras
+% E-mail: anthony.piras@kuleuven.be
+% September 2025
 
 % Set default values for some arguments, if not supplied
 if ~exist('scale','var') || isempty(scale)
@@ -170,7 +170,6 @@ end
 hs = ishold;
 hold on;
 % Handle array initialisation
-% Handle array initialisation
 nCells = size(S.XData, 2);
 nmax   = size(S.XData, 1);
 
@@ -188,8 +187,7 @@ p = patch('Faces', Faces, ...
           'Vertices', [Xv Yv Zv], ...
           'FaceVertexCData', S.ZData, ...
           'FaceColor', 'flat', ...
-          'EdgeColor', 'k', ...
-          'LineWidth', 0.5);
+          'EdgeColor', 'none');
 
 colorbar
 caxis([fmin fmax]);

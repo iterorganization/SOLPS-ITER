@@ -1,5 +1,5 @@
-function [Ch,seph,strh] = Contourfplot(structure,gmtry,field,varargin)
-% [Ch,seph,strh]= Contourfplot(structure,gmtry,field,scale,ncont,fmin,fmax)
+function [Ch,seph,strh] = contourfplot_c(structure,gmtry,field,varargin)
+% [Ch,seph,strh] = contourfplot_c(structure,gmtry,field,scale,ncont,fmin,fmax)
 %
 % Routine to make contourfplot of cell centered quantity.
 % 

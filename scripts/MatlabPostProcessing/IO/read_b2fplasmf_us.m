@@ -1,5 +1,15 @@
 function state = read_b2fplasmf_us(file)
+% state = read_b2fplasmf_us(file)
+%
+% Read formatted b2fplasmf file created by B2.5.
+%
+%
 
+% Author: Wouter Dekeyser
+% E-mail: wouter.dekeyser@kuleuven.be
+% November 2016
+
+disp(['Attempting read_b2fplasmf_us.'])
 
 % Open file
 [fid,msg] = fopen(file);
@@ -10,10 +20,9 @@ end
 
 %% Get version of the b2fstate file
 
-%line    = fgetl(fid);
-%version = line(8:17);
+line    = fgetl(fid);
+version = line(8:17);
 
-disp(['read_b2fsplasmf -- file version ',version]);
 %state.version = version;
 
 
@@ -55,6 +64,8 @@ state.kt     = read_rfield(fid,'kt'    ,statedim);
 
 state.fna    = read_rfield(fid,'fna'   ,fluxdims);
 state.fne    = read_rfield(fid,'fne'   ,fluxdim);
+state.fni    = read_rfield(fid,'fni'   ,fluxdim);
+state.fmo    = read_rfield(fid,'fmo'   ,fluxdims);
 state.fhe    = read_rfield(fid,'fhe'   ,fluxdim);
 state.fhi    = read_rfield(fid,'fhi'   ,fluxdim);
 state.fhn    = read_rfield(fid,'fhn'   ,fluxdim);
@@ -175,7 +186,14 @@ state.dkt0     = read_rfield(fid,'dkt0'    ,[nCv]);
 state.dna_ExB     = read_rfield(fid,'dna_ExB'    ,[nCv]);
 state.hce_ExB     = read_rfield(fid,'hce_ExB'    ,[nCv]);
 state.hci_ExB     = read_rfield(fid,'hci_ExB'    ,[nCv]);
+state.dna_bohm    = read_rfield(fid,'dna_bohm'    ,[nCv 2 ns]);
+state.vla_bohm    = read_rfield(fid,'vla_bohm'    ,[nCv 2 ns]);
+state.vsa_bohm    = read_rfield(fid,'vsa_bohm'    ,[nCv 2 ns]);
 
 %% Close file
 
 fclose(fid);
+
+disp(['Done read_b2fplasmf_us with no errors.'])
+
+end

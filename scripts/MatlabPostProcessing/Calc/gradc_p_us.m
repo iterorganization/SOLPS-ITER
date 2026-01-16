@@ -1,5 +1,9 @@
-function [gfunp]=gradc_p_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
-
+function [gfunp] = gradc_p_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
+% [gfunp] = gradc_p_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
+%
+% Computes the poloidal gradient of a cell-centered quantity on
+% cell-centers.
+%
 gfunp=zeros(nCv,1);
 
 if (mode<0 | mode>1)

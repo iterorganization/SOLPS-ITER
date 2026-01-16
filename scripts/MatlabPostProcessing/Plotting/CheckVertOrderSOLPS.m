@@ -1,11 +1,12 @@
 function is_ordered = CheckVertOrderSOLPS(geo_us,cells)
-
+% is_ordered = CheckVertOrderSOLPS(geo_us,cells)
+%
 % Check per cell whether the vertices and faces are ordered correctly,
 % following the right turning scheme
-
 % Returns the array is_ordered with the indication whether the information
 % is ordered correctly or not. 1 = correctly ordered, 0 = not correctly
-%ordered
+% ordered
+%
 
 if nargin == 2
     is_ordered = ones(length(cells),1);

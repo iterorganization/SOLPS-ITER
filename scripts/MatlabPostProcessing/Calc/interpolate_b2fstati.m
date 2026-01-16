@@ -1,4 +1,5 @@
 function state1 = interpolate_b2fstati(gmtry0,state0,gmtry1)
+% state1 = interpolate_b2fstati(gmtry0,state0,gmtry1)
 %
 % Routine to interpolate a plasma state0 defined on gmtry0 onto a new
 % gmtry1.

@@ -37,29 +37,62 @@ h  = struct('h',[]);
 % For speed, special treatment for nncut = 0 and nncut = 1
 % General cases treated as well, but leads to a heavy plot!
 if isfield(gmtry,'nCv')
-    
-    % Plot all internal cells as set of faces
-    for iCv = 1:gmtry.nCi
-       rco = [];
-       zco = [];
-       for iFc = 1:gmtry.cvFcP(iCv,2)
-            rco    = [rco,[gmtry.vxX(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),1));...
-                          gmtry.vxX(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),2))]];
-            zco    = [zco,[gmtry.vxY(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),1));...
-                          gmtry.vxY(gmtry.fcVx(gmtry.cvFc(gmtry.cvFcP(iCv,1)+iFc-1),2))]];
-       end
-       h(iCv).h = plot(rco,zco,varargin{:});hold on;
+
+    % Old code
+    % % Plot all internal cells as set of faces
+    % nInt = gmtry.nCi;
+    % R_all = [];
+    % Z_all = [];
+    % 
+    % for iCv = 1:nInt
+    %     startIdx = gmtry.cvFcP(iCv,1);
+    %     nFc      = gmtry.cvFcP(iCv,2);
+    %     fcIdx    = gmtry.cvFc(startIdx:startIdx+nFc-1);
+    % 
+    %     vx1 = gmtry.fcVx(fcIdx,1);
+    %     vx2 = gmtry.fcVx(fcIdx,2);
+    % 
+    %     rco = [gmtry.vxX(vx1) gmtry.vxX(vx2)]';
+    %     zco = [gmtry.vxY(vx1) gmtry.vxY(vx2)]';
+    % 
+    %     R_all = [R_all; rco(:); NaN];
+    %     Z_all = [Z_all; zco(:); NaN];
+    % end
+    % 
+    % % Plot all internal faces in one go
+    % hInt = plot(R_all, Z_all, varargin{:});
+    % hold on;
+
+    figure()
+    hold on
+    for iFc = 1:gmtry.nFc
+        vx1 = gmtry.fcVx(iFc,1); % first vertex of face
+        vx2 = gmtry.fcVx(iFc,2); % second vertex of face
+        x1 = gmtry.vxX(vx1); % x-coord of first vertex
+        y1 = gmtry.vxY(vx1); % y-coord of first vertex
+        x2 = gmtry.vxX(vx2); % x-coord of second vertex
+        y2 = gmtry.vxY(vx2); % y-coord of second vertex
+        plot([x1 x2],[y1 y2],'k','LineWidth',0.5)
     end
 
-    % Guard cells: black
-    for iCv = gmtry.nCi+1:gmtry.nCv
-        iFc = gmtry.cvFc(gmtry.cvFcP(iCv,1));
-        rco = [gmtry.vxX(gmtry.fcVx(iFc,1));...
-               gmtry.vxX(gmtry.fcVx(iFc,2))];
-        zco = [gmtry.vxY(gmtry.fcVx(iFc,1));...
-               gmtry.vxY(gmtry.fcVx(iFc,2))];
-       h(iCv).h = plot(rco,zco,'k');hold on;
-    end
+    % --- Guard cells (black lines) ---
+    % Actually not needed -- commented out
+    % nGuard = gmtry.nCv - gmtry.nCi;
+    % R_guard = zeros(3 * nGuard, 1); % 2 pts + NaN per line
+    % Z_guard = zeros(3 * nGuard, 1);
+    % 
+    % for k = 1:nGuard
+    %     iCv = gmtry.nCi + k;
+    %     iFc = gmtry.cvFc(gmtry.cvFcP(iCv,1)); % single face
+    %     vx  = gmtry.fcVx(iFc,:);
+    %     idx = (k-1)*3 + (1:3);
+    %     R_guard(idx) = [gmtry.vxX(vx(1)); gmtry.vxX(vx(2)); NaN];
+    %     Z_guard(idx) = [gmtry.vxY(vx(1)); gmtry.vxY(vx(2)); NaN];
+    % end
+    % 
+    % % Single plot call for all guard cells
+    % hGuard = plot(R_guard, Z_guard, 'k', varargin{:});
+    % axis equal
         
 else
     switch gmtry.nncut
@@ -124,9 +157,5 @@ else
             
     end
 end
-
-% Reset status of hold
-if ~hs, hold off; end;
-
 
 

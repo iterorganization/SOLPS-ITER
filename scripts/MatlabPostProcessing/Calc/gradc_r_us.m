@@ -1,4 +1,8 @@
-function [gfunr]=gradc_r_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
+function [gfunr] = gradc_r_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
+% [gfunr] = gradc_r_us(nCv, nFc, nVx, mode, gmtry, fun, funv)
+%
+% Computes the radial gradient of a cell-centered quantity on cell-centers.
+%
 
 gfunr=zeros(nCv,1);
 

@@ -1,7 +1,11 @@
 function [sep] = plotsep_us(gmtry,icsep,omp,varargin)
+% [sep] = plotsep_us(gmtry,icsep,omp,varargin)
+%
+% Identifies and plots separatrix flux tube.
+%
 
-% identify separatrix flux tube
-[sep1] = find_flux_surfaces(gmtry,omp(icsep)); [sep2] = find_flux_surfaces(gmtry,omp(icsep-1));
+[sep1] = find_flux_surfaces(gmtry,omp(icsep));
+[sep2] = find_flux_surfaces(gmtry,omp(icsep-1));
 sep = intersect(sep1,sep2);
 for jj=1:gmtry.fsFcP(sep,2)     
         ifc = gmtry.fsFc(gmtry.fsFcP(sep,1)+jj-1);

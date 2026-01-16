@@ -1,4 +1,8 @@
-function [gfunr]=grad_r_us(nFc, nVx, mode, gmtry, fun, funv)
+function [gfunr] = grad_r_us(nFc, nVx, mode, gmtry, fun, funv)
+% [gfunr] = grad_r_us(nFc, nVx, mode, gmtry, fun, funv)
+%
+% Computes the radial gradient of a quantity on cell faces.
+%
 
 gfunr = zeros(nFc,1);
 
