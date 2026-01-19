@@ -7,7 +7,7 @@ echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.g
 export NO_MANUAL="true"
 make listobj_nox depend_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt b25_tgt_debug b25_adj_debug b25_hess_tgt_debug
+make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt
 
 # Run test case sensitivity for tangent, adjoint and hessian
 
@@ -26,7 +26,6 @@ cp ../run_AD_CI/b2fstati .
 cp ../run_AD_CI/cf2.dat .
 echo "'b2mndr_ntim' '10'" >> b2mn.dat
 
-. ${SOLPSTOP}/SETUP/debug.ksh
 b2run -tgt b2mn | tee run.log
 grep -i 'Cost function gradient 1' run.log | awk '{print $5}' | tail -n 10 > tgt_sens_10iter_test.dat
 ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ../tgt_sens_10iter.dat ./tgt_sens_10iter_test.dat 10 1.0e-12 || exit 1
@@ -68,4 +67,3 @@ result_tao.sh
 tail -n 1 parm_hist1.dat > optim_test.dat
 tail -n 1 parm_hist2.dat >> optim_test.dat
 ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ./optim.dat ./optim_test.dat 2 1.0e-3 || exit 5
-
