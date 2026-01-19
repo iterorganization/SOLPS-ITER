@@ -54,7 +54,7 @@ ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 #LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
 endif
-LD_NAG     = `pkg-config openblas --libs`
+LD_NAG     = `pkg-config openblas --libs` -L${EBROOTIMKL}/mkl/lib  -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64  -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
 LD_MDSPLUS =
 # LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
