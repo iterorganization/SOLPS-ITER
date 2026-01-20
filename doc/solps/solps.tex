@@ -4662,12 +4662,13 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently five possible choices supported. They are:
+There are currently six possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -22082,6 +22083,7 @@ CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\
 CHECKBIN & file-handling/wrplam\_shrt.F \\
+CHECKBIN & interfaces/couple\_B2/infcop.f \\
 CHECKBIN & main-routines/eirmod\_mcarlo.F \\
 CHECKBIN & modules/eirmod\_comxs.F \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.F \\
@@ -22141,6 +22143,7 @@ GFORTRAN & modules/eirmod\_ccona.F \\
 GFORTRAN & modules/eirmod\_cestim.F \\
 GFORTRAN & modules/eirmod\_cgeom.F \\
 GFORTRAN & modules/eirmod\_cgrid.F \\
+GFORTRAN & modules/eirmod\_cinit.F \\
 GFORTRAN & modules/eirmod\_clgin.F \\
 GFORTRAN & modules/eirmod\_clogau.F \\
 GFORTRAN & modules/eirmod\_comnnl.F \\
@@ -22160,6 +22163,7 @@ GFORTRAN & modules/eirmod\_ctext.F \\
 GFORTRAN & modules/eirmod\_ctrcei.F \\
 GFORTRAN & modules/eirmod\_ctrig.F \\
 GFORTRAN & modules/eirmod\_czt1.F \\
+GFORTRAN & modules/eirmod\_improved\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & modules/eirmod\_parmmod.F \\
 GFORTRAN & photons/eirmod\_photon.F \\
@@ -22173,6 +22177,7 @@ G95 & main-routines/scal\_volav\_tallies.F \\
 G95 & main-routines/scale\_tallies.F \\
 G95 & main-routines/sum\_average.F \\
 G95 & main-routines/sumostra.F \\
+G95 & main-routines/tally\_sanity\_check.F \\
 G95 & particle-tracing/eirmod\_collide.F \\
 G95 & particle-tracing/escape.F \\
 G95 & scoring/getscl4.F \\
@@ -22192,6 +22197,7 @@ LEGACYCOMP & main-routines/scal\_volav\_tallies.F \\
 LEGACYCOMP & main-routines/scale\_tallies.F \\
 LEGACYCOMP & main-routines/sum\_average.F \\
 LEGACYCOMP & main-routines/sumostra.F \\
+LEGACYCOMP & main-routines/tally\_sanity\_check.F \\
 LEGACYCOMP & output/outildsrf.f \\
 LEGACYCOMP & particle-tracing/eirmod\_collide.F \\
 LEGACYCOMP & particle-tracing/eirmod\_samsrf.F \\
@@ -22209,7 +22215,7 @@ MPI\_VERSION & startup-routines/read\_fixform.F \\
 NAGFOR & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
 NAGFOR & main-routines/eirmod\_eirene.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
-NO\_GETENV & file-handling/get\_solpstop.F \\
+NO\_GETENV & user-routines/user\_iter/get\_solpstop.F \\
 OPEN\_MPI & broadcast/broad\_iestr.F \\
 OPEN\_MPI & broadcast/broadcast.F \\
 OPEN\_MPI & broadcast/broadsput.F \\
@@ -22226,6 +22232,7 @@ OPEN\_MPI & modules/eirmod\_ccona.F \\
 OPEN\_MPI & modules/eirmod\_cestim.F \\
 OPEN\_MPI & modules/eirmod\_cgeom.F \\
 OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
 OPEN\_MPI & modules/eirmod\_clgin.F \\
 OPEN\_MPI & modules/eirmod\_clogau.F \\
 OPEN\_MPI & modules/eirmod\_comnnl.F \\
@@ -22245,17 +22252,21 @@ OPEN\_MPI & modules/eirmod\_ctext.F \\
 OPEN\_MPI & modules/eirmod\_ctrcei.F \\
 OPEN\_MPI & modules/eirmod\_ctrig.F \\
 OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 OPEN\_MPI & modules/eirmod\_parmmod.F \\
 OPEN\_MPI & photons/eirmod\_photon.F \\
 OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
 OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 PGF90 & assistant/exit\_own.F \\
+PGF90 & particle-tracing/folion.F \\
+PGF90 & particle-tracing/velocs.F \\
 PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
 TRACE & geometry/time-routines/eirmod\_timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+TRACE & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & assistant/eirmod\_second\_own.F \\
 USE\_MPI & assistant/exit\_own.F \\
 USE\_MPI & broadcast/broad\_iestr.F \\
@@ -22278,6 +22289,7 @@ USE\_MPI & modules/eirmod\_ccona.F \\
 USE\_MPI & modules/eirmod\_cestim.F \\
 USE\_MPI & modules/eirmod\_cgeom.F \\
 USE\_MPI & modules/eirmod\_cgrid.F \\
+USE\_MPI & modules/eirmod\_cinit.F \\
 USE\_MPI & modules/eirmod\_clgin.F \\
 USE\_MPI & modules/eirmod\_clogau.F \\
 USE\_MPI & modules/eirmod\_comnnl.F \\
@@ -22297,14 +22309,14 @@ USE\_MPI & modules/eirmod\_ctext.F \\
 USE\_MPI & modules/eirmod\_ctrcei.F \\
 USE\_MPI & modules/eirmod\_ctrig.F \\
 USE\_MPI & modules/eirmod\_czt1.F \\
+USE\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
 USE\_MPI & modules/eirmod\_parmmod.F \\
-USE\_MPI & photons/eirmod\_phot\_reflec.f \\
 USE\_MPI & photons/eirmod\_photon.F \\
 USE\_MPI & startup-routines/input.F \\
 USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
-USE\_PXFGETENV & file-handling/get\_solpstop.F \\
+USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
     \hline
     \caption{Defines for Eirene and where they are used.}
