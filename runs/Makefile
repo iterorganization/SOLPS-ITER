@@ -89,7 +89,7 @@ else
 fort_lc = ftn
 endif
 
-prints = b2ab.prt b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
+prints = b2ab.prt b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mr.prt b2mnastra.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
  b2yr.prt b2yt.prt b2yi_gnuplot.prt
 
@@ -98,6 +98,7 @@ target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
 target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
+target_mr = b2mr.prt b2frates_mol
 target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced b2ftracedd
 target_opt = target_mn
 ifdef USE_IMPGYRO
@@ -234,6 +235,12 @@ $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf AMJUEL HYDHEL
 	cd b2ar.exe.dir ; ${TIME} ${B2OBJ}/b2ar.exe ${RUN_OPTIONS} ; mv $(target_ar) .. ; rm -f $(notdir $^) >& /dev/null
 	-rmdir b2ar.exe.dir
 
+$(target_mr) : b2mr.dat
+	rm -rf b2mr.exe.dir >& /dev/null ; mkdir b2mr.exe.dir ; cp $^ b2mr.exe.dir
+	rm -f $(target_mr)
+	cd b2mr.exe.dir ; ${TIME} ${B2OBJ}/b2mr.exe ${RUN_OPTIONS} ; mv $(target_mr) .. ; rm -f $(notdir $^) >& /dev/null
+	-rmdir b2mr.exe.dir
+
 $(target_astra) : b2mn.prt
 
 ifndef STAND_ALONE
@@ -245,6 +252,7 @@ endif
 	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
 	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -e ../mol_bg ] && cp -p ../mol_bg . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
@@ -281,6 +289,7 @@ else
 	-cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${TIME} ${B2OBJ}/${MNEXE}.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 endif
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
+	-[ -s b2mn.exe.dir/mol_bg ] && mv b2mn.exe.dir/mol_bg . || ( [ -e b2mn.exe.dir/mol_bg ] && rm b2mn.exe.dir/mol_bg || echo > /dev/null )
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
 endif
@@ -339,6 +348,7 @@ endif
 	-rm -f $(target_mn) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
 	-cd b2mn.exe.dir ; [ -s ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -s ../mol_bg ] && cp -p ../mol_bg . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
@@ -364,6 +374,7 @@ ifdef IMAS_VERSION
 endif
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
+	-[ -s b2mn.exe.dir/mol_bg ] && mv b2mn.exe.dir/mol_bg . || ( [ -e b2mn.exe.dir/mol_bg ] && rm b2mn.exe.dir/mol_bg || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
 ifdef NCDIR
 	-cd b2mn.exe.dir ; rm .netcdf4 >& /dev/null
@@ -618,6 +629,7 @@ ifndef STAND_ALONE
 	cp AMJUEL b2_ual_write.exe.dir/
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+	-cd b2_ual_write.exe.dir ; [ -e ../mol_bg ] && cp -p ../mol_bg . || echo > /dev/null
 ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
@@ -655,6 +667,7 @@ ifndef STAND_ALONE
 	cp AMJUEL b2_ual_rewrite.exe.dir/
 endif
 	-cd b2_ual_rewrite.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
+	-cd b2_ual_rewrite.exe.dir ; [ -e ../mol_bg ] && cp -p ../mol_bg . || echo > /dev/null
 ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
@@ -750,6 +763,8 @@ help help.prt:
 	@echo "     produce the initial plasma state"
 	@echo "  ${target_ar} : "
 	@echo "     produce the atomic physics rate information"
+	@echo "  ${target_mr} : "
+	@echo "     produce the molecular physics rate information"
 	@echo "  ${target_mn} : "
 	@echo "     run the main code"
 	@echo "  ${target_co} : "
