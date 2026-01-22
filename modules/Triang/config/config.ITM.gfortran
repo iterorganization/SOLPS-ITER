@@ -1,14 +1,11 @@
 #  VERSION : 16.12.2004 23:58
 
-# The version relying on Fujitsu Fortran installed on AFS
-
 # Test whether necessary variables are defined
-GLI_HOME ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
-GR_ROOT  ?= /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gr
+GLI_HOME ?= ${EBROOTGLI}
+GR_ROOT  ?= ${EBROOTGR}
 LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
-LD_GR    ?= -L${GR_ROOT} -lgr
+LD_GR    ?= -L${GR_ROOT}/lib -lgr
 
-#CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
 ifdef SOLPS_DEBUG
@@ -17,7 +14,6 @@ endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib
 LDLIBS    =
 
 #!!!Local Variables:

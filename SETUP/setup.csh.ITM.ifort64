@@ -1,22 +1,8 @@
-setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
-setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
-if (! $?LD_LIBRARY_PATH) then
-setenv LD_LIBRARY_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
-else
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
-endif
-if (! $?PKG_CONFIG_PATH) then
-setenv PKG_CONFIG_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
-else
-setenv PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
-endif
-setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
-setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv SCRATCH_DIR /pfs/scratch/$USER
 
 # add IMAS module list to module system
-module use /gw/swimas/modules/all
+module load ach-modules
 
 # load IMAS modules for Intel
 module load IMAS/3.42.0-2025.01-intel-2023b
@@ -33,9 +19,13 @@ module load Doxygen/1.9.8-GCCcore-13.2.0
 module load Ghostscript/10.02.1-GCCcore-13.2.0
 module load makedepend/1.0.9-GCCcore-13.2.0
 module load OpenBLAS/0.3.24-GCC-13.2.0
+module load GLI/4.5.31-GCCcore-13.2.0
+module load GR/0.0.94-GCCcore-13.2.0
+module load MSCL/1.2.5-GCCcore-13.2.0
+module load NCL/6.6.2-intel-2023b
 
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
-setenv EBVERSIONMSCL "1.2.4"
+setenv GLI_HOME ${EBROOTGLI}
 setenv SYSNAME x86_64_rhel9
 
 if (! $?DEVICE) then
@@ -70,7 +60,7 @@ endif
 
 # compilers
 
-#setenv CC gcc
-#setenv FC ifort
-#setenv CXX g++
+setenv CC icc
+setenv FC ifort
+setenv CXX icpc
 setenv MPI_FC mpiifort
