@@ -716,7 +716,7 @@ Among other things, these setup files establish some aliases that are useful for
 It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the {\tt set\_debug} and {\tt unset\_debug} commands. Similarly, the
 {\tt set\_mpi} and {\tt unset\_mpi} will turn on or off, respectively, compilation with MPI parallelization flags. Same for {\tt set\_openmp} and {\tt unset\_openmp}, for OpenMP parallelization. By default, neither debug nor parallelization (MPI and OpenMP) flags are turned on.
 
-After activating one of these flags and upon succesful compilation, it is recommended to do:
+After activating one of these flags and upon successful compilation, it is recommended to do:
 \begin{verbatim}
   rehash
 \end{verbatim}
@@ -1155,7 +1155,6 @@ SOLPSTOP
 |   |   |   |   +---couple_SOLPS_WG
 |   |   |   |   +---couple_SOLPS-ITER
 |   |   |   |   +---couple_Tria
-|   |   |   +---ioflush
 |   |   |   +---iterate
 |   |   |   +---main-routines
 |   |   |   +---mathematics
@@ -1762,7 +1761,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
-  \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
+  \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon successful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nc\_reduce]\index{nc\_reduce} Utility program to reduce the size of very large NetCDF files by keeping only a fraction of the timeslices. Uses {\tt -m \#} and {\tt -l \#} options to obtain every $m$-th time slice and/or the last $l$ time slices.
@@ -4060,7 +4059,7 @@ those regions, excluding the fluxes within boundary regions.
 The converter program {\tt b2yt} can be used for a variety of purposes, and
 prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
-be followed for a succesful conversion is:
+be followed for a successful conversion is:
 \begin{enumerate}
   \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}.
   \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
@@ -4663,12 +4662,13 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently five possible choices supported. They are:
+There are currently six possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -6108,7 +6108,7 @@ to its original {\tt 'francais'}.
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the {\tt (S)ave} option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the {\tt (P)repare} option, but rather jumps directly to {\tt (G)rid}.
 
 \begin{sloppypar}
-Upon succesful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre2/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre2 grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+Upon successful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre2/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre2 grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
 \end{sloppypar}
 
 After running {\tt Carre2}, it is recommended to have a look at the mesh and decide if one wants to modify it before
@@ -22018,6 +22018,8 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}(.local)} files.
 
 \begin{description}
+\item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
 
@@ -22068,44 +22070,252 @@ We list below where the {\tt Eirene} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-B25\_EIRENE & file-handling/wrmesh.F \\
-B25\_EIRENE & main-routines/eirene.f \\
+ALLOCATE\_AND\_NAMELIST & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
+ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param\_fixform.F \\
+B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
+B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
-B25\_EIRENE & plotting/plmesh.F \\
-B25\_EIRENE & startup-routines/find\_param.f \\
-COMPILER\_MAJOR\_VERSION & assistant/exit\_own.f \\
-COMPILER\_MINOR\_VERSION & assistant/exit\_own.f \\
+B25\_EIRENE & main-routines/eirmod\_eirene.F \\
+CHECKBIN & assistant/wrstrt.F \\
+CHECKBIN & file-handling/wrgeom.F \\
+CHECKBIN & file-handling/wrplam\_long.F \\
+CHECKBIN & file-handling/wrplam\_shrt.F \\
+CHECKBIN & interfaces/couple\_B2/infcop.f \\
+CHECKBIN & main-routines/eirmod\_mcarlo.F \\
+CHECKBIN & modules/eirmod\_comxs.F \\
+COMPILER\_MAJOR\_VERSION & assistant/exit\_own.F \\
+COMPILER\_MINOR\_VERSION & assistant/exit\_own.F \\
+CRAY & broadcast/broad\_iestr.F \\
+CRAY & broadcast/broadcast.F \\
+CRAY & broadcast/broadsput.F \\
+CRAY & broadcast/calstr.F \\
+CRAY & broadcast/collect\_census.F \\
+CRAY & broadcast/collect\_coutau.F \\
+CRAY & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+CRAY & interfaces/couple\_SOLPS\_WG/eirsrt.F \\
+CRAY & modules/eirmod\_cadgeo.F \\
+CRAY & modules/eirmod\_cai.F \\
+CRAY & modules/eirmod\_ccona.F \\
+CRAY & modules/eirmod\_cestim.F \\
+CRAY & modules/eirmod\_cgeom.F \\
+CRAY & modules/eirmod\_cgrid.F \\
+CRAY & modules/eirmod\_clgin.F \\
+CRAY & modules/eirmod\_clogau.F \\
+CRAY & modules/eirmod\_comnnl.F \\
+CRAY & modules/eirmod\_comsig.F \\
+CRAY & modules/eirmod\_comsou.F \\
+CRAY & modules/eirmod\_comspl.F \\
+CRAY & modules/eirmod\_comusr.F \\
+CRAY & modules/eirmod\_comxs.F \\
+CRAY & modules/eirmod\_coutau.F \\
+CRAY & modules/eirmod\_cpes.F \\
+CRAY & modules/eirmod\_cpolyg.F \\
+CRAY & modules/eirmod\_cref.F \\
+CRAY & modules/eirmod\_csdvi.F \\
+CRAY & modules/eirmod\_cstep.F \\
+CRAY & modules/eirmod\_ctetra.F \\
+CRAY & modules/eirmod\_ctext.F \\
+CRAY & modules/eirmod\_ctrcei.F \\
+CRAY & modules/eirmod\_ctrig.F \\
+CRAY & modules/eirmod\_czt1.F \\
+CRAY & modules/eirmod\_parmmod.F \\
+CRAY & photons/eirmod\_photon.F \\
+CRAY & user-routines/user\_iter/broad\_usr.F \\
+CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
 DBG & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
+GFORTRAN & assistant/exit\_own.F \\
+GFORTRAN & broadcast/broad\_iestr.F \\
+GFORTRAN & broadcast/broadcast.F \\
+GFORTRAN & broadcast/broadsput.F \\
+GFORTRAN & broadcast/calstr.F \\
+GFORTRAN & broadcast/collect\_census.F \\
+GFORTRAN & broadcast/collect\_coutau.F \\
+GFORTRAN & broadcast/eirmod\_calstr\_buffered.F90 \\
+GFORTRAN & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+GFORTRAN & interfaces/couple\_SOLPS\_WG/eirsrt.F \\
+GFORTRAN & modules/eirmod\_balanced\_strategy.F90 \\
+GFORTRAN & modules/eirmod\_cadgeo.F \\
+GFORTRAN & modules/eirmod\_cai.F \\
+GFORTRAN & modules/eirmod\_ccona.F \\
+GFORTRAN & modules/eirmod\_cestim.F \\
+GFORTRAN & modules/eirmod\_cgeom.F \\
+GFORTRAN & modules/eirmod\_cgrid.F \\
+GFORTRAN & modules/eirmod\_cinit.F \\
+GFORTRAN & modules/eirmod\_clgin.F \\
+GFORTRAN & modules/eirmod\_clogau.F \\
+GFORTRAN & modules/eirmod\_comnnl.F \\
+GFORTRAN & modules/eirmod\_comsig.F \\
+GFORTRAN & modules/eirmod\_comsou.F \\
+GFORTRAN & modules/eirmod\_comspl.F \\
+GFORTRAN & modules/eirmod\_comusr.F \\
+GFORTRAN & modules/eirmod\_comxs.F \\
+GFORTRAN & modules/eirmod\_coutau.F \\
+GFORTRAN & modules/eirmod\_cpes.F \\
+GFORTRAN & modules/eirmod\_cpolyg.F \\
+GFORTRAN & modules/eirmod\_cref.F \\
+GFORTRAN & modules/eirmod\_csdvi.F \\
+GFORTRAN & modules/eirmod\_cstep.F \\
+GFORTRAN & modules/eirmod\_ctetra.F \\
+GFORTRAN & modules/eirmod\_ctext.F \\
+GFORTRAN & modules/eirmod\_ctrcei.F \\
+GFORTRAN & modules/eirmod\_ctrig.F \\
+GFORTRAN & modules/eirmod\_czt1.F \\
+GFORTRAN & modules/eirmod\_improved\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
-GFORTRAN & assistant/exit\_own.f \\
-G95 & assistant/exit\_own.f \\
+GFORTRAN & modules/eirmod\_parmmod.F \\
+GFORTRAN & photons/eirmod\_photon.F \\
+GFORTRAN & user-routines/user\_iter/broad\_usr.F \\
+GFORTRAN & user-routines/user\_iter/eirmod\_refusr.F \\
+G95 & assistant/exit\_own.F \\
+G95 & interfaces/couple\_SOLPS\_WG/couple\_specific.F \\
+G95 & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+G95 & main-routines/integrate\_tallies.F \\
+G95 & main-routines/scal\_volav\_tallies.F \\
+G95 & main-routines/scale\_tallies.F \\
+G95 & main-routines/sum\_average.F \\
+G95 & main-routines/sumostra.F \\
+G95 & main-routines/tally\_sanity\_check.F \\
+G95 & particle-tracing/eirmod\_collide.F \\
+G95 & particle-tracing/escape.F \\
+G95 & scoring/getscl4.F \\
+G95 & scoring/update.F \\
+G95 & scoring/update\_surface.F \\
+G95 & scoring/updphot.F \\
+G95 & startup-routines/find\_tet\_dim.F \\
+G95 & startup-routines/find\_triang\_dim.F \\
 HPUX & modules/eirmod\_cinit.F \\
-LEGACYCOMP & assistant/eirmod\_algebra.f \\
-LEGACYCOMP & file-handling/wrplam\_shrt.f \\
-LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.f \\
-LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.f \\
+LEGACYCOMP & assistant/eirmod\_algebra.F \\
+LEGACYCOMP & file-handling/wrplam\_shrt.F \\
+LEGACYCOMP & interfaces/couple\_SOLPS\_WG/couple\_specific.F \\
+LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+LEGACYCOMP & main-routines/integrate\_tallies.F \\
+LEGACYCOMP & main-routines/scal\_volav\_tallies.F \\
+LEGACYCOMP & main-routines/scale\_tallies.F \\
+LEGACYCOMP & main-routines/sum\_average.F \\
+LEGACYCOMP & main-routines/sumostra.F \\
+LEGACYCOMP & main-routines/tally\_sanity\_check.F \\
 LEGACYCOMP & output/outildsrf.f \\
-LEGACYCOMP & particle-tracing/eirmod\_samsrf.f \\
+LEGACYCOMP & particle-tracing/eirmod\_collide.F \\
+LEGACYCOMP & particle-tracing/eirmod\_samsrf.F \\
+LEGACYCOMP & particle-tracing/escape.F \\
+LEGACYCOMP & scoring/getscl4.F \\
+LEGACYCOMP & scoring/update.F \\
+LEGACYCOMP & scoring/update\_surface.F \\
+LEGACYCOMP & scoring/updphot.F \\
+LEGACYCOMP & startup-routines/find\_tet\_dim.F \\
+LEGACYCOMP & startup-routines/find\_triang\_dim.F \\
+LEGACYCOMP & startup-routines/read\_fixform.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
-NAGFOR & main-routines/eirene.f \\
-NAGFOR & startup-routines/find\_param.f \\
+MPI\_VERSION & startup-routines/read\_fixform.F \\
+NAGFOR & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
+NAGFOR & main-routines/eirmod\_eirene.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
-NO\_GETENV & file-handling/get\_solpstop.f \\
-PGF90 & assistant/exit\_own.f \\
+NO\_GETENV & user-routines/user\_iter/get\_solpstop.F \\
+OPEN\_MPI & broadcast/broad\_iestr.F \\
+OPEN\_MPI & broadcast/broadcast.F \\
+OPEN\_MPI & broadcast/broadsput.F \\
+OPEN\_MPI & broadcast/calstr.F \\
+OPEN\_MPI & broadcast/collect\_census.F \\
+OPEN\_MPI & broadcast/collect\_coutau.F \\
+OPEN\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
+OPEN\_MPI & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+OPEN\_MPI & interfaces/couple\_SOLPS\_WG/eirsrt.F \\
+OPEN\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_cadgeo.F \\
+OPEN\_MPI & modules/eirmod\_cai.F \\
+OPEN\_MPI & modules/eirmod\_ccona.F \\
+OPEN\_MPI & modules/eirmod\_cestim.F \\
+OPEN\_MPI & modules/eirmod\_cgeom.F \\
+OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
+OPEN\_MPI & modules/eirmod\_clgin.F \\
+OPEN\_MPI & modules/eirmod\_clogau.F \\
+OPEN\_MPI & modules/eirmod\_comnnl.F \\
+OPEN\_MPI & modules/eirmod\_comsig.F \\
+OPEN\_MPI & modules/eirmod\_comsou.F \\
+OPEN\_MPI & modules/eirmod\_comspl.F \\
+OPEN\_MPI & modules/eirmod\_comusr.F \\
+OPEN\_MPI & modules/eirmod\_comxs.F \\
+OPEN\_MPI & modules/eirmod\_coutau.F \\
+OPEN\_MPI & modules/eirmod\_cpes.F \\
+OPEN\_MPI & modules/eirmod\_cpolyg.F \\
+OPEN\_MPI & modules/eirmod\_cref.F \\
+OPEN\_MPI & modules/eirmod\_csdvi.F \\
+OPEN\_MPI & modules/eirmod\_cstep.F \\
+OPEN\_MPI & modules/eirmod\_ctetra.F \\
+OPEN\_MPI & modules/eirmod\_ctext.F \\
+OPEN\_MPI & modules/eirmod\_ctrcei.F \\
+OPEN\_MPI & modules/eirmod\_ctrig.F \\
+OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_improved\_strategy.F90 \\
+OPEN\_MPI & modules/eirmod\_parmmod.F \\
+OPEN\_MPI & photons/eirmod\_photon.F \\
+OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
+OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
+PGF90 & assistant/exit\_own.F \\
+PGF90 & particle-tracing/folion.F \\
+PGF90 & particle-tracing/velocs.F \\
 PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
-TRACE & geometry/time-routines/timea.F \\
-TRACE & geometry/time-routines/timep.F \\
-TRACE & geometry/time-routines/timer.F \\
+TRACE & geometry/time-routines/eirmod\_timea.F \\
+TRACE & geometry/time-routines/eirmod\_timep.F \\
+TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
-USE\_MPI & assistant/exit\_own.f \\
+TRACE & modules/eirmod\_improved\_strategy.F90 \\
+USE\_MPI & assistant/eirmod\_second\_own.F \\
+USE\_MPI & assistant/exit\_own.F \\
+USE\_MPI & broadcast/broad\_iestr.F \\
+USE\_MPI & broadcast/broadcast.F \\
+USE\_MPI & broadcast/broadsput.F \\
+USE\_MPI & broadcast/calstr.F \\
+USE\_MPI & broadcast/collect\_census.F \\
+USE\_MPI & broadcast/collect\_coutau.F \\
+USE\_MPI & broadcast/eirmod\_calstr\_buffered.F90 \\
+USE\_MPI & interfaces/couple\_SOLPS\_WG/eirmod\_ccoupl.F \\
+USE\_MPI & interfaces/couple\_SOLPS\_WG/eirmod\_eirbra.F \\
+USE\_MPI & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+USE\_MPI & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+USE\_MPI & interfaces/couple\_SOLPS\_WG/eirsrt.F \\
+USE\_MPI & main-routines/eirene\_main.F \\
+USE\_MPI & modules/eirmod\_balanced\_strategy.F90 \\
+USE\_MPI & modules/eirmod\_cadgeo.F \\
+USE\_MPI & modules/eirmod\_cai.F \\
+USE\_MPI & modules/eirmod\_ccona.F \\
+USE\_MPI & modules/eirmod\_cestim.F \\
+USE\_MPI & modules/eirmod\_cgeom.F \\
+USE\_MPI & modules/eirmod\_cgrid.F \\
+USE\_MPI & modules/eirmod\_cinit.F \\
+USE\_MPI & modules/eirmod\_clgin.F \\
+USE\_MPI & modules/eirmod\_clogau.F \\
+USE\_MPI & modules/eirmod\_comnnl.F \\
+USE\_MPI & modules/eirmod\_comsig.F \\
+USE\_MPI & modules/eirmod\_comsou.F \\
+USE\_MPI & modules/eirmod\_comspl.F \\
+USE\_MPI & modules/eirmod\_comusr.F \\
+USE\_MPI & modules/eirmod\_comxs.F \\
+USE\_MPI & modules/eirmod\_coutau.F \\
+USE\_MPI & modules/eirmod\_cpes.F \\
+USE\_MPI & modules/eirmod\_cpolyg.F \\
+USE\_MPI & modules/eirmod\_cref.F \\
+USE\_MPI & modules/eirmod\_csdvi.F \\
+USE\_MPI & modules/eirmod\_cstep.F \\
+USE\_MPI & modules/eirmod\_ctetra.F \\
+USE\_MPI & modules/eirmod\_ctext.F \\
+USE\_MPI & modules/eirmod\_ctrcei.F \\
+USE\_MPI & modules/eirmod\_ctrig.F \\
+USE\_MPI & modules/eirmod\_czt1.F \\
+USE\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
-USE\_MPI & photons/eirmod\_phot\_reflec.f \\
-USE\_MPI & startup-routines/input.f \\
-USE\_PXFGETENV & file-handling/get\_solpstop.f \\
-WINDOWS & main-routines/eirene.f \\
+USE\_MPI & modules/eirmod\_parmmod.F \\
+USE\_MPI & photons/eirmod\_photon.F \\
+USE\_MPI & startup-routines/input.F \\
+USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
+USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
+USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
+WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
     \hline
     \caption{Defines for Eirene and where they are used.}
     \label{tab:Eirdefines}

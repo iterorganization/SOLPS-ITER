@@ -1,7 +1,3 @@
-#  VERSION : 16.12.2004 23:58
-
-# The version relying on Fujitsu Fortran installed on AFS
-
 # Test whether necessary variables are defined
 ifndef LD_GR
   $(error LD_GR not defined)

@@ -67,4 +67,3 @@ result_tao.sh
 tail -n 1 parm_hist1.dat > optim_test.dat
 tail -n 1 parm_hist2.dat >> optim_test.dat
 ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ./optim.dat ./optim_test.dat 2 1.0e-3 || exit 5
-
