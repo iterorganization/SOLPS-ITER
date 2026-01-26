@@ -163,7 +163,7 @@ c*** 1.  General data for the run
       write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
      .                 ntime0,ntim1,nfullrun
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
-     .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
+     .                 nsmstra,nstoram,ngstal,nrtal1
       nlspcscl = lsprcl
       nlspcscl_on = lsprcl
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
@@ -1108,7 +1108,8 @@ c*** 10f.
       write(iunoo,700) utxthd(35)
       do j=1,nadspc !{
         write(iunoo,707) ispsrf(j), iptyp(j), ipspz(j),
-     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j)
+     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j),
+     .                   ispopt(j)
         write(iunoo,703) spcmn(j), spcmx(j), spcsh(j),
      .                   spcpx(j), spcpy(j), spcps(j)
         if (idirec(j).ne.0)

@@ -156,8 +156,8 @@ c*** 1
      /      -1  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
      ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
-     ,   nstoram, ngstal,nrtal1,nreac_add /
-     /       9  ,   1   ,   0  ,     1    /
+     ,   nstoram, ngstal,nrtal1 /
+     /       9  ,   1   ,   0   /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
@@ -833,7 +833,9 @@ c*** 10e
      /    nals*' ', nals*' ', nals*' ', nals*' ' /
 c*** 10f
       data ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
-     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
+     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /,
+     ,     ispopt /
+     /     nasp*0 /
       data spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
      /    nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
       data spcvx , spcvy , spcvz /

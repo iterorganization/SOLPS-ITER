@@ -275,7 +275,7 @@ c*** 10e
 c*** 10f
 
       integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
-     ,        nsps(nads), isrfcl(nads), idirec(nads)
+     ,        nsps(nads), isrfcl(nads), idirec(nads), ispopt(nads)
       real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
      ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
      ,     spcvz(nads)
@@ -445,7 +445,7 @@ c*** b2ah.dat
      ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
      ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
      ,  iadss,iadst,iadsc,
-     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,
+     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,ispopt,
      ,  nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
      ,  nsrf,nflgs,nspzs1,nspzs2,nsptal,ntls,nplinr,nplotr,npldlr,
      ,  nplinp,nplotp,npldlp,
