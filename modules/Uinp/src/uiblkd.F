@@ -160,10 +160,10 @@ c*** 1
      /       9  ,   1   ,   0   /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
+     ,     nlone ,nlmovie, nldfst,nlranmar,nlcascad,nloctree/
      /    .false.,.false.,.false., .true. , .false., .false./,
-     /    nlwrmsh, nexvs ,nltrimesh/
-     ,    .true. ,.false.,.false./
+     /    nlwrmsh, nexvs ,nltrimesh,nlsoledge/
+     ,    .true. ,.false.,.false., .true./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2

@@ -12,8 +12,8 @@ c*** 1
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh
+     ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
+     ,        nexvs,nltrimesh,nlsoledge
       character txtrun*71
 
 c*** 2
@@ -524,8 +524,8 @@ c*** b2ah.dat
 
       common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh,
+     ,  nlmovie,nldfst,nlranmar,nlcascad,nloctree,
+     ,  nlwrmsh,nexvs,nltrimesh,nlsoledge,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
