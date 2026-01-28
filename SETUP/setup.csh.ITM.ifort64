@@ -35,7 +35,6 @@ if (! $?DEVICE) then
   endif
 endif
 
-# module load paraview/5.10.0
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
