@@ -4840,6 +4840,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
+  \item[NFLA] Number of plasma species followed by the plasma solver, as declared in the {\tt Eirene} input file
   \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file (including BGK species)
   \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
@@ -4920,7 +4921,7 @@ The data blocks are:
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NCV},{\tt NATM})
   \item[emolrad] Radiation rate due to molecules ($W$), dimension ({\tt NCV},{\tt NMOL})
   \item[eionrad] Radiation rate due to test ions ($W$), dimension ({\tt NCV},{\tt NION})
-  \item[eirdiag\_nds] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS +  1})
+  \item[eirdiag\_nds] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS + 1})
   \item[fnmti\_b2] Face indices forming the non-standard surfaces, dimension ({\tt NCL = eirdiag(NSTS)})
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
   \item[wldna\_res] Flux of atoms impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NATM}, {\tt NCL})
