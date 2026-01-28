@@ -1,5 +1,6 @@
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
 setenv SCRATCH_DIR /pfs/scratch/$USER
+setenv MODULES_ADVANCED_VERSION_SPEC 0
 
 # add IMAS module list to module system
 module load ach-modules
@@ -67,6 +68,6 @@ else
 endif
 
 # Debugger (set environment variable DBX)
-# module load totalview/2023.2
-# setenv DBX totalview
+module load totalview/2025.3.4
+setenv DBX totalview
 
