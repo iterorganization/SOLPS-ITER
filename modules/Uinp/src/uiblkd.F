@@ -82,13 +82,13 @@ c*** Default boundary conditions
      ,  ((lmobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
      /    nsdb2*2, nsdb2*3, nsdb2*2, nsdb2*2        /,
      ,  (beebndx(0,1,i),i=1,nbndknd), (beibndx(0,1,i),i=1,nbndknd)  /
-     /         1.e6, 1., 2*0.03     ,      1.e6, 1.5, 2*0.03      /,
+     /         1.e6, 0., 2*0.03     ,      1.e6, 1.5, 2*0.03        /,
      ,  (beebndx(0,2,i),i=1,nbndknd), (beibndx(0,2,i),i=1,nbndknd)  /
-     /            4*0.              ,         4*0.              /,
+     /            4*0.              ,           4*0.                /,
      ,  (bpobndx(0,1,i),i=1,nbndknd), (bpobndx(0,2,i),i=1,nbndknd)  /
      /            4*0.              ,           4*0.                /,
      ,  (benkbndx(0,1,i),i=1,nbndknd), (benkbndx(0,2,i),i=1,nbndknd) /
-     /         0.1, 1.0, 2*-1.0e-3  ,           4*0.            /,
+     /         0.1, 1.0, 2*-1.0e-3  ,           4*0.                /,
      ,  ((bcobndx(j,0,1,i),j=1,nsdb2),i=1,nbndknd)   /
      /    nsdb2*1.e19, nsdb2*0., nsdb2*0.03, nsdb2*0.03 /,
      ,  ((bcobndx(j,0,2,i),j=1,nsdb2),i=1,nbndknd)   /
@@ -154,10 +154,10 @@ c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
      /      -1  ,   1   ,  50  , 5000 ,   1   ,   1  ,   0   ,   1   /,
-     ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
+     ,  nevntmax, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
-     ,   nstoram, ngstal,nrtal1 /
-     /       9  ,   1   ,   0   /
+     ,   nstoram, ngstal,nrtal1, nvnmxtr /
+     /       9  ,   1   ,   0  ,     0   /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
      ,     nlone ,nlmovie, nldfst,nlranmar,nlcascad,nloctree/
