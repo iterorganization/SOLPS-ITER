@@ -171,7 +171,7 @@ c*** 1.  General data for the run
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
      .                 nlranmar,nlcascad,nloctree,nlwrmsh,nexvs,
-     .                 nltrimesh,nlspcscl,nlspcscl_on,nlsoledge
+     .                 nltrimesh,nlspcscl,nlspcscl_on,nlsoledge,nlspcspt
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
       do i=1,nrcln

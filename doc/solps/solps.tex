@@ -11946,7 +11946,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_West_style1}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11955,7 +11955,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_W
 \end{equation}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_West_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_West_style1}).
 
@@ -12025,7 +12025,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_East_style1}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -12034,7 +12034,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_E
 \end{equation}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_East_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_East_style1}).
 
@@ -22184,6 +22184,7 @@ G95 & particle-tracing/escape.F \\
 G95 & scoring/getscl4.F \\
 G95 & scoring/update.F \\
 G95 & scoring/update\_surface.F \\
+G95 & scoring/update\_sptflx.F \\
 G95 & scoring/updphot.F \\
 G95 & startup-routines/find\_tet\_dim.F \\
 G95 & startup-routines/find\_triang\_dim.F \\
@@ -22207,6 +22208,7 @@ LEGACYCOMP & particle-tracing/escape.F \\
 LEGACYCOMP & scoring/getscl4.F \\
 LEGACYCOMP & scoring/update.F \\
 LEGACYCOMP & scoring/update\_surface.F \\
+LEGACYCOMP & scoring/update\_sptflx.F \\
 LEGACYCOMP & scoring/updphot.F \\
 LEGACYCOMP & startup-routines/find\_tet\_dim.F \\
 LEGACYCOMP & startup-routines/find\_triang\_dim.F \\
