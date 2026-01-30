@@ -98,6 +98,10 @@ else
 endif
 
 foreach i ($usual $extra)
+  set var_exists = `ncdump -h $source | grep -cw "$i"`
+  if ($var_exists == 0) then
+    continue
+  endif
   set prefix=`echo $i | cut -c1`
   set pr2fix=`echo $i | cut -c2`
   set suffix=`echo $i | cut -c5-`
@@ -160,6 +164,10 @@ foreach i ($usual $extra)
 end
 
 foreach i ($usual_multi $extra_multi)
+  set var_exists = `ncdump -h $source | grep -cw "$i"`
+  if ($var_exists == 0) then
+    continue
+  endif
   set prefix=`echo $i | cut -c1`
   set pr2fix=`echo $i | cut -c2`
   set suffix=`echo $i | cut -c5-`
