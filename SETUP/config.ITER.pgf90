@@ -51,6 +51,7 @@ ADDLIBS        = -lgfortran
 
 NO_MPI         = true
 
+#
 # Preprocessor options
 #
 

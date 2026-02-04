@@ -19,12 +19,8 @@ set usual_multi="fn3dl na3dl na3di na3da fn3dr na3dr dn3di dn3da dp3di dp3da vx3
 set extra=""
 set extra_multi=""
 if ($?NREG) then
-  if ($NREG == 8) then
-    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
-    set extra_multi="fn3dtl na3dtl fn3dtr na3dtr"
-  endif
-  if ($NREG == 7) then
-    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
+  if ($NREG == 8 || $NREG == 7) then
+    set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
     set extra_multi="fn3dtl na3dtl fn3dtr na3dtr"
   endif
 endif

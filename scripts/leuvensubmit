@@ -5,16 +5,17 @@ set EMAIL=`get_git_email`
 set JOB_NAME="SOLPS-ITER"
 set NODES=1
 set PROCS=1
+set NODES=1
 set THREADS=1
 set hours=24
-set mem=4G
+set mem=4GB
 echo Your email is $EMAIL
 
 set compress_arg=""
 set compress_suffix=""
-set MPIOPTS=""
 set standalone_arg=""
 set coupled_suffix="_coupled"
+set MPIOPTS=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then
@@ -27,13 +28,13 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the QSUB batch system on the Leuven cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the Leuven cluster.
 
 Usage:
 
   `basename $0` {options} {<<SCRIPT>>}
 
-where the optional <<SCRIPT>> is the QSUB submission file to be used
+where the optional <<SCRIPT>> is the SLURM submission file to be used
 
 Available options are:
   -j <<JOB NAME>>    set the job name (default $JOB_NAME)
@@ -43,6 +44,7 @@ Available options are:
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>    memory size (default $mem)
+  -N <<NODES>>       number of nodes requested (default $NODES)
 
 EOF
     exit
@@ -78,7 +80,7 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    echo Asking for MPI run with $PROCS processors
+    echo Asking for MPI run with a total of $PROCS processors
     shift
     goto argloop
   endif
@@ -90,6 +92,13 @@ EOF
     endif
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set NODES="$1"
+    echo Asking for run over $NODES nodes
     shift
     goto argloop
   endif
@@ -111,6 +120,13 @@ EOF
     shift
     goto argloop
   endif
+
+@ TASKS = ( $PROCS / $NODES )
+set nodename=`hostname`
+set job_prefix="SLURM"
+unsetenv LD_PRELOAD
+## FIXMEsetenv LD_PRELOAD "/usr/lib64/libpmi2.so"
+unsetenv I_MPI_PMI_LIBRARY
 
 if ($1 == "") then
   echo No argument is specified. Looking for QSUB.leuven
@@ -142,9 +158,10 @@ else
   endif
 endif
 if($QSUB == "") then
-  echo No Leuven submission file $1 found. Exiting.
+  echo No LEUVEN submission file $1 found. Exiting.
   exit 1
 endif
+
 echo Using submission file template $QSUB
 
 sed \
@@ -152,8 +169,9 @@ sed \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
   -e "s:#MPIOPTS#:'$MPIOPTS':g" \
-  -e 's:#NODES#:'$NODES':g' \
+  -e 's:#TASKS#:'$TASKS':g' \
   -e 's:#PROCS#:'$PROCS':g' \
+  -e 's:#NODES#:'$NODES':g' \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
@@ -167,4 +185,4 @@ sed \
 
 update_solps_run_status -n "Submitted at `date`"
 
-qsub -V -S /bin/tcsh $NAME
+sbatch $NAME

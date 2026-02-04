@@ -133,6 +133,7 @@ TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 EIRENE="${SOLPSTOP}/modules/Eirene/builds/standalone.$eirchain/eirobjx"
 
+q=U
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre/meshes/${DEVICE-iter}}
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
@@ -194,9 +195,7 @@ e=
 }
 [ -n "$e" ] && exit 4
 
-q=U
 [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
-
 
 export GRSOFT_DEVICE='62'
 export PLOT_IT_STEM='tria'
@@ -332,6 +331,7 @@ while true; do {
                 print -u2 -- "    ==> Check $trialog"
                 q=p
               }
+              q=g
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
@@ -422,7 +422,7 @@ while true; do {
               ((i+=1))
             }; done
             unset f X
-            q=c 
+            q=c
             break;;
       (  c  )                                               # convert the TRIA result to template:
             check_files $triaoutlist && {

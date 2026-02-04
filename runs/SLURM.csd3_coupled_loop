@@ -12,7 +12,7 @@
 #SBATCH --mail-user=#EMAIL#
 #SBATCH -o SLURM-%j.out
 #SBATCH -e SLURM-%j.err
-#SBATCH  --no-requeue
+#SBATCH --no-requeue
 
 ### This script submits the job, which launches the SOLPS-ITER code, to the CSD3 cluster,
 ### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
@@ -60,7 +60,9 @@ update_solps_run_status "Started on `hostname` at `date`"
 
 rm -f run.KAPUTT
 
-b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+set STANDALONE=${STANDALONE_ARG}
+
+b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
 
@@ -116,7 +118,7 @@ if ("$Break_loop" == "no") then
     if (-e fort.46.i) mv fort.46.i fort.46.i_$NOW
     if (-e fort.44_aver.i) mv fort.44_aver.i fort.44_aver.i_$NOW
     if (-e fort.46_aver.i) mv fort.46_aver.i fort.46_aver.i_$NOW
-    if (-e conbe.dat.i) mv conbe.dat.i conbe.dat_$NOW
+    if (-e conbe.dat.i) mv conbe.dat.i conbe.dat.i_$NOW
     mv b2fstate b2fstati
     if (-s b2faveri) mv b2faveri b2faveri_$NOW
     if (-s b2favere) mv b2favere b2faveri
