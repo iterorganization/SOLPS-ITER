@@ -47,3 +47,8 @@
 'b2tfhi_lim_flux'                     '1'
 'b2trcl_conductive_limit'             '0'
 'b2mndt_style'                        '0'
+'b2tiner_inert_all_ions'              '0'
+'b2tanml_anml_all_ions'               '0'
+'b2tfnb_dia_lim_all_ions'             '0'
+'b2tvspr_visper_all_ions'             '0'
+'b2tvspr_dia_lim_all_ions'            '0'

@@ -336,6 +336,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
@@ -1783,7 +1784,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
   \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the formatted variant of the main {\tt Eirene} input file ({\tt input.dat}).
+  \item[setup\_baserun\_eirene\_json\_links]\index{setup\_baserun\_eirene\_json\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the JSON variant of the main {\tt Eirene} input file ({\tt eirene.input.json}).
   \item[SLURM.efgw\_compile]\index{SLURM.efgw\_compile} Template file for batch compilation on the EFGW machine.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
@@ -4194,7 +4196,7 @@ code will also attempt to create a new {\tt SOLPS\_FLUIDS.2} file appropriate fo
 new species list.
 
 If an {\tt input.dat} file is present in the run directory, the code will also attempt
-to produce a new {\tt input.dat.2} file. In order to
+to produce a new {\tt input.dat.2} file. Note that conversion of an {\tt eirene.input.json} file is not supported. In order to
 ensure consistency between the {\tt B2.5} and {\tt Eirene} modified inputs, it is
 important that the order of the neutrals boundary conditions in
 {\tt b2.neutrals.parameters} and the strata in {\tt input.dat} match!
@@ -4591,6 +4593,8 @@ We only include here the variables or aspects thereof not already described in t
 
 \subsection{Block 15. Data for interfacing routine GEOUSR}
 
+When using the JSON formatted input, the data from this block will be found in the {\tt user\_data.input} file.
+
 This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. With that default, the specified additional surfaces will be adjusted to meet up exactly with the grid corners at the edges of the divertor targets, and there should be one such additional surface specification per grid corner. The corners will be listed in the following order, in reference to the rectangular computational domain: lower left, upper left, lower right, upper right. For double-null configurations, each separate half of the computational domain will be listed in turn, first the four corners of the left half, then the four corners of the right half. An additional surface can only accommodate one such end vertex adjustment, not more. The number of such corner adjustments is provided by {\tt NASMOD}.
 
 It is also possible to move the vertices of other additional surfaces with the {\tt NADMOD} block, and to flip cell face normals with the {\tt NORMOD} block, although this is not recommended in standard \SOLPSITER runs.
@@ -4702,9 +4706,16 @@ In the run directory, you should execute the command
 \begin{verbatim}
   setup_baserun_eirene_links
 \end{verbatim}\index{setup\_baserun\_eirene\_links}
+if using the formatted version of the {\tt Eirene} input file ({\tt input.dat}), or
+\begin{verbatim}
+  setup_baserun_eirene_json_links
+\end{verbatim}\index{setup\_baserun\_eirene\_json\_links}
+if using the JSON formatted {\tt eirene.input.json} file,
 to establish the links {\tt Eirene} needs to the relevant input and atomic data files,
 as well as some links needed for diagnostic scripts.
-Using the {\tt -r} option with this script creates relative links. Default behaviour is to create absolute links.
+Using the {\tt -r} option with these scripts creates relative links. Default behaviour is to create absolute links.
+
+If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will translate it to the JSON format as part of the run. The input file that {\tt Eirene} actually uses is the one to which the symbolic link {\tt fort.1} file points.
 
 %% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
@@ -4814,7 +4825,7 @@ actual number of wall and non-standard surfaces
 {\tt NLIM} and {\tt NSTS} as they are found in the {\tt Eirene} input file.
 Non-zero values should only be assigned to
 actual walls (so the 200 in the above example corresponds to the real number of walls declared in block 3B of the {\tt Eirene}
-{\tt input.dat} file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
+{\tt input.dat} file and/or in the {\tt eirene\_add\_surfaces.json.input} file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
 the surface numbering considers block 3B first, and then block 3A, so non-standard surfaces will have
 indices varying between {\tt NLIM+1} and {\tt NLIM+NSTS}. Moreover,
 {\tt Eirene} adds a last non-standard (absorbing) surface that is used as a "time
@@ -22021,6 +22032,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
@@ -22219,6 +22231,13 @@ MPI\_VERSION & startup-routines/read\_fixform.F \\
 NAGFOR & file-handling/eirmod\_openfile.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 NO\_GETENV & user-routines/user\_iter/get\_solpstop.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/if0prm\_json.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/wr0\_json.F \\
+NO\_JSON & modules/eirmod\_json.F \\
+NO\_JSON & startup-routines/find\_param\_json.F \\
+NO\_JSON & startup-routines/read\_reaclines.F \\
+NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
 OPEN\_MPI & broadcast/broad\_iestr.F \\
 OPEN\_MPI & broadcast/broadcast.F \\
 OPEN\_MPI & broadcast/broadsput.F \\

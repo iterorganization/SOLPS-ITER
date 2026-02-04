@@ -1,4 +1,4 @@
-# Command file for the plot_trc.py script 
+# Command file for the plot_trc.py script
 # designed to produce default analysis plots from the files tracing/*
 #
 #===============================================================================
@@ -7,16 +7,22 @@
 # @file:XXX     - read XXX or XXX.trc file
 # @page:XXX     - start next page labeled XXX defaults to the .trc header
 # @log:         - plot in semilogY scale
-# @iter:XX      - plot against last XX iterations, not time, 
-#                  (if XX < 0 or absent will plot for the whole time)
-# @setmax:XX    - set Y-axis maximum plotting limit to XX
-# @setmim:XX    - set Y-axis mainimun plotting limit to XX
+# @iter:XX      - plot against last XX iterations, not time,
+#                  (if XX < 0 or absent will plot for the whole history)
+# @points:      - lines replaced by markers
+# @linepoints:  - lines supplemented by markers
+# @grid:        - add grid lines to the page
 #
-# @setx:quantity:label:XX  - change X-axis from default time to given 
+# @setymax:XX   - set Y-axis maximum plotting limit to XX
+# @setymin:XX   - set Y-axis minimum plotting limit to XX
+# @setxmax:XX   - set X-axis maximum plotting limit to XX
+# @setxmin:XX   - set X-axis minimum plotting limit to XX
+#
+# @setx:quantity:label:XX  - change X-axis from default time to given
 #                             quantity with provided label and scaling
-                              factor XX 
+#                             factor XX
 #
-# :quantity:label:XX - name of quantity added to the plot 
+# :quantity:label:XX - name of quantity added to the plot
 #                       multiplied by XX (used for unit and sign conversion)
 #                       label can be added to clarify the meaning in plot
 #                       (otherwise default 'quantity' name will be used)
@@ -34,7 +40,7 @@
 @grid:
 :Te_sep:T_{e}^{sep}:
 :Ti_sep:T_{i}^{sep}:
-@page: Power comming through the separatrix, MW
+@page: Power through the separatrix, MW
 @setx:p_neut_av:p_{n}^{avg}, Pa:1.
 @linepoints:
 @grid:

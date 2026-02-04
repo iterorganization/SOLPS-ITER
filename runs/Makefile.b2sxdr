@@ -91,7 +91,7 @@ ifndef STAND_ALONE
 	cd b2sx.exe.dir ; [ -e ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
 endif
 	cd b2sx.exe.dir ; [ -e ../${fort_lc}30 ] && cp -p ../${fort_lc}30 . || echo > /dev/null ; [ -e ../${fort_lc}31 ] && cp -p ../${fort_lc}31 . || echo > /dev/null ; ${TIME} ${SOLPSTOP}/modules/solps4-5/builds/${TOOL_CHAIN}/b2sxdr.exe ${RUN_OPTIONS} ; mv $(target_sx) .. >& /dev/null ; [ -e ../${fort_lc}30 ] && rm ${fort_lc}30 || mv ${fort_lc}30 .. ; [ -e ../${fort_lc}31 ] && rm ${fort_lc}31 || mv ${fort_lc}31 .. ; rm -f $(notdir $^) >& /dev/null
-ifndef STAND_ALONE 
+ifndef STAND_ALONE
 	-[ -e b2sx.exe.dir/${fort_lc}10 ] && mv b2sx.exe.dir/${fort_lc}10 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}11 ] && mv b2sx.exe.dir/${fort_lc}11 . || echo > /dev/null
 	-[ -e b2sx.exe.dir/${fort_lc}12 ] && mv b2sx.exe.dir/${fort_lc}12 . || echo > /dev/null

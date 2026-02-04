@@ -33,7 +33,7 @@
 # Variables for linking
 #
 
-LD_NETCDF  = `pkg-config --libs netcdf-fortran`
+LD_NETCDF  = `pkg-config netcdf-fortran --libs`
 LD_MSCL    = `pkg-config mscl --libs`
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran

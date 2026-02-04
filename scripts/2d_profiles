@@ -43,7 +43,7 @@ set extra=""
 if ($?NREG) then
   if ($NREG == 8 || $NREG == 7) then
     set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
-    if (-s input.dat) then
+    if (-s fort.1) then
       set extra=`echo ${extra}" mn3dtl mn3dtr"`
     endif
   endif

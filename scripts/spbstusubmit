@@ -156,8 +156,8 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS_REQ=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    if ($PROCS_REQ!="") then
-       set PROCS=$PROCS_REQ
+    if ($PROCS_REQ != "") then
+      set PROCS=$PROCS_REQ
     endif
     echo Asking for MPI run with a total of $PROCS processors
     shift

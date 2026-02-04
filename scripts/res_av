@@ -29,8 +29,13 @@ fi
       input=${ACTDIR}/../baserun/input_fin.eir
       found=1
     } || {
-      input=${ACTDIR}/input.dat
-      found=0
+      [ -s ${ACTDIR}/input.dat ] && {
+        input=${ACTDIR}/input.dat
+        found=0
+      } || {
+        input=${ACTDIR}/eirene.input.json
+        found=0
+      }
     }
   }
 }
@@ -74,7 +79,7 @@ else
 ln -s ${CP_DIR}/AMJUEL ${CP_DIR}/HYDHEL ${CP_DIR}/METHANE ${CP_DIR}/SPUTER ${CP_DIR}/H2VIBR ${CP_DIR}/fort.21 ${CP_DIR}/fort.22 ${CP_DIR}/graphite_ext.dat ${CP_DIR}/mo_ext.dat .
 ln -s ${CP_DIR}/fort.* .
 fi
-ln -s ${input} input.dat
+ln -s ${input} fort.1
 if [ -s ${CP_DIR}/b2fgmtry ]
 then
   ln -s ${CP_DIR}/b2fgmtry .
