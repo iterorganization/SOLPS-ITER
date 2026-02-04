@@ -2688,7 +2688,7 @@
 :p_T_pump:p_{T}^{pump}:
 @page: Neutral pressure at the pump He, Pa
 :p_He_pump:p_{He}^{pump}:
-@page: DT throughput, Pa/m^{3}/s
+@page: DT throughput, Pa*m^{3}/s
 :DT_thrpt:DT_{thrpt}:
 @page: Total fuel flux through PFR, s^{-1}
 :PFR_flow_total_H:\Gamma_{H}^{PFR}:

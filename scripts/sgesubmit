@@ -12,9 +12,9 @@ echo Your email is $EMAIL
 
 set compress_arg=""
 set compress_suffix=""
-set MPIOPTS=""
 set standalone_arg=""
 set coupled_suffix="_coupled"
+set MPIOPTS=""
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 if ($SOLPSTOP == "") then

@@ -17,10 +17,7 @@ endif
 set usual="fn3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl ne3dl te3dl ti3dl po3dl an3dl mn3dl ne3di te3di ti3di po3di an3di mn3di ne3da te3da ti3da po3da an3da mn3da ne3dr te3dr ti3dr po3dr an3dr mn3dr fn3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr dn3di dn3da dp3di dp3da ke3di ke3da ki3di ki3da vx3di vx3da vy3di vy3da vs3di vs3da tp3dl tp3dr"
 set extra=""
 if ($?NREG) then
-  if ($NREG == 8) then
-    set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
-  endif
-  if ($NREG == 7) then
+  if ($NREG == 8 || $NREG == 7) then
     set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
   endif
 endif
