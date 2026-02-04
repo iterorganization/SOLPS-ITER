@@ -11758,7 +11758,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11767,7 +11767,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_W
 \end{equation*}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
@@ -11835,7 +11835,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation*}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} |b_x| \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11844,7 +11844,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_E
 \end{equation*}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 In case of electron temperature or potential oscillations, one can make use of the {\tt b2stbc\_stab\_coeff\_sheath\_te} switch, assigning it a positive value (recommended range between 1 and 100), to include an additional zero-sum stabilizing term.
 
