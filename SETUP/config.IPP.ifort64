@@ -26,7 +26,6 @@
      GR_ROOT ?= ${IPPSOLPSLIBS}/gr
     GLI_HOME ?= ${IPPSOLPSLIBS}/gks
   NCARG_ROOT ?= ${IPPSOLPSLIBS}/NCARG
-#      NAGDIR ?= ${NAGFLIB_HOME}
       NAGDIR ?= ${IPPSOLPSLIBS}/nag
  MDSPLUS_DIR ?= ${IPPSOLPSLIBS}/MDSPLUS
 
@@ -75,4 +74,3 @@ MAKETAGS = etags -o
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

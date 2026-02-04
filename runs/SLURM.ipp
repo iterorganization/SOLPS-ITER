@@ -43,9 +43,11 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
+set STANDALONE=${STANDALONE_ARG}
+
 if ($RUN_NUMBER == 1) then
 
-  b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+  b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
   QSUB.postprocess${COUPLED_SUFFIX}
 
@@ -61,7 +63,7 @@ else if ($RUN_NUMBER > 1) then
 
     echo "#! /bin/tcsh -f"                                                                                 >! $scriptname
     echo "cd $dir"                                                                                         >> $scriptname
-    echo "b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} ${COMPRESS_ARG} >! run.log${COMPRESS_SUFFIX}"      >> $scriptname
+    echo "b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} ${COMPRESS_ARG} >! run.log${COMPRESS_SUFFIX}"          >> $scriptname
     echo "QSUB.postprocess${COUPLED_SUFFIX}"                                                               >> $scriptname
     echo "preserve_scratch_to_work"                                                                        >> $scriptname
     echo "b2fstate_OK_bool"                                                                                >> $scriptname

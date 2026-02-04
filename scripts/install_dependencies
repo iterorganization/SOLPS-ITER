@@ -670,7 +670,7 @@ if ("$OSTYPE" == "linux") then
         set GNUPLOT_INSTALL = "y"
       endif
 
-      if ( "$GNUPLOT_INSTALL" == "y" ) then 
+      if ( "$GNUPLOT_INSTALL" == "y" ) then
         sudo apt-get install -y gnuplot
         echo Gnuplot library successfully installed.
         sleep 1
@@ -1285,6 +1285,39 @@ else if ("$OSTYPE" == "darwin") then
   else
     echo
     echo NetCDF-Fortran library already locally installed.
+    sleep 1
+
+  endif
+
+endif
+
+# Install Open-Blas library
+
+if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^openblas$'` == 0 ) then   # Check if the library is already installed
+
+    echo
+    echo Open-Blas library not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set OPENBLAS_INSTALL = $<
+
+    if ( "$OPENBLAS_INSTALL" == "" ) then
+      set OPENBLAS_INSTALL = "y"
+    endif
+
+    if ( "$OPENBLAS_INSTALL" == "y" ) then
+      brew install openblas
+      echo Open-Blas library successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+
+  else
+    echo
+    echo Open-Blas library already locally installed.
     sleep 1
 
   endif

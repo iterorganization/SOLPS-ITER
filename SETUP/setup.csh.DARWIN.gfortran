@@ -23,6 +23,7 @@ if ( `which brew >& /dev/null; echo $status` != 0 ) then
 else
     setenv PATH "${PATH}:`brew --prefix`/bin"
     setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix openblas`/lib"
 endif
 
 if ( `which port >& /dev/null; echo $status` != 0 ) then
@@ -41,6 +42,7 @@ endif
 
 # Add directories of compiled libraries, include directives, etc.
 
+setenv OPENBLAS_HOME `brew --prefix openblas`
 setenv FREETYPE_HOME `brew --prefix freetype`
 setenv HDF5_HOME `brew --prefix hdf5`
 setenv LAPACK_DIR `brew --prefix lapack`
@@ -102,6 +104,9 @@ if ( `brew list | grep -c '^netcdf$'` == 0 ) then
     set MISSING_DEPENDENCY = 1
 endif
 if ( `brew list | grep -c '^netcdf-fortran$'` == 0 ) then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( `brew list | grep -c '^openblas$'` == 0 ) then
     set MISSING_DEPENDENCY = 1
 endif
 if ( `brew list | grep -c '^open-mpi$'` == 0 ) then
