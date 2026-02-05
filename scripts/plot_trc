@@ -125,7 +125,7 @@ if [ -d "$TRC_DIR" ]
 then
   echo "cp -rf $TRC_DIR/* $WRK_DIR"
   cp -rf "$TRC_DIR"/* "$WRK_DIR"
-# commented out since in principle file format should not brake anymore  
+# commented out since in principle file format should not break anymore
 #  echo "fixing format: sed -i 's/[0-9][-+]/E[-+]/g' $WRK_DIR/*"
 #  sed -i 's/[0-9]-/E-/g' $WRK_DIR/*
 #  sed -i 's/[0-9]+/E+/g' $WRK_DIR/*

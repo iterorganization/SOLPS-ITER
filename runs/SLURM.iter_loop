@@ -30,7 +30,6 @@ endif
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv KMP_AFFINITY disabled
   set OMP_OPTS = #THREADS#
   set USE_OMP = "-t ${OMP_OPTS}"
 endif
@@ -92,7 +91,7 @@ if ("$Break_loop" == "no") then
 #  echo $End_by_walltime
 
   if ("$End_by_ntim" != "" || "$End_by_cputime" != "" || "$End_by_walltime" != "") then
-    update_solps_run_status     "Resubmitting inside the loop at `date`"
+    update_solps_run_status "Resubmitting inside the loop at `date`"
     rm -f run.log* b2mn.prt b2.log*;
     set NOW = `date +"%d.%m.%Y_%T"`
     mv b2fstati b2fstati_$NOW

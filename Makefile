@@ -74,6 +74,7 @@ export MAKETAGS
 EXT_DBG =
 ifdef SOLPS_DEBUG
 EXT_DBG = .debug
+OPT_DBG = -DTRACE=ON
 endif
 
 # Setup MPI flags
@@ -81,22 +82,28 @@ EXT_MPI =
 MPI_OPTS = USE_MPI=-DUSE_MPI SOLPS_MPI=yes
 ifdef SOLPS_MPI
 EXT_MPI = .mpi
+OPT_MPI = -DMPI=ON
+else
+OPT_MPI = -DMPI=OFF
 endif
 
 # Setup OpenMP flag
 EXT_OPENMP =
 ifdef SOLPS_OPENMP
 EXT_OPENMP = .openmp
+OPT_OPENMP = -DOPENMP=ON
 endif
 OMP_OPTB = USE_OPENMP=-D_OPENMP SOLPS_OPENMP=yes
 
 OPT_NOX = LD_GR="" LD_GKS=""
 
+TOOLSHORT = ${HOST_NAME}.${COMPILER}
+TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
+
 ifdef LD_NETCDF
-B25_SERIAL = mods nc2text_simple nc_reduce
-else
-B25_SERIAL = mods
+NCEXECS = nc2text_simple nc_reduce
 endif
+B25_SERIAL = mods ${NCEXECS}
 
 DIMENSIONS = 0
 ifeq ($(shell [ -s modules/B2.5/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
@@ -104,13 +111,14 @@ DIMENSIONS = 1
 endif
 
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
-ifeq (${DIMENSIONS},1)
-MAKEE = ${MAKEO} DIMENSIONS_MODULE=yes
-else
 MAKEE = ${MAKEO}
+ifeq (${DIMENSIONS},1)
+MAKEE += DIMENSIONS_MODULE=yes
 endif
+MAKEC = ${MAKEE}
+MAKEX = ${MAKEE} ${OPT_NOX}
 
-.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi all_mpi_nox carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj b25_hess_tgt b25_diff_dd
+.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi all_mpi_nox carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_nox eirene_nox_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION VERSION_nox help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp b25_diff_d b25_diff_b b25_tgt b25_adj b25_hess_tgt b25_diff_dd
 
 DEFAULT: solps
 
@@ -218,73 +226,73 @@ eirene_nox:
 eirene_nox_mpi:
 	cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
 
-b25: nc2text_simple nc_reduce
+b25: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO}
 
-b25_diff_d: nc2text_simple nc_reduce
+b25_diff_d: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} DIFF_D
 
-b25_diff_b: nc2text_simple nc_reduce
+b25_diff_b: ${NC_EXECS}
 	cd modules/B2.5; ${MAKE} DIFF_B
 
-b25_diff_dd: nc2text_simple nc_reduce
+b25_diff_dd: ${NC_EXECS}
 	cd modules/B2.5; ${MAKE} DIFF_DD
 
-b25_tgt: nc2text_simple nc_reduce
+b25_tgt: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} TANGENT TGT=yes
 
-b25_adj: nc2text_simple nc_reduce
+b25_adj: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ADJOINT ADJ=yes
 
-b25_hess_tgt: nc2text_simple nc_reduce
+b25_hess_tgt: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} HESS_TGT HESS_TGT=yes
 
-b25_all: nc2text_simple nc_reduce
+b25_all: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ALL
 
-b25_openmp: nc2text_simple nc_reduce
+b25_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
 
-b25_mpi: nc2text_simple nc_reduce
+b25_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
 
-b25_openmp_mpi: nc2text_simple nc_reduce
+b25_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 b25_mpi_openmp: b25_openmp_mpi
 
-b25_nox: nc2text_simple nc_reduce
+b25_nox: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} NOPLOT
 
-b25_ig: nc2text_simple nc_reduce
+b25_ig: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25_all_openmp: nc2text_simple nc_reduce
+b25_all_openmp: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
 
-b25_nox_openmp: nc2text_simple nc_reduce
+b25_nox_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
 
 b25_openmp_nox: b25_nox_openmp
 
-b25_nox_mpi: nc2text_simple nc_reduce
+b25_nox_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
 
 b25_mpi_nox: b25_nox_mpi
 
-b25_nox_openmp_mpi: nc2text_simple nc_reduce
+b25_nox_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
 
@@ -294,79 +302,79 @@ b25_mpi_openmp_nox: b25_nox_openmp_mpi
 
 b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
-b25_all_mpi: nc2text_simple nc_reduce
+b25_all_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
 
-b25_all_openmp_mpi: nc2text_simple nc_reduce
+b25_all_openmp_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
-b25eirene: nc2text_simple nc_reduce
+b25eirene: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
 
-b25eirene_all: nc2text_simple nc_reduce
+b25eirene_all: ${NCEXECS}
 	cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 	cd modules/solps4-5; ${MAKE}  links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
-b25eirene_nox: nc2text_simple nc_reduce
+b25eirene_nox: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
 
-b25eirene_openmp: nc2text_simple nc_reduce
+b25eirene_openmp: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 
-b25eirene_mpi: nc2text_simple nc_reduce
+b25eirene_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
 
-b25eirene_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_openmp_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
 
 b25eirene_mpi_openmp: b25eirene_openmp_mpi
 
-b25eirene_nox_openmp: nc2text_simple nc_reduce
+b25eirene_nox_openmp: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
 
-b25eirene_nox_mpi: nc2text_simple nc_reduce
+b25eirene_nox_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
 
-b25eirene_ig: nc2text_simple nc_reduce
+b25eirene_ig: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
 	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
-b25eirene_all_openmp: nc2text_simple nc_reduce
+b25eirene_all_openmp: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
-b25eirene_all_mpi: nc2text_simple nc_reduce
+b25eirene_all_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
 
-b25eirene_all_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_all_openmp_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
@@ -374,7 +382,7 @@ b25eirene_all_openmp_mpi: nc2text_simple nc_reduce
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
-b25eirene_nox_openmp_mpi: nc2text_simple nc_reduce
+b25eirene_nox_openmp_mpi: ${NCEXECS}
 	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} NOPLOT
@@ -468,7 +476,7 @@ nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
-b2sxdr: sonnet-light
+b2sxdr: b25eirene sonnet-light
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
@@ -642,6 +650,13 @@ VERSION:
 	cd modules/DivGeo; ${MAKE} VERSION
 	cd modules/Uinp;   ${MAKE} VERSION
 
+VERSION_nox:
+	cd modules/B2.5;          ${MAKE} VERSION
+	cd modules/Eirene;        ${MAKEE} VERSION
+	cd modules/Carre2;        ${MAKE} VERSION
+	cd modules/DivGeo/equtrn; ${MAKE} VERSION
+	cd modules/Uinp;          ${MAKE} VERSION
+
 # Debug targets
 #--------------
 
@@ -658,11 +673,11 @@ debug: solps_debug
 
 nox_build: clean_build listobj_nox depend_nox divgeo_nox b25eirene_nox carre_nox uinp_nox triang_nox
 
-nox_build_mpi: clean_build_mpi listobj_nox depend_nox divgeo_nox b25eirene_nox_mpi
+nox_build_mpi: clean_build_mpi listobj_nox depend_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi
 
-nox_build_openmp: clean_build_openmp listobj_nox depend_nox b25eirene_nox_openmp
+nox_build_openmp: clean_build_openmp listobj_nox depend_nox b25eirene_nox_openmp uinp_nox_openmp
 
-nox_build_openmp_mpi: clean_build_openmp_mpi listobj_nox depend_nox b25eirene_nox_openmp_mpi
+nox_build_openmp_mpi: clean_build_openmp_mpi listobj_nox depend_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi
 
 nox_build_mpi_openmp: nox_build_openmp_mpi
 
@@ -671,7 +686,7 @@ nox_build_mpi_openmp: nox_build_openmp_mpi
 
 clean: clean_solps
 
-clean_solps:     clean_carre clean_divgeo clean_b25eirene     clean_uinp     clean_triang clean_manual clean_amds
+clean_solps: clean_carre clean_divgeo clean_b25eirene clean_uinp clean_triang clean_manual clean_amds
 
 clean_solps_nox: clean_nox
 

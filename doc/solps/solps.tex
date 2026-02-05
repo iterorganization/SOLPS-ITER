@@ -336,6 +336,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
@@ -716,7 +717,7 @@ Among other things, these setup files establish some aliases that are useful for
 It is also possible to toggle between versions of the code compiled with and without debug options (array bounds checking, traceback, etc...) by use of the {\tt set\_debug} and {\tt unset\_debug} commands. Similarly, the
 {\tt set\_mpi} and {\tt unset\_mpi} will turn on or off, respectively, compilation with MPI parallelization flags. Same for {\tt set\_openmp} and {\tt unset\_openmp}, for OpenMP parallelization. By default, neither debug nor parallelization (MPI and OpenMP) flags are turned on.
 
-After activating one of these flags and upon succesful compilation, it is recommended to do:
+After activating one of these flags and upon successful compilation, it is recommended to do:
 \begin{verbatim}
   rehash
 \end{verbatim}
@@ -1763,7 +1764,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[input.dat\_to\_mesh.extra]\index{input.dat\_to\_mesh.extra}\index{input.dat}\index{mesh.extra} Converts standard input (usually directed from a {\tt input.dat} file) into a {\tt mesh.extra} file.
   \item[last10]\index{last10} Truncates the {\tt run.log} file to contain only the output from the last 10 written code iterations and stores them in {\tt run.log.last10}.
   \item[mds\_id]\index{mds\_id} Obtains certain data necessary for run identification when saving to the {\tt MDSplus} database.
-  \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon succesful termination of a run, move these files to the run directory.
+  \item[move\_optional\_files]\index{move\_optional\_files} Script used by the run Makefile to check for the existence of optional output files and, upon successful termination of a run, move these files to the run directory.
   \item[move\_save\_files]\index{move\_save\_files}\index{b2co} Script used by the crash recovery program {\tt b2co} to replace optional run output files with their recovered versions.
   \item[n2d]\index{n2d} Converts "Naka" format equilibrium files to {\tt DG} format (see Sec.~\ref{sec:equtrn}).
   \item[nc\_reduce]\index{nc\_reduce} Utility program to reduce the size of very large NetCDF files by keeping only a fraction of the timeslices. Uses {\tt -m \#} and {\tt -l \#} options to obtain every $m$-th time slice and/or the last $l$ time slices.
@@ -1785,7 +1786,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[run\_av]\index{run\_av} Special script to prepare the averaging step of the {\tt Eirene} sources averaging scheme (see Section~\ref{sec:B2Eirene:averaging} for details).
   \item[save\_initial\_files]\index{save\_initial\_files} Script used by runs Makefile at start of a run to save initial state files for eventual recovery.
   \item[setup\_baserun\_B25\_links]\index{setup\_baserun\_B25\_links} Prepares the run directory before a {\tt B2.5} stand-alone run by setting up links to the proper input and data files.
-  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files.
+  \item[setup\_baserun\_eirene\_links]\index{setup\_baserun\_eirene\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the formatted variant of the main {\tt Eirene} input file ({\tt input.dat}).
+  \item[setup\_baserun\_eirene\_json\_links]\index{setup\_baserun\_eirene\_json\_links} Prepares the run directory before a {\tt B2.5-Eirene} coupled run by setting up links to the proper input and data files. Uses the JSON variant of the main {\tt Eirene} input file ({\tt eirene.input.json}).
   \item[SLURM.efgw\_compile]\index{SLURM.efgw\_compile} Template file for batch compilation on the EFGW machine.
   \item[SLURM.iter\_compile]\index{SLURM.iter\_compile} Template file for batch compilation on the ITER SDCC cluster.
   \item[SLURM.postprocess]\index{SLURM.postprocess} Alias to {\tt QSUB.postprocess}.
@@ -4061,7 +4063,7 @@ those regions, excluding the fluxes within boundary regions.
 The converter program {\tt b2yt} can be used for a variety of purposes, and
 prospective users are urged to read the {\em entire} section below carefully
 before proceeding to use it. As a summary, however, the sequence of steps to
-be followed for a succesful conversion is:
+be followed for a successful conversion is:
 \begin{enumerate}
   \item[1] Create a new case directory: {\tt \$SOLPSWORK/<my\_new\_case>}.
   \item[2] In the new case directory, create subdirectories {\tt baserun} and {\tt convert} as well as a run subdirectory ({\tt <my\_run>}). {\tt baserun} and {\tt convert} are special names and should not be changed.
@@ -4099,8 +4101,9 @@ The conversion of the {\tt Eirene} input file additionally requires for the conv
   \item['facelift'] for input files from \SOLPSfiveone runs
   \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
   \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['msv'] for input files from the {\tt Eirene} Milestone Version
 \end{description}
-The {\tt input.dat.2} file that the converter will create will follow the \SOLPSITER format.
+The {\tt input.dat.2} file that the converter will create will follow the Milestone Version format.
 
 The conversion of the {\tt Eirene} output file ({\tt fort.44}) additionally requires for the converter program to know the original version of {\tt SOLPS} with which the output file was created, and this is provided by means of the {\tt 'solps\_version'} switch. Its possible values (case-insensitive) are:
 \begin{description}
@@ -4195,7 +4198,7 @@ code will also attempt to create a new {\tt SOLPS\_FLUIDS.2} file appropriate fo
 new species list.
 
 If an {\tt input.dat} file is present in the run directory, the code will also attempt
-to produce a new {\tt input.dat.2} file. In order to
+to produce a new {\tt input.dat.2} file. Note that conversion of an {\tt eirene.input.json} file is not supported. In order to
 ensure consistency between the {\tt B2.5} and {\tt Eirene} modified inputs, it is
 important that the order of the neutrals boundary conditions in
 {\tt b2.neutrals.parameters} and the strata in {\tt input.dat} match!
@@ -4592,6 +4595,8 @@ We only include here the variables or aspects thereof not already described in t
 
 \subsection{Block 15. Data for interfacing routine GEOUSR}
 
+When using the JSON formatted input, the data from this block will be found in the {\tt user\_data.input} file.
+
 This input block is used to adjust the edges of the additional walls in the {\tt Eirene} description of the vacuum vessel walls to match exactly the location of the grid corners from the plasma solver in {\tt B2.5}. This block may begin with an optional text line containing either {\tt GENERAL} or {\tt BIASED\_GARCHING}, which changes the format below. The \SOLPSITER default is to not include this text line. With that default, the specified additional surfaces will be adjusted to meet up exactly with the grid corners at the edges of the divertor targets, and there should be one such additional surface specification per grid corner. The corners will be listed in the following order, in reference to the rectangular computational domain: lower left, upper left, lower right, upper right. For double-null configurations, each separate half of the computational domain will be listed in turn, first the four corners of the left half, then the four corners of the right half. An additional surface can only accommodate one such end vertex adjustment, not more. The number of such corner adjustments is provided by {\tt NASMOD}.
 
 It is also possible to move the vertices of other additional surfaces with the {\tt NADMOD} block, and to flip cell face normals with the {\tt NORMOD} block, although this is not recommended in standard \SOLPSITER runs.
@@ -4664,12 +4669,13 @@ The standard way to choose the MPI parallelization strategy in {\tt Eirene} is {
 AUTOMATIC_DISTRIBUTION
 \end{verbatim}
 
-There are currently five possible choices supported. They are:
+There are currently six possible choices supported. They are:
 \begin{description}
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
+  \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 3}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -4702,9 +4708,16 @@ In the run directory, you should execute the command
 \begin{verbatim}
   setup_baserun_eirene_links
 \end{verbatim}\index{setup\_baserun\_eirene\_links}
+if using the formatted version of the {\tt Eirene} input file ({\tt input.dat}), or
+\begin{verbatim}
+  setup_baserun_eirene_json_links
+\end{verbatim}\index{setup\_baserun\_eirene\_json\_links}
+if using the JSON formatted {\tt eirene.input.json} file,
 to establish the links {\tt Eirene} needs to the relevant input and atomic data files,
 as well as some links needed for diagnostic scripts.
-Using the {\tt -r} option with this script creates relative links. Default behaviour is to create absolute links.
+Using the {\tt -r} option with these scripts creates relative links. Default behaviour is to create absolute links.
+
+If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will translate it to the JSON format as part of the run. The input file that {\tt Eirene} actually uses is the one to which the symbolic link {\tt fort.1} file points.
 
 %% Examples files from https://solps-mdsplus.aug.ipp.mpg.de/repos/SOLPS/trunk/solps_examples/solps5.1/bench_mark/AUG_16151_D+C+He/
 
@@ -4814,7 +4827,7 @@ actual number of wall and non-standard surfaces
 {\tt NLIM} and {\tt NSTS} as they are found in the {\tt Eirene} input file.
 Non-zero values should only be assigned to
 actual walls (so the 200 in the above example corresponds to the real number of walls declared in block 3B of the {\tt Eirene}
-{\tt input.dat} file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
+{\tt input.dat} file and/or in the {\tt eirene\_add\_surfaces.json.input} file used for the same case) and to the non-standard surfaces (block 3A) corresponding to the targets. Note that
 the surface numbering considers block 3B first, and then block 3A, so non-standard surfaces will have
 indices varying between {\tt NLIM+1} and {\tt NLIM+NSTS}. Moreover,
 {\tt Eirene} adds a last non-standard (absorbing) surface that is used as a "time
@@ -4840,6 +4853,7 @@ When running the coupled version of \SOLPSITERns, you will obtain additional out
   \item[NATM] Number of atom species declared in the {\tt Eirene} input file
   \item[NMOL] Number of molecule species declared in the {\tt Eirene} input file
   \item[NION] Number of test ion species declared in the {\tt Eirene} input file
+  \item[NFLA] Number of plasma species followed by the plasma solver, as declared in the {\tt Eirene} input file
   \item[NPLS] Number of plasma background species declared in the {\tt Eirene} input file (including BGK species)
   \item[NSTRA] Number of source strata declared in the {\tt Eirene} input file (Stratum 0 is the sum over strata)
   \item[NLIM] Number of "additional surfaces" (physical walls) declared in block 3B of the {\tt Eirene} input file
@@ -4920,7 +4934,7 @@ The data blocks are:
   \item[eneutrad] Radiation rate due to atoms ($W$), dimension ({\tt NCV},{\tt NATM})
   \item[emolrad] Radiation rate due to molecules ($W$), dimension ({\tt NCV},{\tt NMOL})
   \item[eionrad] Radiation rate due to test ions ($W$), dimension ({\tt NCV},{\tt NION})
-  \item[eirdiag\_nds] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS +  1})
+  \item[eirdiag\_nds] Index delimitors for segments on resolved non-standard surfaces, dimension ({\tt NSTS + 1})
   \item[fnmti\_b2] Face indices forming the non-standard surfaces, dimension ({\tt NCL = eirdiag(NSTS)})
   \item[sarea\_res] Surface area of surface segment ($m^2$), dimension ({\tt NCL})
   \item[wldna\_res] Flux of atoms impinging on surface segment ($particles.m^{-2}.s^{-1}$), dimension ({\tt NATM}, {\tt NCL})
@@ -6109,7 +6123,7 @@ to its original {\tt 'francais'}.
 Once all the settings have been chosen, it is often convenient to save them, so as to not have to re-enter them on the next {\tt Carre} meshing attempt. This is achieved by means of the {\tt (S)ave} option within the {\tt carre} script, provided that the user does not start the next meshing attempt with the {\tt (P)repare} option, but rather jumps directly to {\tt (G)rid}.
 
 \begin{sloppypar}
-Upon succesful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre2/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre2 grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
+Upon successful termination, one needs to {\tt (C)onvert} the grid files to the {\tt .geo} and {\tt .sno} formats understandable by {\tt B2.5} and {\tt DivGeo}. It is also possible to {\tt s(T)ore} the files used to create the grid and the grid output for archival. The input files will be copied to the {\tt \$\{CARRE\_STOREDIR\}} directory (default value is {\tt \$\{SOLPSTOP\}/modules/Carre2/\allowbreak meshes/\$\{DEVICE\}}, or {\tt \$\{SOLPSTOP\}/modules/Carre2/meshes/\$\{DEVICE\}/\$\{USER\}} for a central installation). The Carre2 grid output and {\tt .geo} file will be stored in the same location, but that can be changed by means of the {\tt (O)utput} command in the script itsef, or by specifying the {\tt \$\{CARRE\_GRIDDIR\}} environment variable. If {\tt \$\{CARRE\_GRIDDIR\}} is not specified, the {\tt *.sno} converted output file will be copied instead to {\tt \$\{SOLPSTOP\}/\allowbreak modules/DivGeo/device/\allowbreak \$\{DEVICE\}} (or {\tt \$\{SOLPSTOP\}/modules/DivGeo/device/\$\{DEVICE\}/\allowbreak \$\{USER\}} for a central installation).
 \end{sloppypar}
 
 After running {\tt Carre2}, it is recommended to have a look at the mesh and decide if one wants to modify it before
@@ -11945,7 +11959,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_West_style1}
 \left. \frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_W = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\Phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -11954,7 +11968,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_W
 \end{equation}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_West_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_West_style1}).
 
@@ -12024,7 +12038,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \begin{equation}\label{eq:sheath_electron_bc_East_style1}
 \left. -\frac{\sqrt g}{h_x} \widetilde q_{ex} \right|_E = \left. \left[
         -\frac{\sqrt g}{h_x} b_\alpha \left(
-                \left( 1 + \gamma_e + p_{e,1} \right) T_e +
+                \left( 1 + \gamma_e + p_{h_e,1} \right) T_e +
                 \left( 1 - \gamma_e \right) e \left( \Phi - p_{\phi,2} \right)
         \right) n_e \frac{1}{\sqrt{2 \pi}}
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right) }{T_e} \right)
@@ -12033,7 +12047,7 @@ If {\tt 'bcene\_15\_style'} is set to {\tt '1'} (recommended for stability, defa
 \right] \right|_E
 \end{equation}
 
-with $p_{e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
+with $p_{h_e,1}$ set by {\tt ENEPAR(:,1)} and $p_{\Phi,2}$ set by {\tt POTPAR(:,2)}.
 
 If $p_{n,a,2} \ne 0$, a diffusive term $-\frac{\sqrt{g}}{h_x} p_{h_i,2} \frac{D^{(AN)}_{n,a}}{p_{n,a,2}} z_a n_a$ is included in the species summation inside the r.h.s. of Eq.~(\ref{eq:sheath_electron_bc_East_style0}) or, summed over species, to the second term in the r.h.s of Eq.~(\ref{eq:sheath_electron_bc_East_style1}).
 
@@ -22020,6 +22034,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 
 \begin{description}
 \item[CHECKBIN] \index{CHECKBIN} Turns on debugging output to check the contents of the output binary files
+\item[NO\_JSON] \index{NO\_JSON} Turns off JSON I/O format support
 \item[OPEN\_MPI] \index{OPEN\_MPI} Used to indicate compilation with the OpenMPI library (automatically set by the {\tt Makefile})
 \item[TRACE] \index{TRACE} Turns on tracing output in geometry routines (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \end{description}
@@ -22071,17 +22086,17 @@ We list below where the {\tt Eirene} compilation switches are used.
     \multicolumn{2}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param.F \\
-B25\_EIRENE & file-handling/wrmesh.F \\
+ALLOCATE\_AND\_NAMELIST & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
+ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param\_fixform.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
+B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
 B25\_EIRENE & main-routines/eirmod\_eirene.F \\
-B25\_EIRENE & plotting/plmesh.F \\
-B25\_EIRENE & startup-routines/find\_param.F \\
 CHECKBIN & assistant/wrstrt.F \\
 CHECKBIN & file-handling/wrgeom.F \\
 CHECKBIN & file-handling/wrplam\_long.F \\
 CHECKBIN & file-handling/wrplam\_shrt.F \\
+CHECKBIN & interfaces/couple\_B2/infcop.f \\
 CHECKBIN & main-routines/eirmod\_mcarlo.F \\
 CHECKBIN & modules/eirmod\_comxs.F \\
 COMPILER\_MAJOR\_VERSION & assistant/exit\_own.F \\
@@ -22124,6 +22139,7 @@ CRAY & photons/eirmod\_photon.F \\
 CRAY & user-routines/user\_iter/broad\_usr.F \\
 CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
 DBG & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
 GFORTRAN & assistant/exit\_own.F \\
 GFORTRAN & broadcast/broad\_iestr.F \\
 GFORTRAN & broadcast/broadcast.F \\
@@ -22141,6 +22157,7 @@ GFORTRAN & modules/eirmod\_ccona.F \\
 GFORTRAN & modules/eirmod\_cestim.F \\
 GFORTRAN & modules/eirmod\_cgeom.F \\
 GFORTRAN & modules/eirmod\_cgrid.F \\
+GFORTRAN & modules/eirmod\_cinit.F \\
 GFORTRAN & modules/eirmod\_clgin.F \\
 GFORTRAN & modules/eirmod\_clogau.F \\
 GFORTRAN & modules/eirmod\_comnnl.F \\
@@ -22160,25 +22177,69 @@ GFORTRAN & modules/eirmod\_ctext.F \\
 GFORTRAN & modules/eirmod\_ctrcei.F \\
 GFORTRAN & modules/eirmod\_ctrig.F \\
 GFORTRAN & modules/eirmod\_czt1.F \\
+GFORTRAN & modules/eirmod\_improved\_strategy.F90 \\
 GFORTRAN & modules/eirmod\_mpi.F90 \\
 GFORTRAN & modules/eirmod\_parmmod.F \\
 GFORTRAN & photons/eirmod\_photon.F \\
 GFORTRAN & user-routines/user\_iter/broad\_usr.F \\
 GFORTRAN & user-routines/user\_iter/eirmod\_refusr.F \\
 G95 & assistant/exit\_own.F \\
+G95 & file-handling/eirmod\_openfile.F \\
+G95 & interfaces/couple\_SOLPS\_WG/couple\_specific.F \\
+G95 & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+G95 & main-routines/integrate\_tallies.F \\
+G95 & main-routines/scal\_volav\_tallies.F \\
+G95 & main-routines/scale\_tallies.F \\
+G95 & main-routines/sum\_average.F \\
+G95 & main-routines/sumostra.F \\
+G95 & main-routines/tally\_sanity\_check.F \\
+G95 & particle-tracing/eirmod\_collide.F \\
+G95 & particle-tracing/escape.F \\
+G95 & scoring/getscl4.F \\
+G95 & scoring/update.F \\
+G95 & scoring/update\_surface.F \\
+G95 & scoring/update\_sptflx.F \\
+G95 & scoring/updphot.F \\
+G95 & startup-routines/find\_tet\_dim.F \\
+G95 & startup-routines/find\_triang\_dim.F \\
 HPUX & modules/eirmod\_cinit.F \\
 LEGACYCOMP & assistant/eirmod\_algebra.F \\
+LEGACYCOMP & file-handling/eirmod\_openfile.F \\
 LEGACYCOMP & file-handling/wrplam\_shrt.F \\
+LEGACYCOMP & interfaces/couple\_SOLPS\_WG/couple\_specific.F \\
 LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 LEGACYCOMP & interfaces/couple\_SOLPS\_WG/eirmod\_wneutrals.F \\
+LEGACYCOMP & main-routines/integrate\_tallies.F \\
+LEGACYCOMP & main-routines/scal\_volav\_tallies.F \\
+LEGACYCOMP & main-routines/scale\_tallies.F \\
+LEGACYCOMP & main-routines/sum\_average.F \\
+LEGACYCOMP & main-routines/sumostra.F \\
+LEGACYCOMP & main-routines/tally\_sanity\_check.F \\
 LEGACYCOMP & output/outildsrf.f \\
+LEGACYCOMP & particle-tracing/eirmod\_collide.F \\
 LEGACYCOMP & particle-tracing/eirmod\_samsrf.F \\
+LEGACYCOMP & particle-tracing/escape.F \\
+LEGACYCOMP & scoring/getscl4.F \\
+LEGACYCOMP & scoring/update.F \\
+LEGACYCOMP & scoring/update\_surface.F \\
+LEGACYCOMP & scoring/update\_sptflx.F \\
+LEGACYCOMP & scoring/updphot.F \\
+LEGACYCOMP & startup-routines/find\_tet\_dim.F \\
+LEGACYCOMP & startup-routines/find\_triang\_dim.F \\
+LEGACYCOMP & startup-routines/read\_fixform.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
-NAGFOR & main-routines/eirmod\_eirene.F \\
-NAGFOR & startup-routines/find\_param.F \\
+MPI\_VERSION & startup-routines/read\_fixform.F \\
+NAGFOR & file-handling/eirmod\_openfile.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
-NO\_GETENV & file-handling/get\_solpstop.F \\
+NO\_GETENV & user-routines/user\_iter/get\_solpstop.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/if0prm\_json.F \\
+NO\_JSON & interfaces/couple\_SOLPS\_WG/wr0\_json.F \\
+NO\_JSON & modules/eirmod\_json.F \\
+NO\_JSON & startup-routines/find\_param\_json.F \\
+NO\_JSON & startup-routines/read\_reaclines.F \\
+NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
 OPEN\_MPI & broadcast/broad\_iestr.F \\
 OPEN\_MPI & broadcast/broadcast.F \\
 OPEN\_MPI & broadcast/broadsput.F \\
@@ -22195,6 +22256,7 @@ OPEN\_MPI & modules/eirmod\_ccona.F \\
 OPEN\_MPI & modules/eirmod\_cestim.F \\
 OPEN\_MPI & modules/eirmod\_cgeom.F \\
 OPEN\_MPI & modules/eirmod\_cgrid.F \\
+OPEN\_MPI & modules/eirmod\_cinit.F \\
 OPEN\_MPI & modules/eirmod\_clgin.F \\
 OPEN\_MPI & modules/eirmod\_clogau.F \\
 OPEN\_MPI & modules/eirmod\_comnnl.F \\
@@ -22214,17 +22276,21 @@ OPEN\_MPI & modules/eirmod\_ctext.F \\
 OPEN\_MPI & modules/eirmod\_ctrcei.F \\
 OPEN\_MPI & modules/eirmod\_ctrig.F \\
 OPEN\_MPI & modules/eirmod\_czt1.F \\
+OPEN\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 OPEN\_MPI & modules/eirmod\_parmmod.F \\
 OPEN\_MPI & photons/eirmod\_photon.F \\
 OPEN\_MPI & user-routines/user\_iter/broad\_usr.F \\
 OPEN\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
 PGF90 & assistant/exit\_own.F \\
+PGF90 & particle-tracing/folion.F \\
+PGF90 & particle-tracing/velocs.F \\
 PGF90 & surface-processes/emaxw.F \\
 TRACE & geometry/time-routines/checks.F \\
 TRACE & geometry/time-routines/eirmod\_timea.F \\
 TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
+TRACE & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & assistant/eirmod\_second\_own.F \\
 USE\_MPI & assistant/exit\_own.F \\
 USE\_MPI & broadcast/broad\_iestr.F \\
@@ -22247,6 +22313,7 @@ USE\_MPI & modules/eirmod\_ccona.F \\
 USE\_MPI & modules/eirmod\_cestim.F \\
 USE\_MPI & modules/eirmod\_cgeom.F \\
 USE\_MPI & modules/eirmod\_cgrid.F \\
+USE\_MPI & modules/eirmod\_cinit.F \\
 USE\_MPI & modules/eirmod\_clgin.F \\
 USE\_MPI & modules/eirmod\_clogau.F \\
 USE\_MPI & modules/eirmod\_comnnl.F \\
@@ -22266,14 +22333,14 @@ USE\_MPI & modules/eirmod\_ctext.F \\
 USE\_MPI & modules/eirmod\_ctrcei.F \\
 USE\_MPI & modules/eirmod\_ctrig.F \\
 USE\_MPI & modules/eirmod\_czt1.F \\
+USE\_MPI & modules/eirmod\_improved\_strategy.F90 \\
 USE\_MPI & modules/eirmod\_mpi.F90 \\
 USE\_MPI & modules/eirmod\_parmmod.F \\
-USE\_MPI & photons/eirmod\_phot\_reflec.f \\
 USE\_MPI & photons/eirmod\_photon.F \\
 USE\_MPI & startup-routines/input.F \\
 USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
-USE\_PXFGETENV & file-handling/get\_solpstop.F \\
+USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
     \hline
     \caption{Defines for Eirene and where they are used.}

@@ -34,46 +34,52 @@ else
 endif
 
 # ===================================================
-# Eirene main input file handling - Formatted variant
+# Eirene main input file handling - JSON variant
 #
-# Look for input.dat (input.eir) in standard locations
-if (! -s input.dat) then
-  if (-s ../baserun/input.dat) then
-    ln -s ../baserun/input.dat .
-  else if (-s input.eir) then
-    ln -s input.eir input.dat
-    echo "Creating a link between input.eir and input.dat"
-  else if (-s ../baserun/input.eir) then
-   ln -s ../baserun/input.eir input.dat
-   echo "Creating a link between ../baserun/input.eir and input.dat"
-  else
-    set inputfile=`climb_and_look_for input.dat`
-    if (-s $inputfile) then
-      ln -s $inputfile .
+# Look for eirene.input.json in standard locations
+set eirene_required = (\
+    "eirene.input.json"\
+    "user_data.input"\
+)
+foreach filename ($eirene_required)
+  if (! -s $filename) then
+    if (-s "../baserun/$filename") then
+      ln -s "../baserun/$filename" .
     else
-      set inputfile=`climb_and_look_for input.eir`
-      if (-s $inputfile) then
-        ln -s $inputfile input.dat
-        echo "Creating a link between $inputfile and input.dat"
+      set filename_found=`climb_and_look_for $filename`
+      if (-s $filename_found) then
+        ln -s $filename_found .
       else
-        echo "Warning: no input.dat found!"
+        echo "Warning: no $filename found!"
       endif
     endif
   endif
+end
+# Look for additional eirene*.input.json files in ../baserun and link them
+if (-s eirene.input.json) then
+  set eirene_extra = `find ../baserun/ -maxdepth 1 -name 'eirene*.input.json'`
+  foreach file ($eirene_extra)
+    set filename = `basename $file`
+    if (! -s $filename) ln -s $file .
+  end
 endif
-# Update the fort.1 link to point to input.dat
-if (-s input.dat) then
+# Update the fort.1 link to point to eirene.input.json
+if (-s eirene.input.json) then
   set fort1_target=`readlink "$filestem"1`
-  if ("$fort1_target" != "input.dat") then
+  if ("$fort1_target" != "eirene.input.json") then
     if ( (-e "$filestem"1) && (! -l "$filestem"1) ) then
       echo "Warning: Unable to select Eirene input, ${filestem}1 exists but not a link!"
       echo "  - Please remove ${filestem}1 and run this script again."
     else
-      ln -sf input.dat "$filestem"1
-      echo "Selected FORMATTED Eirene input (${filestem}1 -> input.dat)."
-      if ("$fort1_target" == "eirene.input.json") then
-        echo "Warning: Changes in eirene.input.json not applied to input.dat will be lost on the next simulation run."
-      endif
+      ln -sf eirene.input.json "$filestem"1
+      echo "Selected JSON Eirene input (${filestem}1 -> eirene.input.json)."
+      # TODO: Remove this warning once JSON support is fully implemented
+      echo ""
+      echo "Warning: EXPERIMENTAL FEATURE: Eirene JSON workflow does not yet support 'Uinp', 'b2yt'."
+      echo "  - Running the main simulation ('b2mn') is supported."
+      echo "  - Tools 'Uinp', 'b2yt' will ignore the JSON files and output the FORMATTED file (input.dat)."
+      echo "  - Revert this run to the Eirene FORMATTED workflow by running 'setup_baserun_eirene_links'."
+      echo "  - Changes to JSON files are NOT carried over to input.dat and will be lost after reverting back."
     endif
   endif
 endif

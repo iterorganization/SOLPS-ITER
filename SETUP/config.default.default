@@ -123,6 +123,12 @@ ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   export SOLPSINCLUDE
 endif
 
+# Build with JSON if present
+ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
+  JSON_INC = `pkg-config json-fortran --cflags`
+  LD_JSON = `pkg-config json-fortran --libs`
+endif
+
 # Build with PETSc if available
 ifeq ($(shell `pkg-config --exists petsc`; echo $$?),0)
   TAO_PRESENT = 1
@@ -267,6 +273,7 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
+export LD_JSON
 
 export SOLPS_CPP
 export SOLPS_MPI
@@ -276,6 +283,7 @@ export B25_DEFINES
 export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+export JSON_INC
 
 #!!!Local Variables:
 #!!! mode: Makefile

@@ -508,14 +508,13 @@ while true; do {
                   [ -r input.dat.us    ] && {
                     rm input.dat
                     mv input.dat.us input.dat
-                   }
+                  }
                 } || {
                   print -u2 -- "Not all output files, $b2usoutlist, are produced"
                   print -u2 -- "    ==> Check b2us.log"
                   q=u
                   break
                 }
-
               print -u2 -- "Produced $b2usout file"
               q=s
             } || {

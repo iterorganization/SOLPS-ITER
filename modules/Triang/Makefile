@@ -118,7 +118,7 @@ MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
 ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
+EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_clogau.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_improved_strategy.o eirmod_mpi.o eirmod_parmmod.o exit_own.o ioflush_usr.o leer.o masage.o masj1r.o masj2r.o pedist.o pedist_usr.o plend.o}
 EGROBJS = ${patsubst %.o,${OBJDIR}/%.o,graxs.o grdrw.o grend.o grjmp.o grnwpn.o grsclc.o grsclv.o grspts.o grstrt.o gr90dg.o}
 
 MAINLIST = tria.o triageom.o triainq.o triainp.o
@@ -217,6 +217,10 @@ ${OBJDIR}/eirmod_cestim.o:
 	ln -sf ${EIROBJ}/eirmod_cestim.o ${OBJDIR}
 	@gtfl $@
 
+${OBJDIR}/eirmod_clogau.o:
+	ln -sf ${EIROBJ}/eirmod_clogau.o ${OBJDIR}
+	@gtfl $@
+
 ${OBJDIR}/eirmod_cinit.o:
 	ln -sf ${EIROBJ}/eirmod_cinit.o ${OBJDIR}
 	@gtfl $@
@@ -253,11 +257,15 @@ ${OBJDIR}/eirmod_cstep.o:
 	ln -sf ${EIROBJ}/eirmod_cstep.o ${OBJDIR}
 	@gtfl $@
 
+${OBJDIR}/eirmod_improved_strategy.o: ${OBJDIR}/eirmod_comprt.${MOD}
+	ln -sf ${EIROBJ}/eirmod_improved_strategy.o ${OBJDIR}
+	@gtfl $@
+
 ${OBJDIR}/eirmod_mpi.o:
 	ln -sf ${EIROBJ}/eirmod_mpi.o ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_parmmod.o:
+${OBJDIR}/eirmod_parmmod.o: ${OBJDIR}/eirmod_clogau.${MOD}
 	ln -sf ${EIROBJ}/eirmod_parmmod.o ${OBJDIR}
 	@gtfl $@
 
@@ -309,6 +317,10 @@ ${OBJDIR}/gr90dg.o:
 	ln -sf ${EIROBJ}/gr90dg.o ${OBJDIR}
 	@gtfl $@
 
+${OBJDIR}/ioflush_usr.o:
+	ln -sf ${EIROBJ}/ioflush_usr.o ${OBJDIR}
+	@gtfl $@
+
 ${OBJDIR}/leer.o: ${OBJDIR}/eirmod_comprt.${MOD}
 	ln -sf ${EIROBJ}/leer.o ${OBJDIR}
 	@gtfl $@
@@ -327,6 +339,10 @@ ${OBJDIR}/masj2r.o: ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/eirmod_precision.${
 
 ${OBJDIR}/pedist.o: ${OBJDIR}/eirmod_cai.${MOD} ${OBJDIR}/eirmod_ccona.${MOD} ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/eirmod_comsou.${MOD} ${OBJDIR}/eirmod_comusr.${MOD} ${OBJDIR}/eirmod_coutau.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/eirmod_precision.${MOD}
 	ln -sf ${EIROBJ}/pedist.o ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/pedist_usr.o:
+	ln -sf ${EIROBJ}/pedist_usr.o ${OBJDIR}
 	@gtfl $@
 
 ${OBJDIR}/plend.o:
@@ -352,6 +368,10 @@ ${OBJDIR}/eirmod_ccona.${MOD}:
 
 ${OBJDIR}/eirmod_cestim.${MOD}:
 	ln -sf ${EIROBJ}/eirmod_cestim.${MOD} ${OBJDIR}
+	@gtfl $@
+
+${OBJDIR}/eirmod_clogau.${MOD}:
+	ln -sf ${EIROBJ}/eirmod_clogau.${MOD} ${OBJDIR}
 	@gtfl $@
 
 ${OBJDIR}/eirmod_cinit.${MOD}:
@@ -390,11 +410,15 @@ ${OBJDIR}/eirmod_cstep.${MOD}:
 	ln -sf ${EIROBJ}/eirmod_cstep.${MOD} ${OBJDIR}
 	@gtfl $@
 
+${OBJDIR}/eirmod_improved_strategy.${MOD}: ${OBJDIR}/eirmod_comprt.${MOD}
+	ln -sf ${EIROBJ}/eirmod_improved_strategy.${MOD} ${OBJDIR}
+	@gtfl $@
+
 ${OBJDIR}/eirmod_mpi.${MOD}:
 	ln -sf ${EIROBJ}/eirmod_mpi.${MOD} ${OBJDIR}
 	@gtfl $@
 
-${OBJDIR}/eirmod_parmmod.${MOD}:
+${OBJDIR}/eirmod_parmmod.${MOD}: ${OBJDIR}/eirmod_clogau.${MOD}
 	ln -sf ${EIROBJ}/eirmod_parmmod.${MOD} ${OBJDIR}
 	@gtfl $@
 
