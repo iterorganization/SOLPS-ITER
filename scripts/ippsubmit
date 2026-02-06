@@ -54,8 +54,8 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
-  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
+  -x                       requests an exclusive job allocation
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
   -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives
@@ -64,7 +64,7 @@ Available options are:
   -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
-  -M <<MEM_SIZE>>          memory size (default $mem)
+  -M <<MEM_SIZE>>          memory size per CPU, in GB (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
   -b <<RUN_DIRS_LIST>>     ask for a batch submission of multiple runs from the folders in <<RUN_DIRS_LIST>>
                            the comma-separated list <<RUN_DIRS_LIST>> (e.g. -b 'run1,run2')

@@ -670,7 +670,7 @@ if ("$OSTYPE" == "linux") then
         set GNUPLOT_INSTALL = "y"
       endif
 
-      if ( "$GNUPLOT_INSTALL" == "y" ) then 
+      if ( "$GNUPLOT_INSTALL" == "y" ) then
         sudo apt-get install -y gnuplot
         echo Gnuplot library successfully installed.
         sleep 1
@@ -1306,7 +1306,7 @@ if ("$OSTYPE" == "darwin") then
       set OPENBLAS_INSTALL = "y"
     endif
 
-    if ( "$OPENBLAS_INSTALL" == "y" ) then 
+    if ( "$OPENBLAS_INSTALL" == "y" ) then
       brew install openblas
       echo Open-Blas library successfully installed.
       sleep 1

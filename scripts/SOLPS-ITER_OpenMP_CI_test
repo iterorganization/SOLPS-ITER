@@ -10,17 +10,18 @@ export NO_MANUAL="true"
 make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 b25_nox_openmp b25_nox
+make MAKE_OPTIONS=-j8 b25_nox_openmp b25_nox b25eirene_nox_openmp
 
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh
 
 export DEVICE=compass
 ${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh COMPASS_16515_1150ms_D_drift_AFN run_AFN_drift 100 6 || exit 1
-
-#export DEVICE=upgrade
-#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_coupled_omp_test.sh COMPASS_16515_1150ms_D_drift_AFN run_kin_CI 10 6 || exit 2
 
 #export DEVICE=iter
 #${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_535_D+He+Ar standalone 10 6 || exit 3
 #${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh ITER_2171_D+He+Be+Ne standalone 10 7 || exit 4
+
+#export DEVICE=upgrade
+#${SOLPSTOP}/modules/B2.5/src/test/run_omp_test.sh AUG_16151_D+C+He 16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone 10 6 || exit 5

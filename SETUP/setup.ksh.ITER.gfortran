@@ -53,7 +53,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load netcdf4-python/1.6.5-foss-2023b
 # module load NAG/26-GCC-13.2.0
   module load CMake/3.27.6-GCCcore-13.2.0
-  module load json-fortran/8.5.2-GCC-13.2.0
+  module load json-fortran/9.0.2-GCC-13.2.0
   module load PETSc/3.20.6-foss-2023b
   export SYSNAME="x86_64_rhel9"
 }

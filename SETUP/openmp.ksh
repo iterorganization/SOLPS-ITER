@@ -18,7 +18,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.openmp|g"`
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
-  export   USE_OPENMP="-D_OPENMP"
+  export   USE_OPENMP="-D_OPENMP -DUSE_OPENMP"
   export   SOLPS_OPENMP="yes"
   export   OLD_COMPILER=${FC}
   export   OLD_MPI_COMPILER=${MPI_FC}
