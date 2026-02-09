@@ -21,6 +21,9 @@ LD_NCARG   = ${NCAR}
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
 #
 # Provide compiler
 #

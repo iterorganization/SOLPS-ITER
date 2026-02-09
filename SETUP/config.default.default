@@ -73,6 +73,13 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+ifdef GR_ROOT
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+endif
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #
@@ -274,6 +281,11 @@ export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
 export LD_JSON
+
+export LIBGKS
+export LIBGRS
+export LIBX11
+export ADDLIBS
 
 export SOLPS_CPP
 export SOLPS_MPI

@@ -10,7 +10,7 @@ export NO_MANUAL="true"
 make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 b25_nox_openmp b25_nox b25eirene_nox_openmp
+make MAKE_OPTIONS=-j8 b25_nox_openmp b25eirene_nox_openmp
 
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh

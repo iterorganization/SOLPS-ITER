@@ -46,6 +46,8 @@ LD_MPI     = `pkg-config mvapich2 --libs`
 LD_JSON    = `pkg-config json-fortran --libs`
 
 LIBGKS     = /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib/libGKS.so
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
 
 #
 # Preprocessor options

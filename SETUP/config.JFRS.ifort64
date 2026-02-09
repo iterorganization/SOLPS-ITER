@@ -50,6 +50,9 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpich
 
+LIBGKS     = ${SOLPSLIB}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
 #
 # Provide compiler
 #
