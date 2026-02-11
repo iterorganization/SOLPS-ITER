@@ -1,6 +1,8 @@
 # Load modules 
 
 module load git/2.32.0-GCCcore-10.3.0-nodocs
+
+# Modules needed by SOLPS-ITER
 module load GCC/12.3.0
 module load makedepend/1.0.6-GCCcore-10.3.0
 module load netCDF/4.9.0-gompi-2022b
