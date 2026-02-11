@@ -4,4 +4,3 @@ INCLUDES = -I/${MOTIF_INCLUDE_DIR} -I/${LIBXPM_INCLUDE_DIR}
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
