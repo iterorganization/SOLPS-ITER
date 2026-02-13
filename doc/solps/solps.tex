@@ -1131,6 +1131,7 @@ SOLPSTOP
 |   |   |   |   +---couple_B2.5
 |   |   |   |   +---couple_Dummy
 |   |   |   |   +---couple_SOLPS-ITER
+|   |   |   |   +---couple_SOLPS_WG
 |   |   |   |   +---couple_Tria
 |   |   |   +---iterate
 |   |   |   +---main-routines
@@ -1168,6 +1169,7 @@ by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
 implementations other than that used in \SOLPSITERns. These are the subdirectories
 within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code found in
 the {\tt interfaces/couple\_SOLPS-ITER} and {\tt user-routines/user\_iter} subdirectories.
+The code in {\tt interfaces/couple\_SOLPS\_WG} is meant for the Wide Grids \SOLPSITER version.
 The others are included for compatibility with the FZ-J{\"u}lich master {\tt Eirene}
 repository.
 \end{sloppypar}
@@ -1196,6 +1198,16 @@ The {\tt gmake tags} command is needed if this is the first compilation or new
 files are added or a new routine has been added within an existing source file.
 The second {\tt gmake depend} is needed if this is the first compilation or
 if the dependencies have been altered.
+
+When compiling {\tt Eirene} in stand-alone mode, and not using {\tt CMake}, the
+{\tt Makefile} will attempt to detect automatically if it is part of a \SOLPSITER
+distribution and of which \SOLPSITER code version. If this is the case, it will
+assign the name of the interface directory by itself. If not, or if the user wishes
+to override the choice of interface directory, this is done by setting the environment
+variable {\tt INTDIR} to the absolute path of the desired interface directory, like so:
+\begin{verbatim}
+    setenv INTDIR ${SOLPSTOP}/modules/Eirene/src/interfaces/couple_[Name-of-interface]
+\end{verbatim}
 
 If the user wishes to modify the compiling options used, the creation
 of a {\tt config.\$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}\allowbreak .local} file in the
