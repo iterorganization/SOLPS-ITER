@@ -23,7 +23,7 @@
 	branch = feature/wg_release
 [submodule "Eirene"]
 	path = modules/Eirene
-	url = https://github.com:iterorganization/EIRENE.git
+	url = https://github.com/iterorganization/EIRENE.git
 	branch = SOLPS_develop
 [submodule "ADAS"]
 	path = modules/adas
