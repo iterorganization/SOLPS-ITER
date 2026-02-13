@@ -159,6 +159,7 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
 #setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
+setenv INTDIR ${SOLPSTOP}/modules/Eirene/src/interfaces/couple_SOLPS_WG
 
 # Set path to scripts and executables
 #------------------------------------
