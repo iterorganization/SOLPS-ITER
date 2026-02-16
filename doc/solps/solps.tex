@@ -4111,8 +4111,8 @@ The conversion of the {\tt Eirene} input file additionally requires for the conv
   \item['new'] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
   \item['facelift'] for input files from \SOLPSfiveone runs
   \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
-  \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
-  \item['msv'] for input files from the {\tt Eirene} Milestone Version
+  \item['iter'] for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['msv'] (default) for input files from the {\tt Eirene} Milestone Version
 \end{description}
 The {\tt input.dat.2} file that the converter will create will follow the Milestone Version format.
 
@@ -6043,6 +6043,10 @@ The presence in the run directory of a file called {\tt ncar.cfg}, with the
 first character of the first line non-blank, will cause the program to use
 'publication-ready' settings for the graphs, namely thicker and visible lines
 and easier-to-read font. \index{ncar.cfg}
+
+If {\tt Carre2} is asked to perform the gridding using an equilibrium that
+is being analytically extended, the resulting extended equilibrium is output in file
+{\tt rzpsi\_ext.dat}. \index{rzpsi\_ext.dat}
 
 {\em The following section only applies if Carre2 is compiled in interactive mode}
 
