@@ -70,9 +70,9 @@ endif
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
-EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
@@ -244,15 +244,19 @@ endif
 	-rm -rf b2mn.exe.dir >& /dev/null ; mkdir b2mn.exe.dir ; cp $^ b2mn.exe.dir
 	-rm -f $(target_mn) $(target_astra) ${fort_lc}31 balance.nc b2_to_astra.dat >& /dev/null
 	save_initial_files
-	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null;[ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
+	-cd b2mn.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null ; [ -s ../astra_to_b2.dat ] && cp -p ../astra_to_b2.dat . || echo > /dev/null
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
+else
+ifdef SOLPS_OPENMP
+	-rm -f output.* >& /dev/null
+endif
 endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -263,7 +267,9 @@ endif
 	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
+	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
+	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
+	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
 endif
 ifdef IMAS_VERSION
 	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
@@ -300,7 +306,14 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+else
+ifdef SOLPS_OPENMP
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
+endif
+	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
+	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
+	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
@@ -342,11 +355,15 @@ endif
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
+else
+ifdef SOLPS_OPENMP
+	-rm -f output.* >& /dev/null
+endif
 endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2mn.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -357,7 +374,9 @@ endif
 	[ -s ../${fort_lc}46 ] && cp -p ../${fort_lc}46 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
-	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
+	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
+	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
+	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
 endif
 ifdef IMAS_VERSION
 	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
@@ -383,7 +402,14 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+else
+ifdef SOLPS_OPENMP
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 endif
+endif
+	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
+	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
+	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
@@ -413,7 +439,7 @@ endif
 	-rmdir b2mn.exe.dir
 
 ifndef STAND_ALONE
-$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 input.dat AMJUEL
+$(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}1 AMJUEL
 else
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles}
 endif
@@ -571,8 +597,8 @@ endif
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ${fort_lc}44 ${fort_lc}46 ${fort_lc}85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}85 >& /dev/null ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${TIME} ${B2OBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
 endif
@@ -590,8 +616,8 @@ endif
 	rm -rf b2yt.exe.dir >& /dev/null ; mkdir b2yt.exe.dir ; cp $^ b2yt.exe.dir
 	rm -f $(target_yt)
 ifndef STAND_ALONE
-	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../input.dat ] && ln -s ../input.dat . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
-	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) input.dat ${fort_lc}44 ${fort_lc}46 ${fort_lc}85 >& /dev/null ; mv *.2 ..
+	-cd b2yt.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; [ -e ../${fort_lc}1 ] && ln -s ../${fort_lc}1 . || echo > /dev/null ; [ -e ../${fort_lc}44 ] && ln -s ../${fort_lc}44 . || echo > /dev/null ; [ -e ../${fort_lc}46 ] && ln -s ../${fort_lc}46 . || echo > /dev/null ; [ -e ../${fort_lc}33 ] && ln -s ../${fort_lc}33 . || echo > /dev/null ; [ -e ../${fort_lc}34 ] && ln -s ../${fort_lc}34 . || echo > /dev/null ; [ -e ../${fort_lc}35 ] && ln -s ../${fort_lc}35 . || echo > /dev/null
+	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) ${fort_lc}1 ${fort_lc}44 ${fort_lc}46 ${fort_lc}85 >& /dev/null ; mv *.2 ..
 else
 	cd b2yt.exe.dir ; ${DBX} ${INC} ${DBGOBJ}/b2yt.exe ${RUN_OPTIONS} ; mv $(target_yt) .. ; rm -f $(notdir $^) >& /dev/null ; mv *.2 ..
 endif
@@ -602,7 +628,7 @@ endif
 	-rmdir b2yt.exe.dir
 
 ifndef STAND_ALONE
-$(target_ual) : input.dat AMJUEL
+$(target_ual) : ${fort_lc}1 AMJUEL
 else
 $(target_ual) :
 endif
@@ -614,7 +640,7 @@ endif
 	[ -s b2frates ] && cp b2frates b2_ual_write.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_write.exe.dir/ )
 	cp b2fplasma b2_ual_write.exe.dir/
 ifndef STAND_ALONE
-	cp input.dat b2_ual_write.exe.dir/
+	cp ${fort_lc}1 b2_ual_write.exe.dir/
 	cp AMJUEL b2_ual_write.exe.dir/
 endif
 	-cd b2_ual_write.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
@@ -622,7 +648,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -639,7 +665,7 @@ endif
 	rm -rf b2_ual_write.exe.dir
 
 ifndef STAND_ALONE
-$(target_rew) : input.dat AMJUEL
+$(target_rew) : ${fort_lc}1 AMJUEL
 else
 $(target_rew) :
 endif
@@ -651,7 +677,7 @@ endif
 	[ -s b2frates ] && cp b2frates b2_ual_rewrite.exe.dir/ || ( [ -s $(baserundir)/b2frates ] && cp $(baserundir)/b2frates b2_ual_rewrite.exe.dir/ )
 	cp b2fplasma b2_ual_rewrite.exe.dir/
 ifndef STAND_ALONE
-	cp input.dat b2_ual_rewrite.exe.dir/
+	cp ${fort_lc}1 b2_ual_rewrite.exe.dir/
 	cp AMJUEL b2_ual_rewrite.exe.dir/
 endif
 	-cd b2_ual_rewrite.exe.dir ; [ -e ../b2faveri ] && cp -p ../b2faveri . || echo > /dev/null
@@ -659,7 +685,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; ln -s ../input.dat ${fort_lc}1 ; \
+	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \

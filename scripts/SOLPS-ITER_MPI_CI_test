@@ -1,15 +1,11 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
-# Create additional Eirene dependencies file to avoid a recurring compiler timing error
-echo '${OBJDIR}/pltadd.o: ${OBJDIR}/pside.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-echo '${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-echo '${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-
 # Compile the code with MPI options activated
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
+make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
 make MAKE_OPTIONS=-j8 solps_nox_mpi

@@ -38,6 +38,9 @@ LD_NCARG   = -L/usr/pppl/gcc/9.3-pkgs/ncl-6.6.2/lib/ -lncarg -lncarg_gks -lncarg
 LD_NAG     = -L/usr/pppl/gcc/9.3-pkgs/lapack-3.9.0/lib64 -lXm -llapack -lblas
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
 #
 # Provide compiler
 #

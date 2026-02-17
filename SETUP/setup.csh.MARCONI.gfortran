@@ -18,6 +18,9 @@ module load hdf5/1.10.4--intel--pe-xe-2018--binary
 module load netcdf/4.6.1--intel--pe-xe-2018--binary
 module load netcdff/4.4.4--intel--pe-xe-2018--binary
 #module load nag/mark27--binary
+module load spack
+module load gcc/10.2.0-idk
+module load cmake/3.18.2
 
 # The script above overwrites $PATH, so modules must be loaded afterwards!!!
 # load modules

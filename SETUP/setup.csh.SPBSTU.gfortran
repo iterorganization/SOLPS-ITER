@@ -38,6 +38,7 @@ setenv GLI_HOME ${SOLPSTOP}/../${COMPILER}/gks
 
 module load library/blas/3.8.0
 module load library/netcdf-c/4.5.0/gcc library/netcdf-fortran/4.4.4/gcc library/hdf5/1.10.1/gcc
+module load dev/cmake/3.23.1
 
 setenv LD_LIBRARY_PATH ${SOLPSTOP}/../gfortran/MDSPLUS/lib:$LD_LIBRARY_PATH
 

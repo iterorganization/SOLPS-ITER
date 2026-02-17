@@ -135,6 +135,7 @@ EOF
     shift
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
+      set MPI_SET=yes
     endif
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
@@ -147,6 +148,7 @@ EOF
     shift
     if (! $?SOLPS_OPENMP) then
       source $SOLPSTOP/SETUP/openmp
+      set OPENMP_SET=yes
     endif
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
@@ -226,7 +228,7 @@ sed \
   -e 's:#PWD#:'$PWD':g' \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
   -e 's:#EMAIL#:'$EMAIL':g' \
-  -e 's:#MPIOPTS#:'$MPIOPTS':g' \
+  -e "s:#MPIOPTS#:'$MPIOPTS':g" \
   -e 's:#TASKS#:'$TASKS':g' \
   -e 's:#PROCS#:'$PROCS':g' \
   -e 's:#NODES#:'$NODES':g' \
@@ -243,4 +245,4 @@ sed \
 
 update_solps_run_status -n "Submitted at `date`"
 
-  sbatch $NAME
+sbatch $NAME

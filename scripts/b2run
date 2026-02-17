@@ -207,7 +207,6 @@ argloop:
       set OPENMP_SET=yes
     endif
     set OMP_NUM_THREADS=$1
-    set KMP_AFFINITY=compact,verbose,norespect
     shift
     goto argloop
   endif

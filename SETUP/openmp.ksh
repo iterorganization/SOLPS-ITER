@@ -18,7 +18,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|g"`
   export   SOLPS_PATH=`echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.openmp|g"`
   export   PATH=${SOLPS_PATH}:${OLD_PATH}
-  export   USE_OPENMP="-D_OPENMP"
+  export   USE_OPENMP="-D_OPENMP -DUSE_OPENMP"
   export   SOLPS_OPENMP="yes"
   export   OLD_COMPILER=${FC}
   export   OLD_MPI_COMPILER=${MPI_FC}
@@ -34,7 +34,16 @@ if [[ -n "$SOLPS_PATH" ]]; then
     fi
   fi
   export   KMP_STACKSIZE="128M"
-  export   KMP_AFFINITY="norespect,compact"
+  export   KMP_AFFINITY="noverbose,respect,compact"
+  export   OMP_WAIT_POLICY="active"
+  export   OMP_DYNAMIC="false"
+  if [[ -n "$SOLPS_DEBUG" ]]; then
+    export OMP_DISPLAY_AFFINITY="true"
+    export OMP_DISPLAY_ENV="true"
+  fi
+# The settings below can be used if KMP_AFFINITY is not set
+#  export   OMP_PROC_BIND="true"
+#  export   OMP_PLACES="cores"
   unset    OLD_SOLPS_PATH
   echo "SOLPS-ITER OpenMP mode turned on"
 else
