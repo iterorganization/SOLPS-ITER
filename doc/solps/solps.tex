@@ -4187,8 +4187,8 @@ The conversion of the {\tt Eirene} input file additionally requires for the conv
   \item['new'] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
   \item['facelift'] for input files from \SOLPSfiveone runs
   \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
-  \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
-  \item['msv'] for input files from the {\tt Eirene} Milestone Version
+  \item['iter'] for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['msv'] (default) for input files from the {\tt Eirene} Milestone Version
 \end{description}
 The {\tt input.dat.2} file that the converter will create will follow the Milestone Version format.
 
@@ -5362,6 +5362,8 @@ The conditions
 \delta_{n_a} \tau_f r_{xf_{f_{n_a}}} = 1
 \end{equation}
 must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
+
+For cases where the electric potential at the targets is expected to vary very fast, it is recommended to also use internal iterations to converge the potential equation, with the maximum number of iterations allowed set by the {\tt b2news\_m\_iter\_pot} switch. Convergence criteria can be set with the {\tt b2urb\_epsr} (relative) and {\tt b2urbp\_epsa} (absolute) switches (default value is 0.01 for both).
 
 When computing the residuals in dynamic mode, the contribution from the time derivative terms is not included. If using internal iterations ({\tt b2mndt\_nstg0}, {\tt b2mndt\_nstg1}, or {\tt b2mndt\_nstg2} larger than 1), the time derivative is computed from one internal iteration to the next.
 
