@@ -23,8 +23,8 @@
 	branch = feature/wg_release
 [submodule "Eirene"]
 	path = modules/Eirene
-	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = .
+	url = https://github.com/iterorganization/EIRENE.git
+	branch = SOLPS_develop
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/imex/amns-adas.git

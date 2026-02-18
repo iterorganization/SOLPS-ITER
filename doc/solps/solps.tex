@@ -1138,12 +1138,16 @@ SOLPSTOP
 |   |   |   +---SurfaceData
 |   |   |   |   +---TRIM
 |   |   |   |   |   +---10_bins
+|   |   +---Manual
+|   |   |   +---figures
+|   |   |   +---tex
 |   |   +---scripts
 |   |   +---src.local
 |   |   +---src
 |   |   |   +---assistant
 |   |   |   +---broadcast
 |   |   |   +---broadcast_dummy
+|   |   |   +---cmake
 |   |   |   +---diagno
 |   |   |   +---file-handling
 |   |   |   +---geometry
@@ -1153,8 +1157,8 @@ SOLPSTOP
 |   |   |   |   +---couple_B2
 |   |   |   |   +---couple_B2.5
 |   |   |   |   +---couple_Dummy
-|   |   |   |   +---couple_SOLPS_WG
 |   |   |   |   +---couple_SOLPS-ITER
+|   |   |   |   +---couple_SOLPS_WG
 |   |   |   |   +---couple_Tria
 |   |   |   +---iterate
 |   |   |   +---main-routines
@@ -1192,9 +1196,8 @@ by FZ-J{\"u}lich, some of the directories found above correspond to {\tt Eirene}
 implementations other than that used in \SOLPSITERns. These are the subdirectories
 within {\tt interfaces} and {\tt user-routines}. \SOLPSITER uses only the code found in
 the {\tt interfaces/couple\_SOLPS\_WG} and {\tt user-routines/user\_iter} subdirectories.
-The {\tt interfaces/couple\_SOLPS-ITER} directory contains the interface
-with the structured \SOLPSITER version. The others are included for compatibility
-with the FZ-J{\"u}lich master {\tt Eirene}
+The code in {\tt interfaces/couple\_SOLPS-ITER} is meant for the structured \SOLPSITER version.
+The others are included for compatibility with the FZ-J{\"u}lich master {\tt Eirene}
 repository.
 \end{sloppypar}
 
@@ -1222,6 +1225,16 @@ The {\tt gmake tags} command is needed if this is the first compilation or new
 files are added or a new routine has been added within an existing source file.
 The second {\tt gmake depend} is needed if this is the first compilation or
 if the dependencies have been altered.
+
+When compiling {\tt Eirene} in stand-alone mode, and not using {\tt CMake}, the
+{\tt Makefile} will attempt to detect automatically if it is part of a \SOLPSITER
+distribution and of which \SOLPSITER code version. If this is the case, it will
+assign the name of the interface directory by itself. If not, or if the user wishes
+to override the choice of interface directory, this is done by setting the environment
+variable {\tt INTDIR} to the absolute path of the desired interface directory, like so:
+\begin{verbatim}
+    setenv INTDIR ${SOLPSTOP}/modules/Eirene/src/interfaces/couple_[Name-of-interface]
+\end{verbatim}
 
 If the user wishes to modify the compiling options used, the creation
 of a {\tt config.\$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}\allowbreak .local} file in the
@@ -4100,8 +4113,8 @@ The conversion of the {\tt Eirene} input file additionally requires for the conv
   \item['new'] for input files from {\bf SOLPS4.0} and {\bf SOLPS5.0} runs using "new" Eirene\_99
   \item['facelift'] for input files from \SOLPSfiveone runs
   \item['juelich'] for input files from Juelich {\tt Eirene} versions (2008 and younger)
-  \item['iter'] (default) for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
-  \item['msv'] for input files from the {\tt Eirene} Milestone Version
+  \item['iter'] for input files from {\bf SOLPS4.2/4.3} and \SOLPSITER runs
+  \item['msv'] (default) for input files from the {\tt Eirene} Milestone Version
 \end{description}
 The {\tt input.dat.2} file that the converter will create will follow the Milestone Version format.
 
@@ -4498,7 +4511,7 @@ This program rewrites an existing IDS in case a correction needs to be made (bec
 The user is strongly encouraged to check out that very complete manual.
 Reference~\cite{Reiter2005} also provides a useful description.
 
-The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI parallelization and debugging options can be requested by adding {\tt \_mpi} and {\tt \_debug} (last) to the compilation target name, or by using, respectively, the {\tt set\_mpi} and {\tt set\_debug} scripts before launching the compilation. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
+The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if you want the {\tt Eirene} graphics) or {\tt gmake eirene\_nox} (without graphics) from the top \SOLPSITER directory. MPI and/or OpenMP parallelization and debugging options can be requested by adding {\tt \_mpi}, {\tt \_openmp} and {\tt \_debug} (last) to the compilation target name, or by using, respectively, the {\tt set\_mpi}, {\tt set\_openmp}, and {\tt set\_debug} scripts before launching the compilation. The executables are named {\tt eirobj} and {\tt eirobjx} respectively, and can be invoked directly.
 
 {\tt Eirene} can also be compiled from its submodule directory with:
 \begin{verbatim}
@@ -4674,7 +4687,7 @@ There are currently six possible choices supported. They are:
   \item[BALANCED] A balanced strategy in which the workload is attempted to be divided evenly among processors. If the initial setup for the {\bf BALANCED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 3}.
   \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
-  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
+  \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" or "stratified sampling" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
   \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
@@ -6033,6 +6046,10 @@ first character of the first line non-blank, will cause the program to use
 'publication-ready' settings for the graphs, namely thicker and visible lines
 and easier-to-read font. \index{ncar.cfg}
 
+If {\tt Carre2} is asked to perform the gridding using an equilibrium that
+is being analytically extended, the resulting extended equilibrium is output in file
+{\tt rzpsi\_ext.dat}. \index{rzpsi\_ext.dat}
+
 {\em The following section only applies if Carre2 is compiled in interactive mode}
 
 The program will propose a table (see next chapter for an example) containing,
@@ -6110,6 +6127,8 @@ constraints of the field geometry and the shape of the target plates. The parame
   \item[relax]\index{relax} The relaxation factor used
   \item[pasmin]\index{pasmin} The minimal spacing required between neighbouring surfaces in the poloidal direction
   \item[rlcept]\index{rlcept} The maximum desired deviation from orthogonality (averaged over a flux surface)
+  \item[dpol1max]\index{dpol1max} Criterion for removing small triangular cells along a flux surface (default 0.01)
+  \item[dpol2max]\index{dpol2max} Criterion for removing small triangular cells in the radiald direction (default 0.01)
 \end{description}
 
 If the code fails to position the points poloidally in a way that satisfies the optimization
@@ -21302,7 +21321,9 @@ which is defined in the
 \item[NO\_B2\_CHEM\_SPUT] \index{NO\_B2\_CHEM\_SPUT} Used to indicate that chemical sputtering is specified through {\tt Eirene} arrays instead of {\tt B2.5}
 \item[NO\_SAVE] \index{NO\_SAVE} Turning off static save of some common blocks
 \item[SOLPS4\_3] \index{SOLPS4\_3} Set internally by the {\tt Makefile} to activate code specific to the {\tt SOLPS4-5 b2sxdr} converter
+\item[USE\_EXT\_OPENMP] \index{USE\_EXT\_OPENMP} For use if {\tt B2.5-Eirene} or its components are called from within an OpenMP parallelized region inside a larger workflow (Cannot be used in conjunction with {\tt USE\_OPENMP})
 \item[USE\_IMPGYRO] \index{USE\_IMPGYRO} Used when coupling to IMPGYRO
+\item[USE\_OPENMP] \index{USE\_OPENMP} For OpenMP specific code related to internal {\tt Eirene} parallelization (Cannot be used in conjunction with {\tt USE\_EXT\_OPENMP}). Will be set by default when requesting an OpenMP executable.
 \end{description}
 
 \subsection{B2.5}
@@ -21961,6 +21982,7 @@ TAO\_NEW & differentiation/adjoint/b2optim\_tao.F90 \\
 TAO\_NEW & differentiation/tangent/b2optim\_tao.F90 \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
+USE\_EXT\_OPENMP & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_driver.F \\
 USE\_IMPGYRO & driver/b2mod\_main.F \\
 USE\_IMPGYRO & modules/b2mod\_impgyro.F \\
@@ -21981,6 +22003,7 @@ USE\_MPI & modules/b2mod\_transport\_namelist.F \\
 USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
+USE\_OPENMP & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -22087,7 +22110,6 @@ We list below where the {\tt Eirene} compilation switches are used.
     \hline \endfoot
     \endlastfoot
 ALLOCATE\_AND\_NAMELIST & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
-ALLOCATE\_AND\_NAMELIST & startup-routines/find\_param\_fixform.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
@@ -22139,6 +22161,7 @@ CRAY & photons/eirmod\_photon.F \\
 CRAY & user-routines/user\_iter/broad\_usr.F \\
 CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
 DBG & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
+DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
 GFORTRAN & assistant/exit\_own.F \\
 GFORTRAN & broadcast/broad\_iestr.F \\
@@ -22215,6 +22238,8 @@ LEGACYCOMP & main-routines/scale\_tallies.F \\
 LEGACYCOMP & main-routines/sum\_average.F \\
 LEGACYCOMP & main-routines/sumostra.F \\
 LEGACYCOMP & main-routines/tally\_sanity\_check.F \\
+LEGACYCOMP & modules/eirmod\_comusr.F \\
+LEGACYCOMP & modules/eirmod\_json.F \\
 LEGACYCOMP & output/outildsrf.f \\
 LEGACYCOMP & particle-tracing/eirmod\_collide.F \\
 LEGACYCOMP & particle-tracing/eirmod\_samsrf.F \\
@@ -22230,15 +22255,21 @@ LEGACYCOMP & startup-routines/read\_fixform.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & startup-routines/read\_fixform.F \\
+NAGFOR & assistant/eirmod\_second\_own.F \\
 NAGFOR & file-handling/eirmod\_openfile.F \\
 NO\_B2\_CHEM\_SPUT & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 NO\_GETENV & user-routines/user\_iter/get\_solpstop.F \\
 NO\_JSON & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 NO\_JSON & interfaces/couple\_SOLPS\_WG/if0prm\_json.F \\
 NO\_JSON & interfaces/couple\_SOLPS\_WG/wr0\_json.F \\
+NO\_JSON & modules/eirmod\_comusr.F \\
 NO\_JSON & modules/eirmod\_json.F \\
 NO\_JSON & startup-routines/find\_param\_json.F \\
+NO\_JSON & startup-routines/read\_fixform.F \\
+NO\_JSON & startup-routines/read\_json.F \\
 NO\_JSON & startup-routines/read\_reaclines.F \\
+NO\_JSON & startup-routines/write\_json\_amdata.f \\
+NO\_JSON & startup-routines/write\_json\_file.F \\
 NO\_JSON & user-routines/user\_iter/eirmod\_iousr.F \\
 OPEN\_MPI & broadcast/broad\_iestr.F \\
 OPEN\_MPI & broadcast/broadcast.F \\
@@ -22291,6 +22322,73 @@ TRACE & geometry/time-routines/eirmod\_timep.F \\
 TRACE & geometry/time-routines/eirmod\_timer.F \\
 TRACE & geometry/time-routines/timet.F \\
 TRACE & modules/eirmod\_improved\_strategy.F90 \\
+USE\_EXT\_OPENMP & assistant/exit\_own.F \\
+USE\_EXT\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
+USE\_EXT\_OPENMP & diagno/eirmod\_linint.F \\
+USE\_EXT\_OPENMP & geometry/eirmod\_learc1.F \\
+USE\_EXT\_OPENMP & geometry/learc2.F \\
+USE\_EXT\_OPENMP & geometry/time-routines/eirmod\_timea.F \\
+USE\_EXT\_OPENMP & geometry/time-routines/eirmod\_timep.F \\
+USE\_EXT\_OPENMP & geometry/time-routines/eirmod\_timer.F \\
+USE\_EXT\_OPENMP & interfaces/couple\_SOLPS\_WG/uptcop.F \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_eirene.F \\
+USE\_EXT\_OPENMP & main-routines/eirmod\_mcarlo.F \\
+USE\_EXT\_OPENMP & main-routines/integrate\_tallies.F \\
+USE\_EXT\_OPENMP & main-routines/sumostra.F \\
+USE\_EXT\_OPENMP & mathematics/eirmod\_h1rnm.F \\
+USE\_EXT\_OPENMP & mathematics/eirmod\_ranf.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_cestim.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_cfplk.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_clast.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_comprt.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_comsou.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_comspl.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_comusr.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_comxs.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_coutau.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_crand.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_csdvi.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_cspez.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_cupd.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_czt1.F \\
+USE\_EXT\_OPENMP & modules/eirmod\_openmp.F \\
+USE\_EXT\_OPENMP & particle-tracing/colphot.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_addcol.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_collide.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_locate.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_samsrf.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_samvol.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_stdcol.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_switch\_partinfo.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_velocx.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_veloel.F \\
+USE\_EXT\_OPENMP & particle-tracing/eirmod\_velopi.F \\
+USE\_EXT\_OPENMP & particle-tracing/escape.F \\
+USE\_EXT\_OPENMP & particle-tracing/folion.F \\
+USE\_EXT\_OPENMP & particle-tracing/folneut.F \\
+USE\_EXT\_OPENMP & particle-tracing/folstat\_ion.F \\
+USE\_EXT\_OPENMP & particle-tracing/folstat\_neut.F \\
+USE\_EXT\_OPENMP & particle-tracing/fpkcol.F \\
+USE\_EXT\_OPENMP & particle-tracing/spltrr.F \\
+USE\_EXT\_OPENMP & particle-tracing/timcol.F \\
+USE\_EXT\_OPENMP & particle-tracing/time2surface.F \\
+USE\_EXT\_OPENMP & particle-tracing/torcol.F \\
+USE\_EXT\_OPENMP & plotting/eirmod\_plt2d.F \\
+USE\_EXT\_OPENMP & plotting/eirmod\_tstchm.F \\
+USE\_EXT\_OPENMP & scoring/eirmod\_statis.F \\
+USE\_EXT\_OPENMP & scoring/eirmod\_updlin.F \\
+USE\_EXT\_OPENMP & scoring/eirmod\_uptbgk.F \\
+USE\_EXT\_OPENMP & scoring/update.F \\
+USE\_EXT\_OPENMP & scoring/update\_spectrum.F \\
+USE\_EXT\_OPENMP & scoring/update\_sptflx.F \\
+USE\_EXT\_OPENMP & scoring/update\_surface.F \\
+USE\_EXT\_OPENMP & scoring/updphot.F \\
+USE\_EXT\_OPENMP & surface-processes/eirmod\_reflec.F \\
+USE\_EXT\_OPENMP & surface-processes/eirmod\_sheath.F \\
+USE\_EXT\_OPENMP & surface-processes/eirmod\_sputer.F \\
+USE\_EXT\_OPENMP & surface-processes/reflec\_photon.F \\
+USE\_EXT\_OPENMP & tetrahedra/learct.F \\
+USE\_EXT\_OPENMP & user-routines/user\_iter/eirmod\_uptusr.F \\
 USE\_MPI & assistant/eirmod\_second\_own.F \\
 USE\_MPI & assistant/exit\_own.F \\
 USE\_MPI & broadcast/broad\_iestr.F \\
@@ -22340,6 +22438,75 @@ USE\_MPI & photons/eirmod\_photon.F \\
 USE\_MPI & startup-routines/input.F \\
 USE\_MPI & user-routines/user\_iter/broad\_usr.F \\
 USE\_MPI & user-routines/user\_iter/eirmod\_refusr.F \\
+USE\_OPENMP & assistant/eirmod\_second\_own.F \\
+USE\_OPENMP & assistant/exit\_own.F \\
+USE\_OPENMP & broadcast/eirmod\_calstr\_buffered.F90 \\
+USE\_OPENMP & diagno/eirmod\_linint.F \\
+USE\_OPENMP & geometry/eirmod\_learc1.F \\
+USE\_OPENMP & geometry/learc2.F \\
+USE\_OPENMP & geometry/time-routines/eirmod\_timea.F \\
+USE\_OPENMP & geometry/time-routines/eirmod\_timep.F \\
+USE\_OPENMP & geometry/time-routines/eirmod\_timer.F \\
+USE\_OPENMP & interfaces/couple\_SOLPS\_WG/uptcop.F \\
+USE\_OPENMP & main-routines/eirmod\_eirene.F \\
+USE\_OPENMP & main-routines/eirmod\_mcarlo.F \\
+USE\_OPENMP & main-routines/integrate\_tallies.F \\
+USE\_OPENMP & main-routines/sumostra.F \\
+USE\_OPENMP & mathematics/eirmod\_h1rnm.F \\
+USE\_OPENMP & mathematics/eirmod\_ranf.F \\
+USE\_OPENMP & modules/eirmod\_cestim.F \\
+USE\_OPENMP & modules/eirmod\_cfplk.F \\
+USE\_OPENMP & modules/eirmod\_clast.F \\
+USE\_OPENMP & modules/eirmod\_comprt.F \\
+USE\_OPENMP & modules/eirmod\_comsou.F \\
+USE\_OPENMP & modules/eirmod\_comspl.F \\
+USE\_OPENMP & modules/eirmod\_comusr.F \\
+USE\_OPENMP & modules/eirmod\_comxs.F \\
+USE\_OPENMP & modules/eirmod\_coutau.F \\
+USE\_OPENMP & modules/eirmod\_crand.F \\
+USE\_OPENMP & modules/eirmod\_csdvi.F \\
+USE\_OPENMP & modules/eirmod\_cspez.F \\
+USE\_OPENMP & modules/eirmod\_cupd.F \\
+USE\_OPENMP & modules/eirmod\_czt1.F \\
+USE\_OPENMP & modules/eirmod\_mpi.F90 \\
+USE\_OPENMP & modules/eirmod\_openmp.F \\
+USE\_OPENMP & particle-tracing/colphot.F \\
+USE\_OPENMP & particle-tracing/eirmod\_addcol.F \\
+USE\_OPENMP & particle-tracing/eirmod\_collide.F \\
+USE\_OPENMP & particle-tracing/eirmod\_locate.F \\
+USE\_OPENMP & particle-tracing/eirmod\_samsrf.F \\
+USE\_OPENMP & particle-tracing/eirmod\_samvol.F \\
+USE\_OPENMP & particle-tracing/eirmod\_stdcol.F \\
+USE\_OPENMP & particle-tracing/eirmod\_switch\_partinfo.F \\
+USE\_OPENMP & particle-tracing/eirmod\_velocx.F \\
+USE\_OPENMP & particle-tracing/eirmod\_veloel.F \\
+USE\_OPENMP & particle-tracing/eirmod\_velopi.F \\
+USE\_OPENMP & particle-tracing/escape.F \\
+USE\_OPENMP & particle-tracing/folion.F \\
+USE\_OPENMP & particle-tracing/folneut.F \\
+USE\_OPENMP & particle-tracing/folstat\_ion.F \\
+USE\_OPENMP & particle-tracing/folstat\_neut.F \\
+USE\_OPENMP & particle-tracing/fpkcol.F \\
+USE\_OPENMP & particle-tracing/spltrr.F \\
+USE\_OPENMP & particle-tracing/timcol.F \\
+USE\_OPENMP & particle-tracing/time2surface.F \\
+USE\_OPENMP & particle-tracing/torcol.F \\
+USE\_OPENMP & plotting/eirmod\_plt2d.F \\
+USE\_OPENMP & plotting/eirmod\_tstchm.F \\
+USE\_OPENMP & scoring/eirmod\_statis.F \\
+USE\_OPENMP & scoring/eirmod\_updlin.F \\
+USE\_OPENMP & scoring/eirmod\_uptbgk.F \\
+USE\_OPENMP & scoring/update.F \\
+USE\_OPENMP & scoring/update\_spectrum.F \\
+USE\_OPENMP & scoring/update\_sptflx.F \\
+USE\_OPENMP & scoring/update\_surface.F \\
+USE\_OPENMP & scoring/updphot.F \\
+USE\_OPENMP & surface-processes/eirmod\_reflec.F \\
+USE\_OPENMP & surface-processes/eirmod\_sheath.F \\
+USE\_OPENMP & surface-processes/eirmod\_sputer.F \\
+USE\_OPENMP & surface-processes/reflec\_photon.F \\
+USE\_OPENMP & tetrahedra/learct.F \\
+USE\_OPENMP & user-routines/user\_iter/eirmod\_uptusr.F \\
 USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
     \hline

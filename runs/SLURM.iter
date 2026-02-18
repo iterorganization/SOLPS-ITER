@@ -30,8 +30,8 @@ endif
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

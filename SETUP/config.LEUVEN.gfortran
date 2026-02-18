@@ -47,6 +47,10 @@ LD_MDSPLUS =
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
 LD_MPI     =
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

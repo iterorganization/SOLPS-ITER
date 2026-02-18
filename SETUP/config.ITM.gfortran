@@ -45,6 +45,11 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+LIBX11     = /usr/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

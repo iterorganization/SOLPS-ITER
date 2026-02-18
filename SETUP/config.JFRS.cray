@@ -83,6 +83,12 @@ LD_NAG     = `pkg-config sci --libs`
 endif
 endif
 
+LIBGKS    = ${SOLPSLIB}/libgks.a
+ifdef GR_ROOT
+LIBGRS    = ${GR_ROOT}/libgr.a
+endif
+ADDLIBS   = -L/opt/intel/lib/intel64 -lifcore -limf -lsvml -lintlc -lifport
+
 #
 # Provide compiler
 #

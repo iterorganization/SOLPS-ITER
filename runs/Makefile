@@ -70,9 +70,9 @@ endif
 
 ifndef STAND_ALONE
 B2OBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
+EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 DBGOBJ = ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
-EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}.debug
+EDBOBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_IMPGYRO}.debug
 ifneq (${DBX},totalview)
 INC = -I ${DBGOBJ} -I ${EDBOBJ}
 endif
@@ -248,6 +248,10 @@ endif
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
+else
+ifdef SOLPS_OPENMP
+	-rm -f output.* >& /dev/null
+endif
 endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
@@ -302,6 +306,10 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+else
+ifdef SOLPS_OPENMP
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+endif
 endif
 	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
 	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
@@ -347,6 +355,10 @@ endif
 ifndef STAND_ALONE
 ifdef SOLPS_MPI
 	-rm -f output.* >& /dev/null
+else
+ifdef SOLPS_OPENMP
+	-rm -f output.* >& /dev/null
+endif
 endif
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
@@ -390,6 +402,10 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+else
+ifdef SOLPS_OPENMP
+	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
+endif
 endif
 	-[ -e b2mn.exe.dir/eirene.input.json ] && mv b2mn.exe.dir/*.json . || echo > /dev/null
 	-[ -e b2mn.exe.dir/user_data.input ] && mv b2mn.exe.dir/user_data.input . || echo > /dev/null
