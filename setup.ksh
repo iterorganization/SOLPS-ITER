@@ -117,6 +117,7 @@ export EscapeSonnet=`echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 export DG=${SOLPSTOP}/modules/DivGeo
 export CARRE_STOREDIR=${SOLPSTOP}/modules/Carre/meshes
+export INTDIR=${SOLPSTOP}/modules/Eirene/src/interfaces/couple_SOLPS_WG
 
 # Set path to scripts and executables
 #------------------------------------

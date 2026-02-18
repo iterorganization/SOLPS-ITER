@@ -54,6 +54,10 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext 
 endif
 NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+LIBGKS     = ${GKSDIR}/lib/libGKS.so
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

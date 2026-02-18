@@ -25,6 +25,9 @@ LD_NCARG   = -L${NCARG_ROOT} -lncarg -lncarg_gks -lncarg_c -lX11 -lm -lgfortran 
 LD_MDSPLUS =
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+
 #
 # Provide compiler
 #

@@ -43,8 +43,8 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
-  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
+  -x                       requests an exclusive job allocation
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
   -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives

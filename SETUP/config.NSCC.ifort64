@@ -42,6 +42,10 @@ LD_NAG     = -L${NAGDIR}/lib -lnag -mkl
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

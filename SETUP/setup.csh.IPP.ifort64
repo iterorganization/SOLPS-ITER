@@ -15,6 +15,7 @@ module load Fundamental-Constants/0.1.1
 module load impi/2021.10.0-intel-compilers-2023.2.1
 module load netCDF-Fortran/4.6.1-iimpi-2023b
 module load HDF5/1.14.3-iimpi-2023b
+module load json-fortran/8.5.2-intel-compilers-2023.2.1
 
 module load IPython/8.17.2-GCCcore-13.2.0
 
@@ -28,6 +29,7 @@ endif
 
 # Compiler
 setenv FC ifort
+setenv MPI_FC mpiifort
 
 # find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then

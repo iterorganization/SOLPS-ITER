@@ -42,6 +42,10 @@ LD_NAG     = -L${NAGDIR} -lnag -L${MKL_PATH} -lmkl_blas95_lp64 -lmkl_lapack95_lp
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client -lMdsIpShr
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/lib64/libX11.so
+
 #
 # Provide compiler
 #
