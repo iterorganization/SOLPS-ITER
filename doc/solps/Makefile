@@ -3,6 +3,7 @@
 B25DIR=${SOLPSTOP}/modules/B2.5
 AFNDIR=${SOLPSTOP}/doc/AFN_BCs_documentation
 AFNSRC=${AFNDIR}/LaTeX_source_code
+GEODIR=${SOLPSTOP}/doc/edit_geo_manual
 PATH+=:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
@@ -25,6 +26,8 @@ STYFILES=fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def 
 FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ar_AFN.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py MacOS/compiler.darwin.gfortran MacOS/date2.c Makefile ${BIBFILES} ${STYFILES} ad_optimization.tex expert_features_ad.tex unstructured.tex
 AFN_FILES=${AFNSRC}/cite.tex ${AFNSRC}/defs.tex ${AFNSRC}/future.tex ${AFNSRC}/guide.tex ${AFNSRC}/implementation.tex ${AFNSRC}/intro.tex ${AFNSRC}/main.tex ${AFNSRC}/nomenclaturechapter.tex ${AFNSRC}/theory.tex ${AFNSRC}/mybib.bib
 AFN_DOC=${SOLPSTOP}/doc/AFN_BCs_documentation.pdf
+GEO_DOC=${SOLPSTOP}/doc/edit_geo_manual.pdf
+GEO_FILES = ${GEODIR}/edit_geo_manual.tex
 
 ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   include Makefile.local
@@ -43,7 +46,7 @@ ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] 
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
 endif
 
-all: solps.pdf solps.ps ${AFN_DOC}
+all: solps.pdf solps.ps ${AFN_DOC} ${GEO_DOC}
 
 .PHONY: bibtex thumb update_log complete force
 
@@ -121,6 +124,12 @@ ${AFN_DOC}: ${AFN_FILES} ${MAKES}
 	-grep 'Label(s) may have changed' ${AFNSRC}/main.log && ( cd ${AFNSRC} ; ${LATEX} main ) || echo > /dev/null
 	[ -e ${AFNSRC}/main.pdf ] && mv -f ${AFNSRC}/main.pdf ${AFN_DOC}
 
+${GEO_DOC}: ${GEO_FILES} ${MAKES}
+	@echo 'Building edit geo manual'
+	cd ${GEODIR} ; ${LATEX} edit_geo_manual
+	-grep 'Label(s) may have changed' ${GEODIR}/edit_geo_manual.log && ( cd ${GEODIR} ; ${GEODIR} edit_geo_manual ) || echo > /dev/null
+	[ -e ${GEODIR}/edit_geo_manual.pdf ] && mv -f ${GEODIR}/edit_geo_manual.pdf ${GEO_DOC}
+
 b2cdca.F: ${B25DIR}/src/documentation/b2cdca.F
 	ln -sf ${B25DIR}/src/documentation/b2cdca.F .
 
@@ -196,7 +205,7 @@ complete:
 clean:
 	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex
 	rm -f ${AFN_DOC} ; cd ${AFNSRC} ; rm -f defs.aux main-blx.bib main.aux main.bbl main.blg main.log main.out main.run.xml main.toc
-
+	rm -f ${GEO_DOC} ; cd ${GEODIR}; rm -f edit_geo_manual.aux edit_geo_manual.log edit_geo_manual.out
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps
 
