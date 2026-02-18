@@ -2779,13 +2779,13 @@ which contains
     When {\tt bcene\_15\_style=1}, the electron flux is computed via the exponential of the sheath potential drop, and {\tt ENEPAR(:,1)} is used to artificially increase or decrease the sheath transmission coefficient for electrons (default = {\tt 0}).
   \item[16] feedback boundary condition with constant temperature,
     {\tt ENEPAR(,1)} specifies the power flux in $W$ across the boundary surface,
-    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
+    {\tt ENEPAR(,2)} should be something like $0.1$ and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_te} will be used).
     Also see type [17] below. Available if {\tt bcene\_16\_style=0} (default).
     If {\tt bcene\_16\_style=1}, integrated electron heat flux with constant $T_e$, summed over all core boundaries with {\tt BCENE=16}.
   \item[17] feedback boundary condition with constant shared temperature
     for both electrons and ions, with {\tt ENEPAR(,1) + ENIPAR(,1)} giving
     the total power flux in $W$ across the boundary surface,
-    {\tt ENEPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback.
+    {\tt ENEPAR(,2)} should be something like $0.1$ and specifies the strength of the feedback.
     Replaces [16] for high densities.
   \item[18] fractional drop condition. Experimental. Attempts to set the guard cell temperature to be $(1 - ENEPAR(,1))$ times the boundary cell temperature.
   \item[19] same as [9] but to be used when simultaneously setting {\tt BCCON=1} on the same boundary.
@@ -2852,7 +2852,7 @@ which contains
     to be used in conjunction with {\tt BCMOM=13}, {\tt BCENE=15} with {\tt bcene\_15\_style=1}, {\tt BCCON=14}, {\tt BCPOT=3} or {\tt BCPOT=11} with {\tt istyle\_fchi=0}. Recommended for cases with drifts.
   \item[16] Feedback boundary condition with constant temperature,
     {\tt ENIPAR(,1)} specifies the power flux in $W$ across the boundary surface,
-    {\tt ENIPAR(,2)} should be something like {\tt 0.1} and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    {\tt ENIPAR(,2)} should be something like $0.1$ and specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
     Also see type [17] below. Available if {\tt bceni\_16\_style=0} (default).
     If {\tt bceni\_16\_style=1}, integrated ion heat flux with constant $T_i$, summed over all core boundaries with {\tt BCENI=16}.
   \item[17] feedback boundary condition with constant shared temperature
@@ -8845,13 +8845,13 @@ c_{\eta_{ax}^{(CL)}} & =
 \end{equation}
 
 \begin{equation}\label{eq:vma_max}
-V_{m_a}^{(\max)} = c_{flim_2} \frac{\sqrt g}{h_x} |b_x| n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
+V_{m_a}^{(\max)} = c_{f,mom} \frac{\sqrt g}{h_x} |b_x| n_a T_i
 \end{equation}
 
 If the collision limit is turned on, i.e. the {\tt b2trcl\_min\_collisions} is non-zero, for open field lines where the average number of collisions is below that value, the flux limit formula is modified to:
 
 \begin{equation*}
-c_{\eta_{ax}^{(CL)}} = \frac{1}{1 + \frac{1}{c_{flim_2} N_{coll,i}}}
+c_{\eta_{ax}^{(CL)}} = \frac{1}{1 + \frac{1}{c_{f,mom} N_{coll,i}}}
 \end{equation*}
 
 where $N_{coll,i}$ is the number of ion collisions along the field line:
@@ -8859,6 +8859,16 @@ where $N_{coll,i}$ is the number of ion collisions along the field line:
 \begin{equation*}
 N_{coll,i} = \int \left( \frac{B}{B_x} \frac{1}{\tau_{a} c_s} \right) dl
 \end{equation*}
+
+The flux limiter coefficient $c_{f,mom}$ is computed as, if {\tt b2trcl\_min\_collisions} is non-zero:
+
+\begin{equation*}
+c_{f,mom} = c_{flim_2} \max \left( \alpha_{lc} , \min \left( 1, \frac{N_{coll,i} - \text{min\_collisions}}{5} * (1 - \alpha_{lc} ) + \alpha_{lc} \right) \right)
+\end{equation*}
+
+where $\alpha_{lc}$ is given by the {\tt b2tlmv\_cvsa\_low\_coll\_mltpl} switch (default is $0.1$).
+
+If the minimum collision number condition does not apply, we use simply: $c_{f,mom} = c_{flim_2}$, (default value $\frac{3}{8}$).
 
 \begin{align}\label{eq:mom_veta}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta^{(CL)}}^{Luciani} \eta^{(CL)}_{ax}
@@ -10398,7 +10408,7 @@ c_{\sigma^{(ST)}} e n_e
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-is the radial conductivity associated with the presence of a magnetic stochastic layer, of thickness $\Delta^{(ST)}$ (in $m$, given by the {\tt 'b2tstch\_delta'} switch, default value {\tt 0.0}), just inside the nominal separatrix. The multiplier $c_{\sigma^{(ST)}}$ is given by the value of the {\tt 'b2tstch\_sig'} switch (default value {\tt 1.0}). Overall, the presence of the stochastic current term is governed by the {\tt 'b2tfhe\_stochastic'} switch (default value {\tt '0.0'}, i.e. off).
+is the radial conductivity associated with the presence of a magnetic stochastic layer, of thickness $\Delta^{(ST)}$ (in $m$, given by the {\tt 'b2tstch\_delta'} switch, default value $0.0$), just inside the nominal separatrix. The multiplier $c_{\sigma^{(ST)}}$ is given by the value of the {\tt 'b2tstch\_sig'} switch (default value {\tt 1.0}). Overall, the presence of the stochastic current term is governed by the {\tt 'b2tfhe\_stochastic'} switch (default value {\tt '0.0'}, i.e. off).
 
 $\sigma_y=\sigma^{(AN)} + \sigma^{(CL)}_{y}$
 
@@ -17648,7 +17658,7 @@ will contain 1.0, otherwise they will contain zero.
 
 Please note that the sign convention for the parallel ion ({\bf ua}) and electron ({\bf ue}) velocities depends on the sign of the poloidal magnetic field. The poloidal field is positive if it points if the direction of increasing poloidal index $ix$. The parallel velocities are positive if they point in the {\em same direction as the poloidal magnetic field}. Note further that this sign convention {\em does not apply} to the parallel current {\bf fchp}, for which the standard sign convention applies, i.e. it is positive if pointing in the direction of increasing poloidal index $ix$.\index{b2plot, ua}\index{b2plot, ue}
 
-A note about total energy fluxes. These are provided in two slightly different forms, denoted {\bf fet[xy]} and {\bf fht[xy]}. Both formulations contain the {\bf fhe}, {\bf fhi}, {\bf fhm}, and {\bf fhp} terms. If the code was solving internal energy equations (i.e. {\tt b2news\_BoRiS} set to {\tt 0.0} [default]), we add viscous correction terms and an extra factor of particle flux times temperature. For the {\bf fht} formulation, we also add the electrostatic energy flux term {\bf fhj}. This term is not included in {\bf fet}, but, instead, {\bf fet} will include any contributions from species provided by an additional external code (for example, {\tt IMPGYRO}). These external species do not include the ones followed by {\tt Eirene}, however.\index{b2plot, fetx}\index{b2plot, fety}\index{b2plot, fhtx}\index{b2plot, fhty}\label{fetx}
+A note about total energy fluxes. These are provided in two slightly different forms, denoted {\bf fet[xy]} and {\bf fht[xy]}. Both formulations contain the {\bf fhe}, {\bf fhi}, {\bf fhm}, and {\bf fhp} terms. If the code was solving internal energy equations (i.e. {\tt b2news\_BoRiS} set to $0.0$ [default]), we add viscous correction terms and an extra factor of particle flux times temperature. For the {\bf fht} formulation, we also add the electrostatic energy flux term {\bf fhj}. This term is not included in {\bf fet}, but, instead, {\bf fet} will include any contributions from species provided by an additional external code (for example, {\tt IMPGYRO}). These external species do not include the ones followed by {\tt Eirene}, however.\index{b2plot, fetx}\index{b2plot, fety}\index{b2plot, fhtx}\index{b2plot, fhty}\label{fetx}
 
 The commands acting on the matrix stack are given in table
 \ref{tab:available-commands}. These involve some manipulation or use of
