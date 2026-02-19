@@ -12,7 +12,7 @@ LATEX ?= $(shell which_latex)
 LATEX_VERSION = $(shell ${LATEX} --version | head -1 | cut -d ' ' -f 5 | cut -c 1-4 )
 PDFTOPS ?= $(shell which_pdftops)
 PYTHON ?= python
-INCLUDES=b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex Old_packages.tex
+INCLUDES = b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex Old_packages.tex
 ifeq ($(shell [ -s ${B25DIR}/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
 FILE_DIM = b2mod_dimensions.F
 TARG_DIM = ${B25DIR}/src/modules/b2mod_dimensions.F
@@ -21,13 +21,13 @@ FILE_DIM = DIMENSIONS.F
 TARG_DIM = ${B25DIR}/src/include/DIMENSIONS.F
 endif
 INCLUDES += ${FILE_DIM}
-BIBFILES=adopt.bib afn.bib aps.bib aug.bib divgas.bib extern.bib general.bib keps.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
-STYFILES=fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
-FILES=D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ar_AFN.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py MacOS/compiler.darwin.gfortran MacOS/date2.c Makefile ${BIBFILES} ${STYFILES} ad_optimization.tex expert_features_ad.tex unstructured.tex
-AFN_FILES=${AFNSRC}/cite.tex ${AFNSRC}/defs.tex ${AFNSRC}/future.tex ${AFNSRC}/guide.tex ${AFNSRC}/implementation.tex ${AFNSRC}/intro.tex ${AFNSRC}/main.tex ${AFNSRC}/nomenclaturechapter.tex ${AFNSRC}/theory.tex ${AFNSRC}/mybib.bib
-AFN_DOC=${SOLPSTOP}/doc/AFN_BCs_documentation.pdf
-GEO_DOC=${SOLPSTOP}/doc/edit_geo_manual.pdf
-GEO_FILES = ${GEODIR}/edit_geo_manual.tex
+BIBFILES = adopt.bib afn.bib aps.bib aug.bib divgas.bib extern.bib general.bib keps.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
+STYFILES = fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
+FILES = D/b2ag.dat D/b2ah.dat D/b2ar.dat D/b2ar_AFN.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py MacOS/compiler.darwin.gfortran MacOS/date2.c Makefile ${BIBFILES} ${STYFILES} ad_optimization.tex expert_features_ad.tex unstructured.tex
+AFN_FILES = ${AFNSRC}/cite.tex ${AFNSRC}/defs.tex ${AFNSRC}/future.tex ${AFNSRC}/guide.tex ${AFNSRC}/implementation.tex ${AFNSRC}/intro.tex ${AFNSRC}/main.tex ${AFNSRC}/nomenclaturechapter.tex ${AFNSRC}/theory.tex ${AFNSRC}/mybib.bib
+AFN_DOC = ${SOLPSTOP}/doc/AFN_BCs_documentation.pdf
+GEO_DOC = ${SOLPSTOP}/doc/edit_geo_manual.pdf
+GEO_FILES = ${GEODIR}/edit_geo_manual.tex ${GEODIR}/pictures/*.*
 
 ifeq ($(shell [ -e Makefile.local ] && echo yes || echo no ),yes)
   include Makefile.local
@@ -125,9 +125,9 @@ ${AFN_DOC}: ${AFN_FILES} ${MAKES}
 	[ -e ${AFNSRC}/main.pdf ] && mv -f ${AFNSRC}/main.pdf ${AFN_DOC}
 
 ${GEO_DOC}: ${GEO_FILES} ${MAKES}
-	@echo 'Building edit geo manual'
+	@echo 'Building edit_geo manual'
 	cd ${GEODIR} ; ${LATEX} edit_geo_manual
-	-grep 'Label(s) may have changed' ${GEODIR}/edit_geo_manual.log && ( cd ${GEODIR} ; ${GEODIR} edit_geo_manual ) || echo > /dev/null
+	-grep 'Label(s) may have changed' ${GEODIR}/edit_geo_manual.log && ( cd ${GEODIR} ; ${LATEX} edit_geo_manual ) || echo > /dev/null
 	[ -e ${GEODIR}/edit_geo_manual.pdf ] && mv -f ${GEODIR}/edit_geo_manual.pdf ${GEO_DOC}
 
 b2cdca.F: ${B25DIR}/src/documentation/b2cdca.F
