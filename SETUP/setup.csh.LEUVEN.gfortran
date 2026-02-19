@@ -16,6 +16,8 @@ module load PETSc/3.15.1-intel-2021a
 module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
 module load MATLAB/2023b-r1
+module load Java/11.0.27
+module load CMake/3.31.3-GCCcore-14.2.0
 
 # Debugger env var
 setenv DBX ddt
