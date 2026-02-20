@@ -24,19 +24,29 @@ set args=""
 set nargs=0
 
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 
 /bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
 
 set source=b2mn.exe.dir/tracing/blnn_SPb.trc
 if (! -s $source) set source=tracing/blnn_SPb.trc
+if (! -s $source) then
+  echo "No blnn_SPb.trc tracing file found. Cannot continue."
+  exit 2
+endif
 
 echo `awk 'NR==3 {sub(/^# */, ""); for(i=1;i<=NF;i++) if($i=="time") col=i; next} NR>3 && col {print $col}' $source` >> ${tmpdir}gnuplot.data.tmp
 
 set groups_blnn_SPb="ion_core ntr_targ_tot ntr_targ_rec ntr_targ_spt ntr_targ_pmp ion_wall ntr_wall_tot ntr_wall_rec ntr_wall_spt ntr_wall_pmp src_ioniz ntr_puff flux_tot src_ext ion_dn/dt"
+
+set source=b2mn.exe.dir/tracing/blne.trc
+if (! -s $source) set source=tracing/blne.trc
+if (! -s $source) then
+  echo "No blne.trc tracing file found. Energy quantities will be skipped."
+endif
 
 set groups_blne="pwr_totl pwr_tscl tot_core tot_targ tot_wall tot_rad heat_cor ptnt_cor ntrl_cor plsm_trg ntrl_trg plsm_wll ntrl_wll brms_rad ntrl_rad imp_rad tot_enrg tot_enre tot_enri imp_rad pwr_totl_il pwr_plsm_il pwr_neut_il pwr_ionz_il pwr_diss_il pwr_totl_ol pwr_plsm_ol pwr_neut_ol pwr_ionz_ol pwr_diss_ol pwr_totl_wl pwr_plsm_wl pwr_neut_wl pwr_ionz_wl pwr_diss_wl"
 
@@ -81,6 +91,10 @@ start:
     if ("$var" == "$item") then
       set source=b2mn.exe.dir/tracing/blne.trc
       if (! -s $source) set source=tracing/blne.trc
+      if (! -s $source) then
+        shift
+        if ("X$1X" != "XX") goto start
+      endif
       break
     endif
   end

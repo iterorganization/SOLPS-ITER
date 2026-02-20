@@ -143,7 +143,6 @@ TRIA="${SOLPSTOP}/modules/Triang/builds/$toolchain/tria"
 TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
-EIRENE="${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.$eirchain/eirobjx"
 
 q=U
 griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
@@ -223,10 +222,6 @@ e=
 }
 [ -x "$TRIAINP" ] || {
   print -u2 -- "$NAME: $TRIAINP not found. Check run environment settings"
-  e=y
-}
-[ -x "$EIRENE" ] || {
-  print -u2 -- "$NAME: $EIRENE not found. Check run environment settings"
   e=y
 }
 [ -n "$e" ] && exit 4
