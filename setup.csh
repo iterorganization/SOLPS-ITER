@@ -35,15 +35,20 @@ echo The Eirene manual is located at http://www.eirene.de/
 
 ( ps -p $$ | grep -Eq "tcsh|csh" ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
-# Obtain the directory where setup.csh is located to use as SOLPSTOP
-setenv LAST_COMMAND `echo $_`
-if (`echo ${LAST_COMMAND}` == "") then
-  setenv SOLPSTOP $PWD
+# Obtain the directory where setup.csh is located to use as SOLPSTOP,
+# or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
+if ( $?SOLPSTOP_FORCE ) then
+  setenv SOLPSTOP $SOLPSTOP_FORCE
 else
-  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
-  setenv REAL_FILE `eval echo ${SETUP_FILE}`
-  setenv SETUP_PATH `dirname ${REAL_FILE}`
-  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  setenv LAST_COMMAND `echo $_`
+  if (`echo ${LAST_COMMAND}` == "") then
+    setenv SOLPSTOP $PWD
+  else
+    setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+    setenv REAL_FILE `eval echo ${SETUP_FILE}`
+    setenv SETUP_PATH `dirname ${REAL_FILE}`
+    setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  endif
 endif
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
@@ -154,6 +159,7 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
 #setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
+setenv INTDIR ${SOLPSTOP}/modules/Eirene/src/interfaces/couple_SOLPS_WG
 
 # Set path to scripts and executables
 #------------------------------------

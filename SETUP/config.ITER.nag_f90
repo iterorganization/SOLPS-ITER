@@ -47,6 +47,10 @@ ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lXrender -lbz2 -lz -lgfortran # for NCARG v6.x.x
 endif
 
+LIBGKS     = ${GKSDIR}/lib/libGKS.so
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lgfortran -lXmu
+
 #
 # Provide compiler
 #

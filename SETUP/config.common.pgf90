@@ -177,6 +177,13 @@ export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
 
+export LIBGKS
+export LIBGRS
+export LIBX11
+export LIBXT
+export LIBZ
+export ADDLIBS
+
 export SOLPS_CPP
 export SOLPS_MPI
 export SOLPS_OPENMP

@@ -22,7 +22,7 @@ c=======================================================================
       character hlp_c*2
       integer find_matching_species
       logical streql
-      external streql, xertst, find_matching_species
+      external streql, xertst, xerrab, find_matching_species
 c=======================================================================
       call subini ('uinbndfl')
 c*** Determine the default source scaling relations

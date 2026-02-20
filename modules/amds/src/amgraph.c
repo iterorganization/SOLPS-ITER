@@ -656,6 +656,8 @@ int ReadGraphDlgLines(Group lines,FILE* f) {
 
   for (gl=Group1st(lines,&ix);gl!=NULL;gl=Next(&ix))
     DrawGraphLine(gl->dlg->gv,gl,True);
+
+  return 0;
 }
 
 static void DrawGraphLine(GView gv,GraphLine gl,int mode) {
@@ -1364,6 +1366,8 @@ static int PsGViewOutput(GView gv,char* fName,int fd,char* title) {
   fclose(x->f);
 
   x->f=NULL;
+
+  return 0;
 }
 
 static void* PSV_Free(GView gv) {

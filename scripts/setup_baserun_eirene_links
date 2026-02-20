@@ -12,13 +12,13 @@ if (! -s ${datapath}/PHOTON) then
   endif
 endif
 if ("X$1X" == "X-rX") then
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL        
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR  
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL  
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/amjuel.tex` AMJUEL
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/h2vibr.tex` H2VIBR
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/hydhel.tex` HYDHEL
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/methane.tex` METHANE
   ln -sf `climb_and_look_for -r modules/Eirene/Database/AMdata/ammoniaex.tex` AMMONX
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`         
-  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`        
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/PHOTON`
+  ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/SPUTER`
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/trim.dat` "$filestem"21
   ln -sf `climb_and_look_for -r modules/Eirene/Database/Surfacedata/TRIM/marlow.dat` "$filestem"22
 else
@@ -33,6 +33,10 @@ else
   ln -sf ${datapath}/Surfacedata/TRIM/marlow.dat "$filestem"22
 endif
 
+# ===================================================
+# Eirene main input file handling - Formatted variant
+#
+# Look for input.dat (input.eir) in standard locations
 if (! -s input.dat) then
   if (-s ../baserun/input.dat) then
     ln -s ../baserun/input.dat .
@@ -57,7 +61,24 @@ if (! -s input.dat) then
     endif
   endif
 endif
-if (-s input.dat) ln -sf input.dat "$filestem"1
+# Update the fort.1 link to point to input.dat
+if (-s input.dat) then
+  set fort1_target=`readlink "$filestem"1`
+  if ("$fort1_target" != "input.dat") then
+    if ( (-e "$filestem"1) && (! -l "$filestem"1) ) then
+      echo "Warning: Unable to select Eirene input, ${filestem}1 exists but not a link!"
+      echo "  - Please remove ${filestem}1 and run this script again."
+    else
+      ln -sf input.dat "$filestem"1
+      echo "Selected FORMATTED Eirene input (${filestem}1 -> input.dat)."
+      if ("$fort1_target" == "eirene.input.json") then
+        echo "Warning: Changes in eirene.input.json not applied to input.dat will be lost on the next simulation run."
+      endif
+    endif
+  endif
+endif
+# ===================================================
+
 if (! -s "$filestem"33) then
   if (-s ../TRIANG/"$filestem"33) then
     ln -s ../TRIANG/"$filestem"33 .

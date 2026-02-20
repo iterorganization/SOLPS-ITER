@@ -32,6 +32,7 @@ if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "Cent
   module load SimDB/0.7.1-intel-2020b
   module load ToFu/1.5.1-intel-2020b
   module load netcdf4-python/1.5.5.1-intel-2020b
+  module load json-fortran/8.3.0-iccifort-2020.4.304
   module unload Boost -f
   module load PETSc/3.15.1-intel-2020b
 # module load MATLAB/2020b-GCCcore-10.2.0-Java-11
@@ -39,10 +40,10 @@ if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "Cent
   setenv QTDIR ${EBROOTQT5}
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0
 else
-  module load IMAS-AL-Fortran/5.4.0-intel-2023b-DD-4.0.0
-  module load IDStools/2.2.0-intel-2023b
-  module load GGD/1.13.0-intel-2023b-DD-4.0.0
-  module load AMNS/1.6.0-intel-2023b-DD-4.0.0
+  module load IMAS-Fortran/5.5.0-intel-2023b-DD-4.1.0
+  module load IDStools/2.4.0-intel-2023b
+  module load GGD/1.14.0-intel-2023b-DD-4.1.0
+  module load AMNS/1.6.0-intel-2023b-DD-4.1.0
   module load Viz/2.8.0-intel-2023b
   module load CMake/3.27.6-GCCcore-13.2.0
   module load xarray/2024.5.0-iimkl-2023b
@@ -61,9 +62,10 @@ else
   module load motif/2.3.8-GCCcore-13.2.0
   module load texlive/20230313-intel-compilers-2023.2.1
   module load libtirpc/1.3.4-GCCcore-13.2.0
-  module load SimDB/0.11.0-iimkl-2023b
+  module load SimDB/0.13.0-iimkl-2023b
   module load ToFu/1.7.9-iimkl-2023b
   module load netcdf4-python/1.7.1.post2-intel-2023b
+  module load json-fortran/8.5.2-intel-compilers-2023.2.1
   setenv SYSNAME x86_64_rhel9
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
 endif

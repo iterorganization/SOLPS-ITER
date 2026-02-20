@@ -13,7 +13,7 @@ include ../sonnet.src
 
 VPATH = ../
 CPL = g++
-## CXX = g++
+CXX = g++
 CXXFLAGS = -g
 ifeq (${CXX},icpx)
 CXXFLAGS += -Rno-debug-disables-optimization

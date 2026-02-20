@@ -51,9 +51,8 @@ set TIME="time srun ${MPI_PREFLAGS}"
 
 set USE_OMP=""
 if ($?SOLPS_OPENMP) then
-  setenv KMP_AFFINITY disabled
-  set OMP_OPTS = #THREADS#
-  set USE_OMP = "-t ${OMP_OPTS}"
+  set OMP_OPTS=#THREADS#
+  set USE_OMP="-t ${OMP_OPTS}"
 endif
 
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"

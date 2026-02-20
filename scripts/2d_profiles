@@ -35,13 +35,12 @@ endif
 set extra=""
 set extra_multi=""
 if ($?NREG) then
-  if ($NREG == 8) then
-    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr"
+  if ($NREG == 8 || $NREG == 7) then
+    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
     set extra_multi="fn3dtl na3dtl fn3dtr na3dtr"
-  endif
-  if ($NREG == 7) then
-    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl mn3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr mn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr"
-    set extra_multi="fn3dtl na3dtl fn3dtr na3dtr"
+    if (-s fort.1) then
+      set extra=`echo ${extra}" mn3dtl mn3dtr"`
+    endif
   endif
 endif
 
@@ -99,9 +98,6 @@ endif
 
 foreach i ($usual $extra)
   set var_exists = `ncdump -h $source | grep -cw "$i"`
-  if ($var_exists == 0) then
-    continue
-  endif
   set prefix=`echo $i | cut -c1`
   set pr2fix=`echo $i | cut -c2`
   set suffix=`echo $i | cut -c5-`
@@ -165,9 +161,6 @@ end
 
 foreach i ($usual_multi $extra_multi)
   set var_exists = `ncdump -h $source | grep -cw "$i"`
-  if ($var_exists == 0) then
-    continue
-  endif
   set prefix=`echo $i | cut -c1`
   set pr2fix=`echo $i | cut -c2`
   set suffix=`echo $i | cut -c5-`

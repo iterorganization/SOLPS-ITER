@@ -33,26 +33,25 @@ SRCDIR   = ${SRCTRI}/src
 SRCLOCAL = ${SRCTRI}/local
 B2SRC    = ${SOLPSTOP}/modules/B2.5/src
 SRCEIR   = ${SOLPSTOP}/modules/Eirene/src
-EIRDIR   = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_IMPGYRO}${EXT_DEBUG}
 
 MAKES = ${SRCTRI}/Makefile 
 # Include global SOLPS compiler settings
 ifndef SOLPS_CPP
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  else
+    $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
+  endif
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 else
-  $(warning ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER} not found.)
-endif
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  include ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
-else
-  MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
-ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
-  MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
-endif
+  MAKES += ${SOLPSTOP}/Makefile ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER} ${SOLPSTOP}/SETUP/config.${HOST_NAME}.${COMPILER}
+  ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/config.common.${COMPILER} ] && echo yes || echo no ),yes)
+    MAKES += ${SOLPSTOP}/SETUP/config.common.${COMPILER}
+  endif
 endif
 ifeq ($(shell [ -e ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ] && echo yes || echo no ),yes)
   MAKES += ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -64,7 +63,6 @@ endif
 
 # Directory where objectcode/binaries will be created
 OBJDIR = ${SRCTRI}/builds/${HOST_NAME}.${COMPILER}${EXT_DEBUG}
-EIROBJ = ${SOLPSTOP}/modules/Eirene/builds/couple_SOLPS-ITER.${HOST_NAME}.${COMPILER}${EXT_MPI}${EXT_DEBUG}
 
 INCLUDE =
 LOCAL = no
@@ -77,27 +75,14 @@ endif
 INCLUDE += -I${OBJDIR} -I${B2SRC}/include.local -I${B2SRC}/include
 
 ifeq ($(LOCAL),yes)
-TPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src
-ifeq ($(strip ${LD_GR}),)
-VPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
-GPATH = ${SRCEIR}/plot_dummy:${SRCEIR}/grsoft-dummy
-GRDIR = ${SRCEIR}/plot_dummy
+TPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
 else
-VPATH = ${SRCLOCAL}:${SRCDIR}/modules:${SRCDIR}/src
-GPATH = ${SRCEIR}/plotting
-GRDIR = ${SRCEIR}/plotting
+TPATH = ${SRCDIR}/modules:${SRCDIR}/src:${SRCDIR}/src_eirene
 endif
-else
-TPATH = ${SRCDIR}/modules:${SRCDIR}/src
 ifeq ($(strip ${LD_GR}),)
-VPATH = ${SRCDIR}/modules:${SRCDIR}/src:${SRCEIR}/grsoft-dummy
-GPATH = ${SRCEIR}/plot_dummy:${SRCEIR}/grsoft-dummy
-GRDIR = ${SRCEIR}/plot_dummy
+VPATH = ${TPATH}:${SRCDIR}/gr-dummy
 else
-VPATH = ${SRCDIR}/modules:${SRCDIR}/src
-GPATH = ${SRCEIR}/plotting
-GRDIR = ${SRCEIR}/plotting
-endif
+VPATH = ${TPATH}
 endif
 
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
@@ -113,14 +98,12 @@ ifeq ($(shell [ -e ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPI
 MAKES += ${SOLPSTOP}/modules/Eirene/config/config.${HOST_NAME}.${COMPILER}.local
 endif
 
-
 MODULES := ${patsubst ${SRCDIR}/modules/%.f,%,${shell echo ${SRCDIR}/modules/*.f}}
 MODLOCASE:=$(shell echo $(MODULES)| tr A-Z a-z)
 MODMODS := ${MODLOCASE:%=${OBJDIR}/%.${MOD}}
 MODOBJS = ${MODULES:%=${OBJDIR}/%.o}
-ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o}
-EIROBJS = ${patsubst %.o,${OBJDIR}/%.o,eirmod_balanced_strategy.o eirmod_cai.o eirmod_calstr_buffered.o eirmod_ccona.o eirmod_cestim.o eirmod_cinit.o eirmod_comprt.o eirmod_comsou.o eirmod_comusr.o eirmod_coutau.o eirmod_cpes.o eirmod_csdvi.o eirmod_cspez.o eirmod_cstep.o eirmod_mpi.o eirmod_parmmod.o exit_own.o leer.o masage.o masj1r.o masj2r.o pedist.o plend.o}
-EGROBJS = ${patsubst %.o,${OBJDIR}/%.o,graxs.o grdrw.o grend.o grjmp.o grnwpn.o grsclc.o grsclv.o grspts.o grstrt.o gr90dg.o}
+ALLOBJS = ${OBJS:%.o=${OBJDIR}/%.o} ${OBJF:%.o=${OBJDIR}/%.o} ${OBJS90:%.o=${OBJDIR}/%.o} ${OBJF90:%.o=${OBJDIR}/%.o}
+EGROBJS = ${GROBJS:%.o=${OBJDIR}/%.o}
 
 MAINLIST = tria.o triageom.o triainq.o triainp.o
 
@@ -146,272 +129,56 @@ mods: $(MODMODS)
 
 ifneq ($(strip ${LD_GR}),)
 ifneq ($(strip ${LD_GKS}),)
-${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.x: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.nox 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(GKS) $(LDEXTRA) && touch ${OBJDIR}/.x
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(GKS) $(LDEXTRA) && touch ${OBJDIR}/.x
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.x
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${LDLIBS} ${GKS} $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.x
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} ${GKS} $(LDEXTRA)
 
-${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.x
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${GKS}
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.x
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${GKS}
 
-${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.x
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${GKS}
-
+${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.x
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${GKS}
 else
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a
 
-${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
-
+${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a
 endif
 else
-${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${EGROBJS} ${MAKES}
+${OBJDIR}/tria ${OBJDIR}/.nox: ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${EGROBJS} ${MAKES}
 	rm -f ${OBJDIR}/tria 2> /dev/null; \
 	rm -f ${OBJDIR}/.x 2> /dev/null; \
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${OBJDIR}/ioflush.o ${EGROBJS} ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/tria ${OBJDIR}/tria.o ${OBJDIR}/libtria.a ${EGROBJS} ${LDLIBS} $(LDEXTRA) && touch ${OBJDIR}/.nox
 
-${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${EGROBJS} ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${EGROBJS} ${LDLIBS} $(LDEXTRA)
+${OBJDIR}/triageom: ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${EGROBJS} ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triageom ${OBJDIR}/triageom.o ${OBJDIR}/libtria.a ${EGROBJS} ${LDLIBS} $(LDEXTRA)
 
-${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
+${OBJDIR}/triainq: ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainq ${OBJDIR}/triainq.o ${OBJDIR}/libtria.a
 
-${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${MAKES} ${OBJDIR}/.nox
-	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a
-
+${OBJDIR}/triainp: ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a ${MAKES} ${OBJDIR}/.nox
+	${LD} $(LDOPTS) ${FFLAGSEXTRA} -o ${OBJDIR}/triainp ${OBJDIR}/triainp.o ${OBJDIR}/libtria.a
 endif
 
 ${OBJDIR}/libtria.a: ${ALLOBJS}
 	${BLD} $@ ${ALLOBJS}
 	ranlib $@
 
-${OBJDIR}/libeir.a: ${EIROBJS}
-	${BLD} $@ ${EIROBJS}
-	ranlib $@
-
-${OBJDIR}/ioflush.o:
-	ln -sf ${EIROBJ}/ioflush.o ${OBJDIR}
-
-${OBJDIR}/eirmod_balanced_strategy.o:
-	ln -sf ${EIROBJ}/eirmod_balanced_strategy.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cai.o:
-	ln -sf ${EIROBJ}/eirmod_cai.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_calstr_buffered.o: ${OBJDIR}/eirmod_cestim.o ${OBJDIR}/eirmod_coutau.o ${OBJDIR}/eirmod_csdvi.o ${OBJDIR}/eirmod_cspez.o ${OBJDIR}/eirmod_cstep.o
-	ln -sf ${EIROBJ}/eirmod_calstr_buffered.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_ccona.o:
-	ln -sf ${EIROBJ}/eirmod_ccona.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cestim.o:
-	ln -sf ${EIROBJ}/eirmod_cestim.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cinit.o:
-	ln -sf ${EIROBJ}/eirmod_cinit.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comprt.o:
-	ln -sf ${EIROBJ}/eirmod_comprt.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comsou.o:
-	ln -sf ${EIROBJ}/eirmod_comsou.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comusr.o:
-	ln -sf ${EIROBJ}/eirmod_comusr.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_coutau.o:
-	ln -sf ${EIROBJ}/eirmod_coutau.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cpes.o:
-	ln -sf ${EIROBJ}/eirmod_cpes.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_csdvi.o:
-	ln -sf ${EIROBJ}/eirmod_csdvi.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cspez.o:
-	ln -sf ${EIROBJ}/eirmod_cspez.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cstep.o:
-	ln -sf ${EIROBJ}/eirmod_cstep.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_mpi.o:
-	ln -sf ${EIROBJ}/eirmod_mpi.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_parmmod.o:
-	ln -sf ${EIROBJ}/eirmod_parmmod.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_precision.o:
-	ln -sf ${EIROBJ}/eirmod_precision.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/exit_own.o: ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_comprt.${MOD}
-	ln -sf ${EIROBJ}/exit_own.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/graxs.o:
-	ln -sf ${EIROBJ}/graxs.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grdrw.o:
-	ln -sf ${EIROBJ}/grdrw.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grend.o:
-	ln -sf ${EIROBJ}/grend.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grjmp.o:
-	ln -sf ${EIROBJ}/grjmp.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grnwpn.o:
-	ln -sf ${EIROBJ}/grnwpn.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grsclc.o:
-	ln -sf ${EIROBJ}/grsclc.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grsclv.o:
-	ln -sf ${EIROBJ}/grsclv.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grspts.o:
-	ln -sf ${EIROBJ}/grspts.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/grstrt.o:
-	ln -sf ${EIROBJ}/grstrt.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/gr90dg.o:
-	ln -sf ${EIROBJ}/gr90dg.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/leer.o: ${OBJDIR}/eirmod_comprt.${MOD}
-	ln -sf ${EIROBJ}/leer.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/masage.o: ${OBJDIR}/eirmod_comprt.${MOD}
-	ln -sf ${EIROBJ}/masage.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/masj1r.o: ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/eirmod_precision.${MOD}
-	ln -sf ${EIROBJ}/masj1r.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/masj2r.o: ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/eirmod_precision.${MOD}
-	ln -sf ${EIROBJ}/masj2r.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/pedist.o: ${OBJDIR}/eirmod_cai.${MOD} ${OBJDIR}/eirmod_ccona.${MOD} ${OBJDIR}/eirmod_comprt.${MOD} ${OBJDIR}/eirmod_comsou.${MOD} ${OBJDIR}/eirmod_comusr.${MOD} ${OBJDIR}/eirmod_coutau.${MOD} ${OBJDIR}/eirmod_cpes.${MOD} ${OBJDIR}/eirmod_mpi.${MOD} ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/eirmod_precision.${MOD}
-	ln -sf ${EIROBJ}/pedist.o ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/plend.o:
-	ln -sf ${EIROBJ}/plend.o ${OBJDIR}
-	@gtfl $@
-
-ifneq (${MOD},o)
-${OBJDIR}/eirmod_balanced_strategy.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_balanced_strategy.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cai.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cai.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_calstr_buffered.${MOD}: ${OBJDIR}/eirmod_cestim.${MOD} ${OBJDIR}/eirmod_coutau.${MOD} ${OBJDIR}/eirmod_csdvi.${MOD} ${OBJDIR}/eirmod_cspez.${MOD} ${OBJDIR}/eirmod_cstep.${MOD}
-	ln -sf ${EIROBJ}/eirmod_calstr_buffered.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_ccona.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_ccona.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cestim.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cestim.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cinit.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cinit.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comprt.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_comprt.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comsou.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_comsou.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_comusr.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_comusr.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_coutau.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_coutau.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cpes.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cpes.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_csdvi.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_csdvi.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cspez.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cspez.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_cstep.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_cstep.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_mpi.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_mpi.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_parmmod.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_parmmod.${MOD} ${OBJDIR}
-	@gtfl $@
-
-${OBJDIR}/eirmod_precision.${MOD}:
-	ln -sf ${EIROBJ}/eirmod_precision.${MOD} ${OBJDIR}
-	@gtfl $@
-endif
-
 clean:
-	rm -rf ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/libeir.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/triainp ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
+	rm -rf ${OBJDIR}/*.f ${OBJDIR}/*.o ${OBJDIR}/libtria.a ${OBJDIR}/tria ${OBJDIR}/triageom ${OBJDIR}/triainq ${OBJDIR}/triainp ${OBJDIR}/LISTOBJ ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	rm -rf ${OBJDIR}/*.${MOD}
 endif
@@ -428,34 +195,20 @@ ifneq (${MOD},o)
 	@echo '# 2' >> ${OBJDIR}/dependencies
 endif
 ifeq ($(LOCAL),yes)
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' ' | \
           awk '{sub("\\.f90:",".o:",$$1);sub("\\.F90:",".o:",$$1);sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	@echo '# 3b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
-	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/*/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f90:",".o:",$$1);sub("\\.F90:",".o:",$$1);sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	@echo '# 5b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	@echo '# 6b' >> ${OBJDIR}/dependencies
+	@echo '# 3b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCLOCAL}/*.[fF] ${SRCDIR}/modules/*.[fF] ${SRCDIR}/src_eirene/eirmod_*.[fF] ${SRCDIR}/src_eirene/eirmod_*.[fF]90 | grep -v 'IGNORE' | tr , ' ' | \
+          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 else
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' '  | \
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.[fF] | grep -v 'IGNORE' | tr , ' '  | \
           awk '{sub("\\.f90:",".o:",$$1);sub("\\.F90:",".o:",$$1);sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' | sort -u >> ${OBJDIR}/dependencies
-	@echo '# 3b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
-	@echo '# 4b' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/*/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' '  | \
-          awk '{sub("\\.f90:",".o:",$$1);sub("\\.F90:",".o:",$$1);sub("\\.f:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	@echo '# 5b' >> ${OBJDIR}/dependencies
-	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF] ${SRCEIR}/modules/*.[fF]90 ${GRDIR}/*.f | grep -v 'IGNORE' | tr , ' ' | \
-          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".o"}' >> ${OBJDIR}/dependencies
-	@echo '# 6b' >> ${OBJDIR}/dependencies
+	@echo '# 3b' >> ${OBJDIR}/dependencies
+	@egrep -ai '^[ 	]+use ' ${SRCDIR}/modules/*.[fF] ${SRCDIR}/src_eirene/eirmod_*.[fF] ${SRCDIR}/src_eirene/eirmod_*.[fF]90 | grep -v 'IGNORE' | tr , ' ' | \
+          awk '{sub("\\.f90:",".${MOD}:",$$1);sub("\\.F90:",".${MOD}:",$$1);sub("\\.f:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 endif
 endif
 
@@ -470,7 +223,28 @@ listobj:
 	E="-e 's/ \*\.f//g' -e 's/\.f/\.o/g'" ; for f in $(EXCLUDELIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
-	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ
+	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ; \
+	ll="OBJF =" ; \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
+		ll="$$ll `(cd $$d > /dev/null; echo *.F)`"; \
+	done; \
+	F="-e 's/ \*\.F//g' -e 's/\.F/\.o/g' "; \
+	echo "$$ll" | eval sed "$$F" >> ${OBJDIR}/LISTOBJ; \
+	lll="OBJS90 =" ; \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
+		lll="$$lll `(cd $$d > /dev/null; echo *.f90)`"; \
+	done; \
+	G="-e 's/ \*\.f90//g' -e 's/\.f90/\.o/g' " ; \
+	echo "$$lll" | eval sed "$$G" >> ${OBJDIR}/LISTOBJ; \
+	llll="OBJF90 =" ; \
+	for d in `echo "$(TPATH)" | tr : \ `; do \
+		llll="$$llll `(cd $$d > /dev/null; echo *.F90)`"; \
+	done; \
+	H="-e 's/ \*\.F90//g' -e 's/\.F90/\.o/g' " ; \
+	echo "$$llll" | eval sed "$$H" >> ${OBJDIR}/LISTOBJ; \
+	lg="GROBJS =" ; \
+	lg="$$lg `(cd src/gr-dummy > /dev/null; echo *.f)`"; \
+	echo "$$lg" | eval sed "$$E" >> ${OBJDIR}/LISTOBJ
 
 tags:
 ifeq ($(LOCAL),yes)
@@ -494,12 +268,15 @@ ${SRCTRI}/TAGS: tags
 echo:
 	@echo CPP=${CPP}
 	@echo LOCAL=${LOCAL}
+	@echo TPATH=${TPATH}
 	@echo VPATH=${VPATH}
 	@echo ALLOBJS=${ALLOBJS}
-	@echo EIROBJS=${EIROBJS}
 	@echo EGROBJS=${EGROBJS}
-#	@echo OBJS=${OBJS}
-#	@echo OBJF=${OBJF}
+	@echo OBJS=${OBJS}
+	@echo OBJF=${OBJF}
+	@echo OBJS90=${OBJS90}
+	@echo OBJF90=${OBJF90}
+	@echo GROBJS=${GROBJS}
 	@echo DEST=${DEST}
 	@echo MODULES=${MODULES}
 #	@echo MODLOCASE=${MODLOCASE}

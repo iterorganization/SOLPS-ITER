@@ -42,6 +42,12 @@ LD_NAG     = -L${EBROOTIMKL}/mkl/lib/intel64/  -lmkl_blas95_lp64 -lmkl_lapack95_
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib64 -lMdsLib_client -lMdsIpShr -lMdsShr -l TreeShr
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = ${EBROOTX11}/lib/libX11.so
+LIBZ       = ${EBROOTZLIB}/lib/libz.so
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

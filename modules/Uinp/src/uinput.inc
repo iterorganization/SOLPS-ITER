@@ -8,12 +8,13 @@ c*** Temporary - max. number of reactions in cdenmodel section
       parameter (nrcdn=1)
 
 c*** 1
-      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun
+      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,
+     ,        nevntmax,nvnmxtr
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,        nlmovie,nldfst,nloldran,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh
+     ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
+     ,        nexvs,nltrimesh,nlsoledge,nlspcspt
       character txtrun*71
 
 c*** 2
@@ -34,11 +35,11 @@ c*** 3a
 
       integer nstsi,    idimp(nsts),  inump(nsts),  irpta1(nsts),
      ,    irpte1(nsts), irpta2(nsts), irpte2(nsts), irpta3(nsts),
-     ,    irpte3(nsts), ifclbla(nsts),ifclble(nsts),iliin(nsts),
-     ,    ilside(nsts), ilswch(nsts), ilequi(nsts), iltor(nsts),
-     ,    ilcol(nsts),  ilfit(nsts),  ilcell(nsts), ilbox(nsts),
-     ,    ilplg(nsts),  ilref(nsts),  ilsptp(nsts), ilsptc(nsts),
-     ,    isrss(nsts),  isrc(nsts),
+     ,    ifclbla(nsts),ifclble(nsts),
+     ,    irpte3(nsts), iliin(nsts),  ilside(nsts), ilswch(nsts),
+     ,    ilequi(nsts), iltor(nsts),  ilcol(nsts),  ilfit(nsts),
+     ,    ilcell(nsts), ilbox(nsts),  ilplg(nsts),  ilref(nsts),
+     ,    ilsptp(nsts), ilsptc(nsts), isrss(nsts),  isrc(nsts),
      ,    lchspnws(nsts),isrsg(nsts), arefcell(nsts)
       real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
      ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
@@ -142,9 +143,9 @@ c*** 4d
 c*** 5
 
       integer nplsi,nplsh,nbgk,
-     ,  nmassp(npls),nmassph(npls),ncharp(npls),nprtp(npls),
-     ,  nchrgp(npls),isrfp(npls),isrfph(npls),isrtp(npls),isrtph(npls),
-     ,  nmsecp(npls),nrcp(npls),idnslmp(npls),
+     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
+     ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
+     ,  nmassph(npls),isrfph(npls),isrtph(npls),
      ,  nfolp(npls),ngenp(npls),nhstp(npls),
      ,  ireacp(npls,nreac),ibulkp(npls,nreac),
      ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
@@ -205,8 +206,8 @@ c*** Surface Cards
 
 c*** 7
 
-      integer nstrai,indsrc(nstra),npts(nstra),nptsh(nstra),
-     ,  ninitl(nstra),
+      integer nstrai,indsrc(nstra),npts(nstra),ninitl(nstra),
+     ,  nptsh(nstra),
      ,  nemods(nstra),namods(nstra),nminpts(nstra),nspez(nstra),
      ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
      ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
@@ -275,7 +276,7 @@ c*** 10e
 c*** 10f
 
       integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
-     ,        nsps(nads), isrfcl(nads), idirec(nads)
+     ,        nsps(nads), isrfcl(nads), idirec(nads), ispopt(nads)
       real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
      ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
      ,     spcvz(nads)
@@ -302,7 +303,7 @@ c*** 11
       logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
      ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
      ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble,
-     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim,
+     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim, trcscl,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
@@ -403,8 +404,8 @@ c*** b2ah.dat
       logical is_bundled(natm)
 
       common/uinint/
-     ,  nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
-     ,  noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
+     ,  nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,
+     ,  nevntmax,nvnmxtr,noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,  nstoram,ngstal,nrtal1,nreac_add,nscards,lfrm15,
      ,  indgrd,nr1st,nrsep,
      ,  nrplg,npplg,nrknot,npoin1,necke,nchbar,nseite,inmti,
@@ -429,16 +430,15 @@ c*** b2ah.dat
      ,  nphti,isrff,isrtf,nmsecf,nrcf,nfolf,
      ,  ngenf,nhstf,
      ,  ireacf,ibulkf,iscd1f,iscd2f,iscd3f,iscd4f,iscdef,iestmf,ibgkf,
-     ,  nplsi,nplsh,nbgk,nmassp,nmassph,ncharp,nprtp,nchrgp,isrfp,
-     ,  isrfph,isrtp,isrtph,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,
-     ,  ireacp,ibulkp,
+     ,  nplsi,nbgk,nmassp,ncharp,nprtp,nchrgp,isrfp,
+     ,  isrtp,nmsecp,nrcp,idnslmp,nfolp,ngenp,nhstp,ireacp,ibulkp,
+     ,  nplsh,nmassph,isrfph,isrtph,
      ,  iscd1p,iscd2p,iscd3p,iscd4p,iscdep,nrep,ispcdn,itpcdn,istrcdn,
      ,  indpro,nnftrm,nchsppri,
      ,  lchsptrg,lchspgrp,lchspprt,lchspprp,lchsptgt,
      ,  lchsptgp,lchspnwl,lchspaux,nchemvar,indchemvar,nnchemvar,
      ,  nstrai,indsrc,npts,nptsh,ninitl,nemods,namods,nminpts,nspez,
-     ,  ivlsf,
-     ,  iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
+     ,  ivlsf,iscls,isclt,iscl1,iscl2,iscl3,isclb,iscla,nsrfsi,
      ,  indim,insor,ingrda,ingrde,nrsor,npsor,ntsor,nbsor,nasor,nisor,
      ,  istor,nzadd,ini,ine,
      ,  nprcsf,iprcsf,maxlev,maxrad,maxpol,maxtor,maxadd,nssplr,nssplp,
@@ -446,7 +446,7 @@ c*** b2ah.dat
      ,  ighw,iihw,ighc,iihc,nadvi,nclvi,nalvi,nadsi,nalsi,nadspc,
      ,  iadve,iadvs,iadvt,iadrc,iclve,iclvs,iclvt,iclrc,iadse,
      ,  iadss,iadst,iadsc,
-     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,
+     ,  ispsrf,iptyp,ipspz,isptyp,nsps,isrfcl,idirec,ispopt,
      ,  nvolpr,ntlv,nflgv,nspzv1,nspzv2,ntlvf,nsurpr,
      ,  nsrf,nflgs,nspzs1,nspzs2,nsptal,ntls,nplinr,nplotr,npldlr,
      ,  nplinp,nplotp,npldlp,
@@ -467,8 +467,7 @@ c*** b2ah.dat
      ,  jlblck,jlacll,nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,
      ,  ncutb,ncutl,imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
      ,  iflb,iflbh,ndxa,ndya,ncvp,ncip,nfcp,ntargi,ntgprt,ndt2,ninct2,
-     ,  nixy2,
-     ,  ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
+     ,  nixy2,ntin2,nten2,niflg,nptc,nptcm,nspzi,nspze,nemod,istramin,
      ,  istramax,nainb,ncopib,ncopeb,nains,naint,naotb,naots,naott,
      ,  lkindm,lkindi,lkindp,lkindph,
      ,  nadmod,nasmod,nrs,ipunkt,jedge,nssir,
@@ -526,8 +525,8 @@ c*** b2ah.dat
 
       common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
-     ,  nlmovie,nldfst,nloldran,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh,
+     ,  nlmovie,nldfst,nlranmar,nlcascad,nloctree,
+     ,  nlwrmsh,nexvs,nltrimesh,nlsoledge,nlspcspt,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,
@@ -536,7 +535,7 @@ c*** b2ah.dat
      ,  trcplt,trchst,trcnal,trcmod,
      ,  trcsig,trcgrd,trcsur,trcref,trcfle,trcamd,trcint,trctim,
      ,  trcsou,trcrec,trclst,trcbla,trcblm,trcbli,trcblp,trcble,
-     ,  trcblph,trctal,trcoct,trccen,trcrnf,trchktim,
+     ,  trcblph,trctal,trcoct,trccen,trcrnf,trchktim,trcscl,
      ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
      ,  trcsrc,pl1st,pl2nd,pl3rd,pladd,plhst,plcut,plbox,plstor,plnumv,

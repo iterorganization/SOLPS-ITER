@@ -1,6 +1,6 @@
 # Test whether necessary variables are defined
-MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
-LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
+MSCL_ROOT ?= ${EBROOTMSCL}
+LD_MSCL ?= `pkg-config mscl --libs`
 
 MPI_FC  ?= mpiifort
 ifdef SOLPS_MPI

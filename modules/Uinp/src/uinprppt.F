@@ -826,7 +826,7 @@ cank        isrsp(l)=spcsrsp(l)
         end if !}
       end do !}
 
-!nh   species indices for relection of neutral background species
+!nh   species indices for reflection of neutral background species
 !nh   and adding the neutral background in block 14
       do l=1,nplsh !{
         c=textph(l)(1:1)
