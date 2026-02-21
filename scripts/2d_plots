@@ -64,7 +64,7 @@ foreach is (`seq 1 $ns`)
     set na_dens="$na_dens nasepm$is_minus_1 "
   endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1
@@ -102,7 +102,7 @@ foreach is (`seq 1 $ns`)
     set na_dens="$na_dens nasepi$is_minus_1 "
   endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1
@@ -138,7 +138,7 @@ foreach is (`seq 1 $ns`)
     set na_dens="$na_dens nasepa$is_minus_1 "
   endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1

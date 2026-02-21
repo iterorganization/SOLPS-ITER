@@ -311,7 +311,7 @@ foreach is (`seq 1 $ns`)
       set na_dens="$na_dens na3da$is_minus_1 "
     endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1
@@ -349,7 +349,7 @@ foreach is (`seq 1 $ns`)
       set na_dens="$na_dens na3dl$is_minus_1 "
     endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1
@@ -387,7 +387,7 @@ foreach is (`seq 1 $ns`)
       set na_dens="$na_dens na3dr$is_minus_1 "
     endif
 end
-if (! $na_dens == "" ) then
+if ( "X${na_dens}X" != "XX" ) then
   set counts = (`groups_species`)
   set na_dens_list = (`echo $na_dens`)
   set offset = 1
@@ -427,6 +427,6 @@ rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd
 [ -f "${tmpdir}dsFILET" ] && rm "${tmpdir}dsFILET"
 [ -f "${tmpdir}dsFILEP" ] && rm "${tmpdir}dsFILEP"
 
-if ($netcdf4 == 1) then
+if ( $netcdf4 == 1 ) then
   rm $source
 endif
