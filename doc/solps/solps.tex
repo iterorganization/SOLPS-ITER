@@ -1397,7 +1397,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[resmt\_reg]\index{resmt\_reg} residuals of the total parallel momentum equation
   \item[reshe]\index{reshe} residuals of the electron heat equation
   \item[reshe\_reg]\index{reshe\_reg} residuals of the electron heat equation per region
-  \item[reshi]\index{reshe} residuals of the ion heat equation
+  \item[reshi]\index{reshi} residuals of the ion heat equation
   \item[reshi\_reg]\index{reshi\_reg} residuals of the ion heat equation per region
   \item[respo] \index{respo} residuals of the potential equation, including the internal iterations
   \item[respo\_num] \index{respo\_num} the number of internal potential equation iterations
@@ -1800,7 +1800,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch (slow-moving reference branch).
   \item[solps-iter\_update\_wg\_workflow]\index{solps-iter\_update\_wg\_workflow} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg\_workflow} branch (fast-moving development branch).
   \item[str2ogr]\index{str2ogr} Converts a {\tt .str} structure file into a {\tt DG} {\tt .ogr} template file.
-  \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
+  \item[summarize\_run]\index{summarize\_run} Overarching script for obtaining a standard set of run diagnostics, relying on quantities from the {\tt run.log} file.
+  \item[summarize\_run\_tracing]\index{summarize\_run\_tracing} Overarching script for obtaining a standard set of run diagnostics, relying on quantities from the {\tt tracing} files.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.

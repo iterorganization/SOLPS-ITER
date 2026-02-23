@@ -1,0 +1,8 @@
+#! /bin/tcsh -f
+
+2d_profiles
+2d_plots
+particle_balance_tracing
+energy_balance_tracing
+plot_residuals
+last10
