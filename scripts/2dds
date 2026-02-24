@@ -1,6 +1,13 @@
 #! /bin/csh -f
 
-nc2text -n 9999999 b2time.nc "dsl" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! dsfile
+set ds_exists = `ncdump -h b2time.nc | grep -cw "dsl"`
+if ( $ds_exists ==  0 ) then
+  set source=b2mn.exe.dir/dsl
+  if (! -s $source) set source=dsl
+  if (! -s dsfile) cp $source dsfile
+else
+  nc2text -n 9999999 b2time.nc "dsl" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! dsfile
+endif
 
 set x=$1
 if ("X$1" == "X-lx") then
@@ -118,25 +125,40 @@ if ($is_first) then
     if (! -s $dsFILE) set dsFILE=ds$SUFFIX
     set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
     if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
-    nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsfile
+    set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+    if ( $ds_exists == 0 ) then
+      if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+    else
+      nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+    endif
     if ("$suffix" != "a" && "$suffix" != "i") then
-      nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILET
-      nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILEP
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+      else
+        nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+      endif
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+      else
+        nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+      endif
     endif
 
     set labels="$labels $i"
 
     if ($prefix == "f" && -s $dsFILE) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILET | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
     else if ($prefix == "t" && $pr2fix != "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste ${tmpdir}dsfile - >! ${tmpdir}gnuplot.data.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}gnuplot.data.tmp
     else if ($prefix == "t" && $pr2fix == "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - >! ${tmpdir}gnuplot.data.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}gnuplot.data.tmp
     else
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - >! ${tmpdir}gnuplot.data.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}gnuplot.data.tmp
     endif
     if ($prefix == "f" && -s $dsFILEP) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
     endif
 
   else
@@ -162,10 +184,25 @@ if ($is_first) then
     if (! -s $dsFILE) set dsFILE=ds$SUFFIX
     set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
     if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
-    nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsfile
+    set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+    if ( $ds_exists == 0 ) then
+      if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+    else
+      nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+    endif
     if ("$suffix" != "a" && "$suffix" != "i") then
-      nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILET
-      nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILEP
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+      else
+        nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+      endif
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+      else
+        nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+      endif
     endif
 
     if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
@@ -176,12 +213,12 @@ if ($is_first) then
     set labels="$labels $name($species_name)"
 
     if ($prefix == "f" && -s $dsFILE) then
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILET | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
     else
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - >! ${tmpdir}gnuplot.data.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}gnuplot.data.tmp
     endif
     if ($prefix == "f" && -s $dsFILEP) then
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $1,$2/$3}' >! ${tmpdir}gnuplot.data.tmp
     endif
 
   endif
@@ -203,25 +240,40 @@ else
     if (! -s $dsFILE) set dsFILE=ds$SUFFIX
     set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
     if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
-    nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsfile
+    set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+    if ( $ds_exists == 0 ) then
+      if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+    else
+      nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+    endif
     if ("$suffix" != "a" && "$suffix" != "i") then
-      nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILET
-      nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILEP
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+      else
+        nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+      endif
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+      else
+        nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+      endif
     endif
 
     set labels="$labels $i"
 
     if ($prefix == "f" && -s $dsFILE) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILET | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
     else if ($prefix == "t" && $pr2fix != "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste ${tmpdir}dsfile - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste ${tmpdir}ds${suffix} - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
     else if ($prefix == "t" && $pr2fix == "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
     else
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
     if ($prefix == "f" && -s $dsFILEP) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILEP | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
 
   else
@@ -247,10 +299,25 @@ else
     if (! -s $dsFILE) set dsFILE=ds$SUFFIX
     set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
     if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
-    nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsfile
+    set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+    if ( $ds_exists == 0 ) then
+      if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+    else
+      nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+    endif
     if ("$suffix" != "a" && "$suffix" != "i") then
-      nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILET
-      nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}dsFILEP
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+      else
+        nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+      endif
+      set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+      else
+        nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+      endif
     endif
 
     if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
@@ -261,12 +328,12 @@ else
     set labels="$labels $name($species_name)"
 
     if ($prefix == "f" && -s $dsFILE) then
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILET | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
     else
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
     if ($prefix == "f" && -s $dsFILEP) then
-        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}dsfile - ${tmpdir}dsFILEP | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
+        nc2text -n 9999999 $source "$name(:,$is_plus_1,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
 
   endif

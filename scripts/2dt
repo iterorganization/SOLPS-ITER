@@ -77,7 +77,7 @@ start:
   # Could break if there are enough columns that it extends across multiple lines.
     if ("$1" =~ *[0-9]) then
         # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
-        echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented for $no_nc2text == 1."
+        echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
         exit 1
     else
         # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
@@ -106,7 +106,7 @@ start:
     # Same as timesa except we pass the variable name as string
       if ("$1" =~ *[0-9]) then
           # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
-          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented for $no_nc2text == 1."
+          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
           exit 1
       else
           # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
@@ -139,7 +139,7 @@ start:
     # then assemble data into columns to be processed by awk.transpose
       if ("$1" =~ *[0-9]) then
           # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
-          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented for $no_nc2text == 1."
+          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
           exit 1
       else
           # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')

@@ -7,13 +7,13 @@ endif
 set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
 if (-s $solps_fluids) then
   setenv SOLPS_FLUIDS "`cat $solps_fluids`"
-  #echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
 else
   setenv SOLPS_FLUIDS "`get_solps_fluids`"
-  #echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
 endif
 set n=`echo $SOLPS_FLUIDS | wc -w`
-#echo $n
+echo $n
 if (-X zcat) then
   set ZCAT="zcat --force"
 else
