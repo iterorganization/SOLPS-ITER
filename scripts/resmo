@@ -1,4 +1,4 @@
-#! /bin/csh -f
+#! /bin/tcsh -f
 if (-s b2mn.exe.dir/b2ftrace) then
   set FILE=b2mn.exe.dir/b2ftrace
 else
@@ -26,7 +26,7 @@ else
 endif
 setenv PLOT_FROM_FILE "gnuplot.temp"
 $ZCAT $FILE | \
-    awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
-    resopt $argv | \
-    awk '{printf "%s",$2; for (i=1;i<='$n';i++) printf " %s",$(i+'$n'+2);printf "\n"}' >! ${tmpdir}PLOT_FROM_FILE
-plot xlyplot$n $SOLPS_FLUIDS iteration 'norm of residual of momentum equation' $PWD
+  awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
+  resopt $argv | \
+  awk '{printf "%s",$2; for (i=1;i<='$n';i++) printf " %s",$(i+'$n'+2);printf "\n"}' >! ${tmpdir}PLOT_FROM_FILE
+  plot xlyplot$n $SOLPS_FLUIDS iteration 'norm of residuals of momentum equation' $PWD

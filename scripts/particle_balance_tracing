@@ -1,0 +1,41 @@
+#! /bin/tcsh -f
+
+if($?GNUPLOT_TMP) then
+    set tmpdir="$GNUPLOT_TMP/"
+else
+    set tmpdir=""
+endif
+setenv GNUPLOT_BATCH yes
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
+setenv PRINT_PLOT particle_balance.ps
+rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
+echo 0 > ${tmpdir}GNUPLOT_COUNT
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_names = ()
+foreach name ($species_names)
+  set last_char = `echo "$name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$name" | awk '{print substr($0,length($0)-1,1)}'`
+  if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+    set neutral_species_names = ($neutral_species_names $name)
+  endif
+end
+set isonuclear_species_names = ()
+foreach name ($neutral_species_names)
+  set name = `echo $name | sed 's/0$//'`
+  set isonuclear_species_names = ($isonuclear_species_names $name)
+end
+
+foreach is ($isonuclear_species_names)
+  2dt_tracing ntr_puff_$is ntr_core_$is ion_core_$is ntr_targ_pmp_$is ntr_wall_pmp_$is ntr_targ_spt_$is ntr_wall_spt_$is
+  2dt_tracing ion_core_$is ion_targ_$is ion_wall_$is src_ioniz_$is ion_dn/dt_$is
+end
+
+gnuplot ${tmpdir}gnuplot.cmd
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd

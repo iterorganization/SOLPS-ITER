@@ -1,4 +1,5 @@
 #! /bin/csh -f
+
 set x=$1
 if ("X$1" == "X-lx") then
   set lx="l"
@@ -6,12 +7,19 @@ if ("X$1" == "X-lx") then
 else
   set lx=""
 endif
+
 if ("X$1" == "X-ly") then
   set ly="l"
   shift
 else
   set ly=""
 endif
+
+if ( $#argv < 1 ) then
+    echo "Error: You must provide at least one argument (1st, 2nd, etc. arguments will be plotted vs. time)."
+    exit 1
+endif
+
 set source=b2mn.exe.dir/b2time.nc
 if (! -s $source) set source=b2time.nc
 
@@ -46,42 +54,125 @@ else
   nc2text -n 9999999 $source timesa >> ${tmpdir}gnuplot.data.tmp
 endif
 
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_names = ()
+foreach name ($species_names)
+  set last_char = `echo "$name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+        set neutral_species_names = ($neutral_species_names $name)
+    endif
+end
+
 start:
   if ($no_nc2text == 1) then
   # Here just dump variable and check how many entries are on the second to last line.
   # Works for two, did not have any cases to confirm this works for more.
   # Could break if there are enough columns that it extends across multiple lines.
-    set check=`ncdump $source -v $1 | sed -n 'x;$p' | sed 's/;//g'`
+    if ("$1" =~ *[0-9]) then
+        # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+        echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
+        exit 1
+    else
+        # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+        set check=`ncdump $source -v $1 | sed -n 'x;$p' | sed 's/;//g'`
+    endif
   else
-    set check=`nc2text -n 999999 $source "$1(1)"`
+    if ("$1" =~ *[0-9]) then
+        # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+        set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
+        set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
+        @ is_plus_1 = $is + 1
+        set check=`nc2text -n 999999 $source "$name(1,$is_plus_1)"`
+        # There is currently a bug when calling nc2text -n 999999 $source "$name(1,$is_plus_1)"
+        # for multi-species quantities: all time values are printed instead of only the first one
+        # Probably a mistake while adding additional dimensions to nc2text
+        # Temporary fix:
+        set check = ( $check[1] )
+    else
+        # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+        set check=`nc2text -n 999999 $source "$1(1)"`
+    endif
   endif
   @ nargs += $#check
   if ($#check == 1) then
     if ($no_nc2text == 1) then
     # Same as timesa except we pass the variable name as string
-      ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}  END {print "\n";}' | \
-      sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+      if ("$1" =~ *[0-9]) then
+          # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
+          exit 1
+      else
+          # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+          ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}  END {print "\n";}' | \
+          sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+          set args="$args $1"
+      endif
     else
-      echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+      if ("$1" =~ *[0-9]) then
+          # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+          set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
+          set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
+          @ is_plus_1 = $is + 1
+          echo `nc2text -n 9999999 $source "$name(:,$is_plus_1)"` >> ${tmpdir}gnuplot.data.tmp
+          if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
+            setenv species_name $neutral_species_names[$is_plus_1]
+          else
+            setenv species_name $species_names[$is_plus_1]
+          endif
+          set args="$args $name($species_name)"
+      else
+          # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+          echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+          set args="$args $1"
+      endif
     endif
-    set args="$args $1"
   else
     if ($no_nc2text == 1) then
     # If the data has more than one column we dump as before,
     # then assemble data into columns to be processed by awk.transpose
-      ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' | \
-      awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      if ("$1" =~ *[0-9]) then
+          # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+          echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
+          exit 1
+      else
+          # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+          ncdump $source -f f -v $1 | awk -v string="$1" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+          awk 'BEGIN {FS=","} {for (i=1;i<=NF;i++) if (i%2==1) {ORS=" ";print $i;}}' | sed 's/;//g' | \
+          awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          set args="$args `count -p $1 1 $#check`"
+      endif
     else
-      nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      if ("$1" =~ *[0-9]) then
+          # Multi-species quantities, called as $1 = $name$is (e.g. $1 = 'nasepm1')
+          set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
+          set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
+          @ is_plus_1 = $is + 1
+          nc2text -n 9999999 $source "$name(:,$is_plus_1)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
+            setenv species_name $neutral_species_names[$is_plus_1]
+          else
+            setenv species_name $species_names[$is_plus_1]
+          endif
+          set args="$args `count -p $name($species_name) 1 $#check`"
+      else
+          # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
+          nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          set args="$args `count -p $1 1 $#check`"
+      endif
     endif
-    set args="$args `count -p $1 1 $#check`"
   endif
   shift
   if ("X$1X" != "XX") goto start
 
 awk.transpose < ${tmpdir}gnuplot.data.tmp | awk 'NR==1{saveNF=NF}NF==saveNF{print $0}' | plot ${lx}x${ly}yplot$nargs $args time '' `chop_pwd 60`
-/bin/rm ${tmpdir}gnuplot.data.tmp
+rm ${tmpdir}gnuplot.data.tmp
 
 if ($netcdf4 == 1) then
   rm $source

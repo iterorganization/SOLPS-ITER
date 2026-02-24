@@ -1,0 +1,113 @@
+#! /bin/csh -f
+
+set x=$1
+if ("X$1" == "X-lx") then
+  set lx="l"
+  shift
+else
+  set lx=""
+endif
+
+if ("X$1" == "X-ly") then
+  set ly="l"
+  shift
+else
+  set ly=""
+endif
+
+if ( $#argv < 1 ) then
+    echo "Error: You must provide at least one argument (1st, 2nd, etc. arguments will be plotted vs. time)."
+    exit 1
+endif
+
+set args=""
+set nargs=0
+
+if($?GNUPLOT_TMP) then
+  set tmpdir="$GNUPLOT_TMP/"
+else
+  set tmpdir=""
+endif
+
+/bin/cp /dev/null ${tmpdir}gnuplot.data.tmp
+
+set source=b2mn.exe.dir/tracing/blnn_SPb.trc
+if (! -s $source) set source=tracing/blnn_SPb.trc
+if (! -s $source) then
+  echo "No blnn_SPb.trc tracing file found. Cannot continue."
+  exit 2
+endif
+
+echo `awk 'NR==3 {sub(/^# */, ""); for(i=1;i<=NF;i++) if($i=="time") col=i; next} NR>3 && col {print $col}' $source` >> ${tmpdir}gnuplot.data.tmp
+
+set groups_blnn_SPb="ion_core ntr_targ_tot ntr_targ_rec ntr_targ_spt ntr_targ_pmp ion_wall ntr_wall_tot ntr_wall_rec ntr_wall_spt ntr_wall_pmp src_ioniz ntr_puff flux_tot src_ext ion_dn/dt"
+
+set source=b2mn.exe.dir/tracing/blne.trc
+if (! -s $source) set source=tracing/blne.trc
+if (! -s $source) then
+  echo "No blne.trc tracing file found. Energy quantities will be skipped."
+endif
+
+set groups_blne="pwr_totl pwr_tscl tot_core tot_targ tot_wall tot_rad heat_cor ptnt_cor ntrl_cor plsm_trg ntrl_trg plsm_wll ntrl_wll brms_rad ntrl_rad imp_rad tot_enrg tot_enre tot_enri imp_rad pwr_totl_il pwr_plsm_il pwr_neut_il pwr_ionz_il pwr_diss_il pwr_totl_ol pwr_plsm_ol pwr_neut_ol pwr_ionz_ol pwr_diss_ol pwr_totl_wl pwr_plsm_wl pwr_neut_wl pwr_ionz_wl pwr_diss_wl"
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_names = ()
+foreach name ($species_names)
+  set last_char = `echo "$name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+        set neutral_species_names = ($neutral_species_names $name)
+    endif
+end
+set isonuclear_species_names = ()
+foreach name ($neutral_species_names)
+    set name = `echo $name | sed 's/0$//'`
+    set isonuclear_species_names = ($isonuclear_species_names $name)
+end
+
+start:
+  foreach species ($isonuclear_species_names)
+    if ("$1" =~ "*_$species") then
+      set var = `echo "$1" | sed "s/_"$species"//g"`
+      break
+    else
+      set var = "$1"
+    endif
+  end
+  foreach item ($groups_blnn_SPb)
+    if ("$var" == "$item") then
+      set source=b2mn.exe.dir/tracing/blnn_SPb.trc
+      if (! -s $source) set source=tracing/blnn_SPb.trc
+      break
+    endif
+  end
+  foreach item ($groups_blne)
+    if ("$var" == "$item") then
+      set source=b2mn.exe.dir/tracing/blne.trc
+      if (! -s $source) set source=tracing/blne.trc
+      if (! -s $source) then
+        shift
+        if ("X$1X" != "XX") goto start
+      endif
+      break
+    endif
+  end
+  set check=`awk -v field="$1" 'NR==3 {sub(/^# */, ""); for(i=1;i<=NF;i++) if($i==field) col=i; next} NR>3 && col && seen != 1 {print $col; seen=1}' $source`
+  @ nargs += $#check
+  if ($#check == 1) then
+    echo `awk -v field="$1" 'NR==3 {sub(/^# */, ""); for(i=1;i<=NF;i++) if($i==field) col=i; next} NR>3 && col {print $col}' $source` >> ${tmpdir}gnuplot.data.tmp
+    set args="$args $1"
+  else
+    set args="$args `count -p $1 1 $#check`"
+  endif
+  shift
+  if ("X$1X" != "XX") goto start
+
+awk.transpose < ${tmpdir}gnuplot.data.tmp | awk 'NR==1{saveNF=NF}NF==saveNF{print $0}' | plot ${lx}x${ly}yplot$nargs $args time '' `chop_pwd 60`
+rm ${tmpdir}gnuplot.data.tmp
