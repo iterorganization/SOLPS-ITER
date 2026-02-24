@@ -1382,7 +1382,7 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[res\_D+O]\index{res\_D+O} non-species dependent residuals for a $D+O$ case
   \item[res\_D+C+He]\index{res\_D+C+He} non-species dependent residuals for a $D+C+He$ case
   \item[res\_D+C+Ar+Ne+He]\index{res\_D+C+Ar+Ne+He} non-species dependent residuals for a $D+C+Ar+Ne+He$ case
-  \item[resco]\index{resco} continuity residuals
+  \item[resco]\index{resco} continuity residuals per species
   \item[resco\_reg]\index{resco\_reg} continuity residuals per region
   \item[resco\_reg\_region \#1]\index{resco\_reg\_region} continuity residuals per region for species \#1 (default 0)
   \item[resco\_D+C]\index{resco\_D+C} continuity residuals for a $D+C$ case
@@ -1395,7 +1395,9 @@ The number of scripts developed for various {\bf SOLPS} versions is very large. 
   \item[resmo\_D+O]\index{resmo\_D+O} parallel momentum residuals for a $D+O$ case
   \item[resmo\_D+C+He]\index{resmo\_D+C+He} parallel momentum residuals for a $D+C+He$ case
   \item[resmt\_reg]\index{resmt\_reg} residuals of the total parallel momentum equation
+  \item[reshe]\index{reshe} residuals of the electron heat equation
   \item[reshe\_reg]\index{reshe\_reg} residuals of the electron heat equation per region
+  \item[reshi]\index{reshi} residuals of the ion heat equation
   \item[reshi\_reg]\index{reshi\_reg} residuals of the ion heat equation per region
   \item[respo] \index{respo} residuals of the potential equation, including the internal iterations
   \item[respo\_num] \index{respo\_num} the number of internal potential equation iterations
@@ -1476,7 +1478,7 @@ these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correct
     \begin{verbatim}
 setenv GNUPLOT_BATCH yes
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid'
-setenv PRINT_PLOT b2time2d.ps
+setenv PRINT_PLOT b2time2d_time_traces.ps
 rm -f GNUPLOT_COUNT gnuplot.cmd
 echo 0 > GNUPLOT_COUNT
 
@@ -1555,16 +1557,45 @@ rm GNUPLOT_COUNT gnuplot.*data
  \end{description}
 \item Detailed run diagnostics (Many of these invoke the {\tt plot} command described above and can be toggled to use a logarithmic $y$ scale by use of an additional {\tt l} argument while {\tt L} also plots the absolute values of negative quantities on the same scale and {\tt M} the absolute values of negative quantities in a separate plot)
  \begin{description}
-  \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument.
-  \item[2dt]\index{2dt} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. A python version of this script also exists (Python 2.7 and 3.5 compatible).
+  \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \begin{verbatim}
+  > 2d timesa nesepm
+  > 2d timesa tesepm tisepm
+  > 2d timesa nasepm1 nasepm9
+  \end{verbatim}
+  \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \begin{verbatim}
+  > 2da timesa nesepm
+  > 2da timesa tesepm tisepm
+  > 2da timesa nasepm1 nasepm9
+  \end{verbatim}
+  \item[2dds]\index{2dds} prints profiles from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus the corresponding space coordinate. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \begin{verbatim}
+  > 2dds ne3da
+  > 2dds te3da ti3da
+  > 2dds na3da1 na3da9
+  \end{verbatim}
+  By default, the plotted profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the two further arguments which should be added at end of the command (default values are 10 and 0 respectively).
+  \item[2dt]\index{2dt} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \begin{verbatim}
+  > 2dt nesepm
+  > 2dt tesepm tisepm
+  > 2dt nasepm1 nasepm9
+  \end{verbatim}
+  A python version of this script also exists (Python 2.7 and 3.5 compatible).
   \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).
-  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time.
+  \item[2dt\_tracing]\index{2dt\_tracing} plots time-dependent quantities from the run tracing files {\tt tracing/*.trc}.
+  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \begin{verbatim}
+  > 2dt_av nesepm
+  > 2dt_av tesepm tisepm
+  > 2dt_av nasepm1 nasepm9
+  \end{verbatim}
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
-  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d.ps} from {\tt b2time.nc} (Appendix \ref{cha:b2time}). This uses the batch feature of the {\tt plot} command.
-  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_av.ps} from averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}). This uses the batch feature of the {\tt plot} command.
-  \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
-  \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files for plotting. When processing fluxes, divides them by the area of contact to the neighbouring cell. The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face. By default, the profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging number can be adjusted with the \#1 argument (default value is 10).
+  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d\_time\_traces.ps} from {\tt b2time.nc} (Appendix \ref{cha:b2time}) containing several relevant time traces.
+  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_time\_traces\_av.ps} from averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}) containing several relevant time traces. This uses the batch feature of the {\tt plot} command.
+  \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files containing several relevant plasma profiles at relevant locations (inner/outer midplane and divertor targets), and plots the important ones on {\tt b2time2d\_profiles.ps}. When processing fluxes, divides them by the area of contact to the neighbouring cell. By default, the printed profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
+  \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files containing several relevant plasma profiles at relevant locations (inner/outer midplane and divertor targets). When processing fluxes, divides them by the area of contact to the neighbouring cell. The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face. By default, the printed profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging number can be adjusted with the \#1 argument (default value is 10).
   \item[2d.summarize]\index{2d.summarize} Outputs the time-dependent quantities from the last time point in {\tt b2time.nc}.
   \item[b2favere\_OK]\index{b2favere\_OK} Checks that the {\tt b2favere} file is of correct size and content.
   \item[b2fstate\_OK]\index{b2fstate\_OK} Checks that the {\tt b2fstate} file is of correct size and content.
@@ -1594,6 +1625,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[energy\_balance\_core\_extended]\index{energy\_balance\_core\_extended} Plots an extended version including volumetric sources of the energy balance for the core plasma.
   \item[energy\_balance\_coupled]\index{energy\_balance\_coupled} Plots the energy balance, including sources from {\tt Eirene}.
   \item[energy\_balance\_extended]\index{energy\_balance\_extended} Plots an extended version including volumetric sources of the energy balance.
+  \item[energy\_balance\_tracing]\index{energy\_balance\_tracing} prepares the {\tt energy\_balance.ps} file from {\tt tracing/blne.trc} containing the full energy balance of the run (in order: total energy balance, decomposition of radiation terms, decomposition of the energy load onto the inner target, decomposition of the energy load onto the outer target, decomposition of the energy load onto the main wall).
   \item[fchxreg]\index{fchxreg} Plots the electric current flow across important $x$-directed surfaces in {\tt B2.5}.
   \item[fchyreg]\index{fchyreg} Plots the electric current flow across important $y$-directed surfaces in {\tt B2.5}.
   \item[fhexreg]\index{fhexreg} Plots the electron energy flow across important $x$-directed surfaces in {\tt B2.5}.
@@ -1611,6 +1643,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fluid\_fluxes \#1 \#2]\index{fluid\_fluxes} Plots the sum of fluid fluxes for species numbers varying from \#1 to \#2 (respective defaults are 0 and 1). Also exists as a Python script. Fluxes into the domain are shown as negative values, fluxes out of the domain as positive values.
   \item[fluxt \#1]\index{fluxt}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/modules/b2mod\_dimensions.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
+  \item[groups\_species]\index{groups\_species} Obtains the ordered numbers of species contained in each isonuclear sequence.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -1626,7 +1659,9 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[nesepm\_feedback\_by\_pfr]\index{nesepm\_feedback\_by\_pfr} Plots in {\tt feedback.ps} the parameters of the {\em nesepm\_pfr} feedback scheme.
   \item[nesepm\_feedback\_fluid]\index{nesepm\_feedback\_fluid} Plots in {\tt feedback.ps} the parameters of the {\em nesepm\_sol} feedback scheme for fluid runs.
   \item[nireg]\index{nireg} Shows averaged total ion density per region.
+  \item[particle\_balance\_tracing]\index{particle\_balance\_tracing} prepares the {\tt particle\_balance.ps} file from {\tt tracing/blnn\_SPb.trc} containing the full particle balance of the run (in order: total particle balance and ion balance, both for all fluid species).
   \item[particle\_conservation\_coupled]\index{particle\_conservation\_coupled} Plots the particle balance for multi-species coupled runs
+  \item[plot\_residuals]\index{plot\_residuals} prepares the {\tt residuals.ps} containing the time traces of all the run residuals.
   \item[print\_species]\index{print\_species} Prints the list of species included in the run.
   \item[reflection]\index{reflection} Shows reflected particle fluxes (for {\tt B2.5} standalone runs).
   \item[reflection\_energy]\index{reflection\_energy} Shows reflected energy fluxes (for {\tt B2.5} standalone runs).
@@ -1686,6 +1721,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[plot\_trc]\index{plot\_trc} Produces {\tt trc.pdf} file (or {\tt trc.ps} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt tracing/*.trc} and {\tt b2time.nc} (potentially other similarly formatted files as well) according to {\tt plot\_trc.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[plot\_trg]\index{plot\_trg} Produces {\tt trg.pdf} file (or {\tt trg.pdf} if {\tt PLOT\_TRC\_FMT} environment variable is set to {\tt ps}) containing desired figures based on the data from {\tt ld\_tg\_*.dat} and {\tt fp\_tg\_*.dat} (potentially other similarly formatted files as well) according to {\tt plot\_trg.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Also produces {\tt trg\_sum.dat} file containing some integral, peak and average quantities at the targets. Read the script header for further details.
   \item[quote\_pwd]\index{quote\_pwd} Returns the current working directory as a string with quotes (c.f.\ {\tt noquote\_pwd}).
+  \item[replace\_links]\index{replace\_links} This script recursively replaces all symbolic links in a directory and subdirectories (in the current directory if called without arguments, or in a directory specified as argument) with the real file or folder to which they are linked, keeping the same name of the original link (if the real linked file/folder currently exists).
   \item[rlndr]\index{rlndr} Replaces a link address by another.
   \item[saveb2]\index{saveb2} Workflow script used to backup and save current run data. Intended usage would be running {\tt saveb2 -l} whenever the run is stopped for the diagnostic purpose. This will create {\tt backup.date} directory, copy all the important files there and move tracing files there as well (this allows to keep the whole run history and simultaneously limit the size of current tracing files for faster plotting and better space management). After that {\tt b2mndr\_stime} switch should be set to the current timestamp (can be done by running {\tt STIME -l} script) and run can be continued. After the run is converged {\tt saveb2 -s run\_name} can be used to copy all the necessary files to {\tt run\_name.save} directory and the current {\tt run\_name} directory can be safely deleted to clean-up the space. The script can also be used to setup a workspace on scratch, copy results back and clean-up the workspace.
   \item[STIME]\index{STIME} Auxiliary script to handle {\tt b2mndr\_stime} with {\tt saveb2} workflow, run {\tt STIME -h} for details.
@@ -1764,7 +1800,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[solps-iter\_update\_wg\_release]\index{solps-iter\_update\_wg\_release} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg-release} branch (slow-moving reference branch).
   \item[solps-iter\_update\_wg\_workflow]\index{solps-iter\_update\_wg\_workflow} Script to switch to the up-to-date \SOLPSITER wide grids {\tt wg\_workflow} branch (fast-moving development branch).
   \item[str2ogr]\index{str2ogr} Converts a {\tt .str} structure file into a {\tt DG} {\tt .ogr} template file.
-  \item[summarize\_run]\index{summarize\_run} List of instructions provided during job submission for obtaining a standard set of run diagnostics.
+  \item[summarize\_run]\index{summarize\_run} Overarching script for obtaining a standard set of run diagnostics, relying on quantities from the {\tt run.log} file.
+  \item[summarize\_run\_tracing]\index{summarize\_run\_tracing} Overarching script for obtaining a standard set of run diagnostics, relying on quantities from the {\tt tracing} files.
   \item[switch\_to\_master]\index{switch\_to\_master} Script to switch to the up-to-date \SOLPSITER master branch.
   \item[triang]\index{triang} Main script used to prepare run input files after the {\tt DivGeo} case has been defined and the {\tt Carre} grid has been built.
   \item[triang.conf]\index{triang.conf} Script containing utility functions used by the {\tt triang} script.
@@ -3368,6 +3405,67 @@ used to switch off the setting of transport coefficients in the
 private flux region.
 
 \VerbatimInput[fontsize=\footnotesize]{b2.transport.inputfile}
+
+\subsubsection{ELM model}
+\index{ELM\_model}\index{ELMs}\label{lab:elm:model}
+
+A simplified model is available to emulate ELM events through a periodic increase
+of the anomalous transport coefficients declared in {\tt b2.transport.inputfile}.
+This is done by declaring further variables {\tt tdata(3,m,i,j)} corresponding to
+the values of the coefficients at the plateau of the ELM events. The values declared
+by {\tt tdata(2,m,i,j)} will correspond, in this case, to the inter-ELM coefficients.\\
+The characteristics of the ELM dynamics are controlled through the following variables
+(see also Appendix \ref{lis:b2cdcn}): 
+
+\begin{description}
+  \item[elm\_period]\index{elm\_period} is a real number indicating the period (in seconds) of the simulated ELMs.
+  \item[elm\_time\_begin]\index{elm\_time\_begin} is an array of 9 reals determining the times (in seconds), within
+    an ELM cycle, at which the overall ELM phase begins (i.e.\ the transport coefficients
+    start to ramp up from the {\tt tdata(2,m,i,j)} values to the {\tt tdata(3,m,i,j)} values).
+  \item[elm\_time\_plateau]\index{elm\_time\_plateau} is an array of 9 reals determining the times (in seconds), within
+    an ELM cycle, at which the ELM phase reaches its plateau (i.e.\ the transport coefficients
+    start keeping constant values equal to the {\tt tdata(3,m,i,j)}).
+  \item[elm\_time\_recovery]\index{elm\_time\_recovery} is an array of 9 reals determining the times (in seconds), within
+    an ELM cycle, at which the ELM plateau phase ends (i.e.\ the transport coefficients
+    start to ramp down from the {\tt tdata(3,m,i,j)} values to the {\tt tdata(2,m,i,j)} values).
+  \item[elm\_time\_end]\index{elm\_time\_end} is an array of 9 reals determining the times (in seconds), within
+    an ELM cycle, at which the overall ELM phase ends (i.e.\ the transport coefficients
+    start again keeping costant values equal to the {\tt tdata(2,m,i,j)}).
+  \item[elm\_crash\_factor]\index{elm\_crash\_factor} is an array of 9 reals determining the factors describing
+    a logarithmic-type increase of the transport coefficients from the {\tt tdata(2,m,i,j)} values
+    to the {\tt tdata(3,m,i,j)} values during the ELM crash phase. By default (very low values) the increase is linear in time.
+    For higher values, the increase is faster at the beginning and slower towards the end of the crash phase.
+  \item[elm\_recovery\_factor]\index{elm\_recovery\_factor} is an array of 9 reals determining the factors describing
+    an exponential-type decrease of the transport coefficients from the {\tt tdata(3,m,i,j)} values
+    to the {\tt tdata(2,m,i,j)} values during the ELM recovery phase. By default (very low values) the decrease is linear in time.
+    For higher values, the decrease is faster at the beginning and slower towards the end of the recovery phase.
+  \item[elm\_ballooning\_exp]\index{elm\_ballooning\_exp} is an array of 9 reals determining the exponents of a ballooning-type
+    cosine distribution describing a poloidal dependence of the ELM profiles, with default peaking at the outer midplane.
+    See Appendix \ref{lis:b2cdcn} for further details.
+  \item[elm\_dynamics\_multiple]\index{elm\_dynamics\_multiple} is a logical determining whether all the 9 types
+    of transport coefficients have the same dynamics for the ELM phases. If true, then the 9 different values of the
+    above-mentioned variables are applied to the 9 types of transport coefficients. If false, then the first value
+    of the above-mentioned variables is applied to all the 9 types of transport coefficients.
+\end{description}
+
+The following contains an example where the ELM model is used, simulating
+ELM events at a repetition rate of 1000 $Hz$, through a step increase of the transport
+coefficients for a duration of 0.4 $ms$.
+
+\VerbatimInput[fontsize=\footnotesize]{b2.transport.inputfile.ELMs}
+
+Examples of the resulting shapes of the transport coefficients at a given radial location,
+simulating repetitive ELM events, are shown in Fig.~\ref{fig:elm-cycles}.
+
+\begin{figure}[hbtp]
+\ifpdf
+    \centerline{\includegraphics[height=12cm]{ELM_cycles.pdf}}
+\else
+    \centerline{\includegraphics[height=12cm]{ELM_cycles.eps}}
+\fi
+    \caption{Examples of different dynamics for the transport coefficients during ELM cycles.}
+    \label{fig:elm-cycles}
+\end{figure}
 
 \subsection{b2.sources.profile}
 \index{b2.sources.profile}\index{b2sral}\index{b2sral\_inputfile}\index{sources}\label{lab:b2:sources:profile}
@@ -14961,32 +15059,66 @@ feexap \index{feexap}\index{b2time.nc, feexap} & integrated poloidal electron en
 feixap \index{feixap}\index{b2time.nc, feixap} & integrated poloidal ion energy flux, Eastern edge & $W$ \\
 fetxap \index{fetxap}\index{b2time.nc, fetxap} & integrated poloidal total internal energy flux, Eastern edge & $W$ \\
 fchxap \index{fchxap}\index{b2time.nc, fchxap} & integrated poloidal current, Eastern edge & $A$ \\
+nasepi \index{nasepi}\index{b2time.nc, nasepi} & separatrix fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 nesepi \index{nesepi}\index{b2time.nc, nesepi} & separatrix electron density, Western edge & $m^{-3}$ \\
 tesepi \index{tesepi}\index{b2time.nc, tesepi} & separatrix electron temperature, Western edge & $eV$ \\
 tisepi \index{tisepi}\index{b2time.nc, tisepi} & separatrix ion temperature, Western edge & $eV$ \\
+dabsepi \index{dabsepi}\index{b2time.nc, dabsepi} & separatrix {\tt Eirene} atom density & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+dmbsepi \index{dmbsepi}\index{b2time.nc, dmbsepi} & separatrix {\tt Eirene} molecule density & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+tabsepi \index{tabsepi}\index{b2time.nc, tabsepi} & separatrix {\tt Eirene} atom temperature & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $eV$ \\
+tmbsepi \index{tmbsepi}\index{b2time.nc, tmbsepi} & separatrix {\tt Eirene} molecule temperature & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $eV$ \\
 tpsepi \index{tpsepi}\index{b2time.nc, tpsepi} & separatrix target temperature, Western edge & $K$ \\
 posepi \index{posepi}\index{b2time.nc, posepi} & separatrix potential, Western edge & $V $ \\
+nasepm \index{nasepm}\index{b2time.nc, nasepm} & separatrix fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), outer midplane & $m^{-3}$ \\
 nesepm \index{nesepm}\index{b2time.nc, nesepm} & separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm \index{tesepm}\index{b2time.nc, tesepm} & separatrix electron temperature, outer midplane & $eV$ \\
 tisepm \index{tisepm}\index{b2time.nc, tisepm} & separatrix ion temperature, outer midplane & $eV$ \\
+dabsepm \index{dabsepm}\index{b2time.nc, dabsepm} & separatrix {\tt Eirene} atom density & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+dmbsepm \index{dmbsepm}\index{b2time.nc, dmbsepm} & separatrix {\tt Eirene} molecule density & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+tabsepm \index{tabsepm}\index{b2time.nc, tabsepm} & separatrix {\tt Eirene} atom temperature & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $eV$ \\
+tmbsepm \index{tmbsepm}\index{b2time.nc, tmbsepm} & separatrix {\tt Eirene} molecule temperature & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $eV$ \\
 posepm \index{posepm}\index{b2time.nc, posepm} & separatrix potential, outer midplane & $V$ \\
-dnsepm \index{dnsepm}\index{b2time.nc, dnsepm} & main ion density diffusion coefficient, outer midplane & $m^2.s^{-1}$ \\
-dpsepm \index{dpsepm}\index{b2time.nc, dpsepm} & main neutral pressure diffusion coefficient, outer midplane & $m^2.s^{-1}$ \\
-kesepm \index{kesepm}\index{b2time.nc, kesepm} & electron thermal diffusivity, outer midplane & $m^2.s^{-1}$ \\
-kisepm \index{kisepm}\index{b2time.nc, kisepm} & ion thermal diffusivity, outer midplane & $m^2.s^{-1}$ \\
-vxsepm \index{vxsepm}\index{b2time.nc, vxsepm} & main ion poloidal pinch velocity, outer midplane & $m.s^{-1}$ \\
-vysepm \index{vysepm}\index{b2time.nc, vysepm} & main ion radial pinch velocity, outer midplane & $m.s^{-1}$ \\
-vssepm \index{vssepm}\index{b2time.nc, vssepm} & main ion particle viscosity, outer midplane & $m^2.s^{-1}$ \\
+dnsepm \index{dnsepm}\index{b2time.nc, dnsepm} & separatrix main ion density diffusion coefficient, outer midplane & $m^2.s^{-1}$ \\
+dpsepm \index{dpsepm}\index{b2time.nc, dpsepm} & separatrix main neutral pressure diffusion coefficient, outer midplane & $m^2.s^{-1}$ \\
+kesepm \index{kesepm}\index{b2time.nc, kesepm} & separatrix electron thermal diffusivity, outer midplane & $m^2.s^{-1}$ \\
+kisepm \index{kisepm}\index{b2time.nc, kisepm} & separatrix ion thermal diffusivity, outer midplane & $m^2.s^{-1}$ \\
+vxsepm \index{vxsepm}\index{b2time.nc, vxsepm} & separatrix main ion poloidal pinch velocity, outer midplane & $m.s^{-1}$ \\
+vysepm \index{vysepm}\index{b2time.nc, vysepm} & separatrix main ion radial pinch velocity, outer midplane & $m.s^{-1}$ \\
+vssepm \index{vssepm}\index{b2time.nc, vssepm} & separatrix main ion particle viscosity, outer midplane & $m^2.s^{-1}$ \\
+nasepa \index{nasepa}\index{b2time.nc, nasepa} & separatrix fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nesepa \index{nesepa}\index{b2time.nc, nesepa} & separatrix electron density, Eastern edge & $m^{-3}$ \\
 tesepa \index{tesepa}\index{b2time.nc, tesepa} & separatrix electron temperature, Eastern edge & $eV$ \\
 tisepa \index{tisepa}\index{b2time.nc, tisepa} & separatrix ion temperature, Eastern edge & $eV$ \\
+dabsepa \index{dabsepa}\index{b2time.nc, dabsepa} & separatrix {\tt Eirene} atom density & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+dmbsepa \index{dmbsepa}\index{b2time.nc, dmbsepa} & separatrix {\tt Eirene} molecule density & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+tabsepa \index{tabsepa}\index{b2time.nc, tabsepa} & separatrix {\tt Eirene} atom temperature & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
+tmbsepa \index{tmbsepa}\index{b2time.nc, tmbsepa} & separatrix {\tt Eirene} molecule temperature & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
 tpsepa \index{tpsepa}\index{b2time.nc, tpsepa} & separatrix target temperature, Eastern edge & $K$ \\
 posepa \index{posepa}\index{b2time.nc, posepa} & separatrix potential, Eastern edge & $V $ \\
+namxip \index{namxip}\index{b2time.nc, namxip} & maximum fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 nemxip \index{nemxip}\index{b2time.nc, nemxip} & maximum electron density, Western edge & $m^{-3}$ \\
 temxip \index{temxip}\index{b2time.nc, temxip} & maximum electron temperature, Western edge & $eV$ \\
 timxip \index{timxip}\index{b2time.nc, timxip} & maximum ion temperature, Western edge & $eV$ \\
 tpmxip \index{tpmxip}\index{b2time.nc, tpmxip} & maximum target temperature, Western edge & $K$ \\
 pomxip \index{pomxip}\index{b2time.nc, pomxip} & maximum potential, Western edge & $V$ \\
+namxap \index{namxap}\index{b2time.nc, namxap} & maximum fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nemxap \index{nemxap}\index{b2time.nc, nemxap} & maximum electron density, Eastern edge & $m^{-3}$ \\
 temxap \index{temxap}\index{b2time.nc, temxap} & maximum electron temperature, Eastern edge & $eV$ \\
 timxap \index{timxap}\index{b2time.nc, timxap} & maximum ion temperature, Eastern edge  & $eV$ \\
@@ -15066,13 +15198,16 @@ perpendicular to the magnetic field direction.
     \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
-fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux of main ion, Western edge & $s^{-1}.m^{-2}$ \\
+fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux & \\
+                                            & \hspace{1cm} (for each fluid species), Western edge & $s^{-1}.m^{-2}$ \\
 fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, Western edge & $s^{-1}.m^{-2}$ \\
 fo3dl \index{fo3dl}\index{b2time.nc, fo3dl} & poloidal total ion flux, Western edge & $s^{-1}.m^{-2}$ \\
 fe3dl \index{fe3dl}\index{b2time.nc, fe3dl} & poloidal electron energy flux, Western edge & $W.m^{-2}$ \\
 fi3dl \index{fi3dl}\index{b2time.nc, fi3dl} & poloidal ion energy flux, Western edge & $W.m^{-2}$ \\
 ft3dl \index{ft3dl}\index{b2time.nc, ft3dl} & poloidal total internal energy flux, Western edge & $W.m^{-2}$ \\
 fc3dl \index{fc3dl}\index{b2time.nc, fc3dl} & poloidal current, Western edge & $A.m^{-2}$ \\
+na3dl \index{ne3dl}\index{b2time.nc, ne3dl} & fluid species density & \\
+                                            & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 ne3dl \index{ne3dl}\index{b2time.nc, ne3dl} & electron density, Western edge & $m^{-3}$ \\
 te3dl \index{te3dl}\index{b2time.nc, te3dl} & electron temperature, Western edge & $eV$ \\
 ti3dl \index{ti3dl}\index{b2time.nc, ti3dl} & ion temperature, Western edge & $eV$ \\
@@ -15080,32 +15215,72 @@ tp3dl \index{tp3dl}\index{b2time.nc, tp3dl} & target temperature, Western edge &
 po3dl \index{po3dl}\index{b2time.nc, po3dl} & potential, Western edge & $V$ \\
 an3dl \index{an3dl}\index{b2time.nc, an3dl} & atom density of main neutral, Western edge & $m^{-3}$ \\
 mn3dl \index{mn3dl}\index{b2time.nc, mn3dl} & molecule density of $1^{st}$ molecule, Western edge & $m^{-3}$ \\
+dab3dl \index{dab3dl}\index{b2time.nc, dab3dl} & {\tt Eirene} atom density & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+dmb3dl \index{dmb3dl}\index{b2time.nc, dmb3dl} & {\tt Eirene} molecule density & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+tab3dl \index{tab3dl}\index{b2time.nc, tab3dl} & {\tt Eirene} atom temperature & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $eV$ \\
+tmb3dl \index{tmb3dl}\index{b2time.nc, tmb3dl} & {\tt Eirene} molecule temperature & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $eV$ \\
+na3di \index{na3di}\index{b2time.nc, na3di} & fluid species density & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m^{-3}$ \\
 ne3di \index{ne3di}\index{b2time.nc, ne3di} & electron density, inboard midplane & $m^{-3}$ \\
 te3di \index{te3di}\index{b2time.nc, te3di} & electron temperature, inboard midplane & $eV$ \\
 ti3di \index{ti3di}\index{b2time.nc, ti3di} & ion temperature, inboard midplane & $eV$ \\
 po3di \index{po3di}\index{b2time.nc, po3di} & potential, inboard midplane & $V$ \\
 an3di \index{an3di}\index{b2time.nc, an3di} & atom density of main neutral, inboard midplane & $m^{-3}$ \\
 mn3di \index{mn3di}\index{b2time.nc, mn3di} & molecule density of $1^{st}$ molecule, inboard midplane & $m^{-3}$ \\
-dn3di \index{dn3di}\index{b2time.nc, dn3di} & particle density diffusivity, inboard midplane & $m^2.s^{-1}$ \\
-dp3di \index{dp3di}\index{b2time.nc, dp3di} & particle pressure diffusivity, inboard midplane & $m^2.s^{-1}$ \\
+dab3di \index{dab3di}\index{b2time.nc, dab3di} & {\tt Eirene} atom density & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), inboard midplane & $m^{-3}$ \\
+dmb3di \index{dmb3di}\index{b2time.nc, dmb3di} & {\tt Eirene} molecule density & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), inboard midplane & $m^{-3}$ \\
+tab3di \index{tab3di}\index{b2time.nc, tab3di} & {\tt Eirene} atom temperature & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), inboard midplane & $eV$ \\
+tmb3di \index{tmb3di}\index{b2time.nc, tmb3di} & {\tt Eirene} molecule temperature & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), inboard midplane & $eV$ \\
+dn3di \index{dn3di}\index{b2time.nc, dn3di} & particle density diffusivities & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m^2.s^{-1}$ \\
+dp3di \index{dp3di}\index{b2time.nc, dp3di} & particle pressure diffusivities & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m^2.s^{-1}$ \\
 ke3di \index{ke3di}\index{b2time.nc, ke3di} & electron heat diffusivity, inboard midplane & $m^2.s^{-1}$ \\
 ki3di \index{ki3di}\index{b2time.nc, ki3di} & ion heat diffusivity, inboard midplane & $m^2.s^{-1}$ \\
-vs3di \index{vs3di}\index{b2time.nc, vs3di} & main ion viscosity, inboard midplane & $m^2.s^{-1}$ \\
-vx3di \index{vx3di}\index{b2time.nc, vx3di} & main ion poloidal pinch velocity, inboard midplane & $m.s^{-1}$ \\
-vy3di \index{vy3di}\index{b2time.nc, vy3di} & main ion radial pinch velocity, inboard midplane & $m.s^{-1}$ \\
+vs3di \index{vs3di}\index{b2time.nc, vs3di} & viscosities & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m^2.s^{-1}$ \\
+vx3di \index{vx3di}\index{b2time.nc, vx3di} & poloidal pinch velocities & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m.s^{-1}$ \\
+vy3di \index{vy3di}\index{b2time.nc, vy3di} & radial pinch velocities & \\
+                                            & \hspace{1cm} (for each fluid species), inboard midplane & $m.s^{-1}$ \\
+na3da \index{na3da}\index{b2time.nc, na3da} & fluid species density & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m^{-3}$ \\
 ne3da \index{ne3da}\index{b2time.nc, ne3da} & electron density, outboard midplane & $m^{-3}$ \\
 te3da \index{te3da}\index{b2time.nc, te3da} & electron temperature, outboard midplane & $eV$ \\
 ti3da \index{ti3da}\index{b2time.nc, ti3da} & ion temperature, outboard midplane & $eV$ \\
 po3da \index{po3da}\index{b2time.nc, po3da} & potential, outboard midplane & $V$ \\
 an3da \index{an3da}\index{b2time.nc, an3da} & atom density of main neutral, outboard midplane & $m^{-3}$ \\
 mn3da \index{mn3da}\index{b2time.nc, mn3da} & molecule density of $1^{st}$ molecule, outboard midplane & $m^{-3}$ \\
-dn3da \index{dn3da}\index{b2time.nc, dn3da} & particle density diffusivity, outboard midplane & $m^2.s^{-1}$ \\
-dp3da \index{dp3da}\index{b2time.nc, dp3da} & particle pressure diffusivity, outboard midplane & $m^2.s^{-1}$ \\
+dab3da \index{dab3da}\index{b2time.nc, dab3da} & {\tt Eirene} atom density & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outboard midplane & $m^{-3}$ \\
+dmb3da \index{dmb3da}\index{b2time.nc, dmb3da} & {\tt Eirene} molecule density & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outboard midplane & $m^{-3}$ \\
+tab3da \index{tab3da}\index{b2time.nc, tab3da} & {\tt Eirene} atom temperature & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outboard midplane & $eV$ \\
+tmb3da \index{tmb3da}\index{b2time.nc, tmb3da} & {\tt Eirene} molecule temperature & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outboard midplane & $eV$ \\
+dn3da \index{dn3da}\index{b2time.nc, dn3da} & particle density diffusivities & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m^2.s^{-1}$ \\
+dp3da \index{dp3da}\index{b2time.nc, dp3da} & particle pressure diffusivities & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m^2.s^{-1}$ \\
 ke3da \index{ke3da}\index{b2time.nc, ke3da} & electron heat diffusivity, outboard midplane & $m^2.s^{-1}$ \\
 ki3da \index{ki3da}\index{b2time.nc, ki3da} & ion heat diffusivity, outboard midplane & $m^2.s^{-1}$ \\
-vs3da \index{vs3da}\index{b2time.nc, vs3da} & main ion viscosity, outboard midplane & $m^2.s^{-1}$ \\
-vx3da \index{vx3da}\index{b2time.nc, vx3da} & main ion poloidal pinch velocity, outboard midplane & $m.s^{-1}$ \\
-vy3da \index{vy3da}\index{b2time.nc, vy3da} & main ion radial pinch velocity, outboard midplane & $m.s^{-1}$ \\
+vs3da \index{vs3da}\index{b2time.nc, vs3da} & viscosities & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m^2.s^{-1}$ \\
+vx3da \index{vx3da}\index{b2time.nc, vx3da} & poloidal pinch velocities & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m.s^{-1}$ \\
+vy3da \index{vy3da}\index{b2time.nc, vy3da} & radial pinch velocities & \\
+                                            & \hspace{1cm} (for each fluid species), outboard midplane & $m.s^{-1}$ \\
+na3dr \index{na3dr}\index{b2time.nc, na3dr} & fluid species density & \\
+                                            & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 ne3dr \index{ne3dr}\index{b2time.nc, ne3dr} & electron density, Eastern edge & $m^{-3}$ \\
 te3dr \index{te3dr}\index{b2time.nc, te3dr} & electron temperature, Eastern edge & $eV$ \\
 ti3dr \index{ti3dr}\index{b2time.nc, ti3dr} & ion temperature, Eastern edge & $eV$ \\
@@ -15113,7 +15288,16 @@ tp3dr \index{tp3dr}\index{b2time.nc, tp3dr} & target temperature, Eastern edge &
 po3dr \index{po3dr}\index{b2time.nc, po3dr} & potential, Eastern edge & $V$ \\
 an3dr \index{an3dr}\index{b2time.nc, an3dr} & atom density of main neutral, Eastern edge & $m^{-3}$ \\
 mn3dr \index{mn3dr}\index{b2time.nc, mn3dr} & molecule density of $1^{st}$ molecule, Eastern edge & $m^{-3}$ \\
-fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux of main ion, Eastern edge & $s^{-1}.m^{-2}$ \\
+dab3dr \index{dab3dr}\index{b2time.nc, dab3dr} & {\tt Eirene} atom density & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+dmb3dr \index{dmb3dr}\index{b2time.nc, dmb3dr} & {\tt Eirene} molecule density & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+tab3dr \index{tab3dr}\index{b2time.nc, tab3dr} & {\tt Eirene} atom temperature & \\
+                                               & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
+tmb3dr \index{tmb3dr}\index{b2time.nc, tmb3dr} & {\tt Eirene} molecule temperature & \\
+                                               & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
+fn3dr \index{fn3dr}\index{b2time.nc, fn3dr} & poloidal particle flux & \\
+                                            & \hspace{1cm} (for each fluid species), Eastern edge & $s^{-1}.m^{-2}$ \\
 fe3dr \index{fe3dr}\index{b2time.nc, fe3dr} & poloidal electron energy flux, Eastern edge & $W.m^{-2}$ \\
 fi3dr \index{fi3dr}\index{b2time.nc, fi3dr} & poloidal ion energy flux, Eastern edge & $W.m^{-2}$ \\
 ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total internal energy flux, Eastern edge & $W.m^{-2}$ \\
@@ -15147,6 +15331,8 @@ Table \ref{tab:4db2time}.
     \multicolumn{3}{|l|}{\small\it continued on next page} \\
     \hline \endfoot
     \endlastfoot
+na3dtl \index{na3dtl}\index{b2time.nc, na3dtl} & fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), inboard top divertor & $m^{-3}$ \\
 ne3dtl \index{ne3dtl}\index{b2time.nc, ne3dtl} & electron density, inboard top divertor & $m^{-3}$ \\
 te3dtl \index{te3dtl}\index{b2time.nc, te3dtl} & electron temperature, inboard top divertor & $eV$ \\
 ti3dtl \index{ti3dtl}\index{b2time.nc, ti3dtl} & ion temperature, inboard top divertor & $eV$ \\
@@ -15154,13 +15340,24 @@ tp3dtl \index{tp3dtl}\index{b2time.nc, tp3dtl} & target temperature, inboard top
 po3dtl \index{po3dtl}\index{b2time.nc, po3dtl} & potential, inboard top divertor & $V $ \\
 an3dtl \index{an3dtl}\index{b2time.nc, an3dtl} & atom density of main neutral, inboard top divertor & $m^{-3}$ \\
 mn3dtl \index{mn3dtl}\index{b2time.nc, mn3dtl} & molecule density of $1^{st}$ molecule, inboard top divertor & $m^{-3}$ \\
-fn3dtl \index{fn3dtl}\index{b2time.nc, fn3dtl} & poloidal particle flux of main ion, inboard top divertor & $s^{-1}$ \\
+dab3dtl \index{dab3dtl}\index{b2time.nc, dab3dtl} & {\tt Eirene} atom density & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), inboard top divertor & $m^{-3}$ \\
+dmb3dtl \index{dmb3dtl}\index{b2time.nc, dmb3dtl} & {\tt Eirene} molecule density & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), inboard top divertor & $m^{-3}$ \\
+tab3dtl \index{tab3dtl}\index{b2time.nc, tab3dtl} & {\tt Eirene} atom temperature & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), inboard top divertor & $eV$ \\
+tmb3dtl \index{tmb3dtl}\index{b2time.nc, tmb3dtl} & {\tt Eirene} molecule temperature & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), inboard top divertor & $eV$ \\
+fn3dtl \index{fn3dtl}\index{b2time.nc, fn3dtl} & poloidal particle flux & \\
+                                               & \hspace{1cm} (for each fluid species), inboard top divertor & $s^{-1}$ \\
 fe3dtl \index{fe3dtl}\index{b2time.nc, fe3dtl} & poloidal electron energy flux, inboard top divertor & $W$ \\
 fi3dtl \index{fi3dtl}\index{b2time.nc, fi3dtl} & poloidal ion energy flux, inboard top divertor & $W$ \\
 ft3dtl \index{ft3dtl}\index{b2time.nc, ft3dtl} & poloidal total internal energy flux, inboard top divertor & $W$ \\
 fc3dtl \index{fc3dtl}\index{b2time.nc, fc3dtl} & poloidal current, inboard top divertor  & $A$ \\
 fl3dtl \index{fl3dtl}\index{b2time.nc, fl3dtl} & poloidal electron flux, inboard top divertor & $s^{-1}$ \\
 fo3dtl \index{fo3dtl}\index{b2time.nc, fo3dtl} & poloidal total ion flux, inboard top divertor & $s^{-1}$ \\
+na3dtr \index{na3dtr}\index{b2time.nc, na3dtr} & fluid species density & \\
+                                               & \hspace{1cm} (for each fluid species), outboard top divertor & $m^{-3}$ \\
 ne3dtr \index{ne3dtr}\index{b2time.nc, ne3dtr} & electron density, outboard top divertor & $m^{-3}$ \\
 te3dtr \index{te3dtr}\index{b2time.nc, te3dtr} & electron temperature, outboard top divertor & $eV$ \\
 ti3dtr \index{ti3dtr}\index{b2time.nc, ti3dtr} & ion temperature, outboard top divertor & $eV$ \\
@@ -15168,7 +15365,16 @@ tp3dtl \index{tp3dtl}\index{b2time.nc, tp3dtl} & target temperature, outboard to
 po3dtr \index{po3dtr}\index{b2time.nc, po3dtr} & potential, outboard top divertor & $V $ \\
 an3dtr \index{an3dtr}\index{b2time.nc, an3dtr} & atom density of main neutral, outboard top divertor & $m^{-3}$ \\
 mn3dtr \index{mn3dtr}\index{b2time.nc, mn3dtr} & molecule density of $1^{st}$ molecule, outboard top divertor & $m^{-3}$ \\
-fn3dtr \index{fn3dtr}\index{b2time.nc, fn3dtr} & poloidal particle flux of main ion, outboard top divertor & $s^{-1}$ \\
+dab3dtr \index{dab3dtr}\index{b2time.nc, dab3dtr} & {\tt Eirene} atom density & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outboard top divertor & $m^{-3}$ \\
+dmb3dtr \index{dmb3dtr}\index{b2time.nc, dmb3dtr} & {\tt Eirene} molecule density & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outboard top divertor & $m^{-3}$ \\
+tab3dtr \index{tab3dtr}\index{b2time.nc, tab3dtr} & {\tt Eirene} atom temperature & \\
+                                                  & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outboard top divertor & $eV$ \\
+tmb3dtr \index{tmb3dtr}\index{b2time.nc, tmb3dtr} & {\tt Eirene} molecule temperature & \\
+                                                  & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outboard top divertor & $eV$ \\
+fn3dtr \index{fn3dtr}\index{b2time.nc, fn3dtr} & poloidal particle flux & \\
+                                               & \hspace{1cm} (for each fluid species), outboard top divertor & $s^{-1}$ \\
 fe3dtr \index{fe3dtr}\index{b2time.nc, fe3dtr} & poloidal electron energy flux, outboard top divertor & $W$ \\
 fi3dtr \index{fi3dtr}\index{b2time.nc, fi3dtr} & poloidal ion energy flux, outboard top divertor & $W$ \\
 ft3dtr \index{ft3dtr}\index{b2time.nc, ft3dtr} & poloidal total internal energy flux, outboard top divertor & $W$ \\
@@ -15200,6 +15406,7 @@ to {\tt 2}, then additional quantities such as fluxes are added, see below Table
     \endlastfoot
     \multicolumn{3}{|c|}{If {\tt b2mwti\_2dwrite} $\ge$ 1} \\
     \hline
+    na2d \index{na2d}\index{b2time.nc, na2d} & fluid species density (for each fluid species) & $m^{-3}$ \\
     ne2d \index{ne2d}\index{b2time.nc, ne2d} & electron density & $m^{-3}$ \\
     te2d \index{te2d}\index{b2time.nc, te2d} & electron temperature & $eV$ \\
     ti2d \index{ti2d}\index{b2time.nc, ti2d} & ion temperature & $eV$ \\
@@ -15249,42 +15456,110 @@ These quantities can be visualized by means of the {\tt 2dt\_av} script.
     \endlastfoot
 nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $ $ \\
 batchsa \index{batchsa}\index{b2time.nc, batchsa} & time stamp for averaged batch & $s$ \\
+nasepi\_av \index{nasepi\_av}\index{b2time.nc, nasepi\_av} & averaged separatrix fluid species density & \\
+                                                           & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 nesepi\_av \index{nesepi\_av}\index{b2time.nc, nesepi\_av} & averaged separatrix electron density, Western edge & $m^{-3}$ \\
 tesepi\_av \index{tesepi\_av}\index{b2time.nc, tesepi\_av} & averaged separatrix electron temperature, Western edge & $eV$ \\
 tisepi\_av \index{tisepi\_av}\index{b2time.nc, tisepi\_av} & averaged separatrix ion temperature, Western edge & $eV$ \\
+dabsepi\_av \index{dabsepi\_av}\index{b2time.nc, dabsepi\_av} & averaged separatrix {\tt Eirene} atom density & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+dmbsepi\_av \index{dmbsepi\_av}\index{b2time.nc, dmbsepi\_av} & averaged separatrix {\tt Eirene} molecule density & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+tabsepi\_av \index{tabsepi\_av}\index{b2time.nc, tabsepi\_av} & averaged separatrix {\tt Eirene} atom temperature & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $eV$ \\
+tmbsepi\_av \index{tmbsepi\_av}\index{b2time.nc, tmbsepi\_av} & averaged separatrix {\tt Eirene} molecule temperature & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $eV$ \\
 posepi\_av \index{posepi\_av}\index{b2time.nc, posepi\_av} & averaged separatrix potential, Western edge & $V$ \\
+nasepm\_av \index{nasepm\_av}\index{b2time.nc, nasepm\_av} & averaged separatrix fluid species density & \\
+                                                           & \hspace{1cm} (for each fluid species), outer midplane & $m^{-3}$ \\
 nesepm\_av \index{nesepm\_av}\index{b2time.nc, nesepm\_av} & averaged separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm\_av \index{tesepm\_av}\index{b2time.nc, tesepm\_av} & averaged separatrix electron temperature, outer midplane & $eV$ \\
 tisepm\_av \index{tisepm\_av}\index{b2time.nc, tisepm\_av} & averaged separatrix ion temperature, outer midplane & $eV$ \\
+dabsepm\_av \index{dabsepm\_av}\index{b2time.nc, dabsepm\_av} & averaged separatrix {\tt Eirene} atom density & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+dmbsepm\_av \index{dmbsepm\_av}\index{b2time.nc, dmbsepm\_av} & averaged separatrix {\tt Eirene} molecule density & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+tabsepm\_av \index{tabsepm\_av}\index{b2time.nc, tabsepm\_av} & averaged separatrix {\tt Eirene} atom temperature & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $eV$ \\
+tmbsepm\_av \index{tmbsepm\_av}\index{b2time.nc, tmbsepm\_av} & averaged separatrix {\tt Eirene} molecule temperature & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $eV$ \\
 posepm\_av \index{posepm\_av}\index{b2time.nc, posepm\_av} & averaged separatrix potential, outer midplane & $V$ \\
+nasepa\_av \index{nasepa\_av}\index{b2time.nc, nasepa\_av} & averaged separatrix fluid species density & \\
+                                                           & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nesepa\_av \index{nesepa\_av}\index{b2time.nc, nesepa\_av} & averaged separatrix electron density, Eastern edge & $m^{-3}$ \\
 tesepa\_av \index{tesepa\_av}\index{b2time.nc, tesepa\_av} & averaged separatrix electron temperature, Eastern edge & $eV$ \\
 tisepa\_av \index{tisepa\_av}\index{b2time.nc, tisepa\_av} & averaged separatrix ion temperature, Eastern edge & $eV$ \\
+dabsepa\_av \index{dabsepa\_av}\index{b2time.nc, dabsepa\_av} & averaged separatrix {\tt Eirene} atom density & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+dmbsepa\_av \index{dmbsepa\_av}\index{b2time.nc, dmbsepa\_av} & averaged separatrix {\tt Eirene} molecule density & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+tabsepa\_av \index{tabsepa\_av}\index{b2time.nc, tabsepa\_av} & averaged separatrix {\tt Eirene} atom temperature & \\
+                                                              & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
+tmbsepa\_av \index{tmbsepa\_av}\index{b2time.nc, tmbsepa\_av} & averaged separatrix {\tt Eirene} molecule temperature & \\
+                                                              & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
 posepa\_av \index{posepa\_av}\index{b2time.nc, posepa\_av} & averaged separatrix potential, Eastern edge & $V$ \\
+namxip\_av \index{namxip\_av}\index{b2time.nc, namxip\_av} & averaged maximum fluid species density & \\
+                                                           & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 nemxip\_av \index{nemxip\_av}\index{b2time.nc, nemxip\_av} & averaged maximum electron density, Western edge & $m^{-3}$ \\
 temxip\_av \index{temxip\_av}\index{b2time.nc, temxip\_av} & averaged maximum electron temperature, Western edge & $eV$ \\
 timxip\_av \index{timxip\_av}\index{b2time.nc, timxip\_av} & averaged maximum ion temperature, Western edge & $eV$ \\
 pomxip\_av \index{pomxip\_av}\index{b2time.nc, pomxip\_av} & averaged maximum potential, Western edge & $V$ \\
+namxap\_av \index{namxap\_av}\index{b2time.nc, namxap\_av} & averaged maximum fluid species density & \\
+                                                           & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nemxap\_av \index{nemxap\_av}\index{b2time.nc, nemxap\_av} & averaged maximum electron density, Eastern edge & $m^{-3}$ \\
 temxap\_av \index{temxap\_av}\index{b2time.nc, temxap\_av} & averaged maximum electron temperature, Eastern edge & $eV$ \\
 timxap\_av \index{timxap\_av}\index{b2time.nc, timxap\_av} & averaged maximum ion temperature, Eastern edge & $eV$ \\
 pomxap\_av \index{pomxap\_av}\index{b2time.nc, pomxap\_av} & averaged maximum potential, Eastern edge & $ $ \\
-nesepi\_std \index{nesepi\_std}\index{b2time.nc, nesepi\_std} & averaged separatrix electron density, Western edge & $m^{-3}$ \\
-tesepi\_std \index{tesepi\_std}\index{b2time.nc, tesepi\_std} & averaged separatrix electron temperature, Western edge & $eV$ \\
-tisepi\_std \index{tisepi\_std}\index{b2time.nc, tisepi\_std} & averaged separatrix ion temperature, Western edge & $eV$ \\
-posepi\_std \index{posepi\_std}\index{b2time.nc, posepi\_std} & averaged separatrix potential, Western edge & $V$ \\
+nasepi\_std \index{nasepi\_std}\index{b2time.nc, nasepi\_std} & variance for separatrix fluid species density & \\
+                                                              & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
+nesepi\_std \index{nesepi\_std}\index{b2time.nc, nesepi\_std} & variance for separatrix electron density, Western edge & $m^{-3}$ \\
+tesepi\_std \index{tesepi\_std}\index{b2time.nc, tesepi\_std} & variance for separatrix electron temperature, Western edge & $eV$ \\
+tisepi\_std \index{tisepi\_std}\index{b2time.nc, tisepi\_std} & variance for separatrix ion temperature, Western edge & $eV$ \\
+dabsepi\_std \index{dabsepi\_std}\index{b2time.nc, dabsepi\_std} & variance for separatrix {\tt Eirene} atom density & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+dmbsepi\_std \index{dmbsepi\_std}\index{b2time.nc, dmbsepi\_std} & variance for separatrix {\tt Eirene} molecule density & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $m^{-3}$ \\
+tabsepi\_std \index{tabsepi\_std}\index{b2time.nc, tabsepi\_std} & variance for separatrix {\tt Eirene} atom temperature & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Western edge & $eV$ \\
+tmbsepi\_std \index{tmbsepi\_std}\index{b2time.nc, tmbsepi\_std} & variance for separatrix {\tt Eirene} molecule temperature & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Western edge & $eV$ \\
+posepi\_std \index{posepi\_std}\index{b2time.nc, posepi\_std} & variance for separatrix potential, Western edge & $V$ \\
+nasepm\_std \index{nasepm\_std}\index{b2time.nc, nasepm\_std} & variance for separatrix fluid species density & \\
+                                                              & \hspace{1cm} (for each fluid species), outer midplane & $m^{-3}$ \\
 nesepm\_std \index{nesepm\_std}\index{b2time.nc, nesepm\_std} & variance for separatrix electron density, outer midplane & $m^{-3}$ \\
 tesepm\_std \index{tesepm\_std}\index{b2time.nc, tesepm\_std} & variance for separatrix electron temperature, outer midplane & $eV$ \\
 tisepm\_std \index{tisepm\_std}\index{b2time.nc, tisepm\_std} & variance for separatrix ion temperature, outer midplane & $eV$ \\
+dabsepm\_std \index{dabsepm\_std}\index{b2time.nc, dabsepm\_std} & variance for separatrix {\tt Eirene} atom density & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+dmbsepm\_std \index{dmbsepm\_std}\index{b2time.nc, dmbsepm\_std} & variance for separatrix {\tt Eirene} molecule density & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $m^{-3}$ \\
+tabsepm\_std \index{tabsepm\_std}\index{b2time.nc, tabsepm\_std} & variance for separatrix {\tt Eirene} atom temperature & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), outer midplane & $eV$ \\
+tmbsepm\_std \index{tmbsepm\_std}\index{b2time.nc, tmbsepm\_std} & variance for separatrix {\tt Eirene} molecule temperature & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), outer midplane & $eV$ \\
 posepm\_std \index{posepm\_std}\index{b2time.nc, posepm\_std} & variance for separatrix potential, outer midplane & $V $ \\
+nasepa\_std \index{nasepa\_std}\index{b2time.nc, nasepa\_std} & variance for separatrix fluid species density & \\
+                                                              & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nesepa\_std \index{nesepa\_std}\index{b2time.nc, nesepa\_std} & variance for separatrix electron density, Eastern edge & $m^{-3}$ \\
 tesepa\_std \index{tesepa\_std}\index{b2time.nc, tesepa\_std} & variance for separatrix electron temperature, Eastern edge & $eV$ \\
 tisepa\_std \index{tisepa\_std}\index{b2time.nc, tisepa\_std} & variance for separatrix ion temperature, Eastern edge & $eV$ \\
+dabsepa\_std \index{dabsepa\_std}\index{b2time.nc, dabsepa\_std} & variance for separatrix {\tt Eirene} atom density & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+dmbsepa\_std \index{dmbsepa\_std}\index{b2time.nc, dmbsepa\_std} & variance for separatrix {\tt Eirene} molecule density & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $m^{-3}$ \\
+tabsepa\_std \index{tabsepa\_std}\index{b2time.nc, tabsepa\_std} & variance for separatrix {\tt Eirene} atom temperature & \\
+                                                                 & \hspace{1cm} (for each atom species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
+tmbsepa\_std \index{tmbsepa\_std}\index{b2time.nc, tmbsepa\_std} & variance for separatrix {\tt Eirene} molecule temperature & \\
+                                                                 & \hspace{1cm} (for each molecule species, if {\tt Eirene} is used), Eastern edge & $eV$ \\
 posepa\_std \index{posepa\_std}\index{b2time.nc, posepa\_std} & variance for separatrix potential, Eastern edge & $V$ \\
+namxip\_std \index{namxip\_std}\index{b2time.nc, namxip\_std} & variance for maximum fluid species density & \\
+                                                              & \hspace{1cm} (for each fluid species), Western edge & $m^{-3}$ \\
 nemxip\_std \index{nemxip\_std}\index{b2time.nc, nemxip\_std} & variance for maximum electron density, Western edge & $m^{-3}$ \\
 temxip\_std \index{temxip\_std}\index{b2time.nc, temxip\_std} & variance for maximum electron temperature, Western edge & $eV$ \\
 timxip\_std \index{timxip\_std}\index{b2time.nc, timxip\_std} & variance for maximum ion temperature, Western edge & $eV$ \\
 pomxip\_std \index{pomxip\_std}\index{b2time.nc, pomxip\_std} & variance for maximum potential, Western edge & $V$ \\
+namxap\_std \index{namxap\_std}\index{b2time.nc, namxap\_std} & variance for maximum fluid species density & \\
+                                                              & \hspace{1cm} (for each fluid species), Eastern edge & $m^{-3}$ \\
 nemxap\_std \index{nemxap\_std}\index{b2time.nc, nemxap\_std} & variance for maximum electron density, Eastern edge & $m^{-3}$ \\
 temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for maximum electron temperature, Eastern edge & $eV$ \\
 timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, Eastern edge & $eV$ \\
@@ -15325,6 +15600,7 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     \hline
     na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
     ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
+    ua \index{ua}\index{b2movies.nc, ua} & Parallel velocity of fluid species (for each species) & $m s^{-1}$ \\
     te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
     ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
     po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
@@ -15355,6 +15631,16 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
     rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+    \hline
+    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_transport} $\ge$ 1} \\
+    \hline
+    dna \index{dna}\index{b2movies.nc, dna} & Particle density-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    dpa \index{dna}\index{b2movies.nc, dpa} & Particle pressure-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    hci \index{hci}\index{b2movies.nc, hci} & Ion thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    hce \index{hce}\index{b2movies.nc, hce} & Electron thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    vlax \index{vlax}\index{b2movies.nc, vlax} & Poloidal anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vlay \index{vlay}\index{b2movies.nc, vlay} & Radial anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vsa \index{vsa}\index{b2movies.nc, vsa} & Anomalous viscosity (for each fluid species) & $m kg^{-1} s^{-1}$ \\
     \hline
     \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
     \hline
@@ -15405,6 +15691,7 @@ Users should be careful when requesting the generation of {\tt b2movies.nc}, bec
 \item If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1: 40 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1: 75 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_b25\_sources} $\ge$ 1: 250 kB per {\tt B2.5} fluid species per outputted timestep.
+\item If {\tt cdfmovie\_b25\_transport} $\ge$ 1: 160 kB per {\tt B2.5} fluid species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1: 60 kB per {\tt Eirene} atom/molecule species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1: 120 kB per {\tt Eirene} atom/molecule species per outputted timestep.
 \item If {\tt cdfmovie\_eirene\_sources} $\ge$ 1: 100 kB per {\tt B2.5} fluid species + 45 kB per {\tt Eirene} atom/molecule species per outputted timestep.
@@ -15414,11 +15701,12 @@ Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C
 \item Setting the switch {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1 will cause additional 480 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_fluxes} $\ge$ 1 will cause additional 900 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_b25\_sources} $\ge$ 1 will cause additional 3.0 GB of filesize.
+\item Setting the switch {\tt cdfmovie\_b25\_transport} $\ge$ 1 will cause additional 1.9 GB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 will cause additional 240 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 will cause additional 480 MB of filesize.
 \item Setting the switch {\tt cdfmovie\_eirene\_sources} $\ge$ 1 will cause additional 1.4 GB of filesize.
 \end{itemize}
-If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 6.5 GB can be expected after 1000 outputted timesteps.
+If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 8.4 GB can be expected after 1000 outputted timesteps.
 
 The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
 \ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.

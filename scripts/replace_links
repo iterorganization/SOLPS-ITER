@@ -1,0 +1,63 @@
+#!/bin/tcsh
+
+# Recursively replace all symbolic links in the specified directory and subdirectories
+# with the real file or folder to which they are linked, keeping the same name of the original link.
+# Only works if the real linked file/folder currently exists.
+
+if ( $#argv >= 1 ) then
+    set dir = "$argv[1]"
+else
+    set dir = "$cwd"
+endif
+
+echo "Do you want to recursively replace ALL the symbolic links in the directory"
+echo "$dir"
+echo -n "and subdirectories with the original files/folder? (y/n) [n]"
+set REPLACE_LINKS = $<
+
+if ( "$REPLACE_LINKS" == "" ) then
+    set REPLACE_LINKS = "n"
+endif
+
+if ( "$REPLACE_LINKS" == "y" ) then
+
+    set links = (`find $dir -type l`)
+
+    if ( $#links == 0 ) then
+
+        echo "No symbolic links recursively found in the directory."
+        echo "$dir"
+        echo
+
+    else
+
+        foreach link ($links)
+            if ( -d "$link" ) then
+                set target = `realpath $link`
+                if ( -e "$target" ) then
+                    rm "$link"
+                    cp -a "$target" "$link"
+                    echo "Replaced link $link with folder $target"
+                endif
+            endif
+        end
+
+        foreach link ($links)
+            if ( ! -d "$link" ) then
+                set target = `realpath $link`
+                if ( -e "$target" ) then
+                    rm "$link"
+                    cp -p "$target" "$link"
+                    echo "Replaced link $link with file $target"
+                endif
+            endif
+        end
+
+    endif
+
+    echo "All symbolic links recursively found in the directory"
+    echo "$dir"
+    echo "were replaced, if the original linked file/folder existed."
+    echo
+
+endif
