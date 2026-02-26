@@ -1,0 +1,32 @@
+#! /bin/tcsh -f
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_index = -1
+
+set na_dens = "$1"
+
+set bases = ()
+foreach s ($species_names)
+  set base = `echo $s | sed 's/[+0-9].*//'`
+  set bases = ($bases $base)
+end
+set counts = ()
+set prev = ""
+set count = 0
+foreach b ($bases)
+  if ("$b" == "$prev") then
+    @ count++
+  else
+    if ("$prev" != "") set counts = ($counts $count)
+    set count = 1
+    set prev = $b
+  endif
+end
+set counts = ($counts $count)
+echo $counts

@@ -1738,7 +1738,7 @@ if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version o
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
       endif
-      git clone git@github.com:iterorganization/MSCL.git mscl
+      git clone https://github.com/iterorganization/MSCL.git mscl
       cd mscl
       ./bootstrap
       ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl F77=${FC} CC=${CC}
@@ -1800,7 +1800,7 @@ else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresp
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
       endif
-      git clone git@github.com:iterorganization/MSCL.git mscl
+      git clone https://github.com/iterorganization/MSCL.git mscl
       cd mscl
       git checkout a64eba15137
       cp ${SOLPSTOP}/doc/solps/MacOS/compiler.darwin.gfortran config/compiler.darwin.gfortran
@@ -1918,7 +1918,7 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
     if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr" ) then
       rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr"
     endif
-    git clone git@github.com:iterorganization/GR-Software.git gr
+    git clone https://github.com/iterorganization/GR-Software.git gr
     cd gr
     if ("$OSTYPE" == "linux") then
       sed -i 's/^all: libgr.a install$/all: libgr.a/' Makefile

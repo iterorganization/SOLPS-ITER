@@ -62,14 +62,14 @@ NO_MPI     = true
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNAGFOR -DNCAR4 -DNO_NAG -DNO_F01AAF
+SOLPS_CPP      = -DNAGFOR -DNCAR4
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
 
 # Autodetected optional features...
-SOLPS_CPP     += -DNO_NAG
+SOLPS_CPP     += -DNO_NAG -DNO_F01AAF
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
