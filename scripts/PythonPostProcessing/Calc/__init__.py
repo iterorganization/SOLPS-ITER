@@ -16,6 +16,7 @@ from .find_cv_faces_fcreg import find_cv_faces_fcreg
 from .find_cv_faces_lbl import find_cv_faces_lbl
 from .find_flux_surfaces import find_flux_surfaces
 from .map_cv_onto_line import map_cv_onto_line
+from .find_separatrix_flux_surface import find_separatrix_flux_surface
 
 __all__ = [
     "isplasmagrid",
@@ -29,5 +30,6 @@ __all__ = [
     "find_cv_faces_fcreg",
     "find_cv_faces_lbl",
     "find_flux_surfaces",
-    "map_cv_onto_line"
+    "map_cv_onto_line",
+    "find_separatrix_flux_surface"
 ]

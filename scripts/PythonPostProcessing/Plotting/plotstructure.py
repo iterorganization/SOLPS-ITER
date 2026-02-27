@@ -22,7 +22,7 @@ def plotstructure(structure, *args, **kwargs):
 
     handles = []
     for part in structure:
-        h, = ax.plot(part['r'], part['z'], *args, **kwargs)
+        h, = ax.plot(part.r, part.z, *args, **kwargs)
         handles.append(h)
 
     return handles
