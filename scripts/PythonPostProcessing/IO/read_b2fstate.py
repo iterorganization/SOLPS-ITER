@@ -30,10 +30,10 @@ def read_b2fstate(file):
     fluxdims = (nFc, 2, ns)
 
     # --- Read charges etc. ---
-    state.zamin = read_ifield(fid, "zamin", (ns,))
-    state.zamax = read_ifield(fid, "zamax", (ns,))
-    state.zn    = read_ifield(fid, "zn", (ns,))
-    state.am    = read_ifield(fid, "am", (ns,))
+    state.zamin = read_rfield(fid, "zamin", (ns,))
+    state.zamax = read_rfield(fid, "zamax", (ns,))
+    state.zn    = read_rfield(fid, "zn", (ns,))
+    state.am    = read_rfield(fid, "am", (ns,))
 
     # --- Read state variables ---
     state.na     = read_rfield(fid, 'na', statedims)
@@ -49,14 +49,14 @@ def read_b2fstate(file):
 
     # --- Read fluxes ---
     state.fna    = read_rfield(fid, 'fna', fluxdims)
-    state.fne    = read_rfield(fid, 'fne', fluxdim)
+    # state.fne    = read_rfield(fid, 'fne', fluxdim)
     state.fhe    = read_rfield(fid, 'fhe', fluxdim)
     state.fhi    = read_rfield(fid, 'fhi', fluxdim)
     state.fhn    = read_rfield(fid, 'fhn', fluxdim)
-    state.fch    = read_rfield(fid, 'fch', fluxdim)
-    state.fch_32 = read_rfield(fid, 'fch_32', fluxdim)
-    state.fch_52 = read_rfield(fid, 'fch_52', fluxdim)
-    state.kinrgy = read_rfield(fid, 'kinrgy', statedims)
+    # state.fch    = read_rfield(fid, 'fch', fluxdim)
+    # # state.fch_32 = read_rfield(fid, 'fch_32', fluxdim)
+    # # state.fch_52 = read_rfield(fid, 'fch_52', fluxdim)
+    # # state.kinrgy = read_rfield(fid, 'kinrgy', statedims)
     state.fhm    = read_rfield(fid, 'fhm', fluxdims)
     state.fkt    = read_rfield(fid, 'fkt', fluxdim)
     state.fzt    = read_rfield(fid, 'fzt', fluxdim)
@@ -88,12 +88,13 @@ def read_b2fstate(file):
     state.fchvispar  = read_rfield(fid, 'fchvispar', fluxdim)
     state.fchvisper  = read_rfield(fid, 'fchvisper', fluxdim)
     state.fchvisq    = read_rfield(fid, 'fchvisq', fluxdim)
+    state.fchviskt   = read_rfield(fid, 'fchviskt', fluxdim)
     state.fchinert   = read_rfield(fid, 'fchinert', fluxdim)
-    state.fchanml    = read_rfield(fid, 'fchanml', fluxdim)
-    state.fht        = read_rfield(fid, 'fht', fluxdim)
-    state.fhj        = read_rfield(fid, 'fhj', fluxdim)
-    state.fhm        = read_rfield(fid, 'fhm', fluxdims)
-    state.fhp        = read_rfield(fid, 'fhp', fluxdims)
+    # state.fchanml    = read_rfield(fid, 'fchanml', fluxdim)
+    # state.fht        = read_rfield(fid, 'fht', fluxdim)
+    # state.fhj        = read_rfield(fid, 'fhj', fluxdim)
+    # state.fhm        = read_rfield(fid, 'fhm', fluxdims)
+    # state.fhp        = read_rfield(fid, 'fhp', fluxdims)
 
     state.vaecrb    = read_rfield(fid, 'vaecrb', fluxdims)
     state.vadia     = read_rfield(fid, 'vadia', fluxdims)
