@@ -212,7 +212,7 @@ Contains
           Endif
           i1 = 1
           i2 = 0
-       
+
        ElseIf (CountOccurrences(varname, ',') == 1) Then
 
           ! There is one comma, look for two dimensions

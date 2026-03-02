@@ -1,9 +1,9 @@
 #! /bin/tcsh -f
 
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv GNUPLOT_BATCH yes
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
