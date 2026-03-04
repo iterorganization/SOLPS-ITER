@@ -1,4 +1,4 @@
-load imkl/2023.2.0# Load modules
+#Load modules
 setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
 module load gcc/14
 module load impi/2021.15
