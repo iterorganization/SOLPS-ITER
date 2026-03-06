@@ -1,46 +1,24 @@
 # General
 
-# Note: need to do command below, but from bash!
-# source switch_to_2015a
-
-module load git/2.32.0-GCCcore-10.3.0-nodocs
-
 # Modules needed by SOLPS-ITER
 module load intel/2021a
+module load git/2.32.0-GCCcore-10.3.0-nodocs
 module load makedepend/1.0.6-GCCcore-10.3.0
-# module load mscl/1.0.0-intel-12.0.2
 module load netCDF/4.8.0-iimpi-2021a
 module load netCDF-Fortran/4.5.3-iimpi-2021a
-# module load gr/0.0.94
-# module load gks/4.4.74
 module load NCL/6.6.2-intel-2021a
-# module load nag/15
-# module load LAPACK/3.5.0-intel-2014a
-# module load HDF5/1.8.12-intel-2014a-serial
-# module load flex
 module load Doxygen/1.9.1-GCCcore-10.3.0
-# module load texlive
-# module load ghostscript
 module load libxml2/2.9.10-GCCcore-10.3.0
-# module load fontconfig
-# module load cairo
-# module load mdsplus
-# module load make
 module load matplotlib/3.4.2-intel-2021a
-module load Python/3.10.8-GCCcore-10.3.0-bare
-# module load totalview
-# module load libX11/1.6.3-intel-2015a-Python-2.7.9
-# module load libXt/1.1.4-intel-2015a-libX11-1.6.3
 module load motif/2.3.8-GCCcore-10.3.0
-# module load libXp/1.0.3-intel-2015a
-# mpi-library from intel/2015a is used
 module load Pango/1.48.5-GCCcore-10.3.0
-module load Emacs/28.1-GCCcore-10.3.0
-module load gnuplot/5.4.2-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
 module load CMake/3.31.3-GCCcore-14.2.0
-# Debugger (set environment variable DBX)
 module load ArmForge/22.1.2
+module load gnuplot/5.4.2-GCCcore-10.3.0
+module load MATLAB/2023b-r1
+
+# Debugger env var
 setenv DBX ddt
 # Compiler
 setenv FC ifort
@@ -48,8 +26,6 @@ setenv MPI_FC mpiifort
 setenv CXX icpc
 setenv CC icc
 
-module load MATLAB/2023b-r1
-###UNAVAILABLE!!###module unload GLib/2.54.3-GCCcore-6.4.0
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false

@@ -1,18 +1,13 @@
 function dat = read_my_out(file)
 % dat = read_my_out(file)
 %
-% Read .dat-files created by my_out routine of B2.5.
-%
-% Assumed format of data tables in the files:
-%
-%         -1     0     1     ...       nx
-%   ny   ...   ...   ...                  
-%  ...   ...   ...                        
-%   -1   ...                          ... 
+% Read .dat-files created by my_out routine of B2.5. 
 
-% Author: Wouter Dekeyser
-% E-mail: wouter.dekeyser@kuleuven.be
-% November 2016
+% Author: Anthony Piras
+% E-mail: anthony.piras@kuleuven.be
+% April 2025
+
+fprintf('\n')
 
 [fid,msg] = fopen(file);
 if (fid == -1)
@@ -20,21 +15,18 @@ if (fid == -1)
 end
 
 % Read header line with x-cell numbers
-line = fgetl(fid);
-xco  = strread(line,'%d');
-nx   = xco(end);
-
-% Read data lines
-dat = [];
-line = fgetl(fid);
-while line ~= -1
-    dat = [dat;strread(line(7:end),'%f',nx+2)'];
-    line = fgetl(fid);
+line = strtrim(fgetl(fid));
+tokens = strsplit(line);
+if numel(tokens) >= 2
+    if contains(tokens{2},'.') || contains(tokens{2},'E') || contains(tokens{2},'e')
+        fclose(fid);
+        dat = read_my_out_us(file);
+    else
+        fclose(fid);
+        dat = read_my_out_st(file);
+    end
+else
+    error('Invalid output file format');
 end
 
-% Rearrange: element (1,1) in array should correspond to lower left cell
-dat = fliplr(dat');
-
-% Close file
-fclose(fid);
-
+end

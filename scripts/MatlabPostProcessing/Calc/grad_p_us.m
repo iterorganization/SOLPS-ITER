@@ -1,4 +1,8 @@
-function [gfunp]=grad_p_us(nFc, nVx, mode, gmtry, fun, funv)
+function [gfunp] = grad_p_us(nFc, nVx, mode, gmtry, fun, funv)
+% [gfunp] = grad_p_us(nFc, nVx, mode, gmtry, fun, funv)
+%
+% Computes the poloidal gradient of a quantity on cell faces.
+%
 
 gfunp = zeros(nFc,1);
 

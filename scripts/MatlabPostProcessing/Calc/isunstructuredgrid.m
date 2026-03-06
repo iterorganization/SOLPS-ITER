@@ -1,14 +1,14 @@
 function val = isunstructuredgrid(gmtry)
-% val = isplasmagrid(gmtry)
+% val = isunstructuredgrid(gmtry)
 %
 % Function that checks whether the structure gmtry contains the necessary
-% fields to be a 'plasma grid' from B2.5.
+% fields to be an 'unstructured plasma grid' from B2.5.
 %
 % For now, the routine simply checks whether the structure contains the
 % fields typically needed for the plotting routines. No consistency
 % checking on the data is done.
 %
-% Returns 1 if gmtry is a plasma grid, 0 otherwise.
+% Returns 1 if gmtry is an unstructured plasma grid, 0 otherwise.
 %
 
 % Author: Wouter Dekeyser

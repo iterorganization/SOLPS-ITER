@@ -14,10 +14,10 @@ Program nc2text_simple
   Integer, Parameter :: I8 = Selected_int_kind(8)
 
   Integer :: ncid, iret, varid, nvdims, vartyp, dimids(MAXVDIMS), numcmdarg
-  Integer(I8) :: i, j, i1=1, i2=0, j1=1, j2=0, itmp
+  Integer(I8) :: i, j, k, i1=1, i2=0, j1=1, j2=0, k1=1, k2=0, itmp
   Logical :: use_index = .false.
   Integer, Allocatable  :: dimlen(:)
-  Real(R8), Allocatable :: rdata(:,:)
+  Real(R8), Allocatable :: rdata(:,:,:)
   Character(LEN = 20) :: hlp_frm
   Character(Len = 256) :: filename, varname
   Character(Len = MAXNCNAM) :: dimnam
@@ -59,23 +59,31 @@ Program nc2text_simple
   Case (NCDOUBLE)
      Select Case (nvdims)
      Case (0)
-        Allocate(rdata(1,1))
+        Allocate(rdata(1,1,1))
         i1 = 1
         i2 = 1
         j1 = 1
         j2 = 1
+        k1 = 1
+        k2 = 1
      Case (1)
-        Allocate(rdata(dimlen(1),1))
+        Allocate(rdata(dimlen(1),1,1))
         itmp = i1
         i1 = j1
         j1 = itmp
         itmp = i2
         i2 = j2
         j2 = itmp
+        k1 = 1
+        k2 = 1
      Case (2)
-        Allocate(rdata(dimlen(1),dimlen(2)))
+        Allocate(rdata(dimlen(1),dimlen(2),1))
+        k1 = 1
+        k2 = 1
+     Case (3)
+        Allocate(rdata(dimlen(1),dimlen(2),dimlen(3)))
      Case Default
-        Write(0,*) "Error: Only scalars, 1-, or 2-dimensional arrays supported"
+        Write(0,*) "Error: Only scalars, 1-, 2-, or 3-dimensional arrays supported"
         Stop
      End Select
      iret = NF_GET_VAR_DOUBLE(ncid,varid,rdata)
@@ -93,28 +101,35 @@ Program nc2text_simple
   If (i2 .le. 0) i2 = Size(rdata,1) + i2
   If (j1 .le. 0) j1 = Size(rdata,2) + j1
   If (j2 .le. 0) j2 = Size(rdata,2) + j2
+  If (k1 .le. 0) k1 = Size(rdata,3) + k1
+  If (k2 .le. 0) k2 = Size(rdata,3) + k2
   itmp = i1
   i1 = Min(i1,i2)
   i2 = Max(itmp,i2)
   itmp = j1
   j1 = Min(j1,j2)
   j2 = Max(itmp,j2)
-  If (debug) Write(0,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,')'
+  itmp = k1
+  k1 = Min(k1,k2)
+  k2 = Max(itmp,k2)
+  If (debug) Write(0,'(a,i0,a,i0,a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,',',k1,':',k2,')'
 
   ! Check dimensions
-  If( (i2 .gt. Size(rdata,1)) .OR. (j2 .gt. Size(rdata,2)) .OR. &
-       (i1 .le. 0) .OR. (j1 .le. 0) ) Then
+  If( (i2 .gt. Size(rdata,1)) .OR. (j2 .gt. Size(rdata,2)) .OR. (k2 .gt. Size(rdata,3)) .OR. &
+       (i1 .le. 0) .OR. (j1 .le. 0) .OR. (k1 .le. 0) ) Then
      Write(0,*) "Error: index out of bounds"
      Write(0,*) "Size is ",dimlen
-     Write(0,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,')'
+     Write(0,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,',',k1,':',k2,')'
      Stop
   Endif
 
   ! Output
   Write(hlp_frm,'(a,i8,a)') '(1p,',i2-i1+1,'e18.10)'
-  Do j = j1,j2
-     Write(*,hlp_frm) (rdata(i,j),i=i1,i2)
-  Enddo
+  Do k = k1, k2
+     Do j = j1, j2
+        Write(*,hlp_frm) (rdata(i,j,k), i=i1, i2)
+     End Do
+  End Do
 
   Deallocate(rdata)
   Deallocate(dimlen)
@@ -197,10 +212,11 @@ Contains
           Endif
           i1 = 1
           i2 = 0
-       Else
 
-          ! There is a comma, look for two dimensions
-          If (debug) Write(0,*) "--Found a ',', attempting to get two dimensions"
+       ElseIf (CountOccurrences(varname, ',') == 1) Then
+
+          ! There is one comma, look for two dimensions
+          If (debug) Write(0,*) "--Found one ',', attempting to get two dimensions"
 
           ! Check for semicolon in first dimension
           temp = varname(Index(varname,'(')+1:Index(varname,',')-1)
@@ -234,6 +250,59 @@ Contains
              If (debug) Write(0,*) "--Range found:",j1,j2
           Endif
 
+       ElseIf (CountOccurrences(varname, ',') == 2) Then
+
+         ! There are two commas, look for three dimensions
+         If (debug) Write(0,*) "--Found two ',', attempting to get three dimensions"
+
+         ! Check for semicolon in first dimension
+         temp = varname(Index(varname,'(')+1:Index(varname,',')-1)
+         If (Index(temp,':') .eq. 0) Then
+            If (debug) Write(0,*) "--Single value identified in dim1"
+            If (Len(Trim(temp)) .ne. 0) Read(temp,'(I10)') i1
+            If (debug) Write(0,*) "--Single subscript found:",i1
+            i2 = i1
+         Else
+            If (debug) Write(0,*) "--Range identified in dim1"
+            temp2 = temp(1:Index(temp,':')-1)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') i1
+            temp2 = temp(Index(temp,':')+1:)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') i2
+            If (debug) Write(0,*) "--Range found:",i1,i2
+         Endif
+
+         ! Check for semicolon in second dimension
+         temp = varname(Index(varname,',')+1:Index(varname,',')+Index(varname(Index(varname,',')+1:),',')-1)
+         If (Index(temp,':') .eq. 0) Then
+            If (debug) Write(0,*) "--Single value identified in dim2"
+            If (Len(Trim(temp)) .ne. 0) Read(temp,'(I10)') j1
+            If (debug) Write(0,*) "--Single subscript found:",j1
+            j2 = j1
+         Else
+            If (debug) Write(0,*) "--Range identified in dim2"
+            temp2 = temp(1:Index(temp,':')-1)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') j1
+            temp2 = temp(Index(temp,':')+1:)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') j2
+            If (debug) Write(0,*) "--Range found:",j1,j2
+         Endif
+
+         ! Check for semicolon in third dimension
+         temp = varname(Index(varname,',')+Index(varname(Index(varname,',')+1:),',')+1:Index(varname,')')-1)
+         If (Index(temp,':') .eq. 0) Then
+            If (debug) Write(0,*) "--Single value identified in dim3"
+            If (Len(Trim(temp)) .ne. 0) Read(temp,'(I10)') k1
+            If (debug) Write(0,*) "--Single subscript found:",k1
+            k2 = k1
+         Else
+            If (debug) Write(0,*) "--Range identified in dim3"
+            temp2 = temp(1:Index(temp,':')-1)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') k1
+            temp2 = temp(Index(temp,':')+1:)
+            If (Len(Trim(temp2)) .ne. 0) Read(temp2,'(I10)') k2
+            If (debug) Write(0,*) "--Range found:",k1,k2
+         Endif
+
        Endif
        varname = varname(1:Index(varname,'(')-1)
     Endif
@@ -242,27 +311,42 @@ Contains
   End Function handle_cmd_arg
   !-----------------------------------------------------------------------------
 
+  function CountOccurrences(string, char) result(count)
+    character(len=*) :: string
+    character(len=1) :: char
+    integer :: count, i
+
+    count = 0
+    do i = 1, len(string)
+        if (string(i:i) == char) then
+            count = count + 1
+        end if
+    end do
+   end function CountOccurrences
+  !-----------------------------------------------------------------------------
+
   Subroutine Print_help()
     Write(0,'(a)') ' '
-    Write(0,'(a)') 'usage: nc2text_simple [OPTIONS] filename variable(i1:i2,j1:j2)'
+    Write(0,'(a)') 'usage: nc2text_simple [OPTIONS] filename variable(i1:i2,j1:j2,k1:k2)'
     Write(0,'(a)') ' '
     Write(0,'(a)') 'Outputs variable from netcdf file'
     Write(0,'(a)') ' '
     Write(0,'(a)') '   OPTION -n #, number of columns to display data in. This arg accepted but ignored for compatibility'
     Write(0,'(a)') ' '
-    Write(0,'(a)') "   Optional syntax 'variable(i1:i2,j1:j2)' can return a range"
+    Write(0,'(a)') "   Optional syntax 'variable(i1:i2,j1:j2,k1:k2)' can return a range"
     Write(0,'(a)') ' '
     Write(0,'(a)') '   Missing i1..j2 will evaluate as array bounds'
     Write(0,'(a)') '   Ranges start from 1'
     Write(0,'(a)') '   Zero or regative subscripts count from end of array'
     Write(0,'(a)') ' '
-    Write(0,'(a)') 'Current restrictions: only scalars, 1D and 2D arrays of type double supported'
+    Write(0,'(a)') 'Current restrictions: only scalars, 1D, 2D and 3D arrays of type double supported'
     Write(0,'(a)') ' '
     Write(0,'(a)') 'Examples:'
     Write(0,'(a)') '   nc2text_simple b2time.nc tesepa'
     Write(0,'(a)') '   nc2text_simple -n 999999 b2time.nc tesepa'
     Write(0,'(a)') "   nc2text_simple b2time.nc 'tesepa(1)'"
-    Write(0,'(a)') "   nc2text_simple b2time.nc 'fn3dl(-9:-0,:)'"
+    Write(0,'(a)') "   nc2text_simple b2time.nc 'ne3da(:,-9:-0)'"
+    Write(0,'(a)') "   nc2text_simple b2time.nc 'fn3dl(:,2,-9:-0)'"
 
     Return
   End Subroutine Print_help

@@ -25,7 +25,7 @@ end
 if isfield(rates,'version')
     version = rates.version;
 else
-    version = '03.002.000';
+    version = '03.002.001';
 end
 
 disp(['write_b2frates -- file version ',version]);
@@ -67,9 +67,10 @@ write_rfield(fid,'rtlz2'    , rates.rtlz2);
 write_rfield(fid,'rtlpt'    , rates.rtlpt);
 write_rfield(fid,'rtlpi'    , rates.rtlpi);
 
-%% extra
+%% Write fix_recomb e zmax_recomb
 
 write_ifield(fid,'fix_recomb,zmax_recomb',[rates.fix_recomb,rates.zmax_recomb]);
+
 %% Close file
 
 fclose(fid);

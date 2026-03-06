@@ -4,7 +4,7 @@ if ("X$1X" != "XX") set NUM=$1
 set END=-0
 if ("X$2X" != "XX") set END=$2
 @ NUM = 1 + $END - $NUM
-echo $NUM $END
+#echo $NUM $END
 set nreg=`climb_and_look_for NREG`
 if (-s $nreg) then
   setenv NREG `cat $nreg | cut -d ' ' -f 1`
@@ -15,34 +15,41 @@ else
   echo Set NREG to $NREG "(based on log file)"
 endif
 set usual=""
+set usual_multi=""
 if (-s dsl) then
-  set usual=`echo ${usual}" fn3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl ne3dl te3dl ti3dl po3dl an3dl tp3dl"`
-  if (-s input.dat) then
+  set usual=`echo ${usual}" ne3dl te3dl ti3dl po3dl an3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl"`
+  set usual_multi=`echo ${usual_multi}" fn3dl na3dl"`
+  if (-s fort.1) then
     set usual=`echo ${usual}" mn3dl"`
   endif
 endif
 if (-s dsi) then
-  set usual=`echo ${usual}" ne3di te3di ti3di po3di an3di dn3di dp3di ke3di ki3di vx3di vy3di vs3di"`
-  if (-s input.dat) then
+  set usual=`echo ${usual}" ne3di te3di ti3di po3di an3di ke3di ki3di"`
+  set usual_multi=`echo ${usual_multi}" na3di dn3di dp3di vx3di vy3di vs3di"`
+  if (-s fort.1) then
     set usual=`echo ${usual}" mn3di"`
   endif
 endif
 if (-s dsa) then
-  set usual=`echo ${usual}" ne3da te3da ti3da po3da an3da dn3da dp3da ke3da ki3da vx3da vy3da vs3da"`
-  if (-s input.dat) then
+  set usual=`echo ${usual}" ne3da te3da ti3da po3da an3da ke3da ki3da"`
+  set usual_multi=`echo ${usual_multi}" na3da dn3da dp3da vx3da vy3da vs3da"`
+  if (-s fort.1) then
     set usual=`echo ${usual}" mn3da"`
   endif
 endif
 if (-s dsr) then
-  set usual=`echo ${usual}" ne3dr te3dr ti3dr po3dr an3dr fn3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr tp3dr"`
-  if (-s input.dat) then
+  set usual=`echo ${usual}" ne3dr te3dr ti3dr po3dr an3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr"`
+  set usual_multi=`echo ${usual_multi}" fn3dr na3dr"`
+  if (-s fort.1) then
     set usual=`echo ${usual}" mn3dr"`
   endif
 endif
 set extra=""
+set extra_multi=""
 if ($?NREG) then
   if ($NREG == 8 || $NREG == 7) then
-    set extra="fn3dtl fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr fn3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
+    set extra="fe3dtl fi3dtl fc3dtl fl3dtl fo3dtl ft3dtl ne3dtl te3dtl ti3dtl po3dtl an3dtl ne3dtr te3dtr ti3dtr po3dtr an3dtr fe3dtr fi3dtr fc3dtr fl3dtr fo3dtr ft3dtr tp3dtl tp3dtr"
+    set extra_multi="fn3dtl na3dtl fn3dtr na3dtr"
     if (-s fort.1) then
       set extra=`echo ${extra}" mn3dtl mn3dtr"`
     endif
@@ -52,7 +59,10 @@ endif
 if($?GNUPLOT_TMP) then
   set tmpdir="$GNUPLOT_TMP/"
 else
-  set tmpdir=""
+  set tmpdir="2d_profiles/"
+  if (! -d 2d_profiles) then
+    mkdir 2d_profiles
+  endif
 endif
 set source=b2mn.exe.dir/b2time.nc
 if (! -s $source) set source=b2time.nc
@@ -84,6 +94,8 @@ if ($no_nc2text == 1) then
 #  echo $jstart $jend
 else
   set nt = `nc2text $source "ntstep" | awk '{printf "%d", $1}'`
+  set ns = `ncdump -h $source | grep -w "ns =" | sed -E 's/.*= *([0-9]+) *;.*/\1/'`
+  @ ns_minus_1 = $ns - 1
 #  echo "nt $nt"
   @ jstart = $nt + $NUM
   if ($jstart < 0) then
@@ -97,62 +109,336 @@ else
 endif
 
 foreach i ($usual $extra)
-  set prefix=`echo $i | cut -c1`
-  set pr2fix=`echo $i | cut -c2`
-  set suffix=`echo $i | cut -c5-`
-  set SUFFIX=`echo $suffix | tr 'a-z' 'A-Z'`
-  set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
-  set dsfile=b2mn.exe.dir/ds$suffix
-  if (! -s $dsfile) set dsfile=ds$suffix
-  set dsFILE=b2mn.exe.dir/ds$SUFFIX
-  if (! -s $dsFILE) set dsFILE=ds$SUFFIX
-  set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
-  if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
+  set var_exists = `ncdump -h $source | grep -cw "$i"`
+  if ($var_exists != 0 ) then
+    set prefix=`echo $i | cut -c1`
+    set pr2fix=`echo $i | cut -c2`
+    set suffix=`echo $i | cut -c5-`
+    set SUFFIX=`echo $suffix | tr 'a-z' 'A-Z'`
+    set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
+    set dsfile=b2mn.exe.dir/ds$suffix
+    if (! -s $dsfile) set dsfile=ds$suffix
+    set dsFILE=b2mn.exe.dir/ds$SUFFIX
+    if (! -s $dsFILE) set dsFILE=ds$SUFFIX
+    set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
+    if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
 #  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP $dsfile $dsFILE $dsFILEP
-  if ($no_nc2text == 1) then
-    if ($prefix == "f" && -s $dsFILE) then
-      ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      sed 's/,/ /g' | sed 's/;//g' | \
-      awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILE | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
-    else if ($prefix == "t" && $pr2fix != "p") then
-      ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      sed 's/,/ /g' | sed 's/;//g' | \
-      awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste $dsfile - >! ${tmpdir}$i.last10
-    else if ($prefix == "t" && $pr2fix == "p") then
-      ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      sed 's/,/ /g' | sed 's/;//g' | \
-      awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
+    if ($no_nc2text == 1) then
+      if ($prefix == "f" && -s $dsFILE) then
+        ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+        sed 's/,/ /g' | sed 's/;//g' | \
+        awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
+        ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILE | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
+      else if ($prefix == "t" && $pr2fix != "p") then
+        ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+        sed 's/,/ /g' | sed 's/;//g' | \
+        awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
+        ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste $dsfile - >! ${tmpdir}$i.last10
+      else if ($prefix == "t" && $pr2fix == "p") then
+        ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+        sed 's/,/ /g' | sed 's/;//g' | \
+        awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
+        ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
+      else
+        ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+        sed 's/,/ /g' | sed 's/;//g' | \
+        awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
+        ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
+      endif
+      if ($prefix == "f" && -s $dsFILEP) then
+        ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
+        sed 's/,/ /g' | sed 's/;//g' | \
+        awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
+        ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
+      endif
     else
-      ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      sed 's/,/ /g' | sed 's/;//g' | \
-      awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
-    endif
-    if ($prefix == "f" && -s $dsFILEP) then
-      ncdump $source -f f -v "$i" | awk -v string="$i" 'BEGIN {ORS="";} /data:/{found1=1;next;} $0 ~ string {if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}}' | \
-      sed 's/,/ /g' | sed 's/;//g' | \
-      awk -v nyy="$ny" -v j1=$jstart -v j2=$jend 'BEGIN{ORS=" "} {for (j=j1;j<=j2;j++) {for (i=1;i<=nyy;i++) {k=i+(j-1)*nyy; print $k};print "\n";}}' | head -n -1 | \
-      ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
-    endif
-  else
-    if ($prefix == "f" && -s $dsFILE) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILE | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
-    else if ($prefix == "t" && $pr2fix != "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste $dsfile - >! ${tmpdir}$i.last10
-    else if ($prefix == "t" && $pr2fix == "p") then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
-    else
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - >! ${tmpdir}$i.last10
-    endif
-    if ($prefix == "f" && -s $dsFILEP) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste $dsfile - $dsFILEP | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
+      set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+      else
+        nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+      endif
+      if ("$suffix" != "a" && "$suffix" != "i") then
+        set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+        if ( $ds_exists == 0 ) then
+          if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+        else
+          nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+        endif
+        set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+        if ( $ds_exists == 0 ) then
+          if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+        else
+          nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+        endif
+      endif
+      if ($prefix == "f" && -s $dsFILE) then
+        nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $1,$2/$3}' >! ${tmpdir}$i.last10
+      else if ($prefix == "t" && $pr2fix != "p") then
+        nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1/1.602176634e-19}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}$i.last10
+      else if ($prefix == "t" && $pr2fix == "p") then
+        nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}$i.last10
+      else
+        nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}$i.last10
+      endif
+      if ($prefix == "f" && -s $dsFILEP) then
+        nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'.last10
+      endif
     endif
   endif
 end
 
-if ($netcdf4 == 1) then
+foreach i ($usual_multi $extra_multi)
+  set var_exists = `ncdump -h $source | grep -cw "$i"`
+  if ($var_exists != 0 ) then
+    set prefix=`echo $i | cut -c1`
+    set pr2fix=`echo $i | cut -c2`
+    set suffix=`echo $i | cut -c5-`
+    set SUFFIX=`echo $suffix | tr 'a-z' 'A-Z'`
+    set SUFFIXP=`echo $suffix | tr 'a-z' 'A-Z'`P
+    set dsfile=b2mn.exe.dir/ds$suffix
+    if (! -s $dsfile) set dsfile=ds$suffix
+    set dsFILE=b2mn.exe.dir/ds$SUFFIX
+    if (! -s $dsFILE) set dsFILE=ds$SUFFIX
+    set dsFILEP=b2mn.exe.dir/ds$SUFFIXP
+    if (! -s $dsFILEP) set dsFILEP=ds$SUFFIXP
+#  echo $i $prefix $pr2fix $suffix $SUFFIX $SUFFIXP $dsfile $dsFILE $dsFILEP
+    if ($no_nc2text == 1) then
+      # TODO
+    else
+      set ds_exists = `ncdump -h $source | grep -cw "ds${suffix}"`
+      if ( $ds_exists == 0 ) then
+        if (! -s ${tmpdir}ds${suffix} ) cp $dsfile ${tmpdir}ds${suffix}
+      else
+        nc2text -n 9999999 $source "ds${suffix}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${suffix}
+      endif
+      if ("$suffix" != "a" && "$suffix" != "i") then
+        set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIX}T"`
+        if ( $ds_exists == 0 ) then
+          if (! -s ${tmpdir}ds${SUFFIX}T ) cp $dsFILE ${tmpdir}ds${SUFFIX}T
+        else
+          nc2text -n 9999999 $source "ds${SUFFIX}T" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIX}T
+        endif
+        set ds_exists = `ncdump -h $source | grep -cw "ds${SUFFIXP}"`
+        if ( $ds_exists == 0 ) then
+          if (! -s ${tmpdir}ds${SUFFIXP} ) cp $dsFILEP ${tmpdir}ds${SUFFIXP}
+        else
+          nc2text -n 9999999 $source "ds${SUFFIXP}" | ave.awk | tr ' ' '\n' | awk 'NF>0 { printf("  % .16E\n", $1) }' >! ${tmpdir}ds${SUFFIXP}
+        endif
+      endif
+      if ($prefix == "f" && -s $dsFILE) then
+        foreach is (`seq 1 $ns`)
+          @ is_minus_1 = $is - 1
+          nc2text -n 9999999 $source "$i(:,$is,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}T | awk '{print $1,$2/$3}' >! ${tmpdir}$i$is_minus_1.last10
+        end
+      else
+        foreach is (`seq 1 $ns`)
+          @ is_minus_1 = $is - 1
+          nc2text -n 9999999 $source "$i(:,$is,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - >! ${tmpdir}$i$is_minus_1.last10
+        end
+      endif
+      if ($prefix == "f" && -s $dsFILEP) then
+        foreach is (`seq 1 $ns`)
+          @ is_minus_1 = $is - 1
+          nc2text -n 9999999 $source "$i(:,$is,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $1,$2/$3}' >! ${tmpdir}$i'P'$is_minus_1.last10
+        end
+      endif
+    endif
+  endif
+end
+
+[ -f "${tmpdir}dsfile" ] && rm "${tmpdir}dsfile"
+[ -f "${tmpdir}dsFILET" ] && rm "${tmpdir}dsFILET"
+[ -f "${tmpdir}dsFILEP" ] && rm "${tmpdir}dsFILEP"
+
+if($?GNUPLOT_TMP) then
+  set tmpdir="$GNUPLOT_TMP/"
+else
+  set tmpdir=""
+endif
+setenv GNUPLOT_BATCH yes
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
+setenv PRINT_PLOT b2time2d_profiles.ps
+rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
+echo 0 > ${tmpdir}GNUPLOT_COUNT
+
+set nreg=`climb_and_look_for NREG`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
+if (-s $nreg) then
+  setenv NREG `cat $nreg | cut -d ' ' -f 1`
+  #echo Set NREG to $NREG "(based on $nreg)"
+else
+  set NREG=$nnreg[2]
+  #echo Set NREG to $NREG "(based on log file)"
+endif
+if (! $?NREG) set NREG = 4
+if ("X$nnreg" != "X") then
+  if ($NREG != $nnreg[2]) then
+    echo "NREG in file ($nnreg[2]) does not match $NREG"
+    exit
+  endif
+endif
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+
+if ( $NUM < 0 ) then
+    @ abs_num = -1 * $NUM
+else
+    @ abs_num = $NUM
+endif
+@ NUM = $abs_num + 1
+if ( $END < 0 ) then
+    @ abs_end = -1 * $END
+else
+    @ abs_end = $END
+endif
+@ END = $abs_end
+
+2dds ne3da $NUM $END
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dab3da* if run with Eirene, na3da* if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dab3da* fields exist --> coupled run --> call dab3da*
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dab3da$neutral_species_index "
+      else if (`ncdump -h $source | grep -w na3da | wc -l` > 0) then
+        # dab3da* fields do not exist --> standalone run --> call na3da*
+        set na_dens="$na_dens na3da$is_minus_1 "
+      endif
+    else if (`ncdump -h $source | grep -w na3da | wc -l` > 0) then
+      # ion species: call na3da*
+      set na_dens="$na_dens na3da$is_minus_1 "
+    endif
+end
+if ( "X${na_dens}X" != "XX" ) then
+  set counts = (`groups_species`)
+  set na_dens_list = (`echo $na_dens`)
+  set offset = 1
+  foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+      set group = "$group $na_dens_list[$i]"
+    end
+    2dds $group $NUM $END
+    @ offset = $end + 1
+  end
+endif
+2dds te3da ti3da $NUM $END
+2dds ne3dl $NUM $END
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dab3dl* if run with Eirene, na3dl* if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dab3dl* fields exist --> coupled run --> call dab3dl*
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dab3dl$neutral_species_index "
+      else if (`ncdump -h $source | grep -w na3dl | wc -l` > 0) then
+        # dab3dl* fields do not exist --> standalone run --> call na3dl*
+        set na_dens="$na_dens na3dl$is_minus_1 "
+      endif
+    else if (`ncdump -h $source | grep -w na3dl | wc -l` > 0) then
+      # ion species: call na3dl*
+      set na_dens="$na_dens na3dl$is_minus_1 "
+    endif
+end
+if ( "X${na_dens}X" != "XX" ) then
+  set counts = (`groups_species`)
+  set na_dens_list = (`echo $na_dens`)
+  set offset = 1
+  foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+      set group = "$group $na_dens_list[$i]"
+    end
+    2dds $group $NUM $END
+    @ offset = $end + 1
+  end
+endif
+2dds te3dl ti3dl $NUM $END
+2dds ne3dr $NUM $END
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dab3dr* if run with Eirene, na3dr* if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dab3dr* fields exist --> coupled run --> call dab3dr*
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dab3dr$neutral_species_index "
+      else if (`ncdump -h $source | grep -w na3dr | wc -l` > 0) then
+        # dab3dr* fields do not exist --> standalone run --> call na3dr*
+        set na_dens="$na_dens na3dr$is_minus_1 "
+      endif
+    else if (`ncdump -h $source | grep -w na3dr | wc -l` > 0) then
+      # ion species: call na3dr*
+      set na_dens="$na_dens na3dr$is_minus_1 "
+    endif
+end
+if ( "X${na_dens}X" != "XX" ) then
+  set counts = (`groups_species`)
+  set na_dens_list = (`echo $na_dens`)
+  set offset = 1
+  foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+      set group = "$group $na_dens_list[$i]"
+    end
+    2dds $group $NUM $END
+    @ offset = $end + 1
+  end
+endif
+2dds te3dr ti3dr $NUM $END
+2dds fo3dl $NUM $END
+2dds ft3dl $NUM $END
+2dds fo3dr $NUM $END
+2dds ft3dr $NUM $END
+switch ($NREG)
+  case "8":
+    2dds fo3dtl $NUM $END
+    2dds ft3dtl $NUM $END
+    2dds fo3dtr $NUM $END
+    2dds ft3dtr $NUM $END
+    breaksw
+  case "7":
+    2dds fo3dtl $NUM $END
+    2dds ft3dtl $NUM $END
+    2dds fo3dtr $NUM $END
+    2dds ft3dtr $NUM $END
+    breaksw
+endsw
+
+gnuplot ${tmpdir}gnuplot.cmd
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd
+[ -f "${tmpdir}dsfile" ] && rm "${tmpdir}dsfile"
+[ -f "${tmpdir}dsFILET" ] && rm "${tmpdir}dsFILET"
+[ -f "${tmpdir}dsFILEP" ] && rm "${tmpdir}dsFILEP"
+
+if ( $netcdf4 == 1 ) then
   rm $source
 endif

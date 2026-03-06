@@ -27,6 +27,7 @@ version = line(8:17);
 
 disp(['read_b2frates -- file version ',version]);
 rates.version = version;
+
 %% get label --> for b2frates this is necessary for ppout!
 line    = fgetl(fid);
 line    = fgetl(fid);
@@ -67,7 +68,8 @@ rates.rtlz2     = read_rfield(fid,'rtlz2'    ,ratdims);
 rates.rtlpt     = read_rfield(fid,'rtlpt'    ,ratdims);
 rates.rtlpi     = read_rfield(fid,'rtlpi'    ,ratdims);
 
-%% extra
+%% Read fix_recomb and zmax_recomb
+
 dim = read_ifield(fid,'fix_recomb,zmax_recomb',2);
 rates.fix_recomb = dim(1);
 rates.zmax_recomb = dim(1);
