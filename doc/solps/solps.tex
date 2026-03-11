@@ -229,7 +229,6 @@ In addition to the GitHub repositories, ITER IDM account holders may request acc
 \begin{description}
   \item[SOLPS-ITER] The overarching \SOLPSITER repository
   \item[B2.5] For the {\tt B2.5} source code
-  \item[EIRENE] For the {\tt Eirene} source code
   \item[AMNS ADAS] A repository of atomic data used by the codes
 \end{description}
 Note that only the {\tt AMNS ADAS} Git repository at ITER will provide data files that are not yet available on GitHub. For all other repositories, they are only needed if you need to do some code archaeology, and no code development is to be done there. Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
@@ -239,7 +238,7 @@ Users can obtain the {\tt Eirene} code under a CC-BY-NC-ND licence but developer
 
 After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER} or \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse} and maintained by the IO, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
 
-The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre2} and {\tt DivGeo} individually as submodules. Optional ADAS data files are provided in the {\tt AMNS ADAS} submodule. Some service libraries (such as the {\tt GGD}, {\tt MSCL}, and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Registered users can also have access to the standalone {\tt SOLPS4.3} repository.
+The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt Eirene}, {\tt Carre2} and {\tt DivGeo} individually as submodules. Optional ADAS data files are provided in the {\tt AMNS ADAS} submodule. Some service libraries (such as the {\tt GGD}, {\tt MSCL}, and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Registered users can also have access to the standalone {\tt SOLPS4.3} repository.
 
 One can generally browse the ITER Git repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization} (open access) or \href{https://git.iter.org}{https://git\allowbreak.iter.org} (restricted access) and \SOLPSITER specifically at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com/iterorganization/SOLPS-ITER}. For the ITER restricted repositories, users will first need to authenticate with their ITER username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right hand corner in the web browser window.
 \end{sloppypar}
@@ -4725,7 +4724,7 @@ There are currently six possible choices supported. They are:
   \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" or "stratified sampling" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt Eirene}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -7597,7 +7596,7 @@ Very good agreement between the hybrid and the fully kinetic methods has been ac
 
 \begin{itemize}
 \item Since there is no fluid approximation for the neutral molecules, they have to be kept fully kinetic. However, in detached conditions, the CPU time for the molecules is not negligible compared to the atoms.
-\item At the interface between the {\tt B2.5} mesh and the {\tt EIRENE} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this interface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
+\item At the interface between the {\tt B2.5} mesh and the {\tt Eirene} void triangles, a large flux of atoms must be converted from fluid to kinetic. It could be beneficial to move this interface further down in the divertor with the extended grids code, such that a larger fraction of the neutrals can be treated as fluid.
 \item Suboptimal performance of the global statistics (total bias error) was observed. Typically more particles are needed for the neutral strata along the PFR boundaries, partially negating the speed-up. More research is needed on Monte Carlo procedures that are optimal for the SpH approach.
 \end{itemize}
 
@@ -22853,7 +22852,7 @@ machsfr.f               &  X02AMF & returns the safe range of floating-point ari
 \end{center}
 
 \subsection{EIRENE}
-\index{NAG calls in EIRENE}
+\index{NAG calls in Eirene}
 
 The NAG calls from {\tt Eirene} are given in table \ref{tab:nageirene}.
 

@@ -31,7 +31,8 @@ echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
-echo The Eirene manual is located at http://www.eirene.de/
+echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
+echo or online at http://www.eirene.de/
 
 export LAST_COMMAND=`echo $_`
 if [ "$SOLPSTOP_FORCE" != "" ]; then
@@ -144,15 +145,22 @@ S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 #   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
 link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
 if [ -z "$NO_MPI" ]; then
-  for suffix in ".mpi" ".mpi.debug" ".openmp.mpi" ".openmp.mpi.debug"; do
+  for suffix in ".mpi" ".openmp.mpi"; do
     [ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
-    [ "`readlink ${link_scripts}${suffix}`" != "$link_scripts" ] && ln -sf $link_scripts ${link_scripts}${suffix}
+    [ "`readlink ${link_scripts}${suffix}`" != "${link_scripts}" ] && ln -sf ${link_scripts} ${link_scripts}${suffix}
+    [ -d ${link_scripts}${suffix}.debug ] && rm -Rf ${link_scripts}${suffix}.debug
+    [ "`readlink ${link_scripts}${suffix}.debug`" != "${link_scripts}.debug" ] && ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
   done
 fi
-for suffix in ".openmp" ".debug" ".openmp.debug"; do
-  [ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
-  [ "`readlink ${link_scripts}${suffix}`" != "$link_scripts" ] && ln -sf $link_scripts ${link_scripts}${suffix}
-done
+suffix=".openmp"
+[ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
+[ "`readlink ${link_scripts}${suffix}`" != "${link_scripts}" ] && ln -sf ${link_scripts} ${link_scripts}${suffix}
+[ -d ${link_scripts}${suffix}.debug ] && rm -Rf ${link_scripts}${suffix}.debug
+[ "`readlink ${link_scripts}${suffix}.debug`" != "${link_scripts}.debug" ] && ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
+if [ "`readlink ${link_scripts}.debug`" == "${link_scripts}" ]; then
+  rm -Rf ${link_scripts}.debug
+  mkdir -p ${link_scripts}.debug
+fi
 
 # Note: in case of name clash between script and executable, script will be found first
 export SOLPS_PATH=${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
@@ -289,6 +297,13 @@ export LATEX=`${SOLPSTOP}/scripts/which_latex`
 [ "$LATEX" = "" ] && {
   export NO_MANUAL=true
   echo 'No LaTeX executable found: Manual will not be built'
+}
+
+# Check if CMake available for Eirene compilation
+export CMAKE=`which cmake`
+[ "$CMAKE" = "" ] && {
+  export NO_CMAKE=true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
 }
 
 # Add any local settings if present

@@ -8,7 +8,11 @@ Program nc2text_simple
 #ifndef NO_CDF
 #  include <netcdf.inc>
 
+#ifdef DBG
+  Logical :: debug = .true.
+#else
   Logical :: debug = .false.
+#endif
 
   Integer, Parameter :: R8 = Selected_real_kind(15,307)
   Integer, Parameter :: I8 = Selected_int_kind(8)
@@ -119,7 +123,7 @@ Program nc2text_simple
        (i1 .le. 0) .OR. (j1 .le. 0) .OR. (k1 .le. 0) ) Then
      Write(0,*) "Error: index out of bounds"
      Write(0,*) "Size is ",dimlen
-     Write(0,'(a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,',',k1,':',k2,')'
+     Write(0,'(a,i0,a,i0,a,i0,a,i0,a,i0,a,i0,a)') ' Subscripts processed to (',i1,':',i2,',',j1,':',j2,',',k1,':',k2,')'
      Stop
   Endif
 
@@ -335,11 +339,11 @@ Contains
     Write(0,'(a)') ' '
     Write(0,'(a)') "   Optional syntax 'variable(i1:i2,j1:j2,k1:k2)' can return a range"
     Write(0,'(a)') ' '
-    Write(0,'(a)') '   Missing i1..j2 will evaluate as array bounds'
+    Write(0,'(a)') '   Missing i1..k2 will evaluate as array bounds'
     Write(0,'(a)') '   Ranges start from 1'
-    Write(0,'(a)') '   Zero or regative subscripts count from end of array'
+    Write(0,'(a)') '   Zero or negative subscripts count from end of array'
     Write(0,'(a)') ' '
-    Write(0,'(a)') 'Current restrictions: only scalars, 1D, 2D and 3D arrays of type double supported'
+    Write(0,'(a)') 'Current restrictions: only scalars, 1D, 2D, and 3D arrays of type double supported'
     Write(0,'(a)') ' '
     Write(0,'(a)') 'Examples:'
     Write(0,'(a)') '   nc2text_simple b2time.nc tesepa'

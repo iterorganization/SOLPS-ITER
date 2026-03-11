@@ -52,7 +52,7 @@ cat $dsleft | awk.reverse | awk '{print -0.1-$1}' >> $tfilename
 cat $dsright | awk '{print 0.1+$1}' >> $tfilename
 if ($no_nc2text == 1) then
   echo '%' ny = `ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | wc -w` ygrid=True ylabel=time >> $tfilename
-  ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | awk.tranpose >> $tfilename
+  ncdump $file -f f -v timesa | awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /timesa/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | sed 's/,/ /g' | sed 's/;//g' | awk.transpose >> $tfilename
 else
   echo '%' ny = `nc2text $file timesa | wc -w` ygrid=True ylabel=time >> $tfilename
   nc2text $file timesa | awk.transpose >> $tfilename
