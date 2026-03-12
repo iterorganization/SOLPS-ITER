@@ -1,0 +1,23 @@
+#! /bin/csh -f
+if (-s b2mn.exe.dir/b2ftrace_mol) then
+  set FILE=b2mn.exe.dir/b2ftrace_mol
+else
+  set FILE=b2ftrace_mol
+endif
+if (-X zcat) then
+  set ZCAT="zcat --force"
+else
+  set ZCAT="gzip --decompress --force --stdout"
+endif
+if($?GNUPLOT_TMP) then
+  set tmpdir="$GNUPLOT_TMP/"
+else
+  set tmpdir=""
+endif
+
+setenv PLOT_FROM_FILE "gnuplot.temp"
+$ZCAT $FILE | \
+  awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
+  resopt $argv | \
+  awk '{print $2,$3,$4,$5}' >! ${tmpdir}PLOT_FROM_FILE
+plot xlyplot11 con mom ene iteration 'norm of residuals' $PWD

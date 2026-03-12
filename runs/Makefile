@@ -99,7 +99,7 @@ target_ah = b2ah.prt b2fpardf
 target_ai = b2ai.prt b2fstati
 target_ar = b2ar.prt b2frates
 target_am = b2am.prt b2frates_mol
-target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced b2ftracedd
+target_mn = b2mn.prt b2fparam b2fstate b2fmovie b2ftrace b2ftrack b2fplasma b2fdiffe b2ftraced b2ftracedd b2ftrace_mol
 target_opt = target_mn
 ifdef USE_IMPGYRO
 target_mn += restart_ext
