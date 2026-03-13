@@ -3,14 +3,6 @@
 #
 # Special notes:
 #
-# If you do not have the NetCDF library on your system:
-# Leave LD_NETCDF blank
-# Add -DNO_CDF to SOLPS_CPP
-#
-# If you do have NetCDF on your system:
-# Add -DCDF_MOVIE to SOLPS_CPP to be able to produce movies
-# Add -DNETCDF4_3 to SOLPS_CPP if you are linking to NetCDF version 4.3 or newer
-#
 # If you have NCAR version 3 on your system:
 # Remove -DNCAR4 from SOLPS_CPP
 #
@@ -24,10 +16,6 @@
 # If you have NAG Mark 22 or greater on your system:
 # Add -DNAG22 to SOLPS_CPP
 #
-# If you do not have MDSplus on your system:
-# Leave LD_MDSPLUS blank
-# Remove -DMDSPLUS from SOLPS_CPP
-#
 # If your compiler does not support Fortran 2003 features:
 # Add -DLEGACYCOMP to SOLPS_CPP
 #
@@ -37,28 +25,31 @@
        H5DIR ?=
      GR_ROOT ?= ${STGDIR}
     GLI_HOME ?= ${STGDIR}
-  NCARG_ROOT ?= 
-      NAGDIR ?=  
+  NCARG_ROOT ?=
+      NAGDIR ?=
  MDSPLUS_DIR ?=
 
 #
 # Variables for linking, using pkg-config
 #
 
-LD_NETCDF  = `nf-config --flibs` 
+LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = -L${STGDIR} -lmscl
 LD_GR      = -L${STGDIR} -lgr
 LD_GKS     = -L${STGDIR} -lgks -lX11 -lXt
 ifdef NCARG_ROOT
 #LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
 endif
 LD_NAG     = `pkg-config openblas --libs`
 LD_MDSPLUS =
 # LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${STGDIR} -lsonnet -lstdc++
-LD_MPI     = 
+LD_MPI     =
+
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
 
 #
 # Provide compiler
@@ -73,12 +64,12 @@ endif
 # Preprocessor options
 #
 
-SOLPS_CPP      = -DNO_NAG -DNCAR4
+SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    =
 CARRE_DEFINES  =
 EIRENE_DEFINES =
 FFLAGSEXTRA    =
-MPI_CPP        = 
+MPI_CPP        =
 
 
 #!!!Local Variables:

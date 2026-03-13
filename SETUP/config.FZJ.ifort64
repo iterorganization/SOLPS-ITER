@@ -48,6 +48,10 @@ LD_NAG     = -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #

@@ -21,6 +21,10 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_DEBUG yes
   setenv   I_MPI_DEBUG 5
   setenv   PMI_DEBUG 1
+  if ($?SOLPS_OPENMP) then
+    setenv OMP_DISPLAY_AFFINITY true
+    setenv OMP_DISPLAY_ENV true
+  endif
   unsetenv OLD_SOLPS_PATH
   rehash
   echo "SOLPS-ITER debug mode turned on"

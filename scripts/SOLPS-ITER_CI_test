@@ -1,18 +1,15 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
-# Create additional Eirene dependencies file to avoid a recurring compiler timing error
-echo '${OBJDIR}/pltadd.o: ${OBJDIR}/pside.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-echo '${OBJDIR}/eirmod_extrab25.o: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-echo '${OBJDIR}/eirmod_extrab25.${MOD}: ${OBJDIR}/couple_specific.o' >> ${SOLPSTOP}/modules/Eirene/config/dependencies.local
-
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-make listobj_nox depend_nox
-make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_tgt b25_adj b25_hess_tgt
+make VERSION_nox
+make FC=ifort listobj_nox depend_nox
+make FC=ifort nc2text_simple nc_reduce
+make FC=ifort divgeo_nox
+make FC=ifort MAKE_OPTIONS=-j8 solps_nox b25_nox b25_tgt b25_adj b25_hess_tgt
 
 # Run test cases
 
@@ -36,6 +33,27 @@ touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 1
+
+# Test to check JSON input also works
+cd ..
+mkdir run_CI_JSON_test
+cd run_CI_JSON_test
+cp ../run_kin_CI/b2.*.parameters .
+cp ../run_kin_CI/b2mn.dat .
+cp ../run_kin_CI/b2fstati .
+cp ../run_kin_CI/fort.11.i fort.11
+cp ../run_kin_CI/fort.13.i fort.13
+cp ../run_kin_CI/fort.44.i fort.44
+cp ../run_kin_CI/fort.46.i fort.46
+cp ../run_kin_CI/eirene.input.json .
+cp ../run_kin_CI/eirene_add_surfaces.input.json .
+cp ../run_kin_CI/eirene_physics_model.input.json .
+cp ../run_kin_CI/user_data.input .
+cp ../run_kin_CI/b2time.nc.i b2time.nc
+touch b2fstati
+setup_baserun_eirene_json_links
+b2run b2mn
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 2
 
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
@@ -72,7 +90,7 @@ b2run -s b2mn
 rm b2mn.prt
 mv b2fstate b2fstati
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 3
 cd ..
 
 # Now test the coupled code
@@ -108,7 +126,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 4
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5

@@ -11,7 +11,7 @@
 	branch = .
 [submodule "Carre"]
 	path = modules/Carre
-	url = ssh://git@git.iter.org/bnd/carre.git
+	url = https://github.com/iterorganization/CARRE.git
 	branch = .
 [submodule "Carre2"]
 	path = modules/Carre2
@@ -19,12 +19,12 @@
 	branch = feature/Carre2
 [submodule "DivGeo"]
 	path = modules/DivGeo
-	url = ssh://git@git.iter.org/bnd/divgeo.git
-	branch = .
+	url = https://github.com/iterorganization/DivGeo.git
+	branch = feature/wg_release
 [submodule "Eirene"]
 	path = modules/Eirene
-	url = ssh://git@git.iter.org/bnd/eirene.git
-	branch = .
+	url = https://github.com/iterorganization/EIRENE.git
+	branch = SOLPS_develop
 [submodule "ADAS"]
 	path = modules/adas
 	url = ssh://git@git.iter.org/imex/amns-adas.git

@@ -43,6 +43,11 @@ LD_NAG     = -L${SOLPSLIB} -lblaslapack # -L${NAGDIR} -lnag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = `pkg-config mvapich2 --libs`
+LD_JSON    = `pkg-config json-fortran --libs`
+
+LIBGKS     = /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0/lib/libGKS.so
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
 
 #
 # Preprocessor options
@@ -52,6 +57,7 @@ SOLPS_CPP      = -DNCAR4 -DNO_NAG -DLEGACYCOMP
 B25_DEFINES    =
 EIRENE_DEFINES =
 MPI_CPP        = `pkg-config mvapich2 --cflags`
+JSON_INC       = `pkg-config json-fortran --cflags`
 
 # Autodetected optional features
 
@@ -223,12 +229,14 @@ export LD_NCARG
 export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
+export LD_JSON
 
 export SOLPS_CPP
 export SOLPS_MPI
 export SOLPS_OPENMP
 export B25_DEFINES
 export EIRENE_DEFINES
+export JSON_INC
 
 ## Local Variables:
 ## mode: Makefile

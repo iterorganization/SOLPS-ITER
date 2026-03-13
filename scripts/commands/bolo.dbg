@@ -17,4 +17,16 @@ dup 'radiation from atoms [+]' extl surf drop
 dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: neutrad' outp drop
 m+
 
+molrad                     ! radiation from Eirene molecules
+rlcl m* 0 0 sumz
+dup 'radiation from molecules [+]' extl surf drop
+dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: molrad' outp drop
+m+
+
+ionrad                     ! radiation from Eirene molecular ions
+rlcl m* 0 0 sumz
+dup 'radiation from molecular ions [+]' extl surf drop
+dup sumx sumy 0 0 'INTEGRAL BOLOMETER POWER: ionrad' outp drop
+m+
+
 'Bolometer radiation loss (W)' extl

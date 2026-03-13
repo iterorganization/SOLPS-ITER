@@ -82,13 +82,13 @@ c*** Default boundary conditions
      ,  ((lmobndx(j,0,i),j=1,nsdb2),i=1,nbndknd) /
      /    nsdb2*2, nsdb2*3, nsdb2*2, nsdb2*2        /,
      ,  (beebndx(0,1,i),i=1,nbndknd), (beibndx(0,1,i),i=1,nbndknd)  /
-     /         1.e6, 1., 2*0.03     ,      1.e6, 1.5, 2*0.03      /,
+     /         1.e6, 0., 2*0.03     ,      1.e6, 1.5, 2*0.03        /,
      ,  (beebndx(0,2,i),i=1,nbndknd), (beibndx(0,2,i),i=1,nbndknd)  /
-     /            4*0.              ,         4*0.              /,
+     /            4*0.              ,           4*0.                /,
      ,  (bpobndx(0,1,i),i=1,nbndknd), (bpobndx(0,2,i),i=1,nbndknd)  /
      /            4*0.              ,           4*0.                /,
      ,  (benkbndx(0,1,i),i=1,nbndknd), (benkbndx(0,2,i),i=1,nbndknd) /
-     /         0.1, 1.0, 2*-1.0e-3  ,           4*0.            /,
+     /         0.1, 1.0, 2*-1.0e-3  ,           4*0.                /,
      ,  ((bcobndx(j,0,1,i),j=1,nsdb2),i=1,nbndknd)   /
      /    nsdb2*1.e19, nsdb2*0., nsdb2*0.03, nsdb2*0.03 /,
      ,  ((bcobndx(j,0,2,i),j=1,nsdb2),i=1,nbndknd)   /
@@ -153,17 +153,17 @@ c*** Data for TRIA mesh
 c*** 1
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
-     /      -1  ,   1   ,  50  , 5800 ,   1   ,   1  ,   0   ,   1   /,
-     ,  nfullrun, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
+     /      -1  ,   1   ,  50  , 5000 ,   1   ,   1  ,   0   ,   1   /,
+     ,  nevntmax, noptim,noptm1, ngeom_usr, ncoup_input, nsmstra /
      /       0  ,   1   ,   1  ,     0    ,     1      ,    1    /,
-     ,   nstoram, ngstal,nrtal1,nreac_add /
-     /       9  ,   1   ,   0  ,     1    /
+     ,   nstoram, ngstal,nrtal1, nvnmxtr /
+     /       9  ,   1   ,   0  ,     0   /
       data nlscl , nltest, nlana ,nldrft, nlcrr , nlerg , nlident/
      /    .true. ,.false.,.false.,.true.,.false.,.false.,.false./,
-     ,     nlone ,nlmovie, nldfst,nloldran,nlcascad,nloctree/
+     ,     nlone ,nlmovie, nldfst,nlranmar,nlcascad,nloctree/
      /    .false.,.false.,.false., .true. , .false., .false./,
-     /    nlwrmsh, nexvs ,nltrimesh/
-     ,    .true. ,.false.,.false./
+     /    nlwrmsh, nexvs ,nltrimesh,nlsoledge,nlspcspt/
+     ,    .true. ,.false.,.false., .true. , .false./
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2
@@ -833,7 +833,9 @@ c*** 10e
      /    nals*' ', nals*' ', nals*' ', nals*' ' /
 c*** 10f
       data ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
-     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /
+     /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /,
+     ,     ispopt /
+     /     nasp*0 /
       data spcmn , spcmx , spcsh , spcpx , spcpy , spcps /
      /    nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0.,nasp*0./
       data spcvx , spcvy , spcvz /

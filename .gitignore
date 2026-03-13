@@ -104,6 +104,9 @@ doc/AFN_BCs_documentation/LaTeX_source_code/main-*.*
 !doc/AFN_BCs_documentation/LaTeX_source_code/main.tex
 doc/AFN_BCs_documentation/LaTeX_source_code/defs.aux
 doc/AFN_BCs_documentation.pdf
+doc/edit_geo_manual/edit_geo_manual.*
+!doc/edit_geo_manual/edit_geo_manual.tex
+doc/edit_geo_manual.pdf
 
 # auxiliary files for AMDS
 modules/amds/src/x_~fbr.c
@@ -124,3 +127,6 @@ scripts/*.pgf90*
 scripts/*.nag_f90*
 scripts/*.cray*
 scripts/*.g95*
+
+# Matlab data structure
+scripts/*/*.mat

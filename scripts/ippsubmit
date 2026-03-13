@@ -54,8 +54,8 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
-  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
+  -x                       requests an exclusive job allocation
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
   -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives
@@ -64,7 +64,7 @@ Available options are:
   -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
-  -M <<MEM_SIZE>>          memory size (default $mem)
+  -M <<MEM_SIZE>>          memory size per CPU, in GB (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
   -b <<RUN_DIRS_LIST>>     ask for a batch submission of multiple runs from the folders in <<RUN_DIRS_LIST>>
                            the comma-separated list <<RUN_DIRS_LIST>> (e.g. -b 'run1,run2')
@@ -72,8 +72,9 @@ Available options are:
 Available per-job resources on the cluster:
   Up to 256 CPUs per node, on 1 or multiple nodes
   Maximum memory per CPU: 10 GB
-  Maximum memory per node: 370 GB
-  Maximum run times: 2.00.00 h, 24.00.00 h or 48.00.00 h, depending on qos
+  Maximum memory per node: 740 GB
+  Maximum run times (serial): 4 h, 36 h or 192 h
+  Maximum run times (OMP/Parallel): 2 h, 24 h or 48 h
 
 EOF
     exit
@@ -322,9 +323,9 @@ if ( $mem_tot > 370 ) then
 endif
 
 if ($batch_flag == 0) then
-  if ($standalone == "yes") then
+  if ("$standalone_arg" == "-s") then
     echo Asking for a B2.5 standalone run
-  else if (-s fort.1 && $standalone == "no") then
+  else if (-s fort.1 && $standalone_arg == "") then
     echo Assuming run with Eirene
   else 
     echo Asking run with Eirene but no fort.1 file found: reverting to a standalone run
@@ -332,9 +333,9 @@ if ($batch_flag == 0) then
     set coupled_suffix=""
   endif
 else if ($batch_flag == 1) then
-  if ($standalone == "yes") then
+  if ($standalone_arg == "-s") then
     echo Asking for B2.5 standalone runs
-  else if ($standalone == "no") then
+  else if ($standalone_arg == "") then
     set all_have_fort1 = 1
     foreach dir ($run_dirs)
       if (! -s $dir/fort.1) then

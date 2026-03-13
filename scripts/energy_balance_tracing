@@ -1,0 +1,55 @@
+#! /bin/tcsh -f
+
+if($?GNUPLOT_TMP) then
+  set tmpdir="$GNUPLOT_TMP/"
+else
+  set tmpdir=""
+endif
+setenv GNUPLOT_BATCH yes
+setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
+setenv PRINT_PLOT energy_balance.ps
+rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
+echo 0 > ${tmpdir}GNUPLOT_COUNT
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_names = ()
+foreach name ($species_names)
+  set last_char = `echo "$name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$name" | awk '{print substr($0,length($0)-1,1)}'`
+  if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+    set neutral_species_names = ($neutral_species_names $name)
+  endif
+end
+set isonuclear_species_names = ()
+foreach name ($neutral_species_names)
+  set name = `echo $name | sed 's/0$//'`
+  set isonuclear_species_names = ($isonuclear_species_names $name)
+end
+
+set impurity_names = ($isonuclear_species_names[2-])
+
+set source=b2mn.exe.dir/tracing/blne.trc
+if (! -s $source) set source=tracing/blne.trc
+if (! -s $source) then
+  echo "No blne.trc tracing file found. Cannot proceed."
+  exit
+endif
+
+2dt_tracing tot_core pwr_totl_il pwr_totl_ol pwr_totl_wl tot_rad pwr_totl
+set imp_rad = ""
+foreach species ($impurity_names)
+  set imp_rad="$imp_rad imp_rad_$species "
+end
+2dt_tracing brms_rad ntrl_rad $imp_rad
+2dt_tracing pwr_plsm_il pwr_neut_il pwr_ionz_il pwr_diss_il
+2dt_tracing pwr_plsm_ol pwr_neut_ol pwr_ionz_ol pwr_diss_ol
+2dt_tracing pwr_plsm_wl pwr_neut_wl pwr_ionz_wl pwr_diss_wl
+
+gnuplot ${tmpdir}gnuplot.cmd
+rm ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.*data ${tmpdir}gnuplot.cmd

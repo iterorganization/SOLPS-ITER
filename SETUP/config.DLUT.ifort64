@@ -19,8 +19,8 @@
 # If using the Cray compiler:
 # Add -DCRAY to SOLPS_CPP
 #
-# If your compiler is compatible with Fortran 2003 features, you can:
-# Add -DF2003 to SOLPS_CPP
+# If your compiler does not support Fortran 2003 features:
+# Add -DLEGACYCOMP to SOLPS_CPP
 #
 # If you have NCAR version 3 (or no NCAR at all) on your system:
 # Remove -DNCAR4 from SOLPS_CPP
@@ -45,7 +45,6 @@
 # Add -DWINDOWS to SOLPS_CPP
 #
 
-
        NCDIR ?= ${NETCDF_DIR}
    MSCL_ROOT ?= /opt/ohpc/pub/apps/SOLPS_lib/DLUT.ifort64
        H5DIR ?= ${HDF5_DIR}
@@ -57,10 +56,9 @@
        MPDIR ?= /opt/ohpc/pub/apps/SOLPS_lib/DLUT.ifort64
 
 #
-## Variables for linking
-##
+# Variables for linking
 #
-#LD_NETCDF  = `nc-config --libs` -lnetcdff
+
 LD_NETCDF  = -L${NCDIR} -lnetcdf -lnetcdff
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 ifdef GR_ROOT
@@ -75,6 +73,10 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR} -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+ADDLIBS    = -lgfortran
+
 #
 # Preprocessor options
 #
@@ -86,170 +88,6 @@ EIRENE_DEFINES =
 FFLAGSEXTRA    =
 MPI_CPP        = -I${MPDIR}/include
 
-# Autodetected optional features...
-
-# Build with NetCDF tools if available
-ifdef LD_NETCDF
-  SOLPS_CPP   += -DCDF_MOVIE
-else
-  SOLPS_CPP   += -DNO_CDF
-endif
-
-# Build with MDSplus tools if MDSplus is present
-ifdef LD_MDSPLUS
-  SOLPS_CPP   += -DMDSPLUS
-endif
-
-# Build with Catalyst if ParaView is in PATH
-ifdef LD_CATALYST
-  SOLPS_CPP   += -DCATALYST
-endif
-
-# Build with Fundamental-Constants module if present
-ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
-  SOLPS_CPP += -DCONSTANTS_PROVIDED
-  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
-  IMAS_PKG_LIST = fundamental-constants
-  export SOLPSINCLUDE
-endif
-
-# Build with PETSc if available
-ifeq ($(shell `pkg-config --exists petsc`; echo $$?),0)
-  TAO_PRESENT = 1
-  ifdef TAO
-    SOLPSINCLUDE += `pkg-config petsc --cflags`
-    IMAS_PKG_LIST += petsc
-    export SOLPSINCLUDE
-  endif
-endif
-
-# Build with IMAS if imas module is loaded
-ifdef IMAS_VERSION
-  ifdef AL_VERSION
-    AL_MAJOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f1 )
-    AL_MINOR_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f2 )
-    AL_MICRO_VERSION = $(shell echo ${AL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-  else
-    AL_MAJOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f1 )
-    AL_MINOR_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f2 )
-    AL_MICRO_VERSION = $(shell echo ${UAL_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-  endif
-  IMAS_MAJOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
-  IMAS_MINOR_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
-  IMAS_MICRO_VERSION = $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
-  ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
-    IMAS_PKG_LIST += al-fortran
-  else
-    IMAS_PKG_LIST += imas-ifort
-  endif
-  ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-    ifdef GGD_VERSION
-      GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
-      GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-      GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-    else
-      GGD_MAJOR_VERSION = 0
-      GGD_MINOR_VERSION = 0
-      GGD_MICRO_VERSION = 0
-    endif
-  else
-    ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-      ifdef GGD_VERSION
-        GGD_MAJOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f1 )
-        GGD_MINOR_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f2 )
-        GGD_MICRO_VERSION = $(shell echo ${GGD_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
-      else
-        GGD_MAJOR_VERSION = 0
-        GGD_MINOR_VERSION = 0
-        GGD_MICRO_VERSION = 0
-      endif
-    else
-      GGD_MAJOR_VERSION = 1
-      GGD_MINOR_VERSION = 0
-      GGD_MICRO_VERSION = 0
-    endif
-  endif
-  ifeq ($(shell test ${GGD_MAJOR_VERSION} -gt 0; echo $$?),0)
-    ifeq ($(shell test ${IMAS_MAJOR_VERSION} -ge 4; echo $$?),0)
-      IMAS_PKG_LIST += ggd
-    else
-      ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 17; echo $$?),0)
-        IMAS_PKG_LIST += ggd
-      else
-        ifeq ($(shell test ${IMAS_MINOR_VERSION} -ge 12; echo $$?),0)
-          LD_GGD = -lggd_ifort
-        else
-          IMAS_PKG_LIST += imas-lowlevel
-        endif
-      endif
-    endif
-  endif
-  ifdef AMNS_PREFIX
-    IMAS_PKG_LIST += amns
-    SOLPS_CPP += -DAMNS
-  endif
-  LD_AL = `pkg-config ${IMAS_PKG_LIST} --s`
-  ifdef LD_GGD
-    LD_AL += ${LD_GGD}
-  endif
-  SOLPS_CPP += -DIMAS -DAL_MAJOR_VERSION=${AL_MAJOR_VERSION} -DAL_MINOR_VERSION=${AL_MINOR_VERSION} -DAL_MICRO_VERSION=${AL_MICRO_VERSION} -DIMAS_MAJOR_VERSION=${IMAS_MAJOR_VERSION} -DIMAS_MINOR_VERSION=${IMAS_MINOR_VERSION} -DIMAS_MICRO_VERSION=${IMAS_MICRO_VERSION} -DGGD_MAJOR_VERSION=${GGD_MAJOR_VERSION} -DGGD_MINOR_VERSION=${GGD_MINOR_VERSION} -DGGD_MICRO_VERSION=${GGD_MICRO_VERSION}
-  export LD_AL
-else
-  AL_MAJOR_VERSION = 0
-  AL_MINOR_VERSION = 0
-  AL_MICRO_VERSION = 0
-  GGD_MAJOR_VERSION = 0
-  GGD_MINOR_VERSION = 0
-  GGD_MICRO_VERSION = 0
-  IMAS_MAJOR_VERSION = 0
-  IMAS_MINOR_VERSION = 0
-  IMAS_MICRO_VERSION = 0
-endif
-export AL_MAJOR_VERSION
-export AL_MINOR_VERSION
-export AL_MICRO_VERSION
-export GGD_MAJOR_VERSION
-export GGD_MINOR_VERSION
-export GGD_MICRO_VERSION
-export IMAS_MAJOR_VERSION
-export IMAS_MINOR_VERSION
-export IMAS_MICRO_VERSION
-export IMAS_PKG_LIST
-
-# Build with OpenMP if requested
-ifdef SOLPS_OPENMP
-  B25_DEFINES += -D_OPENMP
-endif
-
-#
-# Export for use in sub-makefiles
-#
-
-export NCDIR
-export MSCL_ROOT
-export H5DIR
-export GR_ROOT
-export GLI_HOME
-export NCARG_ROOT
-export NAGDIR
-export MDSPLUS_DIR
-
-export LD_NETCDF
-export LD_MSCL
-export LD_GR
-export LD_GKS
-export LD_NCARG
-export LD_NAG
-export LD_MDSPLUS
-export LD_SONNET
-export LD_MPI
-
-export SOLPS_CPP
-export FFLAGSEXTRA
-export B25_DEFINES
-export CARRE_DEFINES
-export EIRENE_DEFINES
-export MPI_CPP
 
 #!!!Local Variables:
 #!!! mode: Makefile
