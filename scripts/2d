@@ -15,8 +15,8 @@ else
 endif
 
 if ( $#argv < 2 ) then
-    echo "Error: You must provide at least two arguments (2nd, 3rd, etc. arguments will be plotted vs. the 1st one)."
-    exit 1
+  echo "Error: You must provide at least two arguments (2nd, 3rd, etc. arguments will be plotted vs. the 1st one)."
+  exit 1
 endif
 
 set x=$1
@@ -43,27 +43,35 @@ else
 endif
 
 cp /dev/null ${tmpdir}gnuplot.data.tmp
+set nc=`ncdump -h $source | grep "nc = " | cut -d "=" -f 2 | cut -d ";" -f 1`
 if ($no_nc2text == 1) then
   if ("$x" =~ *[0-9]) then
-      # Multi-species quantities, called as $x = $name$is (e.g. $x = 'nasepm1')
-      echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
-      exit 1
+    # Multi-species quantities, called as $x = $name$is (e.g. $x = 'nasepm1')
+    echo "Error: Plotting multi-species arrays from b2time.nc not yet implemented without nc2text."
+    exit 1
   else
-      # Time, called as $x = 'timesa', or single species quantities, called as $x = $name (e.g. $x = 'nesepm')
-      ncdump $source -f f -v $x | \
-      awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /$x/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | \
-      sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
+    # Time, called as $x = 'timesa', or single species quantities, called as $x = $name (e.g. $x = 'nesepm')
+    ncdump $source -f f -v $x | \
+    awk 'BEGIN {ORS="";} /data:/{found1=1;next;} /$x/{if (found1==1) {if (found2==1) print $1; else {print $3;found2=1;}}} END {print "\n";}' | \
+    sed 's/,/ /g' | sed 's/;//g' >> ${tmpdir}gnuplot.data.tmp
   endif
 else
   if ("$x" =~ *[0-9]) then 
-      # Multi-species quantities, called as $x = $name$is (e.g. $x = 'nasepm1')
-      set is = `echo "$x" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
-      set name = `echo "$x" | sed -E 's/([0-9]+)$//'`
-      @ is_plus_1 = $is + 1
-      echo `nc2text -n 9999999 $source "$name(:,$is_plus_1)"` >> ${tmpdir}gnuplot.data.tmp
+    # Multi-species quantities, called as $x = $name$is (e.g. $x = 'nasepm1')
+    set is = `echo "$x" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
+    set name = `echo "$x" | sed -E 's/([0-9]+)$//'`
+    @ is_plus_1 = $is + 1
+    if ("$name" =~ namx* || "$name" =~ *bsep* || "$name" =~ nasep*) then
+      nc2text -n 9999999 $source "$name($is_plus_1,1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      if ($nc = "2") then
+        nc2text -n 9999999 $source "$name($is_plus_1,2,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      endif
+    else
+      nc2text -n 9999999 $source "$name($is_plus_1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+    endif
   else
-      # Time, called as $x = 'timesa', or single species quantities, called as $x = $name (e.g. $x = 'nesepm')
-      echo `nc2text -n 9999999 $source $x` >> ${tmpdir}gnuplot.data.tmp
+    # Time, called as $x = 'timesa', or single species quantities, called as $x = $name (e.g. $x = 'nesepm')
+    echo `nc2text -n 9999999 $source $x` >> ${tmpdir}gnuplot.data.tmp
   endif
 endif
 
@@ -100,10 +108,21 @@ start:
       set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
       set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
       @ is_plus_1 = $is + 1
-      echo `nc2text -n 9999999 $source "$name(:,$is_plus_1)"` >> ${tmpdir}gnuplot.data.tmp
+      if ("$name" =~ namx* || "$name" =~ *bsep* || "$name" =~ nasep*) then
+        nc2text -n 9999999 $source "$name($is_plus_1,1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        if ($nc = "2") then
+          nc2text -n 9999999 $source "$name($is_plus_1,2,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        endif
+      else
+        nc2text -n 9999999 $source "$name($is_plus_1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      endif
     else
       # Time, called as $1 = 'timesa', or single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
-      echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+      if ("$1" =~ tm* && !("$1" =~ tmb*)) then
+        nc2text -n 9999999 $source $1 >> ${tmpdir}gnuplot.data.tmp
+      else
+        nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+      endif
     endif
   endif
   shift

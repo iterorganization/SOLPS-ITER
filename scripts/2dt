@@ -70,6 +70,7 @@ foreach name ($species_names)
   endif
 end
 
+set nc=`ncdump -h $source | grep "nc = " | cut -d "=" -f 2 | cut -d ";" -f 1`
 start:
   if ($no_nc2text == 1) then
   # Here just dump variable and check how many entries are on the second to last line.
@@ -89,12 +90,11 @@ start:
       set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
       set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
       @ is_plus_1 = $is + 1
-      set check=`nc2text -n 999999 $source "$name(1,$is_plus_1)"`
-      # There is currently a bug when calling nc2text -n 999999 $source "$name(1,$is_plus_1)"
-      # for multi-species quantities: all time values are printed instead of only the first one
-      # Probably a mistake while adding additional dimensions to nc2text
-      # Temporary fix:
-      set check = ( $check[1] )
+      if ("$name" =~ namx* || "$name" =~ *bsep* || "$name" =~ nasep*) then
+        set check=`nc2text -n 999999 $source "$name($is_plus_1,:,1)"`
+      else
+        set check=`nc2text -n 999999 $source "$name($is_plus_1,1)"`
+      endif
     else
       # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
       set check=`nc2text -n 999999 $source "$1(1)"`
@@ -120,7 +120,14 @@ start:
         set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
         set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
         @ is_plus_1 = $is + 1
-        echo `nc2text -n 9999999 $source "$name(:,$is_plus_1)"` >> ${tmpdir}gnuplot.data.tmp
+        if ("$name" =~ namx* || "$name" =~ *bsep* || "$name" =~ nasep*) then
+          nc2text -n 9999999 $source "$name($is_plus_1,1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          if ($nc == "2") then
+            nc2text -n 9999999 $source "$name($is_plus_1,2,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          endif
+        else
+          nc2text -n 9999999 $source "$name($is_plus_1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        endif
         if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
           setenv species_name $neutral_species_names[$is_plus_1]
         else
@@ -129,7 +136,11 @@ start:
         set args="$args $name($species_name)"
       else
         # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
-        echo `nc2text -n 9999999 $source $1` >> ${tmpdir}gnuplot.data.tmp
+        if ("$1" =~ tm* && !("$1" =~ tmb*)) then
+          nc2text -n 9999999 $source $1 >> ${tmpdir}gnuplot.data.tmp
+        else
+          nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        endif
         set args="$args $1"
       endif
     endif
@@ -154,16 +165,27 @@ start:
         set is = `echo "$1" | sed -E 's/.*[^0-9]([0-9]+)$/\1/'`
         set name = `echo "$1" | sed -E 's/([0-9]+)$//'`
         @ is_plus_1 = $is + 1
-        nc2text -n 9999999 $source "$name(:,$is_plus_1)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        if ("$name" =~ namx* || "$name" =~ *bsep* || "$name" =~ nasep*) then
+          nc2text -n 9999999 $source "$name($is_plus_1,1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          if ($nc == "2") then
+            nc2text -n 9999999 $source "$name($is_plus_1,2,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+          endif
+        else
+          nc2text -n 9999999 $source "$name($is_plus_1,:)" | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        endif
         if ("$name" =~ dab* || "$name" =~ dmb* || "$name" =~ tab* || "$name" =~ tmb*) then
           setenv species_name $neutral_species_names[$is_plus_1]
         else
           setenv species_name $species_names[$is_plus_1]
         endif
-        set args="$args `count -p $name($species_name) 1 $#check`"
+        set args="$args `count -p '$name($species_name)' 1 $#check`"
       else
         # Single species quantities, called as $1 = $name (e.g. $1 = 'nesepm')
-        nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        if ("$1" =~ tm* && !("$1" =~ tmb*)) then
+          nc2text -n 9999999 $source $1 >> ${tmpdir}gnuplot.data.tmp
+        else
+          nc2text -n 9999999 $source $1 | awk.transpose >> ${tmpdir}gnuplot.data.tmp
+        endif
         set args="$args `count -p $1 1 $#check`"
       endif
     endif

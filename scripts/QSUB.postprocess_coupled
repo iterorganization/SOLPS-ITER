@@ -11,6 +11,6 @@ echo ""
 ###                save important files as a single tar file                ###
 tar_important_files
 
-summarize_run
+[ -s tracing/blne.trc ] && [ -s tracing/blnn_SPb.trc ] && summarize_run_tracing || summarize_run
 
 [ -e run.log ] && gzip -9 -f run.log
