@@ -3,6 +3,7 @@
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/file-handling/wrplam.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/file-handling/wrplam_long.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/mathematics/fl2o.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/mathematics/parebe.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/emissivity.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/outeir.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/outflx.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/pltadd.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/pside.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt

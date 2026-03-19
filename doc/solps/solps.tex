@@ -188,33 +188,28 @@ The next section discusses obtaining and updating the code.
 \section{Obtaining and updating the code}
 \label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{SOLPS-GUI}
 
-To obtain the code a request should be sent to Xavier Bonnin
-({\tt Xavier.Bonnin@iter.org}) at ITER, the code Responsible Officer (RO).
+\begin{sloppypar}
+Most code components are now available as open-source software on the ITER GiHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
+\end{sloppypar}
 
-The instructions below are meant for ITER collaborators that have obtained an ITER IDM account. Although parts of them also apply to users who obtain the code via the open-source ITER GitHub portal at \href{https://github.com/iterorganization}{https://github.com/iterorganization}, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
+The instructions below are written for ITER collaborators that have obtained an ITER IDM account in mind. Although parts of them also apply to users who obtain the code via GitHub, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
 
 For ITER collaborators, the first formality is to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
 
-For ITER IDM account holders, to get access to additional software or resources that are not publicly available, the next step is to agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories. The form to fill out for this is to be found at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. For a full \SOLPSITER installation, you should request access to the following repositories:
+In addition to the GitHub repositories, ITER IDM account holders may request access to other ITER repositories, which may not yet be publicly available,. For that purpose, one must agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories using the form at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. Related to \SOLPSITERns, the repositories of interest are:
 \begin{description}
   \item[SOLPS-ITER] The overarching \SOLPSITER repository
   \item[B2.5] For the {\tt B2.5} source code
-  \item[EIRENE] For the {\tt Eirene} source code
-  \item[CARRE] For the {\tt Carre} source code
-  \item[DIVGEO] For the {\tt DG} source code and the equilibrium conversion programs
-  \item[SOLPS-GUI] For the graphical environment in which \SOLPSITER can be run
-  \item[GR Software] The graphics library needed by {\tt Eirene} and the triangulation program
-  \item[MSCL] A utility library to parse the {\tt DG} output files
   \item[AMNS ADAS] A repository of atomic data used by the codes
 \end{description}
-Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
+Note that only the {\tt AMNS ADAS} Git repository at ITER will provide data files that are not yet available on GitHub. For all other repositories, they are only needed if you need to do some code archaeology, and no code development is to be done there. Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
 
 \begin{sloppypar}
 Users can obtain the {\tt Eirene} code under a CC-BY-NC-ND licence but developers need to agree to the terms of the Eirene Public Licence (EPL) and become a Basic Developer (BD) or Associated Developer (AD) - see {\tt \$\{SOLPSTOP\}\allowbreak/modules/Eirene/EPL.pdf} for full details. Such registration is managed by Forschungszentrum J{\"u}lich and occurs at \href{https://www.eirene.de/}{https://www.eirene.de/}. ADs associated to ITER may contribute by forking {\tt Eirene} and raising Pull Requests to have their changes integrated into the main repository.
 
-After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER} or \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse} and maintained by the IO, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up. To join, please send a request to the \SOLPSITER RO at ITER: {\tt xavier.bonnin@iter.org}.
+After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER} or \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse} and maintained by the IO, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
 
-The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt EIRENE}, {\tt Carre} and {\tt DivGeo} individually as submodules. Some service libraries (such as the {\tt GGD}, {\tt MSCL} and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Users can also have access to the standalone {\tt SOLPS4.3} repository.
+The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt Eirene}, {\tt Carre} and {\tt DivGeo} individually as submodules. Optional ADAS data files are provided in the {\tt AMNS ADAS} submodule. Some service libraries (such as the {\tt GGD}, {\tt MSCL}, and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Registered users can also have access to the standalone {\tt SOLPS4.3} repository.
 
 One can generally browse the ITER Git repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization} (open access) or \href{https://git.iter.org}{https://git\allowbreak.iter.org} (restricted access) and \SOLPSITER specifically at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com/iterorganization/SOLPS-ITER}. For the ITER restricted repositories, users will first need to authenticate with their ITER username and password - possibly twice, once for the intranet, and once for the Git web front end in the top right hand corner in the web browser window.
 \end{sloppypar}
@@ -222,22 +217,22 @@ One can generally browse the ITER Git repositories at \href{https://github.com/i
 To do this, one must upload a copy of their public ssh key here: \href{https://git.iter.org/plugins/servlet/ssh\allowbreak/account/keys}{https://git.iter.org/plugins/servlet/ssh/account/keys} or create a token at \href{https://git.iter.org/plugins/servlet/access-tokens/manage}{https://git.iter.org/plugins/servlet/access-tokens/manage} (by following links under "Manage Account"). Then one should be able to simply clone a copy of \SOLPSITER to a local machine by doing:
 
 \begin{verbatim}
-> git clone ssh://git@git.iter.org/bnd/solps-iter.git
+> git clone git@github.com:iterorganization/SOLPS-ITER.git
 > cd solps-iter
 > git submodule init
 > git submodule update
 \end{verbatim}
 
-If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol. Please also note that the SSH key needs to be 1024 bits.
+If using the SSH method, make sure that there is no {\tt PreferredAuthentications} setting in your ssh configuration file, as it can conflict with the IO GIT repository access protocol. Please also note that the SSH key needs to be 1024 bits. For GitHub clones, be aware that the HTTPS method only allows for read-only clones. If you intend to do code development, you must use the SSH cloning method and provide a public SSH key to GitHub, following the instructions you will find there.
 
-It is best afterwards to position oneself on the {\tt master} branches, which is achieved by the {\tt switch\_to\_master} script (which can be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
+It is best afterwards to position oneself on the {\tt master} branches, which is achieved with the {\tt switch\_to\_master} script (which should be used after the SOLPS-ITER session environment is established, see Section~\ref{sec:session}) or, alternatively, by hand, with the commands:
 
 \begin{verbatim}
 > git checkout master
 > cd modules/B2.5
 > git checkout master
 > cd ../Eirene
-> git checkout master
+> git checkout SOLPS_master
 > cd ../DivGeo
 > git checkout master
 > cd ../Carre
@@ -247,7 +242,7 @@ It is best afterwards to position oneself on the {\tt master} branches, which is
 \end{verbatim}
 
 \begin{sloppypar}
-For later updates, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead. Currently only the {\tt develop} branches of the three main distribution versions of the code are available on the open-source repository.
+For later updates of the {\tt master} branches, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
 \end{sloppypar}
 
 {\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
@@ -307,12 +302,12 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NAG]\index{NAG} mathematical library (optional) (available from \href{http://www.nag.com/content/nag-library}{http://www.nag.com/content/nag-library})
 \item[BLAS/LAPACK] mathematical libraries (available from \href{http://www.netlib.org/}{http://www.netlib.org/})
 \item[NCAR] plotting library (available from \href{https://www.ncl.ucar.edu/Download/}{https://www.ncl.ucar.edu/Download/})
-\item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/gr-software/browse}{https://git.iter.org/projects\allowbreak/LIB/repos/gr-software/browse})
+\item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available as an open-source package at \href{https://github.com/iterorganization/GR-Software}{https://github.com/iterorganization/GR-Software})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
 \item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
 \item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
-\item[MSCL] utility library (available from the IO Git repository at \href{https://git.iter.org/projects/LIB/repos/mscl/browse}{https://git.iter.org/projects/LIB/repos/mscl/browse})
+\item[MSCL] utility library (available as an open-source package at \href{https://github.com/iterorganization/MSCL}{https://github.com/iterorganization/MSCL})
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
 \item[gnuplot] for many analysis scripts
 \item[nc2text] for obtaining time-dependent data traces (optional)
@@ -4755,7 +4750,7 @@ There are currently six possible choices supported. They are:
   \item[IMPROVED] An improvement over the {\bf BALANCED} strategy to minimize communication overhead and increase stability and parallelization efficiency. If the initial setup for the {\bf IMPROVED} strategy fails, the code then attempts the {\bf APCAS} strategy. Also obtainable by setting {\tt NPRLL = 4}.
   \item[APCAS] meaning {\it All Processors Compute All Strata}, where the work of each stratum is divided among all processors. Usually involves more communication between processors. Also obtainable by setting {\tt NPRLL = 2}.
   \item[ORIGINAL] The original strategy implemented in versions of {\tt Eirene} prior to \SOLPSITER version 3.0.5. Also called "proportional allocation" or "stratified sampling" in the {\tt Eirene} manual. In that strategy, each processor is handed either part of a large stratum or one or several full smaller strata. This strategy works well if the number of processors is larger than the number of strata, but is not recommended if the number of strata is larger than the number of processors. Also obtainable by setting {\tt NPRLL = 1}.
-  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt EIRENE}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
+  \item[EMBARRASS] meaning the "embarassingly parallel" scheme by which each processor is assigned the same number of particle trajectories, as given in the {\tt Eirene} input file. This is the default in non-\SOLPSITER versions of {\tt Eirene}. Also obtainable if setting {\tt NPRLL = 0} or {\tt NPRLL > 4}.
   \item[AUTOMATIC] tells the code to use the current default, whatever it may be.
 \end{description}
 The format to read the strategy name is free-form. The input file is scanned for the words describing the chosen strategy after the title line {\tt *** INFORMATION\_FOR\_MPI} is found. The {\em first} match to an (uppercase) strategy name will be the strategy followed by the code. If the title line is missing or no match is found to any of the strategy names, the default strategy is used. See the {\tt Eirene\_balanced\_MPI} document on the \SOLPSITER web site {\tt Manuals and Documentation} folder for more details on the performance and algorithm corresponding to each strategy.
@@ -22507,7 +22502,7 @@ machsfr.f               &  X02AMF & returns the safe range of floating-point ari
 \end{center}
 
 \subsection{EIRENE}
-\index{NAG calls in EIRENE}
+\index{NAG calls in Eirene}
 
 The NAG calls from {\tt Eirene} are given in table \ref{tab:nageirene}.
 
