@@ -3,15 +3,18 @@ setenv PATH ${PATH}:/pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/N
 setenv NCARG_ROOT /pitagora/pub/userexternal/dcoster0/SOLPS-ITER/${COMPILER}/NCARG
 setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK ${SOLPSTOP}/runs
-setenv FC gfortran
 setenv NO_MANUAL true
+
+# Compilers
+setenv FC gfortran
+setenv MPI_FC mpifort
 
 # Load modules
 #module unload imasenv
 #module load imasenv/3.25.0/gcc/7.3.0/1.0
 #pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 module load intel-oneapi-compilers/2023.2.4
-module load intel-oneapi-mpi/2021.12.1
+module load openmpi/5.0.9--gcc--12.3.0-ucx1.20 
 module load gcc/12.3.0 
 module load libszip/2.1.1--gcc--12.3.0
 module load zlib-ng/2.1.6
@@ -21,7 +24,7 @@ module load netcdf-fortran/4.6.1--gcc--12.3.0
 module load nag-library/mark27--binary
 ###module load spack
 module load cmake/3.27.9
-module load Doxygen/1.9.8-GCCcore-13.2.0
+#module load Doxygen/1.9.8-GCCcore-13.2.0
 
 module use /pitagora/pub/userexternal/dcoster0/spack-0.22.2-6.1/modules
 module load gnuplot
