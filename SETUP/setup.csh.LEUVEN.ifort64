@@ -17,7 +17,7 @@ module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
 module load MATLAB/2023b-r1
 module load Java/11.0.27 # new Java module on Genius, replacing old 1.8.0_192 not available anymore on genius login nodes
-module load CMake/3.31.3-GCCcore-14.2.0
+module load CMake/3.22.1-GCCcore-10.3.0
 
 # Debugger env var
 setenv DBX ddt
