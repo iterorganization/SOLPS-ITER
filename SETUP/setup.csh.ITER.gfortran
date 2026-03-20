@@ -66,7 +66,7 @@ else
   module load motif/2.3.8-GCCcore-13.2.0
   module load texlive/20230313-GCC-13.2.0
   module load SimDB/0.13.0-gfbf-2023b
-  module load json-fortran/9.0.2-GCC-13.2.0
+  module load json-fortran/8.5.2-GCC-13.2.0
   module load PETSc/3.20.6-foss-2023b
   setenv SYSNAME x86_64_rhel9
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
