@@ -21,7 +21,6 @@ module load MATLAB/2023b-r1
 # Debugger env var
 setenv DBX ddt
 
-
 # Set environment variables
 # Compiler
 setenv FC gfortran

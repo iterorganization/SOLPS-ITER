@@ -71,7 +71,6 @@ LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
-LD_MKL     = -L${MKLROOT} -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
 
 LIBGKS     = ${GLI_HOME}/libgks.a
 ifdef GR_ROOT

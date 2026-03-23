@@ -20,6 +20,7 @@ module load MATLAB/2023b-r1
 
 # Debugger env var
 setenv DBX ddt
+
 # Compiler
 setenv FC ifort
 setenv MPI_FC mpiifort
