@@ -1639,6 +1639,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fluxt \#1]\index{fluxt}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/modules/b2mod\_dimensions.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[groups\_species]\index{groups\_species} Obtains the ordered numbers of species contained in each isonuclear sequence.
+  \item[ingest\_simulation\_to\_SimDB]\index{ingest\_simulation\_to\_SimDB} Script to publish a simulation result to a {\tt SimDB} public database.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -4552,6 +4553,12 @@ After the IDS files are created, if using IMAS Access Layer 3 or 4, one should a
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
 which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+If using IMAS Access Layer 5, the code will create a SimDB manifest file ({\tt manifest.yaml}). This file is meant to contain a unique alias for the run to be saved, a verbose description field, and the list of input and output files used and produced by this run. The code fills in the manifest automatically, but it is the responsibility of the user to make sure the file lists are complete (for example in case of multiple input profiles for a time-dependent run) and the alias and description fields contain useful identifying information. Once the manifest file is ready, the run can be published to a remote public database with the command:\index{SimDB}\index{ingest\_simulation\_to\_SimDB}
+\begin{verbatim}
+ingest_simulation_to_SimDB [REMOTE]
+\end{verbatim}
+where {\tt [REMOTE]} is the name of the remote SimDB server where the run is to be pushed. It must be provided if more than one SimDB remotes are declared, but is otherwise optional. Please refer to the SimDB documentation at \href{https://simdb.readthedocs.io/}{https://simdb.readthedocs.io/en/stable} for more details.
 
 \subsection{b2\_ual\_rewrite, rewriting an existing IDS}
 \label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
@@ -21454,6 +21461,7 @@ B25\_EIRENE & driver/b2co.F \\
 B25\_EIRENE & driver/b2mod\_driver.F \\
 B25\_EIRENE & driver/b2mod\_main.F \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
+B25\_EIRENE & ids/b2mod\_ual.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_running\_average.F \\
@@ -21613,6 +21621,7 @@ JET & modules/b2mod\_ppout.F \\
 JET & preprocessing/b2agfs.F \\
 JET & preprocessing/b2ardr.F \\
 LEGACYCOMP & convert/b2cdftallies2mds.F \\
+LEGACYCOMP & ids/b2mod\_ual.F90 \\
 LEGACYCOMP & modules/b2mod\_mdsplus.F \\
 LEGACYCOMP & modules/b2mod\_running\_average.F \\
 LEGACYCOMP & postprocessing/b2ye.F \\
@@ -21937,6 +21946,7 @@ USE\_PXFGETENV & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & ids/b2\_ual\_rewrite.F90 \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & ids/b2mod\_ual\_io.F90 \\
+USE\_PXFGETENV & ids/b2mod\_ual.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & preprocessing/b2agfs.F \\
