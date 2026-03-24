@@ -13,6 +13,7 @@ module load matplotlib/3.4.2-intel-2021a
 module load motif/2.3.8-GCCcore-10.3.0
 module load Pango/1.48.5-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
+module load CMake/3.31.3-GCCcore-14.2.0
 module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
 module load MATLAB/2023b-r1
@@ -21,6 +22,7 @@ module load CMake/3.22.1-GCCcore-10.3.0
 
 # Debugger env var
 setenv DBX ddt
+
 # Compiler
 setenv FC ifort
 setenv MPI_FC mpiifort
