@@ -1,4 +1,4 @@
-#Load modules
+# Load modules
 setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
 module load gcc/14
 module load impi/2021.15
@@ -23,7 +23,7 @@ module load imkl/2023.2.0
 setenv DBX ddt
 setenv SYSNAME amd64_sles15
 
-# work around a problem with cflags entries being suppresed by pkg-config if in CPATH
+# Work around a problem with cflags entries being suppresed by pkg-config if in CPATH
 setenv PKG_CONFIG_ALLOW_SYSTEM_CFLAGS
 
 # Environment variables
@@ -36,7 +36,7 @@ setenv FC gfortran
 setenv MPI_FC mpif90
 setenv CC gcc
 
-# find libraries
+# Find libraries
 if (-d /tokp/work/dpc/SOLPS-ITER) then
   setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER/${COMPILER}
 else if (-d /u/dpc/SOLPS-ITER) then

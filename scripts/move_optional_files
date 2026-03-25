@@ -98,6 +98,8 @@ nfiles=`cat $NAME`
 [ $nfiles -gt 0 ] && mv b2.*.parameters ../ 2> /dev/null || echo > /dev/null
 rm $NAME
 
+[ -e manifest.yaml ] && mv manifest.yaml ../ 2> /dev/null || echo > /dev/null
+
 } || {
 
 echo "Run apparently failed: Optional files not moved"

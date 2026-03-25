@@ -218,7 +218,7 @@ The next section discusses obtaining and updating the code.
 \label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{SOLPS-GUI}
 
 \begin{sloppypar}
-Most code components are now available as open-source software on the ITER GiHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
+Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
 \end{sloppypar}
 
 The instructions below are written for ITER collaborators that have obtained an ITER IDM account in mind. Although parts of them also apply to users who obtain the code via GitHub, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
@@ -1666,6 +1666,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fluxt \#1]\index{fluxt}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/modules/b2mod\_dimensions.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[groups\_species]\index{groups\_species} Obtains the ordered numbers of species contained in each isonuclear sequence.
+  \item[ingest\_simulation\_to\_SimDB]\index{ingest\_simulation\_to\_SimDB} Script to publish a simulation result to a {\tt SimDB} public database.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -4520,6 +4521,12 @@ After the IDS files are created, if using IMAS Access Layer 3 or 4, one should a
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
 which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+If using IMAS Access Layer 5, the code will create a SimDB manifest file ({\tt manifest.yaml}). This file is meant to contain a unique alias for the run to be saved, a verbose description field, and the list of input and output files used and produced by this run. The code fills in the manifest automatically, but it is the responsibility of the user to make sure the file lists are complete (for example in case of multiple input profiles for a time-dependent run) and the alias and description fields contain useful identifying information. Once the manifest file is ready, the run can be published to a remote public database with the command:\index{SimDB}\index{ingest\_simulation\_to\_SimDB}
+\begin{verbatim}
+ingest_simulation_to_SimDB [REMOTE]
+\end{verbatim}
+where {\tt [REMOTE]} is the name of the remote SimDB server where the run is to be pushed. It must be provided if more than one SimDB remotes are declared, but is otherwise optional. Please refer to the SimDB documentation at \href{https://simdb.readthedocs.io/en/stable}{https://simdb.readthedocs.io/} for more details.
 
 \subsection{b2\_ual\_rewrite, rewriting an existing IDS}
 \label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
@@ -21744,6 +21751,7 @@ B25\_EIRENE & ids/b2\_ual\_rewrite.F90 \\
 B25\_EIRENE & ids/b2\_ual\_write.F90 \\
 B25\_EIRENE & ids/b2\_ual\_write\_b2mod.F90 \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
+B25\_EIRENE & ids/b2mod\_ual.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
@@ -21933,6 +21941,7 @@ LEGACYCOMP & convert/b2cdftallies2mds.F \\
 LEGACYCOMP & convert/conv\_surface\_models.F \\
 LEGACYCOMP & convert/conv\_triangles.F \\
 LEGACYCOMP & convert/write\_triangles.F \\
+LEGACYCOMP & ids/b2mod\_ual.F90 \\
 LEGACYCOMP & modules/b2mod\_batch\_average.F \\
 LEGACYCOMP & modules/b2mod\_boundary\_namelist.F \\
 LEGACYCOMP & modules/b2mod\_create\_afn\_bc\_tables.F \\
@@ -22055,6 +22064,7 @@ NO\_CDF & sources/b2stbr.F \\
 NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
+NO\_GETENV & b2plot/b2paspwr.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
@@ -22190,6 +22200,7 @@ PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
+PGF90 & modules/b2mod\_openmp.F \\
 PGF90 & modules/b2mod\_types.F \\
 PLPLOT & b2plot/b2plot.F \\
 PLPLOT & b2plot/color.F \\
@@ -22263,6 +22274,7 @@ USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_OPENMP & driver/b2mod\_driver.F \\
+USE\_PXFGETENV & b2plot/b2paspwr.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -22274,9 +22286,11 @@ USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & convert/b2mds.F \\
 USE\_PXFGETENV & convert/b2plasmastate\_inspect.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & ids/b2\_ual\_rewrite.F90 \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & ids/b2mod\_ual\_io.F90 \\
+USE\_PXFGETENV & ids/b2mod\_ual.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & preprocessing/b2agfs.F \\
