@@ -20,28 +20,28 @@ if (-s dsl) then
   set usual=`echo ${usual}" ne3dl te3dl ti3dl po3dl an3dl fe3dl fi3dl fc3dl fl3dl fo3dl ft3dl tp3dl"`
   set usual_multi=`echo ${usual_multi}" fn3dl na3dl"`
   if (-s fort.1) then
-    set extra=`echo ${extra}" mn3dl"`
+    set usual=`echo ${usual}" mn3dl"`
   endif
 endif
 if (-s dsi) then
   set usual=`echo ${usual}" ne3di te3di ti3di po3di an3di ke3di ki3di"`
   set usual_multi=`echo ${usual_multi}" na3di dn3di dp3di vx3di vy3di vs3di"`
   if (-s fort.1) then
-    set extra=`echo ${extra}" mn3di"`
+    set usual=`echo ${usual}" mn3di"`
   endif
 endif
 if (-s dsa) then
   set usual=`echo ${usual}" ne3da te3da ti3da po3da an3da ke3da ki3da"`
   set usual_multi=`echo ${usual_multi}" na3da dn3da dp3da vx3da vy3da vs3da"`
   if (-s fort.1) then
-    set extra=`echo ${extra}" mn3da"`
+    set usual=`echo ${usual}" mn3da"`
   endif
 endif
 if (-s dsr) then
   set usual=`echo ${usual}" ne3dr te3dr ti3dr po3dr an3dr fe3dr fi3dr fc3dr fl3dr fo3dr ft3dr tp3dr"`
   set usual_multi=`echo ${usual_multi}" fn3dr na3dr"`
   if (-s fort.1) then
-    set extra=`echo ${extra}" mn3dr"`
+    set usual=`echo ${usual}" mn3dr"`
   endif
 endif
 set extra=""
