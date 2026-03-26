@@ -2,6 +2,7 @@
 
 set standalone='no'
 set compress='no'
+set PAR_STRING = ""
 
 echo Started SOLPS-ITER run
 
@@ -47,7 +48,7 @@ EOF
     set PROCS="$1"
     echo Asking for MPI run with a total of $PROCS processors
     shift
-    set PAR_STRING = '-m "mpiexec -np '$PROCS'"'
+    set PAR_STRING = `echo $PAR_STRING -m \"mpiexec -np $PROCS\"`
     goto argloop
   endif
   if ("X${1}X" == "X-tX") then
@@ -59,7 +60,7 @@ EOF
     set THREADS="$1"
     echo Asking for OpenMP run with $THREADS threads
     shift
-    set PAR_STRING = '-t '$THREADS''
+    set PAR_STRING = "$PAR_STRING -t $THREADS"
     goto argloop
   endif
 
@@ -73,13 +74,13 @@ if (-s fort.1 && ${standalone} == "no") then
   if (${compress} == "-gz") then
     (b2run $PAR_STRING b2mn < fort.1 | gzip -9 >& run.log.gz) &
   else
-    (b2run $PAR_STRING b2mn < fort.1 >& run.log) &
+    (b2run $PAR_STRING b2mn < fort.1 >& run.log && [ -e run.log ] && gzip -9 -f run.log) &
   endif
 else
   if ($standalone == "no") echo No fort.1 file found: reverting to a standalone run
   if (${compress} == "-gz") then
     (b2run $PAR_STRING -s b2mn | gzip -9 >& run.log.gz) &
   else
-    (b2run $PAR_STRING -s b2mn >& run.log) &
+    (b2run $PAR_STRING -s b2mn >& run.log && [ -e run.log ] && gzip -9 -f run.log) &
   endif
 endif

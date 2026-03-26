@@ -40,6 +40,17 @@ LD_NAG     = -L${NAGDIR} -lnag
 # LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client -lxml2
 LD_SONNET  = -L${SOLPSLIB} -lsonnet
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+LIBGRS     = ${GR_ROOT}/libgr.a
+LIBX11     = /usr/lib64/libX11.so
+LIBXT      = /usr/lib64/libXt.so
+LIBZ       = /usr/lib64/libz.so
+
+#
+# Provide compiler
+#
+
+FC         = g95
 NO_MPI     = true
 
 #
@@ -49,7 +60,7 @@ NO_MPI     = true
 SOLPS_CPP      = -DNCAR4 -DITM -DG95 -DLEGACYCOMP
 B25_DEFINES    =
 CARRE_DEFINES  =
-EIRENE_DEFINES =
+EIRENE_DEFINES = -DNO_JSON
 FFLAGSEXTRA    =
 
 # Autodetected optional features
@@ -77,6 +88,12 @@ ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
   IMAS_PKG_LIST = fundamental-constants
   export SOLPSINCLUDE
+endif
+
+# Build with JSON if present
+ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
+  JSON_INC = `pkg-config json-fortran --cflags`
+  LD_JSON = `pkg-config json-fortran --libs`
 endif
 
 # Build with PETSc if available
@@ -222,6 +239,7 @@ export LD_NCARG
 export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
+export LD_JSON
 
 export SOLPS_CPP
 export SOLPS_MPI
@@ -230,6 +248,7 @@ export FFLAGSEXTRA
 export B25_DEFINES
 export CARRE_DEFINES
 export EIRENE_DEFINES
+export JSON_INC
 
 ## Local Variables:
 ## mode: Makefile

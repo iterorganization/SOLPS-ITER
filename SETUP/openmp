@@ -18,7 +18,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|Uinp/builds/${HOST_NAME}.${COMPILER}|Uinp/builds/${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|scripts/${HOST_NAME}.${COMPILER}|scripts/${HOST_NAME}.${COMPILER}.openmp|g"`
   setenv   PATH "${SOLPS_PATH}:${OLD_PATH}"
-  setenv   USE_OPENMP "-D_OPENMP"
+  setenv   USE_OPENMP "-D_OPENMP -DUSE_OPENMP"
   setenv   SOLPS_OPENMP yes
   setenv   OLD_COMPILER "${FC}"
   setenv   OLD_MPI_COMPILER "${MPI_FC}"

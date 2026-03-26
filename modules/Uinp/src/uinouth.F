@@ -33,6 +33,7 @@ c=======================================================================
       real x, y
       logical handle,ulmlti,ex,hydrogen,helium,carbon,nitrogen
       logical streql,silent_open
+      logical nlspcscl,nlspcscl_on
       logical, allocatable :: done(:)
       character*256 filename, adasfile, uidin
       character*50 hlp_frm
@@ -162,13 +163,15 @@ c*** 1.  General data for the run
       end if
       nfile=j*10000+k*1000+l*100+m*10+n
       write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
-     .                 ntime0,ntim1,nfullrun
+     .                 ntime0,ntim1,nevntmax,nvnmxtr
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
-     .                 nsmstra,nstoram,ngstal,nrtal1,nreac_add
+     .                 nsmstra,nstoram,ngstal,nrtal1
+      nlspcscl = lsprcl
+      nlspcscl_on = lsprcl
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
-     .                 nloldran,nlcascad,nloctree,nlwrmsh,nexvs,
-     .                 nltrimesh
+     .                 nlranmar,nlcascad,nloctree,nlwrmsh,nexvs,
+     .                 nltrimesh,nlspcscl,nlspcscl_on,nlsoledge,nlspcspt
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
       do i=1,nrcln
@@ -1027,10 +1030,10 @@ c*** 6a.  data for reflection model
 
       write(iunoo,706) nltrim
       if (nnftrm.gt.0) then
-        if(.not.streql(path,' '))
-     >   write(iunoo,'(a6,a60)') 'cpath ',path
+        if (.not.streql(path,' '))
+     >   write(iunoo,'(a6,a60)') 'cpath ', path
         write(iunoo,'(a8)') (filtrm(i),i=1,nnftrm)
-      end if
+      endif
       if (natmi.gt.0) then
         write(iunoo,703) (datm(iatm),iatm=1,natmi)
       else
@@ -1080,6 +1083,7 @@ c*** surface cards
 c*** 7.  data for primary source
 
       write(iunoo,700) utxthd(8)
+c     correct number of strata for vessel mode
       if (grid_mode.ne.2) then ! standard + target mode
         nstrais = count(indsrc(1:nstrai).eq.6)
         nstraih = nstrais/natmi*nplsh
@@ -1105,13 +1109,14 @@ c*** 7.  data for primary source
       inum=nvess
       istep=nstraih
       do i=1,nstrai !{
-        if (grid_mode.ne.2) inum=inum+1
+        if (grid_mode.ne.2) inum=inum+1 ! standard + target mode
         istep=istep+1
         if(indsrc(i).eq.6) cycle
-        if (grid_mode.eq.2) inum=inum+1
+
+        if (grid_mode.eq.2) inum=inum+1 ! vessel mode
         if (grid_mode.ne.2) then ! standard + target mode
           write(iunoo,709) i+nstraih,txtsou(i)
-        else
+        else ! vessel mode
           write(iunoo,709) inum,txtsou(i)
         end if
         write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
@@ -1289,7 +1294,8 @@ c*** 10f.
       write(iunoo,700) utxthd(35)
       do j=1,nadspc !{
         write(iunoo,707) ispsrf(j), iptyp(j), ipspz(j),
-     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j)
+     .                   isptyp(j), nsps(j), isrfcl(j), idirec(j),
+     .                   ispopt(j)
         write(iunoo,703) spcmn(j), spcmx(j), spcsh(j),
      .                   spcpx(j), spcpy(j), spcps(j)
         if (idirec(j).ne.0)
@@ -1304,7 +1310,7 @@ c*** 11.   data for numerical and graphical output
      ,                 trcint,trclst,trcsou,trcrec,trctim,
      ,                 trcbla,trcblm,trcbli,trcblp,trcble,
      ,                 trcblph,trctal,trcoct,trccen,trcrnf,
-     ,                 trchktim,
+     ,                 trchktim,trcscl,
      ,                 trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
      ,                 trcdbgs,trcdbgg,trcdbgmpi,trcdbgc
       write(iunoo,706) (trcsrc(j),j=0,nstrao)

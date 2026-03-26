@@ -21,6 +21,7 @@ SHELL = /bin/sh
 
 .PRECIOUS: %.md5-stamp
 
+CURL ?= /usr/bin/curl
 
 all : $(ASSETS)
 
@@ -29,7 +30,7 @@ all : $(ASSETS)
 % : %.tar.gz
 	echo $@ $^
 	mkdir $@.tmp ; tar -xhmzf $^ -C $@.tmp
-	[ `echo $@.tmp/* | wc -w` == 1 ] && (mv $@.tmp/$@ . ; rm -Rf $@.tmp) || ( mv $@.tmp $@)
+	[ `echo $@.tmp/* | wc -w` -eq 1 ] && (mv $@.tmp/$@ . ; rm -Rf $@.tmp) || ( mv $@.tmp $@)
 
 # If the asset already exists then we do not want to change its timestamp as
 # this may impact other (re)builds. Therefore MD5 and timestamps need
@@ -52,7 +53,7 @@ $(ASSETDIR)/% :
 		then chgrp $(ASSETDIR_GROUP) $(ASSETDIR); \
 	   fi; \
         fi
-	curl --fail --output $(ASSETDIR)/$(@F) $(EXTERNALDATA)/$(@F)
+	$(CURL) --fail --output $(ASSETDIR)/$(@F) $(EXTERNALDATA)/$(@F)
 	chmod g+w $(ASSETDIR)/$(@F)
 
 depend: $(HASHES)

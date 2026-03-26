@@ -11,13 +11,18 @@ ACTDIR=`pwd`
     input=${ACTDIR}/../baserun/input_avg.eir
     found=1
   } || {
-    input=${ACTDIR}/input.dat
-    found=0
+    [ -s ${ACTDIR}/input.dat ] && {
+      input=${ACTDIR}/input.dat
+      found=0
+    } || {
+      input=${ACTDIR}/eirene.input.json
+      found=0
+    }
   }
 }
 [ $found -eq 1 ] && {
   [ -s ${ACTDIR}/input.dat ] && mv ${ACTDIR}/input.dat ${ACTDIR}/input.eir
-  ln -s ${input} input.dat
+  ln -s ${input} fort.1
 }
 
 echo "input = " $input

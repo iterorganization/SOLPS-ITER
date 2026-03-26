@@ -21,7 +21,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout release/3.1.1 && echo "Checked out Eirene 3.1.1 release branch" || goto branch
+  git checkout SOLPS_develop && echo "Checked out Eirene SOLPS_develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -63,9 +63,10 @@ local:
 compile:
   cd $SOLPSTOP
   rehash
+  ${MAKE} local
   ${MAKE} VERSION
+  ${MAKE} tags
   ${MAKE} listobj listobj_debug
   ${MAKE} depend depend_debug
-  ${MAKE} tags
   ${MAKE} solps MAKE_OPTIONS=-j8
 

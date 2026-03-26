@@ -1,1 +1,1 @@
-../../../Eirene/src/interfaces/couple_SOLPS-ITER/eirmod_solps.f
+../../../Eirene/src/interfaces/couple_SOLPS_WG/eirmod_solps.f

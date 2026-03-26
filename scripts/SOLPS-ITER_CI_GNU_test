@@ -2,9 +2,11 @@
 . $(dirname $0)/SOLPS-ITER_CI_GNU_env
 
 # Compile the code
+echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
 echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 export NO_MANUAL="true"
+make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
 make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt
@@ -67,4 +69,3 @@ result_tao.sh
 tail -n 1 parm_hist1.dat > optim_test.dat
 tail -n 1 parm_hist2.dat >> optim_test.dat
 ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ./optim.dat ./optim_test.dat 2 1.0e-3 || exit 5
-

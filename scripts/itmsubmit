@@ -7,7 +7,7 @@ set NODES=1
 set PROCS=1
 set THREADS=1
 set hours=48
-set mem=16GB
+set mem=2GB
 set chain="unset"
 set job_count=0
 echo Your email is $EMAIL
@@ -44,8 +44,8 @@ where the optional <<SCRIPT>> is the SLURM submission file to be used
 Available options are:
   -j <<JOB NAME>>          set the job name (default $JOB_NAME)
   -z                       compress run.log using gzip
-  -x                       requests an exclusive job allocation
   -s                       specify a standalone B2.5 run
+  -x                       requests an exclusive job allocation
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
   -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives
@@ -54,7 +54,7 @@ Available options are:
   -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
-  -M <<MEM_SIZE>>          memory size (default $mem)
+  -M <<MEM_SIZE>>          memory size per CPU (default $mem)
 
 EOF
     exit

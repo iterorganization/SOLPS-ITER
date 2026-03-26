@@ -73,6 +73,13 @@ LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MPI     = -L${MPDIR}/lib -lmpi
 
+LIBGKS     = ${GLI_HOME}/libgks.a
+ifdef GR_ROOT
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+endif
+LIBX11     = /usr/X11R6/lib64/libX11.so
+ADDLIBS    = -lgfortran
+
 #
 # Provide compiler
 #
@@ -121,6 +128,12 @@ ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
   SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
   IMAS_PKG_LIST = fundamental-constants
   export SOLPSINCLUDE
+endif
+
+# Build with JSON if present
+ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
+  JSON_INC = `pkg-config json-fortran --cflags`
+  LD_JSON = `pkg-config json-fortran --libs`
 endif
 
 # Build with PETSc if available
@@ -267,6 +280,12 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_MPI
+export LD_JSON
+
+export LIBGKS
+export LIBGRS
+export LIBX11
+export ADDLIBS
 
 export SOLPS_CPP
 export SOLPS_MPI
@@ -276,6 +295,7 @@ export B25_DEFINES
 export CARRE_DEFINES
 export EIRENE_DEFINES
 export MPI_CPP
+export JSON_INC
 
 #!!!Local Variables:
 #!!! mode: Makefile

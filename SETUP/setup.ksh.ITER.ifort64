@@ -15,6 +15,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load AMNS/1.5.0-intel-2020b-DD-3.41.0
   module load makedepend/1.0.6-GCCcore-10.2.0
   module load MSCL/1.2.2-intel-2020b
+  module load Ghostscript/9.53.3-GCCcore-10.2.0
   module load Doxygen/1.8.20-GCCcore-10.2.0
   module load ParaView/5.10.0-intel-2020b-mpi
   module load texlive/20210216-GCCcore-10.2.0
@@ -23,6 +24,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load NAG/26-intel-2020b
   module load CMake/3.20.1-GCCcore-10.2.0
   module load netcdf4-python/1.5.5.1-intel-2020b
+  module load json-fortran/8.3.0-iccifort-2020.4.304
   export SYSNAME="amd64_sles15"
 } || {
   module load IMAS-AL-Fortran/5.3.0-intel-2023b-DD-3.42.0
@@ -30,11 +32,13 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load IDStools/2.0.0-iimkl-2023b
   module load GGD/1.12.0-intel-2023b-DD-3.42.0
   module load AMNS/1.5.1-intel-2023b-DD-3.42.0
+  module load SimDB/0.14.1-intel-2023b
   module load makedepend/1.0.9-GCCcore-13.2.0
   module load MSCL/1.2.4-iimkl-2023b
   module load Doxygen/1.9.8-GCCcore-13.2.0
 # module load ParaView/5.12.0-foss-2023b
   module load texlive/20230313-intel-compilers-2023.2.1
+  module load Ghostscript/10.02.1-GCCcore-13.2.0
   module load netCDF/4.9.2-iimpi-2023b
   module load netCDF-Fortran/4.6.1-iimpi-2023b
   module load NAG/26-intel-compilers-2023.2.1

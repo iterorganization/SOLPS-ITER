@@ -31,19 +31,25 @@ echo and
 echo https://user.iter.org/\?uid=Q92BAQ
 echo "(both require a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
-echo The Eirene manual is located at http://www.eirene.de/
+echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
+echo or online at http://www.eirene.de/
 
 ( ps -p $$ | grep -Eq "tcsh|csh" ) || ( echo ; echo "*** Use tcsh to source setup.csh! *** " ; echo ; return 1 2> /dev/null ; exit 1 )
 
-# Obtain the directory where setup.csh is located to use as SOLPSTOP
-setenv LAST_COMMAND `echo $_`
-if (`echo ${LAST_COMMAND}` == "") then
-  setenv SOLPSTOP $PWD
+# Obtain the directory where setup.csh is located to use as SOLPSTOP,
+# or bypass this by providing the path in SOLPSTOP_FORCE (can cause issues in scripts)
+if ( $?SOLPSTOP_FORCE ) then
+  setenv SOLPSTOP $SOLPSTOP_FORCE
 else
-  setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
-  setenv REAL_FILE `eval echo ${SETUP_FILE}`
-  setenv SETUP_PATH `dirname ${REAL_FILE}`
-  setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  setenv LAST_COMMAND `echo $_`
+  if (`echo ${LAST_COMMAND}` == "") then
+    setenv SOLPSTOP $PWD
+  else
+    setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+    setenv REAL_FILE `eval echo ${SETUP_FILE}`
+    setenv SETUP_PATH `dirname ${REAL_FILE}`
+    setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+  endif
 endif
 setenv SOLPSWORK ${SOLPSTOP}/runs
 
@@ -154,6 +160,7 @@ setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
 
 setenv DG ${SOLPSTOP}/modules/DivGeo
 #setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
+setenv INTDIR ${SOLPSTOP}/modules/Eirene/src/interfaces/couple_SOLPS_WG
 
 # Set path to scripts and executables
 #------------------------------------
@@ -180,16 +187,29 @@ set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 # Create mirror scripts directory links
 #   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
 set link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
+if (! -d ${link_scripts}) mkdir -p ${link_scripts}
 if (! $?NO_MPI) then
-  foreach suffix ( ".mpi" ".mpi.debug" ".openmp.mpi" ".openmp.mpi.debug" )
+  foreach suffix ( ".mpi" ".openmp.mpi" )
     if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-    if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
+    if (`readlink ${link_scripts}${suffix}` != ${link_scripts} ) ln -sf ${link_scripts} ${link_scripts}${suffix}
+    if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
+    if (`readlink ${link_scripts}${suffix}.debug` != ${link_scripts}.debug ) ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
+  end
+else
+  foreach suffix ( ".mpi" ".openmp.mpi" )
+    if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+    if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
   end
 endif
-foreach suffix ( ".openmp" ".debug" ".openmp.debug" )
-  if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-  if (`readlink ${link_scripts}${suffix}` != $link_scripts) ln -sf $link_scripts ${link_scripts}${suffix}
-end
+set suffix=".openmp"
+if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
+if (`readlink ${link_scripts}${suffix}` != ${link_scripts} ) ln -sf ${link_scripts} ${link_scripts}${suffix}
+if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
+if (`readlink ${link_scripts}${suffix}.debug` != ${link_scripts}.debug ) ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
+if (`readlink ${link_scripts}.debug` == ${link_scripts} ) then
+  rm -Rf ${link_scripts}.debug
+  mkdir -p ${link_scripts}.debug
+endif
 
 # Note: in case of name clash between script and executable, script will be found first
 setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
@@ -319,6 +339,12 @@ setenv LATEX `${SOLPSTOP}/scripts/which_latex`
 if ($LATEX == "") then
   setenv NO_MANUAL true
   echo 'No LaTeX executable found: Manual will not be built'
+endif
+
+# Check if CMake available for Eirene compilation
+if (! -x `which cmake`) then
+  setenv NO_CMAKE true
+  echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
 endif
 
 # Add any local settings if present

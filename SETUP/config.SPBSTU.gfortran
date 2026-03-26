@@ -58,6 +58,10 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg
 endif
 #LD_MPI     = -lmpi2
 
+LIBGKS     = ${GLI_HOME}/lib/libgks.a
+LIBGRS     = ${GR_ROOT}/lib/libgr.a
+ADDLIBS    = -lXmu -ldl
+
 #
 # Provide compiler
 #

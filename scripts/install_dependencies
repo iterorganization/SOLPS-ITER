@@ -107,15 +107,14 @@ if ("$OSTYPE" == "linux") then
         set MINIFORGE_INSTALL = "y"
       endif
 
-      if ( "$MINIFORGE_INSTALL" == "y" ) then 
+      if ( "$MINIFORGE_INSTALL" == "y" ) then
         install_miniforge
         echo "Close your shell, re-open it, start a new SOLPS-ITER"
         echo "and relaunch the install_dependencies script."
         exit 1
       else
-        echo
-        echo "You need to install miniforge in order to continue using this script!"
-        exit 1
+        set MISSING_DEPENDENCY = 1
+        sleep 1
       endif
     endif
 
@@ -134,7 +133,7 @@ if ("$OSTYPE" == "linux") then
         set MINIFORGE_INSTALL = "n"
       endif
 
-      if ( "$MINIFORGE_INSTALL" == "y" ) then 
+      if ( "$MINIFORGE_INSTALL" == "y" ) then
         install_miniforge
         echo set CONDA_ROOT    = \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/miniforge3 >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
         echo setenv CONDA_CHANGEPS1 no >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
@@ -145,9 +144,8 @@ if ("$OSTYPE" == "linux") then
         echo "and relaunch the install_dependencies script."
         exit 1
       else
-        echo
-        echo "You need to install miniforge in order to continue using this script!"
-        exit 1
+        set MISSING_DEPENDENCY = 1
+        sleep 1
       endif
     endif
 
@@ -201,7 +199,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then   # Only for Linux; fo
       set XORG_INSTALL = "y"
     endif
 
-    if ( "$XORG_INSTALL" == "y" ) then 
+    if ( "$XORG_INSTALL" == "y" ) then
       sudo apt-get install -y xorg-dev
       echo X11 development library successfully installed.
       sleep 1
@@ -235,7 +233,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set GCC_INSTALL = "y"
     endif
 
-    if ( "$GCC_INSTALL" == "y" ) then 
+    if ( "$GCC_INSTALL" == "y" ) then
       sudo apt-get install -y gcc
       echo gcc compiler successfully installed.
       sleep 1
@@ -263,7 +261,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
         set GPP_INSTALL = "y"
     endif
 
-    if ( "$GPP_INSTALL" == "y" ) then 
+    if ( "$GPP_INSTALL" == "y" ) then
       sudo apt-get install -y g++
       echo g++ compiler successfully installed.
       sleep 1
@@ -291,7 +289,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
         set GFORTRAN_INSTALL = "y"
     endif
 
-    if ( "$GFORTRAN_INSTALL" == "y" ) then 
+    if ( "$GFORTRAN_INSTALL" == "y" ) then
       sudo apt-get install -y gfortran
       echo gfortran compiler successfully installed.
       sleep 1
@@ -320,7 +318,7 @@ else if ("$OSTYPE" == "darwin") then
       set GCC_INSTALL = "y"
     endif
 
-    if ( "$GCC_INSTALL" == "y" ) then 
+    if ( "$GCC_INSTALL" == "y" ) then
       brew install gcc
       echo gcc library successfully installed.
       sleep 1
@@ -354,7 +352,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set CMAKE_INSTALL = "y"
     endif
 
-    if ( "$CMAKE_INSTALL" == "y" ) then 
+    if ( "$CMAKE_INSTALL" == "y" ) then
       set RESTART_SOLPS = 1
       sudo apt-get install -y cmake
       echo cmake library successfully installed.
@@ -384,7 +382,7 @@ else if ("$OSTYPE" == "darwin") then
       set CMAKE_INSTALL = "y"
     endif
 
-    if ( "$CMAKE_INSTALL" == "y" ) then 
+    if ( "$CMAKE_INSTALL" == "y" ) then
       brew install cmake
       echo cmake library successfully installed.
       sleep 1
@@ -418,7 +416,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set CTAGS_INSTALL = "y"
     endif
 
-    if ( "$CTAGS_INSTALL" == "y" ) then 
+    if ( "$CTAGS_INSTALL" == "y" ) then
       sudo apt-get install -y exuberant-ctags
       echo ctags library successfully installed.
       sleep 1
@@ -447,7 +445,7 @@ else if ("$OSTYPE" == "darwin") then
       set CTAGS_INSTALL = "y"
     endif
 
-    if ( "$CTAGS_INSTALL" == "y" ) then 
+    if ( "$CTAGS_INSTALL" == "y" ) then
       brew install ctags
       echo ctags library successfully installed.
       sleep 1
@@ -481,7 +479,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set DOXYGEN_INSTALL = "y"
     endif
 
-    if ( "$DOXYGEN_INSTALL" == "y" ) then 
+    if ( "$DOXYGEN_INSTALL" == "y" ) then
       sudo apt-get install -y doxygen
       echo Doxygen library successfully installed.
       sleep 1
@@ -510,7 +508,7 @@ else if ("$OSTYPE" == "darwin") then
       set DOXYGEN_INSTALL = "y"
     endif
 
-    if ( "$DOXYGEN_INSTALL" == "y" ) then 
+    if ( "$DOXYGEN_INSTALL" == "y" ) then
       brew install doxygen
       echo Doxygen library successfully installed.
       sleep 1
@@ -544,7 +542,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set FREETYPE_INSTALL = "y"
     endif
 
-    if ( "$FREETYPE_INSTALL" == "y" ) then 
+    if ( "$FREETYPE_INSTALL" == "y" ) then
       sudo apt-get install -y libfreetype-dev
       echo Freetype library successfully installed.
       sleep 1
@@ -573,7 +571,7 @@ else if ("$OSTYPE" == "darwin") then
       set FREETYPE_INSTALL = "y"
     endif
 
-    if ( "$FREETYPE_INSTALL" == "y" ) then 
+    if ( "$FREETYPE_INSTALL" == "y" ) then
       brew install freetype
       echo Freetype library successfully installed.
       sleep 1
@@ -607,7 +605,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set GHOSTSCRIPT_INSTALL = "y"
     endif
 
-    if ( "$GHOSTSCRIPT_INSTALL" == "y" ) then 
+    if ( "$GHOSTSCRIPT_INSTALL" == "y" ) then
       sudo apt-get install -y ghostscript
       echo Ghostscript library successfully installed.
       sleep 1
@@ -636,7 +634,7 @@ else if ("$OSTYPE" == "darwin") then
       set GHOSTSCRIPT_INSTALL = "y"
     endif
 
-    if ( "$GHOSTSCRIPT_INSTALL" == "y" ) then 
+    if ( "$GHOSTSCRIPT_INSTALL" == "y" ) then
       brew install ghostscript
       echo Ghostscript library successfully installed.
       sleep 1
@@ -656,33 +654,80 @@ endif
 
 # Install Gnuplot library
 
-if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+if ("$OSTYPE" == "linux") then
 
-  set pkg_check = `dpkg -l | grep -w gnuplot`
-  if ("$pkg_check" == "") then   # Check if the library is already installed
+  if ("$HOST_NAME" == "LINUX") then   # Local machine
 
-    echo
-    echo Gnuplot library not locally installed.
-    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
-    set GNUPLOT_INSTALL = $<
+    set pkg_check = `dpkg -l | grep -w gnuplot`
+    if ("$pkg_check" == "") then   # Check if the library is already installed
 
-    if ( "$GNUPLOT_INSTALL" == "" ) then
-      set GNUPLOT_INSTALL = "y"
-    endif
+      echo
+      echo Gnuplot library not locally installed.
+      echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+      set GNUPLOT_INSTALL = $<
 
-    if ( "$GNUPLOT_INSTALL" == "y" ) then 
-      sudo apt-get install -y gnuplot
-      echo Gnuplot library successfully installed.
-      sleep 1
+      if ( "$GNUPLOT_INSTALL" == "" ) then
+        set GNUPLOT_INSTALL = "y"
+      endif
+
+      if ( "$GNUPLOT_INSTALL" == "y" ) then
+        sudo apt-get install -y gnuplot
+        echo Gnuplot library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
     else
-      set MISSING_DEPENDENCY = 1
+      echo
+      echo Gnuplot library already locally installed.
       sleep 1
+
     endif
 
-  else
-    echo
-    echo Gnuplot library already locally installed.
-    sleep 1
+  else   # HPC cluster
+
+    if ( `which gnuplot >& /dev/null; echo $status` != 0  && ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3/bin/gnuplot" ) then   # Check if the compiled library already exists locally
+
+      echo
+      echo Gnuplot library not locally installed.
+      echo -n "Do you wish to install it? It will be cloned and locally compiled in SOLPSLIB. (y/n) [y] "
+      set GNUPLOT_INSTALL = $<
+
+      if ( "$GNUPLOT_INSTALL" == "" ) then
+          set GNUPLOT_INSTALL = "y"
+      endif
+
+      if ( "$GNUPLOT_INSTALL" == "y" ) then
+        define_compilers
+        set RESTART_SOLPS = 1
+        cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
+        if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3" ) then
+          rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3"
+        endif
+        wget https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.3/gnuplot-6.0.3-c23.tar.gz
+        tar xvf gnuplot-6.0.3-c23.tar.gz
+        cd "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3"
+        ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3 --without-x --without-readline --disable-wxwidgets --without-lua --with-qt=no --without-latex
+        make
+        make install
+        rm $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3-c23.tar.gz
+        echo setenv PATH \$\{SOLPSTOP\}/lib/${HOST_NAME}.${COMPILER}/gnuplot-6.0.3/bin:\$\{PATH\} >> ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+        cd $SOLPSTOP
+        echo Gnuplot library successfully installed.
+        sleep 1
+      else
+        set MISSING_DEPENDENCY = 1
+        sleep 1
+      endif
+
+    else
+      echo
+      echo Gnuplot library already locally installed.
+      sleep 1
+
+    endif
 
   endif
 
@@ -699,7 +744,7 @@ else if ("$OSTYPE" == "darwin") then
       set GNUPLOT_INSTALL = "y"
     endif
 
-    if ( "$GNUPLOT_INSTALL" == "y" ) then 
+    if ( "$GNUPLOT_INSTALL" == "y" ) then
       brew install gnuplot
       echo Gnuplot library successfully installed.
       sleep 1
@@ -733,7 +778,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set HDF5_INSTALL = "y"
     endif
 
-    if ( "$HDF5_INSTALL" == "y" ) then 
+    if ( "$HDF5_INSTALL" == "y" ) then
       sudo apt-get install -y libhdf5-dev
       echo HDF5 library successfully installed.
       sleep 1
@@ -762,7 +807,7 @@ else if ("$OSTYPE" == "darwin") then
       set HDF5_INSTALL = "y"
     endif
 
-    if ( "$HDF5_INSTALL" == "y" ) then 
+    if ( "$HDF5_INSTALL" == "y" ) then
       brew install hdf5
       echo HDF5 library successfully installed.
       sleep 1
@@ -798,7 +843,7 @@ if ("$OSTYPE" == "linux") then
         set BLAS_INSTALL = "y"
       endif
 
-      if ( "$BLAS_INSTALL" == "y" ) then 
+      if ( "$BLAS_INSTALL" == "y" ) then
         sudo apt-get install -y libblas-dev
         echo Blas library successfully installed.
         sleep 1
@@ -826,7 +871,7 @@ if ("$OSTYPE" == "linux") then
         set LAPACK_INSTALL = "y"
       endif
 
-      if ( "$LAPACK_INSTALL" == "y" ) then 
+      if ( "$LAPACK_INSTALL" == "y" ) then
         sudo apt-get install -y liblapack-dev
         echo Lapack library successfully installed.
         sleep 1
@@ -852,7 +897,7 @@ if ("$OSTYPE" == "linux") then
       set BLASLAPACK_INSTALL = "n"
     endif
 
-    if ( "$BLASLAPACK_INSTALL" == "y" ) then 
+    if ( "$BLASLAPACK_INSTALL" == "y" ) then
       set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
       if (! -d "${CONDA_ROOT}" ) then
         echo
@@ -921,7 +966,7 @@ else if ("$OSTYPE" == "darwin") then
       set BLASLAPACK_INSTALL = "y"
     endif
 
-    if ( "$BLASLAPACK_INSTALL" == "y" ) then 
+    if ( "$BLASLAPACK_INSTALL" == "y" ) then
       brew install lapack
       echo Blas/Lapack library successfully installed.
       sleep 1
@@ -955,7 +1000,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set PNG_INSTALL = "y"
     endif
 
-    if ( "$PNG_INSTALL" == "y" ) then 
+    if ( "$PNG_INSTALL" == "y" ) then
       sudo apt-get install -y libpng-dev
       echo PNG library successfully installed.
       sleep 1
@@ -984,7 +1029,7 @@ else if ("$OSTYPE" == "darwin") then
       set PNG_INSTALL = "y"
     endif
 
-    if ( "$PNG_INSTALL" == "y" ) then 
+    if ( "$PNG_INSTALL" == "y" ) then
       brew install libpng
       echo PNG library successfully installed.
       sleep 1
@@ -1018,7 +1063,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set XPRINT_INSTALL = "y"
     endif
 
-    if ( "$XPRINT_INSTALL" == "y" ) then 
+    if ( "$XPRINT_INSTALL" == "y" ) then
       sudo apt-get install -y libxpm4
       echo XPrint library successfully installed.
       sleep 1
@@ -1047,7 +1092,7 @@ else if ("$OSTYPE" == "darwin") then
       set XPRINT_INSTALL = "y"
     endif
 
-    if ( "$XPRINT_INSTALL" == "y" ) then 
+    if ( "$XPRINT_INSTALL" == "y" ) then
       brew install libxp
       echo XPrint library successfully installed.
       sleep 1
@@ -1081,7 +1126,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set NETCDF_INSTALL = "y"
     endif
 
-    if ( "$NETCDF_INSTALL" == "y" ) then 
+    if ( "$NETCDF_INSTALL" == "y" ) then
       sudo apt-get install -y libnetcdf-dev
       echo NetCDF library successfully installed.
       sleep 1
@@ -1110,7 +1155,7 @@ else if ("$OSTYPE" == "darwin") then
       set NETCDF_INSTALL = "y"
     endif
 
-    if ( "$NETCDF_INSTALL" == "y" ) then 
+    if ( "$NETCDF_INSTALL" == "y" ) then
       brew install netcdf
       echo NetCDF library successfully installed.
       sleep 1
@@ -1146,7 +1191,7 @@ if ("$OSTYPE" == "linux") then
         set NETCDFF_INSTALL = "y"
       endif
 
-      if ( "$NETCDFF_INSTALL" == "y" ) then 
+      if ( "$NETCDFF_INSTALL" == "y" ) then
         sudo apt-get install -y libnetcdff-dev
         echo NetCDF-Fortran library successfully installed.
         sleep 1
@@ -1172,7 +1217,7 @@ if ("$OSTYPE" == "linux") then
       set NETCDF_INSTALL = "n"
     endif
 
-    if ( "$NETCDF_INSTALL" == "y" ) then 
+    if ( "$NETCDF_INSTALL" == "y" ) then
       set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
       if (! -d "${CONDA_ROOT}" ) then
         echo
@@ -1228,7 +1273,7 @@ else if ("$OSTYPE" == "darwin") then
       set NETCDFF_INSTALL = "y"
     endif
 
-    if ( "$NETCDFF_INSTALL" == "y" ) then 
+    if ( "$NETCDFF_INSTALL" == "y" ) then
       brew install netcdf-fortran
       echo NetCDF-Fortran library successfully installed.
       sleep 1
@@ -1261,7 +1306,7 @@ if ("$OSTYPE" == "darwin") then
       set OPENBLAS_INSTALL = "y"
     endif
 
-    if ( "$OPENBLAS_INSTALL" == "y" ) then 
+    if ( "$OPENBLAS_INSTALL" == "y" ) then
       brew install openblas
       echo Open-Blas library successfully installed.
       sleep 1
@@ -1295,7 +1340,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set LIBOPENMPI_INSTALL = "y"
     endif
 
-    if ( "$LIBOPENMPI_INSTALL" == "y" ) then 
+    if ( "$LIBOPENMPI_INSTALL" == "y" ) then
       sudo apt-get install -y libopenmpi-dev
       echo MPI-dev library successfully installed.
       sleep 1
@@ -1323,7 +1368,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set OPENMPIBIN_INSTALL = "y"
     endif
 
-    if ( "$OPENMPIBIN_INSTALL" == "y" ) then 
+    if ( "$OPENMPIBIN_INSTALL" == "y" ) then
       sudo apt-get install -y openmpi-bin
       echo MPI-bin library successfully installed.
       sleep 1
@@ -1352,7 +1397,7 @@ else if ("$OSTYPE" == "darwin") then
       set MPI_INSTALL = "y"
     endif
 
-    if ( "$MPI_INSTALL" == "y" ) then 
+    if ( "$MPI_INSTALL" == "y" ) then
       brew install open-mpi
       echo MPI library successfully installed.
       sleep 1
@@ -1386,7 +1431,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set MOTIF_INSTALL = "y"
     endif
 
-    if ( "$MOTIF_INSTALL" == "y" ) then 
+    if ( "$MOTIF_INSTALL" == "y" ) then
       sudo apt-get install -y libmotif-dev
       echo MOTIF library successfully installed.
       sleep 1
@@ -1415,7 +1460,7 @@ else if ("$OSTYPE" == "darwin") then
       set MOTIF_INSTALL = "y"
     endif
 
-    if ( "$MOTIF_INSTALL" == "y" ) then 
+    if ( "$MOTIF_INSTALL" == "y" ) then
       sudo port install openmotif
       echo MOTIF library successfully installed.
       sleep 1
@@ -1435,7 +1480,7 @@ endif
 
 # Clond and compile JSON-Fortran library
 
-if ("$OSTYPE" == "linux") then 
+if ("$OSTYPE" == "linux") then
 
   if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib/libjsonfortran.a" ) then   # Check if the compiled library already exists locally
 
@@ -1499,7 +1544,7 @@ else if ("$OSTYPE" == "darwin") then
       set JSON_INSTALL = "y"
     endif
 
-    if ( "$JSON_INSTALL" == "y" ) then 
+    if ( "$JSON_INSTALL" == "y" ) then
       sudo port install fortran-json
       echo JSON-Fortran library successfully installed.
       sleep 1
@@ -1535,7 +1580,7 @@ if ("$OSTYPE" == "linux") then
         set NCARG_INSTALL = "y"
       endif
 
-      if ( "$NCARG_INSTALL" == "y" ) then 
+      if ( "$NCARG_INSTALL" == "y" ) then
         set RESTART_SOLPS = 1
         setenv CONDA_CHANGEPS1 no
         set CONDA_BASE = `conda info --base`
@@ -1567,7 +1612,7 @@ if ("$OSTYPE" == "linux") then
         set CAIRO_INSTALL = "y"
       endif
 
-      if ( "$CAIRO_INSTALL" == "y" ) then 
+      if ( "$CAIRO_INSTALL" == "y" ) then
         sudo apt-get install -y libcairo2-dev
         echo Cairo library successfully installed.
         sleep 1
@@ -1595,7 +1640,7 @@ if ("$OSTYPE" == "linux") then
         set NCARG_INSTALL = "n"
       endif
 
-      if ( "$NCARG_INSTALL" == "y" ) then 
+      if ( "$NCARG_INSTALL" == "y" ) then
         set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
         if (! -d "${CONDA_ROOT}" ) then
           echo
@@ -1653,7 +1698,7 @@ else if ("$OSTYPE" == "darwin") then
       set NCARG_INSTALL = "y"
     endif
 
-    if ( "$NCARG_INSTALL" == "y" ) then 
+    if ( "$NCARG_INSTALL" == "y" ) then
       sudo port install ncarg
       echo NCARG library successfully installed.
       sleep 1
@@ -1693,7 +1738,7 @@ if ("$OSTYPE" == "linux") then   # Case Linux: compile the most recent version o
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
       endif
-      git clone ssh://git@git.iter.org/lib/mscl.git mscl
+      git clone https://github.com/iterorganization/MSCL.git mscl
       cd mscl
       ./bootstrap
       ./configure --prefix=${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl F77=${FC} CC=${CC}
@@ -1755,7 +1800,7 @@ else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresp
       if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl" ) then
         rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/mscl"
       endif
-      git clone ssh://git@git.iter.org/lib/mscl.git mscl
+      git clone https://github.com/iterorganization/MSCL.git mscl
       cd mscl
       git checkout a64eba15137
       cp ${SOLPSTOP}/doc/solps/MacOS/compiler.darwin.gfortran config/compiler.darwin.gfortran
@@ -1788,7 +1833,7 @@ else if ("$OSTYPE" == "darwin") then   # Case MacOS: compile the version corresp
       set MISSING_DEPENDENCY = 1
       sleep 1
     endif
-  
+
   else
     echo
     echo MSCL library already locally installed.
@@ -1873,7 +1918,7 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
     if ( -d "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr" ) then
       rm -rf "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr"
     endif
-    git clone ssh://git@git.iter.org/lib/gr-software.git gr
+    git clone https://github.com/iterorganization/GR-Software.git gr
     cd gr
     if ("$OSTYPE" == "linux") then
       sed -i 's/^all: libgr.a install$/all: libgr.a/' Makefile
@@ -1955,7 +2000,7 @@ if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
       set TEXLIVE_INSTALL = "y"
     endif
 
-    if ( "$TEXLIVE_INSTALL" == "y" ) then 
+    if ( "$TEXLIVE_INSTALL" == "y" ) then
       sudo apt-get install -y texlive-full
       echo TeXlive library successfully installed.
       sleep 1
@@ -1984,7 +2029,7 @@ else if ("$OSTYPE" == "darwin") then
       set TEXLIVE_INSTALL = "y"
     endif
 
-    if ( "$TEXLIVE_INSTALL" == "y" ) then 
+    if ( "$TEXLIVE_INSTALL" == "y" ) then
       brew install texlive
       echo TeXlive library successfully installed.
       sleep 1
@@ -2023,7 +2068,7 @@ if ( $?MISSING_TEX && "$MISSING_TEX" == "1" ) then
 
 endif
 
-# If at least one of the libraries was absent and was locally compiled within SOLPSLIB, then warn the user to restart the session to re-initialize variables 
+# If at least one of the libraries was absent and was locally compiled within SOLPSLIB, then warn the user to restart the session to re-initialize variables
 # in order to avoid clashes with the shortcuts to compiler variables
 
 if ( $?RESTART_SOLPS && "$RESTART_SOLPS" == "1" ) then

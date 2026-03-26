@@ -15,12 +15,38 @@ module load Pango/1.48.5-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
 module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
+module load CMake/3.31.3-GCCcore-14.2.0
 module load MATLAB/2020a-r3
 
 # Debugger env var
 setenv DBX ddt
-# Compiler env var
+
+# Set environment variables
+# Compiler
 setenv FC gfortran
+
+# Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
+setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}
+setenv PATH /home/fusion/libs/NCARG2/bin:${PATH}
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  endif
+endif
 
 # Other environment variables
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.gfortran
