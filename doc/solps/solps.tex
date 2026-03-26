@@ -1121,6 +1121,11 @@ data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
 {\tt dc.fnn} and {\tt dc.fnn.coarse} which are the databases used for the
 advanced fluid neutral (AFN) models.
 
+Because some of these files can be very large, they are not stored on the
+GitHub repository but rather as a public-access Zenodo record, and the
+{\tt Makefile} automatically fetches them at first installation using the
+{\tt retrieve\_fnn\_datasets} script.
+
 \newpage
 \subsection{modules/Eirene}
 \index{Eirene}\label{cha:eirene}
