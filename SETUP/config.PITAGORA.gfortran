@@ -43,7 +43,7 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -lX1
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag -lstdc++
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MPI     = -L${MPDIR}/lib64 -lmpi 
+LD_MPI     = -L${MPDIR}/lib64 -lmpi
 
 LIBGKS     = ${GLI_HOME}/libgks.a
 LIBGRS     = ${GR_ROOT}/libgr.a
