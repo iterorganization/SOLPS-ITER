@@ -55,7 +55,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load json-fortran/9.0.2-GCC-13.2.0
   export SYSNAME="x86_64_rhel9"
 }
-module load Fundamental-Constants/0.1.1
+module load Fundamental-Constants/0.2.0
 
 export GGD_VERSION=`pkg-config ggd --modversion`
 export EBVERSIONMSCL=`pkg-config mscl --modversion`
