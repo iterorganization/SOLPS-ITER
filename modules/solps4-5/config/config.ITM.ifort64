@@ -2,8 +2,8 @@ EQUIV5 = -Dsdot=ddot -Dsasum=dasum -Dsaxpy=daxpy -Dsscal=dscal -Dsnrm2=dnrm2 -Ds
 
 CPP = /lib/cpp -C -traditional -ffreestanding
 
-SOLPSINCLUDE += `pkg-config libtirpc --cflags`
-LD_SONNET += `pkg-config libtirpc --libs`
+SOLPSINCLUDE += $(shell pkg-config libtirpc --cflags)
+LD_SONNET += $(shell pkg-config libtirpc --libs)
 
 #!!!Local Variables:
 #!!! mode: Makefile
