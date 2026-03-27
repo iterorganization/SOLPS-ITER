@@ -39,7 +39,7 @@ LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 ifdef NCARG_ROOT
-#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext $(shell pkg-config cairo --libs) -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -L/usr/X11R6/lib64 -lX11 -lm # for 4.4.1
 #LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lncarg_ras -L/usr/X11R6/lib64 -lm -lX11 -L/usr/lib64 -lXext -lcairo -lpangocairo-1.0 -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for
 endif

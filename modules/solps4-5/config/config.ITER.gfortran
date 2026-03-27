@@ -1,13 +1,13 @@
-LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
-LD_MSCL   ?= `pkg-config mscl --libs`
-LD_NAG    ?= `pkg-config nag --libs`
+LD_NETCDF ?= $(shell pkg-config netcdf-fortran --libs)
+LD_MSCL   ?= $(shell pkg-config mscl --libs)
+LD_NAG    ?= $(shell pkg-config nag --libs)
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
 NODENAME  ?= `hostname`
 
 CPP = /lib/cpp -traditional
 
-SOLPSINCLUDE += `pkg-config libtirpc --cflags`
-LDLIBES = `pkg-config libtirpc --libs`
+SOLPSINCLUDE += $(shell pkg-config libtirpc --cflags)
+LDLIBES = $(shell pkg-config libtirpc --libs)
 
 
 #!!!Local Variables:
