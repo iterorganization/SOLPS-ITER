@@ -21403,7 +21403,8 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
-\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
+\item[CONSTANTS\_MINOR\_VERSION] \index{CONSTANTS\_MINOR\_VERSION} Indicates which minor version (and thus which CODATA year) of the {\tt Fundamental-Constants} module is being linked to (set internally by the configuration files)
+\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being used at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
@@ -21790,6 +21791,7 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
+CONSTANTS\_MINOR\_VERSION & ids/b2mod\_constants.F90 \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\

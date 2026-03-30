@@ -63,7 +63,7 @@ else
   setenv SYSNAME x86_64_rhel9
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
 endif
-module load Fundamental-Constants/0.1.1
+module load Fundamental-Constants/0.2.0
 
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv QTDIR ${EBROOTQT5}

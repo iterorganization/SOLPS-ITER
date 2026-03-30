@@ -27,10 +27,9 @@ CPP      = /lib/cpp -traditional
 MOD      = mod
 
 LDLIBS 	 = ${LD_MSCL}
-#LDLIBS   = ${LD_MSCL} -L${EIROBJ} -leirene
+#LDLIBS  = ${LD_MSCL} -L${EIROBJ} -leirene
 LDEXTRA  = 
 
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

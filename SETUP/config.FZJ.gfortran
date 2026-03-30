@@ -35,15 +35,15 @@ $(error First use of config.FZJ.gfortran. Provide paths to libraries first.)
 # Variables for linking, using pkg-config
 #
 
-LD_NETCDF  = `pkg-config netcdf-fortran --libs`
-LD_MSCL    = `pkg-config mscl --libs`
+LD_NETCDF  = $(shell pkg-config netcdf-fortran --libs)
+LD_MSCL    = $(shell pkg-config mscl --libs)
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME} -lgks -lgfortran
 ifdef NCARG_ROOT
-#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm  -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext $(shell pkg-config cairo --libs) -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                                # for NCARG v4.x.x
 endif
-LD_NAG     = `pkg-config nag --libs`
+LD_NAG     = $(shell pkg-config nag --libs)
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 
@@ -74,4 +74,3 @@ FFLAGSEXTRA    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

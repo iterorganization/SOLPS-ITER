@@ -35,4 +35,3 @@ LCPP = -z muldefs ${LD_SONNET} -lw -lnsl -f77compat /usr/lib/libC.so.5
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

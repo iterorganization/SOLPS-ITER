@@ -1,9 +1,8 @@
 # Test whether necessary variables are defined
-LD_MSCL ?= `pkg-config mscl --libs` -lgfortran
+LD_MSCL ?= $(shell pkg-config mscl --libs) -lgfortran
 
 CPP      = /lib/cpp -traditional
 
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

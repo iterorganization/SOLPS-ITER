@@ -47,16 +47,16 @@ LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = -L${MSCL_ROOT}/lib -lmscl
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GLI_HOME}/lib -lgks -lXmu -lX11 -lXt -ldl
-#LD_NAG     = `pkg-config nag --libs`
+#LD_NAG    = $(shell pkg-config nag --libs)
 LD_NAG     = -L/opt/software/blas/3.8.0 -lblas -L${SOLPSTOP}/../lapack -llapack
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-#NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
+#NCDIR    ?= ${EBROOTNETCDFMINFORTRAN}
 ifdef NCARG_ROOT
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 # for NCARG v4.x.x
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 # for NCARG v4.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext $(shell pkg-config cairo --libs) -lfontconfig -lfreetype -lpng -lz -lXrender -lbz2 -ldl # for NCARG v6.x.x
 endif
-#LD_MPI     = -lmpi2
+#LD_MPI    = -lmpi2
 
 LIBGKS     = ${GLI_HOME}/lib/libgks.a
 LIBGRS     = ${GR_ROOT}/lib/libgr.a
@@ -87,4 +87,3 @@ FFLAGSEXTRA    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
