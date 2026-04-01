@@ -92,4 +92,3 @@ MPI_CPP        = -I${MPDIR}/include
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

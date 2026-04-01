@@ -13,4 +13,3 @@ LDLIBES = $(shell pkg-config libtirpc --libs)
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

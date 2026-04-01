@@ -1,4 +1,4 @@
-# MPI_FC  ?= mpif90
+# MPI_FC ?= mpif90
 MPI_FC  ?= mpiifort
 ifdef SOLPS_MPI
 FC       = ${MPI_FC}
@@ -9,4 +9,3 @@ CPP      = /lib/cpp -traditional
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

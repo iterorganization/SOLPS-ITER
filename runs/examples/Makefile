@@ -1,7 +1,7 @@
 # Makefile for fetching large external data
 
 # Shared asset directory is possible on ITER cluster
-EXTERNALDATA ?= https://zenodo.org/records/19238169
+EXTERNALDATA ?= https://zenodo.org/records/19239539
 
 HASHES := $(wildcard *.md5)
 ASSETS = $(HASHES:%.md5=%)
@@ -16,7 +16,7 @@ all : $(ASSETS)
 	@rm -f $*.tar.gz
 	wget ${EXTERNALDATA}/files/$*.tar.gz
 	mkdir $*.tmp ; tar -xhmzf $*.tar.gz -C $*.tmp
-	[ `echo $*.tmp/* | wc -w` == 1 ] && (mv $*.tmp/$* . ; rm -Rf $*.tmp) || ( mv $*.tmp $*)
+	[ `echo $*.tmp/* | wc -w` == 1 ] && (mv $*.tmp/$* . ; rm -Rf $*.tmp) || (mv $*.tmp $*)
 
 clean:
 	rm -f $(ASSETS)

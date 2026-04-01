@@ -24,4 +24,3 @@ OBJDEST   = -J${OBJDIR}
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

@@ -42,7 +42,7 @@ LD_NETCDF  = `nf-config --flibs`
 endif
 LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
-#LD_NAG     = $(shell pkg-config nag --libs)
+#LD_NAG    = $(shell pkg-config nag --libs)
 ifdef NAGDIR
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 else
@@ -106,4 +106,3 @@ export OS
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
