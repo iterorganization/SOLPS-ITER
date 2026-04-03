@@ -29,4 +29,4 @@ $ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
   awk '{printf "%s",$2; for (i=1;i<='$n';i++) printf " %s",$(i+2);printf "\n"}' >! ${tmpdir}PLOT_FROM_FILE
-  plot xlyplot$n $SOLPS_FLUIDS iteration 'norm of residual of continuity equation' `noquote_pwd 3`
+  plot xlyplot$n $SOLPS_FLUIDS iteration 'norm of residuals of continuity equation' $PWD

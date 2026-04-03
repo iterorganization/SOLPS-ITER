@@ -23,7 +23,7 @@ c     -   the magnetic flux read from the equilibrium file is in Vs/rad
 c=====================================================
 c
 c... Routine for XDR
-c      external cdxdr
+      external cdxdr
 C... subroutine for data input
       external fxdrnm
 

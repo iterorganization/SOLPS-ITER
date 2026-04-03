@@ -1,4 +1,3 @@
-### eval '(exit $?0)' && eval 'exec tcsh $0 ${1+"$@"}' && eval 'exec tcsh $0 $argv:q'
 #! /bin/tcsh -f
 
 if($?GNUPLOT_TMP) then
@@ -8,12 +7,25 @@ else
 endif
 setenv GNUPLOT_BATCH yes
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
-setenv PRINT_PLOT b2time2d_av.ps
+setenv PRINT_PLOT b2time2d_time_traces_av.ps
 rm -f ${tmpdir}GNUPLOT_COUNT ${tmpdir}gnuplot.cmd
 echo 0 > ${tmpdir}GNUPLOT_COUNT
 
+set source=b2mn.exe.dir/b2time.nc
+if (! -s $source) set source=b2time.nc
+set ns = `ncdump -h $source | grep -w "ns =" | sed -E 's/.*= *([0-9]+) *;.*/\1/'`
+
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS `cat $solps_fluids`
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+endif
+set species_names = ( $SOLPS_FLUIDS )
+set neutral_species_index = -1
+
 set nreg=`climb_and_look_for NREG`
-set nnreg=`pipe_run.log | grep ^nnreg | head -1`
+set nnreg=`pipe_run.log | grep -a ^nnreg | head -1`
 if (-s $nreg) then
   setenv NREG `cat $nreg`
   echo Set NREG to $NREG "(based on $nreg)"
@@ -30,8 +42,110 @@ if ("X$nnreg" != "X") then
 endif
 
 2dt_av nesepm
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dabsepm if run with Eirene, nasepm if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dabsepm fields exist --> coupled run --> call dabsepm
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dabsepm$neutral_species_index "
+      else
+        # dabsepm fields do not exist --> standalone run --> call nasepm
+        set na_dens="$na_dens nasepm$is_minus_1 "
+      endif
+    else
+      # ion species: always call nasepm
+      set na_dens="$na_dens nasepm$is_minus_1 "
+    endif
+end
+set counts = (`groups_species`)
+set na_dens_list = (`echo $na_dens`)
+set offset = 1
+foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+        set group = "$group $na_dens_list[$i]"
+    end
+    2dt_av $group
+    @ offset = $end + 1
+end
 2dt_av tesepm tisepm
 2dt_av nesepi nemxip nesepa nemxap
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dabsepi if run with Eirene, nasepi if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dabsepi fields exist --> coupled run --> call dabsepi
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dabsepi$neutral_species_index "
+      else
+        # dabsepi fields do not exist --> standalone run --> call nasepi
+        set na_dens="$na_dens nasepi$is_minus_1 "
+      endif
+    else
+      # ion species: always call nasepi
+      set na_dens="$na_dens nasepi$is_minus_1 "
+    endif
+end
+set counts = (`groups_species`)
+set na_dens_list = (`echo $na_dens`)
+set offset = 1
+foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+        set group = "$group $na_dens_list[$i]"
+    end
+    2dt_av $group
+    @ offset = $end + 1
+end
+set na_dens=""
+set neutral_species_index = -1
+foreach is (`seq 1 $ns`)
+  @ is_minus_1 = $is - 1
+  setenv species_name $species_names[$is]
+  set last_char = `echo "$species_name" | awk '{print substr($0,length($0),1)}'`
+  set second_last_char = `echo "$species_name" | awk '{print substr($0,length($0)-1,1)}'`
+    if ("$last_char" == "0" && "$second_last_char" !~ [0-9]) then
+      # neutral species: call dabsepa if run with Eirene, nasepa if standalone run
+      if (`ncdump -h $source | grep -w dabsepm | wc -l` > 0) then
+        # dabsepa fields exist --> coupled run --> call dabsepa
+        @ neutral_species_index = $neutral_species_index + 1
+        set na_dens="$na_dens dabsepa$neutral_species_index "
+      else
+        # dabsepa fields do not exist --> standalone run --> call nasepa
+        set na_dens="$na_dens nasepa$is_minus_1 "
+      endif
+    else
+      # ion species: always call nasepa
+      set na_dens="$na_dens nasepa$is_minus_1 "
+    endif
+end
+set counts = (`groups_species`)
+set na_dens_list = (`echo $na_dens`)
+set offset = 1
+foreach c ($counts)
+    @ end = $offset + $c - 1
+    set group = ""
+    foreach i (`seq $offset $end`)
+        set group = "$group $na_dens_list[$i]"
+    end
+    2dt_av $group
+    @ offset = $end + 1
+end
 2dt_av tesepi temxip tesepa temxap
 2dt_av tisepi timxip tisepa timxap
 2dt_av fnixip fnixap

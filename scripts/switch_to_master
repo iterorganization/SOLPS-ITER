@@ -16,7 +16,7 @@ b25:
 Eirene:
   echo "Updating Eirene"
   cd $SOLPSTOP/modules/Eirene
-  git checkout master && echo "Checked out Eirene master branch" || goto branch
+  git checkout SOLPS_master && echo "Checked out Eirene SOLPS_master branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:

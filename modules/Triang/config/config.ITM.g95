@@ -7,9 +7,6 @@ endif
 ifndef LD_GKS
   LD_GKS = -L${SOLPSLIB} -lgks
 endif
-ifndef LD_NAG
-  LD_NAG = -L${SOLPSLIB} -lblaslapack
-endif
 
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
 #DEFINES += ${SOLPS_CPP} ${EIRENE_DEFINES} -DTRIANG -DRECL_UNITS_PER_DOUBLE=8 -DNO_FORT10 -DNO_SHORT_CYCLE -DNO_F01AAF
@@ -31,7 +28,6 @@ endif
 
 #COMPILE  = ${FC} -c ${FFLAGS}
 
-NAG       = ${LD_NAG}
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
 #LDLIBS   = ${LD_MSCL} -L/usr/local/lib
@@ -51,4 +47,3 @@ LD        = ${FC}
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

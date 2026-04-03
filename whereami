@@ -36,6 +36,7 @@ case "*.iferc-csc.org":
   echo IFERC
   breaksw
 case "*.eufus.eu":
+case "*.efgw.local":
 case "*.efda-itm.eu":
 case "*.marconi.cineca.it"
 case "*.galileo.cineca.it"
@@ -129,7 +130,7 @@ case "kraken01":
 case "*.spbstu.ru":
 case "login1.cluster":
 case "n01p*.cluster":
-case "PLASMATHEORY08":
+case "plasmatheory48":
   echo SPBSTU
   breaksw
 case "*.mephi.ru":

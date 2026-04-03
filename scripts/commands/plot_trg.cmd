@@ -109,10 +109,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_ion:\Gamma_{He+}:
-:Be_flux_ion:\Gamma_{Be+}:
 :Li_flux_ion:\Gamma_{Li+}:
+:Be_flux_ion:\Gamma_{Be+}:
+:B_flux_ion:\Gamma_{B+}:
 :C_flux_ion:\Gamma_{C+}:
 :N_flux_ion:\Gamma_{N+}:
+:O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
 :W_flux_ion:\Gamma_{W+}:
@@ -120,10 +122,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_atm:\Gamma_{He}:
-:Be_flux_atm:\Gamma_{Be}:
 :Li_flux_atm:\Gamma_{Li}:
+:Be_flux_atm:\Gamma_{Be}:
+:B_flux_atm:\Gamma_{B}:
 :C_flux_atm:\Gamma_{C}:
 :N_flux_atm:\Gamma_{N}:
+:O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
 :W_flux_atm:\Gamma_{W}:
@@ -131,10 +135,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_pres_atm:p_{He}:
-:Be_pres_atm:p_{Be}:
 :Li_pres_atm:p_{Li}:
+:Be_pres_atm:p_{Be}:
+:B_pres_atm:p_{B}:
 :C_pres_atm:p_{C}:
 :N_pres_atm:p_{N}:
+:O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
 :W_pres_atm:p_{W}:
@@ -220,10 +226,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_ion:\Gamma_{He+}:
-:Be_flux_ion:\Gamma_{Be+}:
 :Li_flux_ion:\Gamma_{Li+}:
+:Be_flux_ion:\Gamma_{Be+}:
+:B_flux_ion:\Gamma_{B+}:
 :C_flux_ion:\Gamma_{C+}:
 :N_flux_ion:\Gamma_{N+}:
+:O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
 :W_flux_ion:\Gamma_{W+}:
@@ -231,10 +239,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_atm:\Gamma_{He}:
-:Be_flux_atm:\Gamma_{Be}:
 :Li_flux_atm:\Gamma_{Li}:
+:Be_flux_atm:\Gamma_{Be}:
+:B_flux_atm:\Gamma_{B}:
 :C_flux_atm:\Gamma_{C}:
 :N_flux_atm:\Gamma_{N}:
+:O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
 :W_flux_atm:\Gamma_{W}:
@@ -242,10 +252,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_pres_atm:p_{He}:
-:Be_pres_atm:p_{Be}:
 :Li_pres_atm:p_{Li}:
+:Be_pres_atm:p_{Be}:
+:B_pres_atm:p_{B}:
 :C_pres_atm:p_{C}:
 :N_pres_atm:p_{N}:
+:O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
 :W_pres_atm:p_{W}:
@@ -331,10 +343,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_ion:\Gamma_{He+}:
-:Be_flux_ion:\Gamma_{Be+}:
 :Li_flux_ion:\Gamma_{Li+}:
+:Be_flux_ion:\Gamma_{Be+}:
+:B_flux_ion:\Gamma_{B+}:
 :C_flux_ion:\Gamma_{C+}:
 :N_flux_ion:\Gamma_{N+}:
+:O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
 :W_flux_ion:\Gamma_{W+}:
@@ -342,10 +356,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_atm:\Gamma_{He}:
-:Be_flux_atm:\Gamma_{Be}:
 :Li_flux_atm:\Gamma_{Li}:
+:Be_flux_atm:\Gamma_{Be}:
+:B_flux_atm:\Gamma_{B}:
 :C_flux_atm:\Gamma_{C}:
 :N_flux_atm:\Gamma_{N}:
+:O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
 :W_flux_atm:\Gamma_{W}:
@@ -353,10 +369,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_pres_atm:p_{He}:
-:Be_pres_atm:p_{Be}:
 :Li_pres_atm:p_{Li}:
+:Be_pres_atm:p_{Be}:
+:B_pres_atm:p_{B}:
 :C_pres_atm:p_{C}:
 :N_pres_atm:p_{N}:
+:O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
 :W_pres_atm:p_{W}:
@@ -442,10 +460,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_ion:\Gamma_{He+}:
-:Be_flux_ion:\Gamma_{Be+}:
 :Li_flux_ion:\Gamma_{Li+}:
+:Be_flux_ion:\Gamma_{Be+}:
+:B_flux_ion:\Gamma_{B+}:
 :C_flux_ion:\Gamma_{C+}:
 :N_flux_ion:\Gamma_{N+}:
+:O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
 :W_flux_ion:\Gamma_{W+}:
@@ -453,10 +473,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_flux_atm:\Gamma_{He}:
-:Be_flux_atm:\Gamma_{Be}:
 :Li_flux_atm:\Gamma_{Li}:
+:Be_flux_atm:\Gamma_{Be}:
+:B_flux_atm:\Gamma_{B}:
 :C_flux_atm:\Gamma_{C}:
 :N_flux_atm:\Gamma_{N}:
+:O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
 :W_flux_atm:\Gamma_{W}:
@@ -464,10 +486,12 @@
 @setx:x:r-r_{sep}, m:
 @log:
 :He_pres_atm:p_{He}:
-:Be_pres_atm:p_{Be}:
 :Li_pres_atm:p_{Li}:
+:Be_pres_atm:p_{Be}:
+:B_pres_atm:p_{B}:
 :C_pres_atm:p_{C}:
 :N_pres_atm:p_{N}:
+:O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
 :W_pres_atm:p_{W}:

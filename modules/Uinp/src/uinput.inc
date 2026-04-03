@@ -8,12 +8,13 @@ c*** Temporary - max. number of reactions in cdenmodel section
       parameter (nrcdn=1)
 
 c*** 1
-      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun
+      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,
+     ,        nevntmax,nvnmxtr
       integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
       logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
-     ,        nexvs,nltrimesh,nlsoledge
+     ,        nexvs,nltrimesh,nlsoledge,nlspcspt
       character txtrun*71
 
 c*** 2
@@ -399,8 +400,8 @@ c*** b2ah.dat
       logical is_bundled(natm)
 
       common/uinint/
-     ,  nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,nfullrun,
-     ,  noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
+     ,  nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,
+     ,  nevntmax,nvnmxtr,noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
      ,  nstoram,ngstal,nrtal1,nreac_add,nscards,lfrm15,
      ,  indgrd,nr1st,nrsep,
      ,  nrplg,npplg,nrknot,npoin1,necke,nchbar,nseite,inmti,
@@ -520,7 +521,7 @@ c*** b2ah.dat
       common/uinlog/
      ,  nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
      ,  nlmovie,nldfst,nlranmar,nlcascad,nloctree,
-     ,  nlwrmsh,nexvs,nltrimesh,nlsoledge,
+     ,  nlwrmsh,nexvs,nltrimesh,nlsoledge,nlspcspt,
      ,  nlrad,nlslb,nlcrc,nlell,nltri,nlplg,nlfem,nltet,nlgen,
      ,  nlpol,nlply,nlpla,nlplp,nltor,nltrz,nltra,nltrt,
      ,  nlmlt,nladd,lconst,nltrim,nlavrp,nlavrt,nlsymp,nlsymt,

@@ -20,11 +20,14 @@ set STANDALONE_ARG="#STANDALONE_ARG#"
 set COUPLED_SUFFIX="#COUPLED_SUFFIX#"
 set COMPRESS_ARG="#COMPRESS_ARG#"
 set COMPRESS_SUFFIX="#COMPRESS_SUFFIX#"
+set RUN_NUMBER = "#RUN_NUMBER#"
+set RUN_DIRS = "#RUN_DIRS#"
 
 set USE_MPI=""
 if ($?SOLPS_MPI) then
+  set MPI_EXEC=mpirun
   set MPI_PREFLAGS="--mpi=mpi2"
-  set USE_MPI="-m srun"
+  set USE_MPI="-m ${MPI_EXEC}"
   set USE_MPI=`echo $USE_MPI | sed -e 's:-m :-m ''":' -e 's:$:"'':'`
 else
   set MPI_PREFLAGS=""
@@ -40,11 +43,44 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+set STANDALONE=${STANDALONE_ARG}
 
-QSUB.postprocess${COUPLED_SUFFIX}
+if ($RUN_NUMBER == 1) then
 
-preserve_scratch_to_work
+  b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+
+  QSUB.postprocess${COUPLED_SUFFIX}
+
+  preserve_scratch_to_work
+
+  b2fstate_OK_bool
+
+else if ($RUN_NUMBER > 1) then
+
+  foreach dir ($RUN_DIRS)
+
+    set scriptname = "/tmp/${dir}_run_script.csh"
+
+    echo "#! /bin/tcsh -f"                                                                                 >! $scriptname
+    echo "cd $dir"                                                                                         >> $scriptname
+    echo "b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} ${COMPRESS_ARG} >! run.log${COMPRESS_SUFFIX}"          >> $scriptname
+    echo "QSUB.postprocess${COUPLED_SUFFIX}"                                                               >> $scriptname
+    echo "preserve_scratch_to_work"                                                                        >> $scriptname
+    echo "b2fstate_OK_bool"                                                                                >> $scriptname
+
+    chmod +x $scriptname
+    ( tcsh -f $scriptname ) &
+
+  end
+
+  wait
+
+  foreach dir ($RUN_DIRS)
+
+    rm -f /tmp/${dir}_run_script.csh
+
+  end
+
+endif
 
 update_solps_run_status "Finished on `hostname` at `date`"
-b2fstate_OK_bool

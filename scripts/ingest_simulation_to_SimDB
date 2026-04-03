@@ -1,0 +1,49 @@
+#!/bin/tcsh
+
+#Check that a remote is defined
+set remote=""
+if ("X${1}X" != "XX") then
+  set remote=${1}
+  echo 'Using SimDB remote server '${1}
+else
+  set numrem=`simdb remote config list | wc -l`
+  if ($numrem == 0) then
+    echo 'No SimDB remote server declared!'
+    echo 'Use the "simdb remote config new <NAME> <URL>" command to define one."'
+    echo 'And "simdb remote config set-default <NAME>" to make it the default.'
+    exit
+  else if ($numrem > 1) then
+    echo 'More than one SimDB remote is available'
+    echo 'Please specify the server you want to use as argument'
+    echo 'List of available servers:'
+    simdb remote config list
+    exit
+  endif
+endif
+
+# Local ingestion
+set status=`simdb manifest check manifest.yaml`
+if ("X${status}X" != "XokX" ) then
+  echo 'Manifest check failed !'
+  echo 'Run "simdb manifest check manifest.yaml" for the detailed error message'
+  exit
+else
+  echo 'Manifest check passed !'
+endif
+set alias = `grep alias manifest.yaml | cut -d ':' -f 2`
+echo 'The simulation alias is '$alias
+set present = `simdb simulation query alias=eq:${alias} | head -1`
+if ("X${present}X" != "XaliasX") then
+  simdb simulation ingest manifest.yaml
+  # To check the contents of the SimDB entry, use the command
+  # simdb simulation info <test>
+  # where <test> is the alias or UUID of your simulation
+  simdb simulation validate $remote $alias
+
+  # Pushing to public database
+  simdb simulation push $remote $alias
+else
+  echo "A simulation already exists with the same alias"
+  echo "Please modify the manifest file to provide a different alias"
+  echo "or delete the existing simulation."
+endif

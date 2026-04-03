@@ -7,19 +7,19 @@
 
 [submodule "B2.5"]
 	path = modules/B2.5
-	url = ssh://git@git.iter.org/bnd/b2.5.git
+	url = ../B2.5.git
 	branch = .
 [submodule "Carre"]
 	path = modules/Carre
-	url = ssh://git@git.iter.org/bnd/carre.git
+	url = ../CARRE.git
 	branch = .
 [submodule "DivGeo"]
 	path = modules/DivGeo
-	url = ssh://git@git.iter.org/bnd/divgeo.git
+	url = ../DivGeo.git
 	branch = .
 [submodule "Eirene"]
 	path = modules/Eirene
-	url = ssh://git@git.iter.org/bnd/eirene.git
+	url = ../EIRENE.git
 	branch = .
 [submodule "ADAS"]
 	path = modules/adas

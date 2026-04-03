@@ -1,0 +1,39 @@
+# Load modules
+
+module load netcdf-cxx/4.3.1 netcdf-fortran/4.5.2 netcdf/4.7.1
+# Set environment variables
+setenv EBROOTIMK /opt/ohpc/pub/software/intel/compilers_and_libraries_2018.5.274/linux/mkl/lib
+if (! $?DEVICE) then
+   setenv DEVICE EAST
+endif
+setenv GLI_HOME ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
+setenv NCARG_ROOT ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/NCARG
+setenv B2PLOT_DEV "ps"
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    if ($?LD_LIBRARY_PATH) then
+      setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    else
+      setenv LD_LIBRARY_PATH ${PARAVIEW_LIB}
+    endif
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  endif
+endif
+
+# Debugger (set environment variable DBX)
+
+
+# Compilers

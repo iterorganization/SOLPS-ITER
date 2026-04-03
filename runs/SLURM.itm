@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem=#MEM#
+#SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
@@ -42,7 +42,9 @@ endif
 update_solps_run_status "Using SOLPSTOP = #SOLPSTOP#"
 update_solps_run_status "Started on `hostname` at `date`"
 
-b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+set STANDALONE=${STANDALONE_ARG}
+
+time b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
 

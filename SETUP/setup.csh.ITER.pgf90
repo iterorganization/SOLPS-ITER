@@ -43,7 +43,7 @@ else
   module load MDSplus/7.132.0-GCCcore-13.2.0
   module load xarray/2024.5.0-gfbf-2023b
   module load makedepend/1.0.9-GCCcore-13.2.0
-  module load MSCL/1.2.4-GCCcore-13.2.0
+  module load MSCL/1.2.5-GCCcore-13.2.0
   module load GR/0.0.94-GCCcore-13.2.0
   module load GLI/4.5.31-GCCcore-13.2.0
   module load NCL/6.6.2-foss-2023b
@@ -62,11 +62,12 @@ else
   setenv SYSNAME x86_64_rhel9
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
 endif
-module load Fundamental-Constants/0.1.1
+module load Fundamental-Constants/0.2.0
 
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv QTDIR ${EBROOTQT5}
 setenv GLI_HOME ${EBROOTGLI}
+setenv LD_LIBRARY_PATH ${GKSDIR}/lib:${LD_LIBRARY_PATH}
 
 # Debugger (set environment variable DBX)
 module load TotalView/2023.4.16_linux_x86-64

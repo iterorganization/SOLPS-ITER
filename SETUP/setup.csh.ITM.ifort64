@@ -1,27 +1,33 @@
-setenv GLI_HOME /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/gks
-setenv PATH ${PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NETCDF/bin
-if (! $?LD_LIBRARY_PATH) then
-setenv LD_LIBRARY_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
-else
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib
-endif
-if (! $?PKG_CONFIG_PATH) then
-setenv PKG_CONFIG_PATH /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
-else
-setenv PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/mscl/lib/pkgconfig
-endif
-setenv NCARG_ROOT /pfs/work/g2dpc/SOLPS-ITER/${COMPILER}/NCARG
-setenv PATH ${PATH}:${NCARG_ROOT}/bin
 setenv SOLPSWORK /pfs/work/$USER/solps-iter/runs
+setenv SCRATCH_DIR /pfs/scratch/$USER
+setenv MODULES_ADVANCED_VERSION_SPEC 0
 
-module load imasenv/3.37.0/intel/2020/rc
-module load json-fortran/8.4.0/intel/2020
-module unload cmake
-module load cmake/3.18.2
+# add IMAS module list to module system
+module load ach-modules
+
+# load IMAS modules for Intel
+module load IMAS/3.42.0-2025.01-intel-2023b
+module load GGD/1.12.0-intel-2023b-DD-3.42.0
+module load Fundamental-Constants/0.1.1
+module load AMNS/1.5.1-intel-2023b-DD-3.42.0
+module load texlive/20230313-intel-compilers-2023.2.1
+module load json-fortran/8.5.2-intel-compilers-2023.2.1
+module load netCDF/4.9.2-iimpi-2023b
+module load netCDF-Fortran/4.6.1-iimpi-2023b
+module load CMake/3.27.6-GCCcore-13.2.0
+module load git/2.42.0-GCCcore-13.2.0
+module load Doxygen/1.9.8-GCCcore-13.2.0
+module load Ghostscript/10.02.1-GCCcore-13.2.0
+module load makedepend/1.0.9-GCCcore-13.2.0
+module load OpenBLAS/0.3.24-GCC-13.2.0
+module load GLI/4.5.31-GCCcore-13.2.0
+module load GR/0.0.94-GCCcore-13.2.0
+module load MSCL/1.2.5-GCCcore-13.2.0
+module load NCL/6.6.2-intel-2023b
+
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
-setenv EBVERSIONMSCL `pkg-config mscl --modversion`
-module load texlive
-setenv SYSNAME `fs sysname | cut -d "'" -f 2`
+setenv GLI_HOME ${EBROOTGLI}
+setenv SYSNAME x86_64_rhel9
 
 if (! $?DEVICE) then
   if ($?TOKAMAKNAME) then
@@ -29,7 +35,6 @@ if (! $?DEVICE) then
   endif
 endif
 
-module load paraview/5.10.0
 if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
@@ -48,19 +53,14 @@ else
     setenv LD_CATALYST "`paraview-config --libs vtkPVPythonCatalyst` -lstdc++"
   endif
 endif
-if ($?LD_LIBRARY_PATH) then
-  setenv LD_LIBRARY_PATH "/usr/lib64:${LD_LIBRARY_PATH}"
-else
-  setenv LD_LIBRARY_PATH "/usr/lib64"
-endif
 
 # Debugger (set environment variable DBX)
-module switch totalview/2023.2
+module switch totalview/2025.3.4
 setenv DBX totalview
 
 # compilers
 
-#setenv CC gcc
-#setenv FC ifort
-#setenv CXX g++
+setenv CC icc
+setenv FC ifort
+setenv CXX icpc
 setenv MPI_FC mpiifort

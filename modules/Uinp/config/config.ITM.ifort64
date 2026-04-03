@@ -1,6 +1,6 @@
 # Test whether necessary variables are defined
-MSCL_ROOT ?= /pfs/work/g2dpc/SOLPS-ITER/mscl
-LD_MSCL ?= -L${MSCL_ROOT}/lib -lmscl
+MSCL_ROOT ?= ${EBROOTMSCL}
+LD_MSCL ?= $(shell pkg-config mscl --libs)
 
 MPI_FC  ?= mpiifort
 ifdef SOLPS_MPI
@@ -12,4 +12,3 @@ CPP      = /lib/cpp -C -traditional -ffreestanding
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

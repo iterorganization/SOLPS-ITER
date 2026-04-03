@@ -7,7 +7,7 @@ set NODES=1
 set PROCS=1
 set THREADS=1
 set hours=48
-set mem=8GB
+set mem=2GB
 set chain="unset"
 set job_count=0
 echo Your email is $EMAIL
@@ -31,7 +31,7 @@ argloop:
 
 Help for $0
 
-This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the Marconi Gateway cluster.
+This script is used to submit SOLPS-ITER jobs to the SLURM batch system on the EFGW machine.
 
 Usage:
 
@@ -48,7 +48,7 @@ Available options are:
   -m <<MPI OPTIONS>> use the MPI options specified (default serial version)
   -t <<THREADS>>     use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
-  -M <<MEM_SIZE>>    memory size (default $mem)
+  -M <<MEM_SIZE>>    memory size per CPU (default $mem)
 
 EOF
     exit

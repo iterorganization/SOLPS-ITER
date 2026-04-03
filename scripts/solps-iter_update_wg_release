@@ -5,10 +5,11 @@ echo "Switching to SOLPS-ITER WG-release branch"
 set repo="SOLPS-ITER"
 git fetch --prune
 git checkout feature/wg-release && echo "Checked out SOLPS-ITER WG-release branch" || goto branch
+git submodule init
+git submodule update
 git pull && goto b25 || goto local
 
 b25:
-  git submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
@@ -42,7 +43,7 @@ Carre2:
   cd $SOLPSTOP/modules/Carre2
   set repo="Carre2"
   git fetch --prune
-  git checkout feature/Carre2 && echo "Checked out Carre2 branch" || goto branch
+  git checkout feature/Carre2_wg_release && echo "Checked out Carre2 WG-release branch" || goto branch
   git pull && goto DivGeo || goto local
 
 DivGeo:
@@ -50,7 +51,7 @@ DivGeo:
   cd $SOLPSTOP/modules/DivGeo
   set repo="DivGeo"
   git fetch --prune
-  git checkout develop && echo "Checked out DivGeo develop branch" || goto branch
+  git checkout feature/wg_release && echo "Checked out DivGeo WG-release branch" || goto branch
   git pull && goto ADAS || goto local
 
 ADAS:
@@ -80,5 +81,5 @@ compile:
   ${MAKE} listobj listobj_debug
   ${MAKE} depend depend_debug
   ${MAKE} tags
-  ${MAKE} solps
+  ${MAKE} solps MAKE_OPTIONS=-j8
 

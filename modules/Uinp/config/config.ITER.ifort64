@@ -1,12 +1,22 @@
 #  VERSION : 28.07.99 20:34
 NODENAME ?= $(shell echo `hostname`)
-LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
+LD_MSCL  ?= $(shell pkg-config mscl --libs) -lgfortran
 LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+# MPI_FC ?= mpiifort -fc=mpiifx
+# else
 MPI_FC   ?= mpiifort
+# endif
 ifdef SOLPS_MPI
 FC        = ${MPI_FC}
 MPDIR    ?= ${EBROOTMPI}
+# else
+# ifeq (,$(findstring CentOS,$(OS)))
+# FC      = ifx
+# endif
 endif
 
 FFLAGS    = -fPIC -assume no2underscore
@@ -19,4 +29,3 @@ CPP       = /lib/cpp -C -traditional -ffreestanding
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

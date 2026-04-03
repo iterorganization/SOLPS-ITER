@@ -1,5 +1,6 @@
 setenv SYSNAME `uname`_`arch`
 alias gmake make
+if ( ! $?MISSING_DEPENDENCY ) set MISSING_DEPENDENCY = 0
 
 # Initialize the path collections, if they do not exist already
 
@@ -10,17 +11,38 @@ if ( ! $?PKG_CONFIG_PATH ) then
     setenv PKG_CONFIG_PATH
 endif
 
+# Check if main development environment and package managers are installed
+
+setenv XQUARTZ_HOME /opt/X11
+if ( ! -d "$XQUARTZ_HOME" ) then
+    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
+endif
+
+if ( `which brew >& /dev/null; echo $status` != 0 ) then
+    echo "Warning: Homebrew installation not found. Install it from https://brew.sh/."
+else
+    setenv PATH "${PATH}:`brew --prefix`/bin"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix openblas`/lib"
+endif
+
+if ( `which port >& /dev/null; echo $status` != 0 ) then
+    echo "Warning: MacPorts installation not found. Install it from https://ports.macports.org/."
+else
+    setenv PATH "${PATH}:/opt/local/bin"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/opt/local/lib"
+endif
+
+if ( `which python >& /dev/null; echo $status` != 0 ) then
+    echo "Warning: python installation not found. Install it using your preferred method."
+else
+    setenv PATH "${PATH}:`which python | xargs dirname`"
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`which python | xargs dirname`/../lib"
+endif
+
 # Add directories of compiled libraries, include directives, etc.
 
-setenv PATH "${PATH}:`brew --prefix`/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`brew --prefix`/lib"
-
-setenv PATH "${PATH}:/opt/local/bin"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/opt/local/lib"
-
-setenv PATH "${PATH}:`which python | xargs dirname`"
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:`which python | xargs dirname`/../lib"
-
+setenv OPENBLAS_HOME `brew --prefix openblas`
 setenv FREETYPE_HOME `brew --prefix freetype`
 setenv HDF5_HOME `brew --prefix hdf5`
 setenv LAPACK_DIR `brew --prefix lapack`
@@ -30,104 +52,88 @@ setenv NETCDF_HOME `brew --prefix netcdf`
 setenv NETCDF_FORTRAN_HOME `brew --prefix netcdf-fortran`
 setenv NCARG_ROOT /opt/local
 setenv MOTIF_HOME /opt/local
-setenv XQUARTZ_HOME /opt/X11
 
 setenv DBX ddt
 setenv DBX idb
 
 setenv PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:/opt/local/lib/pkgconfig"
 
+# Define compilers
+
 setenv CC gcc
 setenv FC gfortran
 setenv MPI_FC mpif90
 setenv CXX g++
 
-# Check if external libraries are correctly installed
-
-if ( ! -d "$XQUARTZ_HOME" ) then
-    echo "Warning: XQuartz installation not found. Install it from https://www.xquartz.org/."
-endif
+# Check if external libraries are installed
 
 if ( `brew list | grep -c '^gcc$'` == 0 ) then
-    echo "Warning: gcc not installed. Install it via 'brew install gcc'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^cmake$'` == 0 ) then
-    echo "Warning: cmake not installed. Install it via 'brew install cmake'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^ctags$'` == 0 ) then
-    echo "Warning: ctags not installed. Install it via 'brew install ctags'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^doxygen$'` == 0 ) then
-    echo "Warning: doxygen not installed. Install it via 'brew install doxygen'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^freetype$'` == 0 ) then
-    echo "Warning: freetype not installed. Install it via 'brew install freetype'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^ghostscript$'` == 0 ) then
-    echo "Warning: ghostscript not installed. Install it via 'brew install ghostscript'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^gnuplot$'` == 0 ) then
-    echo "Warning: gnuplot not installed. Install it via 'brew install gnuplot'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^hdf5$'` == 0 ) then
-    echo "Warning: hdf5 not installed. Install it via 'brew install hdf5'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^lapack$'` == 0 ) then
-    echo "Warning: lapack not installed. Install it via 'brew install lapack'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^libpng$'` == 0 ) then
-    echo "Warning: libpng not installed. Install it via 'brew install libpng'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^libxp$'` == 0 ) then
-    echo "Warning: libxp not installed. Install it via 'brew install libxp'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^netcdf$'` == 0 ) then
-    echo "Warning: netcdf not installed. Install it via 'brew install netcdf'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^netcdf-fortran$'` == 0 ) then
-    echo "Warning: netcdf-fortran not installed. Install it via 'brew install netcdf-fortran'."
+    set MISSING_DEPENDENCY = 1
 endif
-
+if ( `brew list | grep -c '^openblas$'` == 0 ) then
+    set MISSING_DEPENDENCY = 1
+endif
 if ( `brew list | grep -c '^open-mpi$'` == 0 ) then
-    echo "Warning: open-mpi not installed. Install it via 'brew install open-mpi'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( `brew list | grep -c '^texlive$'` == 0 ) then
-    echo "Warning: texlive not installed. Install it via 'brew install texlive'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( ! -e /opt/local/lib/libjsonfortran.a ) then
-    echo "Warning: json-fortran not installed. Install it via 'sudo port install fortran-json'"
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( ! -e /opt/local/lib/libncarg.a ) then
-    echo "Warning: ncarg not installed. Install it via 'sudo port install ncarg'"
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( ! -e /opt/local/lib/libXm.a ) then
-    echo "Warning: openmotif not installed. Install it via 'sudo port install openmotif'"
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/mscl/darwin.gfortran/libmscl.a" ) then
-    echo "Warning: mscl library not installed. Installing running 'install_dependencies'."
+    set MISSING_DEPENDENCY = 1
 endif
-
 if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/gli/src/gks/libgks.a" ) then
-    echo "Warning: gks library not installed. Installing running 'install_dependencies'."
+    set MISSING_DEPENDENCY = 1
+endif
+if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/gr/libgr.a" ) then
+    set MISSING_DEPENDENCY = 1
 endif
 
-if ( ! -e "${SOLPSTOP}/lib/DARWIN.gfortran/gr/libgr.a" ) then
-    echo "Warning: gr library not installed. Installing running 'install_dependencies'."
+if ( $?MISSING_DEPENDENCY && "$MISSING_DEPENDENCY" == "1" ) then
+    echo "Warning: some dependencies are not installed. Install them running the script 'install_dependencies'."
 endif

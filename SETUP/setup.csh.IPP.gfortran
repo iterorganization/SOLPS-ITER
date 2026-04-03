@@ -1,0 +1,77 @@
+# Load modules
+setenv MODULEPATH /tokp/work/software/TOK_2023/modules:$MODULEPATH
+module load gcc/14
+module load impi/2021.15
+module load nag_lib/mk31.0
+setenv LD_LIBRARY_PATH $NAGLIB_HOME/lib:$LD_LIBRARY_PATH
+module load imas-modules/2.0
+module load IMAS/3.42.0-2024.09-foss-2023b
+module load Fundamental-Constants/0.1.1
+module load AMNS/1.5.1-foss-2023b-DD-3.42.0
+module load GGD/1.12.0-foss-2023b-DD-3.42.0
+module load json-fortran/9.0.2-GCC-13.2.0
+module load IPython/8.17.2-GCCcore-13.2.0
+module load texlive/20230313-GCC-13.2.0
+module load Doxygen/1.9.8-GCCcore-13.2.0
+module load netCDF/4.9.2-gompi-2023b netCDF-Fortran/4.6.1-gompi-2023b
+module load git/2.42.0-GCCcore-13.2.0
+module load gnuplot/6.0
+module load arm_ddt/22.1
+module load NCL/6.6.2-foss-2023b
+
+setenv DBX ddt
+setenv SYSNAME amd64_sles15
+
+# Work around a problem with cflags entries being suppresed by pkg-config if in CPATH
+setenv PKG_CONFIG_ALLOW_SYSTEM_CFLAGS
+
+# Environment variables
+if (! $?DEVICE) then
+  setenv DEVICE upgrade
+endif
+
+# Compiler
+setenv FC gfortran
+setenv MPI_FC mpif90
+setenv CC gcc
+
+# Find libraries
+if (-d /tokp/work/dpc/SOLPS-ITER) then
+  setenv IPPSOLPSLIBS /tokp/work/dpc/SOLPS-ITER/${COMPILER}
+else if (-d /u/dpc/SOLPS-ITER) then
+  setenv IPPSOLPSLIBS /u/dpc/SOLPS-ITER
+else
+  echo "Could not find IPPSOLPSLIBS -- contact dpc@ipp.mpg.de"
+endif
+
+setenv GGD_VERSION `pkg-config ggd --modversion`
+setenv GLI_HOME $IPPSOLPSLIBS/gks
+##setenv NCARG_ROOT $IPPSOLPSLIBS/NCARG
+##setenv NCARG_ROOT /tokp/work/software/TOK_2019/software/ncarg/6.6.2
+setenv PATH ${PATH}
+setenv MDSPLUS_DIR $IPPSOLPSLIBS/MDSPLUS
+setenv PATH ${PATH}:${NCARG_ROOT}/bin:${MDSPLUS_DIR}/bin
+setenv MDS_PATH ${MDSPLUS_DIR}/tdi
+[ $?LD_LIBRARY_PATH == 0 ] && setenv LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MDSPLUS_DIR}/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
+
+if (`where paraview-config` == "") then
+  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
+else
+  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
+  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  if (${CMAKE_MAJOR_VERSION} > 2) then
+    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+  else
+    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
+    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
+    setenv PARAVIEW_INCLUDE `paraview-config --include`
+    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
+    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
+  endif
+endif

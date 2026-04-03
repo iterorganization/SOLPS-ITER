@@ -13,4 +13,3 @@ LDLIBS   = ${LD_GR} ${LD_GKS} -lX11 -lXt
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

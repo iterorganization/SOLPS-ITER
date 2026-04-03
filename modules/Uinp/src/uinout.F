@@ -159,7 +159,7 @@ c*** 1.  General data for the run
       end if
       nfile=j*10000+k*1000+l*100+m*10+n
       write(iunoo,707) nprll,nmode,ntcpu,nfile,niter0,niter,
-     .                 ntime0,ntim1,nfullrun
+     .                 ntime0,ntim1,nevntmax,nvnmxtr
       write(iunoo,707) noptim,noptm1,ngeom_usr,ncoup_input,
      .                 nsmstra,nstoram,ngstal,nrtal1
       nlspcscl = lsprcl
@@ -167,7 +167,7 @@ c*** 1.  General data for the run
       write(iunoo,706) nlscl,nltest,nlana,nldrft,nlcrr,
      .                 nlerg,nlident,nlone,nlmovie,nldfst,
      .                 nlranmar,nlcascad,nloctree,nlwrmsh,nexvs,
-     .                 nltrimesh,nlspcscl,nlspcscl_on,nlsoledge
+     .                 nltrimesh,nlspcscl,nlspcscl_on,nlsoledge,nlspcspt
       write(iunoo,720) utxtfl(1) ! AMJUEL needed by default for H-alpha rates
       handle=.false.
       do i=1,nrcln

@@ -1,21 +1,28 @@
-LD_NETCDF ?= `pkg-config netcdf-fortran --libs`
-LD_NAG    ?= `pkg-config nag --libs` 
+LD_NETCDF ?= $(shell pkg-config netcdf-fortran --libs)
+LD_NAG    ?= $(shell pkg-config nag --libs)
 LD_SONNET ?= -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MSCL   ?= `pkg-config mscl --libs`
+LD_MSCL   ?= $(shell pkg-config mscl --libs)
 NODENAME  ?= `hostname`
 
 EQUIV5 =
 
 CPP = /lib/cpp -traditional
 
+OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+# ifndef SOLPS_DEBUG
+# FC = ifx
+# endif
+# endif
+
 ifdef SOLPS_DEBUG
 FCOPTS += -traceback
 endif
 
-SOLPSINCLUDE += `pkg-config libtirpc --cflags`
-LD_SONNET += `pkg-config libtirpc --libs`
+SOLPSINCLUDE += $(shell pkg-config libtirpc --cflags)
+LD_SONNET += $(shell pkg-config libtirpc --libs)
 
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

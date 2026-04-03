@@ -34,7 +34,7 @@ MDSPLUS_DIR ?=
 #
 
 ifeq (,$(findstring CentOS,$(OS)))
-LD_NETCDF  = `pkg-config netcdf-fortran --libs`
+LD_NETCDF  = $(shell pkg-config netcdf-fortran --libs)
 else
 LD_NETCDF  = `nf-config --flibs`
 endif
@@ -42,15 +42,15 @@ LD_GR      = -L${GR_ROOT}/lib -lgr
 LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
-LD_MSCL    = `pkg-config mscl --libs`
+LD_MSCL    = $(shell pkg-config mscl --libs)
 ifdef NAGDIR
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
 else
-LD_NAG     = `pkg-config openblas --libs`
+LD_NAG     = $(shell pkg-config openblas --libs)
 endif
 ifdef NCARG_ROOT
-LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpthread -lXrender -lbz2 # for NCARG v6.x.x
-#LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                                          # for NCARG v4.x.x
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext $(shell pkg-config cairo --libs) -lfontconfig -lfreetype -lpthread -lXrender -lbz2 # for NCARG v6.x.x
+#LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lm                                                                                           # for NCARG v4.x.x
 endif
 NCDIR     ?= ${EBROOTNETCDFMINFORTRAN}
 
@@ -62,13 +62,25 @@ ADDLIBS    = -lgfortran
 # Provide compiler
 #
 
-MPI_FC    ?= mpiifort
+# Avoid usage of ifx compiler until its many issues are fixed
+# ifeq (,$(findstring CentOS,$(OS)))
+#  MPI_FC    = mpiifort -fc=mpiifx
+#  FCVOPTS   = -check nouninit
+#  FN        = ifx
+#  CC        = icx
+# else
+#  MPI_FC   ?= mpiifort
+# endif
 ifdef SOLPS_MPI
  FC        = ${MPI_FC}
  ifndef MPDIR
   MPDIR    = ${EBROOTIMPI}
   LD_MPI  += -Wl,-rpath,${MPDIR}/lib64
  endif
+# else
+#  ifeq (,$(findstring CentOS,$(OS)))
+#   FC       = ifx
+#  endif
 endif
 
 #
@@ -90,7 +102,7 @@ endif
 
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
-  SOLPS_CPP   += `pkg-config netcdf-fortran --cflags`
+  SOLPS_CPP   += $(shell pkg-config netcdf-fortran --cflags)
 endif
 
 # Build with NAG library if available

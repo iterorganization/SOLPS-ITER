@@ -23,7 +23,6 @@ c======================================================================
       logical ex,e_hlp
       real hlp_ee,hlp_eb,hlp_e1,hlp_e2,hlp_fr
       character*8 c,cc,ccc,cbgk
-      character*1 c0
       character*12 f_hlp
       character*60 hlp_frm, hlp_frf
       logical h_collision, todo, lhelium
@@ -49,7 +48,6 @@ c======================================================================
       external silent_open
 c======================================================================
       call subini ('uinprprc')
-      c0=char(0)
       n_ptc=nspcatm+nspcmol+nspcion+nspcpls
 
       nisotopes=0

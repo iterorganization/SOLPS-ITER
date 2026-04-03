@@ -1,16 +1,31 @@
-# Load modules 
+# Load modules
 
+module load git/2.32.0-GCCcore-10.3.0-nodocs
+
+# Modules needed by SOLPS-ITER
+module load GCC/12.3.0
+module load makedepend/1.0.6-GCCcore-10.3.0
+module load netCDF/4.9.0-gompi-2022b
+module load netCDF-Fortran/4.6.0-gompi-2022b
+module load OpenBLAS/0.3.23-GCC-12.3.0
+module load Doxygen/1.9.1-GCCcore-10.3.0
+module load libxml2/2.9.10-GCCcore-10.3.0
+module load Python/3.10.8-GCCcore-10.3.0-bare
+module load motif/2.3.8-GCCcore-10.3.0
+module load Pango/1.48.5-GCCcore-10.3.0
+module load Emacs/28.1-GCCcore-10.3.0
+module load gnuplot/5.4.2-GCCcore-10.3.0
+module load PETSc/3.15.1-foss-2021a
+module load MATLAB/2020a
 
 # Set environment variables
 
-
-
 # Debugger (set environment variable DBX)
-# DBX =
+module load ArmForge/22.1.2
+setenv DBX ddt
 
 # Compiler
 setenv FC gfortran
-
 
 # Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
 setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}

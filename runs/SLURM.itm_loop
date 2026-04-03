@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
 #SBATCH --time=#HOURS#:00:00
-#SBATCH --mem=#MEM#
+#SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=#EMAIL#
@@ -69,7 +69,9 @@ update_solps_run_status "LD_LIBRARY_PATH = `echo $LD_LIBRARY_PATH`"
 
 update_solps_run_status "MANPATH = `echo $MANPATH`"
 
-b2run ${STANDALONE_ARG} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
+set STANDALONE=${STANDALONE_ARG}
+
+b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
 

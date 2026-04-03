@@ -8,8 +8,11 @@
 [ -s b2time.nc ] && cp b2time.nc b2time.nc.i || echo > /dev/null
 [ -s b2batch.nc ] && cp b2batch.nc b2batch.nc.i || echo > /dev/null
 [ -s b2wall.nc ] && cp b2wall.nc b2wall.nc.i || echo > /dev/null
+[ -s b2neo.nc ] && cp b2neo.nc b2neo.nc.i || echo > /dev/null
 [ -s b2movies.nc ] && cp b2movies.nc b2movies.nc.i || echo > /dev/null
+[ -s eirenemovies.nc ] && cp eirenemovies.nc eirenemovies.nc.i || echo > /dev/null
 [ -s b2tallies.nc ] && cp b2tallies.nc b2tallies.nc.i || echo > /dev/null
+[ -s b2favere ] && cp b2favere b2faveri || echo > /dev/null
 [ -z "$STAND_ALONE" ] && {
   [ $COMPILER != "HP" ] && {
     [ -s fort.10 ] && cp fort.10 fort.10.i || echo > /dev/null

@@ -17,6 +17,7 @@ set chain="unset"
 set job_count=0
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
+cd $SOLPSTOP
 
 argloop:
   if ("X${1}X" == "X-hX") then

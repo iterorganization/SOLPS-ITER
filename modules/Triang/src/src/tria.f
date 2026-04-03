@@ -12,7 +12,7 @@ c*** routine is normally called from a B2-Eirene working directory
 c*** The names are:
 c***  tria.in       for fort.2  (input file)
 c***  tria.dbg      for fort.3  (trap set file)
-c***  triaplt.dat   for fort.22 
+c***  triaplt.dat   for fort.22
 c***  tria.nodes    for fort.23
 c***  tria.elemente for fort.24
 c***  tria.neighbor for fort.25
@@ -111,7 +111,7 @@ cank{
         read (3,*,end=50,err=50) mhlp200
                             ! step after which the code stops
                             ! and the plot data are output for debugging
-        print *,'tria: a trap is set after step ',mhlp200 
+        print *,'tria: a trap is set after step ',mhlp200
         close(3)
         go to 51
  50     print *,'error ',hhlp200,
@@ -201,7 +201,7 @@ C---- CHANGES OF MINIMA AND MAXIMA DEPENDING OF INPUT
           IF (Y(NPOIN+I) .LT. YMIN) YMIN = Y(NPOIN+I)
           IF (Y(NPOIN+I) .GT. YMAX) YMAX = Y(NPOIN+I)
         ENDDO !} OF DO I=1,NBOUN
-        
+
         write (6,'(a,1p,4e12.4)') ' xmin,xmax,ymin,ymax=',
      .                              xmin,xmax,ymin,ymax !###
 
@@ -306,7 +306,14 @@ C---- SPLIT FRONTIER PART IF IT IS LONGER THAN DELPOIN
       if (npartfr .eq. 0) then !{
 c---- empty input
         WRITE(6,*) 'STOP IN MAIN, EMPTY INPUT'
-        STOP 'ERROR'
+        WRITE(6,*) 'WRITING EMPTY OUTPUT FILES'
+        WRITE(23,*) 0
+        WRITE(24,*) 0
+        WRITE(25,*) 0
+        CLOSE(23)
+        CLOSE(24)
+        CLOSE(25)
+        STOP
       endif !}
 !###{
       print *
@@ -350,7 +357,7 @@ c***      kchn_hlp counts the number of segments in the current chain
         print *,' point links'
         do i=1,npoin !{
           if(ichn_hlp(i).ne.2) print '(2i6)',i,ichn_hlp(i)
-        end do !}  
+        end do !}
       end if !}
       print *
       print *,'Point connections'
@@ -444,7 +451,7 @@ c** Output the boundary data for plotting (self-intersections marked)
 
       if(found) stop 'self-intersecting structure'
 
-!##1      
+!##1
 
 98    CONTINUE
 
@@ -575,7 +582,7 @@ C---- TREAT ONE FRONTIER PART
 !###}
 
       CALL CHOICE(FOUND) ! SELECTS THE TRIANGLE POINT UNDER
-C----                      CONSIDERATION OF POINT C AND ALREADY FOUND 
+C----                      CONSIDERATION OF POINT C AND ALREADY FOUND
 C----                      GRID POINTS
 !###{
       if(lhlp200) then !{
@@ -585,8 +592,8 @@ C----                      GRID POINTS
 !###}
 
       IF (.NOT. FOUND) THEN !{
-C---- NO POINT WAS FOUND BY CHOICE 
-C---- THE SEARCH RADIUS IS ENLARGED AND THE MINIMAL INNER ANGLE IS 
+C---- NO POINT WAS FOUND BY CHOICE
+C---- THE SEARCH RADIUS IS ENLARGED AND THE MINIMAL INNER ANGLE IS
 C---- REDUCED
         FRAD = FRAD + 0.5
         IF (EPSANG .GT. 1E-6) THEN !{
@@ -627,7 +634,7 @@ C---- ALL FRONTIER PARTS ARE WORKED OUT
 
       print *,'*300: finished with triangulation.'
       print *,'      npoin,nelm=',npoin,nelm
- 
+
       CALL ADJAC ! CONSTRUCTS THE GRID FROM CALCULATED TRIANGLES
 
 C---- OUTPUT OF COORDINATES

@@ -211,7 +211,7 @@ listobj:
 	for d in `echo "$(TPATH)" | tr : \ `; do \
 		l="$$l `(cd $$d > /dev/null; echo *.f)`"; \
 	done; \
-	E="-e 's/ \*\.f//g' -e 's/\.f/\.o/g' " ; for f in $(EXCLUDELIST); do \
+	E="-e 's/ \*\.f//g' -e 's/\.f/\.o/g'" ; for f in $(EXCLUDELIST); do \
 		E="$$E -e 's/ $$f//'"; \
 	done; \
 	echo "$$l" | eval sed "$$E" > ${OBJDIR}/LISTOBJ; \

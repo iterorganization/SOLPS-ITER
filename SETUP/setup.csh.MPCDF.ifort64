@@ -41,6 +41,7 @@ else if ($cluster == "viper") then
 endif
 
 # Compiler
+setenv CC icc
 setenv FC ifort
 setenv MPI_FC mpiifort
 
@@ -68,9 +69,13 @@ setenv MDS_PATH ${MDSPLUS_DIR}/tdi
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${NETCDF_HOME}/lib:${MDSPLUS_DIR}/lib
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${IPPSOLPSLIBS}/mscl/lib
 if ($cluster == "raven") then
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin/
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/compiler/2023.1.0/linux/compiler/lib/intel64_lin
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/mkl/2023.1.0/lib/intel64
+  setenv MKL_PATH /mpcdf/soft/SLE_15/packages/x86_64/intel_oneapi/2023.1/mkl/2023.1.0/lib/intel64
 else if ($cluster == "viper") then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/RHEL_9/packages/x86_64/intel_oneapi/2024.0/compiler/2024.0/lib
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/mpcdf/soft/RHEL_9/packages/x86_64/intel_oneapi/2024.0/mkl/2024.0/lib
+  setenv MKL_PATH /mpcdf/soft/RHEL_9/packages/x86_64/intel_oneapi/2024.0/mkl/2024.0/lib
 endif
 
 if (`where paraview-config` == "") then
