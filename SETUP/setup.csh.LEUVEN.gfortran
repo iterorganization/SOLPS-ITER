@@ -15,8 +15,9 @@ module load Pango/1.48.5-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
 module load ArmForge/22.1.2
 module load gnuplot/5.4.2-GCCcore-10.3.0
-module load CMake/3.31.3-GCCcore-14.2.0
-module load MATLAB/2020a-r3
+module load MATLAB/2023b-r1
+module load Java/11.0.27
+module load CMake/3.22.1-GCCcore-10.3.0
 
 # Debugger env var
 setenv DBX ddt
@@ -26,6 +27,7 @@ setenv DBX ddt
 setenv FC gfortran
 
 # Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
+setenv JSONF_LIB_DIR /staging/leuven/stg_00030/SOLPS/lib/json-fortran/build_gfortran
 setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}
 setenv PATH /home/fusion/libs/NCARG2/bin:${PATH}
 
@@ -49,6 +51,7 @@ else
 endif
 
 # Other environment variables
+setenv JSONF_LIB_DIR /staging/leuven/stg_00030/SOLPS/lib/json-fortran/build_gfortran
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.gfortran
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade_3.16_latest
