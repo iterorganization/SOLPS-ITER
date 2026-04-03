@@ -13,10 +13,11 @@ module load matplotlib/3.4.2-intel-2021a
 module load motif/2.3.8-GCCcore-10.3.0
 module load Pango/1.48.5-GCCcore-10.3.0
 module load PETSc/3.15.1-intel-2021a
-module load ArmForge/22.1.2
+#module load ArmForge/22.1.2 not available anymore on wICE (checked on 2026.03.24)
 module load gnuplot/5.4.2-GCCcore-10.3.0
 module load MATLAB/2023b-r1
-module load Java/13.0.2
+module load Java/1.8.0_171 # new Java module on wICE, replacing old 1.8.0_192 not available anymore
+module load CMake/3.20.1-GCCcore-10.3.0 # different version available on wICE w.r.t. Genius for the same GCCcore10.3
 
 # Debugger env var
 setenv DBX ddt
@@ -27,6 +28,7 @@ setenv CXX icpc
 setenv CC icc
 
 # Other environment variables
+setenv JSONF_LIB_DIR /staging/leuven/stg_00030/SOLPS/lib/json-fortran/build_ifort64_wice
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN-WICE.ifort64
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade
