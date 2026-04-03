@@ -35,11 +35,10 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load json-fortran/8.3.0-GCC-10.2.0
   export SYSNAME="amd64_sles15"
 } || {
-  module load IMAS-AL-Fortran/5.3.0-foss-2023b-DD-3.42.0
-  module load IMAS-AL-Python/5.3.0-foss-2023b-DD-3.42.0
-  module load IDStools/2.0.0-gfbf-2023b
-  module load GGD/1.12.0-foss-2023b-DD-3.42.0
-  module load AMNS/1.5.1-foss-2023b-DD-3.42.0
+  module load IMAS-Fortran/5.5.0-foss-2023b-DD-4.1.0
+  module load IDStools/2.4.0-gfbf-2023b
+  module load GGD/1.14.0-foss-2023b-DD-4.1.0
+  module load AMNS/1.6.0-foss-2023b-DD-4.1.0
   module load SimDB/0.14.1-foss-2023b
   module load makedepend/1.0.9-GCCcore-13.2.0
   module load MSCL/1.2.5-GCCcore-13.2.0
@@ -49,10 +48,10 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load Ghostscript/10.02.1-GCCcore-13.2.0
   module load netCDF/4.9.2-gompi-2023b
   module load netCDF-Fortran/4.6.1-gompi-2023b
-  module load netcdf4-python/1.6.5-foss-2023b
+  module load netcdf4-python/1.7.1-post2-foss-2023b
 # module load NAG/26-GCC-13.2.0
   module load CMake/3.27.6-GCCcore-13.2.0
-  module load json-fortran/9.0.2-GCC-13.2.0
+  module load json-fortran/8.5.2-GCC-13.2.0
   export SYSNAME="x86_64_rhel9"
 }
 module load Fundamental-Constants/0.2.0
