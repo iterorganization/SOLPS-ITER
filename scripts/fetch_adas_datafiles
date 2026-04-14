@@ -83,100 +83,6 @@ echo "pec12#h/pec12#h_balmer#h0.dat"  >> "$adf15_manifest"
 echo "pec12#h/pec12#h_paschen#h0.dat" >> "$adf15_manifest"
 echo "pec12#h/pec12#h_pju#h0.dat"     >> "$adf15_manifest"
 
-# Argon
-foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
-  foreach series (ca cl ic ls)
-    echo "pec40#ar/pec40#ar_${series}#ar${i}.dat" >> "$adf15_manifest"
-  end
-end
-
-# Tungsten
-foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 \
-           25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 \
-           47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 \
-           69 70 71 72 73)
-  foreach series (ca cl ic ls)
-    echo "pec40#w/pec40#w_${series}#w${i}.dat" >> "$adf15_manifest"
-  end
-end
-
-# Boron
-echo "pec93#b/pec93#b_llr#b3.dat" >> "$adf15_manifest"
-echo "pec93#b/pec93#b_llr#b4.dat" >> "$adf15_manifest"
-foreach i (0 1 2 3)
-  echo "pec93#b/pec93#b_llu#b${i}.dat" >> "$adf15_manifest"
-end
-
-# Beryllium
-echo "pec93#be/pec93#be_llr#be0.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_llu#be0.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_pjr#be0.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_pjr#be1.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_pjr#be3.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_pju#be0.dat" >> "$adf15_manifest"
-echo "pec93#be/pec93#be_pju#be1.dat" >> "$adf15_manifest"
-
-# Carbon
-foreach i (0 1 2 3)
-  foreach series (llr llu pju)
-    echo "pec93#c/pec93#c_${series}#c${i}.dat" >> "$adf15_manifest"
-  end
-end
-foreach i (0 1 2 3 4 5)
-  echo "pec93#c/pec93#c_pjr#c${i}.dat" >> "$adf15_manifest"
-end
-
-# Chromium
-echo "pec93#cr/pec93#cr_llr#cr0.dat" >> "$adf15_manifest"
-echo "pec93#cr/pec93#cr_llu#cr0.dat" >> "$adf15_manifest"
-
-# Helium
-foreach series (llr llu pjr pju)
-  echo "pec93#he/pec93#he_${series}#he0.dat" >> "$adf15_manifest"
-end
-
-# Molybdenum
-echo "pec93#mo/pec93#mo_llr#mo0.dat" >> "$adf15_manifest"
-echo "pec93#mo/pec93#mo_llu#mo0.dat" >> "$adf15_manifest"
-
-# Nitrogen
-echo "pec93#n/pec93#n_llr#n4.dat" >> "$adf15_manifest"
-echo "pec93#n/pec93#n_llu#n4.dat" >> "$adf15_manifest"
-
-# Oxygen
-foreach series (llr llu)
-  foreach i (1 4 5)
-    echo "pec93#o/pec93#o_${series}#o${i}.dat" >> "$adf15_manifest"
-  end
-end
-foreach i (1 2 3 4 5 6 7)
-  echo "pec93#o/pec93#o_pjr#o${i}.dat" >> "$adf15_manifest"
-end
-foreach i (1 4 5)
-  echo "pec93#o/pec93#o_pju#o${i}.dat" >> "$adf15_manifest"
-end
-
-# Beryllium
-foreach i (0 1 2 3)
-  echo "pec96#be/pec96#be_pjr#be${i}.dat" >> "$adf15_manifest"
-  echo "pec96#be/pec96#be_pju#be${i}.dat" >> "$adf15_manifest"
-end
-
-# Carbon
-echo "pec96#c/pec96#c_bnd#c5.dat" >> "$adf15_manifest"
-foreach i (0 1 2 3 4 5)
-  echo "pec96#c/pec96#c_pjr#c${i}.dat" >> "$adf15_manifest"
-  echo "pec96#c/pec96#c_pju#c${i}.dat" >> "$adf15_manifest"
-end
-foreach i (0 1 2)
-  echo "pec96#c/pec96#c_vsr#c${i}.dat" >> "$adf15_manifest"
-  echo "pec96#c/pec96#c_vsu#c${i}.dat" >> "$adf15_manifest"
-end
-
-# Hydrogen
-echo "pec96#h/pec96#h_pjr#h0.dat" >> "$adf15_manifest"
-echo "pec96#h/pec96#h_pju#h0.dat" >> "$adf15_manifest"
-
 # Helium
 echo "pec96#he/pec96#he_bnd#he1.dat" >> "$adf15_manifest"
 foreach i (0 1)
@@ -190,6 +96,33 @@ foreach i (0 1 2)
   echo "pec96#li/pec96#li_pju#li${i}.dat" >> "$adf15_manifest"
 end
 
+# Beryllium
+echo "pec93#be/pec93#be_llr#be0.dat" >> "$adf15_manifest"
+echo "pec93#be/pec93#be_llu#be0.dat" >> "$adf15_manifest"
+foreach i (0 1 3)
+  echo "pec93#be/pec93#be_pjr#be${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1)
+  echo "pec93#be/pec93#be_pju#be${i}.dat" >> "$adf15_manifest"
+end
+
+# Boron
+echo "pec93#b/pec93#b_llr#b3.dat" >> "$adf15_manifest"
+echo "pec93#b/pec93#b_llr#b4.dat" >> "$adf15_manifest"
+foreach i (0 1 2 3)
+  echo "pec93#b/pec93#b_llu#b${i}.dat" >> "$adf15_manifest"
+end
+
+# Carbon
+foreach i (0 1 2 3)
+  foreach series (llr llu pju)
+    echo "pec93#c/pec93#c_${series}#c${i}.dat" >> "$adf15_manifest"
+  end
+end
+foreach i (0 1 2 3 4 5)
+  echo "pec93#c/pec93#c_pjr#c${i}.dat" >> "$adf15_manifest"
+end
+
 # Nitrogen
 foreach i (0 1 2 3 4 5 6)
   echo "pec96#n/pec96#n_pjr#n${i}.dat" >> "$adf15_manifest"
@@ -200,22 +133,47 @@ foreach i (0 1 2 3)
 end
 echo "pec96#n/pec96#n_vsr#n3.dat" >> "$adf15_manifest"
 
-# Neon
-foreach i (0 1 2 3 4 5 6 7 8 9)
-  echo "pec96#ne/pec96#ne_pjr#ne${i}.dat" >> "$adf15_manifest"
-  echo "pec96#ne/pec96#ne_pju#ne${i}.dat" >> "$adf15_manifest"
-end
-
 # Oxygen
 foreach i (0 1 2 3 4 5 6 7)
   echo "pec96#o/pec96#o_pjr#o${i}.dat" >> "$adf15_manifest"
   echo "pec96#o/pec96#o_pju#o${i}.dat" >> "$adf15_manifest"
 end
 
+# Neon
+foreach i (0 1 2 3 4 5 6 7 8 9)
+  echo "pec96#ne/pec96#ne_pjr#ne${i}.dat" >> "$adf15_manifest"
+  echo "pec96#ne/pec96#ne_pju#ne${i}.dat" >> "$adf15_manifest"
+end
+
 # Silicon
 foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13)
   echo "pec96#si/pec96#si_pjr#si${i}.dat" >> "$adf15_manifest"
   echo "pec96#si/pec96#si_pju#si${i}.dat" >> "$adf15_manifest"
+end
+
+# Argon
+foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
+  foreach series (ca cl ic ls)
+    echo "pec40#ar/pec40#ar_${series}#ar${i}.dat" >> "$adf15_manifest"
+  end
+end
+
+# Chromium
+echo "pec93#cr/pec93#cr_llr#cr0.dat" >> "$adf15_manifest"
+echo "pec93#cr/pec93#cr_llu#cr0.dat" >> "$adf15_manifest"
+
+# Molybdenum
+echo "pec93#mo/pec93#mo_llr#mo0.dat" >> "$adf15_manifest"
+echo "pec93#mo/pec93#mo_llu#mo0.dat" >> "$adf15_manifest"
+
+# Tungsten
+foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 \
+           25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 \
+           47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 \
+           69 70 71 72 73)
+  foreach series (ca cl ic ls)
+    echo "pec40#w/pec40#w_${series}#w${i}.dat" >> "$adf15_manifest"
+  end
 end
 
 if ($status != 0) then
@@ -311,27 +269,6 @@ foreach relfile (`cat "$adf11_manifest"`)
     @ adf11_failed = $adf11_failed + 1
     @ errors = $errors + 1
     continue
-  endif
-
-  # Boron acd/scd/prb/plt: downloaded as year 89, rename to 95 for B2.5
-  set basename = "$relfile:t"
-  set subdir   = "$relfile:h"
-  if ("$basename" =~ *89*b.dat && \
-      ("$subdir" =~ acd* || "$subdir" =~ scd* || \
-       "$subdir" =~ prb* || "$subdir" =~ plt*)) then
-    set newbasename = `echo "$basename" | sed 's/89/95/g'`
-    set newsubdir   = `echo "$subdir"   | sed 's/89/95/g'`
-    set newoutdir   = "$adf11_root/$newsubdir"
-    set newoutfile  = "$newoutdir/$newbasename"
-    mkdir -p "$newoutdir"
-    mv "$outfile" "$newoutfile"
-    if ($status != 0) then
-      echo "ERROR: Cannot rename $outfile to $newoutfile"
-      @ adf11_failed = $adf11_failed + 1
-      @ errors = $errors + 1
-      continue
-    endif
-    echo "Renamed adf11/$relfile -> $newsubdir/$newbasename"
   endif
 
   @ adf11_downloaded = $adf11_downloaded + 1
@@ -442,6 +379,7 @@ foreach relfile (`cat "$adf15_manifest"`)
     @ errors = $errors + 1
     continue
   endif
+
   @ adf15_downloaded = $adf15_downloaded + 1
   echo "Download of adf15/$relfile completed"
 end

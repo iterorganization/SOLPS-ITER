@@ -1261,15 +1261,9 @@ Several {\tt AMDS} files are provided by default as part of the \SOLPSITER distr
 \subsection{modules/adas}
 \index{adas}\index{ADAS}
 
-The {\tt modules/adas} subdirectory contains files which are used to tell various programs
-which {\tt ADAS} files to use.
+The {\tt modules/adas} subdirectory contains the {\tt ADAS} datafiles cloned from the AMNS ADAS repository.
 
-{\tt source.location} indicates which class of lines to use ({\tt pjr}
-currently) and the name of the other index file ({\tt ratadas.filelist}
-currently).
-
-{\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
-and which "years" to use.
+In case of no access to the AMNS ADAS repository, the script {\tt fetch\_adas\_datafiles} can be used to create a local copy of this folder, in the {\tt \$SOLPSTOP/data.local/adas} directory, using open source data downloaded from the \href{https://open.adas.ac.uk/}{OpenADAS website}.
 
 \newpage \section{lib}
 
@@ -2459,17 +2453,21 @@ Supplemental information on atomic physics rates can be found in the file
 \end{sloppypar}
 
 \index{ADAS, bundling}
-The {\tt 'adas'} option allows for charge state bundling, provided one has pre-computed the bundled atomic rates. A set of such bundled datasets can be found in the {\tt \$SOLPSTOP/modules/adas/adas\_bundled} directory. The {\tt adas\_DPC\_3} directory contains datasets in which isonuclear sequences are bundled in the most aggressive way, i.e. in 3 bundles only (neutral, all partially ionized species, and fully stripped ion). The {\tt adas\_W} directory contains datasets for bundled tungsten ({\tt W}) using a variety of bundling schemes (see~\cite{BONNIN_W} and the contents of the {\tt adas\_W/Documentation} directory for a full description).
+The {\tt 'adas'} option allows for charge state bundling, provided one has pre-computed the bundled atomic rates. A set of such bundled datasets can be found in the {\tt \$SOLPSTOP/modules/adas/adas\_bundled} directory (or in the {\tt \$SOLPSTOP/data.local/adas/adas\_bundled} directory, if ADAS datafiles were obtained by means of the {\tt fetch\_adas\_datafiles} script). The {\tt adas\_DPC\_3} directory contains datasets in which isonuclear sequences are bundled in the most aggressive way, i.e. in 3 bundles only (neutral, all partially ionized species, and fully stripped ion). The {\tt adas\_W} directory contains datasets for bundled tungsten ({\tt W}) using a variety of bundling schemes (see~\cite{BONNIN_W} and the contents of the {\tt adas\_W/Documentation} directory for a full description).
 
 As an example, let us assume that one wishes to use the {\tt 'jett'} bundling scheme for tungsten. The files for this scheme have the naming convention {\tt adf11/xxx89/xxx89\_w\_02\_jett.dat} where {\tt xxx} stands for one of {\tt acd} (recombination), {\tt ccd} (charge exchange), {\tt ecd} (average ionisation potential), {\tt plt} (line radiation rate), {\tt prb} (energy loss rate), {\tt scd} (ionisation), {\tt ycd} (average square charge), or {\tt zcd} (average charge). Then, the header for the {\tt ratadas.filelist} should be modified to read:
 \begin{verbatim}
 'SOLPSTOP/modules/adas/adas_bundled/adas_W'
 \end{verbatim}
-and the line for the tungsten data should be:
+or
+\begin{verbatim}
+'SOLPSTOP/data.local/adas/adas_bundled/adas_W'
+\end{verbatim}
+if ADAS datafiles were obtained by means of the {\tt fetch\_adas\_datafiles} script, and the line for the tungsten data should be:
 \begin{verbatim}
 '8902' '8902' '8902' '8902' '8902' '8902' '8902' 'w '  'jett'
 \end{verbatim}
-The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP/modules} part of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
+The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP/modules} part of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas} or {\tt \$SOLPSTOP/data.local/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
 
 The modified {\tt ratadas.filelist} file should be present in the {\tt baserun} directory from which {\tt b2ar} will be run. If this file is prepared before {\tt Uinp} is run, then the case build-up will assume that the indicated bundling scheme is to be used and create all appropriate input files accordingly. If one is introducing bundling to an existing case, then the recommended procedure is to use the {\tt b2yt} conversion program to modify all input files as needed. See the corresponding section~\ref{sec:b2yt} for the full details.
 
