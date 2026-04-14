@@ -84,8 +84,13 @@ touch "$adf15_manifest"
 echo "pec12#h/pec12#h_balmer#h0.dat"  >> "$adf15_manifest"
 echo "pec12#h/pec12#h_paschen#h0.dat" >> "$adf15_manifest"
 echo "pec12#h/pec12#h_pju#h0.dat"     >> "$adf15_manifest"
+echo "pec96#h/pec96#h_pjr#h0.dat" >> "$adf15_manifest"
+echo "pec96#h/pec96#h_pju#h0.dat" >> "$adf15_manifest"
 
 # Helium
+foreach series (llr llu pjr pju)
+  echo "pec93#he/pec93#he_${series}#he0.dat" >> "$adf15_manifest"
+end
 echo "pec96#he/pec96#he_bnd#he1.dat" >> "$adf15_manifest"
 foreach i (0 1)
   echo "pec96#he/pec96#he_pjr#he${i}.dat" >> "$adf15_manifest"
@@ -107,6 +112,10 @@ end
 foreach i (0 1)
   echo "pec93#be/pec93#be_pju#be${i}.dat" >> "$adf15_manifest"
 end
+foreach i (0 1 2 3)
+  echo "pec96#be/pec96#be_pjr#be${i}.dat" >> "$adf15_manifest"
+  echo "pec96#be/pec96#be_pju#be${i}.dat" >> "$adf15_manifest"
+end
 
 # Boron
 echo "pec93#b/pec93#b_llr#b3.dat" >> "$adf15_manifest"
@@ -124,8 +133,19 @@ end
 foreach i (0 1 2 3 4 5)
   echo "pec93#c/pec93#c_pjr#c${i}.dat" >> "$adf15_manifest"
 end
+echo "pec96#c/pec96#c_bnd#c5.dat" >> "$adf15_manifest"
+foreach i (0 1 2 3 4 5)
+  echo "pec96#c/pec96#c_pjr#c${i}.dat" >> "$adf15_manifest"
+  echo "pec96#c/pec96#c_pju#c${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1 2)
+  echo "pec96#c/pec96#c_vsr#c${i}.dat" >> "$adf15_manifest"
+  echo "pec96#c/pec96#c_vsu#c${i}.dat" >> "$adf15_manifest"
+end
 
 # Nitrogen
+echo "pec93#n/pec93#n_llr#n4.dat" >> "$adf15_manifest"
+echo "pec93#n/pec93#n_llu#n4.dat" >> "$adf15_manifest"
 foreach i (0 1 2 3 4 5 6)
   echo "pec96#n/pec96#n_pjr#n${i}.dat" >> "$adf15_manifest"
   echo "pec96#n/pec96#n_pju#n${i}.dat" >> "$adf15_manifest"
@@ -136,6 +156,17 @@ end
 echo "pec96#n/pec96#n_vsr#n3.dat" >> "$adf15_manifest"
 
 # Oxygen
+foreach series (llr llu)
+  foreach i (1 4 5)
+    echo "pec93#o/pec93#o_${series}#o${i}.dat" >> "$adf15_manifest"
+  end
+end
+foreach i (1 2 3 4 5 6 7)
+  echo "pec93#o/pec93#o_pjr#o${i}.dat" >> "$adf15_manifest"
+end
+foreach i (1 4 5)
+  echo "pec93#o/pec93#o_pju#o${i}.dat" >> "$adf15_manifest"
+end
 foreach i (0 1 2 3 4 5 6 7)
   echo "pec96#o/pec96#o_pjr#o${i}.dat" >> "$adf15_manifest"
   echo "pec96#o/pec96#o_pju#o${i}.dat" >> "$adf15_manifest"
@@ -275,7 +306,19 @@ foreach relfile (`cat "$adf11_manifest"`)
 
   @ adf11_downloaded = $adf11_downloaded + 1
   echo "Download of adf11/$relfile completed"
+
 end
+
+# Create a local copy of ratadas.filelist which uses the
+# '89 files for B instead of the '95 files
+set ratadas_src = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
+set ratadas_dst = "$SOLPSTOP/data.local/ratadas.filelist"
+cp "$ratadas_src" "$ratadas_dst"
+set ratadas_tmp = "$ratadas_dst.tmp"
+awk -v old="'95  ' '95  ' '89  ' '95  ' '95  ' '89  ' '89  ' 'b '" \
+    -v new="'89  ' '89  ' '89  ' '89  ' '89  ' '89  ' '89  ' 'b '" \
+    '{ gsub(old, new); print }' \
+    "$ratadas_dst" >! "$ratadas_tmp" && mv "$ratadas_tmp" "$ratadas_dst"
 
 # ---------------------------------------------------------------------------
 # Fetch adf15 files
