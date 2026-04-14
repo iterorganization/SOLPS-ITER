@@ -36,8 +36,7 @@ endif
 #
 # Types: acd scd ccd prb plt zcd ecd  (indices 1-7)
 # For boron (element == "b"), acd/scd/prb/plt (indices 1,2,4,5) are
-# hardcoded to year 89, because the '95 files are not yet on OpenADAS.
-# After download, those files are renamed 89->95 so B2.5 finds them.
+# hardcoded to year '89, because the '95 files are not yet on OpenADAS.
 #
 # ---------------------------------------------------------------------------
 
@@ -72,7 +71,10 @@ if ($status != 0) then
 endif
 
 # ---------------------------------------------------------------------------
-# Build the adf15 manifest (hard-coded file list)
+# Build the adf15 manifest
+# (hard-coded file list to match content of filelist.adas.adf15
+# apart from B, for which the old '93 files are downloaded
+# because the '95 files are not yet on OpenADAS)
 # ---------------------------------------------------------------------------
 
 echo "Building hard-coded adf15 manifest"
