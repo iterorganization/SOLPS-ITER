@@ -3,7 +3,7 @@
 # Fetch the SOLPS-ITER ADAS data subset into $SOLPSTOP/data.local/adas.
 
 set openadas_base = "https://open.adas.ac.uk/download"
-set bundled_url   = "https://zenodo.org/records/19571303/files/adas_bundled.tar.gz?download=1"
+set bundled_url   = "https://zenodo.org/records/19571303/files/adas_bundled.tar.gz"
 set ratadas_file = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
 set data_root    = "$SOLPSTOP/data.local/adas"
 set bundled_root = "$data_root/adas_bundled"
@@ -34,7 +34,7 @@ endif
 # ---------------------------------------------------------------------------
 # Build the adf11 manifest from ratadas.filelist
 #
-# Types: acd scd ccd prb plt zcd ecd  (indices 1-7)
+# Types: acd scd ccd prb plt zcd ecd (indices 1-7)
 # For boron (element == "b"), acd/scd/prb/plt (indices 1,2,4,5) are
 # hardcoded to year '89, because the '95 files are not yet on OpenADAS.
 #
@@ -315,6 +315,8 @@ set ratadas_src = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
 set ratadas_dst = "$SOLPSTOP/data.local/ratadas.filelist"
 cp "$ratadas_src" "$ratadas_dst"
 set ratadas_tmp = "$ratadas_dst.tmp"
+cat "$ratadas_dst" | sed -e 's|modules|data.local|' >! "$ratadas_tmp" \
+    && mv "$ratadas_tmp" "$ratadas_dst"
 awk -v old="'95  ' '95  ' '89  ' '95  ' '95  ' '89  ' '89  ' 'b '" \
     -v new="'89  ' '89  ' '89  ' '89  ' '89  ' '89  ' '89  ' 'b '" \
     '{ gsub(old, new); print }' \
