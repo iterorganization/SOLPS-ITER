@@ -3,7 +3,7 @@
 # Fetch the SOLPS-ITER ADAS data subset into $SOLPSTOP/data.local/adas.
 
 set openadas_base = "https://open.adas.ac.uk/download"
-set bundled_url   = "https://zenodo.org/records/19555752/files/adas_bundled.tar.gz?download=1"
+set bundled_url   = "https://zenodo.org/records/19571303/files/adas_bundled.tar.gz?download=1"
 set ratadas_file = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
 set data_root    = "$SOLPSTOP/data.local/adas"
 set bundled_root = "$data_root/adas_bundled"
