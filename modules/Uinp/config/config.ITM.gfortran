@@ -1,6 +1,6 @@
 # Test whether necessary variables are defined
 MSCL_ROOT ?= ${EBROOTMSCL}
-LD_MSCL ?= `pkg-config mscl --libs`
+LD_MSCL ?= $(shell pkg-config mscl --libs)
 
 MPI_FC  ?= mpif90
 ifdef SOLPS_MPI
@@ -17,4 +17,3 @@ CPP      = /lib/cpp -traditional
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

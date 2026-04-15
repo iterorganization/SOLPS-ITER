@@ -1,2 +1,2 @@
 #! /bin/csh -f
-echo $argv | awk '{print 1.239841984e-6/$1}'
+echo $argv | awk '{print 1.2398419843320026e-06/$1}'

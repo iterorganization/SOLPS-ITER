@@ -37,7 +37,7 @@
 LD_NETCDF  = -L${NCDIR}/lib -lnetcdf
 LD_MSCL    = -L${MSCL_ROOT} -lmscl
 LD_GR      = -L${GR_ROOT} -lgr
-#LD_GKS     = -L${GLI_HOME}/gks -lgks -lgfortran
+#LD_GKS    = -L${GLI_HOME}/gks -lgks -lgfortran
 LD_GKS     = -L${GLI_HOME}/gks -lgks
 ifdef NCARG_ROOT
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/X11R6/lib64 -lX11 -lm
@@ -65,4 +65,3 @@ FFLAGSEXTRA    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

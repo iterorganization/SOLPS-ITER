@@ -12,4 +12,3 @@ LDOPTS = -tp px # "-tp px" to fix a compiler bug at JET
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

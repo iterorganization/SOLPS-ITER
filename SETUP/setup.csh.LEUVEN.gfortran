@@ -51,7 +51,6 @@ else
 endif
 
 # Other environment variables
-setenv JSONF_LIB_DIR /staging/leuven/stg_00030/SOLPS/lib/json-fortran/build_gfortran
 setenv STGDIR /staging/leuven/stg_00030/SOLPS/lib/LEUVEN.gfortran
 setenv ALLINEA_NO_MPI_AUTODETECT false
 setenv TAPENADEDIR  /staging/leuven/stg_00030/tapenade_3.16_latest

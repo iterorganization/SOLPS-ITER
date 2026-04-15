@@ -27,4 +27,3 @@ LDEXTRA  = -bmap:$(OBJDIR)/uinp.map -bloadmap:$(OBJDIR)/uinp.lmp
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

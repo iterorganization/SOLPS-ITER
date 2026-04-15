@@ -8,4 +8,3 @@ CPP      = /usr/bin/cpp -traditional
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

@@ -30,23 +30,24 @@ endif
 
 # Build with Fundamental-Constants module if present
 ifeq ($(shell `pkg-config --exists fundamental-constants`; echo $$?),0)
-  SOLPS_CPP += -DCONSTANTS_PROVIDED
-  SOLPSINCLUDE = `pkg-config fundamental-constants --cflags`
+  CONSTANTS_MINOR_VERSION = $(shell pkg-config fundamental-constants --modversion | cut -d '.' -f 2)
+  SOLPS_CPP += -DCONSTANTS_PROVIDED -DCONSTANTS_MINOR_VERSION=${CONSTANTS_MINOR_VERSION}
+  SOLPSINCLUDE = $(shell pkg-config fundamental-constants --cflags)
   IMAS_PKG_LIST = fundamental-constants
   export SOLPSINCLUDE
 endif
 
 # Build with JSON if present
 ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
-  JSON_INC = `pkg-config json-fortran --cflags`
-  LD_JSON = `pkg-config json-fortran --libs`
+  JSON_INC = $(shell pkg-config json-fortran --cflags)
+  LD_JSON = $(shell pkg-config json-fortran --libs)
 endif
 
 # Build with PETSc if available
 ifeq ($(shell `pkg-config --exists petsc`; echo $$?),0)
   TAO_PRESENT = 1
   ifdef TAO
-    SOLPSINCLUDE += `pkg-config petsc --cflags`
+    SOLPSINCLUDE += $(shell pkg-config petsc --cflags)
     IMAS_PKG_LIST += petsc
     export SOLPSINCLUDE
   endif
@@ -136,7 +137,7 @@ ifdef IMAS_VERSION
     endif
     SOLPS_CPP += -DAMNS
   endif
-  LD_AL = `pkg-config ${IMAS_PKG_LIST} --libs`
+  LD_AL = $(shell pkg-config ${IMAS_PKG_LIST} --libs)
   ifdef LD_GGD
     LD_AL += ${LD_GGD}
   endif
@@ -211,4 +212,3 @@ export CC
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

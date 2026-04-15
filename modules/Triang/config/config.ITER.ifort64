@@ -4,7 +4,7 @@
 
 LD_GR    ?= -L${EBROOTGR}/lib -lgr
 LD_GKS   ?= -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
-LD_NAG   ?= `pkg-config nag --libs`
+LD_NAG   ?= $(shell pkg-config nag --libs)
 GLI_HOME ?= ${EBROOTGLI}
 
 #CPP      = -/lib/cpp -C -traditional
@@ -31,4 +31,3 @@ LDLIBS    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

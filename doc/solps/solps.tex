@@ -218,7 +218,7 @@ The next section discusses obtaining and updating the code.
 \label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{SOLPS-GUI}
 
 \begin{sloppypar}
-Most code components are now available as open-source software on the ITER GiHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
+Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
 \end{sloppypar}
 
 The instructions below are written for ITER collaborators that have obtained an ITER IDM account in mind. Although parts of them also apply to users who obtain the code via GitHub, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
@@ -726,18 +726,24 @@ to refresh the list of executables to be found with the search path.
 \section{Examples}
 \label{examples}\index{b2mod\_dimensions.F}
 
-On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
-
-There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains references to a series of sample cases. These are actually stored as a Zenodo record at \href{https://zenodo.org/communities/solps/}{https://zenodo.org/communities/solps/}, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 \begin{sloppypar}
 The cases stored for retrieval include:
 \begin{description}
-  \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
-  \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
+  \item[AUG\_16151\_SN\_WG] ASDEX-Upgrade D-only benchmark cases, for a single-null (SN) topology
+  \item[AUG\_17151\_DDN\_WG] ASDEX-Upgrade D-only benchmark cases, for a disconnected double-null (DDN) topology
   \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code
   \item[COMPASS\_sensitivity] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with Advanced Fluid Neutrals and $k$-model
   \item[COMPASS\_sensitivity\_D+T] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with coarser mesh, deuterium+tritium species, drifts, Advanced Fluid Neutrals, Zhdanov closure and $k$-model
+  \item[COMPASS\_optimization] an older version of the {\tt COMPASS\_sensitivity} tests
+  \item[JET\_80295\_Lim\_WG] a JET limiter topology benchmark case
+\end{description}
+\end{sloppypar}
+
+We expect to add in the future, once issues of solver robustness for distorted grids have been resolved, the following ITER cases:
+
+\begin{description}
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection and Be sputtering
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
@@ -749,9 +755,8 @@ The cases stored for retrieval include:
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
 \end{description}
-as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
+
 Other cases can be added at the suggestion of users, if available.
-\end{sloppypar}
 
 After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
@@ -1120,6 +1125,11 @@ data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
 {\tt n} are for particles. {\tt refl.data} also contains files such as
 {\tt dc.fnn} and {\tt dc.fnn.coarse} which are the databases used for the
 advanced fluid neutral (AFN) models.
+
+Because some of these files can be very large, they are not stored on the
+GitHub repository but rather as a public-access Zenodo record, and the
+{\tt Makefile} automatically fetches them at first installation using the
+{\tt retrieve\_fnn\_datasets} script.
 
 \newpage
 \subsection{modules/Eirene}
@@ -1666,6 +1676,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[fluxt \#1]\index{fluxt}\index{b2mod\_dimensions.F} Gives the flux strength for the first \#1 {\tt Eirene} strata. The default value is all the strata, as read from the {\tt b2.neutrals.parameters} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5/src\allowbreak/modules.local/b2mod\_dimensions.F} file, or if not present, the {\tt \$\{SOLPSTOP\}/modules/B2.5\allowbreak /src/modules/b2mod\_dimensions.F} file.
   \item[get\_solps\_fluids]\index{get\_solps\_fluids} A utility script to obtain the list of fluid species labels from the {\tt run.log} file.
   \item[groups\_species]\index{groups\_species} Obtains the ordered numbers of species contained in each isonuclear sequence.
+  \item[ingest\_simulation\_to\_SimDB]\index{ingest\_simulation\_to\_SimDB} Script to publish a simulation result to a {\tt SimDB} public database.
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
@@ -4520,6 +4531,12 @@ After the IDS files are created, if using IMAS Access Layer 3 or 4, one should a
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
 which will create {\tt ids\_*.yaml} and {\tt ids\_*.watcher} files for that shot and run number, to be used in the IMAS scenario database. These files should be edited by hand according to the instructions within them and the IMAS documentation.
+
+If using IMAS Access Layer 5, the code will create a SimDB manifest file ({\tt manifest.yaml}). This file is meant to contain a unique alias for the run to be saved, a verbose description field, and the list of input and output files used and produced by this run. The code fills in the manifest automatically, but it is the responsibility of the user to make sure the file lists are complete (for example in case of multiple input profiles for a time-dependent run) and the alias and description fields contain useful identifying information. Once the manifest file is ready, the run can be published to a remote public database with the command:\index{SimDB}\index{ingest\_simulation\_to\_SimDB}
+\begin{verbatim}
+ingest_simulation_to_SimDB [REMOTE]
+\end{verbatim}
+where {\tt [REMOTE]} is the name of the remote SimDB server where the run is to be pushed. It must be provided if more than one SimDB remotes are declared, but is otherwise optional. Please refer to the SimDB documentation at \href{https://simdb.readthedocs.io/en/stable}{https://simdb.readthedocs.io/} for more details.
 
 \subsection{b2\_ual\_rewrite, rewriting an existing IDS}
 \label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
@@ -21391,7 +21408,8 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
-\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
+\item[CONSTANTS\_MINOR\_VERSION] \index{CONSTANTS\_MINOR\_VERSION} Indicates which minor version (and thus which CODATA year) of the {\tt Fundamental-Constants} module is being linked to (set internally by the configuration files)
+\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being used at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
@@ -21744,6 +21762,7 @@ B25\_EIRENE & ids/b2\_ual\_rewrite.F90 \\
 B25\_EIRENE & ids/b2\_ual\_write.F90 \\
 B25\_EIRENE & ids/b2\_ual\_write\_b2mod.F90 \\
 B25\_EIRENE & ids/b2mod\_ual\_io.F90 \\
+B25\_EIRENE & ids/b2mod\_ual.F90 \\
 B25\_EIRENE & modules/b2mod\_b2\_to\_astra.F \\
 B25\_EIRENE & modules/b2mod\_mwti.F90 \\
 B25\_EIRENE & modules/b2mod\_neutrals\_namelist.F \\
@@ -21777,6 +21796,7 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
+CONSTANTS\_MINOR\_VERSION & ids/b2mod\_constants.F90 \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
@@ -21933,6 +21953,7 @@ LEGACYCOMP & convert/b2cdftallies2mds.F \\
 LEGACYCOMP & convert/conv\_surface\_models.F \\
 LEGACYCOMP & convert/conv\_triangles.F \\
 LEGACYCOMP & convert/write\_triangles.F \\
+LEGACYCOMP & ids/b2mod\_ual.F90 \\
 LEGACYCOMP & modules/b2mod\_batch\_average.F \\
 LEGACYCOMP & modules/b2mod\_boundary\_namelist.F \\
 LEGACYCOMP & modules/b2mod\_create\_afn\_bc\_tables.F \\
@@ -22055,6 +22076,7 @@ NO\_CDF & sources/b2stbr.F \\
 NO\_CDF & user/cdfmovie.F \\
 NO\_CDF & utility/cdf\_routines.F \\
 NO\_F01AAF & transport/b2tr21.F \\
+NO\_GETENV & b2plot/b2paspwr.F \\
 NO\_GETENV & b2plot/b2plot.F \\
 NO\_GETENV & b2plot/spect.F \\
 NO\_GETENV & convert/b2co\_movies\_cdf.F \\
@@ -22190,6 +22212,7 @@ PAR\_OPT & transport/b2tqna.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
+PGF90 & modules/b2mod\_openmp.F \\
 PGF90 & modules/b2mod\_types.F \\
 PLPLOT & b2plot/b2plot.F \\
 PLPLOT & b2plot/color.F \\
@@ -22263,6 +22286,7 @@ USE\_MPI & modules/b2mod\_user\_namelist.F \\
 USE\_MPI & modules/b2mod\_wall.F \\
 USE\_MPI & utility/xertst.F \\
 USE\_OPENMP & driver/b2mod\_driver.F \\
+USE\_PXFGETENV & b2plot/b2paspwr.F \\
 USE\_PXFGETENV & b2plot/b2plot.F \\
 USE\_PXFGETENV & b2plot/initialize\_plotting.F \\
 USE\_PXFGETENV & b2plot/set\_extralabel.F \\
@@ -22274,9 +22298,11 @@ USE\_PXFGETENV & convert/b2co\_wall\_cdf.F \\
 USE\_PXFGETENV & convert/b2mds.F \\
 USE\_PXFGETENV & convert/b2plasmastate\_inspect.F \\
 USE\_PXFGETENV & driver/b2co.F \\
+USE\_PXFGETENV & driver/b2mod\_driver.F \\
 USE\_PXFGETENV & ids/b2\_ual\_rewrite.F90 \\
 USE\_PXFGETENV & ids/b2\_ual\_write.F90 \\
 USE\_PXFGETENV & ids/b2mod\_ual\_io.F90 \\
+USE\_PXFGETENV & ids/b2mod\_ual.F90 \\
 USE\_PXFGETENV & modules/b2mod\_ppout.F \\
 USE\_PXFGETENV & modules/b2mod\_solpstop.F \\
 USE\_PXFGETENV & preprocessing/b2agfs.F \\

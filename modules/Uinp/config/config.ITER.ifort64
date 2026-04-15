@@ -1,6 +1,6 @@
 #  VERSION : 28.07.99 20:34
 NODENAME ?= $(shell echo `hostname`)
-LD_MSCL  ?= `pkg-config mscl --libs` -lgfortran
+LD_MSCL  ?= $(shell pkg-config mscl --libs) -lgfortran
 LD_MPI   ?= -Wl,-rpath,${MPDIR}/lib64
 
 OS = $(shell grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1 )
@@ -29,4 +29,3 @@ CPP       = /lib/cpp -C -traditional -ffreestanding
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-
