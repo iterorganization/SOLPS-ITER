@@ -8519,7 +8519,7 @@ S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel
 \end{matrix}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{a \parallel}^m $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{a \parallel}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_visres}
 \begin{matrix}
@@ -8660,13 +8660,13 @@ and the ion contributions are:
 S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(F \lim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{1}{h_x} \frac{\partial T_i}{\partial x}, ~z_a \ne 0
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{Therm,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{Therm,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_sorfri}
 S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{fr,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{fr,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 where
 
@@ -8690,7 +8690,7 @@ c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0 \\
 \right.
 $
 
-If {\tt 'b2npmo\_impr\_form\_tf'} is set to {\tt '1'} , $K_{rs}^{(Therm)}$ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2npmo\_impr\_form\_tf'} is set to {\tt '1'}, $K_{rs}^{(Therm)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 $K_{rs}^{(V_\parallel)} = \left\{
 \begin{matrix}
@@ -8702,7 +8702,7 @@ c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0 \\
 \right.
 $
 
-If {\tt 'b2npmo\_impr\_form\_fr'} is set to {\tt '1'} , $K_{rs}^{(V_\parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2npmo\_impr\_form\_fr'} is set to {\tt '1'}, $K_{rs}^{(V_\parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 $c_{imp}^{(1)} = \frac{\left( 1 + 0.24 z_{eff\_imp} \right) \left( 1 + 0.93 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$, ~ $c_{imp}^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff\_imp} \right) \left( 1 + 0.52 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$
 
@@ -9825,7 +9825,7 @@ $
 \widetilde f_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)}}{e} \right)
 \end{equation*}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde f_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde f_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_qixPSch}
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
@@ -9841,7 +9841,7 @@ q_{ix} = \left[
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, the convective part of $q_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_gammahix}
 \Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
@@ -9853,7 +9853,7 @@ q_{ix}^{(Eir)} =
 \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix}^{(Eir)} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, the convective part of $q_{ix}^{(Eir)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \subsection{Poloidal ion energy transport coefficients}
 
@@ -9920,7 +9920,7 @@ If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_cflim}
 \begin{matrix}
@@ -10190,7 +10190,7 @@ $j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species
 
 $\widetilde{j}_{ax}^{(vis \parallel)}$ is the component of the poloidal current due to parallel viscosity from species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(vis \parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ax}^{(vis \parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:pot_jxvisper}
 j_x^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} j_{ax}^{(vis \perp)}
@@ -10218,7 +10218,7 @@ $j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity 
 
 $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(visq)}$ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ax}^{(visq)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
@@ -10347,7 +10347,7 @@ $j_{ay}^{(in)}$ is the component of the radial inertial current due to species $
 
 $\widetilde{j}_{ay}^{(vis \parallel)}$ is the radial component of the current due to parallel viscosity of species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(vis \parallel)} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ay}^{(vis \parallel)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:pot_jyvisper}
 \widetilde j_y^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde j_{ay}^{(vis \perp)}
@@ -10403,7 +10403,7 @@ V_{a \perp} =
 
 $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(visq)} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ay}^{(visq)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 

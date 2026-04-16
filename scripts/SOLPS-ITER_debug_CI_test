@@ -8,6 +8,7 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f 
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/outeir.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/outflx.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/pltadd.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/pside.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/scoring/update.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/scoring/updphot.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/startup-routines/find_param.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/user-routines/user_iter/defaults_usr.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelpi3.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelrc1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt

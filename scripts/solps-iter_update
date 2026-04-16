@@ -8,7 +8,7 @@ git checkout master && echo "Checked out SOLPS-ITER master branch" || goto branc
 git pull && goto b25 || goto local
 
 b25:
-  git submodule update
+  git submodule update || git -c submodule.ADAS.update=none submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
