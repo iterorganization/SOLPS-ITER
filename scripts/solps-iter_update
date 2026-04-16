@@ -42,11 +42,15 @@ DivGeo:
 
 ADAS:
   echo "Updating ADAS"
-  cd $SOLPSTOP/modules/adas
-  set repo="ADAS"
-  git fetch --prune
-  git checkout master && echo "Checked out ADAS master branch" || goto branch
-  git pull && goto compile || goto local
+  if (-s $SOLPSTOP/modules/adas/.gitattributes) then
+    cd $SOLPSTOP/modules/adas
+    set repo="ADAS"
+    git fetch --prune
+    git checkout master && echo "Checked out ADAS master branch" || goto branch
+    git pull && goto compile || goto local
+  else
+    $SOLPSTOP/scripts/fetch_adas_datafiles
+  endif
 
 branch:
   echo "You are not on the master branch."
