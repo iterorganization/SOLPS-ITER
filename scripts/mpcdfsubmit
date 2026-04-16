@@ -72,7 +72,7 @@ Available per-job resources on the Raven cluster:
                   Maximum memory per node: 240000 MB for standard nodes (up to 360 nodes)
                                            500000 MB for large memory nodes (up to 64 nodes)
                                            2048000 MB for very large memory nodes (up to 4 nodes)
-                  Maximum run time: 24.00.00 h.   
+                  Maximum run time: 24.00.00 h.
 
 Available per-job resources on the Viper cluster:
   Shared jobs:    Up to 64 CPUs per node, on 1 node.
@@ -82,7 +82,7 @@ Available per-job resources on the Viper cluster:
                   Maximum memory per node: 480000 MB for standard nodes (up to 256 nodes)
                                            730000 MB for large memory nodes (up to 128 nodes)
                                            2250000 MB for very large memory nodes (up to 3 nodes)
-                  Maximum run time: 24.00.00 h.   
+                  Maximum run time: 24.00.00 h.
 
 EOF
     exit
@@ -257,7 +257,7 @@ if ($manual_nodes_flag == 0) then
       if ($CPU_TOT > 36 && $CPU_TOT <= 72) then
         set exclusive="--exclusive"
         echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
-      else if ($CPU_TOT > 72) then  
+      else if ($CPU_TOT > 72) then
         set exclusive="--exclusive"
         echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
         set NODES = `echo $CPU_TOT | awk '{print ($1 % 72 == 0) ? int($1/72) : int($1/72) + 1}'`
@@ -272,14 +272,14 @@ if ($manual_nodes_flag == 0) then
       if ($CPU_TOT > 64 && $CPU_TOT <= 128) then
         set exclusive="--exclusive"
         echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
-      else if ($CPU_TOT > 128) then  
+      else if ($CPU_TOT > 128) then
         set exclusive="--exclusive"
         echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
         set NODES = `echo $CPU_TOT | awk '{print ($1 % 128 == 0) ? int($1/128) : int($1/128) + 1}'`
       endif
     endif
   endif
-else 
+else
   echo Manually requested ${NODES} nodes
   if ($cluster == "raven") then
     if ($exclusive == "--exclusive") then
@@ -289,19 +289,19 @@ else
       endif
     else
       if ($CPU_TOT <= 36) then
-        if ($NODES > 1) then  
+        if ($NODES > 1) then
           echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
           exit 1
         endif
       else if ($CPU_TOT > 36 && $CPU_TOT <= 72) then
-        if ($NODES == 1) then  
+        if ($NODES == 1) then
           set exclusive="--exclusive"
           echo Requested configuration needs more than 36 CPUs per node: forcing exclusive job allocation
         else
           echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
           exit 1
         endif
-      else if ($CPU_TOT > 72) then  
+      else if ($CPU_TOT > 72) then
         if ($CPU_TOT > `expr $NODES \* 72`) then
           echo Error: maximum number of CPUs per node is 72. Request more nodes.
           exit 1
@@ -322,19 +322,19 @@ else
       endif
     else
       if ($CPU_TOT <= 64) then
-        if ($NODES > 1) then  
+        if ($NODES > 1) then
           echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
           exit 1
         endif
       else if ($CPU_TOT > 64 && $CPU_TOT <= 128) then
-        if ($NODES == 1) then  
+        if ($NODES == 1) then
           set exclusive="--exclusive"
           echo Requested configuration needs more than 64 CPUs per node: forcing exclusive job allocation
         else
           echo Error: too many nodes requested for $CPU_TOT CPUs. Request 1 node.
           exit 1
         endif
-      else if ($CPU_TOT > 128) then  
+      else if ($CPU_TOT > 128) then
         if ($CPU_TOT > `expr $NODES \* 128`) then
           echo Error: maximum number of CPUs per node is 128. Request more nodes.
           exit 1
@@ -381,7 +381,7 @@ if ($batch_flag == 0) then
     echo Asking for a B2.5 standalone run
   else if (-s fort.1 && "$standalone_arg" == "") then
     echo Assuming run with Eirene
-  else 
+  else
     echo Asking run with Eirene but no fort.1 file found: reverting to a standalone run
     set standalone_arg="-s"
     set coupled_suffix=""
