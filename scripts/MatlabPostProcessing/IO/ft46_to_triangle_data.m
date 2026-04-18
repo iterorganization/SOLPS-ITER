@@ -1,10 +1,12 @@
 function [out] = ft46_to_triangle_data(field,nCi,ft35)
-
-%% Inputs
+% [out] = ft46_to_triangle_data(field,nCi,ft35)
+%
+% Inputs
 % field:    input field from an unstructured fort.46 output file.
 % nCi:      number of internal plasma cells
 % ft35:     fort.35 data from the triangle grid
-%% description:
+%
+% Description:
 % field will be a file which will contain nCi internal B2.5 plasma cells,
 % followed by the triangles in the void region (if any). In this function we
 % translate this back to the data on the triangle grid.

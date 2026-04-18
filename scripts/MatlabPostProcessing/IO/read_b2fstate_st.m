@@ -12,6 +12,7 @@ function state = read_b2fstate_st(file)
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016 
 
+disp(['Attempting read_b2fstate_st.'])
 
 % Open file
 [fid,msg] = fopen(file);
@@ -19,14 +20,8 @@ if (fid == -1)
    error(msg);
 end
 
-
-%% Get version of the b2fstate file
-
 line    = fgetl(fid);
 version = line(8:17);
-
-disp(['read_b2fstate -- file version ',version]);
-state.version = version;
 
 
 %% Read dimensions nx, ny, ns
@@ -139,6 +134,7 @@ if str2num(strrep(version,'.','')) >= str2num(strrep('03.000.005','.',''))
     state.floe_noc  = read_rfield(fid,'floe_noc' ,fluxdim);
     state.floi_noc  = read_rfield(fid,'floi_noc' ,fluxdim);
 end
+
 if str2num(strrep(version,'.','')) == str2num(strrep('03.000.009','.',''))
     state.kt     = read_rfield(fid,'kt'    ,[nx+2,ny+2]);
 end
@@ -146,3 +142,7 @@ end
 %% Close file
 
 fclose(fid);
+
+disp(['Done read_b2fstate_st with no errors.'])
+
+end

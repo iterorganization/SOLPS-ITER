@@ -223,9 +223,9 @@ $(target_ai) : b2ai.dat b2fgmtry
 	rm -rf b2ai.exe.dir >& /dev/null ; mkdir b2ai.exe.dir ; cp $^ b2ai.exe.dir
 	rm -f $(target_ai)
 	cd b2ai.exe.dir ; ${TIME} ${B2OBJ}/b2ai.exe ${RUN_OPTIONS} ; mv $(target_ai) .. ; rm -f $(notdir $^) >& /dev/null
-	-[ -s b2ai.exe.dir/b2fgmtry_st ] && rm b2ai.exe.dir/b2fgmtry_st   || echo > /dev/null
-	-[ -s b2ai.exe.dir/b2fstate_st ] && mv b2ai.exe.dir/b2fstate_st b2fstati_st   || echo > /dev/null
-	-[ -s b2ai.exe.dir/b2fplasmf_st ] && rm b2ai.exe.dir/b2fplasmf_st   || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fgmtry_st ] && rm b2ai.exe.dir/b2fgmtry_st || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fstate_st ] && mv b2ai.exe.dir/b2fstate_st b2fstati_st || echo > /dev/null
+	-[ -s b2ai.exe.dir/b2fplasmf_st ] && rm b2ai.exe.dir/b2fplasmf_st || echo > /dev/null
 	-rmdir b2ai.exe.dir
 
 $(target_ar) : b2ar.dat stra.dat weis.dat b2fpardf AMJUEL HYDHEL
@@ -648,7 +648,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
+	-cd b2_ual_write.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -661,7 +661,8 @@ ifndef STAND_ALONE
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
 endif
-	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}
+	cd b2_ual_write.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_write.exe ${RUN_OPTIONS}; \
+	[ -e manifest.yaml ] && mv manifest.yaml ../ 2> /dev/null || echo > /dev/null
 	rm -rf b2_ual_write.exe.dir
 
 ifndef STAND_ALONE
@@ -685,7 +686,7 @@ ifndef STAND_ALONE
 	[ -s ${fort_lc}33 ] || ( [ -s $(baserundir)/${fort_lc}33 ] && ln -sf $(baserundir)/${fort_lc}33 . || ( [ -s $(triangdir)/${fort_lc}33 ] && ln -sf $(triangdir)/${fort_lc}33 . || echo > /dev/null ) )
 	[ -s ${fort_lc}34 ] || ( [ -s $(baserundir)/${fort_lc}34 ] && ln -sf $(baserundir)/${fort_lc}34 . || ( [ -s $(triangdir)/${fort_lc}34 ] && ln -sf $(triangdir)/${fort_lc}34 . || echo > /dev/null ) )
 	[ -s ${fort_lc}35 ] || ( [ -s $(baserundir)/${fort_lc}35 ] && ln -sf $(baserundir)/${fort_lc}35 . || ( [ -s $(triangdir)/${fort_lc}35 ] && ln -sf $(triangdir)/${fort_lc}35 . || echo > /dev/null ) )
-	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 ../${fort_lc}1 . ; \
+	-cd b2_ual_rewrite.exe.dir ; ln -s ../HYDHEL ../METHANE ../SPUTER ../H2VIBR ../AMMONX ../${fort_lc}21 ../${fort_lc}22 . ; \
 	[ -s ../${fort_lc}15 ] && cp -p ../${fort_lc}15 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}14 ] && cp -p ../${fort_lc}14 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}13 ] && cp -p ../${fort_lc}13 . || echo > /dev/null ; \
@@ -699,6 +700,7 @@ ifndef STAND_ALONE
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null
 endif
 	cd b2_ual_rewrite.exe.dir ; ${TIME} ${B2OBJ}/b2_ual_rewrite.exe ${RUN_OPTIONS}
+	-[ -s b2_ual_rewrite.exe.dir/manifest.yaml ] && mv b2_ual_rewrite.exe.dir/manifest.yaml . || echo > /dev/null
 	-[ -s b2_ual_rewrite.exe.dir/ids_*.yaml ] && mv b2_ual_rewrite.exe.dir/ids_*.yaml . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.yaml ] && rm b2_ual_rewrite.exe.dir/ids_*.yaml || echo > /dev/null )
 	-[ -s b2_ual_rewrite.exe.dir/ids_*.watcher ] && mv b2_ual_rewrite.exe.dir/ids_*.watcher . || ( [ -e b2_ual_rewrite.exe.dir/ids_*.watcher ] && rm b2_ual_rewrite.exe.dir/ids_*.watcher || echo > /dev/null )
 	rm -rf b2_ual_rewrite.exe.dir

@@ -155,6 +155,13 @@ ifeq ($(UNAME),Darwin)
 NO_CMAKE := 1
 endif
 
+ifndef NO_CMAKE
+CMAKE_MAJOR_VERSION = `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+ifeq ($(shell [ $(CMAKE_MAJOR_VERSION) -gt 3 ] && echo yes || echo no ),yes)
+DEFOPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+endif
+endif
+
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE

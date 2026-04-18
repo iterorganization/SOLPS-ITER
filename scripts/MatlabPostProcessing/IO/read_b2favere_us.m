@@ -1,5 +1,5 @@
 function aver = read_b2favere_us(file)
-% state = read_b2favere(file,nx,ny,ns)
+% state = read_b2favere(file)
 %
 % Read b2faveri/b2favere file created by B2.5.
 %
@@ -10,6 +10,8 @@ function aver = read_b2favere_us(file)
 % Author: Wouter Dekeyser
 % E-mail: wouter.dekeyser@kuleuven.be
 % February 2017
+
+disp(['Attempting read_b2favere_us.'])
 
 
 % Open file
@@ -55,3 +57,7 @@ aver.smo     = read_rfield(fid,'smo_mean'    ,[nCv,ns]);
 %% Close file
 
 fclose(fid);
+
+disp(['Done read_b2favere_us with no errors.'])
+
+end

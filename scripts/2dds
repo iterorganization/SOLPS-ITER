@@ -273,7 +273,7 @@ else
       nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - | awk '{print $2}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
     if ($prefix == "f" && -s $dsFILEP) then
-      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIX}P | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
+      nc2text -n 9999999 $source "$i(:,${NUM}:${END})" | ave.awk | tr ' ' '\n' | awk 'NF>0{print $1}' | paste ${tmpdir}ds${suffix} - ${tmpdir}ds${SUFFIXP} | awk '{print $2/$3}' >! ${tmpdir}gnuplot.data.tmp.tmp
     endif
 
   else

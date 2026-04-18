@@ -1,9 +1,9 @@
 #! /bin/tcsh -f
 
 if($?GNUPLOT_TMP) then
-    set tmpdir="$GNUPLOT_TMP/"
+  set tmpdir="$GNUPLOT_TMP/"
 else
-    set tmpdir=""
+  set tmpdir=""
 endif
 setenv GNUPLOT_BATCH yes
 setenv GNUPLOT_POSTSCRIPT_OPTIONS 'color solid noenhanced'
@@ -33,6 +33,13 @@ foreach name ($neutral_species_names)
 end
 
 set impurity_names = ($isonuclear_species_names[2-])
+
+set source=b2mn.exe.dir/tracing/blne.trc
+if (! -s $source) set source=tracing/blne.trc
+if (! -s $source) then
+  echo "No blne.trc tracing file found. Cannot proceed."
+  exit
+endif
 
 2dt_tracing tot_core pwr_totl_il pwr_totl_ol pwr_totl_wl tot_rad pwr_totl
 set imp_rad = ""

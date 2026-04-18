@@ -15,8 +15,8 @@
 	branch = .
 [submodule "Carre2"]
 	path = modules/Carre2
-	url = ssh://git@git.iter.org/bnd/carre.git
-	branch = feature/Carre2
+	url = https://github.com/iterorganization/CARRE.git
+	branch = feature/Carre2_wg_release
 [submodule "DivGeo"]
 	path = modules/DivGeo
 	url = https://github.com/iterorganization/DivGeo.git

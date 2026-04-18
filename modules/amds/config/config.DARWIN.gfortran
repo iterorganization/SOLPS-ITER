@@ -4,4 +4,3 @@ INCLUDES = -I/${MOTIF_HOME}/include -I/${LIBXP_HOME}/include -I/${XQUARTZ_HOME}/
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

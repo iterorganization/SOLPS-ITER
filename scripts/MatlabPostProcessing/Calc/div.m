@@ -15,13 +15,14 @@ if isfield(gmtry,'nCv')
     
     % Some local variables
     ns  = size(flow,3);
+    nFc = size(flow,1);
     
     % Initialize output
     div = zeros(gmtry.nCv,ns);
     
     % Compute divergence
     for is = 1:ns
-        for iFc = 1:gmtry.nFc
+        for iFc = 1:nFc
             iCv1 = gmtry.fcCv(iFc,1);
             iCv2 = gmtry.fcCv(iFc,2);
             

@@ -1,18 +1,15 @@
 function write_geo(file,geo,type)
 % write_geo(file,geo,type)
 %
-% Write .geo file.
-%
+% Write .geo file. % Adjusted by Sander Van den Kerkhof
+% (sander.vandenkerkhof@kuleuven.be), March 2022, for CARRE2 .geo file.
+% Default behavior is CARRE, but switch can be given to other formats using
+% the new optional argument 'type', which should be a string.
 %
 
 % Author: Wouter Dekeyser
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
-
-% Adjusted by Sander Van den Kerkhof (sander.vandenkerkhof@kuleuven.be),
-% March 2022, for CARRE2 .geo file. Default behavior is CARRE, but switch
-% can be given to other formats using the new optional argument 'type',
-% which should be a string.
 
 [fid,msg] = fopen(file,'wt');
 if (fid == -1)

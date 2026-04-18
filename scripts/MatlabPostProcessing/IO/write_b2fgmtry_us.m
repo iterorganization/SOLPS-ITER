@@ -1,5 +1,5 @@
 function write_b2fgmtry_us(file,label,gmtry)
-% write_b2fgmtry(file,label,gmtry)
+% write_b2fgmtry_us(file,label,gmtry)
 %
 % Write b2fgmtry file for use by B2.5.
 %
@@ -9,6 +9,8 @@ function write_b2fgmtry_us(file,label,gmtry)
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
 
+disp(['Attempting write_b2fgmtry_us.'])
+
 [fid,msg] = fopen(file,'wt');
 if (fid == -1)
    error(msg);
@@ -17,8 +19,9 @@ end
 
 %% Write a version header
 
-VERSION = 'VERSION03.002.000 Matlab';
+VERSION = 'VERSION03.002.001 Matlab';
 fprintf(fid,'%s\n',VERSION);
+disp(['write_b2fgmtry_us -- file version ',VERSION(8:end)]);
 
 
 %% Write dimensions nx, ny, ns
@@ -120,9 +123,15 @@ write_rfield(fid,'vxFpsi', gmtry.vxFpsi  );
 write_rfield(fid,'cvConn', gmtry.cvConn );
 write_rfield(fid,'fsPsi', gmtry.fsPsi );
 
+% Qalfmin
+write_rfield(fid,'Qalfmin',gmtry.Qalfmin);
+write_rfield(fid,'Qalfmax',gmtry.Qalfmax);
+
 
 %% Close file
 
 fclose(fid);
+
+disp(['Done write_b2fgmtry_us with no errors.'])
 
 end
