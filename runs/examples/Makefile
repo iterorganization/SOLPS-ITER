@@ -1,7 +1,7 @@
 # Makefile for fetching large external data
 
 # Shared asset directory is possible on ITER cluster
-EXTERNALDATA ?= https://zenodo.org/records/19499134
+EXTERNALDATA ?= https://zenodo.org/records/19643817
 
 HASHES := $(wildcard *.md5)
 ASSETS = $(HASHES:%.md5=%)
@@ -33,7 +33,7 @@ publish:
 		md5=$$(md5sum $(dir).tar.gz | cut -c 1-32) ;\
 		echo $${md5} > $(dir).tar.gz.md5 ;\
 		git add $(dir).tar.gz.md5 ;\
-		echo "Do not forget to publish $(dir).tar.gz on Zenodo at $(EXTERNALDATA)" ;\
+		echo "Do not forget to publish $(dir).tar.gz on Zenodo and update the record from $(EXTERNALDATA)" ;\
 		echo "and to commit the new MD5 hash $(dir).tar.gz.md5" ;\
 	else \
 		echo "Missing argument dir=yourdir" ;\

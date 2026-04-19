@@ -49,7 +49,7 @@ cp ../convert_orig/b2fpardf .
 cp ../convert_orig/b2fstati .
 cp ../convert_orig/fort.* .
 b2run b2us
-${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig/ ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig . || exit 1
 cd ..
 
 cd baserun
@@ -70,5 +70,5 @@ cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
 touch b2fstati
 setup_baserun_B25_links
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift . || exit 2
 cd ..
