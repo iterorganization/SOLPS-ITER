@@ -1,12 +1,6 @@
       subroutine uib2pl
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_constants
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 14.04.97 19:05
 c
@@ -21,7 +15,6 @@ c***  nnvsle  the length of this list
 c***          (specified through dg and input by uinnam)
 c=====================================================
       implicit none
-#include "uinput.inc"
       integer i, j, k
       character*28 filename
 c=====================================================

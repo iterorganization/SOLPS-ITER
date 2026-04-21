@@ -1,11 +1,5 @@
       subroutine uinspcid(s,l,k)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 26.05.99 20:38
 c
@@ -18,7 +12,6 @@ c======================================================================
       implicit none
       integer l,k
       character*(*) s
-#include "uinpcom.inc"
       integer i
       logical streql
       external streql
@@ -72,4 +65,3 @@ c*** Plasma ion
 
 c======================================================================
       end subroutine uinspcid
-

@@ -1,12 +1,6 @@
       subroutine uinprpgr
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
       implicit none
 
 c  version : 15.03.2001 17:03
@@ -14,7 +8,6 @@ c  version : 15.03.2001 17:03
 c=======================================================================
 c*** Prepare the grid data - dimensions and cuts
 c=======================================================================
-#include "uinput.inc"
       logical ex
       real (kind=R8) :: rratio
       external rratio

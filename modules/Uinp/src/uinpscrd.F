@@ -1,11 +1,5 @@
       subroutine uinpscrd
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 
 c  version : 04.02.2005 18:37
 
@@ -13,7 +7,6 @@ c=======================================================================
 c  Produce surface interaction cards
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,j,k,kk,kkk,nn,ind
       integer chemindex(maxchmvar)
       logical streql

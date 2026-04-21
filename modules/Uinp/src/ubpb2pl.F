@@ -1,7 +1,6 @@
       subroutine ubpb2pl
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use ubpcom
+      implicit none
 c
 c  version : 27.11.2003 21:10
 c
@@ -15,8 +14,8 @@ c***          (specified through dg and input by ubpnam)
 c***
 c*** Toroidal angles are temporarily used for profiles only!!!
 c======================================================================
-#include "ubpcom.h"
-      integer i,j,k,llm(nubchrdx),lli(nubchrdx)
+      integer i,j,k,l,m,llm(nubchrdx),lli(nubchrdx)
+      real pi45,d,dd,fi,x,y,x1,y1,x2,y2,r,z,r1,z1,r2,z2,w
       character c*(ufnlen+4)
 c======================================================================
 
@@ -104,19 +103,6 @@ c
           end do
         end if
       end do
+      return
 c======================================================================
-      end
-c
-c
-c======================================================================
-      block data ubpblkd
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-#include "ubpcom.h"
-      data nnvsle, nubchrd,  nubnpnt  ,  nubnpni  , nubchrdp, nubchrdi/
-
-     /       0   ,    0   , nubslp*200, nubsli*400, nubslp*0, nubsli*0/,
-     ,  angchrdp  , angchrdi  /
-     / nubchrdx*0.,nubchrdx*0./
-      end
+      end subroutine ubpb2pl

@@ -1,12 +1,6 @@
       subroutine uinbndrg
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 15.03.2001 00:57
 c
@@ -14,7 +8,6 @@ c=======================================================================
 c*** Determine the gross boundary regions
 c=======================================================================
       implicit none
-#include "uinpcom.inc"
       integer i,j,k,l,nt_hlp
       logical ex
       parameter (nt_hlp=5)

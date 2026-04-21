@@ -1,11 +1,6 @@
       subroutine uinprpdz(lmrk,nmrk,kmrk)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
+     , , irr => ir, izz => iz
 
 c  version : 24.01.2003 17:55
 
@@ -24,7 +19,6 @@ c***  nmrk  number of marked boundary zones
 c=======================================================================
       implicit none
       integer nmrk,lmrk(*),kmrk(*)
-#include "uinpcom.inc"
       integer i,j,k,l,m,n,ir,iz,it,l_pfr,l_wll
       logical ex,hlp_trg
       integer mesh_cell_ind

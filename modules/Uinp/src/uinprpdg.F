@@ -1,12 +1,7 @@
       subroutine uinprpdg(lc)
       use b2mod_constants
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 28.04.2003 23:32
 c
@@ -15,7 +10,6 @@ c*** Prepare the data for the diagnostic Eirene run
 c=======================================================================
       implicit none
       logical lc
-#include "uinput.inc"
       integer i,j,k,l,m,iy,ix,ntcpu_b,nfile_b,npts_b(nstra),lntspec_b,
      ,  lntsput_b,nmcsput_b,ngwties_b,
      ,  nlstadds_b,nlstadu_b,mtreadds_b,

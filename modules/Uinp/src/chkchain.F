@@ -13,7 +13,6 @@ c      print *,'irt= ',irt
 c      if(irt.gt.0) print *,'ind= ',ind
 c      end
 
-
       subroutine chkchain(p1,p2,mp,np,ls,ns,nc,ind,irt,
      . jedgep,jedgec,jedge,nt)
       use b2mod_subsys

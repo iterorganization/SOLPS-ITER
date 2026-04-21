@@ -1,12 +1,10 @@
       subroutine uicrb2(lin,lout,iret)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
+      use uib2pprm
+      implicit none
+      integer, intent(in) :: lin, lout
+      integer, intent(out) :: iret
 c
 c  version : 30.06.2000 21:13
 c
@@ -14,16 +12,14 @@ c=======================================================================
 c*** Corrects the B2 input file.
 c*** Reads the file from unit LIN and writes the output into LOUT.
 c***
-c*** Input parameters: prepared in uinprp and passed through uinpcom.inc
+c*** Input parameters: prepared in uinprp and passed through uinput_mod
 c***
 c*** Output parameter
 c***
 c***  iret:   0 means OK
 c=======================================================================
 c
-#include "uinpcom.inc"
-#include "uib2pprm.inc"
-c
+      integer i, j, k, kb
 c*** Logical variables:
 c***   uba : opening apostrophe encountered
 c***   ubr : left ellipse encountered
@@ -126,7 +122,7 @@ c*** Not yet. Proceed with the variables still left to be modified
             if(.not.lbb) then !{
               write(0,*) 'Unexpected error in uicrb2: unable to ',
      ,          'complete the block ',jblk,' : ',chrbl(jblk)
-              iret =8
+              iret=8
               goto 9990
             end if !}
           end if !}

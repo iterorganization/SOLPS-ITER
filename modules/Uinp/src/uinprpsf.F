@@ -1,12 +1,6 @@
       subroutine uinprpsf
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 01.06.99 18:08
 c
@@ -14,7 +8,6 @@ c=======================================================================
 c*** Prepare the chemical sputtering data for the Eirene input file
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,j,k,l
       logical ex
       integer nlpw_hlp

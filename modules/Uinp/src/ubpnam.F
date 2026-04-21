@@ -1,14 +1,12 @@
       subroutine ubpnam(unn)
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use ubpcom
+      implicit none
 c
 c  version : 17.11.2003 17:38
 c
 c======================================================================
 c*** Data input from the DG file
 c======================================================================
-#include "ubpcom.h"
       integer lunm
       parameter (lunm=12)
       character*8 unm(lunm),unn,uun,uuc*(ufnlen)
@@ -16,7 +14,7 @@ c*** luchrs: chord type switch.
 c***          1   line integrals
 c***          2   line profiles
 c***
-      integer i,j,luchrs
+      integer i,j,luchrs,luind,nlimi
       logical streql
       external streql
       data luchrs / 0 /

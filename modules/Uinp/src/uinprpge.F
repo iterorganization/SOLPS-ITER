@@ -1,12 +1,6 @@
       subroutine uinprpge
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 03.04.2003 17:25
 c
@@ -28,7 +22,6 @@ c***    eewbnds, etfbnds, etbbnds, efcbnds, easbnds, efpbnds,
 c***    rfcbnds, rfpbnds
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,j,k,l,m,knd_hlp(nedgmrkd,nwllmrkd)
       external xerrab
 c=======================================================================

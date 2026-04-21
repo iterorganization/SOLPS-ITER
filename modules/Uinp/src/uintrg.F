@@ -1,11 +1,5 @@
       subroutine uintrg(nam)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 25.03.99 21:27
 c
@@ -14,14 +8,10 @@ c*** Data input from the target file
 c======================================================================
       implicit none
       character*8 nam
-      integer lun
-      
-#include "uinput.inc"
-
       integer nnms
       parameter (nnms=2)
       integer i
-      character*8 name, unm(nnms), uline*16
+      character*8 name, unm(nnms)
       logical streql
       external streql
 c*** List of the valid input keywords
@@ -43,8 +33,15 @@ c======================================================================
         call skipit
       end select
       return
+      end subroutine uintrg
+
 c======================================================================
-      entry uintopo(lun)
+      subroutine uintopo(lun)
+      use uinput_mod
+      implicit none
+      integer, intent(in) :: lun
+      integer i
+      character*16 uline
 c*** Read the topology keyword from the file header
 c======================================================================
 
@@ -60,4 +57,4 @@ c======================================================================
       return
       
 c======================================================================
-      end subroutine uintrg
+      end subroutine uintopo
