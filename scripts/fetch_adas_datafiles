@@ -1,0 +1,494 @@
+#!/bin/tcsh -f
+
+# Fetch the SOLPS-ITER ADAS data subset into $SOLPSTOP/data.local/adas.
+
+set openadas_base = "https://open.adas.ac.uk/download"
+set bundled_url   = "https://zenodo.org/records/19571303/files/adas_bundled.tar.gz"
+set ratadas_file = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
+set data_root    = "$SOLPSTOP/data.local/adas"
+set bundled_root = "$data_root/adas_bundled"
+set adf11_root   = "$data_root/adf11"
+set adf15_root   = "$data_root/adf15"
+set work_dir     = "/tmp/fetch_adas_datafiles.$$"
+set adf11_manifest = "$work_dir/adf11_manifest"
+set adf15_manifest = "$work_dir/adf15_manifest"
+
+mkdir -p "$work_dir"
+mkdir -p "$bundled_root" "$adf11_root" "$adf15_root"
+
+set downloader = ""
+which curl >& /dev/null
+if ($status == 0) then
+  set downloader = "curl"
+else
+  which wget >& /dev/null
+  if ($status == 0) set downloader = "wget"
+endif
+
+if ("$downloader" == "") then
+  echo "ERROR: Neither curl nor wget is available."
+  rm -rf "$work_dir"
+  exit 1
+endif
+
+# ---------------------------------------------------------------------------
+# Build the adf11 manifest from ratadas.filelist
+#
+# Types: acd scd ccd prb plt zcd ecd (indices 1-7)
+# For boron (element == "b"), acd/scd/prb/plt (indices 1,2,4,5) are
+# hardcoded to year '89, because the '95 files are not yet on OpenADAS.
+#
+# ---------------------------------------------------------------------------
+
+echo "Building adf11 manifest from $ratadas_file"
+awk 'BEGIN { \
+       FS = sprintf("%c", 39); \
+       t[1]="acd"; t[2]="scd"; t[3]="ccd"; t[4]="prb"; \
+       t[5]="plt"; t[6]="zcd"; t[7]="ecd"; \
+       b[1]=1; b[2]=1; b[4]=1; b[5]=1; \
+     } \
+     NF >= 16 { \
+       element = $16; \
+       gsub(/[[:space:]]/, "", element); \
+       if (element == "" || element == "es") next; \
+       for (i = 1; i <= 7; i++) { \
+         if (b[i] && element == "b") { \
+           version = "89"; \
+         } else { \
+           version = $(2 * i); \
+           gsub(/[[:space:]]/, "", version); \
+         } \
+         if (version != "" && version != "none") \
+           printf "%s%s/%s%s_%s.dat\n", t[i], version, t[i], version, element; \
+       } \
+     }' \
+  "$ratadas_file" >! "$adf11_manifest"
+
+if ($status != 0) then
+  echo "ERROR: Failed to build adf11 manifest."
+  rm -rf "$work_dir"
+  exit 1
+endif
+
+# ---------------------------------------------------------------------------
+# Build the adf15 manifest
+# (hard-coded file list to match content of filelist.adas.adf15
+# apart from B, for which the old '93 files are downloaded
+# because the '95 files are not yet on OpenADAS)
+# ---------------------------------------------------------------------------
+
+echo "Building hard-coded adf15 manifest"
+touch "$adf15_manifest"
+
+# Hydrogen
+echo "pec12#h/pec12#h_balmer#h0.dat"  >> "$adf15_manifest"
+echo "pec12#h/pec12#h_paschen#h0.dat" >> "$adf15_manifest"
+echo "pec12#h/pec12#h_pju#h0.dat"     >> "$adf15_manifest"
+echo "pec96#h/pec96#h_pjr#h0.dat" >> "$adf15_manifest"
+echo "pec96#h/pec96#h_pju#h0.dat" >> "$adf15_manifest"
+
+# Helium
+foreach series (llr llu pjr pju)
+  echo "pec93#he/pec93#he_${series}#he0.dat" >> "$adf15_manifest"
+end
+echo "pec96#he/pec96#he_bnd#he1.dat" >> "$adf15_manifest"
+foreach i (0 1)
+  echo "pec96#he/pec96#he_pjr#he${i}.dat" >> "$adf15_manifest"
+  echo "pec96#he/pec96#he_pju#he${i}.dat" >> "$adf15_manifest"
+end
+
+# Lithium
+foreach i (0 1 2)
+  echo "pec96#li/pec96#li_pjr#li${i}.dat" >> "$adf15_manifest"
+  echo "pec96#li/pec96#li_pju#li${i}.dat" >> "$adf15_manifest"
+end
+
+# Beryllium
+echo "pec93#be/pec93#be_llr#be0.dat" >> "$adf15_manifest"
+echo "pec93#be/pec93#be_llu#be0.dat" >> "$adf15_manifest"
+foreach i (0 1 3)
+  echo "pec93#be/pec93#be_pjr#be${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1)
+  echo "pec93#be/pec93#be_pju#be${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1 2 3)
+  echo "pec96#be/pec96#be_pjr#be${i}.dat" >> "$adf15_manifest"
+  echo "pec96#be/pec96#be_pju#be${i}.dat" >> "$adf15_manifest"
+end
+
+# Boron
+echo "pec93#b/pec93#b_llr#b3.dat" >> "$adf15_manifest"
+echo "pec93#b/pec93#b_llr#b4.dat" >> "$adf15_manifest"
+foreach i (0 1 2 3)
+  echo "pec93#b/pec93#b_llu#b${i}.dat" >> "$adf15_manifest"
+end
+
+# Carbon
+foreach i (0 1 2 3)
+  foreach series (llr llu pju)
+    echo "pec93#c/pec93#c_${series}#c${i}.dat" >> "$adf15_manifest"
+  end
+end
+foreach i (0 1 2 3 4 5)
+  echo "pec93#c/pec93#c_pjr#c${i}.dat" >> "$adf15_manifest"
+end
+echo "pec96#c/pec96#c_bnd#c5.dat" >> "$adf15_manifest"
+foreach i (0 1 2 3 4 5)
+  echo "pec96#c/pec96#c_pjr#c${i}.dat" >> "$adf15_manifest"
+  echo "pec96#c/pec96#c_pju#c${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1 2)
+  echo "pec96#c/pec96#c_vsr#c${i}.dat" >> "$adf15_manifest"
+  echo "pec96#c/pec96#c_vsu#c${i}.dat" >> "$adf15_manifest"
+end
+
+# Nitrogen
+echo "pec93#n/pec93#n_llr#n4.dat" >> "$adf15_manifest"
+echo "pec93#n/pec93#n_llu#n4.dat" >> "$adf15_manifest"
+foreach i (0 1 2 3 4 5 6)
+  echo "pec96#n/pec96#n_pjr#n${i}.dat" >> "$adf15_manifest"
+  echo "pec96#n/pec96#n_pju#n${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1 2 3)
+  echo "pec96#n/pec96#n_vsu#n${i}.dat" >> "$adf15_manifest"
+end
+echo "pec96#n/pec96#n_vsr#n3.dat" >> "$adf15_manifest"
+
+# Oxygen
+foreach series (llr llu)
+  foreach i (1 4 5)
+    echo "pec93#o/pec93#o_${series}#o${i}.dat" >> "$adf15_manifest"
+  end
+end
+foreach i (1 2 3 4 5 6 7)
+  echo "pec93#o/pec93#o_pjr#o${i}.dat" >> "$adf15_manifest"
+end
+foreach i (1 4 5)
+  echo "pec93#o/pec93#o_pju#o${i}.dat" >> "$adf15_manifest"
+end
+foreach i (0 1 2 3 4 5 6 7)
+  echo "pec96#o/pec96#o_pjr#o${i}.dat" >> "$adf15_manifest"
+  echo "pec96#o/pec96#o_pju#o${i}.dat" >> "$adf15_manifest"
+end
+
+# Neon
+foreach i (0 1 2 3 4 5 6 7 8 9)
+  echo "pec96#ne/pec96#ne_pjr#ne${i}.dat" >> "$adf15_manifest"
+  echo "pec96#ne/pec96#ne_pju#ne${i}.dat" >> "$adf15_manifest"
+end
+
+# Silicon
+foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13)
+  echo "pec96#si/pec96#si_pjr#si${i}.dat" >> "$adf15_manifest"
+  echo "pec96#si/pec96#si_pju#si${i}.dat" >> "$adf15_manifest"
+end
+
+# Argon
+foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
+  foreach series (ca cl ic ls)
+    echo "pec40#ar/pec40#ar_${series}#ar${i}.dat" >> "$adf15_manifest"
+  end
+end
+
+# Chromium
+echo "pec93#cr/pec93#cr_llr#cr0.dat" >> "$adf15_manifest"
+echo "pec93#cr/pec93#cr_llu#cr0.dat" >> "$adf15_manifest"
+
+# Molybdenum
+echo "pec93#mo/pec93#mo_llr#mo0.dat" >> "$adf15_manifest"
+echo "pec93#mo/pec93#mo_llu#mo0.dat" >> "$adf15_manifest"
+
+# Tungsten
+foreach i (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 \
+           25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 \
+           47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 \
+           69 70 71 72 73)
+  foreach series (ca cl ic ls)
+    echo "pec40#w/pec40#w_${series}#w${i}.dat" >> "$adf15_manifest"
+  end
+end
+
+if ($status != 0) then
+  echo "ERROR: Failed to build adf15 manifest."
+  rm -rf "$work_dir"
+  exit 1
+endif
+
+# ---------------------------------------------------------------------------
+# Fetch adf11 files
+# ---------------------------------------------------------------------------
+
+set errors           = 0
+set adf11_total      = 0
+set adf11_downloaded = 0
+set adf11_skipped    = 0
+set adf11_failed     = 0
+
+echo "Fetching adf11 files into $adf11_root"
+foreach relfile (`cat "$adf11_manifest"`)
+  @ adf11_total = $adf11_total + 1
+
+  set outfile = "$adf11_root/$relfile"
+  set outdir  = "$outfile:h"
+
+  if (-s "$outfile") then
+    @ adf11_skipped = $adf11_skipped + 1
+    continue
+  endif
+
+  if (! -d "$outdir") then
+    mkdir -p "$outdir"
+    if ($status != 0) then
+      echo "ERROR: Cannot create $outdir"
+      @ adf11_failed = $adf11_failed + 1
+      @ errors = $errors + 1
+      continue
+    endif
+  endif
+
+  set url     = "$openadas_base/adf11/$relfile"
+  set tmpfile = "$outfile.download.$$"
+  if ("$downloader" == "curl") then
+    curl -fsSL -g --retry 3 --retry-delay 2 --connect-timeout 30 -o "$tmpfile" "$url"
+  else
+    wget -q -O "$tmpfile" "$url"
+  endif
+  if ($status != 0) then
+    echo "Download of adf11/$relfile failed"
+    if (-e "$tmpfile") rm -f "$tmpfile"
+    @ adf11_failed = $adf11_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  # Strip the dated OpenADAS terms footer
+  set stripfile = "$tmpfile.strip.$$"
+  awk 'BEGIN{nbuf=0;stop=0} \
+       /^C[[:space:]]+OPEN-ADAS[[:space:]]*$/{stop=1;exit} \
+       {if(nbuf==2) print buf1; buf1=buf2; buf2=$0; if(nbuf<2) nbuf++} \
+       END{if(stop==0){if(nbuf==1) print buf2; else if(nbuf>=2){print buf1; print buf2}}}' \
+    "$tmpfile" >! "$stripfile"
+  if ($status != 0) then
+    echo "ERROR: Failed to strip the OpenADAS footer from $tmpfile"
+    rm -f "$tmpfile" "$stripfile"
+    @ adf11_failed = $adf11_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+  mv "$stripfile" "$tmpfile"
+  if ($status != 0) then
+    echo "ERROR: Cannot replace $tmpfile with the stripped download."
+    rm -f "$tmpfile" "$stripfile"
+    @ adf11_failed = $adf11_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  # Validate size
+  set bytes = `wc -c "$tmpfile" | awk '{print $1}'`
+  if ("$bytes" == "") set bytes = 0
+  if ($bytes < 1000) then
+    echo "Download of adf11/$relfile failed (response too small: $bytes bytes)"
+    rm -f "$tmpfile"
+    @ adf11_failed = $adf11_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  mv "$tmpfile" "$outfile"
+  if ($status != 0) then
+    echo "ERROR: Cannot move $tmpfile to $outfile"
+    @ adf11_failed = $adf11_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  @ adf11_downloaded = $adf11_downloaded + 1
+  echo "Download of adf11/$relfile completed"
+
+end
+
+# Create a local copy of ratadas.filelist which uses the
+# '89 files for B instead of the '95 files
+set ratadas_src = "$SOLPSTOP/modules/B2.5/Database/ratadas.filelist"
+set ratadas_dst = "$SOLPSTOP/data.local/ratadas.filelist"
+cp "$ratadas_src" "$ratadas_dst"
+set ratadas_tmp = "$ratadas_dst.tmp"
+cat "$ratadas_dst" | sed -e 's|modules|data.local|' >! "$ratadas_tmp" \
+    && mv "$ratadas_tmp" "$ratadas_dst"
+awk -v old="'95  ' '95  ' '89  ' '95  ' '95  ' '89  ' '89  ' 'b '" \
+    -v new="'89  ' '89  ' '89  ' '89  ' '89  ' '89  ' '89  ' 'b '" \
+    '{ gsub(old, new); print }' \
+    "$ratadas_dst" >! "$ratadas_tmp" && mv "$ratadas_tmp" "$ratadas_dst"
+
+# ---------------------------------------------------------------------------
+# Fetch adf15 files
+# ---------------------------------------------------------------------------
+
+set adf15_total      = 0
+set adf15_downloaded = 0
+set adf15_skipped    = 0
+set adf15_failed     = 0
+
+echo "Fetching adf15 files into $adf15_root"
+foreach relfile (`cat "$adf15_manifest"`)
+  @ adf15_total = $adf15_total + 1
+
+  set outfile = "$adf15_root/$relfile"
+  set outdir  = "$outfile:h"
+
+  if (-s "$outfile") then
+    @ adf15_skipped = $adf15_skipped + 1
+    continue
+  endif
+
+  if (! -d "$outdir") then
+    mkdir -p "$outdir"
+    if ($status != 0) then
+      echo "ERROR: Cannot create $outdir"
+      @ adf15_failed = $adf15_failed + 1
+      @ errors = $errors + 1
+      continue
+    endif
+  endif
+
+  # Build the OpenADAS URL for this pec file
+  set filename = "$relfile:t"
+  set url_path = `echo "$filename" | awk '{ \
+    fn = $0; \
+    if (fn ~ /^pec/) { \
+      num = substr(fn, 4, 2); \
+      split(fn, parts, "#"); \
+      split(parts[2], specparts, "_"); \
+      spec = specparts[1]; \
+      gsub(/#/, "%5D%5B", fn); \
+      sub(/_/, "/pec" num "%5D%5B" spec "_", fn); \
+    } else { \
+      gsub(/#/, "%5D%5B", fn); \
+    } \
+    print fn; \
+  }'`
+
+  set url     = "$openadas_base/adf15/$url_path"
+  set tmpfile = "$outfile.download.$$"
+  if ("$downloader" == "curl") then
+    curl -fsSL -g --retry 3 --retry-delay 2 --connect-timeout 30 -o "$tmpfile" "$url"
+  else
+    wget -q -O "$tmpfile" "$url"
+  endif
+  if ($status != 0) then
+    echo "Download of adf15/$relfile failed"
+    if (-e "$tmpfile") rm -f "$tmpfile"
+    @ adf15_failed = $adf15_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  # Strip the dated OpenADAS terms footer
+  set stripfile = "$tmpfile.strip.$$"
+  awk 'BEGIN{nbuf=0;stop=0} \
+       /^C[[:space:]]+OPEN-ADAS[[:space:]]*$/{stop=1;exit} \
+       {if(nbuf==2) print buf1; buf1=buf2; buf2=$0; if(nbuf<2) nbuf++} \
+       END{if(stop==0){if(nbuf==1) print buf2; else if(nbuf>=2){print buf1; print buf2}}}' \
+    "$tmpfile" >! "$stripfile"
+  if ($status != 0) then
+    echo "ERROR: Failed to strip the OpenADAS footer from $tmpfile"
+    rm -f "$tmpfile" "$stripfile"
+    @ adf15_failed = $adf15_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+  mv "$stripfile" "$tmpfile"
+  if ($status != 0) then
+    echo "ERROR: Cannot replace $tmpfile with the stripped download."
+    rm -f "$tmpfile" "$stripfile"
+    @ adf15_failed = $adf15_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  # Validate size
+  set bytes = `wc -c "$tmpfile" | awk '{print $1}'`
+  if ("$bytes" == "") set bytes = 0
+  if ($bytes < 1000) then
+    echo "Download of adf15/$relfile failed (response too small: $bytes bytes)"
+    rm -f "$tmpfile"
+    @ adf15_failed = $adf15_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  mv "$tmpfile" "$outfile"
+  if ($status != 0) then
+    echo "ERROR: Cannot move $tmpfile to $outfile"
+    @ adf15_failed = $adf15_failed + 1
+    @ errors = $errors + 1
+    continue
+  endif
+
+  @ adf15_downloaded = $adf15_downloaded + 1
+  echo "Download of adf15/$relfile completed"
+end
+
+# ---------------------------------------------------------------------------
+# Fetch the adas_bundled archive
+# ---------------------------------------------------------------------------
+
+set archive_file = "$work_dir/adas_bundled_archive"
+set extract_dir  = "$work_dir/adas_bundled_extract"
+mkdir -p "$extract_dir"
+
+if ("$downloader" == "curl") then
+  curl -fsSL -g --retry 3 --retry-delay 2 --connect-timeout 30 -o "$archive_file" "$bundled_url"
+else
+  wget -q -O "$archive_file" "$bundled_url"
+endif
+
+set bundled_status = "failed"
+if ($status != 0) then
+  echo "Download of adas_bundled archive failed"
+  @ errors = $errors + 1
+else
+  tar -xf "$archive_file" -C "$extract_dir"
+  if ($status != 0) then
+    unzip -q "$archive_file" -d "$extract_dir"
+  endif
+  if ($status != 0) then
+    echo "ERROR: Failed to extract adas_bundled archive. Expected a tar-compatible or zip archive."
+    @ errors = $errors + 1
+  else
+    if (-d "$extract_dir/adas_bundled") then
+      set bundled_source = "$extract_dir/adas_bundled"
+    else
+      set bundled_source = "$extract_dir"
+    endif
+    tar -cf - -C "$bundled_source" . | tar -xf - -C "$bundled_root"
+    if ($status != 0) then
+      echo "ERROR: Failed to copy extracted adas_bundled content into $bundled_root"
+      @ errors = $errors + 1
+    else
+      set bundled_status = "downloaded"
+      echo "Download of adas_bundled archive completed"
+    endif
+  endif
+endif
+
+# ---------------------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------------------
+
+echo "ADAS fetch summary:"
+echo "  adf11: $adf11_downloaded downloaded, $adf11_skipped already present, $adf11_failed failed, $adf11_total manifest entries"
+echo "  adf15: $adf15_downloaded downloaded, $adf15_skipped already present, $adf15_failed failed, $adf15_total manifest entries"
+echo "  adas_bundled: $bundled_status"
+echo "  target: $data_root"
+
+rm -rf "$work_dir"
+
+if ($errors != 0) then
+  echo "Completed with $errors error(s)."
+  exit 1
+endif
+
+exit 0

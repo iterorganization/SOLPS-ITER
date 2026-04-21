@@ -8,7 +8,7 @@ git checkout release/3.1.2 && echo "Checked out SOLPS-ITER 3.1.2 release branch"
 git pull && goto b25 || goto local
 
 b25:
-  git submodule update
+  git submodule update || git -c submodule.ADAS.update=none submodule update
   echo "Updating B2.5"
   cd $SOLPSTOP/modules/B2.5
   set repo="B2.5"
@@ -42,11 +42,15 @@ DivGeo:
 
 ADAS:
   echo "Updating ADAS"
-  cd $SOLPSTOP/modules/adas
-  set repo="ADAS"
-  git fetch --prune
-  git checkout develop && echo "Checked out ADAS develop branch" || goto branch
-  git pull && goto compile || goto local
+  if (-s $SOLPSTOP/modules/adas/.gitattributes) then
+    cd $SOLPSTOP/modules/adas
+    set repo="ADAS"
+    git fetch --prune
+    git checkout develop && echo "Checked out ADAS develop branch" || goto branch
+    git pull && goto compile || goto local
+  else
+    $SOLPSTOP/scripts/fetch_adas_datafiles && goto compile || exit
+  endif
 
 branch:
   echo "You are not on the 3.1.2 release branch."

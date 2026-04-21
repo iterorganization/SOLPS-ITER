@@ -233,6 +233,8 @@ In addition to the GitHub repositories, ITER IDM account holders may request acc
 \end{description}
 Note that only the {\tt AMNS ADAS} Git repository at ITER will provide data files that are not yet available on GitHub. For all other repositories, they are only needed if you need to do some code archaeology, and no code development is to be done there. Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
 
+For users without access to AMNS ADAS, the installation scripts will instead fetch equivalent data to that on the IO repository from the \href{https://open.adas.ac.uk/}{OpenADAS} website and Zenodo.
+
 \begin{sloppypar}
 Users can obtain the {\tt Eirene} code under a CC-BY-NC-ND licence but developers need to agree to the terms of the Eirene Public Licence (EPL) and become a Basic Developer (BD) or Associated Developer (AD) - see {\tt \$\{SOLPSTOP\}\allowbreak/modules/Eirene/EPL.pdf} for full details. Such registration is managed by Forschungszentrum J{\"u}lich and occurs at \href{https://www.eirene.de/}{https://www.eirene.de/}. ADs associated to ITER may contribute by forking {\tt Eirene} and raising Pull Requests to have their changes integrated into the main repository.
 
@@ -1315,6 +1317,8 @@ currently).
 {\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
 and which "years" to use.
 
+In case of no access to the AMNS ADAS repository, the script {\tt fetch\_adas\_datafiles} can be used to create a local copy of this folder, as {\tt \$SOLPSTOP/data.local/adas}, which will be populated using open source data downloaded from the \href{https://open.adas.ac.uk/}{OpenADAS website} and, for bundled data, from a Zenodo record.
+
 \newpage \section{lib}
 
 %%find $SOLPSTOP/lib -follow -maxdepth 2 -type d -print | sed -e "s:${SOLPSTOP}:SOLPSTOP:" | sed -e 's:[^/]*/:|   :g' | sed 's:\(\(|   \)*\)|   :\1+---:'
@@ -1738,6 +1742,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
+  \item[fetch\_adas\_datafiles]\index{fetch\_adas\_datafiles}\index{ADAS} Downloads the ADAS datafiles used by {\tt B2.5} from the OpenADAS website (adf11 and adf15 files) and from the \SOLPSITER Zenodo archive (bundled files) and puts them into a {\tt \$SOLPSTOP/data.local/adas} folder. Used in case of no access to the AMNS ADAS repository.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
   \item[get\_series]\index{get\_series} Gets the data from {\tt last\_2d\_out} files of the runs associated with the series described in {\tt series\_file} and prints them out in a plottable multi-column file {\tt Series.dat} according to {\tt get\_series.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[gtdr]\index{gtdr} Script to make a directory tree local.
@@ -2897,7 +2902,7 @@ which contains
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
     Obsolete. Replace with drift-compatible {\tt BCENI=15}.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
-   {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
+    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
@@ -2926,13 +2931,13 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
     {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
-    {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    {\tt ENIPAR(,1)} specifies the desired ion temperature in $eV$.
+    {\tt ENIPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    {\tt ENIPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[28] prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the average temperature in $eV$.
   \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -4645,7 +4650,7 @@ DO 50, IAOT=1,NAOTB
 
 {\bf Meaning of the input variables for interfacing routine INFUSR}
 
-We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, Section 2.14.
+We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, Section~2.14.
 
 \begin{description}
   \item[LCOARSE] Coarse mesh switch ??? $\Rightarrow$ no longer in use in the extended grids code
@@ -17354,8 +17359,7 @@ For LFS snowflake topologies, face-based regions 15 and 17, the core boundary an
 under interactive control.  It uses {\tt NCAR} and so the user must have
 access to the {\tt NCAR} environment. Some, but far from all, functionalities
 have been ported so that \btwoplot may also work in the {\tt PLPLOT}
-environment.
-Preprocessing before compilation with {\tt -DPLPLOT} option is then necessary
+environment. Preprocessing before compilation with {\tt -DPLPLOT} option is then necessary
 (see Section~\ref{sec:compilingb2} for more details).
 Data from the {\tt B2SXDR}, and, if available, the {\tt B2SDIAG} (for \SOLPSfour runs),
 {\tt b2fstate}, {\tt b2fplasma}, {\tt b2frates}, {\tt b2fgmtry}, {\tt b2mn.dat}
@@ -21841,15 +21845,42 @@ DBG & b2plot/ngread.F \\
 DBG & b2plot/plotcontour.F \\
 DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
+DBG & equations/b2news\_m.F \\
+DBG & equations/b2npco.F \\
+DBG & equations/b2npht.F \\
+DBG & equations/b2npmo.F \\
+DBG & equations/b2nppo.F \\
+DBG & modules/b2mod\_ad.F \\
+DBG & modules/b2mod\_boundary\_namelist.F \\
+DBG & modules/b2mod\_cdf.F90 \\
 DBG & modules/b2mod\_input\_profile.F \\
-DBG & sources/b2stbr\_bas.F \\
+DBG & modules/b2mod\_neutrals\_namelist.F \\
+DBG & modules/b2us\_map.F \\
+DBG & modules/b2us\_prep.F \\
+DBG & output/b2wdat.F \\
+DBG & preprocessing/b2agfs\_st.F \\
+DBG & sources/b2sihs\_.F \\
+DBG & sources/b2sral.F \\
+DBG & sources/b2stbc.F \\
+DBG & sources/b2stbr.F \\
 DBG & sources/b2stbr\_phys.F \\
+DBG & transport/b2tfch\_.F \\
+DBG & transport/b2tqna.F \\
+DBG & transport/b2tral.F \\
+DBG & transport/b2trcl.F \\
+DBG & transport/b2trno.F \\
+DBG & transport/b2tvskt.F \\
+DBG & transport/b2tvspr.F \\
+DBG & user/b2mod\_blns.F \\
+DBG & user/b2mod\_file.F \\
 DBG & user/b2mod\_usrtrc.F \\
 DBG & user/b2mod\_wrsrt.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\
 DBG & utility/my\_out.F \\
+DBG & utility/my\_out\_us.F \\
+DBG & utility/my\_outi\_us.F \\
 DBG & utility/ratamjhyd.F \\
 DBG & utility/ysmp\_d.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
