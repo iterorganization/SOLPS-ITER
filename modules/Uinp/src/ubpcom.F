@@ -1,6 +1,9 @@
-c
-c  version : 16.11.2003 22:27
-c
+      module ubpcom
+#ifdef DIMENSIONS_MODULE
+      use b2mod_dimensions
+#endif
+      implicit none
+
 c*** Common data for b2plot input
 c======================================================================
 c*** iunoo  : output unit
@@ -20,10 +23,6 @@ c
       real ubchrds(4,nubchrdx), pp1(3,DEF_NLIM), pp2(3,DEF_NLIM),
      ,  angchrdp(nubchrdx),  angchrdi(nubchrdx)
       character*(ufnlen) cublbli(nubsli), cublblp(nubslp)
-      common/ub2pcom/pp1, pp2, ubchrds, angchrdp, angchrdi,
-     i  nnvsle, nmvsle, nubchrd, nubnpnt, nubnpni,
-     i  lubchrdp, lubchrdi, nubchrdp, nubchrdi, lublbli, lublblp
-      common/ub2pcoma/cublbli, cublblp
 c======================================================================
 c*** nubslp   : max. number of groups of chords for line profiles
 c*** nubsli   : max. number of groups of chords for line integrals
@@ -42,3 +41,11 @@ c*** pp1, pp2 : coordinates of the end points of the segments (R, Z, 0)
 c*** ubchrds  : coordinates of the chord ends (R1, Z1, R2, Z2)
 c*** cublbli  : set identifiers for the line integrals
 c*** cublblp  : set identifiers for the line profiles
+
+      data nnvsle, nubchrd,  nubnpnt  ,  nubnpni  , nubchrdp, nubchrdi/
+
+     /       0   ,    0   , nubslp*200, nubsli*400, nubslp*0, nubsli*0/,
+     ,  angchrdp  , angchrdi  /
+     / nubchrdx*0.,nubchrdx*0./
+
+      end module ubpcom

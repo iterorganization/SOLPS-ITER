@@ -1,12 +1,6 @@
       subroutine uinpsrcv
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 13.02.2005 20:02
 c
@@ -16,7 +10,6 @@ c*** DG, then assume the default strata - unless the corresponding flag
 c*** was set in DG
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,k,l,n,ka,ipl,ipt,irc,krc,nrc,istr,irce(nstra)
       character*12 hlp_frm
       logical ex,l_hlp,hlp_err

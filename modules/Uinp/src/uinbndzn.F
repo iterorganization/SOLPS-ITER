@@ -1,12 +1,7 @@
       subroutine uinbndzn
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
+     & , izz => iz
 c
 c  version : 15.03.2001 17:12
 c
@@ -14,7 +9,6 @@ c=======================================================================
 c*** Determine the boundary zones
 c=======================================================================
       implicit none
-#include "uinpcom.inc"
       integer i,j,k,l,m,n,ix,iy,iz,n1,n2
       integer, parameter :: n_hlp=3
       integer i_sw(0:nxd+1,nbndrgn,n_hlp),i_tg(0:nyd+1,ntrgts),
@@ -251,7 +245,7 @@ c*** divide found
             if(iz.gt.nbndzon) then !{
               write(0,*) 'Too many boundary zones specified for targets'
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
-     ,                   'model and parameter "nbndzon" in uinpcom.inc'
+     ,                   'model and parameter "nbndzon" in uinput_mod.F'
               call xerrab
      .         ('Too many boundary zones specified for targets')
             end if !}
@@ -302,7 +296,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
           if(iz.gt.nbndzon) then !{
             write(0,*) 'Too many boundary zones specified for targets'
             write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
-     ,        'model and parameter "nbndzon" in uinpcom.inc'
+     ,        'model and parameter "nbndzon" in uinput_mod.F'
             call xerrab
      .       ('Too many boundary zones specified for targets')
           end if !}
@@ -385,7 +379,7 @@ c*** divide found
                 write(0,*) 'Too many boundary zones specified for ',
      ,                          hlp_txt(l)
                 write(0,*) 'STOP ==> check "Boundary divides" in the ',
-     ,                'DG model and parameter "nbndzon" in uinpcom.inc'
+     ,                'DG model and parameter "nbndzon" in uinput_mod.F'
                 call xerrab ('Too many boundary zones')
               end if !}
               lzpbndt(iz,m)=lrsbndt(k,m)
@@ -452,7 +446,7 @@ c     ,                             jc1bnds(iz,m),jc2bnds(iz,m) !###
               write(0,*) 'Too many boundary zones specified for ',
      ,                                                        hlp_txt(l)
               write(0,*) 'STOP ==> check "Boundary divides" in the DG ',
-     ,                   'model and parameter "nbndzon" in uinpcom.inc'
+     ,                   'model and parameter "nbndzon" in uinput_mod.F'
               call xerrab ('Too many boundary zones')
             end if !}
             lzpbndt(iz,m)=lrsbndt(k,m)

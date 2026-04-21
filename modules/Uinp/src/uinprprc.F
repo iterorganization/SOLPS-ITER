@@ -1,12 +1,7 @@
       subroutine uinprprc
       use b2mod_elements
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 17.02.2002 21:52
 c
@@ -14,7 +9,6 @@ c======================================================================
 c*** Prepare the reaction data for Eirene
 c======================================================================
       implicit none
-#include "uinput.inc"
       integer i,j,k,l,m,n,ic,ii,jj,kk,k0,k1,k2,k3,k4,ll,
      ,  iib,iie,iir,iik,ii1,ii2,ii3,ibgk,ipls,nrc_amds,nrc_el,
      ,  ipt,irc,m_rct,m_rcn,n_ptc,l_hlp(mreac),igd,ngn,nrc,jrc,niso,

@@ -1,12 +1,7 @@
       subroutine uichkchn(indelm,nni,nnx,indnss,nno,label)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
+      implicit none
 
 c  version : 31.03.2005 20:05
 
@@ -36,10 +31,6 @@ c***            -6 - NSS do not close the chain
 c***          -100 - unexpected error
 c***        < -100 - not enough space for NSS (needed nnx >= 100-nno) 
 c=======================================================================
-
-      implicit none
-
-#include "uinput.inc"
 
       integer nni,nnx,nno,label,indelm(max(nni,1)),indnss(max(nnx,1)),
      ,  ind(max(nni,1)+ntrgts),irt

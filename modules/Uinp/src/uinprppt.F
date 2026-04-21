@@ -1,12 +1,7 @@
       subroutine uinprppt
       use b2mod_elements
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
       implicit none
 
 c  version : 27.12.2004 23:24
@@ -14,7 +9,6 @@ c  version : 27.12.2004 23:24
 c======================================================================
 c*** Prepare the particle lists
 c======================================================================
-#include "uinput.inc"
       integer i,ii,iii,j,jj,jjj,k,l,m,mm,n,na,ni,nm,np,ipt
       integer find_matching_species
       logical ex,streql

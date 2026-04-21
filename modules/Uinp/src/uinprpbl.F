@@ -1,20 +1,13 @@
       subroutine uinprpbl
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
       use b2mod_elements
       use b2mod_solpstop
       use b2mod_subsys
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
       implicit none
 
 c======================================================================
 c*** Modify the particle lists to take into account bundling
 c======================================================================
-#include "uinput.inc"
       integer i, j, l, ic, iquote, quote_count, nc, maxne, ncnct, iyear
       integer nplsb, ianf, iend, iplsb, ja, je, ichr, ireac, jreac, iss
       integer iknd, ipls

@@ -1,12 +1,6 @@
       subroutine uinbndfl
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 01.04.2005 14:27
 c
@@ -14,7 +8,6 @@ c=======================================================================
 c*** Fill in the default boundary data
 c=======================================================================
       implicit none
-#include "uinpcom.inc"
       integer i,j,k,l,n,isp,iknd,izn,igs_hlp(nspdgen)
       logical ex,uex,hlp_fl1,hlp_fl2
       real hlp_f1
@@ -277,16 +270,9 @@ c=======================================================================
       end subroutine uinbndfl
 
       integer function find_matching_species(name)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
       use b2mod_elements
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
       implicit none
-#     include "uinpcom.inc"
       character*2 name, str_name
       integer i
       logical streql, isadigit, isplusorminus
@@ -317,16 +303,9 @@ c=======================================================================
       end function find_matching_species
 
       integer function find_matching_reagent(name)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
       use b2mod_elements
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
       implicit none
-#     include "uinpcom.inc"
       character*8 name, species_name
       integer i
       integer nplus

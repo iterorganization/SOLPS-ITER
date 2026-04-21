@@ -1,19 +1,12 @@
       subroutine uininp
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
       use b2mod_solpstop
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use uinput_mod
 c
 c  version : 23.04.99 14:36
 c
 c======================================================================
       implicit none
-#include "uinput.inc"
 #include "impcon.inc"
       integer i,j,iamd,ifile,imat,nmat,isp
       logical uex,open_file,streql,match_found,skip_wall
