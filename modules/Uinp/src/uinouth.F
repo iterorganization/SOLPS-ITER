@@ -1,13 +1,6 @@
       subroutine uinouth(ufnm)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
       implicit none
 
 c  version : 05.02.2005 00:46
@@ -21,7 +14,6 @@ c=======================================================================
 c   produce "input.eir" file with input data for eirene
 
 c=======================================================================
-#include "uinput.inc"
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 

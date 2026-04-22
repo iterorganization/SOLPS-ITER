@@ -1,14 +1,8 @@
       subroutine uinprpb2
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
       use b2mod_elements
       use b2mod_subsys
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
+      use uib2pprm
 c
 c  version : 15.08.2003 18:26
 c
@@ -16,8 +10,6 @@ c=======================================================================
 c*** Prepares the arrays of the B2 parameters to be used for replacement
 c=======================================================================
       implicit none
-#include "uinput.inc"
-#include "uib2pprm.inc"
       integer i,j,k,kk,l,m,n,ii,jj,ll,nbc,iatm,ipl,isp,ispi,ispe,ists,
      .        ihyb,nhyb,nskip,nskip2,nskip3,isrf
       integer ifl(DEF_NFL),cmp_bck(nmol,nmol+nion)

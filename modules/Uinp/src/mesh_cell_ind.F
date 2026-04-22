@@ -1,12 +1,7 @@
       integer function mesh_cell_ind(mrk,ir,iz)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
+     , , only : nxd, nyd, nx, ny
+      implicit none
 
 c  version : 28.01.2003 18:10
 
@@ -22,7 +17,6 @@ c***
 c*** Function returns 0 if valid indices are found
 c=======================================================================
       integer mrk,ir,iz
-#include "uinpcom.inc"
 c=======================================================================
       mesh_cell_ind=-1
       if(nx.le.0 .or. nx.gt.nxd .or. ny.le.0 .or. ny.gt.nyd) return

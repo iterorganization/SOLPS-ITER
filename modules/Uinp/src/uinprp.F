@@ -1,14 +1,7 @@
       subroutine uinprp
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
       use b2mod_constants
       use b2mod_subsys
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 
 c  version : 16.03.2005 23:56
 
@@ -16,8 +9,7 @@ c=======================================================================
 c*** Prepare the data for the B2-Eirene input files
 c=======================================================================
       implicit none
-#include "uinput.inc"
-      integer i,j,k,l,m,lunplt,m_hlp(nlim,nlim),n_hlp
+      integer i,j,k,l,m,m_hlp(nlim,nlim),n_hlp
       parameter (n_hlp=nlim*nlim)
       logical uex,hlp_l
       real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
@@ -314,7 +306,6 @@ c*** Output control
 
       nplotr=nr1st
       nplotp=np2nd
-      lunplt=nptal*nplt
       call vfill(nplot2,lunplt,irwl)
       if(ch2mx.le.0. .or. ch2my.le.0.) then !{
         rm_hlp=uzdim

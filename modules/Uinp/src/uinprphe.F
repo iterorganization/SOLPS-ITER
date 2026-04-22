@@ -1,13 +1,7 @@
       subroutine uinprphe
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
+      use uib2pprm
 c
 c  version : 30.06.2000 19:47
 c
@@ -15,8 +9,6 @@ c=======================================================================
 c*** Prepare the data for evaluation of He pumping in B2
 c=======================================================================
       implicit none
-#include "uinput.inc"
-#include "uib2pprm.inc"
       integer i,j,k,l,n,luind(nxd),luwrk(nxd)
       logical streql
       external xerrab, streql

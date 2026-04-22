@@ -1,13 +1,6 @@
       subroutine uinprpnd
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 14.03.2001 17:11
 c
@@ -15,7 +8,6 @@ c=======================================================================
 c*** Prepare the data for the cuts for the Eirene input file
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,k
       external xerrab
 c=======================================================================

@@ -1,14 +1,7 @@
       subroutine uinnam(unn)
-      use b2mod_types
       use b2mod_constants
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 01.04.2005 01:23
 c
@@ -17,9 +10,8 @@ c*** Data input from the DG file
 c=======================================================================
       implicit none
       character*8 unn
-#include "uinput.inc"
 #include "impcon.inc"
-      integer lunm,i,j,l,lusgm,lugpf,lugwt,luvsp,nprnl
+      integer lunm,i,j,l,lusgm,lugpf,lugwt,nuvsp,nprnl
       integer, save :: lupfr,luskel,luswch,lurefls,
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
@@ -40,7 +32,7 @@ c***         or switch for the target data (clockwise from bottom left)
 c*** luskel: counter for the segments to be skipped
 c*** lugpf : counter for the puffing sources
 c*** lugwt : counter for the grid-wall ties
-      data lusgm, luswch, luskel, lugpf, lugwt, luvsp /6*0/
+      data lusgm, luswch, luskel, lugpf, lugwt, nuvsp /6*0/
       data nprnl /999999/
       data hlp_spc / .true. /, read_chr_angl / .false. /
       data lurefls / 0 /, chtyp / ' ' /
@@ -622,7 +614,7 @@ c=======================================================================
           write(0,*) 'Too many AMDS models specified - ',
      ,      'must be no more than ',namdfs
           call xerrab
-     .     ('==> Check the DG model or increase NAMDFS in uinpcom.inc')
+     .     ('==> Check the DG model or increase NAMDFS in uinput_mod.F')
         end if !}
       case (88)
 c*** Chemical sputtering
@@ -776,7 +768,7 @@ c*** Surface data transfer from B2 to Eirene
         if(npfrgrp.gt.npfrgrpd) then !{
           write(0,*) 'Too many "PFR surface groups" specified'
           write(0,*) 'STOP ==> check the DG model and the value of ',
-     ,                          'npfrgrpd in uinpcom.inc and COMUSER.F'
+     ,                          'npfrgrpd in uinput_mod.F and COMUSER.F'
           call xerrab ('Too many "PFR surface groups" specified')
         end if !}
         if(npfrgrp.ne.i) then !{
@@ -899,39 +891,39 @@ c*** Data for diagnostics of wall erosion
         call rearri(lgwties(1,ngwtiesi),mgwtiesx,mgwties(ngwtiesi))
 c*** Data for visualisation of the surface properties
       case (132)
-        call resimi(luvsp)
-        if(luvsp.lt.0) then !{
+        call resimi(nuvsp)
+        if(nuvsp.lt.0) then !{
           write(0,*) 'uinnam: negative view identifier - ',
      ,                        'corrupted DG output???'
           call xerrab ('Negative view identifier')
-        else if(luvsp.gt.nsrfclsx) then !}{
+        else if(nuvsp.gt.nsrfclsx) then !}{
           write(0,*)
-     ,     'uinnam: too many views for surface coloring ',luvsp
+     ,     'uinnam: too many views for surface coloring ',nuvsp
           write(0,*) '  ==> Check the DG model or increase the ',
-     ,      'nsrfclsx parameter in uinpcom.inc'
+     ,      'nsrfclsx parameter in uinput_mod.F'
           call xerrab ('Too many views for surface coloring')
         end if !}
-        nsrfcls=max(luvsp,nsrfcls)
+        nsrfcls=max(nuvsp,nsrfcls)
       case (133)
-        call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+        call xertst (nuvsp.gt.0 .and. nuvsp.le.nsrfclsx,
      ,   'uinnam: undefined view identifier - corrupted DG output???')
-        call resimi(isrfclu(luvsp,1))
+        call resimi(isrfclu(nuvsp,1))
       case (134)
-        call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+        call xertst (nuvsp.gt.0 .and. nuvsp.le.nsrfclsx,
      ,   'uinnam: undefined view identifier - corrupted DG output???')
-        call resimi(isrfclu(luvsp,2))
+        call resimi(isrfclu(nuvsp,2))
       case (135)
-        call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+        call xertst (nuvsp.gt.0 .and. nuvsp.le.nsrfclsx,
      ,   'uinnam: undefined view identifier - corrupted DG output???')
-        call resimi(isrfclu(luvsp,3))
+        call resimi(isrfclu(nuvsp,3))
       case (136:147)
         l=i-135
- 1147   call xertst (luvsp.gt.0 .and. luvsp.le.nsrfclsx,
+ 1147   call xertst (nuvsp.gt.0 .and. nuvsp.le.nsrfclsx,
      ,    'uinnam: undefined view identifier - corrupted DG output???')
         call resimi(i)
         if(i.gt.0) then !{
-          msrfcls(luvsp)=msrfcls(luvsp)+1
-          lsrfcls(msrfcls(luvsp),luvsp)=l
+          msrfcls(nuvsp)=msrfcls(nuvsp)+1
+          lsrfcls(msrfcls(nuvsp),nuvsp)=l
         end if !}
 c***  input trimark is the marker for TRIA mesh
       case (148)
@@ -950,7 +942,7 @@ c***  input mesh size for current rectangle
           write(0,*) 'Too many TRIA regions: maximum ',ntrimax
           write(0,*) 'Current number of requested regions: ',ntriref
           call xerrab
-     .     (' ==> Check the DG model and ntrimax in uinpcom.inc')
+     .     (' ==> Check the DG model and ntrimax in uinput_mod.F')
         end if !}
         call resime(trisize(ntriref))
 c***  input elements indices for current rectangle

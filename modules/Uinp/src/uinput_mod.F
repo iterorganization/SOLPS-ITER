@@ -1,22 +1,580 @@
-      block data uiblkd
+      module uinput_mod
       use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
 #ifdef DIMENSIONS_MODULE
       use b2mod_dimensions
 #endif
       use carre_dimensions
+      use b2mod_layer
+     , , only: ntrack, nalloys
+      use eirmod_solps
+      implicit none
 
-c  version : 01.04.2005 14:35
+      public
+
+c*** The basic data for uinput
+      integer, private :: i, j
+
+#include "COUPLE/KOPPLDIM.F"
+
+c=======================================================================
+c*** Temporary assignment - the max. number of photon species
+      integer, parameter :: npht=1
+
+c*** Unit numbers for output and input of the files
+      integer, parameter :: iunoo=2, iunii=1
+
+c*** Variable dimensions for the output data
+      integer nstrao,natmo,nmolo,niono,nphto,nplso
+
+c*** Grid segmentation, topology, and AMDS file.
+c***  [nm]npr   : the maximum and actual numbers of radial grid regions,
+c***      npr   : their segmentation (DG);
+c***  [nm]nptseg: the maximum and actual numbers of poloidal grid zones,
+c***      nptseg: their segmentation (DG);
+c***  ntrgdflt  : default number of targets depending on the topology
+c***  ntrgts    : maximum number of targets
+c***  nntrian   : maximum number of triangular mesh nodes for input
+      integer, parameter :: nnpr=6, nnptseg=6, ntrgts=4, namdfs=20
+      integer, parameter :: nntrian=1
+      integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
+      integer nppol(nregmx),nprad(nregmx),nnreg,
+     .        cflags(5,npmamx,nrmamx,nregmx),
+     .        fdegen(4,npmamx,nrmamx,nregmx)
+      integer ncells,nicells,nbcells,nfaces,ndfaces
+      integer carre_mode,grid_mode
+      character*4 topo
+      character*48 amd_file(namdfs)
+
+c*** B2 dimensions
+      integer, parameter :: nsdb2=DEF_NSD,
+     & nxd=DEF_NXD+DEF_NCUT*5, nyd=DEF_NYD
+
+c*** Eirene dimensions
+c***  nchor     max. number of explicitly specified diagnostic chords
+c***  nstep     the maximum number of surface sources
+c***  lntsputx  max. number of material template surfaces
+c***  nsrfclsx  max. number of views
+
+      integer nplg, nppart, nstep
+      parameter (nppart=max(1,DEF_NCUT*3))
+      parameter (nplg=DEF_NXD+nppart)
+      parameter (nstep=DEF_NSTRA)
+      integer nreac, nchor, lntsputx, nsrfclsx
+      parameter (nreac=DEF_NREAC)
+      parameter (nchor=250, lntsputx=4, nsrfclsx=12)
+      integer nrad, nadd, nplt, nsd, nsdw, ncv, nsnv
+      integer nadv, nclv, nalv, nads, nals, nasp
+      integer nhd6, nmtr, nain
+      parameter (nadd=DEF_NADD)
+      parameter (nrad=n1st*n2nd*n3rd+nadd+1)
+      parameter (nplt=5, nsd=1, nsdw=1, ncv=1, nsnv=1)
+      parameter (nadv=4*(DEF_NATM+DEF_NMOL))
+      parameter (nads=1, nclv=1, nalv=1, nals=1, nasp=1)
+      parameter (nmtr=6, nain=1)
+      parameter (nhd6=DEF_NATM*nmtr)
+
+c*** Uinp dimensions
+      integer :: lugen
+      parameter (lugen=max(3,DEF_NATM))
+
+c*** The definitions below must match those found in eirmod_parmmod
+      integer ntalv, nbmax, nptal
+      parameter (ntalv=100, nbmax=10, nptal=30)
+
+c*** Cuts and grid blocks: number of cuts, their location and length,
+c***    the same for isolating cuts (B2 notation),
+c***    number of grid blocks, and grid dimensions (B2);
+c***    poloidal positions of the cuts, isolating cuts,
+c***    and the last target, the radial positions of
+c***    the separatrices and the outer wall
+c***    (see uinprpgr.F for detail)
+      integer nncut,nxcut1(nnptseg),nycut2(nnptseg),nx,ny,
+     ,        nniso,nxiso1(nxd),nxiso2(nxd),nyiso1(nxd),nyiso2(nxd)
+      integer izc1,izc2,izc3,izc4,izci,iztg,irsp,irsp2,irwl,
+     ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
+      real(kind=R4) niiso(nsdb2),tiiso,teiso
+
+c-----------------------------------------------------------------------
+c*** Species lists: number of different nuclei, plasma ions, atoms,
+c***                molecules, and test ions; notations for them,
+c***                reflected fast and thermal particles (AMDS);
+c***                atomic mass, nuclear charge, ion charge, number of
+c***                nuclei, and sputtering flag for each species,
+c***                reference nucleus for plasma ions and atoms,
+c***                CEI boundary condition kind for each nucleus,
+c***                source scaling trigger for each nucleus,
+c***                density cut-off for plasma ions (log2!!),
+c***                history following flag (atoms, molecules, and ions),
+c***                flag for 3 secondary particles for each species,
+c***                max. number of MC generations (0 - unlimited) for
+c***                atoms, molecules, and test ions,
+c***                nuclear composition for molecules and test ions;
+c***                CEI boundary condition parameter and
+c***                inboard flux fraction for each nucleus,
+c*** spcscrk - CEI boundary condition kind:
+c***  0 - default for this nucleus
+c***  1 - density for the highest ion, zero flux for the rest
+c***  2 - density for the highest ion, zero density for the rest
+c***  3 - flux for the highest ion, zero flux for the rest
+c*** spcscrp - the value of flux or density for the highest ion
+c*** spcscrf - flux fraction across the inboard CEI (DN only)
+
+      integer nspcncl,nspcpls,nspcatm,nspcmol,nspcion
+      character*8 spcsncl(natm),spcspls(npls),spcsatm(natm),
+     ,  spcsmol(nmol),spcsion(nion),
+     ,  spcsrfp(npls),spcsrfa(natm),spcsrfm(nmol),spcsrfi(nion),
+     ,  spcsrtp(npls),spcsrta(natm),spcsrtm(nmol),spcsrti(nion)
+      integer spcsmsp(npls),spcsmsa(natm),spcsmsm(nmol),spcsmsi(nion),
+     ,  spcsncp(npls),spcsnca(natm),spcsncm(nmol),spcsnci(nion),
+     ,  spcscgp(npls),spcscga(natm),spcscgm(nmol),spcscgi(nion),
+     ,  spcsfup(npls),spcsfua(natm),spcsfum(nmol),spcsfui(nion),
+     ,  spcsrsp(npls),spcsrsa(natm),spcsrsm(nmol),spcsrsi(nion),
+     ,  spcsrnp(npls),spcsrna(natm),spcscrk(natm),spcsscn(natm),
+     ,  spcsdlp(npls),spcsfla(natm),spcsflm(nmol),spcsfli(nion),
+     ,  spcsnsp(npls),spcsnsa(natm),spcsnsm(nmol),spcsnsi(nion),
+     ,  spcsnga(natm),spcsngm(nmol),spcsngi(nion),
+     ,  spcscmm(natm,nmol),spcscmi(natm,nion)
+      real(kind=R4) spcscrp(natm),spcscrf(natm)
+
+c*** Input species lists: the same + generic species (the whole chain
+c***                      related to the same atom)
+c***                      nspignp gives the number of molecules, test
+c***                      ions, and plasma ions for each selected GS;
+c***                spcids[amip] is the sampling frequency,
+c***                spcinn[mi] is the number of nuclei kinds and
+c***                spcicm[mi] the nuclear composition for
+c***                each molecule or test ion.
+      integer nspipls,nspiatm,nspimol,nspiion,nspigen,nspignp(3,natm)
+      character*8 spcincl(natm)*2,spcipls(npls)*6,spciatm(natm)*2,
+     ,  spcimol(nmol),spciion(nion),spcigen(lugen)*2,
+     ,  spcirfp(npls),spcirfa(natm),spcirfm(nmol),spcirfi(nion),
+     ,  spcirtp(npls),spcirta(natm),spcirtm(nmol),spcirti(nion),
+     ,  spcirnp(npls),spcirna(natm),
+     ,  spcirnm(natm,nmol),spcirni(natm,nion)
+      integer spcimsp(npls),spcimsa(natm),spcimsm(nmol),spcimsi(nion),
+     ,  spcincp(npls),spcinca(natm),spcincm(nmol),spcinci(nion),
+     ,  spcicgp(npls),spcicga(natm),spcicgm(nmol),spcicgi(nion),
+c     ,  spcifup(npls),spcifua(natm),spcifum(nmol),spcifui(nion),
+     ,  spcirsp(npls),spcirsa(natm),spcirsm(nmol),spcirsi(nion),
+     ,  spcinnm(nmol),spcinni(nion),spcicrk(natm),spciscn(natm),
+     ,  spcidlp(npls),spcifla(natm),spciflm(nmol),spcifli(nion),
+     ,  spcinsp(npls),spcinsa(natm),spcinsm(nmol),spcinsi(nion),
+     ,  spcinga(natm),spcingm(nmol),spcingi(nion),
+     ,  spcicmm(natm,nmol),spcicmi(natm,nion)
+      real(kind=R4)
+     ,  spcidsp(npls),spcidsa(natm),spcidsm(nmol),spcidsi(nion),
+     ,  spcicrp(natm),spcicrf(natm)
+
+c*** Default particle chains for the generic species
+c***    Number of entries, storage size; default GS list;
+c***    species notation, reflected particle, and desorbed particle;
+c***    species start index, numbers of plasma ions, molecules, and
+c***    test ions for each entry (always one atom for a GS);
+c***    atomic mass, nuclear charge, charge state, flux units (nuclei),
+c***    and '3 secondaries' flag for each entry
+      integer nspdgen,nspdlen
+      parameter (nspdgen=11, nspdlen=83)
+      character*8 spcdgen(nspdgen)*2,spcdspc(nspdlen),
+     ,  spcdrfl(nspdlen),spcdrtl(nspdlen)
+      integer lspdgen(nspdgen),nspdpls(nspdgen),
+     ,  nspdatm(nspdgen),nspdmol(nspdgen),
+     ,  nspdion(nspdgen),spcdms(nspdlen),spcdnc(nspdlen),
+     ,  spcdcg(nspdlen),spcdfu(nspdlen),spcdns(nspdlen)
+      logical no_n2(nspdlen), no_n2_model, l_ammon(nspdlen), ammonx_used
+      logical l_meta(nspdlen), meta_used, is_meta(natm)
+
+c-----------------------------------------------------------------------
+c*** Boundary conditions at the grid edge.
+
+c***  Maximum numbers of divides, kinds of boundaries (core, target,
+c***     PFR side, outer side), boundary regions of each type,
+c***     boundary zones of each kind, markers for each zone
+      integer nbnddvd,nbndknd,nbndrgn,nbndzon,nbndmrk
+      parameter (nbnddvd=400, nbndknd=4, nbndrgn=12,
+     ,  nbndzon=20, nbndmrk=100)
+
+c*** Eirene data: surface type, position, start, end, plotting color,
+c***    direction (W,S: -1; E,N: 1), reflection model
+c***    switch and group for chemical sputtering,
+c***    switch and species for physical sputtering, max. and min. number
+c***    of histories, random number initialisator, energy distribution;
+c***    transparences forth and back, absorption, wall temperature,
+c***    fudge factors for physical and chemical sputtering,
+c***    Eirene parameters SORENI and SORENE;
+c***    flag "recycling surface"; surface material
+      integer jskbnds(nbndzon,nbndknd), jcpbnds(nbndzon,nbndknd),
+     ,        jc1bnds(nbndzon,nbndknd), jc2bnds(nbndzon,nbndknd),
+     ,        jclbnds(nbndzon,nbndknd), jdrbnds(nbndzon,nbndknd),
+     ,        jrfbnds(nbndzon,nbndknd), jcsbnds(nbndzon,nbndknd),
+     ,        jcgbnds(nbndzon,nbndknd), jpsbnds(nbndzon,nbndknd),
+     ,        jppbnds(nbndzon,nbndknd), jnpbnds(nbndzon,nbndknd),
+     ,        jmpbnds(nbndzon,nbndknd), jnibnds(nbndzon,nbndknd),
+     ,        jnebnds(nbndzon,nbndknd), rfcbnds(nbndzon,nbndknd)
+      real(kind=R4)
+     ,        etfbnds(nbndzon,nbndknd), etbbnds(nbndzon,nbndknd),
+     ,        easbnds(nbndzon,nbndknd), eewbnds(nbndzon,nbndknd),
+     ,        efpbnds(nbndzon,nbndknd), efcbnds(nbndzon,nbndknd),
+     ,        esibnds(nbndzon,nbndknd), esebnds(nbndzon,nbndknd),
+     ,        rfpbnds(nbndzon,nbndknd)
+      logical nlrbnds(nbndzon,nbndknd)
+      character*8 ewmbnds(nbndzon,nbndknd)
+
+c*** Material properties of the grid edges:
+c***    dimensions for the number of material templates and grid markers
+c***    specified numbers of material templates and grid and target
+c***    markers for each template; lists of grid markers, target
+c***    markers, and template references; index of default template in
+c***    the above list; temporary storage for selected wall materials
+c***    flags "insert material specification" for each non-def. surface
+      integer nwllmrkd,nedgmrkd
+      parameter (nwllmrkd=8, nedgmrkd=20)
+      integer nwllmrk,nedgmrk(nwllmrkd),ntrgmrk(nwllmrkd),
+     ,  ledgmrk(nedgmrkd,nwllmrkd),ltrgmrk(nedgmrkd,nwllmrkd),
+     ,  lwllmrk(nwllmrkd),ledgdfl
+      real(kind=R4) wlmbnds(nbndzon,nbndknd)
+      logical bliin(nsts),bbliin(nbndzon,nbndknd)
+
+c*** B2 data: position, start, end, neutral penetration range,
+c***         start and end of recycling sources,
+c***         types of boundary conditions for Te, n, Ti, and v,
+c***         reference to a nuclei species to scale the source with;
+c***         parameters for boundary conditions for Te, Ti, n, and v
+      integer lcpbnds(nbndzon,nbndknd), lc1bnds(nbndzon,nbndknd),
+     ,        lc2bnds(nbndzon,nbndknd), lrrbnds(nbndzon,nbndknd),
+     ,        ls1bnds(nbndzon,nbndknd), ls2bnds(nbndzon,nbndknd),
+     ,        leebnds(nbndzon,nbndknd), lcobnds(nsdb2,nbndzon,nbndknd),
+     ,        leibnds(nbndzon,nbndknd), lenkbnds(nbndzon,nbndknd),
+     ,        lmobnds(nsdb2,nbndzon,nbndknd),
+     ,        lpobnds(nbndzon,nbndknd), lscbnds(natm,nbndzon,nbndknd)
+      real(kind=R4)
+     ,  beebnds(nbndzon,2,nbndknd),bcobnds(nsdb2,nbndzon,2,nbndknd),
+     ,  beibnds(nbndzon,2,nbndknd),bmobnds(nsdb2,nbndzon,2,nbndknd),
+     ,  bpobnds(nbndzon,2,nbndknd),benkbnds(nbndzon,2,nbndknd)
+      character cskbnds(nbndzon,nbndknd), ctxbnds(nbndknd)*10
+
+c*** DG data: number and list of divides, numbers and lists of
+c***      explicitly specified zones of each type and markers there;
+c***      surface type, plotting color, reflection model,
+c***      switch and group for chemical sputtering, switch and species
+c***      for physical sputtering, flag "recycling surface", max. and
+c***      min. number of histories, random number initialisator,
+c***      energy distribution;
+c***      transparences forth and back, absorption, wall temperature,
+c***      fudge factors for physical and chemical sputtering,
+c***      Eirene parameters SORENI and SORENE;
+c***      material, species to scale and with which to scale;
+c***      flags "use default recycling";
+c***      types of boundary conditions for Te, n, Ti, and v;
+c***      parameters for boundary conditions for Te, Ti, n, and v.
+c*** ldvbndx(0) is the number of radial markers
+      integer mdvbndx,ldvbndx(0:nbnddvd),
+     ,  mznbndx(nbndknd),lznbndx(nbndzon,nbndknd),
+     ,  mmkbndx(nbndknd),lmkbndx(nbndzon,nbndknd)
+c***                    Below, index "0" corresponds to a group default
+      integer jskbndx(0:nbndzon,nbndknd), jclbndx(0:nbndzon,nbndknd),
+     ,        jrfbndx(0:nbndzon,nbndknd), jcsbndx(0:nbndzon,nbndknd),
+     ,        jcgbndx(0:nbndzon,nbndknd), jpsbndx(0:nbndzon,nbndknd),
+     ,        jppbndx(0:nbndzon,nbndknd), nlrbndx(0:nbndzon,nbndknd),
+     ,        jnpbndx(0:nbndzon,nbndknd), jmpbndx(0:nbndzon,nbndknd),
+     ,        jnibndx(0:nbndzon,nbndknd), jnebndx(0:nbndzon,nbndknd),
+     ,        rfcbndx(0:nbndzon,nbndknd)
+      real(kind=R4)
+     ,        etfbndx(0:nbndzon,nbndknd), etbbndx(0:nbndzon,nbndknd),
+     ,        easbndx(0:nbndzon,nbndknd), eewbndx(0:nbndzon,nbndknd),
+     ,        efpbndx(0:nbndzon,nbndknd), efcbndx(0:nbndzon,nbndknd),
+     ,        esibndx(0:nbndzon,nbndknd), esebndx(0:nbndzon,nbndknd),
+     ,        rfpbndx(0:nbndzon,nbndknd)
+      character*2 ewmbndx(0:nbndzon,nbndknd)*8,
+     ,  escbndx(natm,0:nbndzon,nbndknd), eswbndx(natm,0:nbndzon,nbndknd)
+      logical dfrbndx(nbndknd)
+      integer
+     ,  leebndx(0:nbndzon,nbndknd), lcobndx(nsdb2,0:nbndzon,nbndknd),
+     ,  leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd),
+     ,  lpobndx(0:nbndzon,nbndknd), lenkbndx(0:nbndzon,nbndknd)
+      real(kind=R4)
+     ,  beebndx(0:nbndzon,2,nbndknd),bcobndx(nsdb2,0:nbndzon,2,nbndknd),
+     ,  beibndx(0:nbndzon,2,nbndknd),bmobndx(nsdb2,0:nbndzon,2,nbndknd),
+     ,  bpobndx(0:nbndzon,2,nbndknd),benkbndx(0:nbndzon,2,nbndknd)
+c*** Default boundary conditions for generic species. Index order:
+c*** species, [parameter], boundary kind, ion(2-the highest, 1-the rest)
+      integer kcobndx(nspdgen,nbndknd,2),   kmobndx(nspdgen,nbndknd,2)
+      real(kind=R4)
+     ,  dcobndx(nspdgen,2,nbndknd,2), dmobndx(nspdgen,2,nbndknd,2)
+      character*2 dscbndx(nspdgen)
+c*** Flags "B2 global data read" and "use time stratum";
+c*** total power influx [MW] with electrons and ions, its fraction
+c*** across the inner CEI (DN only).
+      logical glb2read,usetmstr
+      real(kind=R4) pwrcrtte,pwrcrtti,pwrcrfri
+
+c*** Technical data: numbers of regions and zones of each kind,
+c***             region which can be combined with each region,
+c***             zone reference to the boundary regions,
+c***             radial and poloidal range of B2 cells for each region,
+c***             their positions, zone range and position ;
+c***             flags "explicit boundary specified" and
+c***             "explicit recycling specified" for each zone;
+c***             boundary code (E, W, S, N) for each region and zone;
+      integer nrgbndt(nbndknd),nznbndt(nbndknd),
+     ,  lcmbndt(nbndrgn,nbndknd),lrfbndt(nbndzon,nbndknd),
+     ,  lrrbndt(nbndrgn,nbndknd,2),lrpbndt(nbndrgn,nbndknd,2),
+     ,  lrsbndt(nbndrgn,nbndknd),
+     ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd),
+     ,  lzrbndt_us(nbndzon,nbndknd,2)
+      logical bxsbndt(nbndzon,nbndknd),rxsbndt(nbndzon,nbndknd)
+      character crgbndt(nbndrgn,nbndknd),cznbndt(nbndzon,nbndknd)
+
+c-----------------------------------------------------------------------
+c*** Whole targets: number of targets, PFR edges, CFR edges,
+c***           old-style specification, target counters;
+c***           switches for reflection, phys. and chem. sputtering,
+c***           phys. sputtered particle, chem. surface group, max. and
+c***           min. number of histories, RNG initialisator;
+c***           multipliers for phys. and chem. sput., wall temperature,
+c***           absorption, transparence forth and back;
+c***           material; flag "target data was read"
+      integer ntrgte,jedgep(ntrgts),jedgec(ntrgts),jedgeo(ntrgts),
+     ,  ntrgto,ntrgtm
+      integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
+     ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
+     ,  tgnini(ntrgts),trefcell(ntrgts),tgfclbl(ntrgts)
+      real(kind=R4)
+     ,  tgsppff(ntrgts),tgspcff(ntrgts),tgewall(ntrgts),
+     ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts),
+     ,  trfpress(ntrgts)
+      character*8 made_of(ntrgts)
+      logical tgdtinpt
+
+c-----------------------------------------------------------------------
+      integer mreac
+      parameter (mreac=2*nreac)
+
+c*** Reaction lists: number of datasets, groups, massp, masst,
+c***    number of the output particles, extrapolation modes;
+c***    reaction type, database, chapter and reaction;
+c***    input and output particles (AMDS notation);
+c***    deltae, tmin, and tmax from AMDS, energies of the
+c***    reaction products (for DS), extrapolation coefficients;
+c***    flag "Use the default model"
+      integer nnrctn,rctngrp(mreac),rctnmsp(mreac),rctnmst(mreac),
+     ,  rctnnmo1(mreac),rctnnmo2(mreac),rctnnmo3(mreac),
+     ,  rctnimn(mreac),rctnimx(mreac),rctniz(mreac)
+      character*2 rctntyp(mreac),rctneln(mreac)
+      character*4 rctnchp(mreac)
+      character*6 rctndbs(mreac)
+      character*8 rctnptpr(mreac),rctnptin(mreac),
+     ,            rctnpto1(mreac),rctnpto2(mreac),rctnpto3(mreac)
+      character*9 rctnrct(mreac)
+      character*60 rctnbdl(mreac)
+      real(kind=R4)
+     ,  rctndlte(mreac),rctntmin(mreac),rctntmax(mreac),
+     ,  rctnenr1(mreac),rctnenr2(mreac),rctnexcf(mreac,6)
+      logical rctndflt
+
+c*** Default reaction lists: the same for each species (nsrctd and
+c***    spcrctd are the number and the list of default species;
+c***    primary particle is determined from spcrctd)
+      integer nsrctd
+      parameter (nsrctd=14)
+      character*8 spcrctd(nsrctd)
+      integer nnrctd(nsrctd),rctdgrp(mreac,nsrctd),
+     ,  rctdmsp(mreac,nsrctd),rctdmst(mreac,nsrctd)
+      character*2 rctdtyp(mreac,nsrctd),rctdeln(mreac,nsrctd)
+      character*4 rctdchp(mreac,nsrctd)
+      character*6 rctddbs(mreac,nsrctd)
+      character*8 rctdptpr(mreac,nsrctd),rctdptin(mreac,nsrctd),
+     ,            rctdpto1(mreac,nsrctd),rctdpto2(mreac,nsrctd),
+     ,            rctdpto3(mreac,nsrctd)
+      character*9 rctdrct(mreac,nsrctd)
+      real(kind=R4)
+     ,  rctddlte(mreac,nsrctd),rctdtmin(mreac,nsrctd),
+     ,  rctdtmax(mreac,nsrctd),
+     ,  rctdenr1(mreac,nsrctd),rctdenr2(mreac,nsrctd)
+      integer n_hlp_h,m_hlp_h
+      parameter (n_hlp_h=16, m_hlp_h=3)
+      integer hlp_h_m(n_hlp_h)
+      character*4 hlp_h(n_hlp_h,m_hlp_h,2)
+
+c-----------------------------------------------------------------------
+c*** Chemical sputtering: pairs projectile-wall and sputtered particle
+c***                      as input from DG
+      integer nchsppr
+      parameter (nchsppr=DEF_NATM*(ntrack+nalloys))
+      character chsptgt(nchsppr)*24,chspspt(nchsppr)*8
+
+c-----------------------------------------------------------------------
+c*** Gas puffing strata: number, corresponding strata, number of surface
+c***    segments and their lists, angular distribution (namods in
+c***    Eirene), first additional cells (NASOR), max. and min. number of
+c***    histories, RNG initialisation, nuclear composition
+c***    of the source, species to scale with (B2);
+c***    species (AMDS), species to scale with (AMDS);
+c***    gas temperature, its default value, parameter for
+c***    angular distribution, and source strength
+      integer ngpfstr,ingpfstr(nstra),kgpfstr(nstra),lgpfstr(nlim),
+     ,  jgpfstr(nstra),mgpfstr(nstra),npgpfstr(nstra),mpgpfstr(nstra),
+     ,  nigpfstr(nstra),igpfstr(natm,nstra),lsgpfstr(natm,nstra)
+      character*12 cgpfstrs(nstra),sgpfstrs(natm,nstra)*2
+      real(kind=R4) tgpfstr(nstra),tgpfstd,pgpfstr(nstra),fgpfstr(nstra)
+
+c*** Recombination strata: number of strata, starting/ending cells in
+c***    radial and poloidal directions, number of
+c***    histories, RNG initialisation, species to scale
+c***    with (B2); recombined atom (AMDS),
+c***    species to scale and to scale with (AMDS);
+c***    flag "use defaults if no sources specified"
+      integer nrcmstr,lrcmrb(nstra),lrcmre(nstra),lrcmpb(nstra),
+     ,  lrcmpe(nstra),nrcmstrs(nstra),ircmstrs(nstra),
+     ,  lsrcmstr(natm,nstra)
+      character*6 crcmstrs(nstra),srcmstrs(natm,nstra)*2,
+     ,  wrcmstrs(natm,nstra)*2
+      logical srcvdflt
+
+c-----------------------------------------------------------------------
+c*** Data for wall erosion calculation in Eirene - to be used for a
+c*** separate Eirene input file called "diag2.eir"
+c***    lntspcu   becomes lntspec
+c***    lntsptu   becomes lntsput
+c***    nmcsptu   becomes nmcsput
+c***    nlstadu   becomes nlstadds
+c***    ngwtiesi  becomes ngwties
+      integer lntspcu,lntsptu,nmcsptu,nlstadu,dgntcpu,dgnptsfc,
+     ,  dgnfile,listaddi(nlim),ngwtiesi
+      real(kind=R4) dgalloc
+
+c-----------------------------------------------------------------------
+c*** Data for visualisation of the surface properties in Eirene for all
+c*** nvspfls Eirene input files (input.eir, test.eir, and diag2.eir)
+c***    nsrfclu   becomes nsrfcls
+c***    msrfclu   becomes msrfcls
+c***    lsrfclu   becomes lsrfcls
+c***    isrfclu(i,j).ne.0 : specify view i in the file j
+      integer nvspfls
+      parameter (nvspfls=3)
+      integer nsrfclu(nvspfls),msrfclu(nsrfclsx,nvspfls),
+     ,  lsrfclu(msrfclsx,nsrfclsx,nvspfls),isrfclu(nsrfclsx,nvspfls)
+
+c-----------------------------------------------------------------------
+c*** Numbering offset for "additional surfaces" and surface indices:
+c***    indasrfe(i) is the new number for an old number i,
+c***    indasrfs(i) is the old number for a new number i
+      integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
+
+c*** Coordinates of the O-point
+      real(kind=R4) xlpcntr(3)
+
+c*** Data for toroidal geometry specification
+      real(kind=R4) zaator,roator
+      integer nttrator
+
+c*** Midplane position in the B2 grid, Eirene time allocation in B2
+      integer jxi,jxa,ntcpub2
+
+c*** Vessel specification for b2plot: number of segments, index
+      integer nnvsle, nmvsle(nlim)
+
+c-----------------------------------------------------------------------
+c*** Data for triangular mesh: maximum number of mesh refinment zones;
+c*** temporary arrays for ILPLG parameter;
+c*** mesh size and coordinates of refinment zone (rectangle);
+c*** refinment zone markers from DG, and actual number of zones
+       integer ntrimax, ntriplgmax, nsegtriplgmax
+       parameter (ntrimax=100, ntriplgmax = 20, nsegtriplgmax = 20)
+       integer ilplgu(nsts),jlplgu(nlim),ilplgdg(nlim)
+       real(kind=R4)
+     ,      trisize(0:ntrimax), trixmin(ntrimax), trixmax(ntrimax),
+     ,      triymin(ntrimax), triymax(ntrimax)
+       integer trirefel(2*nlim),trirefcn(ntrimax),ntriref
+       integer ntriplg, nntriplg(ntriplgmax), nsegtriplg(ntriplgmax),
+     ,      nnsstriplg(ntriplgmax),nfclbltriplg(ntriplgmax)
+       integer triplg(nlim,ntriplgmax),
+     ,      triplgnss(2*nsegtriplgmax,ntriplgmax),
+     ,      triplgfclbl(2*nsegtriplgmax,ntriplgmax)
+
+c-----------------------------------------------------------------------
+c*** Data for pre-defined 'density models' in Eirene:
+c*** number of these models and max. length of their names;
+c*** names of the models
+      integer ndnmdlp,ldnmdlp
+      parameter (ndnmdlp=11,ldnmdlp=10)
+      character*(ldnmdlp) cdnmdlp_sel(ndnmdlp)
+
+c-----------------------------------------------------------------------
+c*** Data for postprocessing windows: max. number of them
+      integer npwinx
+      parameter (npwinx=16)
+
+c-----------------------------------------------------------------------
+c*** Helium pumping data: flag "Do this section";
+c***    fusion power, ratio of He to D pumping speeds;
+c***    pump location (1 - lower PFR, 2 - outer side, other - no pump),
+c***    bottom and top of the cell ranges, inner and outer, where the
+c***    neutral pressure is to be averaged, indices of the D and He
+c***    atoms in the list, amount of hydrogenic nuclei in the molecules,
+c***    list of cell numbers indicating the pump and their number,
+c***    list of wall segments indicating the pump and their number
+      logical do_hepdt
+      real(kind=R4) pwrhepdt,pmphepdt
+      integer locphep,lpbihep,lpbohep,lptihep,lptohep,
+     ,  j_he_at,j_h_at(3),j_ne_at,
+     ,  l_h_mol(nmol,3),lstclhep(nxd),nstclhep,lhetrgts(nlim),nhetrgts
+
+c-----------------------------------------------------------------------
+c*** Data substitution for the Eirene test run
+      integer ttntcpu,ttnfile,ttnpts(nstra)
+      real(kind=R4) ttalloc
+      logical
+     ,  ttchst,ttcref,ttcint,ttcamd,ttcsou,ttcsur,ttcbla,ttcblm,ttcbli,
+     ,  ttcblp,ttcble,ttcblph,ttctal,ttcoct,ttccen,ttcrnf,ttcsrc,
+     ,  ttcdbg2,ttcdbge,ttcdbgm,ttcdbgf,
+     ,  ttcdbgl,ttcdbgs,ttcdbgg,ttcdbgmpi,ttcdbgc,ttchktim,ttcscl,
+     ,  ttpl1st,ttpl2nd,ttpladd,ttplhst,ttplcut(3),ttplnums,tttest,
+     ,  ttplspec,ttprspec,ttplargl,ttprargl,ttlsprcl
+
+c-----------------------------------------------------------------------
+c*** Eirene surface data through B2:
+c***      number of groups, number of surfaces in the groups, wall group
+c***      for chem. sputtering, the first and last positions of the
+c***      group in the common list, the common list of affected
+c***      segments, the input list of affected segments;
+c***      absorption, transparency out, transparency in, surface
+c***      material in Eirene notation, surface temperature, physical
+c***      sputtering factor, chemical sputtering factor;
+c***      surface material in human notation, group identifier
+      integer n_spcsrf, k_spcsrf(DEF_NSPCSRFG), sps_sgrp(DEF_NSPCSRFG),
+     ,  i_spcsrf(DEF_NSPCSRFG), j_spcsrf(DEF_NSPCSRFG),
+     ,  l_spcsrf(DEF_NSPCSRFG), ll_spcsrf(nlimps,DEF_NSPCSRFG)
+      real(kind=R4)
+     ,  sps_absr(DEF_NSPCSRFG), sps_trno(DEF_NSPCSRFG),
+     ,  sps_trni(DEF_NSPCSRFG), sps_mtri(DEF_NSPCSRFG),
+     ,  sps_tmpr(DEF_NSPCSRFG), sps_spph(DEF_NSPCSRFG),
+     ,  sps_spch(DEF_NSPCSRFG)
+      character*4 sps_mtrl(DEF_NSPCSRFG), sps_id(DEF_NSPCSRFG)*16
+
+c-----------------------------------------------------------------------
+c*** Gas flows in PFR:
+      integer npfrgrp,npfrgrpd
+      parameter (npfrgrpd=12)
+      integer lpfrgrp(DEF_NLIM),ipfrgrp(npfrgrpd),jpfrgrp(npfrgrpd)
+      character gpfrgrp(npfrgrpd)*8
+
+c-----------------------------------------------------------------------
+c*** Limiter and linear configurations - cheating:
+      logical lm_cnfg, ln_cnfg
+      integer lm_vhst, lm_whst
+
+c-----------------------------------------------------------------------
+c*** Wall material data
+      character*8 umtrl(nlim)
 
 c=======================================================================
 c*** Standard set of input data for eirene - and some other data
 c=======================================================================
-      implicit none
-#include "uinput.inc"
-      integer i,j
-      common /uiblkd_local/ i,j
+
+      integer ngwtiesx
+      parameter (ngwtiesx=2*n2nd)
+      integer cbnrmx
+      parameter (cbnrmx=6+2+1+1)
       integer, parameter :: lurpst=n1st*nplg, luznknd=nbndzon*nbndknd,
      ,  lulim2=nlim*nlim,
      ,  lu9=9*nlim,         lustsr=nsrfs*nstra, luatsr=natm*nstra,
@@ -25,6 +583,7 @@ c=======================================================================
      ,  lupw=nlimps*npwinx, lusg=nstep*ngitt, nchor2=nchor*nchor,
      ,  lur9=9*mreac, lur6=6*mreac, luml=3*nmol,
      ,  lcbs=8*nsdb2*cbnrmx, lcbe=8*cbnrmx, lcfs=8*nsdb2
+
 c=======================================================================
 c*** General information
 
@@ -140,17 +699,24 @@ c*** He pumping data
      ,  pwrhepdt,pmphepdt,nstclhep,nhetrgts/
      /    570.  ,   0.8  ,    0   ,   0    /
 
-c*** Data for visualisation of the surface properties
-
-      integer, parameter :: luvsp=nsrfclsx*nvspfls
-      data nsrfclu  , nsrfcls, isrfclu, msrfclu,  msrfcls   /
-     /    nvspfls*0 ,    0   , luvsp*0, luvsp*0, nsrfclsx*0 /
-
 c*** Data for TRIA mesh
       data ilplgdg,ntriref /
      /      nlim*0,   0    /
 
+c*** 0: additional data for uinout control
+c*** Temporary - max. number of reactions in cdenmodel section
+      integer nrcdn
+      parameter (nrcdn=1)
+
 c*** 1
+      integer nprll,nmode,ntcpu,nfile,niter0,niter,ntime0,ntim1,
+     ,        nevntmax,nvnmxtr
+      integer noptim,noptm1,ngeom_usr,ncoup_input,nsmstra,
+     ,        nstoram,ngstal,nrtal1,nreac_add,lfrm15
+      logical nlscl,nltest,nlana,nldrft,nlcrr,nlerg,nlident,nlone,
+     ,        nlmovie,nldfst,nlranmar,nlcascad,nloctree,nlwrmsh,
+     ,        nexvs,nltrimesh,nlsoledge,nlspcspt
+      character txtrun*71
 
       data nprll, nmode , ntcpu, nfile, niter0, niter, ntime0, ntim1 /
      /      -1  ,   1   ,  50  , 5000 ,   1   ,   1  ,   0   ,   1   /,
@@ -167,6 +733,18 @@ c*** 1
       data  txtrun / ' EIRENE input file generated with uinp v. 2.2' /
 
 c*** 2
+
+      integer indgrd(3),nr1st,nrsep,nrplg,npplg,nrknot,npoin1(2,nppart),
+     ,  necke(3,n1st),nchbar(3,n1st),nseite(3,n1st),inmti(3,n1st),
+     ,  np2nd,npsep,nppla,npper,nt3rd,ntsep,nttra,ntper,nbmlt,nradd
+      real ria, ragrid, raa, rarefl, ep1in, ep1ot, ep1ch, exep1, ellin,
+     ,  ellot, ellch, exell, triin, triot, trich, extri,
+     ,  xpcor, ypcor, zpcor, plrefl, xpol(n1st,nplg), ypol(n1st,nplg),
+     ,  xtrian(nntrian), ytrian(nntrian), yia, yagrid, yaa, yya, zia,
+     ,  zagrid, zaa, zza, roa, volcor(nbmax), voladd(nadd)
+      logical nlrad, nlslb, nlcrc, nlell, nltri, nlplg, nlfem, nltet,
+     ,    nlgen, nlpol, nlply, nlpla, nlplp, nltor, nltrz, nltra,
+     ,    nltrt, nlmlt, nladd
 
       data indgrd, nr1st, nrsep, nrplg, npplg,nrknot, npoin1  /
      /    6, 1, 1,   0  ,   1  ,   0  ,   0  ,   0  ,lu21pr*1 /,
@@ -197,6 +775,21 @@ c*** 2
 
 c*** 3a
 
+      integer nstsi,    idimp(nsts),  inump(nsts),  irpta1(nsts),
+     ,    irpte1(nsts), irpta2(nsts), irpte2(nsts), irpta3(nsts),
+     ,    ifclbla(nsts),ifclble(nsts),
+     ,    irpte3(nsts), iliin(nsts),  ilside(nsts), ilswch(nsts),
+     ,    ilequi(nsts), iltor(nsts),  ilcol(nsts),  ilfit(nsts),
+     ,    ilcell(nsts), ilbox(nsts),  ilplg(nsts),  ilref(nsts),
+     ,    ilsptp(nsts), ilsptc(nsts), isrss(nsts),  isrc(nsts),
+     ,    lchspnws(nsts),isrsg(nsts), arefcell(nsts)
+      real xmlim(nsts), ewall(nsts),  ewbin(nsts),  transp(nsts,2),
+     ,    recycc(nsts), recycf(nsts), recyct(nsts), recprm(nsts),
+     ,    recycs(nsts), exppl(nsts),  expel(nsts),  expil(nsts),
+     ,    fsheat(nsts), echspts(nsts),fchspts(nsts),sptprm(nsts),
+     ,    arfpress(nsts)
+      character txtsfl(nsts)*64
+
       data  nstsi , idimp , inump , irpta1, irpte1,  iliin , ilside /
      /        0   , nsts*2, nsts*1, nsts*1, nsts*1, nsts*-1, nsts*0 /,
      ,      ilswch, ilequi, ilcol , irpta2, irpte2, irpta3, irpte3 /
@@ -219,6 +812,32 @@ c*** 3a
       data tgdtinpt / .false. /
 
 c*** 3b
+
+      integer nlimi,    itend(nlim),  itini(nlim), jliin(nlim),
+     ,    jlside(nlim), jlequi(nlim), jltor(nlim), jlcol(nlim),
+     ,    jlfit(nlim),  jlbox(nlim),  jlref(nlim), jlsptp(nlim),
+     ,    jlsptc(nlim), jsrss(nlim),  jsrc(nlim),  lchspnwa(nlim),
+     ,    jsrsg(nlim),  jlplg(nlim),  fclbl(nlim), omp_elm, imp_elm
+      integer jadch0(nlim), jadch1(nlim,nlim), jadnsw(nlim),
+     ,    jadmsw(nlim), jadlsw(nlim), jadksw(nlim), jadjsw(nlim),
+     ,    jadisw(nlim), jlblck(nlim), jlacll(nlim), refcell(nlim)
+      real rlb(nlim),  sarea(nlim),rlwmn(nlim),rlwmx(nlim),
+     ,     a0lm(nlim), a1lm(nlim), a2lm(nlim), a3lm(nlim), a4lm(nlim),
+     ,     a5lm(nlim), a6lm(nlim), a7lm(nlim), a8lm(nlim), a9lm(nlim),
+     ,     p1(3,nlim), p2(3,nlim), p3(3,nlim), p4(3,nlim), p5(3,nlim),
+     ,     p6(3,nlim), xlims1(nlim,9), ylims1(nlim,9), zlims1(nlim,9),
+     ,     xlims2(nlim,9), ylims2(nlim,9), zlims2(nlim,9),
+     ,     alims(nlim,9), xlims(nlim,9), ylims(nlim,9), zlims(nlim,9),
+     ,     alims0(nlim,9), xlims3(nlim,9), ylims3(nlim,9),
+     ,     zlims3(nlim,9), xmlma(nlim), ewala(nlim), ewbna(nlim),
+     ,     trnspa(nlim,2), rcycca(nlim), rcycfa(nlim), rcycta(nlim),
+     ,     rcycsa(nlim), exppla(nlim), expela(nlim), expila(nlim),
+     ,     rcprma(nlim), sptpra(nlim), echspta(nlim),fchspta(nlim),
+     ,     xlcor(nlim), ylcor(nlim), zlcor(nlim),
+     ,     xlref(nlim), ylref(nlim), zlref(nlim), xlrot(nlim),
+     ,     ylrot(nlim), zlrot(nlim), alrot(nlim), fsheata(nlim),
+     ,     refpress(nlim)
+      character txtsfa(nlim)*64
 
       data laddsrfs, indasrfs, indasrfe / 0, 0, nlim*0, 0, nlim*0 /
       data nlimi, jadch0,  jadch1 , jadnsw, jadmsw, jadlsw, jadksw /
@@ -260,6 +879,67 @@ c*** 3b
       data txtsfa / nlim*' ' /
 
 c*** 4
+
+      integer nreaci, ir(mreac), massp(mreac), iz(mreac),
+     ,    masst(mreac),
+     ,    ifex1mn(mreac), ifex1mx(mreac),
+     ,    ifex2mn(mreac), ifex2mx(mreac), nrcln
+      real delpot(mreac),
+     ,  rc1mn(mreac),rc1mx(mreac),rc2mn(mreac),rc2mx(mreac),
+     ,  fp1(mreac,6),fp2(mreac,6),
+     ,  creac(9,mreac)
+      logical lconst(mreac)
+      character filnam(mreac)*8, h123(mreac)*4, reac(mreac)*9,
+     ,    crc(mreac)*3,elname(mreac)*2,bundling(mreac)*60
+
+c*** 4a
+
+      integer natmi,nmeta,
+     ,  nmassa(natm),nchara(natm),isrfa(natm),isrta(natm),
+     ,  nmseca(natm),nrca(natm),nfola(natm),ngena(natm),nhsta(natm),
+     ,  ireaca(natm,nreac),ibulka(natm,nreac),iscd1a(natm,nreac),
+     ,  iscd2a(natm,nreac),iscd3a(natm,nreac),iscd4a(natm,nreac),
+     ,  iscdea(natm,nreac),iestma(natm,nreac),ibgka(natm,nreac)
+      real eeleca(natm,nreac), ebulka(natm,nreac), escd1a(natm,nreac),
+     ,     escd2a(natm,nreac), freaca(natm,nreac), edpota(natm,nreac)
+      character texta(natm)*8
+
+c*** 4b
+
+      integer nmoli,nmassm(nmol),ncharm(nmol),nprtm(nmol),isrfm(nmol),
+     ,  isrtm(nmol),nmsecm(nmol),nrcm(nmol),
+     ,  nfolm(nmol),ngenm(nmol),nhstm(nmol),lkindm(nmol),
+     ,  ireacm(nmol,nreac),ibulkm(nmol,nreac),iscd1m(nmol,nreac),
+     ,  iscd2m(nmol,nreac),iscd3m(nmol,nreac),iscd4m(nmol,nreac),
+     ,  iscdem(nmol,nreac),iestmm(nmol,nreac),ibgkm(nmol,nreac)
+      real eelecm(nmol,nreac), ebulkm(nmol,nreac), escd1m(nmol,nreac),
+     ,     escd2m(nmol,nreac), freacm(nmol,nreac)
+      character textm(nmol)*8
+
+c*** 4c
+
+      integer nioni,nmassi(nion),nchari(nion),nprti(nion),nchrgi(nion),
+     ,  isrfi(nion),isrti(nion),nmseci(nion),nrci(nion),nfoli(nion),
+     ,  ngeni(nion),nhsti(nion),lkindi(nion),
+     ,  ireaci(nion,nreac),ibulki(nion,nreac),
+     ,  iscd1i(nion,nreac),iscd2i(nion,nreac),iscd3i(nion,nreac),
+     ,  iscd4i(nion,nreac),
+     ,  iscdei(nion,nreac),iestmi(nion,nreac),ibgki(nion,nreac)
+      real eeleci(nion,nreac), ebulki(nion,nreac), escd1i(nion,nreac),
+     ,     escd2i(nion,nreac), freaci(nion,nreac)
+      character texti(nion)*8
+
+c*** 4d
+
+      integer nphti,isrff(npht),isrtf(npht),nmsecf(npht),
+     ,  nrcf(npht),nfolf(npht),ngenf(npht),nhstf(npht),
+     ,  ireacf(npht,nreac),ibulkf(npht,nreac),
+     ,  iscd1f(npht,nreac),iscd2f(npht,nreac),iscd3f(npht,nreac),
+     ,  iscd4f(npht,nreac),
+     ,  iscdef(npht,nreac),iestmf(npht,nreac),ibgkf(npht,nreac)
+      real eelecf(npht,nreac),ebulkf(npht,nreac),escd1f(npht,nreac),
+     ,     escd2f(npht,nreac),freacf(npht,nreac),edpotf(npht,nreac)
+      character textf(npht)*8
 
       data nreaci,nrcln,  ir   , massp , masst ,  iz    /
      /        0  ,  0  ,mreac*0,mreac*0,mreac*0,mreac*1 /
@@ -674,6 +1354,33 @@ c      integer lura,lurm,luri,lurf
 
 c*** 5
 
+      integer nplsi,nplsh,nbgk,
+     ,  nmassp(npls),ncharp(npls),nprtp(npls),nchrgp(npls),
+     ,  isrfp(npls),isrtp(npls),nmsecp(npls),nrcp(npls),idnslmp(npls),
+     ,  nmassph(npls),isrfph(npls),isrtph(npls),
+     ,  nfolp(npls),ngenp(npls),nhstp(npls),
+     ,  ireacp(npls,nreac),ibulkp(npls,nreac),
+     ,  iscd1p(npls,nreac),iscd2p(npls,nreac),iscd3p(npls,nreac),
+     ,  iscd4p(npls,nreac),iscdep(npls,nreac),nrep(npls)
+      real eelecp(npls,nreac), ebulkp(npls,nreac), escd1p(npls,nreac),
+     ,     escd2p(npls,nreac), freacp(npls,nreac)
+      integer ispcdn(npls,nrcdn),itpcdn(npls,nrcdn),istrcdn(npls,nrcdn)
+      real valcdn(npls,5),bltzcdn(npls),dltecdn(npls),acrncdn(npls)
+      character cdnmdlp(npls)*(ldnmdlp),fnamcdn(npls,nrcdn)*6,
+     ,    h2cdn(npls,nrcdn)*4,reaccdn(npls,nrcdn)*9,crcdn(npls,nrcdn)*3
+      integer indpro(12)
+      real te0, te1, te2, te3, te4, te5,
+     ,     ti0(npls), ti1(npls), ti2(npls), ti3(npls), ti4(npls),
+     ,     ti5(npls), di0(npls), di1(npls), di2(npls), di3(npls),
+     ,     di4(npls), di5(npls), vx0(npls), vx1(npls), vx2(npls),
+     ,     vx3(npls), vx4(npls), vx5(npls), vy0(npls), vy1(npls),
+     ,     vy2(npls), vy3(npls), vy4(npls), vy5(npls), vz0(npls),
+     ,     vz1(npls), vz2(npls), vz3(npls), vz4(npls), vz5(npls),
+     ,     zi0(npls), zi1(npls), zi2(npls), zi3(npls), zi4(npls),
+     ,     zi5(npls),
+     ,     b0, b1, b2, b3, b4, b5, vl0, vl1, vl2, vl3, vl4, vl5
+      character textp(npls)*8, textph(npls)*8
+
       integer lurp,lurc,lup5,lup6
       parameter (lurp=nreac*npls, lurc=nrcdn*npls)
       parameter (lup5=5*npls, lup6=6*npls)
@@ -717,6 +1424,39 @@ c*** 5
 
 c*** 6
 
+      integer luftrm
+      parameter (luftrm=1)
+      integer nnftrm, nchsppri,
+     ,     lchsptrg(nchsppr), lchspgrp(nchsppr),
+     ,     lchspprt(nchsppr), lchspprp(nchsppr), lchsptgt(nchsppr),
+     ,     lchsptgp(nchsppr), lchspnwl(nchsppr), lchspaux(5,nchsppr)
+      real datm(natm), dmol(nmol), dion(nion), dpls(npls), dplsh(npls),
+     ,     ermin, ercut, rprob0, rinteg, einteg, ainteg,
+     ,     ychsptg(nchsppr), echsptg(nchsppr), fchsptg(nchsppr),
+     ,     achsptg(3,nchsppr)
+      logical nltrim
+      character*8 filtrm(nhd6),path*60
+
+c*** Surface Cards
+      integer maxsc,nscards
+      parameter (maxsc=100)
+      character*(72) scard_name(maxsc)
+      integer scilref(maxsc),scilspt(maxsc),scisrs(maxsc),
+     ,       scisrc(maxsc),sclchspnwl(maxsc),scisrsg(maxsc),
+     ,       screfcell(maxsc)
+      real scxmlim(maxsc),scewall(maxsc),scewbin(maxsc),
+     ,  sctransp(maxsc,2),scfsheat(maxsc),screcycf(maxsc),
+     ,  screcyct(maxsc),scrcprm(maxsc),scexppl(maxsc),scexpel(maxsc),
+     ,  scexpil(maxsc),screcycs(maxsc),scychsptg(maxsc),
+     ,  scechsptg(maxsc),scfchsptg(maxsc),scstprm(maxsc),
+     ,  screfpress(maxsc)
+      integer iscrd(nsts),jscrd(nlim)
+      integer maxchmvar,maxchsc,nchemvar
+      parameter (maxchmvar=nlim,maxchsc=nlim*(natm+nmol+nion+npht+npls))
+      integer nnchemvar(maxsc),indchemvar(maxchsc)
+      character*8 chvarname(maxchsc),chmspname(maxchsc)
+      real chmvar(maxchsc)
+
       integer luchsi,luchsr,lvchsi,lvchsr
       parameter (luchsi=5, luchsr=3)
       parameter (lvchsi=luchsi*nchsppr, lvchsr=luchsr*nchsppr)
@@ -747,6 +1487,29 @@ c*** 6
      /    npls*0 /
 
 c*** 7
+
+      integer nstrai,indsrc(nstra),npts(nstra),ninitl(nstra),
+     ,  nptsh(nstra),
+     ,  nemods(nstra),namods(nstra),nminpts(nstra),nspez(nstra),
+     ,  ivlsf(nstra),iscls(nstra),isclt(nstra),iscl1(nstra),
+     ,  iscl2(nstra),iscl3(nstra),isclb(nstra),iscla(nstra),
+     ,  nsrfsi(nstra),indim(nsrfs,nstra), insor(nsrfs,nstra),
+     ,  ingrda(nsrfs,nstra,3),ingrde(nsrfs,nstra,3),nrsor(nsrfs,nstra),
+     ,  npsor(nsrfs,nstra),ntsor(nsrfs,nstra),nbsor(nsrfs,nstra),
+     ,  nasor(nsrfs,nstra),nisor(nsrfs,nstra),     istor(nsrfs,nstra)
+      real alloc, flux(nstra), scalv(nstra),       sorwgt(nsrfs,nstra),
+     ,     sorlim(nsrfs,nstra),sorind(nsrfs,nstra),sorexp(nsrfs,nstra),
+     ,     sorifl(nsrfs,nstra),sorad1(nsrfs,nstra),
+     ,     sorad2(nsrfs,nstra),sorad3(nsrfs,nstra),
+     ,     sorad4(nsrfs,nstra),sorad5(nsrfs,nstra),
+     ,     sorad6(nsrfs,nstra),soreni(nstra), sorene(nstra),
+     ,     sorvdx(nstra), sorvdy(nstra), sorvdz(nstra), sorcos(nstra),
+     ,     sormax(nstra), sorctx(nstra), sorcty(nstra), sorctz(nstra)
+      logical nlavrp(nstra), nlavrt(nstra), nlsymp(nstra),
+     ,    nlsymt(nstra), nlatm(nstra), nlmol(nstra), nlion(nstra),
+     ,    nlpls(nstra), nlpnt(nstra), nllne(nstra), nlsrf(nstra),
+     ,    nlvol(nstra), nlcns(nstra), nlray(nstra), nlphot(nstra)
+      character txtsou(nstra)*64
 
       data srcvdflt,tgpfstd /
      /      .true. ,  0.03  /
@@ -788,10 +1551,21 @@ c*** 7
 
 c*** 8
 
+      integer nzadd, ini(nrad), ine(nrad)
+
       data nzadd,  ini  ,  ine   /
      /       0  , nrad*0, nrad*0 /
 
 c*** 9
+
+      integer nprcsf,iprcsf(nlimps),maxlev,maxrad,maxpol,maxtor,maxadd,
+     ,  nssplr(n1st),nssplp(n2nd),nssplt(n3rd),nsspla(nlim),
+     ,  nsigvi,nsigsi,nsigci,nsigi_spc,
+     ,  igh(nsd),iih(nsd),ighw(nsdw),iihw(nsdw),ighc(2,ncv),iihc(2,ncv)
+      real prmrspl(n1st),prmpspl(n2nd),prmtspl(n3rd),prmaspl(nlim),
+     ,  wminv,wmins,wminc,splpar
+      logical nlprca(natm),nlprcm(nmol),nlprci(nion),nlprcph(npht),
+     ,  llpbls,nlpbls(natm,nstra)
 
       data nprcsf, iprcsf ,maxlev,maxrad,maxpol,maxtor,maxadd /
      /       0   ,nlimps*0,   0  ,   0  ,   0  ,   0  ,   0   /,
@@ -810,28 +1584,63 @@ c*** 9
 
 c*** 10
 
+      integer nadvi, nclvi, nalvi, nadsi, nalsi, nadspc
+
       data nadvi, nclvi, nalvi, nadsi, nalsi, nadspc /
      /       0  ,   0  ,   0  ,   0  ,   0  ,   0    /
+
 c*** 10a
+
+      integer iadve(nadv), iadvs(nadv), iadvt(nadv), iadrc(nadv)
+      character txttla(nadv)*72, txtspa(nadv)*24, txtuna(nadv)*24
+
       data iadve , iadvs , iadvt , iadrc , txttla , txtspa , txtuna  /
      /     nadv*0, nadv*0, nadv*0, nadv*0,nadv*' ',nadv*' ',nadv*' ' /
+
 c*** 10b
+
+      integer iclve(nclv), iclvs(nclv), iclvt(nclv), iclrc(nclv)
+      character txttlc(nclv)*72, txtspc(nclv)*24, txtunc(nclv)*24
+
       data iclve,  iclvs,  iclvt,  iclrc /
      /    nclv*1, nclv*1, nclv*0, nclv*0 /
+
 c*** 10c
+
+      character chrtal(nalv)*70
+      character txttlr(nalv)*72, txtspr(nalv)*24, txtunr(nalv)*24
+
       data txttlc , txtspc , txtunc  /
      ,    nclv*' ',nclv*' ',nclv*' ' /
       data chrtal , txttlr , txtspr , txtunr  /
      ,    nalv*' ',nalv*' ',nalv*' ',nalv*' ' /
+
 c*** 10d
+
+      integer iadse(nads), iadss(nads), iadst(nads), iadsc(nads)
+      character txttld(nads)*72, txtspd(nads)*24, txtund(nads)*24
+
       data iadse,  iadss,  iadst,  iadsc /
      /    nads*1, nads*1, nads*0, nads*0 /
       data txttld , txtspd , txtund  /
      ,    nads*' ',nads*' ',nads*' ' /
+
 c*** 10e
+
+      character chrtls(nals)*70, txtsps(nals)*24, txttls(nals)*72,
+     ,    txtuns(nals)*24
+
       data chrtls ,  txtsps ,  txttls ,  txtuns  /
      /    nals*' ', nals*' ', nals*' ', nals*' ' /
+
 c*** 10f
+
+      integer ispsrf(nads), iptyp(nads), ipspz(nads), isptyp(nads),
+     ,        nsps(nads), isrfcl(nads), idirec(nads), ispopt(nads)
+      real spcmn(nads), spcmx(nads), spcsh(nads), spcpx(nads),
+     ,     spcpy(nads), spcps(nads), spcvx(nads), spcvy(nads),
+     ,     spcvz(nads)
+
       data ispsrf, iptyp , ipspz , isptyp,  nsps , isrfcl, idirec /
      /     nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0, nasp*0 /,
      ,     ispopt /
@@ -842,6 +1651,38 @@ c*** 10f
      /    nasp*0.,nasp*0.,nasp*0./
 
 c*** 11
+
+      integer nvolpr,ntlv(ntalv),nflgv(ntalv),nspzv1(ntalv),
+     ,  nspzv2(ntalv),ntlvf(ntalv),nsurpr,nsrf(nlimps),ntls(nlimps),
+     ,  nflgs(nlimps),nspzs1(nlimps),nspzs2(nlimps),nsptal(nptal),
+     ,  nplinr,nplotr,npldlr,nplinp,nplotp,npldlp,nplint,nplott,npldlt,
+     ,  iplta(5),iplaa(5,4),iplea(5,4),iplts(3),iplas(3,4),iples(3,4),
+     ,  i1trc,i2trc,isyplt(8),ilinie,nvolpl,nptal2(nptal,nplt),
+     ,  nptal3(nptal,nplt),nsp(nptal),ispzt2(nptal,nplt),
+     ,  ispzt3(nptal,nplt),nplin2(nptal,nplt),nplot2(nptal,nplt),
+     ,  npldl2(nptal,nplt),iproj3(nptal,nplt),npli13(nptal,nplt),
+     ,  nplo13(nptal,nplt),npli23(nptal,nplt),nplo23(nptal,nplt),
+     ,  ipln(nptal,nplt),
+     ,  nsrfcls,msrfcls(nsrfclsx),lsrfcls(msrfclsx,nsrfclsx)
+      real ch2mx,ch2my,ch2x0,ch2y0,ch2z0,ch3mx,ch3my,ch3mz,ch3x0,ch3y0,
+     ,  ch3z0,angle1,angle2,angle3,cutplane(4),talzmi(nptal),
+     ,  talzma(nptal),talxmi(nptal),talxma(nptal),talymi(nptal),
+     ,  talyma(nptal),talw1(nptal),talw2(nptal),fcabs1(nptal),
+     ,  fcabs2(nptal),rpsdl(nptal)
+      logical trcplt, trchst, trcnal, trcmod, trcsig, trcgrd, trcsur,
+     ,  trcref, trcfle, trcamd, trcint, trctim, trcsou, trcrec,
+     ,  trclst, trcbla, trcblm, trcbli, trcblp, trcble,
+     ,  trcblph,trctal, trcoct, trccen, trcrnf, trchktim, trcscl,
+     ,  trcdbg2,trcdbge,trcdbgm,trcdbgf,trcdbgl,
+     ,  trcdbgs,trcdbgg,trcdbgmpi,trcdbgc,
+     ,  trcsrc(0:nstra),pl1st,pl2nd,pl3rd,pladd,plhst,plcut(3),plbox,
+     ,  plstor,plnumv,plnums,plarr,lrpscut,pltsrc(0:nstra),pl3a(5),
+     ,  pl3s(3),pltl2d(nptal),pltl3d(nptal),pltllg(nptal),pltler(nptal),
+     ,  lhist2(nptal),lsmot2(nptal),lhist3(nptal),lcntr3(nptal),
+     ,  lsmot3(nptal),lraps(nptal),lvect3(nptal),lrpvc3(nptal),
+     ,  lrps3d(nptal),lrpscn(nptal),lprad(nptal),lppol(nptal),
+     ,  lptor(nptal),plidl,plvtk
+      character textla(5)*24, textls(3)*24
 
       data nvolpr,  ntlv  , nflgv , nspzv1, nspzv2, ntlvf ,nsurpr/
      /       0   , ntalv*0,ntalv*0,ntalv*0,ntalv*0,ntalv*0,  0    /,
@@ -897,7 +1738,35 @@ c*** 11
      /   nptal*.false., nptal*.false./
       data textla / 5*' ' /, textls / 3*' ' /
 
+c*** Data for visualisation of the surface properties
+
+      integer, parameter :: luvsp=nsrfclsx*nvspfls
+      data nsrfclu  , nsrfcls, isrfclu, msrfclu,  msrfcls   /
+     /    nvspfls*0 ,    0   , luvsp*0, luvsp*0, nsrfclsx*0 /
+
 c*** 12
+
+      integer numlines,modaddv
+      integer nchori,ncheni,lntspec,lntsput,nmcsput,
+     ,  nchrdgrp,nchrdlint,nchrdlprf,
+     ,  jchlst(nchor,nchor),nchtal(nchor),chr_lbl(nchor),
+     ,  nspscl(nchor),nspnew(nchor),nspstr(nchor),nspspz(nchor),
+     ,  nspini(nchor),nspend(nchor),nspblc(nchor),nspadd(nchor),
+     ,  ipivot(nchor),ichord(nchor),npspcen,iatspec,
+     ,  npspctt,npspcfi,listmtmp(lntsputx),listmtra(lntsputx),
+     ,  nlstadds,mtreadds,listadds(nlimps),listaddg(nlimps),
+     ,  ngwties,kgwties(ngwtiesx),mgwties(ngwtiesx),
+     ,  lgwties(mgwtiesx,ngwtiesx),
+     ,  npwin,npwsurf(npwinx),npwtally(npwinx),pwsurf(nlimps,npwinx),
+     ,  pwtally(nlimps,npwinx),pwspecy(nlimps,npwinx),
+     ,  pwtally_d(nlimps,npwinx),pwspecy_d(nlimps,npwinx)
+      real emin1(nchor), emax1(nchor), eshift(nchor),
+     ,     xpivot(nchor), ypivot(nchor), zpivot(nchor),
+     ,     xchord(nchor), ychord(nchor), zchord(nchor),
+     ,     emnspc, emxspc, chpts(4,nchor)
+      logical plchor,plspec,prspec,plargl,prargl,lpw_d(npwinx)
+      character chrdfile(nchor)*24,
+     ,     txtmtmp(lntsputx)*2,txtmtra(lntsputx)*2
 
       data numlines, modaddv /
      /       0     ,    1    /
@@ -930,6 +1799,11 @@ c*** 12
 
 c*** 13
 
+      integer nprnli, ntmstp, nptst, nsnvi, ninitl_read, nprmul,
+     ,  isnve(nsnv), isnvs(nsnv), isnvt(nsnv), isnrc(nsnv)
+      real dtimv, time0
+      character txttlv(nsnv)*70, txtspv(nsnv)*24, txtunv(nsnv)*24
+
       data nprnli, ntmstp , nptst  , ninitl_read, nprmul /
      /        0  ,    1   ,   0    ,   -1       ,    0   /,
      ,      nsnvi,  isnve ,  isnvs ,  isnvt ,  isnrc /
@@ -940,6 +1814,22 @@ c*** 13
      /     nsnv*' ', nsnv*' ', nsnv*' ' /
 
 c*** 14
+
+      integer nclmi,nblcki,nprnvi,nprtvi,nprdvi,nfla,ncutb,ncutl,
+     ,  imf,ntrfrm,nfull,ibrad,ibpol,ibtor,
+     ,  iflb(npls),iflbh(npls),ndxa,ndya,ncvp,ncip,nfcp,ntargi,
+     ,  ntgprt(nstep),ndt2(nstep,ngitt),
+     ,  ninct2(nstep,ngitt),nixy2(nstep,ngitt),ntin2(nstep,ngitt),
+     ,  nten2(nstep,ngitt),niflg(nstep,ngitt),nptc(nstep,ngitt),
+     ,  nptcm(nstep,ngitt),nspzi(nstep,ngitt),nspze(nstep,ngitt),
+     ,  nemod(nstep,ngitt),istramin,istramax,
+     ,  nainb,ncopib,ncopeb,nains(nain),naint(nain),
+     ,  naotb,naots(nlimps),naott(nlimps),
+     ,  lkindp(npls),lkindph(npls)
+      real fcte(npls),fcteh(npls),bmass(npls),bmassh(npls),chgsp(nstra),
+     ,  chgsee(nstra),chgsei(nstra),chgsmom(nstra)
+      logical lsymet,lbalan,lcoarse,lfchgs,lsprcl
+      character txtpls(nain)*72, txtpsp(nain)*24, txtpun(nain)*24
 
       data nclmi,nblcki,nprnvi,nprtvi,nprdvi, nfla , ncutb, lkindp  /
      /        5 , -25  ,  1   , 350  ,  1   ,   0  ,   0  , npls*0  /,
@@ -963,6 +1853,13 @@ c*** 14
      /    .false.,.true.,.false.,.false.,.true. /
 
 c*** 15
+
+      integer nnadmod
+      parameter (nnadmod=1)
+      integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
+     ,  nssir(8)
+      real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
+     ,  xpolpos(8),ypolpos(8)
 
       data ntrgte, ntrgto, ntrgtm /
      /        0  ,    0  ,    0   /
@@ -996,6 +1893,32 @@ c*** Data for diagnostic run
       data lntspcu,lntsptu,nmcsptu,dgntcpu,dgnptsfc,dgnfile,dgalloc /
      /        1   ,   0   ,   0   ,  1200 ,   10   , 10606 ,  0.5   /
 
+c*** b2ah.dat
+
+      integer cbnrso,cbnrno,cbnrwe,cbnrea,
+     ,        cbirso,cbirno,cbirwe,cbirea,
+     ,        izamin(0:natm+npls-1),izamax(0:natm+npls-1),nbndl(natm)
+      real cbrbrk(0:cbnrmx-1),
+     ,     cbsna(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbsmo(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshi(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbrec(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbmsb(0:7,0:nsdb2-1,0:cbnrmx-1),
+     ,     cbshe(0:7,0:cbnrmx-1),
+     ,     cbsch(0:7,0:cbnrmx-1),
+     ,     cbmsa(0:7,0:cbnrmx-1),
+     ,     cfdf0(0:7,0:nsdb2-1),
+     ,     cfdna(0:7,0:nsdb2-1),
+     ,     cfdpa(0:7,0:nsdb2-1),
+     ,     cfvla(0:7,0:nsdb2-1),
+     ,     cfvsa(0:7,0:nsdb2-1),
+     ,     cfhci(0:7,0:nsdb2-1),
+     ,     cfhce(0:7),
+     ,     cfsig(0:7),
+     ,     cfalf(0:7),
+     ,     cflim(0:7)
+      logical is_bundled(natm)
+
 c*** Data for b2ah.dat.stencil file
 
       data cbsna , cbsmo , cbshi , cbmsb , cbrec /
@@ -1007,5 +1930,4 @@ c*** Data for b2ah.dat.stencil file
      ,     cfhce , cfsig , cfalf , cflim /
      /      8*0. ,  8*0. ,  8*0. ,  8*0. /
 
-c======================================================================
-      end block data uiblkd
+      end module uinput_mod

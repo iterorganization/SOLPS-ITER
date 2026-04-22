@@ -1,13 +1,6 @@
       subroutine uinbnddt
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 01.04.2005 00:12
 c
@@ -16,7 +9,6 @@ c*** Prepare the boundary data ("non-default surfaces" and recycling
 c*** sources) for the Eirene input file
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer ibk,isf,iatm,ispe,ispi,ndt,i,k
       external xerrab
 c=======================================================================

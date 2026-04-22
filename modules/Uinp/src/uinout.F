@@ -1,13 +1,6 @@
       subroutine uinout(ufnm)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
       implicit none
 
 c  version : 05.02.2005 00:46
@@ -21,7 +14,6 @@ c=======================================================================
 c   produce "input.eir" file with input data for eirene
 
 c=======================================================================
-#include "uinput.inc"
 #include "impcon.inc"
 #include "git_version_Uinp.h"
 
@@ -1330,7 +1322,7 @@ cnh        write(iunoo,707) ndxa,ndya
         if (grid_mode.ne.2) then ! standard + target mode
           do i=1,ntargi !{
             do j=1,ntgprt(i) !{
-              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,1),nptcm(i,1),
+              write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,j),nptcm(i,j),
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
             end do !}
           end do !}

@@ -2,16 +2,8 @@
 !======================================================================
 !*** Obtain the grid size from carre.out
 !======================================================================
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
       implicit none
-#include "uinput.inc"
       integer :: lun, i,j, ireg
       character*80 uline
       character*12  dum0, dum1

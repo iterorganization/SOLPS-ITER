@@ -1,12 +1,5 @@
       subroutine uinmtr(cmt,n,ncmt)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 01.06.99 16:35
 c
@@ -15,7 +8,6 @@ c*** Wall material specification
 c=======================================================================
       implicit none
       integer n, ncmt
-#include "uinput.inc"
       integer imtrl
       parameter (imtrl=2)
       character*(imtrl) ucm(0:nmtr),ucr
@@ -70,5 +62,6 @@ c*** Non-default surface (target)
  20     xmlim(n)=uz(j)
 
       end if !}
+      return
 c=======================================================================
       end subroutine uinmtr

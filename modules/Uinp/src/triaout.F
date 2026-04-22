@@ -1,18 +1,7 @@
       subroutine triaout(filename)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
-
-c  version : 17.03.2005 00:03
-
 CVK output data for Triang grid (file header)
+      use uinput_mod
       implicit none
-#include "uinput.inc"
       integer :: i, j, k, l, n
       character*(*) filename
       character*22 hlp_frm
@@ -50,5 +39,6 @@ cwdk  write additional file with (part of) the polygons for triangulation
       write(iunoo,*)
       close(iunoo)
       write(*,*) '    ... fort.48 created'
+      return
   703 format (1p,6e13.5)
       end subroutine triaout

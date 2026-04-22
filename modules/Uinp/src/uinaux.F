@@ -1,13 +1,7 @@
       subroutine uinaux(nam)
       use b2mod_constants
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 03.01.2005 16:55
 c
@@ -16,7 +10,6 @@ c*** Input of user data from the file AUX
 c=======================================================================
       implicit none
       character*8 nam
-#include "uinput.inc"
 #include "impcon.inc"
       integer nnms
       parameter (nnms=38)
@@ -27,7 +20,6 @@ c=======================================================================
       real u
       real rdum(6)
       logical ublplt(5)
-      equivalence (ublplt,pl1st)
       logical streql
       external streql, xerrab
 c*** List of the valid input keywords
@@ -169,6 +161,11 @@ c
         do i=1,j
           ublplt(i)=iiiplt(i).ne.0
         end do
+        pl1st=ublplt(1)
+        pl2nd=ublplt(2)
+        pl3rd=ublplt(3)
+        pladd=ublplt(4)
+        plhst=ublplt(5)
       case (27)
         call rearri(nemods,nstrai,i)
       case (28)
