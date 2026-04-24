@@ -49,6 +49,9 @@ LD_NETCDF  = `nf-config --flibs`
 LD_MSCL    = -L${STGDIR} -lmscl
 LD_GR      = -L${STGDIR} -lgr
 LD_GKS     = -L${STGDIR} -lgks -lX11 -lXt
+ifdef JSONF_LIB_DIR
+LD_JSON    = -L${JSONF_LIB_DIR} -ljsonfortran 
+endif
 ifdef NCARG_ROOT
 #LD_NCARG  = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11
 LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lm -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lfreetype -lpng -lz -lpthread -lXrender -lbz2 -lgfortran # for NCARG v6.x.x
