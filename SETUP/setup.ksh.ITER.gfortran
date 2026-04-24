@@ -55,6 +55,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load CMake/3.27.6-GCCcore-13.2.0
   module load json-fortran/8.5.2-GCC-13.2.0
   module load PETSc/3.20.6-foss-2023b
+  module load imkl/2023.2.0
   export SYSNAME="x86_64_rhel9"
 }
 module load Fundamental-Constants/0.2.0
