@@ -1057,13 +1057,13 @@ c*** 4d
      /      'H','H2','He', 'C','Ne','H+','Ar', 'N','Be','H2+',
      /     'N+','C+', 'X','X+' /
       integer, parameter ::
-     ,  lurctdh=4, lurctdh2=7,lurctdhe=6,lurctdc=4, lurctdne=2,
+     ,  lurctdh=5, lurctdh2=7,lurctdhe=6,lurctdc=4, lurctdne=2,
      ,  lurctdhp=2,lurctdar=2,lurctdn=2, lurctdbe=2,lurctdh2p=4,
      ,  lurctdnp=2,lurctdcp=2,lurctdx=2, lurctdxp=2
       data  nnrctd / lurctdh, lurctdh2,lurctdhe,lurctdc, lurctdne,
      /               lurctdhp,lurctdar,lurctdn, lurctdbe,lurctdh2p,
      /               lurctdnp,lurctdcp,lurctdx, lurctdxp/
-      data (rctdtyp(i,1),i=1,lurctdh)  / 2*'EI', 2*'CX' /
+      data (rctdtyp(i,1),i=1,lurctdh)  / 2*'EI', 3*'CX' /
       data (rctdtyp(i,2),i=1,lurctdh2) / 'EI', 2*'DS', 3*'EL', 'CX' /
       data (rctdtyp(i,3),i=1,lurctdhe) / 2*'EI', 4*'CX' /
       data (rctdtyp(i,4),i=1,lurctdc)  / 2*'EI', 2*'CX' /
@@ -1077,7 +1077,8 @@ c*** 4d
       data (rctdtyp(i,12),i=1,lurctdcp) / 2*'RC' /
       data (rctdtyp(i,13),i=1,lurctdx) / 2*'EI' /
       data (rctdtyp(i,14),i=1,lurctdxp) / 2*'RC' /
-      data (rctddbs(i,1),i=1,lurctdh)  / 2*'AMJUEL', 2*'HYDHEL' /
+      data (rctddbs(i,1),i=1,lurctdh)
+     .                        / 2*'AMJUEL', 2*'HYDHEL', 'ADAS' /
       data (rctddbs(i,2),i=1,lurctdh2) / 7*'AMJUEL' /
       data (rctddbs(i,3),i=1,lurctdhe) / 2*'ADAS', 4*'HYDHEL' /
       data (rctddbs(i,4),i=1,lurctdc)  / 2*'AMJUEL', 2*'METHAN' /
@@ -1091,8 +1092,9 @@ c*** 4d
       data (rctddbs(i,12),i=1,lurctdcp) / 2*'ADAS' /
       data (rctddbs(i,13),i=1,lurctdx)  / 2*'ADAS' /
       data (rctddbs(i,14),i=1,lurctdxp) / 2*'ADAS' /
-      data (rctdchp(i,1),i=1,lurctdh)  / 'H.4','H.10', 'H.1', 'H.3' /
-      data (rctdchp(i,2),i=1,lurctdh2)
+      data (rctdchp(i,1),i=1,lurctdh)
+     .                          / 'H.4','H.10', 'H.1', 'H.3', 'H.4' /
+      data (rctdchp(i,2),i=1,lurctdh2) 
      .                        / 3*'H.4', 'H.0', 'H.1', 'H.3', 'H.2' /
       data (rctdchp(i,3),i=1,lurctdhe)
      .                  / 'H.4', 'H.10', 'H.1', 'H.3', 'H.1', 'H.3' /
@@ -1107,8 +1109,8 @@ c*** 4d
       data (rctdchp(i,12),i=1,lurctdcp) / 'H.4','H.10' /
       data (rctdchp(i,13),i=1,lurctdx)  / 'H.4','H.10' /
       data (rctdchp(i,14),i=1,lurctdxp) / 'H.4','H.10' /
-      data (rctdrct(i,1),i=1,lurctdh)  / 2*'2.1.5', 2*'3.1.8' /
-      data (rctdrct(i,2),i=1,lurctdh2)
+      data (rctdrct(i,1),i=1,lurctdh)  / 2*'2.1.5', 2*'3.1.8', 'ccd' /
+      data (rctdrct(i,2),i=1,lurctdh2) 
      .              / '2.2.9', '2.2.5g', '2.2.10', 3*'0.3T', '3.2.3' /
       data (rctdrct(i,3),i=1,lurctdhe)
      .              / 'scd', 'plt', 2*'5.3.1', 2*'6.3.1' /
@@ -1124,7 +1126,7 @@ c*** 4d
       data (rctdrct(i,12),i=1,lurctdcp) / 'acd', 'prb' /
       data (rctdrct(i,13),i=1,lurctdx)  / 'scd', 'plt' /
       data (rctdrct(i,14),i=1,lurctdxp) / 'acd', 'prb' /
-      data (rctdptin(i,1),i=1,lurctdh)  / 2*' ', 2*'H+' /
+      data (rctdptin(i,1),i=1,lurctdh)  / 2*' ', 2*'H+', 'X+' /
       data (rctdptin(i,2),i=1,lurctdh2) / 3*' ', 4*'H+' /
       data (rctdptin(i,3),i=1,lurctdhe) / 2*' ', 2*'He+', 2*'He++' /
       data (rctdptin(i,4),i=1,lurctdc)  / 2*' ', 2*'H+' /
@@ -1138,7 +1140,7 @@ c*** 4d
       data (rctdptin(i,12),i=1,lurctdcp) / 2*' ' /
       data (rctdptin(i,13),i=1,lurctdx)  / 2*' ' /
       data (rctdptin(i,14),i=1,lurctdxp) / 2*' ' /
-      data (rctdpto1(i,1),i=1,lurctdh)  / 2*'H+', 2*'H' /
+      data (rctdpto1(i,1),i=1,lurctdh)  / 2*'H+', 2*'H', 'X' /
       data (rctdpto1(i,2),i=1,lurctdh2)
      .                           / 'H2+', '2H', 'H', 3*'H+', 'H' /
       data (rctdpto1(i,3),i=1,lurctdhe) / 2*'He+', 4*'He' /
@@ -1153,7 +1155,7 @@ c*** 4d
       data (rctdpto1(i,12),i=1,lurctdcp) / 2*'C' /
       data (rctdpto1(i,13),i=1,lurctdx)  / 2*'X+' /
       data (rctdpto1(i,14),i=1,lurctdxp) / 2*'X' /
-      data (rctdpto2(i,1),i=1,lurctdh)  / 2*' ', 2*'H+' /
+      data (rctdpto2(i,1),i=1,lurctdh)  / 2*' ', 3*'H+' /
       data (rctdpto2(i,2),i=1,lurctdh2) / 2*' ', 'H+', 3*'H2', 'H2+' /
       data (rctdpto2(i,3),i=1,lurctdhe) / 2*' ', 2*'He+', 2*'He++' /
       data (rctdpto2(i,4),i=1,lurctdc)  / 2*' ', 2*'C+' /
@@ -1181,7 +1183,7 @@ c*** 4d
       data (rctdpto3(i,12),i=1,lurctdcp) / lurctdcp*' ' /
       data (rctdpto3(i,13),i=1,lurctdx)  / lurctdx*' ' /
       data (rctdpto3(i,14),i=1,lurctdxp) / lurctdxp*' ' /
-      data (rctdgrp(i,1),i=1,lurctdh)  / 2*-1, 2*-2 /
+      data (rctdgrp(i,1),i=1,lurctdh)  / 2*-1, 2*-2, 0 /
       data (rctdgrp(i,2),i=1,lurctdh2) / 3*0, 3*-5, 0 /
       data (rctdgrp(i,3),i=1,lurctdhe) / 2*-9, 2*-6, 2*-8 /
       data (rctdgrp(i,4),i=1,lurctdc)  / 2*-10, 2*-11 /
@@ -1195,7 +1197,7 @@ c*** 4d
       data (rctdgrp(i,12),i=1,lurctdcp) / 2*-13 /
       data (rctdgrp(i,13),i=1,lurctdx)  / 2*-15 /
       data (rctdgrp(i,14),i=1,lurctdxp) / 2*-16 /
-      data (rctdmsp(i,1),i=1,lurctdh)  / 2*0, 2*1 /
+      data (rctdmsp(i,1),i=1,lurctdh)  / 2*0, 2*1, 0 /
       data (rctdmsp(i,2),i=1,lurctdh2) / 3*0, 4*1 /
       data (rctdmsp(i,3),i=1,lurctdhe) / 2*0, 4*4 /
       data (rctdmsp(i,4),i=1,lurctdc)  / 2*0, 2*1 /
@@ -1223,7 +1225,7 @@ c*** 4d
       data (rctdmst(i,12),i=1,lurctdcp) / lurctdcp*12 /
       data (rctdmst(i,13),i=1,lurctdx)  / lurctdx*-1 /
       data (rctdmst(i,14),i=1,lurctdxp) / lurctdxp*-1 /
-      data (rctddlte(i,1),i=1,lurctdh)  / 4*0.0 /
+      data (rctddlte(i,1),i=1,lurctdh)  / 5*0.0 /
       data (rctddlte(i,2),i=1,lurctdh2) / 15.4, 10.5, 25.0, 4*0.0 /
       data (rctddlte(i,3),i=1,lurctdhe) / 0.0,-24.5874, 4*0.0 /
       data (rctddlte(i,4),i=1,lurctdc)  / 4*0.0 /
