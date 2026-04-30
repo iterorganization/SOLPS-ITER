@@ -39,7 +39,7 @@ ${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ../adj_sens_10iter.dat .
 rm b2mn.prt run.log; b2run -hess_tgt b2mn | tee run.log
 grep -i 'Cost function hessian 1' run.log | awk '{print $5}' | tail -n 100 > hess_sens_10iter_test.dat
 ../crop_data.py hess_sens_10iter_test.dat
-${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ../hess_sens_10iter.dat ./hess_sens_10iter_test.dat 55 1.0e-12 # || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/sensitivity_checks.sh ../hess_sens_10iter.dat ./hess_sens_10iter_test.dat 55 1.0e-12 || exit 3
 
 # Run test case optimization
 cd ${SOLPSTOP}
