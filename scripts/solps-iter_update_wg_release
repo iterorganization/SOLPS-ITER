@@ -22,7 +22,7 @@ Eirene:
   cd $SOLPSTOP/modules/Eirene
   set repo="Eirene"
   git fetch --prune
-  git checkout feature/wg-release && echo "Checked out Eirene WG-release branch" || goto branch
+  git checkout SOLPS_develop && echo "Checked out Eirene SOLPS_develop branch" || goto branch
   git pull && goto Carre || goto local
 
 Carre:
@@ -36,7 +36,7 @@ Carre:
 Carre2:
   echo "Updating Carre2"
   if (! -d $SOLPSTOP/modules/Carre2) then
-    git clone ssh://git@git.iter.org/bnd/carre.git $SOLPSTOP/modules/Carre2
+    git clone git@github.com:iterorganization/CARRE.git $SOLPSTOP/modules/Carre2
     git submodule init
     git submodule update
   endif

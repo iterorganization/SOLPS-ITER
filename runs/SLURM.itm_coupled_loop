@@ -4,6 +4,7 @@
 #SBATCH --ntasks-per-node=#PROCS#
 #SBATCH --cpus-per-task=#THREADS#
 #SBATCH -p gw
+#SBATCH --account=g2
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem-per-cpu=#MEM#
 #SBATCH --job-name=#JOBNAME#

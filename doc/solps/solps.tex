@@ -189,27 +189,19 @@ The next section discusses obtaining and updating the code.
 \label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{SOLPS-GUI}
 
 \begin{sloppypar}
-Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
+Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to ITER IT using the web form at \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257} to obtain the necessary additional permissions.
 \end{sloppypar}
 
 The instructions below are written for ITER collaborators that have obtained an ITER IDM account in mind. Although parts of them also apply to users who obtain the code via GitHub, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
 
-For ITER collaborators, the first formality is to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
+For ITER collaborators, the first formality is to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the code Responsible Officer (RO) at ITER, Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}), and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
 
-In addition to the GitHub repositories, ITER IDM account holders may request access to other ITER repositories, which may not yet be publicly available. For that purpose, one must agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories using the form at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. Related to \SOLPSITERns, the repositories of interest are:
-\begin{description}
-  \item[SOLPS-ITER] The overarching \SOLPSITER repository
-  \item[B2.5] For the {\tt B2.5} source code
-  \item[AMNS ADAS] A repository of atomic data used by the codes
-\end{description}
-Note that only the {\tt AMNS ADAS} Git repository at ITER will provide data files that are not yet available on GitHub. For all other repositories, they are only needed if you need to do some code archaeology, and no code development is to be done there. Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
-
-For users without access to AMNS ADAS, the installation scripts will instead fetch equivalent data to that on the IO repository from the \href{https://open.adas.ac.uk/}{OpenADAS} website and Zenodo.
+The only non-public IO repository related to \SOLPSITER is AMNS ADAS, which provides data files that are not yet available on GitHub. For users without access to AMNS ADAS, the installation scripts will instead fetch equivalent data to that on the IO repository from the OpenADAS website (\href{https://open.adas.ac.uk}{https://open.adas.ac.uk}) and Zenodo. All other \SOLPSITERns-related IO repositories are only needed if you need to do some code archaeology, and no code development is to be done there. For IO repositories, if you do not intend to participate in code development, you can ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}. The open source repositories work on the fork system, so users may create their own forks, but the reference branches can only be manipulated by IO staff.
 
 \begin{sloppypar}
 Users can obtain the {\tt Eirene} code under a CC-BY-NC-ND licence but developers need to agree to the terms of the Eirene Public Licence (EPL) and become a Basic Developer (BD) or Associated Developer (AD) - see {\tt \$\{SOLPSTOP\}\allowbreak/modules/Eirene/EPL.pdf} for full details. Such registration is managed by Forschungszentrum J{\"u}lich and occurs at \href{https://www.eirene.de/}{https://www.eirene.de/}. ADs associated to ITER may contribute by forking {\tt Eirene} and raising Pull Requests to have their changes integrated into the main repository.
 
-After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER} or \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse} and maintained by the IO, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
+After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER}, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://iterorganization.sharepoint.com/sites/PMA/Shared%20Documents/IMAS/Migration%20from%20SP2019/SOLPS-ITER}{https://iterorganization.sharepoint.com\allowbreak/sites/PMA/Shared Documents/IMAS/Migration from SP2019/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER Microsoft Teams channel for diffusion of code-related notifications. Additionally, there are two Wiki pages, on GitHub at \href{https://github.com/iterorganization/SOLPS-ITER/wiki}{https://github.com/iterorganization/SOLPS-ITER/wiki} and on the ITER Confluence site at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
 
 The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt Eirene}, {\tt Carre} and {\tt DivGeo} individually as submodules. Optional ADAS data files are provided in the {\tt AMNS ADAS} submodule. Some service libraries (such as the {\tt GGD}, {\tt MSCL}, and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Registered users can also have access to the standalone {\tt SOLPS4.3} repository.
 
@@ -245,6 +237,8 @@ It is best afterwards to position oneself on the {\tt master} branches, which is
 
 \begin{sloppypar}
 For later updates of the {\tt master} branches, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
+
+To obtain the Wide Grids code version, you should use the {\tt solps-iter\_update\_wg\_release} script.
 \end{sloppypar}
 
 {\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
@@ -669,7 +663,7 @@ tcsh
 source setup.csh
 \end{verbatim}
 
-Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter \ref{cha:structure}). Those aliases are:
+Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
 \begin{description}
   \item[stop] Goes to {\tt \$\{SOLPSTOP\}}, the \SOLPSITER top directory
   \item[sb2, sbb] Go to {\tt \$\{SOLPSTOP\}/modules/B2.5}, the {\tt B2.5} top directory
@@ -697,7 +691,7 @@ to refresh the list of executables to be found with the search path.
 \section{Examples}
 \label{examples}\index{b2mod\_dimensions.F}
 
-There is a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains references to a series of sample cases. These are actually stored as a Zenodo record at \href{https://zenodo.org/communities/solps/}{https://zenodo.org/communities/solps/}, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains references to a series of sample cases. These are actually stored as a Zenodo record at \href{https://zenodo.org/communities/solps/}{https://zenodo.org/communities/solps/}, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix~\ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 \begin{sloppypar}
 The cases stored for retrieval include:
@@ -2894,9 +2888,9 @@ which contains
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
     {\tt ENIPAR(,1)} specifies the desired ion temperature in $eV$.
     {\tt ENIPAR(,2)} is the strength of the feedback.
-  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
+  \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
-  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON = 25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
+  \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
   \item[28] prescribe ion temperature profile in $eV$, read from file {\tt ENI\_FN}.
     If {\tt ENIPAR(IB,2)} is positive, the profile is scaled such that {\tt ENIPAR(IB,1)} is the maximum ion temperature of the profile in $eV$.
@@ -4659,7 +4653,7 @@ DO 50, IAOT=1,NAOTB
 
 {\bf Meaning of the input variables for interfacing routine INFUSR}
 
-We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, section 2.14.
+We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, Section~2.14.
 
 \begin{description}
   \item[LCOARSE] Coarse mesh switch ???
@@ -7898,7 +7892,7 @@ Fully multi-ion collisional closure for the components along the magnetic field 
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
-The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on \SOLPSfivetwo from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix~\ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix~\ref{lis:b2cdci} and of namelist variables in Appendix~\ref{lis:b2cdcn}.
+The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on \SOLPSfivetwo from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix~\ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters~\ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix~\ref{lis:b2cdci} and of namelist variables in Appendix~\ref{lis:b2cdcn}.
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
@@ -8891,7 +8885,7 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \right.
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\Gamma^m_{ax} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\Gamma^m_{ax} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
@@ -9018,7 +9012,7 @@ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
 \left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $\label{eq:mom_nu_vareps_etc}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -9207,7 +9201,7 @@ j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is ac
 \end{aligned}\right.
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{Fei} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{Fei} $ is applied according to Section~\ref{sec:Zhdanov}.
 
  %-------- end of 9th page -------------
 
@@ -9728,7 +9722,7 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 \right)
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{vis} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{vis} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
@@ -9747,7 +9741,7 @@ Q_{F_{ab}} =
 z_a^2 z_b^2 n_a n_b \left( V_{a \parallel} - V_{b \parallel} \right)^2
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{F_{ab}} $ is applied according to Section~\ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{F_{ab}} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 Atom heat source due to ionisation
 
@@ -17131,7 +17125,7 @@ under interactive control.  It uses {\tt NCAR} and so the user must have
 access to the {\tt NCAR} environment. Some, but far from all, functionalities
 have been ported so that \btwoplot may also work in the {\tt PLPLOT}
 environment. Preprocessing before compilation with {\tt -DPLPLOT} option is then necessary
-(see section \ref{sec:compilingb2} for more details).
+(see Section~\ref{sec:compilingb2} for more details).
 Data from the {\tt B2SXDR}, and, if available, the {\tt B2SDIAG} (for \SOLPSfour runs),
 {\tt b2fstate}, {\tt b2fplasma}, {\tt b2frates}, {\tt b2fgmtry}, {\tt b2mn.dat}
 (for \SOLPSfive and \SOLPSITER runs) and {\tt fort.44} and {\tt fort.46}
@@ -17611,7 +17605,7 @@ number of each cell. If $\langle${\tt ireg}$\rangle$ is greater than {\tt 0}, th
 
 The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi}, and
 {\bf sch} can take an optional integer argument $\langle${\tt isel}$\rangle$, varying from {\tt 0} to {\tt 3} ({\tt 0} to {\tt 1} for {\bf sna}). Then the data
-stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
+stack contains the linearized source data according to the description found in Appendix~\ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
 The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
 For the corner coordinates arrays {\bf crx} and {\bf cry}, an integer argument must be provided to determine the corner
