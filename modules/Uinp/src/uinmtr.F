@@ -69,5 +69,6 @@ c*** Non-default surface (target)
  20     xmlim(n)=uz(j)
 
       end if !}
+      return
 c=======================================================================
       end subroutine uinmtr

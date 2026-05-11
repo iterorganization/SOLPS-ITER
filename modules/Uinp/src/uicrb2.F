@@ -126,7 +126,7 @@ c*** Not yet. Proceed with the variables still left to be modified
             if(.not.lbb) then !{
               write(0,*) 'Unexpected error in uicrb2: unable to ',
      ,          'complete the block ',jblk,' : ',chrbl(jblk)
-              iret =8
+              iret=8
               goto 9990
             end if !}
           end if !}

@@ -215,5 +215,6 @@ c*** Set the VSP data for test.eir
         prargl=prargl_b
         lsprcl=lsprcl_b
       end if !}
+      return
 c=======================================================================
       end subroutine uinprptt
