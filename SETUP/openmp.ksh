@@ -25,11 +25,14 @@ if [[ -n "$SOLPS_PATH" ]]; then
   if [ "$COMPILER" != "ifort64" ]; then
     export OMP_STACKSIZE="128M"
   else
-    if [ "$FC" == "ifx" ]; then
+    # Older Intel toolchains (<=2024) still ship ifort, which is preferred
+    # over ifx for OpenMP correctness. Newer toolchains (intel/2025b onward)
+    # ship ifx only, so only swap when ifort is actually available.
+    if [ "$FC" == "ifx" ] && command -v ifort >/dev/null 2>&1; then
       export FC="ifort"
       echo "Reverting to ifort compiler as ifx is unsafe with OpenMP"
     fi
-    if [ "$MPI_FC" == "mpiifort -fc=mpiifx" ]; then
+    if [ "$MPI_FC" == "mpiifort -fc=mpiifx" ] && command -v ifort >/dev/null 2>&1; then
       export MPI_FC="mpiifort"
     fi
   fi

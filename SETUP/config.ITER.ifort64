@@ -38,13 +38,19 @@ LD_NETCDF  = $(shell pkg-config netcdf-fortran --libs)
 else
 LD_NETCDF  = `nf-config --flibs`
 endif
+ifneq ($(strip ${GR_ROOT}),)
 LD_GR      = -L${GR_ROOT}/lib -lgr
+endif
+ifneq ($(strip ${GKSDIR}),)
 LD_GKS     = -L${GKSDIR}/lib -lGKS -lgfortran -lX11 -lXt
+endif
 LD_MDSPLUS = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++
 LD_MSCL    = $(shell pkg-config mscl --libs)
 ifdef NAGDIR
 LD_NAG     = -L${NAGDIR}/lib -lnag_nag
+else ifneq ($(shell pkg-config --exists mkl-dynamic-lp64-seq && echo yes),)
+LD_NAG     = $(shell pkg-config mkl-dynamic-lp64-seq --libs)
 else
 LD_NAG     = $(shell pkg-config openblas --libs)
 endif
