@@ -127,13 +127,16 @@ endif
 $(OBJDIR)/%.o : %.F
 	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 ifneq (${MOD},o)
-$(OBJDIR)/%.${MOD} : %.F
-	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
-	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+# The compiler writes the .mod file as a side effect of producing the .o,
+# so make .mod depend on .o (no recipe).  This avoids a parallel-make race
+# where the duplicate "%.${MOD}: %.F" rule and the "%.o: %.F" rule above
+# would both compile the same source concurrently and clobber the .mod.
+$(OBJDIR)/%.${MOD} : $(OBJDIR)/%.o
+	@true
 endif
-	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
