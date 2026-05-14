@@ -415,7 +415,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER. From Intel oneAPI 2025 onwards, this identifier selects {\tt ifx} (the LLVM-based compiler) instead of the classic {\tt ifort}.
   \item[gfortran] The gfortran compiler, in use at IPP, EFGW (EUROfusion Gateway), FZ-J{\"u}lich, and KU-Leuven
   \item[g95] The g95 compiler
   \item[nag\_f90] The NAG Fortran compiler
@@ -530,12 +530,24 @@ course be replaced by {\tt gmake solps(\_debug)},
 and proceed with the recompilation as above.
 \end{sloppypar}
 
-It is possible to pass down Makefile options with the syntax
+It is possible to accelerate the compilation by invoking {\tt make} with a top-level {\tt -j} flag, e.g.:
+\begin{verbatim}
+  gmake -j 8 solps
+  gmake -j $(nproc) solps_openmp
+\end{verbatim}
+This allows GNU make's jobserver to share compilation jobs across all submodules.
+In a SLURM batch job where {\tt SLURM\_CPUS\_PER\_TASK} is set, the following command will automatically use the allocated number of cores:
+\begin{verbatim}
+  gmake -j ${SLURM_CPUS_PER_TASK:-$(nproc)} solps
+\end{verbatim}
+\index{parallel compilation}\index{Makefile, parallel}
+Note: the {\tt Triang} submodule is automatically forced to build serially ({\tt -j1}) because its {\tt makedepend}-generated dependency file does not capture Fortran {\tt USE} dependencies for the Eirene modules it compiles. This has negligible impact on overall build time.
+
+The older form
 \begin{verbatim}
   gmake MAKE_OPTIONS=-j8
 \end{verbatim}
-for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
-because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
+is still supported but only parallelises within each submodule's sub-make, not across them, because it bypasses the top-level jobserver.
 
 Once the configuration files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
@@ -662,6 +674,8 @@ smooth code operation (See also Section~\ref{sec:setup} for full details).
 tcsh
 source setup.csh
 \end{verbatim}
+An alternative setup script, {\tt setup.ksh}, is also available for Bash/Korn shell users.
+Note that {\tt setup.ksh} may not support all features provided by {\tt setup.csh}.
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
 \begin{description}
