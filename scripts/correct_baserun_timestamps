@@ -1,5 +1,15 @@
 #! /bin/tcsh -f
 cd baserun
+# Ensure the b2ag/b2ah/b2ai/b2ar input .dat files are older than the
+# derived output files touched below.  Otherwise, when a tarball is
+# extracted with -m (mtimes set to extraction time) the .dat files can
+# end up newer than the corresponding outputs by a few sub-second
+# fractions, which makes GNU make try to regenerate b2fgmtry / b2fpardf
+# / b2fstati / b2frates from scratch (and, for b2fgmtry, fail because
+# the carre mesh file is not on the in-tree search path).
+foreach i (b2ag.dat b2ah.dat b2ai.dat b2ar.dat stra.dat weis.dat)
+  [ -s $i ] && touch -d '10 seconds ago' $i
+end
 touch b2ag.prt
 [ -s b2fgmtry ] && touch b2fgmtry || echo 'No valid b2fgmtry file found'
 if (${COMPILER} == "HP" ) then
