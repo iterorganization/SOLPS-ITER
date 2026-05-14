@@ -622,18 +622,18 @@ uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
 uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
 triang: eirene_nox
-	cd modules/Triang; ${MAKE}
+	cd modules/Triang; ${MAKE} -j1
 
 triang_mpi: eirene_nox_mpi
-	cd modules/Triang; ${MAKE} ${MPI_OPTS}
+	cd modules/Triang; ${MAKE} -j1 ${MPI_OPTS}
 
 triang_nox: eirene_nox
 	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
-	cd modules/Triang; ${MAKE} ${OPT_NOX}
+	cd modules/Triang; ${MAKE} -j1 ${OPT_NOX}
 
 triang_nox_mpi: eirene_nox_mpi
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
-	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Triang; ${MAKE} -j1 ${MPI_OPTS} ${OPT_NOX}
 
 ifndef NO_MOTIF
 amds: b25eirene
