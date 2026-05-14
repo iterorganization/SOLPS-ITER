@@ -29,7 +29,7 @@ make VERSION_nox
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug
-make MAKE_OPTIONS=-j8 solps_nox_debug b25_nox_debug
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh

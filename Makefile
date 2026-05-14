@@ -162,6 +162,13 @@ DEFOPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 endif
 endif
 
+# MAKEO is the recursive-make incantation used by per-module recipes.
+# When invoked from a parallel top-level (e.g. `make -j 32 solps_nox`) and no
+# explicit MAKE_OPTIONS=-jN was set, ${MAKE} alone propagates GNU make's
+# jobserver to sub-makes so that compilation jobs are shared across modules
+# rather than being capped to N per module.  Setting MAKE_OPTIONS=-jN at the
+# top level still works (legacy behaviour) but disables the jobserver and
+# only parallelises within each individual sub-make.
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE
@@ -1131,6 +1138,10 @@ help:
 	@echo "      nox_openmp_debug : compile debug version (OpenMP) (no X main codes)"
 	@echo "     all_nox_mpi_debug : compile debug version (MPI) (all no X codes)"
 	@echo "  nox_openmp_mpi_debug : compile debug version (OpenMP+MPI) (no X main codes)"
+	@echo ""
+	@echo "Parallel build: invoke any of the above targets with 'make -j N <target>'"
+	@echo "to share N compilation jobs across modules (recommended).  The legacy form"
+	@echo "'make MAKE_OPTIONS=-jN <target>' only parallelises within each sub-make."
 
 # debugging aids
 echo:

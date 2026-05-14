@@ -8,7 +8,7 @@ export NO_MANUAL="true"
 make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox_mpi
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox_mpi
 
 # Run test case
 . ${SOLPSTOP}/SETUP/mpi.ksh

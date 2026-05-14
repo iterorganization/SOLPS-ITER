@@ -8,7 +8,7 @@ export NO_MANUAL="true"
 make VERSION_nox
 make FC=ifort listobj_nox depend_nox
 make FC=ifort divgeo_nox
-make FC=ifort MAKE_OPTIONS=-j8 solps_nox b25_nox
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} FC=ifort solps_nox b25_nox
 
 # Run test cases
 
