@@ -1,11 +1,13 @@
 ifeq (${FC},f77)
-FC = ifort
+  FC = ifort
 else
-ifeq (${FC},ifx)
-ifdef SOLPS_DEBUG
-FC = ifort
-endif
-endif
+  ifeq (${FC},ifx)
+    ifdef SOLPS_DEBUG
+      ifneq ($(shell command -v ifort 2>/dev/null),)
+        FC = ifort
+      endif
+    endif
+  endif
 endif
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 
