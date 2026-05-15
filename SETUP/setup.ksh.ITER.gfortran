@@ -106,7 +106,7 @@ export FC=gfortran
 export CXX=g++
 
 [ $SOLPS_TOOLCHAIN_VERSION = "2025b" ] && {
-  echo ""Warning: Catalyst engine not yet functional in 2025b toolchain"
+  echo "Warning: Catalyst engine not yet functional in 2025b toolchain"
   echo "due to CMake incompatibilities"
 } || {
   [ -x paraview-config ] && {

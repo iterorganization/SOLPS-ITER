@@ -62,8 +62,12 @@ LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -lX11 -lXext $(sh
 endif
 # LD_MPI     = -lmpi2
 
+ifdef GKSDIR
 LIBGKS     = ${GKSDIR}/lib/libGKS.so
+endif
+ifdef GR_ROOT
 LIBGRS     = ${GR_ROOT}/lib/libgr.a
+endif
 ADDLIBS    = -lgfortran
 
 #

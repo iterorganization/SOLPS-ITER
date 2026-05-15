@@ -47,7 +47,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
     module load makedepend/1.0.9-GCCcore-14.3.0
     module load MSCL/1.2.5-GCCcore-14.3.0
     module load Doxygen/1.14.0-GCCcore-14.3.0
-    module load texlive/20250308-GCC-14.3.0
+    module load texlive/20250308-intel-compilers-2025.2.0
     module load Ghostscript/10.05.1-GCCcore-14.3.0
     module load netCDF/4.9.3-iimpi-2025b
     module load netCDF-Fortran/4.6.2-iimpi-2025b
@@ -101,19 +101,19 @@ export DBX="totalview"
 # ships ifx (ifort wrapper removed). Pick the compiler driver based on which
 # binary is actually present in $PATH so this file remains backwards-compatible.
 if command -v ifort >/dev/null 2>&1; then
-   export CC="icc"
-   export FC="ifort"
-   export MPI_FC="mpiifort"
+  export CC="icc"
+  export FC="ifort"
+  export MPI_FC="mpiifort"
   export CXX="icpc"
 else
-   export CC="icx"
-   export FC="ifx"
-   export MPI_FC="mpiifort -fc=mpiifx"
+  export CC="icx"
+  export FC="ifx"
+  export MPI_FC="mpiifort -fc=mpiifx"
   export CXX="icpx"
 fi
 
 [ $SOLPS_TOOLCHAIN_VERSION = "2025b" ] && {
-  echo ""Warning: Catalyst engine not yet functional in 2025b toolchain"
+  echo "Warning: Catalyst engine not yet functional in 2025b toolchain"
   echo "due to CMake incompatibilities"
 } || {
   [ -x paraview-config ] && {

@@ -46,7 +46,6 @@ else
   echo and restart the session
   if ("$SOLPS_TOOLCHAIN_VERSION" == "2025b") then
     module use /work/imas/etc/modules-2025b/all
-    module use /home/ITER/vandell/public/modulefiles
     module load git/2.54.0-GCCcore-14.3.0
     module load IMAS-Fortran/5.6.0-foss-2025b-DD-4.1.1
     module load IDStools/2.4.0-foss-2025b
