@@ -157,7 +157,7 @@ endif
 
 ifndef NO_CMAKE
 CMAKE_MAJOR_VERSION = `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
-ifeq ($(shell [ $(CMAKE_MAJOR_VERSION) -gt 3 ] && echo yes || echo no ),yes)
+ifeq ($(shell test ${CMAKE_MAJOR_VERSION} -gt 3; echo $$?),0)
 DEFOPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 endif
 endif
