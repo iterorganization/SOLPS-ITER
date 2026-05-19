@@ -6,7 +6,6 @@ GR_ROOT  ?= ${EBROOTGR}
 LD_GKS   ?= -L${GLI_HOME} -lgks -lgfortran
 LD_GR    ?= -L${GR_ROOT}/lib -lgr
 
-#CPP      = -/lib/cpp -traditional
 CPP       = /lib/cpp -traditional
 
 ifdef SOLPS_DEBUG
@@ -21,4 +20,3 @@ LDLIBS    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

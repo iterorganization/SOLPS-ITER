@@ -1,20 +1,12 @@
       subroutine uinptriang(TriMesh)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 
 c  version : 01.04.2005 00:51
 
 c***  prepares the data for TRIA grid 
 c***  returns .TRUE. if successful and .FALSE. otherwise 
       implicit none
-#include "uinput.inc"
     
       logical TriMesh  
       integer attrib(nlim),nattr,nchain,chain(nlim),

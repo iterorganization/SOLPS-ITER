@@ -32,7 +32,7 @@ cp ../run_kin_CI/fort.46.i fort.46
 touch b2fstati
 setup_baserun_eirene_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI . || exit 1
 
 # Test to check JSON input also works
 cd ..
@@ -53,7 +53,7 @@ cp ../run_kin_CI/b2time.nc.i b2time.nc
 touch b2fstati
 setup_baserun_eirene_json_links
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_kin_CI . || exit 2
 
 # Special test to look for restart effects
 cd ${SOLPSTOP}/modules/B2.5
@@ -90,7 +90,7 @@ b2run -s b2mn
 rm b2mn.prt
 mv b2fstate b2fstati
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20/ ./ || exit 3
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20 . || exit 3
 cd ..
 
 # Now test the coupled code
@@ -126,7 +126,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20/ ./ || exit 4
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20 . || exit 4
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5

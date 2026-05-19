@@ -26,7 +26,7 @@ LD_NETCDF  = -L${NETCDF_LIB_DIR} -lnetcdf -L${NETCDF_FORTRAN_LIB_DIR} -lnetcdff
 LD_MSCL    = 
 LD_GR      = 
 LD_GKS     = 
-LD_NCARG   = -L${NCARG_LIB_DIR} -lncarg -lncarg_gks -lncarg_c -lX11 -lXext `pkg-config cairo --libs` -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_LIB_DIR} -lfreetype -L${LIBPNG_LIB_DIR} -lpng
+LD_NCARG   = -L${NCARG_LIB_DIR} -lncarg -lncarg_gks -lncarg_c -lX11 -lXext $(shell pkg-config cairo --libs) -lfontconfig -lz -lXrender -lbz2 -ldl -L${FREETYPE_LIB_DIR} -lfreetype -L${LIBPNG_LIB_DIR} -lpng
 LD_NAG     = -L${LAPACK_LIB_DIR} -llapack -L${BLAS_LIB_DIR} -lblas
 LD_SONNET  = -L${SOLPSLIB}/lib -lsonnet -lstdc++
 

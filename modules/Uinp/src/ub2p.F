@@ -1,9 +1,7 @@
       program ub2p
       use b2mod_types
       use b2mod_xerset
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
+      use ubpcom
       implicit none
 c======================================================================
 c*** Creates the additional input files for b2plot, provided that the
@@ -19,7 +17,6 @@ c*** The DG "dgo" file must be linked (or copied) to "param.dg"
 c======================================================================
 c  version : 25.08.97 15:04
 c
-#include "ubpcom.h"
 #include "impcon.inc"
       external prgini,prgend,ubpnam
 c======================================================================

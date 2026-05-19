@@ -136,15 +136,15 @@ All errors, omissions {\it etc.} should be e-mailed to {\tt Xavier.Bonnin@iter.o
 
 This document describes the \SOLPSITER code package and its components.
 Following this introduction is a chapter (\ref{cha:structure})
-describing the structure of the code.  Then chapter
-\ref{cha:standaloneb2} describes the standalone version of {\tt B2.5}.  This
+describing the structure of the code.  Then Chapter~\ref{cha:standaloneb2}
+describes the standalone version of {\tt B2.5}.  This
 is followed by a description of the standalone version of {\tt Eirene} in
-chapter \ref{cha:standaloneeirene} and then of the coupled {\tt B2.5-Eirene}
-in chapter \ref{cha:coupledb2eirene}.  Then follow chapters on {\tt DivGeo}
+Chapter~\ref{cha:standaloneeirene} and then of the coupled {\tt B2.5-Eirene}
+in Chapter~\ref{cha:coupledb2eirene}.  Then follow chapters on {\tt DivGeo}
 (\ref{cha:divgeo}), {\tt Carre} (\ref{cha:carre}) and {\tt agg} (\ref{cha:agg}).
 A discussion of the Algorithmic Differentation and optimization code options is found in Chapter~\ref{cha:ad_optim}.
 Chapter~\ref{cha:unstructured} explains the new wide grid (WG) structure of {\tt B2.5}.
-Appendix \ref{cha:intb2doc} contains copies of the {\tt B2.5} internal
+Appendix~\ref{cha:intb2doc} contains copies of the {\tt B2.5} internal
 documentation files, \ref{cha:b2physics} describes the physics in {\tt B2.5},
 \ref{cha:equations} gives the full model equations used in {\tt B2.5},
 \ref{cha:Mladen} gives details about some {\tt B2.5} boundary conditions,
@@ -171,7 +171,7 @@ is done exclusively on \SOLPSfive and \SOLPSITER versions (with the important ex
 differences of note between {\tt B2} and {\tt B2.5} are:
 \begin{enumerate}
   \item For ions, {\tt B2} solves a {\em total} energy equation, while {\tt B2.5}
-solves an {\em internal} energy equation. See section \ref{sec:sourcescoupling} for an
+solves an {\em internal} energy equation. See Section~\ref{sec:sourcescoupling} for an
 example of the consequences.
   \item The primary momentum variable is the {\em poloidal} velocity in {\tt B2} and the
 {\em parallel} velocity in {\tt B2.5}.
@@ -180,7 +180,7 @@ example of the consequences.
   \item The treatment of drifts and currents is much more complete in {\tt B2.5} than in {\tt B2}.
   \item Classical transport in {\tt B2.5} follows the Zhdanov and Balescu treatments by default, while it uses
 Braginskii in {\tt B2} (see \ref{sec:balescubraginskii} for a comparison).
-  \item Some variables names and indexing have changed. See section \ref{sec:b2pl} for a partial list.
+  \item Some variables names and indexing have changed. See Section~\ref{sec:b2pl} for a partial list.
   \item The run parameters to {\tt B2.5} are split into several input files. See sections
 \ref{sec:b2mn}, \ref{lis:b2cdcn} and \ref{sec:b2files} for a detailed description.
 \end{enumerate}
@@ -188,7 +188,7 @@ Braginskii in {\tt B2} (see \ref{sec:balescubraginskii} for a comparison).
 \index{Converting from SOLPS5 to SOLPS4}
 Some effort has been undertaken for the user to be able to toggle between the \SOLPSfour and
 \SOLPSfive numerical treatments. The interested reader is referred to the listing of run switches
-in section \ref{lis:b2cdci} for the complete list. Two converters also exist to transfer run output
+in Section~\ref{lis:b2cdci} for the complete list. Two converters also exist to transfer run output
 from \SOLPSfour or \SOLPSfive to \SOLPSITERns:
 \begin{description}
   \item[From 4 to 5 and ITER] {\tt b2sxdr}\index{b2sxdr}
@@ -210,7 +210,7 @@ When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI201
 
 Several of the {\bf SOLPS4.2} features are detailed in {\tt Kotov\_SOLPS42\_Report.pdf}.
 
-{\tt B2} and {\tt B2.5} originally used structured finite-volume meshes with a rectangular topology. Since 2017, an effort is ongoing to transform the code to an unstructured mesh format, making it possible to model up to the real vessel walls, and having more control over local refinement. This new version is typically called the wide-grids version or WG. Chapter \ref{cha:unstructured} explains the WG discretization.
+{\tt B2} and {\tt B2.5} originally used structured finite-volume meshes with a rectangular topology. Since 2017, an effort is ongoing to transform the code to an unstructured mesh format, making it possible to model up to the real vessel walls, and having more control over local refinement. This new version is typically called the wide-grids version or WG. Chapter~\ref{cha:unstructured} explains the WG discretization.
 
 The next section discusses obtaining and updating the code.
 
@@ -218,25 +218,19 @@ The next section discusses obtaining and updating the code.
 \label{solpsdistribution}\index{Obtaining the code}\index{B2.5, obtaining}\index{SOLPS-ITER, obtaining}\index{Eirene, obtaining}\index{dg, obtaining}\index{DG, obtaining}\index{DivGeo, obtaining}\index{Carre, obtaining}\index{Updating the code}\index{B2.5, Updating}\index{SOLPS-ITER, Updating}\index{Eirene, Updating}\index{dg, Updating}\index{DG, updating}\index{DivGeo, Updating}\index{Carre, Updating}\index{SOLPS-GUI}
 
 \begin{sloppypar}
-Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}) at ITER, the code Responsible Officer (RO), to obtain the necessary additional permissions.
+Most code components are now available as open-source software on the ITER GitHub portal at \href{https://github.com\allowbreak/iterorganization}{https://github.com/iterorganization}. If what is found there is insufficient for the user's purposes, a request should be sent to ITER IT using the web form at \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257} to obtain the necessary additional permissions.
 \end{sloppypar}
 
 The instructions below are written for ITER collaborators that have obtained an ITER IDM account in mind. Although parts of them also apply to users who obtain the code via GitHub, they are still being updated to this new distribution channel. {\em The ITER Organization does not provide support to open-source users}, but they are welcome to report any issues they encounter and/or to start discussions about desired features at the respective locations on the ITER GitHub server.
 
-For ITER collaborators, the first formality is to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the RO, and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
+For ITER collaborators, the first formality is to obtain an IDM (ITER Document Management) account, in case they do not have one already. This account request will be done by the code Responsible Officer (RO) at ITER, Xavier Bonnin ({\tt Xavier.Bonnin\allowbreak@iter.org}), and the requesting user will receive an automated electronic message asking for confirmation of the provided e-mail address. This e-mail address should preferably be a professional one, otherwise requesting users need to provide a way for the IO to verify their belonging to an authorized ITER collaboration partner (academic or non-military state institutions within the ITER Member States, or that have an existing contractual relationship with the IO). This may also require the signature of an IMAS Access Request between the IO and the new user's institution, if one is not already in force. Another option is for the user to be sponsored nominatively by a third party institution through their own IMAS Access Request.
 
-In addition to the GitHub repositories, ITER IDM account holders may request access to other ITER repositories, which may not yet be publicly available,. For that purpose, one must agree to the ITER Integrated Modelling and Analysis Suite (IMAS) terms of use and request access to the needed repositories using the form at: \href{https://jira.iter.org/servicedesk/customer/portal/1/create/257}{https://jira.iter.org/servicedesk/customer/portal/1/create/257}. Related to \SOLPSITERns, the repositories of interest are:
-\begin{description}
-  \item[SOLPS-ITER] The overarching \SOLPSITER repository
-  \item[B2.5] For the {\tt B2.5} source code
-  \item[AMNS ADAS] A repository of atomic data used by the codes
-\end{description}
-Note that only the {\tt AMNS ADAS} Git repository at ITER will provide data files that are not yet available on GitHub. For all other repositories, they are only needed if you need to do some code archaeology, and no code development is to be done there. Users may request access to other repositories as well according to their needs or interest. If not intending to participate in code development, one may ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}.
+The only non-public IO repository related to \SOLPSITER is AMNS ADAS, which provides data files that are not yet available on GitHub. For users without access to AMNS ADAS, the installation scripts will instead fetch equivalent data to that on the IO repository from the OpenADAS website (\href{https://open.adas.ac.uk}{https://open.adas.ac.uk}) and Zenodo. All other \SOLPSITERns-related IO repositories are only needed if you need to do some code archaeology, and no code development is to be done there. For IO repositories, if you do not intend to participate in code development, you can ask for {\tt REPO\_READ} permissions only, instead of {\tt REPO\_WRITE}. The open source repositories work on the fork system, so users may create their own forks, but the reference branches can only be manipulated by IO staff.
 
 \begin{sloppypar}
 Users can obtain the {\tt Eirene} code under a CC-BY-NC-ND licence but developers need to agree to the terms of the Eirene Public Licence (EPL) and become a Basic Developer (BD) or Associated Developer (AD) - see {\tt \$\{SOLPSTOP\}\allowbreak/modules/Eirene/EPL.pdf} for full details. Such registration is managed by Forschungszentrum J{\"u}lich and occurs at \href{https://www.eirene.de/}{https://www.eirene.de/}. ADs associated to ITER may contribute by forking {\tt Eirene} and raising Pull Requests to have their changes integrated into the main repository.
 
-After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER} or \href{https://git.iter.org/projects/BND/repos/solps-iter/browse}{https://git.iter.org/projects\allowbreak/BND/repos/solps-iter/browse} and maintained by the IO, and IDM account holders also can consult the \SOLPSITER SharePoint web site hosted by ITER (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org\allowbreak/departments/POP/CM/IMAS/SOLPS-ITER}). The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. Links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder (\href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}). The account request will also serve for registration of the user to the \SOLPSITER mailing list ({\tt SOLPS-ITER@iter.org}). Additionally, there is a Confluence Wiki page located at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
+After access is granted, the user will be able to consult the \SOLPSITER GIT repository at \href{https://github.com/iterorganization/SOLPS-ITER}{https://github.com\allowbreak/iterorganization/SOLPS-ITER}. The access request will also serve as registration of the user to the \SOLPSITER Microsoft Teams channel for diffusion of code-related notifications, and which also contains extensive documentation at \href{https://iterorganization.sharepoint.com/sites/SOLPS-ITER/Shared%20Documents/General}{https://iterorganization.sharepoint.com\allowbreak/sites/SOLPS-ITER/Shared Documents\allowbreak/General}. The manual to the SOLPS-GUI can be found online at \href{https://static.iter.org/imas/assets/solps-iter/html/}{https://static.iter.org/imas/assets/solps-iter/html/}. For IDM account holders, links to the IDM-controlled documents related to \SOLPSITER can be found in a centralized folder: \href{https://user.iter.org/?uid=Q92BAQ}{https://user.iter.org/?uid=Q92BAQ}. Additionally, there are two Wiki pages, on GitHub at \href{https://github.com/iterorganization/SOLPS-ITER/wiki}{https://github.com/iterorganization/SOLPS-ITER/wiki} and on the ITER Confluence site at \href{https://confluence.iter.org/display/IMP/SOLPS-ITER}{https://confluence.iter.org/display/IMP/SOLPS-ITER} for the purpose of collecting user contributions to the body of knowledge about the code and which contains minutes of the \SOLPSITER User Forums and Release Notes for the various code versions. Lastly, a Slack discussion forum has been set up at \href{https://solps.slack.com}{https://solps.slack.com}.
 
 The \SOLPSITER Git repository includes the repositories for {\tt B2.5}, {\tt Eirene}, {\tt Carre2} and {\tt DivGeo} individually as submodules. Optional ADAS data files are provided in the {\tt AMNS ADAS} submodule. Some service libraries (such as the {\tt GGD}, {\tt MSCL}, and {\tt GR} service libraries), can be found in the repository in the {\tt IMAS Extra} and {\tt Libraries} section, or as stand-alone repositories at \href{https://github.com/iterorganization}{https://github.com/iterorganization}. Registered users can also have access to the standalone {\tt SOLPS4.3} repository.
 
@@ -271,8 +265,7 @@ It is best afterwards to position oneself on the {\tt master} branches, which is
 \end{verbatim}
 
 \begin{sloppypar}
-For later updates of the {\tt master} branches, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead.
-For the Wide Grids code, you should use the {\tt solps-iter\_update\_wg\_release} script.
+For later updates of the {\tt master} branches, it is recommended you use the {\tt solps-iter\_update} script. If you are planning to do code development, your starting point should be the {\tt develop} branches, which you can switch to by using the {\tt solps-iter\_update\_develop} script instead. For the Wide Grids code, you should use the {\tt solps-iter\_update\_wg\_release} script.
 \end{sloppypar}
 
 {\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
@@ -544,7 +537,7 @@ then do the following:
 \end{verbatim}
 and edit the file {\tt modules.local/b2mod\_dimensions.F} so that the
 dimensions (mainly used for the namelists in {\tt B2.5} and the {\tt Uinp} input file build-up program) are
-big enough (see the description of the relevant variables in section \ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
+big enough (see the description of the relevant variables in Section~\ref{sec:DIMENSIONS}). Once you have edited that file, you will need to recompile with:
 \begin{verbatim}
   stop
   gmake listobj
@@ -698,7 +691,7 @@ tcsh
 source setup.csh
 \end{verbatim}
 
-Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter \ref{cha:structure}). Those aliases are:
+Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
 \begin{description}
   \item[stop] Goes to {\tt \$\{SOLPSTOP\}}, the \SOLPSITER top directory
   \item[sb2, sbb] Go to {\tt \$\{SOLPSTOP\}/modules/B2.5}, the {\tt B2.5} top directory
@@ -726,18 +719,24 @@ to refresh the list of executables to be found with the search path.
 \section{Examples}
 \label{examples}\index{b2mod\_dimensions.F}
 
-On the \SOLPSITER web site (\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}), in the folder {\em Examples}, one can find a few example cases for \SOLPSITER runs, in both {\tt B2.5} standalone or {\tt B2.5-Eirene} coupled modes.
-
-There is also a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains links to a series of sample cases. These are actually stored in the {\tt /work/imas/shared/external/assets/solps-iter/MD5} directory hosted at the IO, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix \ref{sec:DIMENSIONS} for full details about the contents of such files).
+There is a dedicated directory {\tt \$\{SOLPSTOP\}/runs/examples} which contains references to a series of sample cases. These are actually stored as a Zenodo record at \href{https://zenodo.org/communities/solps/}{https://zenodo.org/communities/solps/}, and the means to retrieve these cases is detailed in the {\tt \$\{SOLPSTOP\}/runs/examples\allowbreak/README.md} file. Following the instructions therein will extract an archived file in gzipped tar format containing a {\tt baserun} and one or more run directories and associated files. In some cases, a {\tt b2mod\_dimensions.F} file is also provided, which shows the dimensions necessary to run those cases (see Appendix~\ref{sec:DIMENSIONS} for full details about the contents of such files).
 
 \begin{sloppypar}
 The cases stored for retrieval include:
 \begin{description}
-  \item[AUG\_16151\_D] ASDEX-Upgrade D-only benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
-  \item[AUG\_16151\_D+C+He] ASDEX-Upgrade multi-fluid benchmark cases, including {\tt B2.5} standalone, coupled and single {\tt Eirene} call run directories
+  \item[AUG\_16151\_SN\_WG] ASDEX-Upgrade D-only benchmark cases, for a single-null (SN) topology
+  \item[AUG\_17151\_DDN\_WG] ASDEX-Upgrade D-only benchmark cases, for a disconnected double-null (DDN) topology
   \item[COMPASS\_16515\_1150ms\_D\_AFN] an unstructured, coarse grid, pure D COMPASS case with drifts and Advanced Fluid Neutrals, and kinetic neutrals without drifts, with a Matlab example script to plot results in the WG code
   \item[COMPASS\_sensitivity] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with Advanced Fluid Neutrals and $k$-model
-  \item[COMPASS\_sensitivity\_D+T] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with coarser mesh, deuterium+tritium species, drifts, Advanced Fluid Neutrals, Zhdanov closure and $k$-model
+  \item[COMPASS\_sensitivity\_D+T] CI test case and demo for the sensitivity calculation and optimization toolbox based on AD. Based on the COMPASS\_16515\_1150ms\_D\_AFN case above, with coarser mesh, PARDISO solver, deuterium+tritium species, drifts, Advanced Fluid Neutrals, Zhdanov closure and $k$-model
+  \item[COMPASS\_optimization] an older version of the {\tt COMPASS\_sensitivity} tests
+  \item[JET\_80295\_Lim\_WG] a JET limiter topology benchmark case
+\end{description}
+\end{sloppypar}
+
+We expect to add in the future, once issues of solver robustness for distorted grids have been resolved, the following ITER cases:
+
+\begin{description}
   \item[ITER\_2171\_D+He+Be+Ne] ITER full performance case with Ne injection and Be sputtering
   \item[ITER\_2292\_Honly\_20MW] ITER low power case at low density (H-fuelled)
   \item[ITER\_2294\_Honly\_20MW] Same as above, but increasing density
@@ -749,9 +748,8 @@ The cases stored for retrieval include:
   \item[ITER\_535\_D+He+Ar] ITER full power case with Ar injection
   \item[ITER\_Be-W\_D+T+He+Ne] ITER full power case with 98 species
 \end{description}
-as well as additional partial cases used in tutorials when learning how to build a case using the {\tt DivGeo} and {\tt SOLPS-GUI} utilities.
+
 Other cases can be added at the suggestion of users, if available.
-\end{sloppypar}
 
 After the cases have been downloaded to your system, make sure that the timestamps of the various input files are in the proper chronological order (using the {\tt correct\_baserun\_timestamps} and {\tt touch bf2tstati} instructions as necessary) before attempting to launch any actual runs. Also, the links to database files are not provided within these examples, and they can be set up using the {\tt setup\_baserun\_eirene\_links} script.
 
@@ -1080,7 +1078,7 @@ control software. The same compilation instructions as in previous
 Section~\ref{b2codemodifications} apply.
 
 The user wanting to delve deeper into the source code is directed to the detailed routine
-listing in Appendix \ref{lis:b2cdcr}.
+listing in Appendix~\ref{lis:b2cdcr}.
 
 \subsubsection{modules/B2.5/Database}
 
@@ -1092,7 +1090,7 @@ These data files include:
 \begin{description}
 \item[ionization\_potentials] \index{ionization\_potentials} is a {\tt B2} and {\tt B2.5} input file containing ionisation potentials
 \item[incatm] \index{incatm} is a {\tt B2.5} input file containing data for atomic mass, surface binding energy and density of all elements
-\item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file containing information used to index into the ADAS files when the {\tt 'adas'} option is used in {\tt b2ar} (see section \ref{sec:b2ar})
+\item[ratadas.filelist] \index{ratadas.filelist}\index{b2ar}\index{ADAS} is a {\tt B2.5} input file containing information used to index into the ADAS files when the {\tt 'adas'} option is used in {\tt b2ar} (see Section~\ref{sec:b2ar})
 \item[stra.dat] \index{stra.dat}\index{b2ar}\index{baserun}\index{STRAHL} is a file containing {\tt STRAHL} atomic data results for use by {\tt b2ar} when building {\tt b2frates} files where the {\tt 'strahl'} data option is chosen. Must be copied to the local {\tt baserun} directory.
 \item[weis.dat] \index{weis.dat}\index{b2ar}\index{baserun} is a file containing atomic data results for hydrogen by Weisheit {\it et al.} for use by {\tt b2ar} when building {\tt b2frates} files. Must be copied to the local {\tt baserun} directory.
 \end{description}
@@ -1120,6 +1118,11 @@ data used by {\tt B2.5}. Files ending in {\tt e} are for energy, in
 {\tt n} are for particles. {\tt refl.data} also contains files such as
 {\tt dc.fnn} and {\tt dc.fnn.coarse} which are the databases used for the
 advanced fluid neutral (AFN) models.
+
+Because some of these files can be very large, they are not stored on the
+GitHub repository but rather as a public-access Zenodo record, and the
+{\tt Makefile} automatically fetches them at first installation using the
+{\tt retrieve\_fnn\_datasets} script.
 
 \newpage
 \subsection{modules/Eirene}
@@ -1295,7 +1298,7 @@ Several {\tt AMDS} files are provided by default as part of the \SOLPSITER distr
 \subsection{modules/adas}
 \index{adas}\index{ADAS}
 
-The {\tt modules/adas} subdirectory contains files which are used to tell various programs
+The {\tt modules/adas} subdirectory contains the {\tt ADAS} datafiles cloned from the AMNS ADAS repository and manifest files which are used to tell various programs
 which {\tt ADAS} files to use.
 
 {\tt source.location} indicates which class of lines to use ({\tt pjr}
@@ -1304,6 +1307,8 @@ currently).
 
 {\tt ratadas.filelist} indicates the global source of the {\tt ADAS} files,
 and which "years" to use.
+
+In case of no access to the AMNS ADAS repository, the script {\tt fetch\_adas\_datafiles} can be used to create a local copy of this folder, as {\tt \$SOLPSTOP/data.local/adas}, which will be populated using open source data downloaded from the \href{https://open.adas.ac.uk/}{OpenADAS website} and, for bundled data, from a Zenodo record.
 
 \newpage \section{lib}
 
@@ -1354,7 +1359,7 @@ The {\tt baserun}
 directory contains the defaults for all of the other directories at
 its same level, and typically the grid generation steps and the input build programs
 {\tt b2ag}, {\tt b2ah}, {\tt b2ar}
-and {\tt b2ai} are run in this directory (see chapter \ref{cha:standaloneb2}).
+and {\tt b2ai} are run in this directory (see Chapter~\ref{cha:standaloneb2}).
 
 \newpage\section{scripts}
 \label{sec:scripts}
@@ -1438,7 +1443,7 @@ all of the above can take {\tt -m \#} to plot the residuals {\it modulo} {\tt \#
 and/or {\tt -l \#} to plot the last {\tt \#} residuals
 and/or {\tt -a \#} to plot the average residual over {\tt \#} occurrences.
 The options are applied in that order independently of the order in which they were typed.
-\item Power/particle losses (see section \ref{cha:regions} and Appendix \ref{lab:b2:numerics:parameters} for the region definitions)
+\item Power/particle losses (see Section~\ref{cha:regions} and Appendix~\ref{lab:b2:numerics:parameters} for the region definitions)
  \begin{description}
   \item[b2stbc\_sna\_reg \#1]\index{b2stbc\_sna\_reg} Boundary particle sources for region \#1 (default 0)
   \item[b2stbr\_sna\_reg \#1]\index{b2stbr\_sna\_reg} Recycling particle sources for region \#1 (default 0)
@@ -1498,7 +1503,7 @@ The options are applied in that order independently of the order in which they w
   \item[rsamoreg\_region \#1]\index{rsamoreg\_region} ionisation parallel momentum, by region, for species \#1 (default 0)
   \item[rsanareg\_region \#1]\index{rsanareg\_region} ionisation rate, by region, for species \#1 (default 0)
  \end{description}
-these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions} for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary information is extracted from the {\tt run.log} file.
+these require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see Section~\ref{lab:b2:numerics:parameters} and Appendix~\ref{cha:regions} for the definitions of the regions)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files are not found, the necessary information is extracted from the {\tt run.log} file.
 \item Plotting
  \begin{description}
   \item[plot]\index{plot} The various {\tt xyplot}\#, {\tt lxyplot}\#, {\tt xlyplot}\# and {\tt lxlyplot}\# call {\tt plot} passing their name as the 1$^{st}$ parameter; {\tt plot} parses the 1$^{st}$ parameter to determine if $\log x$ ({\tt lx}) or $\log y$ ({\tt ly}) and the number of curves (\#); args 1..\# specify labels for curves; the next two arguments specify $x$- and $y$-axis labels, the last specifies a header. The system normally uses {\tt gnuplot.cmd} for the {\tt gnuplot} commands, and {\tt gnuplot.data} for the data. A number of environment variables can be used to modify the behaviour of plot:
@@ -1586,43 +1591,43 @@ rm GNUPLOT_COUNT gnuplot.*data
  \end{description}
 \item Detailed run diagnostics (Many of these invoke the {\tt plot} command described above and can be toggled to use a logarithmic $y$ scale by use of an additional {\tt l} argument while {\tt L} also plots the absolute values of negative quantities on the same scale and {\tt M} the absolute values of negative quantities in a separate plot)
  \begin{description}
-  \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \item[2d]\index{2d} plots time-dependent quantities from {\tt b2time.nc} (Appendix~\ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
   \begin{verbatim}
   > 2d timesa nesepm
   > 2d timesa tesepm tisepm
   > 2d timesa nasepm1 nasepm9
   \end{verbatim}
-  \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \item[2da]\index{2da} prints time-dependent quantities from {\tt b2time.nc} (Appendix~\ref{cha:b2time}), 2$^{nd}$, 3$^{rd}$ {\it etc.\ versus} the 1$^{st}$ argument. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
   \begin{verbatim}
   > 2da timesa nesepm
   > 2da timesa tesepm tisepm
   > 2da timesa nasepm1 nasepm9
   \end{verbatim}
-  \item[2dds]\index{2dds} prints profiles from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus the corresponding space coordinate. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \item[2dds]\index{2dds} prints profiles from {\tt b2time.nc} (Appendix~\ref{cha:b2time}) versus the corresponding space coordinate. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
   \begin{verbatim}
   > 2dds ne3da
   > 2dds te3da ti3da
   > 2dds na3da1 na3da9
   \end{verbatim}
   By default, the plotted profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the two further arguments which should be added at end of the command (default values are 10 and 0 respectively).
-  \item[2dt]\index{2dt} plots time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \item[2dt]\index{2dt} plots time-dependent quantities from {\tt b2time.nc} (Appendix~\ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
   \begin{verbatim}
   > 2dt nesepm
   > 2dt tesepm tisepm
   > 2dt nasepm1 nasepm9
   \end{verbatim}
   A python version of this script also exists (Python 2.7 and 3.5 compatible).
-  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from {\tt b2tallies.nc} (Appendix \ref{cha:b2tallies}) versus time (Python 3.5 compatible).
+  \item[2dt\_tallies.py]\index{2dt\_tallies.py} plots time-dependent quantities from {\tt b2tallies.nc} (Appendix~\ref{cha:b2tallies}) versus time (Python 3.5 compatible).
   \item[2dt\_tracing]\index{2dt\_tracing} plots time-dependent quantities from the run tracing files {\tt tracing/*.trc}.
-  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from {\tt b2time.nc} (Appendix \ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
+  \item[2dt\_av]\index{2dt\_av} plots averaged time-dependent quantities from {\tt b2time.nc} (Appendix~\ref{cha:b2time}) versus time. Multi-species quantities should be called as {\tt \$\{name\}\allowbreak\$\{is\}}, where {\tt \$\{is\}} is the {\tt B2.5} species index (the species names can be retrieved using the {\bf species} command). E.g.:
   \begin{verbatim}
   > 2dt_av nesepm
   > 2dt_av tesepm tisepm
   > 2dt_av nasepm1 nasepm9
   \end{verbatim}
   \item[2dvi]\index{2dvi} prepares a \btwoplot command file {\tt TDV/contr.b2p} for production of input files to start a {\tt DIVIMP} run.
-  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d\_time\_traces.ps} from {\tt b2time.nc} (Appendix \ref{cha:b2time}) containing several relevant time traces.
-  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_time\_traces\_av.ps} from averaged values in {\tt b2time.nc} (Appendix \ref{cha:b2time}) containing several relevant time traces. This uses the batch feature of the {\tt plot} command.
+  \item[2d\_plots]\label{script:2dplots}\index{2d\_plots} prepares {\tt b2time2d\_time\_traces.ps} from {\tt b2time.nc} (Appendix~\ref{cha:b2time}) containing several relevant time traces.
+  \item[2d\_plots\_av]\index{2d\_plots\_av} prepares {\tt b2time2d\_time\_traces\_av.ps} from averaged values in {\tt b2time.nc} (Appendix~\ref{cha:b2time}) containing several relevant time traces. This uses the batch feature of the {\tt plot} command.
   \item[2d\_profiles]\index{2d\_profiles} creates {\tt *.last10} files containing several relevant plasma profiles at relevant locations (inner/outer midplane and divertor targets), and plots the important ones on {\tt b2time2d\_profiles.ps}. When processing fluxes, divides them by the area of contact to the neighbouring cell. By default, the printed profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging limits can be adjusted with the \#1 and \#2 arguments (default values are 10 and 0 respectively).
   \item[2d\_profiles\_extended]\index{2d\_profiles\_extended} creates {\tt *.last10} files containing several relevant plasma profiles at relevant locations (inner/outer midplane and divertor targets). When processing fluxes, divides them by the area of contact to the neighbouring cell. The flux files ending in {\tt P.last10} are divided by the perpendicular area of the cell face. By default, the printed profiles will be averaged over the last 10 snapshots. If the number of available snapshots is less than 10, the default will be to average over all the snapshots available. The averaging number can be adjusted with the \#1 argument (default value is 10).
   \item[2d.summarize]\index{2d.summarize} Outputs the time-dependent quantities from the last time point in {\tt b2time.nc}.
@@ -1670,10 +1675,10 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[internal\_energy\_balance]\index{internal\_energy\_balance} Outputs the energy balance tallies.
   \item[internal\_energy\_balance\_coupled]\index{internal\_energy\_balance\_coupled} Outputs the energy balance tallies for a coupled run.
   \item[joule\_heating]\index{joule\_heating} Plots the amount of Joule heating per region.
-  \item[mtv\_3d]\index{mtv\_3d} Plots the time evolution of a {\tt CDF} quantity (Appendix \ref{cha:b2time}) profile.
-  \item[mtv\_3d\_f]\index{mtv\_3d\_f} Plots the time evolution of the profile of the flux of a {\tt CDF} quantity (Appendix \ref{cha:b2time}) along the targets.
-  \item[mtv\_3d\_nf]\index{mtv\_3d\_nf} Plots the time evolution of the profile of a {\tt CDF} quantity (Appendix \ref{cha:b2time}) along both targets side by side.
-  \item[mtv\_3d\_t]\index{mtv\_3d\_t} Plots the time evolution of the profile of the a {\tt CDF} quantity (Appendix \ref{cha:b2time}) along the targets.
+  \item[mtv\_3d]\index{mtv\_3d} Plots the time evolution of a {\tt CDF} quantity (Appendix~\ref{cha:b2time}) profile.
+  \item[mtv\_3d\_f]\index{mtv\_3d\_f} Plots the time evolution of the profile of the flux of a {\tt CDF} quantity (Appendix~\ref{cha:b2time}) along the targets.
+  \item[mtv\_3d\_nf]\index{mtv\_3d\_nf} Plots the time evolution of the profile of a {\tt CDF} quantity (Appendix~\ref{cha:b2time}) along both targets side by side.
+  \item[mtv\_3d\_t]\index{mtv\_3d\_t} Plots the time evolution of the profile of the a {\tt CDF} quantity (Appendix~\ref{cha:b2time}) along the targets.
   \item[nareg \#1]\index{nareg} Shows averaged density per region for species \#1.
   \item[nareg\_species \#1]\index{nareg\_species} Shows averaged density per species for region \#1.
   \item[nereg]\index{nereg} Shows averaged electron density per region.
@@ -1706,7 +1711,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   \item[viscous\_heating]\index{viscous\_heating} Shows the viscous heating term per region.
   \item[zeffreg]\index{zeffreg} Shows $Z_{eff}$ per region.
  \end{description}
-many of the above require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see section \ref{lab:b2:numerics:parameters} and Appendix \ref{cha:regions}
+many of the above require the {\tt SOLPS\_FLUIDS} and {\tt NREG} variables to be set correctly (see Section~\ref{lab:b2:numerics:parameters} and Appendix~\ref{cha:regions}
 for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG}. If the {\tt SOLPS\_FLUIDS} or {\tt NREG} files is not found, the necessary information is extracted from the {\tt run.log} file.
 \item Utility
  \begin{description}
@@ -1728,6 +1733,7 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[define\_compilers]\index{define\_compilers} This script sets the compiling variables {\tt \$\{CC\}} and {\tt \$\{FC\}} to the proper C and Fortran compilers, respectively, if not already set, according to the value of the main {\tt \$\{COMPILER\}} variable.
   \item[env\_var\_length]\index{env\_var\_length} Lists the length of each environment variable in the shell. When executed as in {\tt `env\_var\_length | sort -n | tail`}, prints the 10 longest environment variables.
   \item[env\_var\_prune]\index{env\_var\_prune} Prunes an environment variable by removing duplicated entries. Usage is {\tt setenv X `env\_var\_prune X`}.
+  \item[fetch\_adas\_datafiles]\index{fetch\_adas\_datafiles}\index{ADAS} Downloads the ADAS datafiles used by {\tt B2.5} from the OpenADAS website (adf11 and adf15 files) and from the \SOLPSITER Zenodo archive (bundled files) and puts them into a {\tt \$SOLPSTOP/data.local/adas} folder. Used in case of no access to the AMNS ADAS repository.
   \item[fixbb]\index{fixbb} A utility script to properly define the bounding box of PostScript files.
   \item[get\_series]\index{get\_series} Gets the data from {\tt last\_2d\_out} files of the runs associated with the series described in {\tt series\_file} and prints them out in a plottable multi-column file {\tt Series.dat} according to {\tt get\_series.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[gtdr]\index{gtdr} Script to make a directory tree local.
@@ -1868,9 +1874,9 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
  \end{description}
 \item Some new Python \index{Python scripts} based scripts have also been added:
  \begin{description}
-  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
-  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (chapter \ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_inner\_target.py]\index{calculate\_sputter\_inner\_target.py} Calculates the physical sputtering to be expected at the inner target in a simulation saved in MDSplus (Chapter~\ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[calculate\_sputter\_outer\_target.py]\index{calculate\_sputter\_outer\_target.py} Calculates the physical sputtering to be expected at the outer target in a simulation saved in MDSplus (Chapter~\ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
+  \item[compare\_2\_solps.py]\index{compare\_2\_solps.py} Compares two SOLPS shots with same dimensions saved in MDSplus (Chapter~\ref{cha:MDSplus}) on the solps-mdsplus.ipp.mpg.de server ({\tt -h} help is provided).
   \item[energy\_analysis.py]\index{energy\_analysis.py} Energy passing through various surfaces.
   \item[fluid\_core\_fluxes.py \#1 \#2]\index{fluid\_core\_fluxes.py} Total fluid flux entering the core region summed from species \#1 to \#2.
   \item[fluid\_fluxes.py \#1 \#2]\index{fluid\_fluxes.py} Fluid fluxes through various surfaces summed from species \#1 to \#2.
@@ -1972,16 +1978,16 @@ above for more details.
 \chapter{Running the standalone version of B2.5}
 \label{cha:standaloneb2}
 
-The compilation of {\tt B2.5} is described in section \ref{sec:b2} on page
+The compilation of {\tt B2.5} is described in Section~\ref{sec:b2} on page
 \pageref{sec:b2}.
 
-The run directory is described in section \ref{sec:b2runs} on page
+The run directory is described in Section~\ref{sec:b2runs} on page
 \pageref{sec:b2runs}. It is accessible with the {\tt sbr} command.
 
 \begin{sloppypar}
 The main code is {\tt b2mn.exe} but it needs input files written
 by {\tt b2ag.exe}, {\tt b2ah.exe}, {\tt b2ar.exe} and
-{\tt b2ai.exe}.  As described in section \ref{sec:b2runs}, these last four are
+{\tt b2ai.exe}.  As described in Section~\ref{sec:b2runs}, these last four are
 usually run in the {\tt baserun} directory, and then {\tt b2mn.exe}
 is run in the actual run directory.
 \end{sloppypar}
@@ -2243,7 +2249,7 @@ as {\tt jet.50401.58000.geo}, identify it as being of size $96 \times
     \end{enumerate}
   \end{itemize}
 \item[...] other options can be used to modify the mesh and magnetic
-  field information that are read in from the mesh file (see Appendix \ref{lis:b2cdci})
+  field information that are read in from the mesh file (see Appendix~\ref{lis:b2cdci})
 \end{description}
 
 \newpage\section{b2ah, setting up the default physics parameters}
@@ -2340,11 +2346,11 @@ The {\tt b2cmpb} block contains
 \end{description}
 
 The exact form of the specification is somewhat arcane: users are
-referred to the code ({\tt b2stbc\_bas}) for the definitive meaning,
-or to the write-up in Appendix \ref{cha:Mladen}.
+referred to the write-up in Appendix~\ref{cha:Mladen} for the
+definitive meaning.
 
 Users are encouraged to use the "physics" formulation of the
-boundary conditions specified later (see section \ref{lab:b2:boundary:parameters}),
+boundary conditions specified later (see Section~\ref{lab:b2:boundary:parameters}),
 rather than the "Bas" formulation listed here.
 For double-null and snowflake cases, the "South" boundary must be split
 in at least six pieces, and the "North" boundary in at least two.
@@ -2360,7 +2366,7 @@ Anything from this block can be overridden in {\tt b2mn.dat} and,
 depending on switches in {\tt b2mn.dat}, by
 {\tt b2.\allowbreak boundary.\allowbreak parameters} (the recycling coefficients can be
 overridden by {\tt b2.neutrals.parameters}
-(see section \ref{lab:b2:neutrals:parameters})).
+(see Section~\ref{lab:b2:neutrals:parameters})).
 
 \subsubsection{b2cmpt, transport coefficients}
 \index{b2cmpt}\index{transport coefficients}\label{lab:b2cmpt}
@@ -2393,11 +2399,11 @@ of the seven parameters with various quantities from the code.
 
 Anything from this block can be overridden in {\tt b2mn.dat} and,
 depending on switches in {\tt b2mn.dat}, by use of the
-{\tt b2.transport.parameters} (section \ref{lab:b2:transport:parameters}) and
-{\tt b2.transport.inputfile} (section \ref{lab:b2:transport:inputfile}) files.
+{\tt b2.transport.parameters} (Section~\ref{lab:b2:transport:parameters}) and
+{\tt b2.transport.inputfile} (Section~\ref{lab:b2:transport:inputfile}) files.
 
 Fuller descriptions are found in {\tt b2cdcv.F} in the {\tt documentation}
-sub-directory of the {\tt B2.5} source code (see Appendix \ref{lis:b2cdcv}), and the
+sub-directory of the {\tt B2.5} source code (see Appendix~\ref{lis:b2cdcv}), and the
 relevant subroutine is {\tt b2tqna}.
 
 It is important, for numerical stability reasons, to provide mechanisms by which some
@@ -2440,7 +2446,7 @@ or, best:
 \item[nucspec] nuclear charge, lowest charge state, highest charge state
 \item[flag] which atomic physics database to use
 \item[tailep] smoothing parameter for the temperature dependence of some rate coefficients
-\item[switches] optional, described in {\tt b2cdci}, (see Appendix \ref{lis:b2cdci})
+\item[switches] optional, described in {\tt b2cdci}, (see Appendix~\ref{lis:b2cdci})
 \end{description}
 
 The allowable choices for the {\bf flag} switch are:
@@ -2453,7 +2459,7 @@ The allowable choices for the {\bf flag} switch are:
 
 \index{Weisheit}
 Unless the user chooses to activate the {\tt b2ardr\_no\_weisheit} switch (see
-section \ref{lis:b2cdci} for description), the hydrogen rates come from
+Section~\ref{lis:b2cdci} for description), the hydrogen rates come from
 \cite{Weisheit} and \cite{Janev1984} and overwrite those provided by the data packages above. Those
 data are stored in the {\tt weis.dat}\index{weis.dat} file which should be present in the
 {\tt baserun} directory where {\tt b2ar} is run. When running {\tt b2ar.dat} using the
@@ -2472,17 +2478,21 @@ Supplemental information on atomic physics rates can be found in the file
 \end{sloppypar}
 
 \index{ADAS, bundling}
-The {\tt 'adas'} option allows for charge state bundling, provided one has pre-computed the bundled atomic rates. A set of such bundled datasets can be found in the {\tt \$SOLPSTOP/modules/adas/adas\_bundled} directory. The {\tt adas\_DPC\_3} directory contains datasets in which isonuclear sequences are bundled in the most aggressive way, i.e. in 3 bundles only (neutral, all partially ionized species, and fully stripped ion). The {\tt adas\_W} directory contains datasets for bundled tungsten ({\tt W}) using a variety of bundling schemes (see~\cite{BONNIN_W} and the contents of the {\tt adas\_W/Documentation} directory for a full description).
+The {\tt 'adas'} option allows for charge state bundling, provided one has pre-computed the bundled atomic rates. A set of such bundled datasets can be found in the {\tt \$SOLPSTOP/modules/adas/adas\_bundled} directory (or in the {\tt \$SOLPSTOP/data.local/adas/adas\_bundled} directory, if ADAS datafiles were obtained by means of the {\tt fetch\_adas\_datafiles} script). The {\tt adas\_DPC\_3} directory contains datasets in which isonuclear sequences are bundled in the most aggressive way, i.e. in 3 bundles only (neutral, all partially ionized species, and fully stripped ion). The {\tt adas\_W} directory contains datasets for bundled tungsten ({\tt W}) using a variety of bundling schemes (see~\cite{BONNIN_W} and the contents of the {\tt adas\_W/Documentation} directory for a full description).
 
 As an example, let us assume that one wishes to use the {\tt 'jett'} bundling scheme for tungsten. The files for this scheme have the naming convention {\tt adf11/xxx89/xxx89\_w\_02\_jett.dat} where {\tt xxx} stands for one of {\tt acd} (recombination), {\tt ccd} (charge exchange), {\tt ecd} (average ionisation potential), {\tt plt} (line radiation rate), {\tt prb} (energy loss rate), {\tt scd} (ionisation), {\tt ycd} (average square charge), or {\tt zcd} (average charge). Then, the header for the {\tt ratadas.filelist} should be modified to read:
 \begin{verbatim}
 'SOLPSTOP/modules/adas/adas_bundled/adas_W'
 \end{verbatim}
-and the line for the tungsten data should be:
+or
+\begin{verbatim}
+'SOLPSTOP/data.local/adas/adas_bundled/adas_W'
+\end{verbatim}
+if ADAS datafiles were obtained by means of the {\tt fetch\_adas\_datafiles} script, and the line for the tungsten data should be:
 \begin{verbatim}
 '8902' '8902' '8902' '8902' '8902' '8902' '8902' 'w '  'jett'
 \end{verbatim}
-The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP/modules} part of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
+The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP/modules} part of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas} or {\tt \$SOLPSTOP/data.local/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
 
 The modified {\tt ratadas.filelist} file should be present in the {\tt baserun} directory from which {\tt b2ar} will be run. If this file is prepared before {\tt Uinp} is run, then the case build-up will assume that the indicated bundling scheme is to be used and create all appropriate input files accordingly. If one is introducing bundling to an existing case, then the recommended procedure is to use the {\tt b2yt} conversion program to modify all input files as needed. See the corresponding section~\ref{sec:b2yt} for the full details.
 
@@ -2599,7 +2609,7 @@ program run in the background.  Thus
 
 The code reads its data from {\tt b2mn.dat}, and optionally from a
 number of other files, as described below.  Options for monitoring the
-code run are described in section \ref{sec:b2running}.
+code run are described in Section~\ref{sec:b2running}.
 
 \subsection{b2mn.dat}
 \index{b2mn.dat, D example}
@@ -2616,14 +2626,14 @@ The basic structure of {\tt b2mn.dat} is
   those specified in the block of the same name in {\tt b2ah.dat}
   \item[*b2cmpt] specifies a block of transport coefficients, overriding
   those specified in the block of the same name in {\tt b2ah.dat}
-  \item[switches] described in {\tt b2cdci}, (see Appendix \ref{lis:b2cdci})
+  \item[switches] described in {\tt b2cdci}, (see Appendix~\ref{lis:b2cdci})
 \end{description}
 \end{sloppypar}
 
 \subsection{b2.boundary.parameters}
 \index{b2.boundary.parameters}\index{b2stbc}\index{b2stbc\_boundary\_namelist}\index{boundary conditions}\label{lab:b2:boundary:parameters}
 
-See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
+See also Appendix~\ref{lis:b2cdcn} for a more up-to-date description.
 
 If {\tt 'b2stbc\_boundary\_namelist'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the boundary conditions are read in from
@@ -2883,7 +2893,7 @@ which contains
     $\delta_i$ in $Q_i = \delta_i T_i \sum_a \Gamma_a$.
     Obsolete. Replace with drift-compatible {\tt BCENI=15}.
   \item[13] prescribe the ion energy flux per unit area proportional to temperature,
-   {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
+    {\tt ENIPAR(,1)} specifies the energy flux density per temperature in $W.m^{-2}.J^{-1}$ (the temperature here in $J$).
   \item[14] leakage option for ion energy, {\tt ENIPAR(,1)} specifies
     the leakage factor, $\alpha$ in $\Gamma_{\mbox{loss}} = \alpha C_{s,\mbox{collective}} n_i T_i$
   \item[15] sheath boundary condition. If {\tt MOMPAR(ismain,,2)} $< 0.5$, collective sound speed velocity flux, and marginal imposition of the Bohm-Chodura sheath entrance condition;
@@ -2912,13 +2922,13 @@ which contains
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
     {\tt ENIPAR(,2)} specifies the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[25] constant temperature feedback scaled by temperature on the ring {\tt bc\_type21\_ref} away
-    {\tt ENIPAR(,,1)} specifies the desired ion temperature in $eV$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    {\tt ENIPAR(,1)} specifies the desired ion temperature in $eV$.
+    {\tt ENIPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[26] prescribe the poloidally averaged value of the ion temperature and introduce a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=23} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The average is taken over all core boundaries with {\tt BCENI=26}.
     {\tt ENIPAR(,1)} specifies the temperature in $eV$.
   \item[27] feedback boundary condition with prescribed total ion heat flux, constant poloidally averaged ion temperature and a poloidal variation in a simplified manner. This boundary condition is suitable for any plasma composition (i.e. when {\tt BCENI=24} fails). It is recommended to use this boundary condition together with corresponding condition on ion density ({\tt BCCON=25,26,27}). The flux is summed over all core boundaries with {\tt BCENI=27}.
     {\tt ENIPAR(,1)} specifies the energy flux in $W$.
-    {\tt ENIPAR(,,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
+    {\tt ENIPAR(,2)} is the strength of the feedback (if left zero, {\tt b2stbc\_bc\_ref\_ti} will be used).
   \item[28] prescribe the value of the ion temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
     {\tt ENIPAR(,1)} specifies the average temperature in $eV$.
   \item[29] Feedback on the total ion energy flux, by imposing a flux surface averaged temperature, with a poloidal perturbation taken from the flux tube just inside the domain.
@@ -3086,7 +3096,7 @@ criterion at the plates is adjusted to include drift velocities).
 \subsection{b2.transport.parameters}
 \index{b2.transport.parameters}\index{b2tqna}\index{b2tqna\_transport\_namelist}\index{transport coefficients}\label{lab:b2:transport:parameters}
 
-See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
+See also Appendix~\ref{lis:b2cdcn} for a more up-to-date description.
 
 If {\tt 'b2tqna\_transport\_namelist'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the transport coefficients are read in from the namelist found in
@@ -3215,7 +3225,7 @@ which contains
   {\tt real}, the basic time at which a switch is to be made to a new
   transport input file, in $s$
 \end{description}
-See also section \ref{lab:b2:transport:inputfile} for an alternative
+See also Section~\ref{lab:b2:transport:inputfile} for an alternative
 description of the transport coefficients which allows for radial
 variation.
 
@@ -3235,7 +3245,7 @@ The code will fail a transport coefficients test in {\tt b2tral} otherwise.
 \subsection{b2.numerics.parameters}
 \index{b2.numerics.parameters}\label{lab:b2:numerics:parameters}
 
-See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
+See also Appendix~\ref{lis:b2cdcn} for a more up-to-date description.
 
 \begin{description}\index{NREG}
 \item[DTCO]\index{DTCO} {\tt real array, length NS * (NREG+1)}, the
@@ -3287,7 +3297,7 @@ The extent of those regions in both computational and physical space is shown
 in Fig.~\ref{fig:SN_regions}. For double-null configurations, the regions
 follow a similar numbering scheme (modulo 4) as shown in
 Fig.~\ref{fig:DN_regions}. Details for other geometries can be found in the
-{\tt init\_region} routine of {\tt b2agfs.F} and in Appendix \ref{cha:regions}.
+{\tt init\_region} routine of {\tt b2agfs.F} and in Appendix~\ref{cha:regions}.
 
 \begin{figure}[hbtp]
   \centering
@@ -3316,10 +3326,10 @@ Fig.~\ref{fig:DN_regions}. Details for other geometries can be found in the
 \subsection{b2.transport.inputfile}
 \index{b2.transport.inputfile}\index{b2tqna}\index{b2tqna\_inputfile}\index{transport coefficients}\label{lab:b2:transport:inputfile}\index{b2ah.dat}\index{b2mn.dat}\index{b2.transport.parameters}
 
-See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
+See also Appendix~\ref{lis:b2cdcn} for a more up-to-date description.
 
 This allows for a radial variation ... for a simpler option see
-section \ref{lab:b2:transport:parameters}.
+Section~\ref{lab:b2:transport:parameters}.
 
 If {\tt 'b2tqna\_inputfile'} is set to {\tt '1'} in {\tt b2mn.dat}
 then the transport coefficients are read in from the namelist in
@@ -3441,7 +3451,7 @@ private flux region.
 \subsection{b2.sources.profile}
 \index{b2.sources.profile}\index{b2sral}\index{b2sral\_inputfile}\index{sources}\label{lab:b2:sources:profile}
 
-See also Appendix \ref{lis:b2cdcn} for a more up-to-date description.
+See also Appendix~\ref{lis:b2cdcn} for a more up-to-date description.
 
 One can also set radially dependent source profiles, in much the same way as with
 {\tt b2.transport.inputfile}, with the {\tt b2.sources.profile} input file,
@@ -3507,8 +3517,8 @@ The results of these imported source profiles can be visualised in
 \subsection{b2.neutrals.parameters}
 \index{b2.neutrals.parameters}\label{lab:b2:neutrals:parameters}
 
-See descriptions in Coupled {\tt Eirene} chapter \ref{cha:coupledb2eirene}
-and Appendix \ref{lis:b2cdcn}.
+See descriptions in Coupled {\tt Eirene} chapter~\ref{cha:coupledb2eirene}
+and Appendix~\ref{lis:b2cdcn}.
 
 \subsection{b2.atomic\_physics\_rescale.parameters}
 \index{b2.atomic\_physics\_rescale.parameters}\label{lab:b2:atomic_physics_rescale:parameters}
@@ -3530,23 +3540,23 @@ These are:
   contains the scaling factor per species to be applied to the brems-strahlung radiation rates
 \end{description}
 
-See Appendix \ref{lis:b2cdcn} for a full description.
+See Appendix~\ref{lis:b2cdcn} for a full description.
 
 \subsection{b2.user.parameters}
 \index{b2.user.parameters}\label{lab:b2:user:parameters}
 
-See descriptions in Coupled {\tt Eirene} chapter \ref{cha:coupledb2eirene}
-and Appendix \ref{lis:b2cdcn}.
+See descriptions in Coupled {\tt Eirene} chapter~\ref{cha:coupledb2eirene}
+and Appendix~\ref{lis:b2cdcn}.
 
 \subsection{b2.XXX.parameters}
 
-See descriptions in Appendix \ref{lis:b2cdcn}.
+See descriptions in Appendix~\ref{lis:b2cdcn}.
 
 \subsection{While the code is running}
 \label{sec:b2running}
 
 While the code is running and writing into {\tt run.log}, a number of
-the scripts described in section \ref{sec:scripts} can be run.
+the scripts described in Section~\ref{sec:scripts} can be run.
 
 {\tt cpu}\index{cpu} shows how much CPU time each iteration has taken and is a
 quick way of monitoring the progress of a run.
@@ -3586,7 +3596,7 @@ All of the residuals of a pure deuterium run can be plotted with
 The power crossing various surfaces can be seen with
 {\tt energy\_analysis}\index{energy\_analysis} or
 {\tt energy\_analysis.py}\index{energy\_analysis.py}, figure \ref{fig:energyanalysis}.
-The detailed definition of these surfaces can be found in Appendix \ref{cha:regions}
+The detailed definition of these surfaces can be found in Appendix~\ref{cha:regions}
 or the commented header to the {\tt init\_region} subroutine in
 {\tt b2agfs.F}.
 
@@ -3631,10 +3641,11 @@ The following commands apply:
 
 \lstinputlisting[breaklines,basicstyle=\footnotesize]{b2plot.commands}
 
-A revised copy of the \btwoplot manual can be found in Appendix
-\ref{cha:b2plotmanual}, page \pageref{cha:b2plotmanual}.  Note that some
-of the quantities have changed name between \SOLPSfour and \SOLPSfive versions,
-\index{b2plot, changes from SOLPS4.0 to SOLPS5.0}table \ref{tab:changedplotquantities}, and that
+A revised copy of the \btwoplot manual can be found in
+Appendix~\ref{cha:b2plotmanual}, page~\pageref{cha:b2plotmanual}.
+Note that some of the quantities have changed name between \SOLPSfour
+and \SOLPSfive versions,
+\index{b2plot, changes from SOLPS4.0 to SOLPS5.0}Table~\ref{tab:changedplotquantities}, and that
 whereas {\tt ix} ran from {\tt 0} to {\tt nx+1} it now runs from
 {\tt -1} to {\tt nx}, {\tt iy} which ran from {\tt 0} to {\tt ny+1}
 now runs from {\tt -1} to {\tt ny} and {\tt is} which ran from {\tt 1}
@@ -4293,7 +4304,7 @@ omissions to the developer team are always welcome.
 In case of a computer crash during a run, it may be possible to recover
 the results and continue the simulation. The code writes, at regular
 intervals (default is 3600 CPU seconds, and can be modified with use of the
-{\tt b2mndr\_cpu}, {\tt b2mndr\_ntim\_save}, or {\tt b2mndr\_plasmatim} switches, see Appendix \ref{lis:b2cdci} for details),
+{\tt b2mndr\_cpu}, {\tt b2mndr\_ntim\_save}, or {\tt b2mndr\_plasmatim} switches, see Appendix~\ref{lis:b2cdci} for details),
 recovery files entitled {\tt plasmastate.XXXX} and {\tt b2.*\_save.parameters.XXXX} in the {\tt b2mn.exe.dir} run
 subdirectory. The {\tt XXXX} are numbers indicating the order in which the
 files were written. The {\tt plasmastate} files contain the same information as the {\tt b2fstati} or
@@ -4551,7 +4562,10 @@ This program rewrites an existing IDS in case a correction needs to be made (bec
 \chapter{Running the standalone version of Eirene}
 \label{cha:standaloneeirene}\index{Eirene}
 
-{\tt Eirene} is documented at \href{http://www.eirene.de/}{http://www.eirene.de/}.
+The complete {\tt Eirene} manual is provided as part of the \SOLPSITER
+distribution as the {\tt \$SOLPSTOP/modules/\allowbreak Eirene/Manual/eirene.pdf} file,
+automatically built with the code compilation.
+If not present, it can also be found at \href{http://www.eirene.de/}{http://www.eirene.de/}.
 The user is strongly encouraged to check out that very complete manual.
 Reference~\cite{Reiter2005} also provides a useful description.
 
@@ -4568,7 +4582,7 @@ The {\tt Eirene} standalone executable is built by doing {\tt gmake eirene} (if 
 \end{verbatim}
 %% $
 
-See also the next chapter and section \ref{sec:DIMENSIONS} for setting the array sizes
+See also the next Chapter and Section~\ref{sec:DIMENSIONS} for setting the array sizes
 and useful file links for {\tt Eirene} before compilation.
 
 \section{Specific SOLPS-ITER blocks in the Eirene input file}
@@ -4627,7 +4641,7 @@ DO 50, IAOT=1,NAOTB
 
 {\bf Meaning of the input variables for interfacing routine INFUSR}
 
-We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, section 2.14.
+We only include here the variables or aspects thereof not already described in the {\tt Eirene} manual, Section~2.14.
 
 \begin{description}
   \item[LCOARSE] Coarse mesh switch ??? $\Rightarrow$ no longer in use in the extended grids code
@@ -5226,7 +5240,7 @@ and the time derivative terms for the energy equations, (\ref{eq:ene_new}) and (
 \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} T_\alpha^{(k+1)} - n_\alpha^{(k)} T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f}
 \end{equation}
 
-where $\alpha$ stands for $e$ or $i$, $\tau$ is the time step size, $\delta_x$ is the time step multiplier for the $x$ equation (i.e. the value of the {\tt DTMO}, {\tt DTEE}, or {\tt DTEI} arrays for that region and species), and $\tau_f$ is an additional optional time step multiplier, governed by the {\tt CORE\_DT\_FACTOR} switch from the {\tt NUMERICS} namelist (see Section \ref{lab:b2:numerics:parameters} and Appendix \ref{lis:b2cdcn} for details).
+where $\alpha$ stands for $e$ or $i$, $\tau$ is the time step size, $\delta_x$ is the time step multiplier for the $x$ equation (i.e. the value of the {\tt DTMO}, {\tt DTEE}, or {\tt DTEI} arrays for that region and species), and $\tau_f$ is an additional optional time step multiplier, governed by the {\tt CORE\_DT\_FACTOR} switch from the {\tt NUMERICS} namelist (see Section~\ref{lab:b2:numerics:parameters} and Appendix~\ref{lis:b2cdcn} for details).
 
 According to the under-relaxation scheme, the updated values of the parallel velocity and temperatures at time step $k+1$ are given by:
 
@@ -5387,7 +5401,7 @@ or whatever the latest version of MDSplus is.
 
 {\tt b2md} requires as input {\tt b2md.dat} and this is searched for in the
 present working directory, then the {\tt baserun} directory, in order.
-See Appendix \ref{lis:b2cdcn} for a content description.
+See Appendix~\ref{lis:b2cdcn} for a content description.
 
 An example {\tt b2md.dat} is:
 \VerbatimInput[fontsize=\footnotesize]{MDSPLUS/b2md.dat}
@@ -5980,7 +5994,7 @@ Available choices are:
 \end{description}
 The default setting for {\tt DEVICE} can be changed for each local
 implementation {\em via} use of the {\tt setup.csh.*} files listed
-in section \ref{sec:setup}.
+in Section~\ref{sec:setup}.
 
 If {\tt DivGeo} is not yet compiled, you will need to do \index{DivGeo, compiling}
 \begin{verbatim}
@@ -6009,7 +6023,7 @@ or
 \end{verbatim}
 where {\tt case.dg} is an existing case.
 
-The reader is referred to the {\tt DG} manual in Appendix \ref{cha:dgmanual}
+The reader is referred to the {\tt DG} manual in Appendix~\ref{cha:dgmanual}
 for further information of running {\tt DG} itself.
 
 After saving ({\tt File|Save}) and outputting ({\tt File|Output}) you
@@ -6096,7 +6110,7 @@ is being analytically extended, the resulting extended equilibrium is output in 
 
 {\em The following section only applies if Carre2 is compiled in interactive mode}
 
-The program will propose a table (see next chapter for an example) containing,
+The program will propose a table (see next Chapter for an example) containing,
 for each
 region of the grid, the relevant meshing parameters. The first table
 (titled {\tt SEPARATRIX SEGMENTS}) includes the variables for the poloidal
@@ -7287,7 +7301,7 @@ stellarators, the $V_{\perp}$ term may overpower the sound
 velocity \cite{FENG99A}
 and then the boundary condition would require a plasma flow exiting the plate.
 Therefore, the pitch angle at the plates is limited to be no less than
-1 degree (user parameter, see switch {\tt b2agfs\_min\_pitch} in Appendix \ref{lis:b2cdci}),
+1 degree (user parameter, see switch {\tt b2agfs\_min\_pitch} in Appendix~\ref{lis:b2cdci}),
 motivated by the engineering limits met when attempting to align the
 divertor tiles with the magnetic field. The solution procedure of the code
 was also modified so as ensure that no unphysical flows were being created,
@@ -7751,7 +7765,7 @@ In some cases, it may also be essential to ensure excellent particle conservatio
 run timestep, as the {\tt B2} internal iterations make the plasma solution evolve away from the plasma
 background originally used for the computation of the {\tt Eirene} sources above, it may become
 necessary to rescale these. A scheme to do so was developed by A. Kukushkin for ITER applications \cite{Kukushkin2002PPCF}
-and can be activated using the {\tt eirene\_ank\_mods} switch. See the listing in Appendix \ref{lis:b2cdci}
+and can be activated using the {\tt eirene\_ank\_mods} switch. See the listing in Appendix~\ref{lis:b2cdci}
 and the additional description in the {\tt \$\{SOLPSTOP\}/doc/Source\_Scaling\_in\_B2.pdf} file.
 
 \section{Classical transport: Braginskii, Balescu and Zhdanov formulations}
@@ -7763,7 +7777,7 @@ as a function of the local $Z_{eff}$.
 Table \ref{tab:comparetransport} summarizes the differences between the Braginskii and Balescu models.
 It is possible in the code to use either model, or even the full Balescu 21-moment expressions, as well as
 a Zhdanov fit to the table published in the Braginskii paper as a function of $Z_{eff}$.
-See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\tt 'b2sigp\_style'} as described in Appendix \ref{lis:b2cdci}.
+See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\tt 'b2sigp\_style'} as described in Appendix~\ref{lis:b2cdci}.
 
 \begin{center}
     \begin{longtable}{|c|c|c|c|c|}
@@ -7838,13 +7852,13 @@ Zhdanov fit to Braginskii and the \SOLPSfour values.
 {\em This code feature is still experimental.}
 
 \begin{sloppypar}
-Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Zhdanov-Grad module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Zhdanov-Grad closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in section \ref{sec:Zhdanov}.
+Fully multi-ion collisional closure for the components along the magnetic field of the vector and tensor moments of the distribution function is applied for all ions (without specifying main ions and impurities) based on the works of Zhdanov \cite{ZHDANOV2002} and Makarov {\it et al.} \cite{MAKAROV2021}. It is used if {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}. It is not applied by default. The Zhdanov-Grad module operates in two regimes: 1) Improved analytical method (IAM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '1'}; 2) Explicit matrix inversion method (EMIM), if {\tt 'b2tral\_zh\_imp\_analyt'} is set to {\tt '0'}. The Zhdanov-Grad closure provides transport coefficients for the parallel components of the ion heat conductivity, the ion velocity-dependent heat flux, the ion thermal force, the ion friction force, the ion flow velocity viscous stress and the ion heat viscous stress for all ions. It allows aplication of \SOLPSITER to arbitrary plasma mixtures such as: $D+T+He+$impurities, $H+D+$impurities, $He+H+$impurities, etc... A detailed description of this closure method can be found in Section~\ref{sec:Zhdanov}.
 \end{sloppypar}
 
 \chapter{Model equations for B2.5}
 \label{cha:equations}\index{B2.5, model}\index{B2.5, equations}\index{equations}\index{model}
 
-The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on \SOLPSfivetwo from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix \ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters \ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix \ref{lis:b2cdci} and of namelist variables in Appendix \ref{lis:b2cdcn}.
+The version of the equations shown in this Appendix represents the best available description of the standard recommended settings for the \SOLPSITER physics model, built upon the original work on \SOLPSfivetwo from the St. Petersburg group \cite{ROZHANSKY2009}. Use of that physics model is governed by the switch {\tt b2mndt\_style}, with a default value of {\tt 1}. If set to {\tt 0}, then the {\bf SOLPS5.0} physics model, as described in Appendix~\ref{cha:b2physics} and in the review paper \cite{SOLPS2006}, will be applied instead. The present Appendix is not meant as an exhaustive registry of the capabilities of the code, for which the reader is encouraged to peruse Chapters~\ref{cha:standaloneb2} and \ref{cha:coupledb2eirene} as well as the list of switches in Appendix~\ref{lis:b2cdci} and of namelist variables in Appendix~\ref{lis:b2cdcn}.
 
 Some equations include terms which are multiplied by zero. This is meant to indicate that such terms are not included in the standard \SOLPSITER physics model, but that switches exist that allow for their inclusion.
 
@@ -8422,7 +8436,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z\sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x}\frac{\partial n_a T_i}{\partial x} +
 Z_a e n_a \frac{b_x}{h_x} \frac{\partial \Phi}{\partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 However, one can also use the formulation given as Eq.~(\ref{eq:mom_old}),
@@ -8434,7 +8448,7 @@ m_a \frac{\partial n_a V_{\parallel a}}{\partial t} +
 \frac{1}{h_z\sqrt g} \frac{\partial}{\partial y} \left( \frac{h_z \sqrt g}{h_y} \Gamma_{ay}^m \right) +
 \frac{b_x}{h_x} \frac{\partial n_a T_i}{\partial x} +
 \frac{b_x}{h_x} \frac{Z_a n_a \partial n_e T_e}{n_e \partial x} = \notag \\
-= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_a}^m
+= S_{a \parallel}^m + S_{CF_a}^m + S_{fr_a}^m &+ S_{Therm_a}^{m} + S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{EIRENE_{a\parallel}}^m
 \end{align}
 
 The treatment using Eq.~(\ref{eq:mom_new}) is recommended for cases with a
@@ -8467,7 +8481,7 @@ S_{a \parallel}^m = - \left( \nabla \cdot\overset\leftrightarrow\pi_a^{\parallel
 \end{matrix}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{a \parallel}^m $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{a \parallel}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_visres}
 \begin{matrix}
@@ -8608,13 +8622,13 @@ and the ion contributions are:
 S_{Therm,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} c_{\alpha_{ab}}^{(F \lim)} z_a^2 z_b^2 \frac{m_p}{\zeta_p e} \frac{n_a n_b}{n_a + n_b} \alpha_{ab} \frac{1}{h_x} \frac{\partial T_i}{\partial x}, ~z_a \ne 0
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{Therm,ia}^m $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{Therm,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_sorfri}
 S_{fr,ia}^m = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} R_{ab}^{(V_\parallel)} = \sum \limits_{\substack{b=0 \\ b \ne a}}^{ns - 1} \frac{1}{\zeta_p} m_p \sqrt{\frac{\frac{m_a}{m_p} \frac{m_b}{m_p}}{\frac{m_a}{m_p} + \frac{m_b}{m_p}}} z_a^2 z_b^2 n_a n_b K_{ab}^{(V_\parallel)} \left( V_{b \parallel} - V_{a \parallel} \right)
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $S_{fr,ia}^m $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $S_{fr,ia}^m $ is applied according to Section~\ref{sec:Zhdanov}.
 
 where
 
@@ -8638,7 +8652,7 @@ c_{imp}^{(2)}, & s \ne r, & s = s_{main}, & z_r \ne 0, & z_s \ne 0 \\
 \right.
 $
 
-If {\tt 'b2npmo\_impr\_form\_tf'} is set to {\tt '1'} , $K_{rs}^{(Therm)}$ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2npmo\_impr\_form\_tf'} is set to {\tt '1'}, $K_{rs}^{(Therm)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 $K_{rs}^{(V_\parallel)} = \left\{
 \begin{matrix}
@@ -8650,7 +8664,7 @@ c_{imp}^{(1)}, & s = s_{main}, & r \ne s, & z_r \ne 0, & z_s \ne 0 \\
 \right.
 $
 
-If {\tt 'b2npmo\_impr\_form\_fr'} is set to {\tt '1'} , $K_{rs}^{(V_\parallel)}$ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2npmo\_impr\_form\_fr'} is set to {\tt '1'}, $K_{rs}^{(V_\parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 $c_{imp}^{(1)} = \frac{\left( 1 + 0.24 z_{eff\_imp} \right) \left( 1 + 0.93 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$, ~ $c_{imp}^{(2)} = 1.56 \frac{\left( 1 + 1.4 z_{eff\_imp} \right) \left( 1 + 0.52 z_{eff\_imp} \right)}{\left( 1 + 2.56 z_{eff\_imp} \right) \left( 1 + 0.29 z_{eff\_imp} \right)}$
 
@@ -8761,7 +8775,7 @@ $c_{th_e,a} = 0, a=0,\ldots,ns-1$ and $c_{th_i,a}=2.65, a=0,\ldots, ns-1$ if the
 
 \subsubsection{Neoclassical corrections for high Z impurity transport}
 
-These corrections (see~\cite{KORZUEVA2025} for a full derivation) are based on the Zhdanov-Grad module (see section \ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
+These corrections (see~\cite{KORZUEVA2025} for a full derivation) are based on the Zhdanov-Grad module (see Section~\ref{sec:Zhdanov}), so {\tt 'b2tral\_Zhdanov\_closure'} should be set to {\tt '1'}.
 
 \begin{sloppypar}
 If {\tt 'b2tral\_Zhdanov\_nc'} is set to {\tt '1'}, neoclassical corrections for impurity transport are applied for a chosen impurity isonuclear sequence, {\tt 'b2tral\_Zhdanov\_nc\_spec'}, e.g. for Ne in case of a {\tt D+Ne} plasma {\tt 'b2tral\_Zhdanov\_nc\_spec'} should be set to {\tt '2'}. The corrections are more accurate for impurity species with at least Z=10.
@@ -8821,7 +8835,7 @@ c_{2,a}=\frac{1.6\varepsilon^3 g^2}{1+\varepsilon^{1.5}g^2}
 g=\frac{\nu_{\ast} \varepsilon^{1.5}}{Z_{eff}}
 \end{equation}
 
-Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in Section~\ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in section \ref{sec:Zhdanov}.
+Quantities (\ref{eq:mom_neoctermi})-(\ref{eq:mom_neoc_collis}) are printed, if {\tt 'b2sifrtf\_iout'} is set to {\tt '1'}. Variables such as $\nu_{\ast}$ and $\varepsilon$ are described in Section~\ref{eq:mom_nu_vareps_etc}. Overline averaged values and $c^{RTA,an}_{\beta,\alpha}$, $c^{hTA,an}_{\beta}$ are described in Section~\ref{sec:Zhdanov}.
 
 If {\tt 'b2sifr\_Zhdanov\_test'} is set to {\tt '1'}, the Zhdanov-Grad variables are calculated but used only for the friction and thermal force. Additionally, the velocity-dependent ion heat flux, see Eq.~(\ref{eq:eni_tifix}), is included. Other parts of the Zhdanov-Grad module are not used.
 
@@ -8839,7 +8853,7 @@ m_a V_{\parallel a} \Gamma_{ax}^{Cor} -
 \right.
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\Gamma^m_{ax} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\Gamma^m_{ax} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:mom_fluxy}
 \Gamma^m_{ay} =
@@ -8988,7 +9002,7 @@ $\varepsilon = \frac{\left( \mathlarger{\oint} h_x dx \right)^2}
 \left( \frac{ 4 \pi \epsilon_0 }{e^2} \right)^2
 $\label{eq:mom_nu_vareps_etc}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\nu_{\ast} $ is applied according to \eqref{eq:nu_zh}.
 
 \begin{equation}
 \label{eq:mom_etaCL}
@@ -9178,7 +9192,7 @@ j_x \hat E_x + 0 \cdot j_y \hat{E}_y & \mbox{, when Eq.~(\ref{eq:mom_old}) is ac
 \end{aligned}\right.
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{Fei} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{Fei} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 $Q_e^{\kappa,\mathrm{inter}}$ and $Q_e^{\kappa,\parallel}$ are interchange terms related to the $\kappa$-model, see Eqs.~(\ref{eq:sikt_t1}) and (\ref{eq:sikt_t3}).
 
@@ -9716,7 +9730,7 @@ Q_{vis} = \sum \limits_{fluid~species} \left(
 \right)
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{vis} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{vis} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 When Eq.~(\ref{eq:mom_new}) is used ({\tt 'b2sigp\_style'} set to {\tt '2'}), the contribution from friction between charged species is given as:
 
@@ -9735,7 +9749,7 @@ Q_{F_{ab}} =
 z_a^2 z_b^2 n_a n_b \left( V_{a \parallel} - V_{b \parallel} \right)^2
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $Q_{F_{ab}} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $Q_{F_{ab}} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 Atom heat source due to ionisation
 
@@ -9815,7 +9829,7 @@ $Q_i^{\kappa,\mathrm{inter}}$ is an interchange term related to the $\kappa$-mod
 \widetilde f_{ix} = \frac{3}{2} \Gamma_{ix} + V_{ix}^{(str)} n_i + \frac{3}{2} \left( \frac{j_x^{\left( AN \right)} + j_x^{\left( in \right)} + \widetilde{j_x}^{\left( vis \parallel \right)} + j_x^{\left( vis \perp \right)} + \widetilde{j_x}^{\left( visq \right)} + j^{(\kappa,\mathrm{RS})}_x }{e} \right)
 \end{equation*}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde f_{ix} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde f_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_qixPSch}
 q_{ix}^{P.Sch} = \frac{5}{2} \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} D_{axy} \frac{1}{h_y} \frac{\partial n_a T_i^2}{\partial y}
@@ -9831,7 +9845,7 @@ q_{ix} = \left[
 - \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{multline}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, the convective part of $q_{ix} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_gammahix}
 \Gamma_{ix} = \sum \limits^{ns-1}_{a = 0} \Gamma_{ax}^{(he)}
@@ -9843,7 +9857,7 @@ q_{ix}^{(Eir)} =
 \kappa_{ix} \frac{1}{h_x} \frac{\partial T_i}{\partial x}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , the convective part of $q_{ix}^{(Eir)} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, the convective part of $q_{ix}^{(Eir)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \subsection{Poloidal ion energy transport coefficients}
 
@@ -9910,7 +9924,7 @@ If {\tt b2tqna\_user\_transport} is {\tt 8}, the neoclassical transport model is
 \widetilde{\widetilde{\kappa}}_{ix}^{(CL)} = c_{\kappa_{ix}}^{(F \lim)} \widetilde{\kappa}_{ix}^{(CL)}
 \end{equation}
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde{\widetilde{\kappa}}_{ix}^{(CL)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:eni_cflim}
 \begin{matrix}
@@ -10186,7 +10200,7 @@ $j_{ax}^{(in)}$ is the component of the poloidal inertial current due to species
 
 $\widetilde{j}_{ax}^{(vis \parallel)}$ is the component of the poloidal current due to parallel viscosity from species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(vis \parallel)}$ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ax}^{(vis \parallel)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:pot_jxvisper}
 j_x^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} j_{ax}^{(vis \perp)}
@@ -10214,7 +10228,7 @@ $j_{ax}^{(vis \perp)}$ is the poloidal component of the perpendicular viscosity 
 
 $\widetilde{j}_{ax}^{(visq)}$ is the component of the poloidal heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ax}^{(visq)}$ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ax}^{(visq)}$ is applied according to Section~\ref{sec:Zhdanov}.
 
 For the definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
@@ -10341,7 +10355,7 @@ $j_{ay}^{(in)}$ is the component of the radial inertial current due to species $
 
 $\widetilde{j}_{ay}^{(vis \parallel)}$ is the radial component of the current due to parallel viscosity of species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(vis \parallel)} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ay}^{(vis \parallel)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 \begin{equation}\label{eq:pot_jyvisper}
 \widetilde j_y^{(vis \perp)} = \sum \limits^{ns-1}_{\substack{a = 0 \\ z_a \neq 0}} \widetilde j_{ay}^{(vis \perp)}
@@ -10397,7 +10411,7 @@ V_{a \perp} =
 
 $\widetilde{j}_{ay}^{(visq)}$ is the radial component of the heat viscosity current due to species $a$. It is non-zero only for the main hydrogenic species in the problem.
 
-If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'} , $\widetilde j_{ay}^{(visq)} $ is applied according to section \ref{sec:Zhdanov}.
+If {\tt 'b2tral\_Zhdanov\_closure'} is set to {\tt '1'}, $\widetilde j_{ay}^{(visq)} $ is applied according to Section~\ref{sec:Zhdanov}.
 
 For definition of $\widetilde{q}_a^{(0)}$, see Eqs.~(\ref{eq:q0-0}) and (\ref{eq:q0-1}).
 
@@ -10454,7 +10468,7 @@ c_{\sigma^{(ST)}} e n_e
 \end{matrix} \right.
 \end{matrix}
 \end{equation}
-is the radial conductivity associated with the presence of a magnetic stochastic layer, of thickness $\Delta^{(ST)}$ (in $m$, given by the {\tt 'b2tstch\_delta'} switch, default value $0.0$), just inside the nominal separatrix. The multiplier $c_{\sigma^{(ST)}}$ is given by the value of the {\tt 'b2tstch\_sig'} switch (default value {\tt 1.0}). Overall, the presence of the stochastic current term is governed by the {\tt 'b2tfhe\_stochastic'} switch (default value {\tt '0.0'}, i.e. off).
+is the radial conductivity associated with the presence of a magnetic stochastic layer, of thickness $\Delta^{(ST)}$ (in $m$, given by the {\tt 'b2tstch\_delta'} switch, default value $0.0$), just inside the nominal separatrix. The multiplier $c_{\sigma^{(ST)}}$ is given by the value of the {\tt 'b2tstch\_sig'} switch (default value {\tt 1.0}). Overall, the presence of the stochastic current term is governed by the {\tt 'b2tfhe\_stochastic'} switch (default value $0.0$, i.e. off).
 
 $\sigma_y=\sigma^{(AN)} + \sigma^{(CL)}_{y}$
 
@@ -12716,7 +12730,7 @@ electrons and ions correspondingly. They are
 
 \begin{gather}
  R_{e\parallel} = 0; \\
- R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_a}^m
+ R_{a\parallel} =  S_{I_a}^m + S_{R_a}^m + S_{CX_a}^m + S_{AN_a}^m + S_{{\rm EIRENE}_{a\parallel}}^m
 \end{gather}
 
 $Q_e^{\rm ATOMIC}$ and $Q_i^{\rm ATOMIC}$ are electron and ion
@@ -13049,7 +13063,7 @@ The relevant switches for the Zhdanov closure are:
 \end{description}
 
 \begin{sloppypar}
-Legacy switches (using the reduced improved analytical expressions that were included in earlier 3.0.7 code versions; they can be applied, if {\tt b2tral\_Zhdanov\_closure.eq.0} or {\tt b2sifr\_Zhdanov\_test.eq.1} or {\tt b2sifr\_Zhdanov\_tf\_fr.eq.}0; details in subsection \ref{subsec:zh_legacy_tf_fr}):
+Legacy switches (using the reduced improved analytical expressions that were included in earlier 3.0.7 code versions; they can be applied, if {\tt b2tral\_Zhdanov\_closure.eq.0} or {\tt b2sifr\_Zhdanov\_test.eq.1} or {\tt b2sifr\_Zhdanov\_tf\_fr.eq.}0; details in subsection~\ref{subsec:zh_legacy_tf_fr}):
 \begin{description}
   \item[b2npmo\_impr\_form\_tf] If {\tt '1'}, the thermal force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
   \item[b2npmo\_impr\_form\_fr] If {\tt '1'}, the friction force is calculated using reduced improved analytical expressions (corresponding to {\tt b2sigp\_style.eq.2}). Default is {\tt '0'}.
@@ -13856,7 +13870,7 @@ Where the viscous stress coefficient is:
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{ax}^{(CL)}} \eta^{(CL)}_{ax}
 \end{align}
 
-The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection~\ref{subsec:par_mom_transp_coef}.
 
 \begin{equation}
 \begin{matrix}
@@ -13903,7 +13917,7 @@ V_{m_a}^{(\max)} = c_{flim_2} n_a T_i ~ \text{,} ~ c_{flim_2} = \frac{3}{8}
 \widetilde{\eta}^{(CL)}_{ax} = c_{\eta_{\alpha x}^{(CL)}} \eta^{(CL)}_{ax}
 \end{align}
 
-The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection \ref{subsec:par_mom_transp_coef}.
+The $c_{\eta^{(CL)}}^{Luciani}$ is defined in subsection~\ref{subsec:par_mom_transp_coef}.
 
 \begin{equation}
 \begin{matrix}
@@ -14531,13 +14545,13 @@ Reduced improved analytical expressions were included into the standard 3.0.7 \S
 
 \ \ \textbf{\textit{If {\tt impr\_form\_tf.eq.1} then}}
 
-\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
+\ \ \ The corresponding term in subsection~\ref{subsec:par_mom} is replaced by:
 
 \begin{align}
 K^{(Therm)}_{\beta0} = \frac{1}{\tilde{\Delta}_0} \frac{25}{16} \frac{\mu_{0 \beta}}{m_{0}} \left[ \frac{3}{2} \left( 1 + \frac{433 \sqrt{2}}{360} Z^s_{110} \right) - \frac{1}{2} \frac{\mu_{0 \beta}}{m_0} \left( 1 + \frac{23 \sqrt{2}}{8} Z^s_{90} \right) \right] \left( 1 + \sqrt{2} Z^*_{c\alpha} \right)
 \end{align}
 
-\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection~\ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
 
 \ \ \textbf{\textit{else}}
 
@@ -14547,7 +14561,7 @@ K^{(Therm)}_{\beta0} = \frac{1}{\tilde{\Delta}_0} \frac{25}{16} \frac{\mu_{0 \be
 
 \ \ \textbf{\textit{If {\tt impr\_form\_fr.eq.1} then}}
 
-\ \ \ The corresponding term in subsection \ref{subsec:par_mom} is replaced by:
+\ \ \ The corresponding term in subsection~\ref{subsec:par_mom} is replaced by:
 
 \begin{multline}
 K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
@@ -14557,7 +14571,7 @@ K^{(V_\parallel)}_{\beta0} = K^{(V_\parallel)}_{0\beta} =
 \end{multline}
 
 
-\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection \ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
+\ \ \ Note, a transition from the Greek to Latin letters should be done $ [ 0 \rightarrow s;\ \beta \rightarrow r] $ (details in subsection~\ref{subsec:zh_notation}), where $s=s_{main},\ s\neq r$\\
 
 \ \ \textbf{\textit{else}}
 
@@ -14710,10 +14724,10 @@ coefficients $C_{pj\alpha}$, $C_{mj\alpha}$, $C_{hij\alpha}$, $C_{hej}$ and
 $C_{chj}$. These coefficients are free input parameters,
 which depend on the theoretical model used for describing the boundary
 conditions. They must be written by the user in the input file
-{\tt b2ah.dat} (section \ref{sec:b2ah}). If the {\tt b2ah.dat} file already exists and the boundary
+{\tt b2ah.dat} (Section~\ref{sec:b2ah}). If the {\tt b2ah.dat} file already exists and the boundary
 conditions for the new simulation are not significantly different, it is
 practical to write any minor changes to the boundary conditions in the input
-file {\tt b2mn.dat} (section \ref{sec:b2mn}). (If the existing {\tt b2ah.dat} file is
+file {\tt b2mn.dat} (Section~\ref{sec:b2mn}). (If the existing {\tt b2ah.dat} file is
 corrected, it is not necessary to do that.) When the theoretical model
 predicts more complicated nonlinear dependence of the boundary fluxes on
 the plasma parameters, the effects of these nonlinearities can be only
@@ -16061,8 +16075,8 @@ If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPS
 
 The meaning of the dimensions are:
 \begin{description}
-\item[vreg] volume region tally (see Appendix \ref{cha:regions} and section \ref{lab:b2:numerics:parameters}). Here, however, region 0 stands for the whole plasma.
-\item[freg] face-directed region tally (see Appendix \ref{cha:regions})
+\item[vreg] volume region tally (see Appendix~\ref{cha:regions} and Section~\ref{lab:b2:numerics:parameters}). Here, however, region 0 stands for the whole plasma.
+\item[freg] face-directed region tally (see Appendix~\ref{cha:regions})
 \item[ns] species index
 \item[time] time index
 \end{description}
@@ -16435,7 +16449,7 @@ $\displaystyle S_{AN_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2npmo\_smoan[XX
 
 $\displaystyle S_{BC_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbc\_phys\_smo[XXX].dat} &  \\
 
-$\displaystyle S_{EIRENE_a}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
+$\displaystyle S_{EIRENE_{a\parallel}}^m h_z \sqrt{g}$ & $N \cdot m$ & \texttt{b2stbr\_smo\_eir[XXX].dat} &  (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
 $\displaystyle \widetilde{\widetilde{\eta}}_{ax}^{(CL)} \frac{h_z \sqrt{g}}{h_x^2}$ & $kg \cdot m/s$ & \footnotesize{\texttt{b2trcl\_luciani\_fllim\_cvsahzx[XXX].dat}} & (\ref{eq:mom_dveta}) \\
 
@@ -16968,7 +16982,7 @@ For this geometry, {\tt NREG} should be set to $4$ and {\tt FREG} to $13$ (defau
 
 Volume-based regions:
 
-See also section \ref{lab:b2:numerics:parameters} for a specific example.
+See also Section~\ref{lab:b2:numerics:parameters} for a specific example.
 
 \begin{verbatim}
 +-------+---------------+-------+
@@ -17113,7 +17127,7 @@ For both cases, {\tt NREG} should be set to $8$ and {\tt FREG} to $27$, or the {
 
 Volume-based regions:
 
-See also section \ref{lab:b2:numerics:parameters} for a specific example.
+See also Section~\ref{lab:b2:numerics:parameters} for a specific example.
 
 \begin{verbatim}
 +-------+---------------+-------++-------+---------------+-------+
@@ -17337,7 +17351,7 @@ under interactive control.  It uses {\tt NCAR} and so the user must have
 access to the {\tt NCAR} environment. Some, but far from all, functionalities
 have been ported so that \btwoplot may also work in the {\tt PLPLOT}
 environment. Preprocessing before compilation with {\tt -DPLPLOT} option is then necessary
-(see section \ref{sec:compilingb2} for more details).
+(see Section~\ref{sec:compilingb2} for more details).
 Data from the {\tt B2SXDR}, and, if available, the {\tt B2SDIAG} (for \SOLPSfour runs),
 {\tt b2fstate}, {\tt b2fplasma}, {\tt b2frates}, {\tt b2fgmtry}, {\tt b2mn.dat}
 (for \SOLPSfive and \SOLPSITER runs) and {\tt fort.44} and {\tt fort.46}
@@ -17883,7 +17897,7 @@ The source arrays {\bf sna}, {\bf smo}, {\bf smq}, {\bf she}, {\bf shi},
 {\bf shn}, {\bf sch}, {\bf skt}, and {\bf szt} can take an optional integer
 argument $\langle${\tt isel}$\rangle$, varying from {\tt 0} to {\tt 3}
 ({\tt 0} to {\tt 1} for {\bf sna}). Then the data
-stack contains the linearized source data according to the description found in Appendix \ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
+stack contains the linearized source data according to the description found in Appendix~\ref{lis:b2cdcv}. In the absence of this integer argument, the data stack will contain the total source terms.
 The same treatment applies to {\bf smaf}, {\bf smag}, and {\bf smav}.
 
 For the corner coordinates arrays {\bf crx} and {\bf cry}, an integer argument must be provided to determine the corner
@@ -19008,22 +19022,22 @@ Section~\ref{sec:dataplotting} describes the commands used to produce a
 plot.  Sections \ref{sec:datamanipulation} describes commands that manipulate
 quantities on the "matrix" stack, and \ref{sec:arithmetic} describes the
 commands that can be used to do arithmetic.  Stack manipulating
-commands are described in section \ref{sec:stack}.  Graph appearance is covered in
+commands are described in Section~\ref{sec:stack}.  Graph appearance is covered in
 sections \ref{sec:pageformat} (page format), \ref{sec:graphformat} (graph
 format) and \ref{sec:graphappearance} (graph appearance).  Overlays to
-contour plots are covered in section \ref{sec:contouroverlays} and changing
-contour parameters in section \ref{sec:contourparameters}.  There is a grab bag of
-miscellaneous commands in section \ref{sec:miscellaneous}.
+contour plots are covered in Section~\ref{sec:contouroverlays} and changing
+contour parameters in Section~\ref{sec:contourparameters}.  There is a grab bag of
+miscellaneous commands in Section~\ref{sec:miscellaneous}.
 
 \subsection{Data plotting commands}\label{sec:dataplotting}
 \index{b2plot, data plotting commands}
 
 These commands are typically used to produce a plot.
 
-See section \ref{sec:graphappearance} for a list of commands that can be used to
-change the graph appearance (text font, label size, overlays), and section
-\ref{sec:graphformat} for commands changing the graph format (physical or
-computational domain, aspect ratio, linear or logarithmic).
+See Section~\ref{sec:graphappearance} for a list of commands that can be used to
+change the graph appearance (text font, label size, overlays), and
+Section~\ref{sec:graphformat} for commands changing the graph format
+(physical or computational domain, aspect ratio, linear or logarithmic).
 
 See also the {\bf chor} (\ref{sec:chor}), {\bf chpl} (\ref{sec:chpl}),
 {\bf chbx} (\ref{sec:chbx}),
@@ -19051,7 +19065,7 @@ which produced figure \ref{fig:d3d}.
 
 \subsubsection{cont}\index{b2plot, cont}\label{sec:cont}
 Plots contour plots of the current data.  See figure \ref{fig:d3d}.
-See section \ref{sec:contourparameters} for a list of commands that can be used to
+See Section~\ref{sec:contourparameters} for a list of commands that can be used to
 change the appearance of contour plots.  Section~\ref{sec:pageformat}
 covers global changes to the plotting (square, landscape or portrait,
 number of graphs per page). The use of {\bf surf} (see \ref{sec:surf}) is preferred
@@ -20651,7 +20665,7 @@ Overwrites the $T_e$ array with the top of the matrix stack.
 
 \subsubsection{$<$iy,{\bf I}$>$ yref}\index{b2plot, yref}\label{sec:yref}
 Overwrites the radial reference location index {\em iyref} with $\langle${\tt iy}$\rangle$.
-See description of {\tt set\_transport\_iyref} switch (see Appendix \ref{lis:b2cdci})
+See description of {\tt set\_transport\_iyref} switch (see Appendix~\ref{lis:b2cdci})
 for the computation of its default value (usually the separatrix location).
 
 \subsubsection{$<$n,{\bf I}$>$ ave}\index{b2plot, ave}\label{sec:ave}
@@ -20756,7 +20770,7 @@ entered between \`{}s, e.g.
 `date`
 \end{verbatim}
 
-See section \ref{sec:stdl} for the label set by {\bf stdl} for an example using
+See Section~\ref{sec:stdl} for the label set by {\bf stdl} for an example using
 environment variables as well as shell expansions.
 
 \subsubsection{$<${\it x}-axis label$>$ xlab}\index{b2plot, xlab}\label{sec:xlab}
@@ -20949,7 +20963,7 @@ Used for specifying the {\tt CDF} file if a movie is to be made.
 
 \subsubsection{$<$istart,{\bf I}$>$ $<$iend,{\bf I}$>$ $<$varname, {\bf S}$>$ movie}\index{b2plot, movie}\label{sec:movie}
 Creates a movie for timeslice $\langle${\tt istart}$\rangle$ to time slice $\langle${\tt iend}$\rangle$ of variable $\langle${\tt varname}$\rangle$. The
-list of available quantities in given in Appendix \ref{cha:b2time}. The time interval between frames can be
+list of available quantities in given in Appendix~\ref{cha:b2time}. The time interval between frames can be
 controlled with the {\bf mvsk} command.
 {\bf nmovie} is an alias for {\bf movie}.
 
@@ -21354,7 +21368,7 @@ The current default settings of {\tt b2mod\_dimensions.F}, which allow for a
 \section{Compiling B2.5}
 \label{sec:compilingb2}\index{B2.5, compiling}\index{B2.5, Makefile}
 
-(See also section \ref{sec:b2}, page \pageref{sec:b2}.)
+(See also Section~\ref{sec:b2}, page~\pageref{sec:b2}.)
 
 The following is the {\tt Makefile} provided with the Master
 in the {\tt sbb} directory:
@@ -21398,7 +21412,8 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
 \item[COMPILER\_MINOR\_VERSION] \index{COMPILER\_MINOR\_VERSION} Minor version number of the compiler being used (set internally by the configuration files)
-\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being at compilation time (set internally by the configuration files)
+\item[CONSTANTS\_MINOR\_VERSION] \index{CONSTANTS\_MINOR\_VERSION} Indicates which minor version (and thus which CODATA year) of the {\tt Fundamental-Constants} module is being linked to (set internally by the configuration files)
+\item[CONSTANTS\_PROVIDED] \index{CONSTANTS\_PROVIDED} Indicates whether the {\tt Fundamental-Constants} module is being used at compilation time (set internally by the configuration files)
 \item[CRAY] \index{CRAY} To be used with the Cray Fortran compiler
 \item[DBG] \index{DBG} Turns on additional debugging output (set internally by the {\tt Makefile} when requesting a {\tt \_debug} compilation)
 \item[F77] \index{F77} Identifies specific code to {\tt Fortran-77} compilers
@@ -21499,6 +21514,7 @@ CARRE\_NONINTERACTIVE & carre\_mod/carre\_parameter\_io.F90 \\
 ITM\_ENVIRONMENT\_LOADED & fcrr/fcrr.F90 \\
 ITM\_ENVIRONMENT\_LOADED & trans/tradui.F90 \\
 DBG & carre\_mod/carre\_types.F90 \\
+DBG & fcrr/construct\_vessel\_polygons.F90 \\
 DBG & fcrr/fcrprp.F90 \\
 READOPT & carre/rdfrch.F90 \\
 READOPT & carre/rdfrin.F90 \\
@@ -21619,6 +21635,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[NO\_OPT] \index{NO\_OPT} No compiler optimization
 \item[\_OPENMP] \index{\_OPENMP} For OpenMP specific code
 \item[PAR\_OPT] \index{PAR\_OPT} Runs the code in a special interpretive parameter optimization mode
+\item[PARDISO] \index{PARDISO} Enables specific code for the PARDISO solver
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
@@ -21769,6 +21786,7 @@ B25\_EIRENE & transport/b2tinnt.F \\
 B25\_EIRENE & user/b2mod\_blnc.F \\
 B25\_EIRENE & user/b2mod\_blne.F \\
 B25\_EIRENE & user/b2mod\_blnm.F \\
+B25\_EIRENE & user/b2mod\_blns.F \\
 B25\_EIRENE & user/b2mod\_trace.F \\
 B25\_EIRENE & user/b2mod\_usrtrc.F \\
 B25\_EIRENE & user/b2mod\_wrint.F \\
@@ -21785,6 +21803,7 @@ CATALYST & driver/b2mod\_driver.F \\
 CDF\_MOVIE & b2plot/caltraj.F \\
 CDF\_MOVIE & b2plot/process\_chords.F \\
 CLASSICAL\_CURRENT & transport/b2tdia.F \\
+CONSTANTS\_MINOR\_VERSION & ids/b2mod\_constants.F90 \\
 CONSTANTS\_PROVIDED & common/emissivity.constants \\
 CONSTANTS\_PROVIDED & ids/b2mod\_constants.F90 \\
 CRAY & b2plot/b2plot.F \\
@@ -21806,24 +21825,54 @@ CRAY & utility/illtern\_7\_solps.F \\
 CRAY & utility/ilutern\_7\_solps.F \\
 CRAY & utility/ilutern\_9\_solps.F \\
 CRAY & utility/ilutern\_us\_solps.F \\
+DBG & b2plot/b2pnwl.F \\
 DBG & b2plot/b2ptrdl.F \\
 DBG & b2plot/b2ptrgl.F \\
+DBG & b2plot/b2pwlprp.F \\
 DBG & b2plot/b2pwrdld.F \\
+DBG & b2plot/b2pwrldt.F \\
 DBG & b2plot/fill.F \\
 DBG & b2plot/init\_wall.F \\
 DBG & b2plot/ngread.F \\
 DBG & b2plot/plotcontour.F \\
 DBG & b2plot/rlcomp.F \\
 DBG & equations/b2news\_.F \\
+DBG & equations/b2news\_m.F \\
+DBG & equations/b2npco.F \\
+DBG & equations/b2npht.F \\
+DBG & equations/b2npmo.F \\
+DBG & equations/b2nppo.F \\
+DBG & modules/b2mod\_ad.F \\
+DBG & modules/b2mod\_boundary\_namelist.F \\
+DBG & modules/b2mod\_cdf.F90 \\
 DBG & modules/b2mod\_input\_profile.F \\
-DBG & sources/b2stbr\_bas.F \\
+DBG & modules/b2mod\_neutrals\_namelist.F \\
+DBG & modules/b2us\_map.F \\
+DBG & modules/b2us\_prep.F \\
+DBG & output/b2wdat.F \\
+DBG & preprocessing/b2agfs\_st.F \\
+DBG & sources/b2sihs\_.F \\
+DBG & sources/b2sral.F \\
+DBG & sources/b2stbc.F \\
+DBG & sources/b2stbr.F \\
 DBG & sources/b2stbr\_phys.F \\
+DBG & transport/b2tfch\_.F \\
+DBG & transport/b2tqna.F \\
+DBG & transport/b2tral.F \\
+DBG & transport/b2trcl.F \\
+DBG & transport/b2trno.F \\
+DBG & transport/b2tvskt.F \\
+DBG & transport/b2tvspr.F \\
+DBG & user/b2mod\_blns.F \\
+DBG & user/b2mod\_file.F \\
 DBG & user/b2mod\_usrtrc.F \\
+DBG & user/b2mod\_wrsrt.F \\
 DBG & utility/ma28.F \\
 DBG & utility/ma28copy.F \\
 DBG & utility/ma28copy3.F \\
-DBG & utility/ma28copy4.F \\
 DBG & utility/my\_out.F \\
+DBG & utility/my\_out\_us.F \\
+DBG & utility/my\_outi\_us.F \\
 DBG & utility/ratamjhyd.F \\
 DBG & utility/ysmp\_d.F \\
 DEF\_MAXCHORDS & b2plot/process\_chords.F \\
@@ -22197,6 +22246,7 @@ NO\_SAVE & include/EIRDIAG.H \\
 \_OPENMP & utility/sfill.F \\
 PAR\_OPT & sources/b2stbc\_phys.F \\
 PAR\_OPT & transport/b2tqna.F \\
+PARDISO & modules/b2mod\_pardiso.F \\
 PERFMON & utility/prgend.F \\
 PERFMON & utility/prgini.F \\
 PERFMON & utility/subsys.F \\
@@ -22433,7 +22483,6 @@ CRAY & modules/eirmod\_parmmod.F \\
 CRAY & photons/eirmod\_photon.F \\
 CRAY & user-routines/user\_iter/broad\_usr.F \\
 CRAY & user-routines/user\_iter/eirmod\_refusr.F \\
-DBG & interfaces/couple\_SOLPS\_WG/eirmod\_infcop.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 DIMENSIONS\_MODULE & interfaces/couple\_SOLPS\_WG/eirmod\_extrab25.F90 \\
 GFORTRAN & assistant/exit\_own.F \\
@@ -22875,7 +22924,7 @@ The NAG calls from {\tt Eirene} are given in table \ref{tab:nageirene}.
   \centering
   \begin{tabular}{|c|c|p{10cm}|} \hline
 erf.f            & S15AEF & returns the value of the error function erf, via the routine name. \\ \hline
-second\_own.f    & X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
+second\_own.F    & X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
   \end{tabular}
   \caption{NAG calls from Eirene}
   \label{tab:nageirene}
@@ -24575,7 +24624,7 @@ output file and can be processed by other programs. Some variables
 (targets and structure) also have important functions in {\tt DG}.
 
 Variables must be set up by a power user before using them. This
-procedure is described in {\bf Customizing DG} (section \ref{sec:DGcustom}). Each variable has
+procedure is described in {\bf Customizing DG} (Section~\ref{sec:DGcustom}). Each variable has
 following attributes\index{DG, variable attributes}:
 \begin{description}
 \item[Name] \index{DG, variables, name}is written into the output file
@@ -25190,7 +25239,7 @@ JET in 2002.
   file {\tt b2fplasmf} to the normal unformatted {\tt b2fplasma}
 \item[\textcolor{Red}{b2md}] \index{b2md} saves the \SOLPSfive output to the {\tt MDSplus} server (see \ref{cha:MDSplus})
 \item[\textcolor{Red}{b2mn}] \index{b2mn} the main program (see \ref{sec:b2mn})
-\item[\textcolor{Red}{b2pl}] \index{b2pl} the plot program (see \ref{sec:b2pl} and Appendix \ref{cha:b2plotmanual})
+\item[\textcolor{Red}{b2pl}] \index{b2pl} the plot program (see \ref{sec:b2pl} and Appendix~\ref{cha:b2plotmanual})
 \item[\textcolor{Red}{b2rd}] \index{b2rd} retrieves the \SOLPSfive output from the {\tt MDSplus} server (see \ref{cha:MDSplus})
 \item[b2ts] \index{b2ts} an example post-processing program; it reads the basic
   output files produced by {\bf b2mn} and prints some simple geometric

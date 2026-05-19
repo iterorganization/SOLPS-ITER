@@ -1,13 +1,6 @@
       subroutine uinpsrcg
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 01.04.2005 00:51
 c
@@ -15,7 +8,6 @@ c=======================================================================
 c*** Prepare the gas puffing sources.
 c=======================================================================
       implicit none
-#include "uinput.inc"
       integer i,j,k,l,isg,istr,isf
       logical ex,uex,streql
       external streql, xerrab

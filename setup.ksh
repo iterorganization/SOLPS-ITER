@@ -26,10 +26,10 @@
 
 echo Welcome to SOLPS-ITER!
 echo Documentation can be found at:
-echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo https://iterorganization.sharepoint.com/sites/SOLPS-ITER/Shared%20Documents/General
 echo and
 echo https://user.iter.org/\?uid=Q92BAQ
-echo "(both require a valid ITER IDM account)"
+echo "(requires a valid ITER IDM account)"
 echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
 echo The Eirene manual can be found in \$SOLPSTOP/modules/Eirene/Manual/eirene.pdf
 echo or online at http://www.eirene.de/

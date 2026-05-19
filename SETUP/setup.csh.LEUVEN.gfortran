@@ -28,6 +28,7 @@ setenv FC gfortran
 
 # Set LD_LIBRARY_PATH and PATH for dyn. linked libraries
 setenv JSONF_LIB_DIR /staging/leuven/stg_00030/SOLPS/lib/json-fortran/build_gfortran
+setenv NCARG_ROOT /staging/leuven/stg_00030/SOLPS/lib/ncl-6.6.2-gfortran
 setenv LD_LIBRARY_PATH /home/fusion/libs/NCARG2/lib:${LD_LIBRARY_PATH}
 setenv PATH /home/fusion/libs/NCARG2/bin:${PATH}
 

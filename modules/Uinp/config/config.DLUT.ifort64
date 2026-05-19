@@ -8,4 +8,3 @@ CPP      = /lib/cpp -C -traditional -ffreestanding
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
-

@@ -1,13 +1,6 @@
       subroutine uiniamd(unn)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 c
 c  version : 30.06.2000 19:44
 c
@@ -16,7 +9,6 @@ c*** Read the data from AMDS file
 c=======================================================================
       implicit none
       character unn*8
-#include "uinpcom.inc"
 #include "impcon.inc"
       integer lunm,luns
       parameter (lunm=26, luns=72)

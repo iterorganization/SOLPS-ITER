@@ -3,16 +3,21 @@
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/file-handling/wrplam.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/file-handling/wrplam_long.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/mathematics/fl2o.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/mathematics/parebe.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/emissivity.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/outeir.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/outflx.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/pltadd.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/pside.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/scoring/update.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/scoring/updphot.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/startup-routines/find_param.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/user-routines/user_iter/defaults_usr.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelei1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelpi3.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/feelrc1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fehvei1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fehvpi3.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/fehvpi3.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/feplel3.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/fpathph.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/ftabei1.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecta.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecti.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
@@ -46,7 +51,7 @@ cp ../convert_orig/b2fpardf .
 cp ../convert_orig/b2fstati .
 cp ../convert_orig/fort.* .
 b2run b2us
-${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig/ ./ || exit 1
+${SOLPSTOP}/modules/B2.5/src/test/convert_checks.sh ../convert_orig . || exit 1
 cd ..
 
 cd baserun
@@ -67,5 +72,5 @@ cp ../run_AFN_drift/b2batch.nc.i b2batch.nc
 touch b2fstati
 setup_baserun_B25_links
 b2run -s b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift/ ./ || exit 2
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_drift . || exit 2
 cd ..

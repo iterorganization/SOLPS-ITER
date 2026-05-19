@@ -1,13 +1,6 @@
       subroutine uinpavgdg(lc)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
       use b2mod_subsys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
 
 c  version : 16.03.2005 23:54
 
@@ -16,7 +9,6 @@ c*** Prepare the data for the averaged Eirene run
 c=======================================================================
       implicit none
       logical lc
-#include "uinput.inc"
       integer, save :: nprnli_save, nfile_save
       integer, save :: npts_save(nstra)
       integer :: jk

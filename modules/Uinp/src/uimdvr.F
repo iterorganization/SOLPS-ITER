@@ -1,12 +1,6 @@
       subroutine uimdvr(lout,jblk,jvrb,ufs)
-      use b2mod_types
-      use b2mod_layer
-     , , only: ntrack, nalloys
-      use eirmod_solps
-#ifdef DIMENSIONS_MODULE
-      use b2mod_dimensions
-#endif
-      use carre_dimensions
+      use uinput_mod
+      use uib2pprm
 c
 c  version : 18.08.2003 17:31
 c
@@ -22,8 +16,6 @@ c======================================================================
       implicit none
       integer lout,jblk,jvrb
       character ufs*(*)
-#include "uinpcom.inc"
-#include "uib2pprm.inc"
       logical ufirst
 c      integer nniprm(nmxprm,nkwrd,nblck)
       integer i,j,k,l,m,n,ll,nn,len
