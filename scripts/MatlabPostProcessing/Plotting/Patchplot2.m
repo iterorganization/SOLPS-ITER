@@ -25,10 +25,10 @@ if ~exist('scale','var') || isempty(scale)
   scale = 1;
 end
 if ~exist('fmin','var') || isempty(fmin)
-    fmin = min(min(field/scale));
+    fmin = min(min(field(1:gmtry.nCi)/scale));
 end
 if ~exist('fmax','var') || isempty(fmax)
-    fmax = max(max(field/scale));
+    fmax = max(max(field(1:gmtry.nCi)/scale));
 end
 if ~exist('threshold','var') || isempty(threshold)
     threshold = 9e99;

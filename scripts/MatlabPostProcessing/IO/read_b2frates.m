@@ -12,6 +12,7 @@ function rates = read_b2frates(file,ns)
 % E-mail: stefano.carli@kuleuven.be
 % February 2022 
 
+fprintf('\n')
 
 % Open file
 [fid,msg] = fopen(file);

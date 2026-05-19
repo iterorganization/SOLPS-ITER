@@ -108,7 +108,7 @@ if length(fcList)~=length(fcList_unsorted)
 end
 
 % Sort the resulting polyline
-if (start_point ~= end_point)
+if (start_point ~= end_point) && ~isempty(meth)
     switch meth
         case 'X'
 

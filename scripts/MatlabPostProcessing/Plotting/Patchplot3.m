@@ -216,8 +216,8 @@ colorbar
 caxis([fmin fmax]);
 
 % Highlight borders
-mask_g = (check_type == 'g') & (S.ZData > threshold) & (1:nCells)' <= gmtry.nCi;
-mask_s = (check_type == 's') & (S.ZData < threshold) & (1:nCells)' <= gmtry.nCi;
+mask_g = (check_type == 'g') & (S.ZData > threshold);
+mask_s = (check_type == 's') & (S.ZData < threshold);
 highlight = mask_g | mask_s;
 
 if any(highlight)

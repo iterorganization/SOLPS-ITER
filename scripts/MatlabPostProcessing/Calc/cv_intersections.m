@@ -1,4 +1,4 @@
-function [listcv,listfc,nn] = cv_intersections(segment,gmtry,meth)
+function [listcv,listfc,nncv] = cv_intersections(segment,gmtry,meth)
 % [listcv,listfc,nn] = cv_intersections(segment,gmtry,meth)
 %
 % Function to compute the cvs and faces intersected by a given segment.
@@ -11,9 +11,10 @@ if ~exist('meth','var') || isempty(meth)
   meth = '';
 end
 
-nn = 1;
-listcv = zeros(10000,1);
-listfc = zeros(10000,1);
+nncv = 1;
+nnfc = 0;
+listcv = zeros(gmtry.nCv,1);
+listfc = zeros(gmtry.nFc,1);
 
 p1=[segment(1,1) segment(2,1)];
 q1=[segment(1,2) segment(2,2)];
@@ -23,29 +24,40 @@ for ifc=1:gmtry.nFc
     p2 = [gmtry.vxX(vx1) gmtry.vxY(vx1)];
     q2 = [gmtry.vxX(vx2) gmtry.vxY(vx2)];
     if (intersects(p1,q1,p2,q2))
+        nnfc = nnfc + 1;
+        listfc(nnfc) = ifc;
         for ii=1:2
             cv=gmtry.fcCv(ifc,ii);
-            trovato = 0;
-            kk =1;
-            while (trovato~=1 && kk<=nn)
+            found = 0;
+            kk = 1;
+            while (found~=1 && kk<=nncv)
                 if (listcv(kk)==cv)
-                    trovato = 1;
+                    found = 1;
                 end
-                kk=kk+1;
+                kk = kk+1;
             end
-            if (trovato==0)
-
-                listcv(nn) = cv;
-                listfc(nn) = ifc;
-                nn = nn +1;
+            if (found==0)
+                listcv(nncv) = cv;
+                % listfc(nncv) = ifc;
+                nncv = nncv + 1;
             end
         end
-
     end
 end
-nn = nn-1;
-listcv=listcv(1:nn);
-listfc=listfc(1:nn);
+nncv = nncv-1;
+% nnfc = nncv;
+listcv=listcv(1:nncv);
+listfc=listfc(1:nnfc);
+% [vals, ~, idx] = unique(listfc(1:nnfc));
+% counts = accumarray(idx, 1);
+% 
+% duplicates = vals(counts > 1)
+% 
+% isDup = false(size(listfc(1:nnfc)));
+% [~, firstIdx] = unique(listfc(1:nnfc), 'first');
+% isDup(setdiff(1:numel(listfc(1:nnfc)), firstIdx)) = true;
+% 
+% listfc=listfc(1:nnfc);
 
 
 % Sort list
