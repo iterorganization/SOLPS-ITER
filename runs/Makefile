@@ -91,7 +91,7 @@ endif
 
 prints = b2ab.prt b2ag.prt b2ah.prt b2ai.prt b2ar.prt b2mn.prt b2mnastra.prt \
  b2ye.prt b2yg.prt b2yh.prt b2yi.prt b2ym.prt b2yn.prt b2yp.prt b2yq.prt \
- b2yr.prt b2yt.prt b2yi_gnuplot.prt
+ b2yr.prt b2yt.prt b2yi_gnuplot.prt b2ch.prt
 
 target_ab = b2ab.prt b2_afn_bcs
 target_ag = b2ag.prt b2fgmtry b2fgmtry_st ${fort_lc}30
@@ -106,6 +106,7 @@ endif
 target_astra = b2mnastra.prt
 target_uf = b2uf.prt
 target_fu = b2fu.prt
+target_ch = b2ch.prt rays.chords b2chords
 target_co = b2co.prt b2co.files
 target_pl = b2pl.prt b2plot.ps
 target_ts = b2ts.prt
@@ -437,6 +438,13 @@ ifdef IMAS_VERSION
 	-[ -s b2mn.exe.dir/shotnumber.history ] && mv b2mn.exe.dir/shotnumber.history . || echo > /dev/null
 endif
 	-rmdir b2mn.exe.dir
+
+$(target_ch) : b2ch.dat b2fgmtry
+	rm -rf b2ch.exe.dir >& /dev/null ; mkdir b2ch.exe.dir ; cp $^ b2ch.exe.dir
+	rm -f $(target_ch)
+	cd b2ch.exe.dir ; ${TIME} ${B2OBJ}/b2ch.exe ${RUN_OPTIONS} ; mv $(target_ch) .. ; rm -f $(notdir $^) >& /dev/null
+	-rmdir b2ch.exe.dir
+
 
 ifndef STAND_ALONE
 $(target_co) : b2mn.dat b2fgmtry b2fpardf b2fstati ${PLASMASTATE} ${savefiles} ${fort_lc}33 ${fort_lc}34 ${fort_lc}35 ${fort_lc}1 AMJUEL
@@ -780,6 +788,8 @@ help help.prt:
 	@echo "     produce the atomic physics rate information"
 	@echo "  ${target_mn} : "
 	@echo "     run the main code"
+	@echo "  ${target_ch} : "
+	@echo "     produce the rays.chords and b2chords files"
 	@echo "  ${target_co} : "
 	@echo "     prepare a b2fstate file from a plasmastate file"
 	@echo "  ${target_rd} : "

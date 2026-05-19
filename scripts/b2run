@@ -76,6 +76,7 @@ argloop:
     echo ' b2ah: Build the run parameters file b2fpardf'
     echo ' b2ai: Build the initial state file b2fstati'
     echo ' b2ar: Build the atomic rates file b2frates'
+    echo ' b2ch: Build the files rays.chords and b2chords'
     echo ' b2co: Recover from a plasmastate.xxxx file'
     echo ' b2fu: Convert from b2fplasmf to b2fplasma'
     echo ' b2md: Archive a run into MDSPLUS'
