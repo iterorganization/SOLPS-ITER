@@ -8,7 +8,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
     echo "COMPILER not defined. Exiting."
     exit 1
   fi
-  
+
   # Pragmatic approach: assume only B2.5 and B2.5-Eirene will require OpenMP versions
   export   OLD_SOLPS_PATH=$SOLPS_PATH
   export   PATH=`echo $PATH | sed "s|${SOLPS_PATH}:||"`
@@ -23,17 +23,20 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export   OLD_COMPILER=${FC}
   export   OLD_MPI_COMPILER=${MPI_FC}
   if [ "$COMPILER" != "ifort64" ]; then
-    export OMP_STACKSIZE="128M"
+    export OMP_STACKSIZE="256M"
   else
-    if [ "$FC" == "ifx" ]; then
+    # Older Intel toolchains (<=2024) still ship ifort, which is preferred
+    # over ifx for OpenMP correctness. Newer toolchains (intel/2025b onward)
+    # ship ifx only, so only swap when ifort is actually available.
+    if [ "$FC" == "ifx" ] && command -v ifort >/dev/null 2>&1; then
       export FC="ifort"
       echo "Reverting to ifort compiler as ifx is unsafe with OpenMP"
     fi
-    if [ "$MPI_FC" == "mpiifort -fc=mpiifx" ]; then
+    if [ "$MPI_FC" == "mpiifort -fc=mpiifx" ] && command -v ifort >/dev/null 2>&1; then
       export MPI_FC="mpiifort"
     fi
   fi
-  export   KMP_STACKSIZE="128M"
+  export   KMP_STACKSIZE="256M"
   export   KMP_AFFINITY="noverbose,respect,compact"
   export   OMP_WAIT_POLICY="active"
   export   OMP_DYNAMIC="false"
@@ -45,6 +48,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
 #  export   OMP_PROC_BIND="true"
 #  export   OMP_PLACES="cores"
   unset    OLD_SOLPS_PATH
+  rehash
   echo "SOLPS-ITER OpenMP mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."

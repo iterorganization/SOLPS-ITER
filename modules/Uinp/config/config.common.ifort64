@@ -1,17 +1,22 @@
 ifeq (${FC},f77)
-FC = ifort
+ ifneq ($(shell command -v ifort 2>/dev/null),)
+  FC = ifort
+ endif
 endif
-# Use of ifx OpenMP is unsafe at the moment
+# Use of ifx OpenMP is unsafe at the moment, but only swap if a usable ifort
+# is present (intel-compilers 2025.x onwards ships only ifx).
 ifneq (,$(findstring ifx,${FC}))
-  ifdef SOLPS_OPENMP
-    FN = ifort
-    MPI_FC = mpiifort
-    ifdef SOLPS_MPI
-      FC = ${MPI_FC}
-    else
-      FC = ifort
-    endif
+ ifdef SOLPS_OPENMP
+  ifneq ($(shell command -v ifort 2>/dev/null),)
+   FN = ifort
+   MPI_FC = mpiifort
+   ifdef SOLPS_MPI
+    FC = ${MPI_FC}
+   else
+    FC = ifort
+   endif
   endif
+ endif
 endif
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
@@ -49,7 +54,7 @@ INCLUDE  = -I${SRCDIR} ${EIRINC} ${B2INC} ${CRRINC}
 MOD      = mod
 LDLIBS   = ${LD_MSCL} ${LD_NAG}
 ifdef SOLPS_MPI
-LDLIBS  += ${LD_MPI}
+ LDLIBS += ${LD_MPI}
 endif
 
 #!!!Local Variables:
