@@ -89,7 +89,6 @@ module load Fundamental-Constants/0.2.0
 export GGD_VERSION=`pkg-config ggd --modversion`
 export EBVERSIONMSCL=`pkg-config mscl --modversion`
 export PARAVIEW_PREFIX=${EBROOTPARAVIEW}
-export QTDIR=${EBROOTQT6}
 export GLI_HOME=${EBROOTGLI}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
