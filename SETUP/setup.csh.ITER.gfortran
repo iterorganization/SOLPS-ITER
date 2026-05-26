@@ -37,6 +37,7 @@ if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "Cent
   module load json-fortran/8.3.0-GCC-10.2.0
   setenv SYSNAME amd64_sles15
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0
+  setenv QTDIR ${EBROOTQT5}
 else
   module load IMAS-Fortran/5.5.0-foss-2023b-DD-4.1.0
   module load IDStools/2.4.0-foss-2023b
@@ -47,6 +48,7 @@ else
   module load Viz/2.8.0-foss-2023b
   module load ToFu/1.7.9-gfbf-2023b
   module load xarray/2024.5.0-gfbf-2023b
+  module load CMake/3.27.6-GCCcore-13.2.0
   module load makedepend/1.0.9-GCCcore-13.2.0
   module load MSCL/1.2.5-GCCcore-13.2.0
   module load GR/0.0.94-GCCcore-13.2.0
@@ -55,26 +57,29 @@ else
 # module load NAG/26-GCC-13.2.0
   module load flex/2.6.4-GCCcore-13.2.0
   module load Doxygen/1.9.8-GCCcore-13.2.0
-  module load netCDF/4.9.2-gompi-2023b
-  module load netCDF-Fortran/4.6.1-gompi-2023b
   module load Ghostscript/10.02.1-GCCcore-13.2.0
-# module load CMake/3.27.6-GCCcore-13.2.0
+  module load texlive/20230313-GCC-13.2.0
+  module load netCDF/4.9.2-gompi-2023b
   module load netCDF-Fortran/4.6.1-gompi-2023b
   module load netcdf4-python/1.7.1.post2-foss-2023b
   module load motif/2.3.8-GCCcore-13.2.0
-  module load texlive/20230313-GCC-13.2.0
   module load SimDB/0.14.1-foss-2023b
   module load json-fortran/8.5.2-GCC-13.2.0
-  setenv SYSNAME x86_64_rhel9
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
+  setenv SYSNAME x86_64_rhel9
+  setenv QTDIR ${EBROOTQT6}
 endif
 module load Fundamental-Constants/0.2.0
 
 setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
-setenv QTDIR ${EBROOTQT6}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
-setenv LD_LIBRARY_PATH ${GKSDIR}/lib:${LD_LIBRARY_PATH}
+if ($?GKSDIR) then
+  setenv LD_LIBRARY_PATH ${GKSDIR}/lib:${LD_LIBRARY_PATH}
+else
+  echo GKSDIR not defined!
+  echo Graphic executables may not compile nor execute
+endif
 
 # Debugger (set environment variable DBX)
 module load TotalView/2023.4.16_linux_x86-64
@@ -121,7 +126,7 @@ if ($?SOLPS_GUI_PREFIX) then
   setenv SOLPSGUI "${SOLPS_GUI_PREFIX}/src/gui"
   alias solps 'python3 ${SOLPS_GUI_PREFIX}/src/gui/solps.py'
   alias solps5 'env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} python3 ${SOLPS_GUI_PREFIX}/src/gui/solps5.py'
-  alias designer "env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} ${EBROOTQT6}/bin/designer"
+  alias designer "env PYTHONPATH=${SOLPS_GUI_PREFIX}/src/widgets:${PYTHONPATH} ${QTDIR}/bin/designer"
   alias solps_doc 'env --unset LD_LIBRARY_PATH firefox ${SOLPS_GUI_PREFIX}/doc/build/html/index.html'
   alias eirene 'python3 ${SOLPS_GUI_PREFIX}/src/actors/eirene.py'
   alias b2 'python3 ${SOLPS_GUI_PREFIX}/src/actors/b2.py'
