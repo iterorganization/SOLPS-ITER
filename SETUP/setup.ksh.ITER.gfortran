@@ -35,6 +35,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load json-fortran/8.3.0-GCC-10.2.0
   module load PySide6/6.2.3-GCCcore-10.2.0
   module load PETSc/3.14.4-foss-2020b
+  export QTDIR=${EBROOTQT5}
   export SYSNAME="amd64_sles15"
 } || {
   module load IMAS-Fortran/5.5.0-foss-2023b-DD-4.1.0
@@ -53,9 +54,11 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   module load netcdf4-python/1.7.1-post2-foss-2023b
 # module load NAG/26-GCC-13.2.0
   module load CMake/3.27.6-GCCcore-13.2.0
+  module load IMAS-ParaView/2.3.0-foss-2023b
   module load json-fortran/8.5.2-GCC-13.2.0
   module load PETSc/3.20.6-foss-2023b
   module load imkl/2023.2.0
+  export QTDIR=${EBROOTQT6}
   export SYSNAME="x86_64_rhel9"
 }
 module load Fundamental-Constants/0.2.0
@@ -73,7 +76,6 @@ module load Fundamental-Constants/0.2.0
 
 export GGD_VERSION=`pkg-config ggd --modversion`
 export EBVERSIONMSCL=`pkg-config mscl --modversion`
-export QTDIR=${EBROOTQT5}
 export PARAVIEW_PREFIX=${EBROOTPARAVIEW}
 export GLI_HOME=${EBROOTGLI}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}

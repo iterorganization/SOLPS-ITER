@@ -8,12 +8,25 @@ ifeq (${CC},cc)
     CC = /usr/bin/gcc
   endif
 endif
-# Use of ifx OpenMP is unsafe at the moment
+# Use of ifx OpenMP is unsafe at the moment, but only swap if a usable ifort
+# is present (intel-compilers 2025.x onwards ships only ifx).
 ifeq (${FC},ifx)
   ifdef SOLPS_OPENMP
-    FC = ifort
+    ifneq ($(shell command -v ifort 2>/dev/null),)
+      FC = ifort
+      FN = ifort
+      MPI_FC = mpiifort
+    endif
+  endif
+endif
+# FN is the serial Fortran compiler used to build the netCDF utility programs.
+# If still unset (e.g. setup script exported FC=ifx without setting FN), pick
+# ifort when available, otherwise fall back to the same driver as FC.
+ifeq ($(strip ${FN}),)
+  ifneq ($(shell command -v ifort 2>/dev/null),)
     FN = ifort
-    MPI_FC = mpiifort
+  else
+    FN = ${FC}
   endif
 endif
 

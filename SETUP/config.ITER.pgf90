@@ -45,8 +45,12 @@ LD_MDSPLUS     = -L${MDSPLUS_DIR}/lib -lMdsLib_client
 LD_MSCL        = $(shell pkg-config mscl --libs) -lgfortran
 LD_SONNET      = -L${SOLPSLIB} -lsonnet -lstdc++
 
+ifdef GKSDIR
 LIBGKS         = ${GKSDIR}/lib/libGKS.so
+endif
+ifdef GR_ROOT
 LIBGRS         = ${GR_ROOT}/lib/libgr.a
+endif
 ADDLIBS        = -lgfortran
 
 NO_MPI         = true

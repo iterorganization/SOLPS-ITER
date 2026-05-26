@@ -1,5 +1,9 @@
 #! /bin/tcsh -f
 cd baserun
+foreach i (b2ag.dat b2ah.dat b2ai.dat b2ar.dat)
+  [ -s $i ] && touch $i
+end
+sleep 1
 touch b2ag.prt
 [ -s b2fgmtry ] && touch b2fgmtry || echo 'No valid b2fgmtry file found'
 sleep 1
