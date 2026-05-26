@@ -98,8 +98,13 @@ else
   setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
   setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if (${CMAKE_MAJOR_VERSION} > 2) then
+    module switch CMake/3.18.4
     setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+    module switch CMake/3.27.6-GCCcore-13.2.0
+    # Avoid a naming clash
+    unsetenv BOOST_ROOT
     setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
+    setenv BOOST_ROOT ${EBROOTBOOST}
   else
 #   setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
 #   setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
