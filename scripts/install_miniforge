@@ -25,14 +25,26 @@ if (! -d "${CONDA_ROOT}" ) then
     # Go to the installation directory
     cd $SOLPSTOP/lib/${HOST_NAME}.${COMPILER}
 
-    # Download Miniforge installer (assuming to be in a x86_64 Linux environment)
-    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-
+    # Detect OS and architecture
+    set OS = `uname -s`
+    set ARCH = `uname -m`
+    if ( "$OS" == "Linux" && "$ARCH" == "x86_64" ) then
+      set MINIFORGE_INSTALLER = "Miniforge3-Linux-x86_64.sh"
+    else if ( "$OS" == "Linux" && "$ARCH" == "aarch64" ) then
+      set MINIFORGE_INSTALLER = "Miniforge3-Linux-aarch64.sh"
+    else
+      echo "Unsupported OS/architecture: $OS $ARCH"
+      exit 1
+    endif
+    
+    # Download Miniforge installer
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_INSTALLER}
+    
     # Install Miniforge in batch mode at $CONDA_ROOT
-    bash Miniforge3-Linux-x86_64.sh -b -p $CONDA_ROOT
-
-    # Remove installed
-    rm Miniforge3-Linux-x86_64.sh
+    bash ${MINIFORGE_INSTALLER} -b -p $CONDA_ROOT
+    
+    # Remove installer
+    rm ${MINIFORGE_INSTALLER}
 
     # Initialize conda
     ${CONDA_ROOT}/bin/conda init tcsh
