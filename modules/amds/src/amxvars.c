@@ -102,6 +102,7 @@ Widget OpenSetupWarningDlg(View w) {
     if (xtp!=NULL) CbSetupWarningOk(wDlg,w,NULL);
     else XtPopup(XtParent(wDlg),XtGrabNone);
   }
+  return wDlg;
 }
 
 Widget OpenSetupDlg(View w) {
@@ -128,7 +129,10 @@ Widget OpenSetupDlg(View w) {
     Form2Table(wDlg);
 
     XtManageChild(wDlg);
-  } else XtPopup(XtParent(wDlg),XtGrabNone);
+  } else {
+    XtPopup(XtParent(wDlg),XtGrabNone);
+  }
+  return wDlg;
 }
 
 Widget OpenVarDefListDlg(View w) {
