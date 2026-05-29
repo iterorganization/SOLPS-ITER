@@ -7779,32 +7779,30 @@ It is possible in the code to use either model, or even the full Balescu 21-mome
 a Zhdanov fit to the table published in the Braginskii paper as a function of $Z_{eff}$.
 See the use of the switches {\tt 'b2tqce\_model'}, {\tt 'b2tqca\_model'} and {\tt 'b2sigp\_style'} as described in Appendix~\ref{lis:b2cdci}.
 
-\begin{center}
-    \begin{longtable}{|c|c|c|c|c|}
-    \hline
-    \multicolumn{5}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & functional & \multicolumn{3}{|c|}{numerical prefactor} \\
-    \cline{3-5}     & dependence & Braginskii & fits to Balescu & fits to Zhdanov \\
-    \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
-    \hline \endhead
-    \hline quantity & functional & \multicolumn{3}{|c|}{numerical prefactor} \\
-    \cline{3-5}     & dependence & Braginskii & fits to Balescu & fits to Zhdanov \\
-    \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{5}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|c|c|c|c|c|}
+  \hline
+  \multicolumn{5}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & functional & \multicolumn{3}{|c|}{numerical prefactor} \\
+  \cline{3-5}     & dependence & Braginskii & fits to Balescu & fits to Zhdanov \\
+  \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
+  \hline \endhead
+  \hline quantity & functional & \multicolumn{3}{|c|}{numerical prefactor} \\
+  \cline{3-5}     & dependence & Braginskii & fits to Balescu & fits to Zhdanov \\
+  \hline default in &          & \SOLPSfour & \SOLPSfive & \SOLPSITER \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{5}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 $\kappa_{e \parallel}$ & $\frac{T_e^{5/2} n_e}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & 3.16 & $\frac{5}{2} \frac{2.16 Z_{eff}}{1 + 0.27 Z_{eff}}$ & $\frac{\left( 3.9 +\frac{2.3}{Z_{eff}} \right)}{0.31+\frac{1.2}{Z_{eff}}+\frac{0.41}{Z_{eff}^2}}$ \\ \hline
 $\kappa_{i \parallel}$ & $\frac{T_i^{5/2}}{\ln \Lambda}\sum \limits_a \frac{n_a}{Z_a^2}$ & $\frac{3.9}{\mathlarger{\sum \limits_b} Z_b^2 n_b \sqrt{\frac{2 m_a m_b}{m_a + m_b}}}$ & \multicolumn{2}{|c|}{$\frac{3.95}{\sqrt{m_a} \sum \limits_b Z_b^2 n_b}$} \\ \hline
 $\eta_{a \parallel}$ & $\frac{T_i^{5/2}}{\ln \Lambda}\frac{n_a}{Z_a^2}$ & $\frac{1.37}{\mathlarger{\sum \limits_b} \frac{Z_b^2 n_b}{\sqrt{\frac{m_a + m_b}{2}}}}$ & \multicolumn{2}{|c|}{$\frac{\sqrt{2} \; 0.96 \sqrt{m_a}}{\sum \limits_b Z_b^2 n_b}$} \\ \hline
 $\sigma_\parallel$ & $\frac{n_e T_e^{3/2}}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & \multicolumn{2}{|c|}{$\frac{4.95 Z_{eff}}{1 + 1.54 Z_{eff}}$} & $\frac{(1+0.24 Z_{eff})(1+0.93 Z_{eff})}{(1+2.56 Z_{eff})(1+0.29 Z_{eff})}$ \\ \hline
 $\alpha_{e \parallel}$ & $\frac{n_e T_e^{3/2}}{\ln \Lambda \sum \limits_a Z_a^2 n_a}$ & \multicolumn{2}{|c|}{$-\sqrt{\frac{5}{2}}\frac{1.25 Z_{eff}}{1+0.41 Z_{eff}}$} & $-\frac{1.56 Z_{eff} \frac{\left( 1+1.4 Z_{eff} \right) \left( 1+0.52 Z_{eff} \right)}{\left( 1+2.56 Z_{eff} \right) \left( 1+0.29 Z_{eff} \right)} \frac{1}{Z_{eff} + \frac{\sqrt{2}}{2}}}{\frac{\left( 1+0.24 Z_{eff} \right) \left( 1+0.93 Z_{eff} \right)}{\left( 1+2.56 Z_{eff} \right) \left( 1+0.29 Z_{eff} \right)}}$ \\
-    \hline
-    \caption{Comparison of classical transport coefficients according to the Braginskii, Balescu, and Zhdanov formulations}
-    \label{tab:comparetransport}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Comparison of classical transport coefficients according to the Braginskii, Balescu, and Zhdanov formulations}
+  \label{tab:comparetransport}
+\end{longtable}
 
 Note that this table does not contain the full prefactors, but only the numerically changing pieces between the models.
 
@@ -15357,18 +15355,17 @@ In the case of linear runs, the midplane refers, by default, to the midpoint of 
 
 The total internal energy flux quantities {\tt fet...} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 ntstep \index{ntstep}\index{b2time.nc, ntstep} & timestep index & $ $ \\
 timesa \index{timesa}\index{b2time.nc, timesa} & time stamp & $s$ \\
 fnixip \index{fnixip}\index{b2time.nc, fnixip} & integrated poloidal main ion particle flux, Western edge & $s^{-1}$ \\
@@ -15461,9 +15458,9 @@ pwmxap \index{pwmxap}\index{b2time.nc, pwmxap} & maximum total power flux, Easte
 tmne \index{tmne}\index{b2time.nc, tmne} & total number of particles & $ $ \\
 tmte \index{tmte}\index{b2time.nc, tmte} & total electron energy & $eV$ \\
 tmti \index{tmti}\index{b2time.nc, tmti} & total ion energy & $eV$ \\
-tmhacore \index{tmhacore}\index{b2time.nc, tmhacore} & $H_\alpha$ emissivity, core & $photons.m^{-2}.sr^{-1}?$ \\
-tmhasol \index{tmhasol}\index{b2time.nc, tmhasol} & $H_\alpha$ emissivity, SOL above the X-point & $photons.m^{-2}.sr^{-1}?$ \\
-tmhadiv \index{tmhadiv}\index{b2time.nc, tmhadiv} & $H_\alpha$ emissivity, divertor region & $photons.m^{-2}.sr^{-1}?$ \\
+tmhacore \index{tmhacore}\index{b2time.nc, tmhacore} & $H_\alpha$ emissivity, core & $ph.m^{-2}.sr^{-1}?$ \\
+tmhasol \index{tmhasol}\index{b2time.nc, tmhasol} & $H_\alpha$ emissivity, SOL above the X-point & $ph.m^{-2}.sr^{-1}?$ \\
+tmhadiv \index{tmhadiv}\index{b2time.nc, tmhadiv} & $H_\alpha$ emissivity, divertor region & $ph.m^{-2}.sr^{-1}?$ \\
 fnisip \index{fnisip}\index{b2time.nc, fnisip} & poloidal main ion particle flux, into Western separatrix throat & $s^{-1}$ \\
 feesip \index{feesip}\index{b2time.nc, feesip} & poloidal electron energy flux, into Western separatrix throat & $W$ \\
 feisip \index{feisip}\index{b2time.nc, feisip} & poloidal ion energy flux, into Western separatrix throat & $W$ \\
@@ -15484,11 +15481,10 @@ feesapp \index{feesapp}\index{b2time.nc, feesapp} & poloidal electron energy flu
 feisapp \index{feisapp}\index{b2time.nc, feisapp} & poloidal ion energy flux, x-pt private flux region & $W$ \\
 fetsapp \index{fetsapp}\index{b2time.nc, fetsapp} & poloidal total internal energy flux, x-pt private flux region & $W$ \\
 fchsapp \index{fchsapp}\index{b2time.nc, fchsapp} & poloidal current, x-pt private flux region & $A$ \\
-    \hline
-    \caption{Scalar time-dependent quantities stored in b2time.nc}
-    \label{tab:2db2time}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Scalar time-dependent quantities stored in b2time.nc}
+  \label{tab:2db2time}
+\end{longtable}
 
 The following are vector time-dependent quantities stored in
 {\tt b2time.nc}.  These are quantities along lines of constant
@@ -15508,18 +15504,17 @@ by $m^{-2}$. When using {\tt 2d\_profiles\_extended}, additional files are creat
 the name template {\tt f?3d?P.last10} where the area used is the surface area
 perpendicular to the magnetic field direction.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 fn3dl \index{fn3dl}\index{b2time.nc, fn3dl} & poloidal particle flux & \\
                                             & \hspace{1cm} (for each fluid species), Western edge & $s^{-1}.m^{-2}$ \\
 fl3dl \index{fl3dl}\index{b2time.nc, fl3dl} & poloidal electron flux, Western edge & $s^{-1}.m^{-2}$ \\
@@ -15626,33 +15621,31 @@ ft3dr \index{ft3dr}\index{b2time.nc, ft3dr} & poloidal total internal energy flu
 fc3dr \index{fc3dr}\index{b2time.nc, fc3dr} & poloidal current, Eastern edge & $A.m^{-2}$ \\
 fl3dr \index{fl3dr}\index{b2time.nc, fl3dr} & poloidal electron flux, Eastern edge & $s^{-1}.m^{-2}$ \\
 fo3dr \index{fo3dr}\index{b2time.nc, fo3dr} & poloidal total ion flux, Eastern edge & $s^{-1}.m^{-2}$ \\
-    \hline
-    \caption{Vector time-dependent quantities stored in b2time.nc.
+  \hline
+  \caption{Vector time-dependent quantities stored in b2time.nc.
        Note that the conversion to "per unit area" for fluxes is done
        in the script "2d\_profiles"; the actual data stored in
        b2time.nc for fluxes are the fluxes per cell. There is a
        similar conversion from $J$ to $eV$ for temperatures.}
-    \label{tab:3db2time}
-  \end{longtable}
-\end{center}
+  \label{tab:3db2time}
+\end{longtable}
 
 In the case of double-null geometries, additional quantities are
 created related to the inboard top ({\tt tl}) and
 outboard top ({\tt tr}) divertors. These are listed below in
 Table \ref{tab:4db2time}.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 na3dtl \index{na3dtl}\index{b2time.nc, na3dtl} & fluid species density & \\
                                                & \hspace{1cm} (for each fluid species), inboard top divertor & $m^{-3}$ \\
 ne3dtl \index{ne3dtl}\index{b2time.nc, ne3dtl} & electron density, inboard top divertor & $m^{-3}$ \\
@@ -15703,38 +15696,36 @@ ft3dtr \index{ft3dtr}\index{b2time.nc, ft3dtr} & poloidal total internal energy 
 fc3dtr \index{fc3dtr}\index{b2time.nc, fc3dtr} & poloidal current, outboard top divertor  & $A$ \\
 fl3dtr \index{fl3dtr}\index{b2time.nc, fl3dtr} & poloidal electron flux, outboard top divertor & $s^{-1}$ \\
 fo3dtr \index{fo3dtr}\index{b2time.nc, fo3dtr} & poloidal total ion flux, outboard top divertor & $s^{-1}$ \\
-    \hline
-    \caption{Double-null vector time-dependent quantities stored in b2time.nc}
-    \label{tab:4db2time}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Double-null vector time-dependent quantities stored in b2time.nc}
+  \label{tab:4db2time}
+\end{longtable}
 
 Additional multi-dimensional writes to {\tt b2time.nc} can be made using the {\tt b2mwti\_2dwrite} switch.
 If set to {\tt 1}, then a few 2D arrays ($n_e$, $T_e$, $T_i$) are output with each write to {\tt b2time.nc}. If set
 to {\tt 2}, then additional quantities such as fluxes are added, see below Table
 \ref{tab:5db2time}.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
-    \multicolumn{3}{|c|}{If {\tt b2mwti\_2dwrite} $\ge$ 1} \\
-    \hline
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+  \multicolumn{3}{|c|}{If {\tt b2mwti\_2dwrite} $\ge$ 1} \\
+  \hline
     na2d \index{na2d}\index{b2time.nc, na2d} & fluid species density (for each fluid species) & $m^{-3}$ \\
     ne2d \index{ne2d}\index{b2time.nc, ne2d} & electron density & $m^{-3}$ \\
     te2d \index{te2d}\index{b2time.nc, te2d} & electron temperature & $eV$ \\
     ti2d \index{ti2d}\index{b2time.nc, ti2d} & ion temperature & $eV$ \\
-    \hline
-    \multicolumn{3}{|c|}{and if {\tt b2mwti\_2dwrite} = 2} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{and if {\tt b2mwti\_2dwrite} = 2} \\
+  \hline
     po2d \index{po2d}\index{b2time.nc, po2d} & electric potential & $V$ \\
     kin2d \index{kin2d}\index{b2time.nc, kin2d} & parallel kinetic energy & $J$ \\
     rsahi2d \index{rsahi2d}\index{b2time.nc, rsahi2d} & ionisation energy source/sink & $W$ \\
@@ -15749,11 +15740,10 @@ to {\tt 2}, then additional quantities such as fluxes are added, see below Table
     fhi2d \index{fhi2d}\index{b2time.nc, fhi2d} & Ion heat flux & $W$ \\
     fch2d \index{fch2d}\index{b2time.nc, fch2d} & Electric crrent & $A$ \\
     fna2d \index{fna2d}\index{b2time.nc, fna2d} & Particle flux & $s^{-1}$ \\
-    \hline
-    \caption{Multi-dimensional time-dependent quantities stored in b2time.nc}
-    \label{tab:5db2time}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Multi-dimensional time-dependent quantities stored in b2time.nc}
+  \label{tab:5db2time}
+\end{longtable}
 
 \begin{sloppypar}
 When using the averaging scheme for {\tt Eirene} coupled runs
@@ -15764,18 +15754,17 @@ These quantities can be visualized by means of the {\tt 2dt\_av} script.
 \index{2dt\_av}
 \end{sloppypar}
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 nastep \index{nastep}\index{b2time.nc, nastep} & timestep index & $ $ \\
 batchsa \index{batchsa}\index{b2time.nc, batchsa} & time stamp for averaged batch & $s$ \\
 nasepi\_av \index{nasepi\_av}\index{b2time.nc, nasepi\_av} & averaged separatrix fluid species density & \\
@@ -15886,11 +15875,10 @@ nemxap\_std \index{nemxap\_std}\index{b2time.nc, nemxap\_std} & variance for max
 temxap\_std \index{temxap\_std}\index{b2time.nc, temxap\_std} & variance for maximum electron temperature, Eastern edge & $eV$ \\
 timxap\_std \index{timxap\_std}\index{b2time.nc, timxap\_std} & variance for maximum ion temperature, Eastern edge & $eV$ \\
 pomxap\_std \index{pomxap\_std}\index{b2time.nc, pomxap\_std} & variance for maximum potential, Eastern edge & $V $ \\
-    \hline
-    \caption{Scalar batch-averaged time-dependent quantities stored in b2time.nc}
-    \label{tab:b2timeav}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Scalar batch-averaged time-dependent quantities stored in b2time.nc}
+  \label{tab:b2timeav}
+\end{longtable}
 
 \clearpage
 
@@ -15906,29 +15894,28 @@ If {\tt 'b2mndr\_stim'} is set to a negative value, data from the current \SOLPS
 The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of switches (which can be simultaneously used) as described in the below Table
 \ref{tab:b2moviesarrays}.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1} \\
-    \hline
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_state\_variables} $\ge$ 1} \\
+  \hline
     na \index{na}\index{b2movies.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
     ne \index{ne}\index{b2movies.nc, ne} & Electron density & $m^{-3}$ \\
     ua \index{ua}\index{b2movies.nc, ua} & Parallel velocity of fluid species (for each species) & $m s^{-1}$ \\
     te \index{te}\index{b2movies.nc, te} & Electron temperature & $eV$ \\
     ti \index{ti}\index{b2movies.nc, ti} & Ion temperature & $eV$ \\
     po \index{po}\index{b2movies.nc, po} & Electric potential & $V$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_fluxes} $\ge$ 1} \\
+  \hline
     fnax \index{fnax}\index{b2movies.nc, fnax} & Poloidal particle flux (for each fluid species) & $s^{-1}$ \\
     fnay \index{fnay}\index{b2movies.nc, fnay} & Radial particle flux (for each fluid species) & $s^{-1}$ \\
     fhex \index{fhex}\index{b2movies.nc, fhex} & Poloidal electron heat flux & $W$ \\
@@ -15937,9 +15924,9 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     fhiy \index{fhiy}\index{b2movies.nc, fhiy} & Radial ion heat flux & $W$ \\
     fchx \index{fchx}\index{b2movies.nc, fchx} & Poloidal electric current & $A$ \\
     fchy \index{fchy}\index{b2movies.nc, fchy} & Radial electric current & $A$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_sources} $\ge$ 1} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_sources} $\ge$ 1} \\
+  \hline
     rsana \index{rsana}\index{b2movies.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
     rsahi \index{rsahi}\index{b2movies.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
     rsahisum \index{rsahisum}\index{b2movies.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
@@ -15953,9 +15940,9 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
     rqrad \index{rqrad}\index{b2movies.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
     rqahesum \index{rqahesum}\index{b2movies.nc, rqahesum} & Total volumetric line radiation rate & $W m^{-3}$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_transport} $\ge$ 1} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_b25\_transport} $\ge$ 1} \\
+  \hline
     dna \index{dna}\index{b2movies.nc, dna} & Particle density-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
     dpa \index{dna}\index{b2movies.nc, dpa} & Particle pressure-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
     hci \index{hci}\index{b2movies.nc, hci} & Ion thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
@@ -15963,16 +15950,16 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     vlax \index{vlax}\index{b2movies.nc, vlax} & Poloidal anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
     vlay \index{vlay}\index{b2movies.nc, vlay} & Radial anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
     vsa \index{vsa}\index{b2movies.nc, vsa} & Anomalous viscosity (for each fluid species) & $m kg^{-1} s^{-1}$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
     dab2 \index{dab2}\index{b2movies.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
     tab2 \index{tab2}\index{b2movies.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
     dmb2 \index{dab2}\index{b2movies.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
     tmb2 \index{tab2}\index{b2movies.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 (if {\tt Eirene} is used)} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_fluxes} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
     rfluxa \index{rfluxa}\index{b2movies.nc, rfluxa} & Atomic radial flux density (for each atom species) & $m^{-2} s^{-1}$ \\
     pfluxa \index{pfluxa}\index{b2movies.nc, pfluxa} & Atomic poloidal flux density (for each atom species) & $m^{-2} s^{-1}$ \\
     refluxa \index{refluxa}\index{b2movies.nc, refluxa} & Atomic radial energy flux density (for each atom species) & $W m^{-2}$ \\
@@ -15981,9 +15968,9 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     pfluxm \index{pfluxm}\index{b2movies.nc, pfluxm} & Molecular poloidal flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
     refluxm \index{refluxm}\index{b2movies.nc, refluxm} & Molecular radial energy flux density (for each molecule species) & $W m^{-2}$ \\
     pefluxm \index{pefluxm}\index{b2movies.nc, pefluxm} & Molecular poloidal energy flux density (for each molecule species) & $W m^{-2}$ \\
-    \hline
-    \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
-    \hline
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfmovie\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
     eirene\_papl\_sna \index{eirene\_papl\_sna}\index{b2movies.nc, eirene\_papl\_sna} & Particle source density from atom-plasma collisions & \\
                                                                                 & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
     eirene\_pmpl\_sna \index{eirene\_pmpl\_sna}\index{b2movies.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
@@ -16002,11 +15989,10 @@ The number of arrays outputted to {\tt b2movies.nc} is controlled by a series of
     emolrad \index{emolrad}\index{b2movies.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules & \\
                                                         & \hspace{0.5cm} (for each molecule species) & $W m^{-3}$ \\
     emolradsum \index{emolradsum}\index{b2movies.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules & $W m^{-3}$ \\
-    \hline
-    \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
-    \label{tab:b2moviesarrays}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Multi-dimensional time-dependent quantities stored in b2movies.nc}
+  \label{tab:b2moviesarrays}
+\end{longtable}
 
 Users should be careful when requesting the generation of {\tt b2movies.nc}, because it can become very heavy. The following list summarizes the additional filesize which can be roughly expected, on a $96 \times 36 = 3456$ control volumes grid, for each of the requested data groups:
 \begin{itemize}
@@ -16033,18 +16019,17 @@ If all the aforementioned switches are $\ge$ 1, then a filesize of roughly 9.3 G
 The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the below Table
 \ref{tab:eirenemoviesarrays}. The file is created, in case of couples runs, only if the switch {\tt cdfmovie\_triangles} $\ge$ 1.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description & units \\
-    \hline \endhead
-    \hline quantity & description & units \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     pdena \index{pdena}\index{eirenemovies.nc, pdena} & Atom particle density (for each atom species) & $m^{-3}$ \\
     pdenm \index{pdenm}\index{eirenemovies.nc, pdenm} & Molecule particle density (for each molecule species) & $m^{-3}$ \\
     edena \index{edena}\index{eirenemovies.nc, edena} & Atom energy density (for each atom species) & $eV m^{-3}$ \\
@@ -16055,11 +16040,10 @@ The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the bel
     vydenm \index{vydenm}\index{eirenemovies.nc, vydenm} & Molecule y-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
     vzdena \index{vzdena}\index{eirenemovies.nc, vzdena} & Atom z-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
     vzdenm \index{vzdenm}\index{eirenemovies.nc, vzdenm} & Molecule z-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
-    \hline
-    \caption{Multi-dimensional time-dependent quantities stored in eirenemovies.nc}
-    \label{tab:eirenemoviesarrays}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Multi-dimensional time-dependent quantities stored in eirenemovies.nc}
+  \label{tab:eirenemoviesarrays}
+\end{longtable}
 
 Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy. For example, on a grid consisting of 10000 triangles, the filesize can be roughly expected to be 360 kB per {\tt Eirene} atom/molecule species per outputted timestep. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (3 {\tt Eirene} atom species and 1 {\tt Eirene} molecule species), a filesize of roughly 1.4 GB can be expected.
 
@@ -16081,18 +16065,17 @@ The meaning of the dimensions are:
 \item[time] time index
 \end{description}
 
-\begin{center}
-    \begin{longtable}{|l|l|l|l|}
-    \hline
-    \multicolumn{4}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & dimensions & units & description \\
-    \hline \endhead
-    \hline quantity & dimensions & units & description \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{4}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|l|l|}
+  \hline
+  \multicolumn{4}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & dimensions & units & description \\
+  \hline \endhead
+  \hline quantity & dimensions & units & description \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{4}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 b2bremreg \index{b2bremreg}\index{b2tallies.nc, b2bremreg}                       & vreg, time     & $W$           & Bremsstrahlung radiation rate \\
 b2divua \index{b2divua}\index{b2tallies.nc, b2divua}                             & vreg, time     & $W$           & Heating term from $\nabla u_a$ \\
 b2divue \index{b2divue}\index{b2tallies.nc, b2divue}                             & vreg, time     & $W$           & Heating term from $\nabla u_e$ \\
@@ -16172,11 +16155,10 @@ rsanareg \index{rsanareg}\index{b2tallies.nc, rsanareg}                         
 tereg \index{tereg}\index{b2tallies.nc, tereg}                                   & vreg, time     & $eV$          & Average electron temperature $\frac{\int T_e n_e dV}{\int n_e dV}$ \\
 tireg \index{tireg}\index{b2tallies.nc, tireg}                                   & vreg, time     & $eV$          & Average ion temperature $\frac{\int T_i n_i dV}{\int n_i dV}$ \\
 volreg \index{volreg}\index{b2tallies.nc, volreg}                                & vreg, time     & $m^3$         & Total volume $\int dV$\\
-    \hline
-    \caption{Quantities stored in b2tallies.nc}
-    \label{tab:b2tallies}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Quantities stored in b2tallies.nc}
+  \label{tab:b2tallies}
+\end{longtable}
 
 \clearpage
 
@@ -16271,20 +16253,19 @@ Note that some quantities (like density, velocity, temperature, potentials, magn
 metric coefficients, etc.) are computed at cell centers, while others (like particle,
 energy, and momentum fluxes, currents, and quantities which contribute to them) are computed at cell faces.
 
-\begin{center}
-    \begin{longtable}{|l|l|l|l|}
-    \hline
-    \multicolumn{4}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & units & file(s) & equation \\
-    \hline \endhead
-    \hline quantity & units & file(s) & equation \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{4}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
-\multicolumn{4}{|l|}{\small\it Main quantities} \\
-\hline
+\begin{longtable}{|l|l|l|l|}
+  \hline
+  \multicolumn{4}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & units & file(s) & equation \\
+  \hline \endhead
+  \hline quantity & units & file(s) & equation \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{4}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+  \multicolumn{4}{|l|}{\small\it Main quantities} \\
+  \hline
 
 $n_a$ & $m^{-3}$ & \texttt{b2npco\_na[XXX].dat} or & (\ref{eq:cont_appC}) \\
  & & \texttt{b2npc11\_na[XXX].dat} &  \\
@@ -16299,9 +16280,9 @@ $\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_po.dat} &  \\
 $n_e$ & $m^{-3}$ & \texttt{ne.dat} & (\ref{eq:ne}) \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Geometry and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Geometry and related quantities} \\
+  \hline
 
 $\sqrt{g}$ & $m^3$ & \texttt{vol.dat} &  \\
 $h_x$ & $m$ & \texttt{hx.dat} &  \\
@@ -16320,9 +16301,9 @@ $Z_2$ & $m$ & \texttt{crz2.dat} &  \\
 $R_3$ & $m$ & \texttt{crx3.dat} &  \\
 $Z_3$ & $m$ & \texttt{crz3.dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Continuity equation and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Continuity equation and related quantities} \\
+  \hline
 
 $S_a^n\sqrt{g}$ & $s^{-1}$ & \texttt{b2npco\_sna[XXX].dat} or & (\ref{eq:cont_appC}) \\
  & & \texttt{b2npc11\_sna[XXX].dat} & \\
@@ -16405,9 +16386,9 @@ ${\Gamma}_{ay}$ & $s^{-1}$ & \texttt{b2tfnb\_fnby[XXX].dat} & (\ref{eq:GammaAYno
 residuals & $s^{-1}$ & \texttt{b2npco\_resco[XXX].dat} or &  \\
  & & \texttt{b2npc11\_resco[XXX].dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Momentum balance equation and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Momentum balance equation and related quantities} \\
+  \hline
 
 $V_{\parallel a}$ & $m/s$ & \texttt{b2npmo\_ua[XXX].dat} & (\ref{eq:mom_new}), (\ref{eq:mom_old}) \\
 
@@ -16505,9 +16486,9 @@ $\displaystyle \frac{h_z \sqrt{g}}{h_x} \left( \frac{4}{3} \widetilde{\widetilde
 
 residuals & $N \cdot m$ & \texttt{b2npmo\_resmo[XXX].dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Electron heat balance equation and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Electron heat balance equation and related quantities} \\
+  \hline
 
 $T_e$ & $J$ & \texttt{b2npht\_te.dat} or & (\ref{eq:ene_new}) \\
  & & \texttt{b2nph9\_te.dat} &  \\
@@ -16612,9 +16593,9 @@ $r_{Q_a}^{\rm line} \sqrt{g}$ & $W$ & \texttt{b2stel\_rqrad[XXX]} & (\ref{eq:ene
 residuals & $W$ & \texttt{b2npht\_reshe.dat} or &  \\
  & & \texttt{b2nph9\_reshe.dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Ion heat balance equation and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Ion heat balance equation and related quantities} \\
+  \hline
 
 $T_i$ & $W$ & \texttt{b2npht\_shi.dat} or & (\ref{eq:eni}) \\
  & & \texttt{b2nph9\_shi.dat} &  \\
@@ -16700,9 +16681,9 @@ $\displaystyle \frac{5}{2} \frac{\sqrt{g}}{h_y} T_i \sum \limits^{ns-1}_{\substa
 residuals & $W$ & \texttt{b2npht\_reshi.dat} or &  \\
  & & \texttt{b2nph9\_reshi.dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Current continuity equation and related quantities} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Current continuity equation and related quantities} \\
+  \hline
 
 $\varphi$ & $V$ & \texttt{b2nppo\_po.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_po.dat} &  \\
@@ -16770,9 +16751,9 @@ $\displaystyle \frac{\sqrt{g}}{h^2_y} \sigma^{(ST)}$ & $S$ & \texttt{b2trno\_csi
 residuals & $A$ & \texttt{b2nppo\_respo.dat} or & (\ref{eq:pot_eq}) \\
  & & \texttt{b2npp7\_respo.dat} &  \\
 
-\hline
-\multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
-\hline
+  \hline
+  \multicolumn{4}{|l|}{\small\it Moments of the distribution function} \\
+  \hline
 
 $\displaystyle u_{\parallel}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_avm\_u.dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
@@ -16786,11 +16767,10 @@ $\displaystyle \frac{r^T_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec
 
 $\displaystyle \frac{r^w_{\parallel a}\gamma_a}{p_a}$ (only for Section~\ref{sec:Zhdanov}) & $m/s$ & \texttt{b2tral\_rwdpgamma\_out[XXX].dat} & (\ref{eq:zh_ion_dist_fun}) \\
 
-\hline
-\caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
-\label{tab:b2wdat_files}
+  \hline
+  \caption{Files produced by means of {\tt 'b2wdat\_iout = 4'}, the variable they contain, and the equation to which they are related}
+  \label{tab:b2wdat_files}
 \end{longtable}
-\end{center}
 
 It may be convenient to build a total energy flux $\vec{\bf q}^{\rm ENERGY}$ (cf. Eq.~(\ref{eq:energy_flux_vector})) and many other quantities
 which contribute to it from the quantities listed in the table~\ref{tab:b2wdat_files}. Note that since the energy flux is computed at
@@ -17446,18 +17426,18 @@ Note that some commands will only work if the {\tt B2.5} grid is built from
 an underlying structured base grid, i.e. those referring to an $ix$ or $iy$
 coordinate index.
 
-\begin{center}\index{b2plot, plasma quantities}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline quantity & description $(units)$ \\
-    \hline \endhead
-    \hline quantity & description $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, plasma quantities}
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description $(units)$ \\
+  \hline \endhead
+  \hline quantity & description $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     ahal     & \index{b2plot, ahal} Atomic $H_\alpha$ emissivity $(photons.m^{-3}.s^{-1})$ \\
     alf      & \index{b2plot, alf} Thermo-electric coefficient $(\Omega^{-1}.m^{-1})$ \\
     alph     & \index{b2plot, alph} Ratio of pressure gradient to critical ballooning value \\
@@ -17883,11 +17863,10 @@ coordinate index.
     zn\_ext  & \index{b2plot, zn\_ext} External species nuclear charge $(amu)$ \\
     zt       & \index{b2plot, zt} $\exb$ turbulent enstrophy $(s^{-2}?)$ \\
     zt0      & \index{b2plot, zt0} $\exb$ turbulent enstrophy {\em zt} at previous time step $(s^{-2}?)$ \\
-    \hline
-    \caption{Available quantities}
-    \label{tab:available-quantities}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Available quantities}
+  \label{tab:available-quantities}
+\end{longtable}
 
 Note that the {\bf nreg}, {\bf niso}, {\bf freg}, {\bf clbl}, {\bf flbl}, and {\bf tlbl} commands require an integer
 argument $\langle${\tt ireg}$\rangle$. If $\langle${\tt ireg}$\rangle = 0$, the arrays will contain the region index
@@ -17939,20 +17918,20 @@ are shown in the table for the integer ('i'), real ('r'), string ('s'),
 matrix ('m'), wall ('w') and target ('t') stacks. Whenever these stack requirements
 are not met, an error is returned and no action is taken.
 
-\begin{center}\index{b2plot, stack commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, stack commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     abs \index{b2plot, abs}        & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:abs}   & Absolute value \\
     arox \index{b2plot, arox}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:arox}  & Use as array for arrow $X$-component \\
     aroy \index{b2plot, aroy}      & 0 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:aroy}  & Use as array for arrow $Y$-component \\
@@ -18047,31 +18026,30 @@ are not met, an error is returned and no action is taken.
                                    &   &   &   &   &   &   &   &  & \hspace{1cm} onto wall stack \\
     zrng \index{b2plot, zrng}      & 2 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zrng}  & Select species range \\
     zsel \index{b2plot, zsel}      & 1 & 0 & 0 & 1 & 0 & 0 & 0 & \ref{sec:zsel}  & Select species index \\
-    \hline
-    \caption{Commands acting on the "matrix" stack together with their stack requirements.}
-    \label{tab:available-commands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands acting on the "matrix" stack together with their stack requirements.}
+  \label{tab:available-commands}
+\end{longtable}
 
 The commands acting on the "matrix" stack plotting are given in table
 \ref{tab:matrixplot-commands}.  These modify some behavior or
 appearance of the "matrix" stack plot.  Their arguments requirements
 are indicated in the table.
 
-\begin{center}\index{b2plot, plot commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, plot commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline command & \multicolumn{7}{|c|}{stack requirements} & section & description \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     a4l \index{b2plot, a4l}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4l}    & A4 landscape \\
     a4p \index{b2plot, a4p}        & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:a4p}    & A4 portrait \\
     acol \index{b2plot, acol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:acol}   & Arrow colour \\
@@ -18208,29 +18186,28 @@ are indicated in the table.
     zcol \index{b2plot, zcol}      & 1 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zcol}   & Colour of zero axes \\
     zero \index{b2plot, zero}      & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zero}   & Add zero axes to plot \\
     zwid \index{b2plot, zwid}      & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:zwid}   & Zero axes line width \\
-    \hline
-    \caption{Commands acting on the "matrix" stack plotting together with their stack requirements.}
-    \label{tab:matrixplot-commands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands acting on the "matrix" stack plotting together with their stack requirements.}
+  \label{tab:matrixplot-commands}
+\end{longtable}
 
 The maxima and minima for plotting can
 be set by changing the real variables listed in table
 \ref{tab:real-variables}.  These commands take one value from the
 "real" stack and store it in an associated global variable.
 
-\begin{center}\index{b2plot, real variables}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & use $(units)$ \\
-    \hline \endhead
-    \hline name & use $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, real variables}
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & use $(units)$ \\
+  \hline \endhead
+  \hline name & use $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     a0 \index{b2plot, a0}      & $R$ radius of the ellipse in {\tt chord.F} $(m)$ \\
     b0 \index{b2plot, b0}      & $R$ radius of the ellipse in {\tt chord.F} $(m)$ \\
     emax \index{b2plot, emax}    & Maximum function value for plotting Eirene stack data \\
@@ -18270,31 +18247,30 @@ be set by changing the real variables listed in table
     zmax \index{b2plot, zmax}    & Maximum $Z$ for plotting in the physical domain $(m)$ \\
     zmin \index{b2plot, zmin}    & Minimum $Z$ for plotting in the physical domain $(m)$ \\
     zshi \index{b2plot, zshi}    & Relative $Z$ shift to be applied to chords $(m)$ \\
-    \hline
-    \caption{Commands assigning real variables from stack for use in plotting}
-    \label{tab:real-variables}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands assigning real variables from stack for use in plotting}
+  \label{tab:real-variables}
+\end{longtable}
 
 Values for the text variables mentioned in
 tables \ref{tab:character-variables} can also be set.  These text
 variables often form the argument for a command.  Typically these
 commands take one value off the "string" stack.
 
-\begin{center}\index{b2plot, character commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, character commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     adas \index{b2plot, adas}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:adas}     & Access {\tt ADAS} data \\
     amju \index{b2plot, amju}, amjuel \index{b2plot, anjuel} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & \ref{sec:amju} & Access {\tt AMJUEL} data \\
     cam \index{b2plot, cam}      & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:cam}      & Camera plot \\
@@ -18358,30 +18334,29 @@ commands take one value off the "string" stack.
                                  &   &   &   &   &   &   &   &  & \hspace{1cm} wall stack to a file \\
     xlab \index{b2plot, xlab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:xlab}     & Set $x$-axis label \\
     ylab \index{b2plot, ylab}    & 0 & 0 & 1 & 0 & 0 & 0 & 0 & \ref{sec:ylab}     & Set $y$-axis label \\
-    \hline
-    \caption{Commands taking character strings as parameters.  Note
+  \hline
+  \caption{Commands taking character strings as parameters.  Note
       that the string should be delimited by single quotes.}
-    \label{tab:character-variables}
-  \end{longtable}
-\end{center}
+  \label{tab:character-variables}
+\end{longtable}
 
 In table \ref{tab:eirenequantities}, we give the list of quantities that
 are available for use on the "Eirene" stack, containing values defined
 on the triangular grid defined for the {\tt Eirene} computations. These
 quantities are only available for coupled \SOLPSITER runs.
 
-\begin{center}\index{b2plot, Eirene quantities}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & description $(units)$ \\
-    \hline \endhead
-    \hline name & description $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, Eirene quantities}
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & description $(units)$ \\
+  \hline \endhead
+  \hline name & description $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     edena \index{b2plot, edena} & Atoms energy density $(eV.m^{-3})$ \\
     edeni \index{b2plot, edeni} & Test ions energy density $(eV.m^{-3})$ \\
     edenm \index{b2plot, edenm} & Molecules energy density $(eV.m^{-3})$ \\
@@ -18418,31 +18393,30 @@ quantities are only available for coupled \SOLPSITER runs.
     vzdenm \index{b2plot, vzdenm} & Molecules $z$-directed (Cartesian) momentum density $(kg.m^{-2}.s^{-1})$ \\
     vzi \index{b2plot, vzi} & Test ions $z$-directed (Cartesian) velocity $(m.s^{-1})$ \\
     vzm \index{b2plot, vzm} & Molecules $z$-directed (Cartesian) velocity $(m.s^{-1})$ \\
-    \hline
-    \caption{Quantities that can be stored in the "Eirene" stack.}
-    \label{tab:eirenequantities}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Quantities that can be stored in the "Eirene" stack.}
+  \label{tab:eirenequantities}
+\end{longtable}
 
 Note that the neutral pressure is readily obtainable as $\frac{2}{3}$ of the energy density.
 
 In table \ref{tab:eirenecommands}, we give the list of commands that
 act on the "Eirene" stack or affect graphs of those data.
 
-\begin{center}\index{b2plot, Eirene stack commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, Eirene stack commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     eabs \index{b2plot, eabs}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:eabs}     & Absolute value \\
     earow \index{b2plot, earow}    & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:earow}    & Set arrow length scale for Eirene data plots \\
     earox \index{b2plot, earox}    & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:earox}    & Use as Eirene array for arrow $x$-component \\
@@ -18504,28 +18478,27 @@ act on the "Eirene" stack or affect graphs of those data.
     psta \index{b2plot, psta}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:psta}     & Divide Eirene data per triangle area \\
     pstv \index{b2plot, pstv}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:pstv}     & Divide Eirene data per triangle volume \\
     sumt \index{b2plot, sumt}      & 0 & 0 & 0 & 0 & 1 & 0 & 0 & \ref{sec:sumt}     & Sum over triangular grid \\
-    \hline
-    \caption{Commands related to the "Eirene" stack and triangular grid data plots.}
-    \label{tab:eirenecommands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands related to the "Eirene" stack and triangular grid data plots.}
+  \label{tab:eirenecommands}
+\end{longtable}
 
 In table \ref{tab:wallquantities}, we give the list of quantities that
 are available for use on the "wall" stack, containing values defined at the boundary surface
 at the edge of the computational domain.
 
-\begin{center}\index{b2plot, wall quantities}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & description $(units)$ \\
-    \hline \endhead
-    \hline name & description $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, wall quantities}
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & description $(units)$ \\
+  \hline \endhead
+  \hline name & description $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     backscae \index{b2plot, backscae}  & Backscattering energy fraction \\
     backscat \index{b2plot, backscat}  & Backscattering fraction \\
     bbdyemis \index{b2plot, bbdyemis}  & Blackbody emissivity \\
@@ -18624,11 +18597,10 @@ at the edge of the computational domain.
     west \index{b2plot, west}      & Wall elements corresponding to the West boundary \\
     z1 \index{b2plot, z1}        & Start $Z$ position of wall element $(m)$ \\
     z2 \index{b2plot, z2}        & End $Z$ position of wall element $(m)$ \\
-    \hline
-    \caption{Quantities that can be stored in the "wall" stack.}
-    \label{tab:wallquantities}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Quantities that can be stored in the "wall" stack.}
+  \label{tab:wallquantities}
+\end{longtable}
 
 Note that the {\bf nseg} command requires an integer
 argument $\langle${\tt iseg}$\rangle$. If $\langle${\tt iseg}$\rangle = 0$, the arrays will contain the wall segment
@@ -18646,20 +18618,20 @@ will contain {\tt 1.0}, otherwise they will contain zero.
 In table \ref{tab:wallcommands}, we give the list of commands that
 act on the "wall" stack or affect wall graphs.
 
-\begin{center}\index{b2plot, wall commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, wall commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     ddw \index{b2plot, ddw}       & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:ddw}      & Take derivative along wall length \\
     intw \index{b2plot, intw}     & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw}     & Integrate over walls (per segment) \\
     intw* \index{b2plot, intw*}   & 0 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:intw*}    & Integrate over walls (all segments) \\
@@ -18724,11 +18696,10 @@ act on the "wall" stack or affect wall graphs.
     wwid \index{b2plot, wwid}     & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \ref{sec:wwid}     & Wall linewidth \\
     wzrng \index{b2plot, wzrng}   & 2 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzrng}    & Select species range in wall data \\
     wzsel \index{b2plot, wzsel}   & 1 & 0 & 0 & 0 & 0 & 1 & 0 & \ref{sec:wzsel}    & Select species in wall data \\
-    \hline
-    \caption{Commands related to the "wall" stack and wall plots.}
-    \label{tab:wallcommands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands related to the "wall" stack and wall plots.}
+  \label{tab:wallcommands}
+\end{longtable}
 
 In table \ref{tab:targetquantities}, we give the list of quantities that
 are available for use on the "target" stack, containing values defined
@@ -18736,18 +18707,18 @@ inside the target elements, if the appropriate \SOLPSfive models have been
 activated. Note that by default, the "target" stack contains the target
 temperature (in $K$) upon \btwoplot start-up.
 
-\begin{center}\index{b2plot, target quantities}
-  \begin{longtable}{|c|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & description $(units)$ \\
-    \hline \endhead
-    \hline name & description $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, target quantities}
+\begin{longtable}{|c|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & description $(units)$ \\
+  \hline \endhead
+  \hline name & description $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     cp \index{b2plot, cp}        & Target specific heat capacity $(J.kg^{-1}.K^{-1})$ \\
     dkappadt \index{b2plot, dkappadt}  & Derivative of target heat conductivity $(W.m^{-1}.K^{-2})$ \\
     itrgeq \index{b2plot, itrgeq}    & Is the target element index equal to? \\
@@ -18781,11 +18752,10 @@ temperature (in $K$) upon \btwoplot start-up.
     ztrgle \index{b2plot, ztrgle}    & Is the target element depth index less than or equal to? \\
     ztrglt \index{b2plot, ztrglt}    & Is the target element depth index less than? \\
     ztrgne \index{b2plot, ztrgne}    & Is the target element depth index not equal to? \\
-    \hline
-    \caption{Available target quantities for plotting.}
-    \label{tab:targetquantities}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Available target quantities for plotting.}
+  \label{tab:targetquantities}
+\end{longtable}
 
 The arrays {\bf itrglt}, {\bf itrgle}, {\bf itrgeq}, {\bf itrgne}, {\bf itrgge}, {\bf itrggt}, {\bf ztrglt}, {\bf ztrgle}, {\bf ztrgeq}, {\bf ztrgne}, {\bf ztrgge}, and {\bf ztrggt}
 all require an integer argument $\langle${\tt i}$\rangle$,
@@ -18805,20 +18775,20 @@ In table \ref{tab:targetcommands}, we give the list of commands that
 act on the "target" stack or affect target graphs, with their respective
 stack requirements.
 
-\begin{center}\index{b2plot, target commands}
-  \begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued from previous page} \\
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endhead
-    \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
-    \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{10}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, target commands}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|l|}
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued from previous page} \\
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endhead
+  \hline name & \multicolumn{7}{|c|}{stack requirements} & section & use \\
+  \hline   & 'i' & 'r' & 's' & 'm' & 'e' & 'w' & 't' &   &   \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{10}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     inttrgw \index{b2plot, inttrgw}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (all segments) \\
     inttrgw* \index{b2plot, inttrgw*} & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgw}  & Integrate along walls (per segment) \\
     inttrgz \index{b2plot, inttrgz}   & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:inttrgz}  & Integrate in depth \\
@@ -18881,28 +18851,27 @@ stack requirements.
     trgtow \index{b2plot, trgtow}     & 0 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgtow}   & Copy target data onto wall stack \\
     trgwsel \index{b2plot, trgwsel}   & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgwsel}  & Select wall element in target data \\
     trgzsel \index{b2plot, trgzsel}   & 1 & 0 & 0 & 0 & 0 & 0 & 1 & \ref{sec:trgzsel}  & Select depth element in target data \\
-    \hline
-    \caption{Commands related to the "target" stack and target plots.}
-    \label{tab:targetcommands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Commands related to the "target" stack and target plots.}
+  \label{tab:targetcommands}
+\end{longtable}
 
 Additionally, some real and integer constants used by the code can be read
 into the "real" and "integer" stacks of \btwoplot for further manipulation. These are given
 in the table \ref{tab:b2plotconstants}.
 
-\begin{center}\index{b2plot, constants}
-  \begin{longtable}{|c|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & description $(units)$ \\
-    \hline \endhead
-    \hline name & description $(units)$ \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, constants}
+\begin{longtable}{|c|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & description $(units)$ \\
+  \hline \endhead
+  \hline name & description $(units)$ \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     avogr \index{b2plot, avogr}  & Avogadro's constant $N_A$ $(mol^{-1})$ \\
     c \index{b2plot, c}      & Speed of light $c$ $(m/s)$ \\
     eps0 \index{b2plot, eps0}   & Electric permittivity of vacuum $\epsilon_0$ $(F)$ \\
@@ -18933,26 +18902,25 @@ in the table \ref{tab:b2plotconstants}.
     ny \index{b2plot, ny}     & Mesh size in radial direction \\
     pi \index{b2plot, pi}     & $\pi$ \\
     qe \index{b2plot, qe}     & Electron charge $q_e$ $(C)$ \\
-    \hline
-    \caption{Available \btwoplot constants.}
-    \label{tab:b2plotconstants}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Available \btwoplot constants.}
+  \label{tab:b2plotconstants}
+\end{longtable}
 
 In table \ref{tab:extracommands} some additional commands are given.
 
-\begin{center}\index{b2plot, additional commands}
-  \begin{longtable}{|c|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & use \\
-    \hline \endhead
-    \hline name & use \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\index{b2plot, additional commands}
+\begin{longtable}{|c|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & use \\
+  \hline \endhead
+  \hline name & use \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
     coro \index{b2plot, coro}         & Print coronal rates \\
     debu \index{b2plot, debu}, debug \index{b2plot, debug} & Set debugging information level \\
     eof \index{b2plot, eof}           & Indicate end of file \\
@@ -18963,11 +18931,10 @@ In table \ref{tab:extracommands} some additional commands are given.
     user \index{b2plot, user}         & Available for user-defined functions \\
     wlld \index{b2plot, wlld}         & Produces ANK wall loading files \\
     quit \index{b2plot, quit}, exit, end \index{b2plot, exit}\index{b2plot, end} & Terminate program \\
-    \hline
-    \caption{Additional commands.}
-    \label{tab:extracommands}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Additional commands.}
+  \label{tab:extracommands}
+\end{longtable}
 
 The {\bf coro} command, with integer argument $\langle${\tt is}$\rangle$ and real argument $\langle${\tt T}$\rangle$
 prints to {\tt stdout} the coronal radiation
@@ -21495,18 +21462,17 @@ We list here additional possible compiler options that can be used when compilin
 
 We list below where the {\tt Carre2} compilation switches are used.
 
-\begin{center}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & used in \\
-    \hline \endhead
-    \hline name & used in \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & used in \\
+  \hline \endhead
+  \hline name & used in \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 CARRE\_NONINTERACTIVE & carre/coinci.F90 \\
 CARRE\_NONINTERACTIVE & carre/maille.F90 \\
 CARRE\_NONINTERACTIVE & carre/selptx.F90 \\
@@ -21531,11 +21497,10 @@ USE\_SILO & carre\_mod/carre\_postprocess.F90 \\
 USE\_SILO & carre\_mod/carre\_virtualstructures.F90 \\
 USE\_SILO & carre\_mod/carresiloio.F90 \\
 USE\_SILO & trans/tradui.F90 \\
-    \hline
-    \caption{Defines for Carre2 and where they are used.}
-    \label{tab:Carre2defines}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Defines for Carre2 and where they are used.}
+  \label{tab:Carre2defines}
+\end{longtable}
 
 \subsection{DivGeo}
 \index{DEFINES, used in compiling DivGeo}
@@ -21544,46 +21509,44 @@ USE\_SILO & trans/tradui.F90 \\
 
 We list below where the {\tt DivGeo} compilation switches are used.
 
-\begin{center}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & used in \\
-    \hline \endhead
-    \hline name & used in \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
-       AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
-       AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
-       AL\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
-       GGD\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       GGD\_MICRO\_VERSION & equtrn/src/wrids.f \\
-       GGD\_MINOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS & equtrn/src/eqdim.f90 \\
-       IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
-       IMAS\_MAJOR\_VERSION & equtrn/src/eqdim.f90 \\
-       IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
-       IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
-       IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
-       IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
-       IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
-       IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
-       NO\_GETENV & equtrn/src/dg2ids.f \\
-       NO\_GETENV & equtrn/src/ids2dg.f \\
-       NO\_GETENV & equtrn/src/wrids.f \\
-       USE\_PXFGETENV & equtrn/src/dg2ids.f \\
-       USE\_PXFGETENV & equtrn/src/ids2dg.f \\
-       USE\_PXFGETENV & equtrn/src/wrids.f \\
-    \hline
-    \caption{Defines for DivGeo and where they are used.}
-    \label{tab:DivGeodefines}
-  \end{longtable}
-\end{center}
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & used in \\
+  \hline \endhead
+  \hline name & used in \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+     AL\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+     AL\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+     AL\_MICRO\_VERSION & equtrn/src/rdids.f \\
+     AL\_MINOR\_VERSION & equtrn/src/rdids.f \\
+     CONSTANTS\_PROVIDED & equtrn/src/eqdim.f90 \\
+     GGD\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+     GGD\_MICRO\_VERSION & equtrn/src/wrids.f \\
+     GGD\_MINOR\_VERSION & equtrn/src/wrids.f \\
+     IMAS & equtrn/src/eqdim.f90 \\
+     IMAS\_MAJOR\_VERSION & equtrn/src/dg2ids.f \\
+     IMAS\_MAJOR\_VERSION & equtrn/src/eqdim.f90 \\
+     IMAS\_MAJOR\_VERSION & equtrn/src/ids2dg.f \\
+     IMAS\_MAJOR\_VERSION & equtrn/src/rdids.f \\
+     IMAS\_MAJOR\_VERSION & equtrn/src/wrids.f \\
+     IMAS\_MINOR\_VERSION & equtrn/src/eqdim.f90 \\
+     IMAS\_MINOR\_VERSION & equtrn/src/rdids.f \\
+     IMAS\_MINOR\_VERSION & equtrn/src/wrids.f \\
+     NO\_GETENV & equtrn/src/dg2ids.f \\
+     NO\_GETENV & equtrn/src/ids2dg.f \\
+     NO\_GETENV & equtrn/src/wrids.f \\
+     USE\_PXFGETENV & equtrn/src/dg2ids.f \\
+     USE\_PXFGETENV & equtrn/src/ids2dg.f \\
+     USE\_PXFGETENV & equtrn/src/wrids.f \\
+  \hline
+  \caption{Defines for DivGeo and where they are used.}
+  \label{tab:DivGeodefines}
+\end{longtable}
 
 \subsection{B2.5-Eirene}
 \index{DEFINES, used in compiling B2.5-Eirene}
@@ -21683,18 +21646,17 @@ in the previous section.
 
 We list below where the {\tt B2.5} compilation switches are used.
 
-\begin{center}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & used in \\
-    \hline \endhead
-    \hline name & used in \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & used in \\
+  \hline \endhead
+  \hline name & used in \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 AL\_MAJOR\_VERSION & b2plot/b2pawpwr.F \\
 AL\_MAJOR\_VERSION & ids/b2\_ual\_rewrite.F90 \\
 AL\_MAJOR\_VERSION & ids/b2\_ual\_write.F90 \\
@@ -22361,11 +22323,10 @@ WITH\_FTIMINGS & equations/b2npmo.F \\
 WITH\_FTIMINGS & utility/sfill.F \\
 WOS & b2plot/additional\_elements.F \\
 WOS & b2plot/flux.F \\
-    \hline
-    \caption{Defines for B2.5 and where they are used.}
-    \label{tab:B2defines}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Defines for B2.5 and where they are used.}
+  \label{tab:B2defines}
+\end{longtable}
 
 \subsection{Eirene}
 \index{DEFINES, used in compiling Eirene}
@@ -22420,18 +22381,17 @@ in the previous section.
 
 We list below where the {\tt Eirene} compilation switches are used.
 
-\begin{center}
-  \begin{longtable}{|l|l|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline name & used in \\
-    \hline \endhead
-    \hline name & used in \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|l|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline name & used in \\
+  \hline \endhead
+  \hline name & used in \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 ALLOCATE\_AND\_NAMELIST & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_init.F \\
 B25\_EIRENE & interfaces/couple\_SOLPS\_WG/couple\_param.F \\
@@ -22831,11 +22791,10 @@ USE\_OPENMP & tetrahedra/learct.F \\
 USE\_OPENMP & user-routines/user\_iter/eirmod\_uptusr.F \\
 USE\_PXFGETENV & user-routines/user\_iter/get\_solpstop.F \\
 WINDOWS & user-routines/user\_iter/ioflush\_usr.F \\
-    \hline
-    \caption{Defines for Eirene and where they are used.}
-    \label{tab:Eirdefines}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{Defines for Eirene and where they are used.}
+  \label{tab:Eirdefines}
+\end{longtable}
 
 \index{SOLPS\_CPP}\index{EIRENE\_DEFINES}
 If you want to activate any of these options, you should add
@@ -22878,18 +22837,17 @@ in the previous section.
 
 The NAG calls from {\tt B2.5} are given in table \ref{tab:nagb2}.
 
-\begin{center}
-  \begin{longtable}[hbtp]{|c|c|p{10cm}|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline caller routine & calling & function \\
-    \hline \endhead
-    \hline caller routine & calling & function \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}[hbtp]{|c|c|p{10cm}|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline caller routine & calling & function \\
+  \hline \endhead
+  \hline caller routine & calling & function \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 b2mndr.f                &  X05BAF & returns the amount of processor time used since an unspecified previous time, via the routine name \\ \hline
 b2mod\_input\_profile.f &  E01BEF & computes a monotonicity-preserving piecewise cubic Hermite interpolant to a set of data points \\ \hline
 b2mod\_input\_profile.f &  E01BFF & evaluates a piecewise cubic Hermite interpolant, as computed by E01BEF \\ \hline
@@ -22912,8 +22870,7 @@ machsfr.f               &  X02AMF & returns the safe range of floating-point ari
   \hline
   \caption{NAG calls from B2.5}
   \label{tab:nagb2}
-  \end{longtable}
-\end{center}
+\end{longtable}
 
 \subsection{EIRENE}
 \index{NAG calls in Eirene}
@@ -23021,18 +22978,17 @@ normally have default extensions by which are used by the code when
 displaying the lists of files in the I/O control windows. The
 following table gives a brief description of the files used in {\tt DG}.
 
-\begin{center}
-    \begin{longtable}{|l|p{10cm}|l|}
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued from previous page} \\
-    \hline          & {\large\bf Description} & {\large\bf Extension} \\
-    \hline \endhead
-    \hline          & {\large\bf Description} & {\large\bf Extension} \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{3}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|p{10cm}|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline          & {\large\bf Description} & {\large\bf Extension} \\
+  \hline \endhead
+  \hline          & {\large\bf Description} & {\large\bf Extension} \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 {\bf Input files:}&                                 & \\ \hline
 {\tt DG} model & All the data relevant to the model & .dg \\
 Template     & Geometry data from CAD drawing or other source
@@ -23057,29 +23013,27 @@ by the interface routines producing the input files for {\tt Sonnet} or {\tt Car
              & The file containing information on the {\tt DG} {\it layers} and
 {\it variables}.
                                                     & .dgc \\
-    \hline
-    \caption{DG external objects}
-    \label{tab:dgexternalobjects}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{DG external objects}
+  \label{tab:dgexternalobjects}
+\end{longtable}
 
 \subsubsection{Internal objects}
 \label{sec:internalobjects}
 
 The internal objects are those with which you deal when working with {\tt DG}.
 
-\begin{center}
-    \begin{longtable}{|l|p{12cm}|}
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued from previous page} \\
-    \hline {\large\bf Objects} & {\large\bf Description} \\
-    \hline \endhead
-    \hline {\large\bf Objects} & {\large\bf Description} \\
-    \hline \endfirsthead
-    \hline
-    \multicolumn{2}{|l|}{\small\it continued on next page} \\
-    \hline \endfoot
-    \endlastfoot
+\begin{longtable}{|l|p{12cm}|}
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued from previous page} \\
+  \hline {\large\bf Objects} & {\large\bf Description} \\
+  \hline \endhead
+  \hline {\large\bf Objects} & {\large\bf Description} \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{2}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
 {\bf Drawing objects}&             \\
 Points               &
 Just points (displayed as red squares) which can be used to create
@@ -23204,11 +23158,10 @@ Target edges
 The elements which should be reconnected to the corresponding corners
 of the calculational mesh in order to avoid mismatches of the mesh
 and the targets in the Monte Carlo calculations. \\
-    \hline
-    \caption{DG internal objects}
-    \label{tab:dginternalobjects}
-  \end{longtable}
-\end{center}
+  \hline
+  \caption{DG internal objects}
+  \label{tab:dginternalobjects}
+\end{longtable}
 
 
 \section{Using DG}
