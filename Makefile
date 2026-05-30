@@ -195,17 +195,24 @@ ifdef OPEN_MPI
 MAKEM += -DOPEN_MPI=${OPEN_MPI}
 MAKEY += -DOPEN_MPI=${OPEN_MPI}
 endif
-# Special treatment to avoid using ifx with OpenMP options
+# Special treatment to avoid using ifx with OpenMP options when ifort is available
 ifneq (${FC},ifx)
 MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
 MAKEP = ${MAKEM} -DOPENMP=ON
 MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
 MAKEA = ${MAKEY} -DOPENMP=ON
 else
+ifneq ($(shell command -v ifort 2>/dev/null),)
 MAKEN = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=OFF -DOPENMP=ON
 MAKEP = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
 MAKEZ = FC=mpiifort ${CMAKX_STEM} -DMPI=OFF -DOPENMP=ON
 MAKEA = FC=mpiifort ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
+else
+MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
+MAKEP = ${MAKEM} -DOPENMP=ON
+MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
+MAKEA = ${MAKEY} -DOPENMP=ON
+endif
 ifdef OPEN_MPI
 MAKEP += -DOPEN_MPI=${OPEN_MPI}
 MAKEA += -DOPEN_MPI=${OPEN_MPI}
