@@ -261,6 +261,7 @@ void* FreeView(View w) {
   /*if (IsEmptyGroup(w->xapp->views)) exit(0);*/
 
   Free(w);
+  return NULL;
 }
 
 Group GetSelectedReactions(View w) {
