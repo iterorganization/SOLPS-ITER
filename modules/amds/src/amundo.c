@@ -144,6 +144,7 @@ static int ActUndoMark(Doc ss,ActRec ar) {
   ur=CreateActRec(sizeof(*ur),ActUndoMark);
   AddUndoRec(ss,ur);
   NotifyAlt(ss);
+  return 0;
 }
 
 static int ActChangeString(Doc ss,ChangeStringRec ar) {
@@ -157,6 +158,7 @@ static int ActChangeString(Doc ss,ChangeStringRec ar) {
   ar->ar.obj1=NULL;
 
   AddUndoRec(ss,(ActRec)ur);
+  return 0;
 }
 
 static int ActChangeGroup(Doc ss,ChangeGroupRec ar) {
@@ -171,6 +173,7 @@ static int ActChangeGroup(Doc ss,ChangeGroupRec ar) {
   else GroupDel(*ar->pGroup,ar->member);
 
   AddUndoRec(ss,(ActRec)ur);
+  return 0;
 }
 
 void ChangeGroup(Doc ss,Group* pGroup,void* member,int status) {

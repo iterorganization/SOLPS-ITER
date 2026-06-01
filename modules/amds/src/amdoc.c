@@ -180,6 +180,7 @@ static int ActActivateReaction(Doc ss,ActivateRec ar) {
 
   AddUndoRec(ss,(ActRec)ur);
   NotifyDoc(ss,N_ENABLE,ar->r);
+  return 0;
 }
 
 Group GetActiveReactions(Doc d) {

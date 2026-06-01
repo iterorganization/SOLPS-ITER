@@ -88,6 +88,7 @@ char* GetParticleVar(Doc ss,Reaction r,Particle p,VarDef vd) {
 
   s=GetVar2(v,GetVar(vd->v,VDS_NAME),NULL);
   if (s==NULL) s=GetVar(r->vars,GetVar(vd->v,VDS_NAME));
+  return s;
 }
 
 void SetParticleVar(Doc ss,Reaction r,Particle p,VarDef vd,char* val) {

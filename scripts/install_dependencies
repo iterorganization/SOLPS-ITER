@@ -1504,7 +1504,7 @@ if ("$OSTYPE" == "linux") then
       tar xvf 9.0.2.tar.gz
       cd "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2"
       mkdir -p build
-      cmake -S ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2 ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/build
+      cmake -S ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2 -B ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/build
       cd build
       make
       mkdir -p ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/json-fortran-9.0.2/lib
