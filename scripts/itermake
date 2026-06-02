@@ -5,7 +5,7 @@ set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
 set hours=2
-set mem=4GB
+set mem=8GB
 if ($os == "CentOS") then
   set part="altair"
 else

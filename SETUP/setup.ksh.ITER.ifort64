@@ -109,7 +109,7 @@ if command -v ifort >/dev/null 2>&1; then
 else
   export CC="icx"
   export FC="ifx"
-  export MPI_FC="mpiifort -fc=mpiifx"
+  export MPI_FC="mpiifx"
   export CXX="icpx"
 fi
 

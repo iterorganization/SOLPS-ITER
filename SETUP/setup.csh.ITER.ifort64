@@ -130,7 +130,7 @@ if ($status == 0) then
   setenv CC icc
 else
   setenv FC ifx
-  setenv MPI_FC "mpiifort -fc=mpiifx"
+  setenv MPI_FC mpiifx
   setenv CXX icpx
   setenv CC icx
 endif
