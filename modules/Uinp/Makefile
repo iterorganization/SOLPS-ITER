@@ -127,13 +127,12 @@ endif
 $(OBJDIR)/%.o : %.F
 	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 ifneq (${MOD},o)
-$(OBJDIR)/%.${MOD} : %.F
-	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
-	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+$(OBJDIR)/%.${MOD} : $(OBJDIR)/%.o
+	@true
 endif
-	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
