@@ -303,76 +303,76 @@ carre_nox:
 
 divgeo:
 ifndef NO_MOTIF
-	cd modules/DivGeo;         ${MAKEO}
+	+cd modules/DivGeo;         ${MAKEO}
 else
 	$(warning DivGeo will not be compiled because Motif library is not installed.)
 endif
-	cd modules/DivGeo/equtrn;  ${MAKEO}
-	cd modules/DivGeo/convert; ${MAKEO}
+	+cd modules/DivGeo/equtrn;  ${MAKEO}
+	+cd modules/DivGeo/convert; ${MAKEO}
 
 divgeo_nox:
-	cd modules/DivGeo/equtrn;  ${MAKEO}
-	cd modules/DivGeo/convert; ${MAKEO}
+	+cd modules/DivGeo/equtrn;  ${MAKEO}
+	+cd modules/DivGeo/convert; ${MAKEO}
 
 ifndef NO_CMAKE
 
 eirene:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
 
 eirene_mpi:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
 
 eirene_openmp:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
 
 eirene_openmp_mpi:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_mpi:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_openmp:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_openmp_mpi:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
 
 else
 
 eirene:
-	cd modules/Eirene; ${MAKEE}
+	+cd modules/Eirene; ${MAKEE}
 
 eirene_mpi:
-	cd modules/Eirene; ${MAKEE} ${MPI_OPTS}
+	+cd modules/Eirene; ${MAKEE} ${MPI_OPTS}
 
 eirene_openmp:
-	cd modules/Eirene; ${MAKEE} ${OMP_OPTE}
+	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE}
 
 eirene_openmp_mpi:
-	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS}
+	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS}
 
 eirene_nox:
-	cd modules/Eirene; ${MAKEE} ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} ${OPT_NOX}
 
 eirene_nox_mpi:
-	cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} ${MPI_OPTS} ${OPT_NOX}
 
 eirene_nox_openmp:
-	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${OPT_NOX}
 
 eirene_nox_openmp_mpi:
-	cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 
 endif
 
@@ -382,55 +382,55 @@ eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
 
 b25: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO}
+	+cd modules/B2.5; ${MAKEO}
 
 b25_all: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} ALL
+	+cd modules/B2.5;     ${MAKEO} ALL
 
 b25_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
+	+cd modules/B2.5; ${MAKEO} ${OMP_OPTB}
 
 b25_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
+	+cd modules/B2.5; ${MAKEO} ${MPI_OPTS}
 
 b25_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+	+cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 b25_mpi_openmp: b25_openmp_mpi
 
 b25_nox: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} NOPLOT
+	+cd modules/B2.5; ${MAKEO} NOPLOT
 
 b25_ig: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
+	+cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25_all_openmp: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
+	+cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
 
 b25_nox_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
+	+cd modules/B2.5; ${MAKEO} ${OMP_OPTB} NOPLOT
 
 b25_openmp_nox: b25_nox_openmp
 
 b25_nox_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
+	+cd modules/B2.5; ${MAKEO} ${MPI_OPTS} NOPLOT
 
 b25_mpi_nox: b25_nox_mpi
 
 b25_nox_openmp_mpi: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
+	+cd modules/B2.5; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} NOPLOT
 
 b25_nox_mpi_openmp: b25_nox_openmp_mpi
 
@@ -441,179 +441,179 @@ b25_openmp_mpi_nox: b25_nox_openmp_mpi
 b25_all_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
+	+cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
 
 b25_all_openmp_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
+	+cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
 b25eirene: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE
 
 b25eirene_all: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
+	+cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 endif
 	cd modules/solps4-5; ${MAKE}  links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
+	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
 b25eirene_nox: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE NOPLOT
 
 b25eirene_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 
 b25eirene_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
 
 b25eirene_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS}
 
 b25eirene_mpi_openmp: b25eirene_openmp_mpi
 
 b25eirene_nox_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} NOPLOT
 
 b25eirene_nox_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} NOPLOT
 
 b25eirene_ig: ${NCEXECS}
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
-	cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	+cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25eirene_all_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
+	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
 b25eirene_all_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
+	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
 
 b25eirene_all_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
+	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
 b25eirene_nox_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
 else
-	cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
+	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
 	cd modules/B2.5; ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} NOPLOT
+	+cd modules/B2.5; ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} NOPLOT
 
 b25eirene_nox_mpi_openmp: b25eirene_nox_openmp_mpi
 
 uinp: b25eirene
-	cd modules/Uinp; ${MAKEO}
+	+cd modules/Uinp; ${MAKEO}
 
 uinp_nox: b25eirene_nox
-	cd modules/Uinp; ${MAKEO}
+	+cd modules/Uinp; ${MAKEO}
 
 uinp_openmp: b25eirene_openmp
-	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
+	+cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
 uinp_mpi: b25eirene_mpi
-	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
+	+cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
 uinp_openmp_mpi: b25eirene_openmp_mpi
-	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+	+cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 uinp_mpi_openmp: uinp_openmp_mpi
 
 uinp_nox_openmp: b25eirene_nox_openmp
-	cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
+	+cd modules/Uinp; ${MAKEO} ${OMP_OPTB}
 
 uinp_openmp_nox: uinp_nox_openmp
 
 uinp_nox_mpi: b25eirene_nox_mpi
-	cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
+	+cd modules/Uinp; ${MAKEO} ${MPI_OPTS}
 
 uinp_mpi_nox: uinp_nox_mpi
 
 uinp_nox_openmp_mpi: b25eirene_nox_openmp_mpi
-	cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+	+cd modules/Uinp; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 
 uinp_nox_mpi_openmp: uinp_nox_openmp_mpi
 
@@ -637,16 +637,16 @@ triang_nox_mpi: eirene_nox_mpi
 
 ifndef NO_MOTIF
 amds: b25eirene
-	cd modules/amds; ${MAKEO}
+	+cd modules/amds; ${MAKEO}
 
 amds_mpi: b25eirene_mpi
-	cd modules/amds; ${MAKEO} ${MPI_OPTS}
+	+cd modules/amds; ${MAKEO} ${MPI_OPTS}
 
 amds_openmp: b25eirene_openmp
-	cd modules/amds; ${MAKEO} ${OMP_OPTB}
+	+cd modules/amds; ${MAKEO} ${OMP_OPTB}
 
 amds_openmp_mpi: b25eirene_openmp_mpi
-	cd modules/amds; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
+	+cd modules/amds; ${MAKEO} ${OMP_OPTB} ${MPI_OPTS}
 else
 amds:
 amds_mpi:
@@ -656,7 +656,7 @@ amds_openmp_mpi:
 endif
 
 fxdr: sonnet-light
-	cd modules/fxdr; ${MAKEO}
+	+cd modules/fxdr; ${MAKEO}
 
 sonnet-light:
 	@-mkdir -p ${SOLPSLIB}
