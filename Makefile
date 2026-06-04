@@ -166,7 +166,7 @@ endif
 # When invoked from a parallel top-level (e.g. `make -j 32 solps_nox`) and no
 # explicit MAKE_OPTIONS=-jN was set, ${MAKE} alone propagates GNU make's
 # jobserver to sub-makes so that compilation jobs are shared across modules
-# rather than being capped to N per module.  Setting MAKE_OPTIONS=-jN at the
+# rather than being capped to N per module. Setting MAKE_OPTIONS=-jN at the
 # top level still works (legacy behaviour) but disables the jobserver and
 # only parallelises within each individual sub-make.
 MAKEO = ${MAKE} ${MAKE_OPTIONS}

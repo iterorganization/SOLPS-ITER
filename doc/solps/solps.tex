@@ -674,7 +674,7 @@ smooth code operation (See also Section~\ref{sec:setup} for full details).
 tcsh
 source setup.csh
 \end{verbatim}
-An alternative setup script, {\tt setup.ksh}, is also available for Bash/Korn shell users.
+An alternative setup script, {\tt setup.ksh}, is also available for Bash/Korn shell environments, without graphics, such as for CI test suites.
 Note that {\tt setup.ksh} may not support all features provided by {\tt setup.csh}.
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
@@ -21343,13 +21343,13 @@ or
 \begin{verbatim}
   B25_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list.
+For {\tt ksh} or {\tt bash} users, the syntax would be
 \begin{verbatim}
   export B25_DEFINES="$B25_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 %%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2,$1}' | sort | uniq
@@ -21985,13 +21985,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 We list below where the {\tt Eirene} compilation switches are used.
@@ -22429,13 +22429,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 \section{NAG calls in SOLPS}
