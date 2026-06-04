@@ -108,6 +108,7 @@ setenv GGD_VERSION `pkg-config ggd --modversion`
 setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
+setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
 if ($?GKSDIR) then
   setenv LD_LIBRARY_PATH ${GKSDIR}/lib:${LD_LIBRARY_PATH}
 else
@@ -143,7 +144,6 @@ else if ("$SOLPS_TOOLCHAIN_VERSION" == "2025b") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if (${CMAKE_MAJOR_VERSION} > 2) then
     module switch CMake/3.18.4
     setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
