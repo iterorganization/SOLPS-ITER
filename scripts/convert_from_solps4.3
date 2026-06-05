@@ -16,10 +16,10 @@ export DEVICEDIR=$DEVICE
 export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d '.' -f 1`
 [ "$AL_VERSION" = '' ] && {
   export AL_MAJOR_VERSION=`echo $UAL_VERSION | cut -d '.' -f 1`
-  export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
+  export IMASDIR=/work/projects/solps-iter/${USER}/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
 } || {
   export AL_MAJOR_VERSION=`echo $AL_VERSION | cut -d '.' -f 1`
-  export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}
+  export IMASDIR=/work/projects/solps-iter/${USER}/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}
 }
 [ "$SOLPS_CENTRAL" = 'yes' ] && DEVICEDIR=$DEVICE/$USER
 echo "Converting shot number " $1
