@@ -720,7 +720,7 @@ listobj:
 	cd modules/DivGeo;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 endif
@@ -730,7 +730,7 @@ ifndef NO_MPI
 	cd modules/Uinp;           ${MAKE} listobj ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
@@ -750,7 +750,7 @@ listobj_nox:
 	cd modules/Uinp;           ${MAKE} listobj
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${OPT_NOX}
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
@@ -763,7 +763,7 @@ ifndef NO_MPI
 	cd modules/Uinp;           ${MAKE} listobj ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB} ${MPI_OPTS}
@@ -784,7 +784,7 @@ depend:
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB}
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
@@ -801,7 +801,7 @@ ifndef NO_MPI
 	cd modules/Uinp;           ${MAKE} depend ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${MPI_OPTS}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${MPI_OPTS}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS}
 	cd modules/B2.5;	   ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
@@ -822,7 +822,7 @@ depend_nox:
 	cd modules/DivGeo/equtrn;  ${MAKE} depend
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${OPT_NOX}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB} ${OPT_NOX}
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB}
@@ -835,7 +835,7 @@ ifndef NO_MPI
 	cd modules/Uinp;           ${MAKE} depend ${MPI_OPTS}
 	cd modules/Eirene;         ${MAKEF} depend USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
-ifneq (,$(findstring ifx,${FC}))
+ifeq (,$(findstring ifx,${FC}))
 	cd modules/Eirene;         ${MAKEF} depend ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/B2.5;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS} ${OPT_NOX}
 	cd modules/Uinp;           ${MAKE} depend ${OMP_OPTB} ${MPI_OPTS}
