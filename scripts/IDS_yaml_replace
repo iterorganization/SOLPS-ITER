@@ -20,9 +20,9 @@
 export IMAS_MAJOR_VERSION=`echo $IMAS_VERSION | cut -d '.' -f 1`
 [ "$IMASDIR" = '' ] && {
   [ $AL_MAJOR_VERSION = 5 ] && {
-    export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}
+    export IMASDIR=/work/projects/solps-iter/${USER}/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}
   } || {
-    export IMASDIR=${HOME}/public/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
+    export IMASDIR=/work/projects/solps-iter/${USER}/imasdb/${DATABASE}/${IMAS_MAJOR_VERSION}/0
   }
 } || {
   echo "IMASDIR = " $IMASDIR
