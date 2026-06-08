@@ -194,6 +194,10 @@ export CARRE_DEFINES
 export EIRENE_DEFINES
 export JSON_INC
 
+ifndef NO_CMAKE
+  export CMAKE_MAJOR_VERSION
+endif
+
 export MPI_FC
 export FC
 export FN

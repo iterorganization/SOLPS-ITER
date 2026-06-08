@@ -288,6 +288,11 @@ export EIRENE_DEFINES
 export MPI_CPP
 export JSON_INC
 
+ifndef NO_CMAKE
+  export CMAKE_MAJOR_VERSION
+endif
+
+
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
