@@ -80,6 +80,7 @@ export PARAVIEW_PREFIX=${EBROOTPARAVIEW}
 export GLI_HOME=${EBROOTGLI}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}
 export MPDIR=${EBROOTIMPI}
+export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
 
 # Debugger (set environment variable DBX)
 module load TotalView/2023.4.16_linux_x86-64
@@ -93,10 +94,40 @@ export CXX=g++
 [ -x paraview-config ] && {
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   export PARAVIEW_MAJOR_VERSION=`paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if [ $CMAKE_MAJOR_VERSION -gt 2 ]; then
-    export LD_CATALYST=`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
-    export PARAVIEW_INCLUDE=`paraview-config --cppflags`
+    # Avoid a naming clash
+    unset BOOST_ROOT
+    if [ $PARAVIEW_MAJOR_VERSION -lt 6 ]; then
+      module switch CMake/3.18.4
+      export LD_CATALYST=`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+      module switch CMake/3.27.6-GCCcore-13.2.0
+      export PARAVIEW_INCLUDE=`paraview-config --cppflags`
+    else
+      # Wrap cmake to suppress spurious CMake 4.x warnings when calling paraview-config
+      _pv_tmpdir=`mktemp -d`
+      _pv_cmake=`which cmake`
+      # Write a cmake include file that pre-finds external deps so that
+      # -c PythonCatalyst succeeds (requires MPI, X11, Boost, catalyst targets).
+      printf 'find_package(MPI)\nfind_package(X11)\nfind_package(Boost QUIET)\n' > ${_pv_tmpdir}/_inject.cmake
+      printf 'if (DEFINED ENV{EBROOTPARAVIEWMINCATALYST})\n' >> ${_pv_tmpdir}/_inject.cmake
+      printf '  find_package(catalyst HINTS "$ENV{EBROOTPARAVIEWMINCATALYST}/lib/cmake/catalyst-2.0" NO_DEFAULT_PATH)\n' >> ${_pv_tmpdir}/_inject.cmake
+      printf 'endif()\n' >> ${_pv_tmpdir}/_inject.cmake
+      printf '#!/bin/sh\n' > ${_pv_tmpdir}/cmake
+      echo 'case " $* " in' >> ${_pv_tmpdir}/cmake
+      echo '  *" --build "*) exec '"${_pv_cmake}"' "$@" ;;' >> ${_pv_tmpdir}/cmake
+      echo '  *) exec '"${_pv_cmake}"' -DCMAKE_WARN_DEPRECATED=OFF -DCMAKE_POLICY_DEFAULT_CMP0167=NEW -DCMAKE_PROJECT_INCLUDE='"${_pv_tmpdir}"'/_inject.cmake "$@" ;;' >> ${_pv_tmpdir}/cmake
+      echo 'esac' >> ${_pv_tmpdir}/cmake
+      chmod +x ${_pv_tmpdir}/cmake
+      _pv_saved_path="$PATH"
+      export PATH="${_pv_tmpdir}:${PATH}"
+      export LD_CATALYST=`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
+      export PARAVIEW_INCLUDE=`paraview-config --cppflags`
+      # Restore PATH and clean up cmake wrapper
+      export PATH="${_pv_saved_path}"
+      rm -rf ${_pv_tmpdir}
+      unset _pv_tmpdir _pv_cmake _pv_saved_path
+    fi
+    export BOOST_ROOT=${EBROOTBOOST}
   else
     export PARAVIEW_LIB=`paraview-config --libs --python | sed s/-L//`
     export PARAVIEW_INCLUDE=`paraview-config --include`
@@ -105,7 +136,7 @@ export CXX=g++
     export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
     export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
   fi
-  export LD_CATALYST="-shared-intel ${LD_CATALYST} -lstdc++"
+  export LD_CATALYST="${LD_CATALYST} -lstdc++"
 } || {
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 }
