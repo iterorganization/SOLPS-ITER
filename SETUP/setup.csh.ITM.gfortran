@@ -28,6 +28,7 @@ module load NCL/6.6.2-foss-2023b
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 setenv GLI_HOME ${EBROOTGLI}
 setenv SYSNAME x86_64_rhel9
+setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
 
 # Compiler
 setenv CC gcc
@@ -47,7 +48,6 @@ if (`where paraview-config` == "") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if (${CMAKE_MAJOR_VERSION} > 2) then
     module switch CMake/3.20.0-GCCcore-13.2.0
     setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`

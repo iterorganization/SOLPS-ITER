@@ -25,6 +25,7 @@ fi
 export GLI_HOME=${EBROOTGLI}
 export QTDIR=${EBROOTQT5}
 export NCDIR=${EBROOTNETCDFMINFORTRAN}
+export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
 
 # Compilers
 export CC=gcc

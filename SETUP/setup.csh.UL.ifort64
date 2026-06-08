@@ -47,6 +47,7 @@ setenv GLI_HOME ${EBROOTGLI}
 setenv NCDIR ${EBROOTNETCDFMINFORTRAN}
 setenv MPDIR ${EBROOTIMPI}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GKSDIR}/lib
+setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
 
 # Debugger (set environment variable DBX)
 #module load TotalView/2023.4.16_linux_x86-64
@@ -71,7 +72,6 @@ if (`where paraview-config` == "") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if (${CMAKE_MAJOR_VERSION} > 2) then
     setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
     setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
