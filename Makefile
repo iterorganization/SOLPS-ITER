@@ -155,13 +155,6 @@ ifeq ($(UNAME),Darwin)
 NO_CMAKE := 1
 endif
 
-ifndef NO_CMAKE
-CMAKE_MAJOR_VERSION ?= $(shell cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1)
-ifeq ($(shell test ${CMAKE_MAJOR_VERSION} -gt 3; echo $$?),0)
-DEFOPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-endif
-endif
-
 MAKEO = ${MAKE} ${MAKE_OPTIONS}
 MAKEF = ${MAKEO} -f config/Makefile
 ifndef NO_CMAKE
@@ -711,16 +704,16 @@ tags:
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
 	cd modules/Eirene;         ${MAKEF} listobj
-	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} listobj
-	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Uinp;           ${MAKE} listobj
-	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Triang;         ${MAKE} listobj
 	cd modules/DivGeo;         ${MAKE} listobj
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE
 ifeq (,$(findstring ifx,${FC}))
+	cd modules/Eirene;         ${MAKEF} listobj ${OMP_OPTE}
+	cd modules/B2.5;           ${MAKE} listobj ${OMP_OPTB}
+	cd modules/Uinp;           ${MAKE} listobj ${OMP_OPTB}
 	cd modules/Eirene;         ${MAKEF} listobj USE_B25=-DB25_EIRENE ${OMP_OPTE}
 	cd modules/B2.5;           ${MAKE} listobj USE_EIRENE=-DB25_EIRENE ${OMP_OPTB}
 endif
