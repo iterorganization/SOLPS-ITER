@@ -109,7 +109,12 @@ NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}${EXT_DBG}
 NCEXECS      = ${NC_EXE_DIR}/nc2text_simple.exe ${NC_EXE_DIR}/nc_reduce.exe
 NCEXEC_NAMES = nc2text_simple nc_reduce
 endif
-B25_SERIAL = mods ${NCEXEC_NAMES}
+# B25_SERIAL: targets that must be built serially before the parallel compilation.
+# nc exes are excluded here because they are already handled once at the outer
+# level via NCEXECS (real file-path targets), before any b25*/b25eirene* recipe
+# starts.  Including them here would cause b25 and b25eirene to re-invoke
+# nc_reduce/nc2text_simple in parallel, racing on the shared standalone.* OBNDIR.
+B25_SERIAL = mods
 
 DEFLIBS =
 DEGLIBS = -DGRAPHICS=ON
@@ -705,7 +710,9 @@ ${NC_EXE_DIR}/nc_reduce.exe:
 	@-mkdir -p ${NC_EXE_DIR}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
-${NC_EXE_DIR}/nc2text_simple.exe:
+# nc2text_simple shares the same B2.5 OBNDIR (standalone.*) as nc_reduce.
+# Serialize via order-only prerequisite to prevent a parallel race on that directory.
+${NC_EXE_DIR}/nc2text_simple.exe: | ${NC_EXE_DIR}/nc_reduce.exe
 	@-mkdir -p ${NC_EXE_DIR}
 	cd modules/B2.5; ${MAKE} nc2text_simple
 endif
