@@ -102,9 +102,14 @@ TOOLSHORT = ${HOST_NAME}.${COMPILER}
 TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
 
 ifdef LD_NETCDF
-NCEXECS = nc2text_simple nc_reduce
+# Use actual exe file paths so parallel b25*/b25eirene* targets share a single
+# real-file prerequisite, which GNU Make builds exactly once per invocation
+# (unlike phony targets, which are re-run once per dependent in parallel builds).
+NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}${EXT_DBG}
+NCEXECS      = ${NC_EXE_DIR}/nc2text_simple.exe ${NC_EXE_DIR}/nc_reduce.exe
+NCEXEC_NAMES = nc2text_simple nc_reduce
 endif
-B25_SERIAL = mods ${NCEXECS}
+B25_SERIAL = mods ${NCEXEC_NAMES}
 
 DEFLIBS =
 DEGLIBS = -DGRAPHICS=ON
@@ -220,7 +225,28 @@ endif
 endif
 endif
 
-.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp all all_openmp all_nox all_mpi all_openmp_mpi all_mpi_openmp all_nox_openmp all_nox_openmp_mpi all_nox_mpi_openmp all_nox_mpi all_mpi_nox carre carre_nox divgeo divgeo_nox b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp b25_ig b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp eirene eirene_mpi eirene_openmp eirene_openmp_mpi eirene_nox eirene_openmp_nox eirene_nox_mpi eirene_nox_openmp_mpi b25eirene b25eirene_openmp b25eirene_mpi b25eirene_openmp_mpi b25eirene_mpi_openmp b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi uinp uinp_nox uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp triang triang_nox triang_mpi triang_nox_mpi amds amds_mpi amds_openmp amds_openmp_mpi fxdr sonnet-light nc2text_simple nc_reduce b2sxdr manual local depend depend_nox tags listobj listobj_nox clean clean_% debug %_debug VERSION VERSION_nox help nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp
+.PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp \
+        nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp \
+        all all_openmp all_mpi all_openmp_mpi all_mpi_openmp \
+        all_nox all_nox_openmp all_nox_mpi all_nox_openmp_mpi all_nox_mpi_openmp all_mpi_nox \
+        carre carre_nox divgeo divgeo_nox \
+        b25 b25_openmp b25_mpi b25_openmp_mpi b25_mpi_openmp \
+        b25_nox b25_nox_openmp b25_nox_mpi b25_nox_openmp_mpi b25_nox_mpi_openmp \
+        b25_ig b25_all b25_all_mpi b25_all_openmp b25_all_openmp_mpi b25_all_mpi_openmp \
+        eirene eirene_mpi eirene_openmp eirene_openmp_mpi \
+        eirene_nox eirene_nox_mpi eirene_openmp_nox eirene_nox_openmp_mpi \
+        b25eirene b25eirene_mpi b25eirene_openmp b25eirene_openmp_mpi b25eirene_mpi_openmp \
+        b25eirene_nox b25eirene_nox_mpi b25eirene_ig b25eirene_all_mpi b25eirene_nox_mpi \
+        uinp uinp_openmp uinp_mpi uinp_openmp_mpi uinp_mpi_openmp \
+        uinp_nox uinp_nox_openmp uinp_nox_mpi uinp_nox_openmp_mpi uinp_nox_mpi_openmp \
+        triang triang_nox triang_mpi triang_nox_mpi \
+        amds amds_mpi amds_openmp amds_openmp_mpi \
+        fxdr sonnet-light \
+        nc2text_simple nc_reduce \
+        b2sxdr manual local depend depend_nox tags listobj listobj_nox \
+        clean clean_% debug %_debug \
+        VERSION VERSION_nox help prereqs prereqs_debug prereqs_nox prereqs_nox_debug \
+        nox_build nox_build_mpi nox_build_openmp nox_build_openmp_mpi nox_build_mpi_openmp
 
 DEFAULT: solps
 
@@ -387,7 +413,7 @@ b25: ${NCEXECS}
 b25_all: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} ALL
+	+cd modules/B2.5;    ${MAKEO} ALL
 
 b25_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
@@ -414,7 +440,7 @@ b25_ig: ${NCEXECS}
 b25_all_openmp: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} ${OMP_OPTB}
+	+cd modules/B2.5;    ${MAKEO} ${OMP_OPTB}
 
 b25_nox_openmp: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
@@ -441,12 +467,12 @@ b25_openmp_mpi_nox: b25_nox_openmp_mpi
 b25_all_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} ${MPI_OPTS} ALL
+	+cd modules/B2.5;    ${MAKEO} ${MPI_OPTS} ALL
 
 b25_all_openmp_mpi: ${NCEXECS}
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
+	+cd modules/B2.5;    ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25_all_mpi_openmp: b25_all_openmp_mpi
 
@@ -469,7 +495,7 @@ else
 endif
 	cd modules/solps4-5; ${MAKE}  links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
+	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
 b25eirene_nox: ${NCEXECS}
 ifndef NO_CMAKE
@@ -536,7 +562,7 @@ endif
 b25eirene_ig: ${NCEXECS}
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE    USE_IMPGYRO=-DUSE_IMPGYRO
 	cd modules/B2.5;   ${MAKE}  USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO ${B25_SERIAL}
-	+cd modules/B2.5;   ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
+	+cd modules/B2.5;  ${MAKEO} USE_EIRENE=-DB25_EIRENE USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25eirene_all_openmp: ${NCEXECS}
 ifndef NO_CMAKE
@@ -547,7 +573,7 @@ else
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
+	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
 b25eirene_all_mpi: ${NCEXECS}
 ifndef NO_CMAKE
@@ -558,7 +584,7 @@ else
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
+	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
 
 b25eirene_all_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
@@ -569,7 +595,7 @@ else
 endif
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
-	+cd modules/B2.5;     ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
+	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
 
 b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 
@@ -672,6 +698,18 @@ nc_reduce:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
+# File-path rules matching B2.5's NCODIR.  These are the real targets that
+# b25*/b25eirene* depend on via NCEXECS, ensuring a single build per invocation.
+ifdef LD_NETCDF
+${NC_EXE_DIR}/nc_reduce.exe:
+	@-mkdir -p ${NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc_reduce
+
+${NC_EXE_DIR}/nc2text_simple.exe:
+	@-mkdir -p ${NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc2text_simple
+endif
+
 b2sxdr: b25eirene sonnet-light
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
@@ -690,6 +728,39 @@ endif
 else
 	$(warning SOLPS-ITER and Eirene manuals will not be produced because NO_MANUAL switch is activated.)
 endif
+
+# prereqs runs all preliminary, non-parallel-safe steps once in order.
+# Call this before a large parallel build (e.g. `make prereqs && make -j32 all ...`)
+# to ensure local stubs, version headers, LISTOBJ files, and dependency files
+# are all generated once rather than redundantly inside each parallel sub-make.
+prereqs:
+	${MAKE} local
+	${MAKE} VERSION
+	${MAKE} tags
+	${MAKE} listobj
+	${MAKE} depend
+
+prereqs_debug:
+	${MAKE} local
+	${MAKE} VERSION
+	${MAKE} tags
+	${MAKE} listobj SOLPS_DEBUG=yes
+	${MAKE} depend SOLPS_DEBUG=yes
+
+# Targeted variants for nox (no-X11) builds, used by CI scripts.
+prereqs_nox:
+	${MAKE} local
+	${MAKE} VERSION_nox
+	${MAKE} tags
+	${MAKE} listobj_nox
+	${MAKE} depend_nox
+
+prereqs_nox_debug:
+	${MAKE} local
+	${MAKE} VERSION_nox
+	${MAKE} tags
+	${MAKE} listobj_nox SOLPS_DEBUG=yes
+	${MAKE} depend_nox SOLPS_DEBUG=yes
 
 local:
 	cd modules/Eirene;   ${MAKEF} local links
@@ -876,6 +947,11 @@ endif
 #--------------
 
 debug: solps_debug
+
+# b25* and b25eirene* debug targets: build NetCDF executables in debug mode first
+# to avoid race conditions when multiple targets are compiled in parallel.
+b25%_debug: nc2text_simple_debug nc_reduce_debug
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 %_debug:
 	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
@@ -1158,6 +1234,13 @@ help:
 	@echo "Parallel build: invoke any of the above targets with 'make -j N <target>'"
 	@echo "to share N compilation jobs across modules (recommended).  The legacy form"
 	@echo "'make MAKE_OPTIONS=-jN <target>' only parallelises within each sub-make."
+	@echo ""
+	@echo "Prerequisite targets (run once before a parallel build to avoid redundant"
+	@echo "re-generation of dependency files and object lists inside each sub-make):"
+	@echo "            prereqs : local + VERSION + tags + listobj + depend (all variants)"
+	@echo "      prereqs_debug : same for debug builds (all variants)"
+	@echo "        prereqs_nox : same for no-X11 builds (used by CI)"
+	@echo "  prereqs_nox_debug : same for no-X11 debug builds (used by CI)"
 
 # debugging aids
 echo:

@@ -132,15 +132,18 @@ sed \
   -e 's:#COMPILER#:'$COMPILER':g' \
   < $QSUB > $NAME
 
+echo "set build_failed = 0" >> $NAME
 if ("X${options}X" != "XX") then
-  echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& make.log.${COMPILER}" >> $NAME
+  echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
 else if ($nproc > 1) then
   foreach i ($objects)
-    echo "${MAKE} -j "$nproc $i" >>& make.log.${COMPILER}" >> $NAME
+    echo "${MAKE} -j "$nproc $i" >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+    echo 'if ($build_failed != 0) exit $build_failed' >> $NAME
   end
 else
-  echo "${MAKE} ${objects} >>& make.log.${COMPILER}" >> $NAME
+  echo "${MAKE} ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
 endif
+echo 'exit $build_failed' >> $NAME
 
 if ($chain == "unset") then
   sbatch $NAME
