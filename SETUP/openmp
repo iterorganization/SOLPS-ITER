@@ -25,6 +25,7 @@ if ($?SOLPS_PATH) then
   if ( $COMPILER != 'ifort64' ) then
     setenv OMP_STACKSIZE 256M
   else
+    setenv KMP_STACKSIZE 256M
     if (`where ifort` != "") then
       # Older Intel toolchains (<=2024) still ship ifort, which is preferred
       # over ifx for OpenMP correctness. Newer toolchains (intel/2025b onward)
@@ -35,10 +36,11 @@ if ($?SOLPS_PATH) then
       endif
       if ( "$MPI_FC" == "mpiifort -fc=mpiifx" ) then
         setenv MPI_FC mpiifort
+      else if ( "$MPI_FC" == "mpiifx" ) then
+        setenv MPI_FC mpiifort
       endif
     endif
   endif
-  setenv   KMP_STACKSIZE 256M
   setenv   KMP_AFFINITY noverbose,respect,compact
   setenv   OMP_WAIT_POLICY active
   setenv   OMP_DYNAMIC false
