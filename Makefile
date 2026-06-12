@@ -668,7 +668,7 @@ nc2text_simple:
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc2text
 
-nc_reduce:
+nc_reduce: | nc2text_simple
 	@-mkdir -p ${SOLPSTOP}/scripts/${TOOLCHAIN}
 	cd modules/B2.5; ${MAKE} nc_reduce
 
