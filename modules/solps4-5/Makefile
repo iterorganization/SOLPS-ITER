@@ -134,6 +134,8 @@ ifndef LD_MSCL
 $(error LD_MSCL not defined. Run the install_dependencies script first.)
 endif
 
+$(shell awk 'FNR==1{if(!/^FOBJS *=/){e=1;exit}} END{exit e}' \
+        ${BASEDIR}/LISTOBJ 2>/dev/null || rm -f ${BASEDIR}/LISTOBJ)
 ifeq ($(shell [ -e ${BASEDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${BASEDIR}/LISTOBJ
 endif
@@ -254,6 +256,8 @@ ${OBJDIR}/hypp.o: ${OBJDIR}/clmsur.${MOD}
 ${OBJDIR}/if0prm.o: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/cinit.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/impneut_interface.o: ${OBJDIR}/impdns.${MOD} ${OBJDIR}/impmom.${MOD} ${OBJDIR}/impsrc.${MOD}
+
+${OBJDIR}/impsrc.o: ${OBJDIR}/ccoupl.${MOD} ${OBJDIR}/ctrig.${MOD}
 
 ${OBJDIR}/infcop.o: ${OBJDIR}/brascl.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/braspoi.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/ifwrite.${MOD} ${OBJDIR}/impdns.${MOD}
 
@@ -461,7 +465,7 @@ ${OBJDIR}/ccrm.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/ctrcei
 ${OBJDIR}/cdiprl.o: ${SRCDIR}/Eirene_modules/cdiprl.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/cdiprl.o -c ${SRCDIR}/Eirene_modules/cdiprl.F
 
-${OBJDIR}/ceirsrt.o: ${SRCDIR}/Eirene_modules/ceirsrt.F ${MAKES}
+${OBJDIR}/ceirsrt.o: ${OBJDIR}/precision.o ${SRCDIR}/Eirene_modules/ceirsrt.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/ceirsrt.o -c ${SRCDIR}/Eirene_modules/ceirsrt.F
 
 ${OBJDIR}/censav.o: ${SRCDIR}/Eirene_modules/censav.F ${MAKES}
@@ -500,7 +504,7 @@ ${OBJDIR}/clgin.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/clgin.F ${M
 ${OBJDIR}/clmsur.o: ${SRCDIR}/Eirene_modules/clmsur.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/clmsur.o -c ${SRCDIR}/Eirene_modules/clmsur.F
 
-${OBJDIR}/clogau.o: ${SRCDIR}/Eirene_modules/clogau.F ${MAKES}
+${OBJDIR}/clogau.o: ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/clogau.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/clogau.o -c ${SRCDIR}/Eirene_modules/clogau.F
 
 ${OBJDIR}/comnnl.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/comnnl.F ${MAKES}
@@ -748,7 +752,7 @@ ${OBJDIR}/cdiprl.${MOD}: ${SRCDIR}/Eirene_modules/cdiprl.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/cdiprl.o -c ${SRCDIR}/Eirene_modules/cdiprl.F
 
-${OBJDIR}/ceirsrt.${MOD}: ${SRCDIR}/Eirene_modules/ceirsrt.F ${MAKES}
+${OBJDIR}/ceirsrt.${MOD}: ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/ceirsrt.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/ceirsrt.o -c ${SRCDIR}/Eirene_modules/ceirsrt.F
 
@@ -800,7 +804,7 @@ ${OBJDIR}/clmsur.${MOD}: ${SRCDIR}/Eirene_modules/clmsur.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/clmsur.o -c ${SRCDIR}/Eirene_modules/clmsur.F
 
-${OBJDIR}/clogau.${MOD}: ${SRCDIR}/Eirene_modules/clogau.F ${MAKES}
+${OBJDIR}/clogau.${MOD}: ${OBJDIR}/precision.${MOD} ${SRCDIR}/Eirene_modules/clogau.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/clogau.o -c ${SRCDIR}/Eirene_modules/clogau.F
 
@@ -1084,12 +1088,13 @@ ${OBJDIR}/dependencies: ${SRCDIR}/B2.5_modules/.new_modules
 ifeq ($(shell [ -d ${OBJDIR} ] && echo yes || echo no ),no)
 	-mkdir -p ${OBJDIR}
 endif
-	touch ${OBJDIR}/dependencies
+	printf '# Dummy dependencies file for solps4-5\n' > ${OBJDIR}/dependencies
 	${MAKE} links
 	${MAKE} tags
 	${MAKE} listobj
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies ] || rm -f ${OBJDIR}/dependencies)
 include ${OBJDIR}/dependencies
 ifeq ($(shell [ -e ${S45DIR}/config/dependencies.local ] && echo yes || echo no ),yes)
 include ${S45DIR}/config/dependencies.local

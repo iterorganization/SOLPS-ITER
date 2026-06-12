@@ -36,7 +36,7 @@ if ($?SOLPS_PATH) then
       endif
       if ( "$MPI_FC" == "mpiifort -fc=mpiifx" ) then
         setenv MPI_FC mpiifort
-      else if ( "$MPI_FC" == "mpiifx" ) then
+      elseif ( "$MPI_FC" == "mpiifx" ) then
         setenv MPI_FC mpiifort
       endif
     endif

@@ -85,6 +85,8 @@ else
 VPATH = ${TPATH}
 endif
 
+$(shell awk 'FNR==1{if(!/^OBJS *=/){e=1;exit}} END{exit e}' \
+        ${OBJDIR}/LISTOBJ 2>/dev/null || rm -f ${OBJDIR}/LISTOBJ)
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
@@ -257,10 +259,11 @@ ${OBJDIR}/LISTOBJ: listobj
 
 ${OBJDIR}/dependencies: 
 	-mkdir -p ${OBJDIR}
-	touch ${OBJDIR}/dependencies
+	printf '# Dummy dependencies file for Triang\n' > ${OBJDIR}/dependencies
 	${MAKE} listobj
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies ] || rm -f ${OBJDIR}/dependencies)
 include ${OBJDIR}/dependencies
 
 ${SRCTRI}/TAGS: tags
