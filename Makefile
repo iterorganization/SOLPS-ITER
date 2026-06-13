@@ -332,21 +332,24 @@ eirene_openmp_mpi:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
 	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
 
+# The nox (graphics-free) standalone Eirene builds use their own build tree so a
+# parallel build does not clash with the graphics eirene* configure/build, which
+# targets the same directory but with the opposite GRAPHICS cmake configuration.
 eirene_nox:
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	@-mkdir -p modules/Eirene/builds/standalone_nox.${TOOLCHAIN}
+	+cd modules/Eirene/builds/standalone_nox.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_mpi:
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
+	@-mkdir -p modules/Eirene/builds/standalone_nox.${TOOLSHORT}.mpi${EXT_DBG}
+	+cd modules/Eirene/builds/standalone_nox.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_openmp:
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
+	@-mkdir -p modules/Eirene/builds/standalone_nox.${TOOLSHORT}.openmp${EXT_DBG}
+	+cd modules/Eirene/builds/standalone_nox.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
 
 eirene_nox_openmp_mpi:
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
+	@-mkdir -p modules/Eirene/builds/standalone_nox.${TOOLSHORT}.openmp.mpi${EXT_DBG}
+	+cd modules/Eirene/builds/standalone_nox.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
 
 else
 
