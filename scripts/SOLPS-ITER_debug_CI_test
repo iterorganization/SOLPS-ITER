@@ -40,7 +40,12 @@ make VERSION_nox
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce
 make divgeo_nox_debug
-make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox_debug b25_nox_debug
+# Build the two debug variants in a SINGLE make so the shared standalone-debug
+# B2.5 objects (NCEXECS etc.) are built once via a common prerequisite.  Passing
+# "solps_nox_debug b25_nox_debug" instead makes the %_debug pattern rule spawn two
+# concurrent recursive makes that race on those objects ("File not found ...
+# b2mod_types.f" -> nc_reduce / solps_nox_debug Error 2).
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} SOLPS_DEBUG=yes solps_nox b25_nox
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh
