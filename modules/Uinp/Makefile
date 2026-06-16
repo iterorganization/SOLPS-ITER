@@ -107,6 +107,8 @@ endif
 
 VPATH = ${SRCDIR}
 
+$(shell awk 'FNR==1{if(!/^OBJS *=/){e=1;exit}} END{exit e}' \
+        ${OBJDIR}/LISTOBJ 2>/dev/null || rm -f ${OBJDIR}/LISTOBJ)
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
@@ -297,10 +299,11 @@ ${SRCDIR}/git_version_Uinp.h: force
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}
-	touch ${OBJDIR}/dependencies.${COMPILER}
+	printf '# Dummy dependencies file for Uinp\n' > ${OBJDIR}/dependencies.${COMPILER}
 	${MAKE} listobj
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies.${COMPILER} ] || rm -f ${OBJDIR}/dependencies.${COMPILER})
 include ${OBJDIR}/dependencies.${COMPILER}
 ifeq ($(shell [ -e ${SRCUIN}/config/dependencies.local ] && echo yes || echo no ),yes)
 include ${SRCUIN}/config/dependencies.local

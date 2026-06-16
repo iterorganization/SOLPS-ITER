@@ -82,7 +82,8 @@ ${OBJDIR}:
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}
-	touch ${OBJDIR}/dependencies.${COMPILER}
+	printf '# Dummy dependencies file for fxdr\n' > ${OBJDIR}/dependencies.${COMPILER}
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies.${COMPILER} ] || rm -f ${OBJDIR}/dependencies.${COMPILER})
 include ${OBJDIR}/dependencies.${COMPILER}

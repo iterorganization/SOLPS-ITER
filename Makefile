@@ -101,6 +101,23 @@ OPT_NOX = LD_GR="" LD_GKS=""
 TOOLSHORT = ${HOST_NAME}.${COMPILER}
 TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
 
+# Sentinel files for the eirene cmake builds.  cmake places libeirene.a in
+# the build directory; this real-file target anchors the GRAPHICS=ON build.
+# Each eirene_nox* build produces libeirene_nox.a (GRAPHICS=OFF) in the
+# same directory by copying libeirene.a after the OFF cmake configure+build.
+# Both library files are independent Make targets with separate recipes.
+# Unconditional order-only rules (after the cmake/non-cmake endif below)
+# prevent eirene* and eirene_nox* from running concurrently in the same
+# build directory in both cmake and non-cmake modes.
+LIBEIRENE_A            = modules/Eirene/builds/standalone.${TOOLCHAIN}/libeirene.a
+LIBEIRENE_A_MPI        = modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}/libeirene.a
+LIBEIRENE_A_OPENMP     = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}/libeirene.a
+LIBEIRENE_A_OPENMP_MPI = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}/libeirene.a
+LIBEIRENE_A_NOX            = modules/Eirene/builds/standalone.${TOOLCHAIN}/libeirene_nox.a
+LIBEIRENE_A_NOX_MPI        = modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}/libeirene_nox.a
+LIBEIRENE_A_NOX_OPENMP     = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}/libeirene_nox.a
+LIBEIRENE_A_NOX_OPENMP_MPI = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}/libeirene_nox.a
+
 ifdef LD_NETCDF
 # Use actual exe file paths so parallel b25*/b25eirene* targets share a single
 # real-file prerequisite, which GNU Make builds exactly once per invocation
@@ -230,6 +247,70 @@ endif
 endif
 endif
 
+# ---------------------------------------------------------------------------
+# Multi-goal deduplication
+# When several composite top-level goals are given on the same command line
+# (e.g. "make all all_mpi all_openmp all_mpi_openmp") they share sub-targets
+# such as carre, divgeo and manual.  Because phony targets are always
+# considered out-of-date, parallel make (-jN) can launch those shared
+# sub-targets concurrently – one for each goal chain – causing races inside
+# sub-makes (e.g. the equtrn LISTOBJ file being written by two processes at
+# the same time).
+#
+# The fix: define the prerequisite list of every composite target as a Make
+# variable (_prereqs.<name>).  When more than one such target appears on the
+# command line, compute the sorted union of all their prerequisites and attach
+# a single real-file sentinel (.deduped.stamp) that depends on that union.
+# A real-file target is built exactly once per invocation even with -jN, so
+# all shared sub-targets are built in one parallel pass before any of the
+# composite goals processes its own (now already-finished) prerequisite list.
+
+_prereqs.solps             := carre divgeo b25eirene uinp triang amds manual
+_prereqs.solps_openmp      := carre divgeo b25eirene_openmp uinp_openmp triang amds_openmp manual
+_prereqs.solps_mpi         := carre divgeo b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+_prereqs.solps_openmp_mpi  := carre divgeo b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
+_prereqs.solps_mpi_openmp  := $(_prereqs.solps_openmp_mpi)
+_prereqs.nox               := carre_nox divgeo_nox b25eirene_nox uinp_nox triang_nox manual
+_prereqs.nox_openmp        := carre_nox divgeo_nox b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+_prereqs.nox_mpi           := carre_nox divgeo_nox b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+_prereqs.nox_openmp_mpi    := carre_nox divgeo_nox b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+_prereqs.nox_mpi_openmp    := $(_prereqs.nox_openmp_mpi)
+_prereqs.all               := carre divgeo b25 eirene b25eirene uinp triang amds manual
+_prereqs.all_openmp        := carre divgeo b25_openmp eirene_openmp b25eirene_openmp uinp_openmp triang amds_openmp manual
+_prereqs.all_mpi           := carre divgeo b25_mpi eirene_mpi b25eirene_mpi uinp_mpi triang_mpi amds_mpi manual
+_prereqs.all_openmp_mpi    := carre divgeo b25_openmp_mpi eirene_openmp_mpi b25eirene_openmp_mpi uinp_openmp_mpi triang_mpi amds_openmp_mpi manual
+_prereqs.all_mpi_openmp    := $(_prereqs.all_openmp_mpi)
+_prereqs.all_nox           := carre_nox divgeo_nox b25_nox eirene_nox b25eirene_nox uinp_nox triang_nox manual
+_prereqs.all_nox_openmp    := carre_nox divgeo_nox b25_nox_openmp eirene_nox_openmp b25eirene_nox_openmp uinp_nox_openmp triang_nox manual
+_prereqs.all_nox_mpi       := carre_nox divgeo_nox b25_nox_mpi eirene_nox_mpi b25eirene_nox_mpi uinp_nox_mpi triang_nox_mpi manual
+_prereqs.all_nox_openmp_mpi := carre_nox divgeo_nox b25_nox_openmp_mpi eirene_nox_openmp_mpi b25eirene_nox_openmp_mpi uinp_nox_openmp_mpi triang_nox_mpi manual
+_prereqs.all_openmp_nox    := $(_prereqs.all_nox_openmp)
+_prereqs.all_mpi_nox       := $(_prereqs.all_nox_mpi)
+_prereqs.all_nox_mpi_openmp    := $(_prereqs.all_nox_openmp_mpi)
+_prereqs.all_openmp_mpi_nox    := $(_prereqs.all_nox_openmp_mpi)
+_prereqs.all_mpi_openmp_nox    := $(_prereqs.all_nox_openmp_mpi)
+
+# All composite goals known to this deduplication mechanism
+_composite_goals := solps solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp \
+                    nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp \
+                    all all_openmp all_mpi all_openmp_mpi all_mpi_openmp \
+                    all_nox all_nox_openmp all_nox_mpi all_nox_openmp_mpi \
+                    all_openmp_nox all_mpi_nox \
+                    all_nox_mpi_openmp all_openmp_mpi_nox all_mpi_openmp_nox
+
+_active_composite := $(filter $(_composite_goals),$(MAKECMDGOALS))
+
+# Only activate the deduplication when two or more composite goals are given.
+ifneq ($(words $(_active_composite)),1)
+ifneq ($(words $(_active_composite)),0)
+_deduped_union := $(sort $(foreach _g,$(_active_composite),$(_prereqs.$(_g))))
+.deduped.stamp: $(_deduped_union)
+	@touch $@
+$(_active_composite): .deduped.stamp
+endif
+endif
+# ---------------------------------------------------------------------------
+
 .PHONY: solps solps_nox solps_openmp solps_mpi solps_openmp_mpi solps_mpi_openmp \
         nox nox_openmp nox_mpi nox_openmp_mpi nox_mpi_openmp \
         all all_openmp all_mpi all_openmp_mpi all_mpi_openmp \
@@ -347,37 +428,66 @@ divgeo_nox:
 
 ifndef NO_CMAKE
 
-eirene:
+# Each eirene* cmake build is anchored to a real-file target (libeirene.a).
+# GNU Make builds real-file targets at most once per invocation, so when
+# multiple top-level targets (e.g. all: eirene … triang→eirene_nox) run in
+# parallel, the cmake build directory is entered only once for the initial
+# full build.
+#
+# eirene_nox* always reconfigures cmake to GRAPHICS=OFF and copies the
+# resulting libeirene.a to libeirene_nox.a.  eirene* then reconfigures
+# cmake back to GRAPHICS=ON before the incremental make.  Two cmake
+# processes in the same directory simultaneously would corrupt build.make;
+# the order-only rules added after the endif block below ensure that
+# eirene_nox* always completes before eirene* starts its cmake configure.
+
+${LIBEIRENE_A}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
 	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
 
-eirene_mpi:
+eirene: ${LIBEIRENE_A}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+
+${LIBEIRENE_A_MPI}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
 	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
 
-eirene_openmp:
+eirene_mpi: ${LIBEIRENE_A_MPI}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
+
+${LIBEIRENE_A_OPENMP}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
 	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
 
-eirene_openmp_mpi:
+eirene_openmp: ${LIBEIRENE_A_OPENMP}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
+
+${LIBEIRENE_A_OPENMP_MPI}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
 	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
 
-eirene_nox:
+eirene_openmp_mpi: ${LIBEIRENE_A_OPENMP_MPI}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
+
+eirene_nox: | ${LIBEIRENE_A}
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}; \
+	cp libeirene.a libeirene_nox.a
 
-eirene_nox_mpi:
+eirene_nox_mpi: | ${LIBEIRENE_A_MPI}
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}; \
+	cp libeirene.a libeirene_nox.a
 
-eirene_nox_openmp:
+eirene_nox_openmp: | ${LIBEIRENE_A_OPENMP}
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}; \
+	cp libeirene.a libeirene_nox.a
 
-eirene_nox_openmp_mpi:
+eirene_nox_openmp_mpi: | ${LIBEIRENE_A_OPENMP_MPI}
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}; \
+	cp libeirene.a libeirene_nox.a
 
 else
 
@@ -406,6 +516,20 @@ eirene_nox_openmp_mpi:
 	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 
 endif
+
+# In both cmake and non-cmake modes, eirene* and eirene_nox* share the
+# same build directory (standalone.${TOOLCHAIN}/).  Two concurrent builds
+# in the same directory race on object compilation and ar updates to
+# libeirene.a.  These order-only prerequisites ensure eirene_nox* always
+# finishes before eirene* starts, without forcing eirene* to rebuild when
+# only eirene_nox* has run.
+# In cmake mode this also prevents two cmake configure processes from
+# writing to build.make simultaneously (eirene* reconfigures GRAPHICS=ON
+# after eirene_nox* has set GRAPHICS=OFF).
+eirene: | eirene_nox
+eirene_mpi: | eirene_nox_mpi
+eirene_openmp: | eirene_nox_openmp
+eirene_openmp_mpi: | eirene_nox_openmp_mpi
 
 eirene_mpi_openmp: eirene_openmp_mpi
 
@@ -983,6 +1107,7 @@ nox_build_mpi_openmp: nox_build_openmp_mpi
 #--------------
 
 clean: clean_solps
+	$(RM) .deduped.stamp
 
 clean_solps: clean_carre clean_divgeo clean_b25eirene clean_uinp clean_triang clean_manual clean_amds
 
