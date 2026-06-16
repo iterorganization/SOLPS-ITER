@@ -182,6 +182,13 @@ ifeq ($(UNAME),Darwin)
 NO_CMAKE := 1
 endif
 
+# Check if a legacy SOLPS4 directory is present
+SOLPS4 ?= ${SOLPSTOP}/../[sS][oO][lL][pP][sS]4.3
+ifeq ($(shell [ -d ${SOLPS4} ] && echo yes || echo no ),no)
+$(warning No SOLPS4 directory present at '${SOLPS4}'. SOLPS4-to-5 converters will not be built.)
+SOLPS4_MISSING := yes
+endif
+
 # MAKEO is the recursive-make incantation used by per-module recipes.
 # When invoked from a parallel top-level (e.g. `make -j 32 solps_nox`) and no
 # explicit MAKE_OPTIONS=-jN was set, ${MAKE} alone propagates GNU make's
@@ -540,7 +547,9 @@ b25: ${NCEXECS}
 	+cd modules/B2.5; ${MAKEO}
 
 b25_all: ${NCEXECS}
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE} links
+endif
 	cd modules/B2.5;     ${MAKE} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} ALL
 
@@ -567,7 +576,9 @@ b25_ig: ${NCEXECS}
 	+cd modules/B2.5; ${MAKEO} USE_IMPGYRO=-DUSE_IMPGYRO
 
 b25_all_openmp: ${NCEXECS}
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE} SOLPS_OPENMP=yes links
+endif
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} ${OMP_OPTB}
 
@@ -594,12 +605,16 @@ b25_mpi_openmp_nox: b25_nox_openmp_mpi
 b25_openmp_mpi_nox: b25_nox_openmp_mpi
 
 b25_all_mpi: ${NCEXECS}
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes links
+endif
 	cd modules/B2.5;     ${MAKE} ${MPI_OPTS} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} ${MPI_OPTS} ALL
 
 b25_all_openmp_mpi: ${NCEXECS}
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE} SOLPS_MPI=yes SOLPS_OPENMP=yes links
+endif
 	cd modules/B2.5;     ${MAKE} ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} ${OMP_OPTB} ${MPI_OPTS} ALL
 
@@ -622,7 +637,9 @@ ifndef NO_CMAKE
 else
 	+cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 endif
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE}  links
+endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ALL
 
@@ -700,7 +717,9 @@ ifndef NO_CMAKE
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE}  SOLPS_OPENMP=yes links
+endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ALL
 
@@ -711,7 +730,9 @@ ifndef NO_CMAKE
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes links
+endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${MPI_OPTS} ALL
 
@@ -722,7 +743,9 @@ ifndef NO_CMAKE
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE}  SOLPS_MPI=yes SOLPS_OPENMP=yes links
+endif
 	cd modules/B2.5;     ${MAKE}  USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ${B25_SERIAL}
 	+cd modules/B2.5;    ${MAKEO} USE_EIRENE=-DB25_EIRENE ${OMP_OPTB} ${MPI_OPTS} ALL
 
@@ -841,12 +864,14 @@ ${NC_EXE_DIR}/nc2text_simple.exe: | ${NC_EXE_DIR}/nc_reduce.exe
 	cd modules/B2.5; ${MAKE} nc2text_simple
 endif
 
+ifndef SOLPS4_MISSING
 b2sxdr: b25eirene sonnet-light
 	cd modules/solps4-5; ${MAKE} links
 	cd modules/solps4-5; ${MAKE} tags
 	cd modules/solps4-5; ${MAKE} listobj
 	cd modules/solps4-5; ${MAKE} depend
 	cd modules/solps4-5; ${MAKE}
+endif
 
 manual:
 ifndef NO_MANUAL
@@ -896,7 +921,9 @@ prereqs_nox_debug:
 local:
 	cd modules/Eirene;   ${MAKEF} local links
 	cd modules/B2.5;     ${MAKE} local
+ifndef SOLPS4_MISSING
 	cd modules/solps4-5; ${MAKE} local
+endif
 
 tags:
 	cd modules/Carre;          ${MAKE} tags
@@ -908,7 +935,11 @@ tags:
 	cd modules/DivGeo/convert; ${MAKE} tags
 	cd modules/DivGeo/equtrn;  ${MAKE} tags
 #	cd modules/solps4-5;       ${MAKE} tags
+ifndef SOLPS4_MISSING
 	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.[Ff] modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff] modules/Eirene/src/user-routines/user_iter/*.[Ff] modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/amds/src/*.[ch] modules/solps4-5/src/*.F scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
+else
+	rm -f TAGS ; ${MAKETAGS} TAGS modules/Carre/src.local/*.F modules/Carre/src/*/*.F modules/Carre/src/include/*.* modules/Eirene/src.local/*.[Ff] modules/Eirene/src/*/*.[Ff] modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff] modules/Eirene/src/user-routines/user_iter/*.[Ff] modules/Eirene/src/geometry/time-routines/*.F modules/Eirene/src/*/*.[Ff]90 modules/Eirene/src/interfaces/couple_SOLPS-ITER/*.[Ff]90 modules/B2.5/src.local/*.F modules/B2.5/src/*/*.F modules/B2.5/src/*/*.F90 modules/B2.5/src/*/*.[Hh] modules/B2.5/src/common/*.* modules/B2.5/src/common/COUPLE/*.F modules/B2.5/src/documentation/*.xml modules/B2.5/src/documentation/*.py modules/Uinp/src/*.F modules/Uinp/src/*.inc modules/Uinp/src/*.h modules/Triang/src/*/*.f modules/DivGeo/equtrn/src/*.f modules/DivGeo/equtrn/src/*.f90 modules/DivGeo/equtrn/src/*.inc modules/DivGeo/convert/src/*.f modules/DivGeo/src/*.[ch] modules/DivGeo/dg.dgc modules/amds/src/*.[ch] scripts/nc2text_simple/*.F90 doc/solps/solps.tex modules/Eirene/Manual/eirene.tex modules/Eirene/Manual/tex/*.tex || touch TAGS
+endif
 
 listobj:
 	cd modules/Carre;          ${MAKE} listobj
@@ -1326,8 +1357,10 @@ clean_fxdr:
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean
 
+ifndef SOLPS4_MISSING
 clean_b2sxdr:
 	cd modules/solps4-5; ${MAKE} clean
+endif
 
 clean_manual:
 	cd doc/solps; ${MAKE} clean
