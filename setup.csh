@@ -326,6 +326,12 @@ endif
 if ($?NO_MOTIF) then
   if (`ldconfig -p | grep 'libXm\.' | wc -l` != 0) unsetenv NO_MOTIF
 endif
+# Compilation also requires Motif development headers; restore NO_MOTIF if they are absent
+if (! $?NO_MOTIF) then
+  set _xm_found = `find /usr/include /usr/local/include -name "Xm.h" -print 2>/dev/null | wc -l`
+  if ($_xm_found == 0) setenv NO_MOTIF 1
+  unset _xm_found
+endif
 
 # Check if Manual can be built
 setenv LATEX `${SOLPSTOP}/scripts/which_latex`

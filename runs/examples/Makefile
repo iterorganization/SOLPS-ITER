@@ -1,7 +1,7 @@
 # Makefile for fetching large external data
 
 # Shared asset directory is possible on ITER cluster
-EXTERNALDATA ?= https://zenodo.org/records/20698550
+EXTERNALDATA ?= https://zenodo.org/records/20736422
 
 HASHES := $(wildcard *.md5)
 ASSETS = $(HASHES:%.md5=%)

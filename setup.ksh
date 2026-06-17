@@ -284,6 +284,10 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 [ -n "$NO_MOTIF" ] && {
   [ `ldconfig -p | grep 'libXm\.' | wc -l` != 0 ] && unset NO_MOTIF
 }
+# Compilation also requires Motif development headers; restore NO_MOTIF if they are absent
+[ -z "$NO_MOTIF" ] && {
+  [ "$(find /usr/include /usr/local/include -name 'Xm.h' 2>/dev/null | wc -l)" -eq 0 ] && export NO_MOTIF=1
+}
 
 # Check if Manual can be built
 export LATEX=`${SOLPSTOP}/scripts/which_latex`
