@@ -122,9 +122,17 @@ ifdef LD_NETCDF
 # Use actual exe file paths so parallel b25*/b25eirene* targets share a single
 # real-file prerequisite, which GNU Make builds exactly once per invocation
 # (unlike phony targets, which are re-run once per dependent in parallel builds).
-NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}${EXT_DBG}
+NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}
 NCEXECS      = ${NC_EXE_DIR}/nc2text_simple.exe ${NC_EXE_DIR}/nc_reduce.exe
 NCEXEC_NAMES = nc2text_simple nc_reduce
+# Debug-mode NC executables.  NC_EXE_DIR deliberately omits the debug suffix
+# so the two paths form a consistent pair: non-debug = TOOLSHORT,
+# debug = TOOLSHORT.debug.  The debug NC executables are pre-built via
+# real-file targets before b25*_debug / solps*_debug sub-makes start (see the
+# b25%_debug / solps%_debug rules below), so those sub-makes find the non-debug
+# NCEXECS files already present and skip rebuilding nc_reduce/nc2text_simple.
+DEBUG_NC_EXE_DIR = ${SOLPSTOP}/scripts/${TOOLSHORT}.debug
+DEBUG_NCEXECS    = ${DEBUG_NC_EXE_DIR}/nc_reduce.exe ${DEBUG_NC_EXE_DIR}/nc2text_simple.exe
 endif
 # B25_SERIAL: targets that must be built serially before the parallel compilation.
 # nc exes are excluded here because they are already handled once at the outer
@@ -862,6 +870,18 @@ ${NC_EXE_DIR}/nc_reduce.exe:
 ${NC_EXE_DIR}/nc2text_simple.exe: | ${NC_EXE_DIR}/nc_reduce.exe
 	@-mkdir -p ${NC_EXE_DIR}
 	cd modules/B2.5; ${MAKE} nc2text_simple
+
+# Debug-mode NC executables: real-file targets pre-built before b25*_debug /
+# solps*_debug sub-makes start (see b25%_debug / solps%_debug rules).
+# Building them here (outer make, no SOLPS_DEBUG) keeps the debug and non-debug
+# B2.5 utility objects in separate directories, avoiding any parallel race.
+${DEBUG_NC_EXE_DIR}/nc_reduce.exe:
+	@-mkdir -p ${DEBUG_NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc_reduce SOLPS_DEBUG=yes
+
+${DEBUG_NC_EXE_DIR}/nc2text_simple.exe: | ${DEBUG_NC_EXE_DIR}/nc_reduce.exe
+	@-mkdir -p ${DEBUG_NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc2text_simple SOLPS_DEBUG=yes
 endif
 
 ifndef SOLPS4_MISSING
@@ -1110,9 +1130,18 @@ endif
 
 debug: solps_debug
 
-# b25* and b25eirene* debug targets: build NetCDF executables in debug mode first
-# to avoid race conditions when multiple targets are compiled in parallel.
-b25%_debug: nc2text_simple_debug nc_reduce_debug
+# b25* and b25eirene* debug targets: pre-build both debug and non-debug NC
+# executables as real-file prerequisites before launching any sub-make.  The
+# outer make (no SOLPS_DEBUG) builds them in separate OBNDIR directories, so
+# there is no parallel race.  The sub-makes (SOLPS_DEBUG=yes) then derive
+# NC_EXE_DIR = scripts/${TOOLSHORT} (no EXT_DBG suffix) and find the non-debug
+# NCEXECS files already present, skipping the nc_reduce/nc2text_simple build.
+b25%_debug: ${DEBUG_NCEXECS} ${NCEXECS}
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
+
+# solps* debug targets (e.g. solps_nox_debug) spawn a sub-make that independently
+# re-derives NCEXECS; apply the same real-file prerequisites as b25%_debug.
+solps%_debug: ${DEBUG_NCEXECS} ${NCEXECS}
 	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 %_debug:
