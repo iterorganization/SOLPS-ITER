@@ -6,8 +6,6 @@ echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
 echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 export NO_MANUAL="true"
-echo CMAKE_MAJOR_VERSION is $CMAKE_MAJOR_VERSION.
-cmake --version
 make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox

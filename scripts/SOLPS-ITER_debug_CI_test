@@ -21,6 +21,7 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecta.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecti.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xstpi.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 
 # Start the debug build from clean build dirs.  The CI agent workspace is
 # persistent across builds; a stale/partial CMake build tree left by an earlier
@@ -36,8 +37,6 @@ rm -rf ${SOLPSTOP}/modules/Eirene/builds/*.debug \
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-echo CMAKE_MAJOR_VERSION is $CMAKE_MAJOR_VERSION.
-cmake --version
 make VERSION_nox
 make listobj_nox_debug depend_nox_debug
 make nc2text_simple nc_reduce

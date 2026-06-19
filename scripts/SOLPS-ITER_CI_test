@@ -5,8 +5,6 @@
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-echo CMAKE_MAJOR_VERSION is $CMAKE_MAJOR_VERSION.
-cmake --version
 make VERSION_nox
 make listobj_nox depend_nox
 make divgeo_nox
