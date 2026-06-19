@@ -415,7 +415,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER. From Intel oneAPI 2025 onwards, this identifier selects {\tt ifx} (the LLVM-based compiler) instead of the classic {\tt ifort}.
   \item[gfortran] The gfortran compiler, in use at IPP, EFGW (EUROfusion Gateway), FZ-J{\"u}lich, and KU-Leuven
   \item[g95] The g95 compiler
   \item[nag\_f90] The NAG Fortran compiler
@@ -662,6 +662,8 @@ smooth code operation (See also Section~\ref{sec:setup} for full details).
 tcsh
 source setup.csh
 \end{verbatim}
+An alternative setup script, {\tt setup.ksh}, is also available for Bash/Korn shell environments, without graphics, such as for CI test suites.
+Note that {\tt setup.ksh} may not support all features provided by {\tt setup.csh}.
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
 \begin{description}
@@ -21330,13 +21332,13 @@ or
 \begin{verbatim}
   B25_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list.
+For {\tt ksh} or {\tt bash} users, the syntax would be
 \begin{verbatim}
   export B25_DEFINES="$B25_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 %%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2,$1}' | sort | uniq
@@ -21973,13 +21975,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 We list below where the {\tt Eirene} compilation switches are used.
@@ -22417,13 +22419,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 \section{NAG calls in SOLPS}

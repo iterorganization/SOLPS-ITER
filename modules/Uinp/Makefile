@@ -107,6 +107,8 @@ endif
 
 VPATH = ${SRCDIR}
 
+$(shell awk 'FNR==1{if(!/^OBJS *=/){e=1;exit}} END{exit e}' \
+        ${OBJDIR}/LISTOBJ 2>/dev/null || rm -f ${OBJDIR}/LISTOBJ)
 ifeq ($(shell [ -e ${OBJDIR}/LISTOBJ ] && echo yes || echo no ),yes)
 include ${OBJDIR}/LISTOBJ
 endif
@@ -127,13 +129,16 @@ endif
 $(OBJDIR)/%.o : %.F
 	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
 	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 ifneq (${MOD},o)
-$(OBJDIR)/%.${MOD} : %.F
-	${CPP} -P ${INCLUDE} ${SOLPS_CPP} ${DEFINES} ${USE_DEBUG} $< ${OBJDIR}/$*.f
-	$(COMPILE) ${INCLUDE} ${FFLAGSEXTRA} -I${OBJDIR} -o ${OBJDIR}/$*.o ${OBJDIR}/$*.f
+# The compiler writes the .mod file as a side effect of producing the .o,
+# so make .mod depend on .o (no recipe).  This avoids a parallel-make race
+# where the duplicate "%.${MOD}: %.F" rule and the "%.o: %.F" rule above
+# would both compile the same source concurrently and clobber the .mod.
+$(OBJDIR)/%.${MOD} : $(OBJDIR)/%.o
+	@true
 endif
-	@if [ -f $*.${MOD} ] ; then /bin/mv $*.${MOD} ${OBJDIR}/ ; fi
 
 all: VERSION ${OBJDIR}/${PROG} ${OBJDIR}/ub2p
 
@@ -294,10 +299,11 @@ ${SRCDIR}/git_version_Uinp.h: force
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}
-	touch ${OBJDIR}/dependencies.${COMPILER}
+	printf '# Dummy dependencies file for Uinp\n' > ${OBJDIR}/dependencies.${COMPILER}
 	${MAKE} listobj
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies.${COMPILER} ] || rm -f ${OBJDIR}/dependencies.${COMPILER})
 include ${OBJDIR}/dependencies.${COMPILER}
 ifeq ($(shell [ -e ${SRCUIN}/config/dependencies.local ] && echo yes || echo no ),yes)
 include ${SRCUIN}/config/dependencies.local

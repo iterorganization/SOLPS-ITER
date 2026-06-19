@@ -1,13 +1,13 @@
 #! /bin/tcsh
 
-#SBATCH  --time=#HOURS#:00:00
-#SBATCH  --mem-per-cpu=#MEM#
-#SBATCH  --mail-user=#EMAIL#
-#SBATCH  --mail-type=END,FAIL
-#SBATCH  --job-name=#JOBNAME#
-#SBATCH  --partition=#PART#
-#SBATCH  --output=/tmp/slurm-%j.out
-#SBATCH  --no-requeue
+#SBATCH --time=#HOURS#:00:00
+#SBATCH --mem-per-cpu=#MEM#
+#SBATCH --mail-user=#EMAIL#
+#SBATCH --mail-type=END,FAIL
+#SBATCH --job-name=#JOBNAME#
+#SBATCH --partition=#PART#
+#SBATCH --output=/tmp/slurm-%j.out
+#SBATCH --no-requeue
 
 echo Using SOLPSTOP = #SOLPSTOP# > make.log.#COMPILER#
 

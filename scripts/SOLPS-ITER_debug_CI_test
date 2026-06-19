@@ -21,6 +21,7 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecta.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecti.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xstpi.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
