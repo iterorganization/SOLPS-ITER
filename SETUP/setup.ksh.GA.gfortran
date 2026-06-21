@@ -43,7 +43,10 @@ if [ -z `type paraview-config 2> /dev/null` ]; then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  export PARAVIEW_MAJOR_VERSION=`paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  export PARAVIEW_MAJOR_VERSION=`paraview --version 2>/dev/null | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  if [ -z "${PARAVIEW_MAJOR_VERSION}" ]; then
+    echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
+  else
   export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
   if [ $CMAKE_MAJOR_VERSION -gt 2 ]; then
     export LD_CATALYST=`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
@@ -59,6 +62,7 @@ else
     export PYTHONPATH="${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
     export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
     export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
+  fi
   fi
 fi
 
