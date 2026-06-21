@@ -91,10 +91,12 @@ export CC=gcc
 export FC=gfortran
 export CXX=g++
 
-[ -x paraview-config ] && {
+if [ -x paraview-config ]; then
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  export PARAVIEW_MAJOR_VERSION=`paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  if [ $CMAKE_MAJOR_VERSION -gt 2 ]; then
+  export PARAVIEW_MAJOR_VERSION=`paraview --version 2>/dev/null | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  if [ -z "${PARAVIEW_MAJOR_VERSION}" ]; then
+    echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
+  elif [ $CMAKE_MAJOR_VERSION -gt 2 ]; then
     # Avoid a naming clash
     unset BOOST_ROOT
     if [ $PARAVIEW_MAJOR_VERSION -lt 6 ]; then
@@ -136,10 +138,12 @@ export CXX=g++
     export PYTHONPATH="${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
     export LD_CATALYST=`paraview-config --libs vtkPVPythonCatalyst`
   fi
-  export LD_CATALYST="${LD_CATALYST} -lstdc++"
-} || {
+  if [ -n "${LD_CATALYST}" ]; then
+    export LD_CATALYST="${LD_CATALYST} -lstdc++"
+  fi
+else
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
-}
+fi
 
 # Other environment variables
 unset MPLBACKEND

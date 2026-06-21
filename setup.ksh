@@ -102,10 +102,10 @@ fi
 } || {
   echo File SETUP/setup.ksh.${HOST_NAME}.${COMPILER} not found!
 }
-[ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ] && {
+if [ -s ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local ]; then
   echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local.
   . ${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.local
-}
+fi
 
 ulimit -s unlimited
 
@@ -311,7 +311,7 @@ export CMAKE=`which cmake`
 }
 
 # Add any local settings if present
-[ -s ${SOLPSTOP}/SETUP/setup.ksh.local ] && {
+if [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ]; then
    echo "Loading SETUP/setup.ksh.local"
    . ${SOLPSTOP}/SETUP/setup.ksh.local
-}
+fi
