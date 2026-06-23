@@ -1,6 +1,10 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
+# Start the build from clean dirs.
+rm -rf ${SOLPSTOP}/modules/Eirene/builds/* \
+       ${SOLPSTOP}/modules/B2.5/builds/*
+
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
