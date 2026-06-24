@@ -80,6 +80,9 @@ endif
 # Build with Catalyst if ParaView is in PATH
 ifdef LD_CATALYST
   SOLPS_CPP   += -DCATALYST
+  ifeq ($(strip $(PARAVIEW_MAJOR_VERSION)),)
+    PARAVIEW_MAJOR_VERSION := 0
+  endif
 endif
 
 # Build with Fundamental-Constants module if present
@@ -231,6 +234,9 @@ export LD_NAG
 export LD_MDSPLUS
 export LD_SONNET
 export LD_JSON
+export LD_CATALYST
+export PARAVIEW_MAJOR_VERSION
+export PARAVIEW_INCLUDE
 
 export SOLPS_CPP
 export SOLPS_MPI
