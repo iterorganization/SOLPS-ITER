@@ -335,7 +335,7 @@ if ($?NO_MOTIF) then
 endif
 # Compilation also requires Motif development headers; restore NO_MOTIF if they are absent
 if (! $?NO_MOTIF) then
-  set _xm_found = `find /usr/include /usr/local/include -name "Xm.h" -print 2>/dev/null | wc -l`
+  set _xm_found = `sh -c 'find /usr/include /usr/local/include -name "Xm.h" -print 2>/dev/null' | wc -l`
   if ($_xm_found == 0) setenv NO_MOTIF 1
   unset _xm_found
 endif
