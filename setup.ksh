@@ -286,7 +286,7 @@ alias unset_ig='. $SOLPSTOP/SETUP/noig'
 }
 # Compilation also requires Motif development headers; restore NO_MOTIF if they are absent
 [ -z "$NO_MOTIF" ] && {
-  [ "$(find /usr/include /usr/local/include -name 'Xm.h' 2>/dev/null | wc -l)" -eq 0 ] && export NO_MOTIF=1
+  [ "$(find /usr/include /usr/local/include ${EBROOTMOTIF} -name 'Xm.h' 2>/dev/null | wc -l)" -eq 0 ] && export NO_MOTIF=1
 }
 
 # Check if Manual can be built
