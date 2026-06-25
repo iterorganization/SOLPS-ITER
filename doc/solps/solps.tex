@@ -415,7 +415,7 @@ At the moment the following compiler platforms are supported, assuming a Linux w
 \begin{description}\index{Platforms}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
-  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER
+  \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER. From Intel oneAPI 2025 onwards, this identifier selects {\tt ifx} (the LLVM-based compiler) instead of the classic {\tt ifort}.
   \item[gfortran] The gfortran compiler, in use at IPP, EFGW (EUROfusion Gateway), FZ-J{\"u}lich, and KU-Leuven
   \item[g95] The g95 compiler
   \item[nag\_f90] The NAG Fortran compiler
@@ -530,12 +530,44 @@ course be replaced by {\tt gmake solps(\_debug)},
 and proceed with the recompilation as above.
 \end{sloppypar}
 
-It is possible to pass down Makefile options with the syntax
+It is possible to accelerate the compilation by invoking {\tt make} with a top-level {\tt -j} flag, e.g.:
+\begin{verbatim}
+  gmake -j 8 solps
+  gmake -j $(nproc) solps_openmp
+\end{verbatim}
+This allows GNU make's jobserver to share compilation jobs across all submodules.
+In a SLURM batch job where {\tt SLURM\_CPUS\_PER\_TASK} is set, the following command will automatically use the allocated number of cores:
+\begin{verbatim}
+  gmake -j ${SLURM_CPUS_PER_TASK:-$(nproc)} solps
+\end{verbatim}
+\index{parallel compilation}\index{Makefile, parallel}
+
+For a \emph{fresh build} (no object files yet), it is recommended to run the {\tt prereqs} target once
+before the parallel compilation.
+This generates version headers, local stubs, object-list files ({\tt LISTOBJ}), and dependency files
+for all build variants in a single serial pass, preventing each parallel sub-make from redundantly
+regenerating the same shared files:
+\begin{verbatim}
+  gmake prereqs
+  gmake -j $(nproc) solps
+\end{verbatim}
+For debug builds use {\tt prereqs\_debug} in the same way:
+\begin{verbatim}
+  gmake prereqs_debug
+  gmake -j $(nproc) solps_debug
+\end{verbatim}
+For no-X11 builds (e.g.\ on headless nodes or in CI), use the targeted variants:
+\begin{verbatim}
+  gmake prereqs_nox       && gmake -j $(nproc) solps_nox
+  gmake prereqs_nox_debug && gmake -j $(nproc) solps_nox_debug
+\end{verbatim}
+Note: the {\tt Triang} submodule is automatically forced to build serially ({\tt -j1}) because its {\tt makedepend}-generated dependency file does not capture Fortran {\tt USE} dependencies for the Eirene modules it compiles. This has negligible impact on overall build time.
+
+The older form
 \begin{verbatim}
   gmake MAKE_OPTIONS=-j8
 \end{verbatim}
-for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
-because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
+is still supported but only parallelises within each submodule's sub-make, not across them, because it bypasses the top-level jobserver.
 
 Once the configuration files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
@@ -606,6 +638,13 @@ purpose, a master \SOLPSITER {\tt Makefile} is provided, located at {\tt \$\{SOL
   \item[depend\_nox] Builds the dependencies files for the various code components when not linking to graphics libraries
   \item[tags] Builds {\tt etags} files for easy source code searched using {\tt emacs}
   \item[VERSION] Updates the GIT version number included in the source code and output
+  \item[prereqs] Runs all non-parallel-safe preliminary steps once in order:
+    {\tt local}, {\tt VERSION}, {\tt tags}, {\tt listobj}, {\tt depend} (all variants).
+    Recommended before a large parallel build to avoid redundant regeneration of
+    object lists and dependency files inside each parallel sub-make.
+    See also {\tt prereqs\_debug} for debug builds, and
+    {\tt prereqs\_nox} / {\tt prereqs\_nox\_debug} for no-X11
+    and no-X11 debug builds respectively.
   \item[clean] Alias to {\bf clean\_solps}
   \item[solps\_nox] Alias to {\bf nox}
   \item[help] Lists the available targets that can be built
@@ -662,6 +701,8 @@ smooth code operation (See also Section~\ref{sec:setup} for full details).
 tcsh
 source setup.csh
 \end{verbatim}
+An alternative setup script, {\tt setup.ksh}, is also available for Bash/Korn shell environments, without graphics, such as for CI test suites.
+Note that {\tt setup.ksh} may not support all features provided by {\tt setup.csh}.
 
 Among other things, these setup files establish some aliases that are useful for navigating the \SOLPSITER directory structure (see details in Chapter~\ref{cha:structure}). Those aliases are:
 \begin{description}
@@ -21330,13 +21371,13 @@ or
 \begin{verbatim}
   B25_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list.
+For {\tt ksh} or {\tt bash} users, the syntax would be
 \begin{verbatim}
   export B25_DEFINES="$B25_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 %%grep #if $SOLPSTOP/modules/B2.5/src/*/*.F | awk '{print $2,$1}' | sort | uniq
@@ -21973,13 +22014,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 We list below where the {\tt Eirene} compilation switches are used.
@@ -22417,13 +22458,13 @@ or
 \begin{verbatim}
   EIRENE_DEFINES += -DOPTION
 \end{verbatim}
-so that the new option is added to the list. (Unsupported {\tt ksh}
-or {\tt bash} users would use something like
+so that the new option is added to the list, or if using {\tt ksh}
+or {\tt bash}
 \begin{verbatim}
   export EIRENE_DEFINES="$EIRENE_DEFINES -DOPTION"
 \end{verbatim}
 %% $
-). If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
+If choosing to use {\tt SOLPS\_CPP} instead, the procedure is the same as
 in the previous section.
 
 \section{NAG calls in SOLPS}

@@ -1,14 +1,17 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
+# Start the build from clean dirs.
+rm -rf ${SOLPSTOP}/modules/Eirene/builds/* \
+       ${SOLPSTOP}/modules/B2.5/builds/*
+
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-make VERSION_nox
-make listobj_nox depend_nox
+make prereqs_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox b25_nox
 
 # Run test cases
 
@@ -70,7 +73,14 @@ setup_baserun_eirene_links
 b2run b2mn
 ../run_checks_ITER_2360_coupled.sh ../ref_run_for_CI/ ./ || exit 3
 
-cd ../..
+# Increase output precision to look for restart effects
+cd ${SOLPSTOP}/modules/B2.5
+cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
+touch src/modules/.new_modules
+cd ${SOLPSTOP}
+make listobj_nox b25eirene_nox
+cd ${SOLPSTOP}/runs/examples
+
 make DIIID_3106_DN_D+C
 cd DIIID_3106_DN_D+C
 export DEVICE=d3d
@@ -119,12 +129,7 @@ b2run b2mn
 ../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 5
 
 # Special test to look for restart effects
-cd ${SOLPSTOP}/modules/B2.5
-cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
-touch src/modules/.new_modules
-cd ${SOLPSTOP}
-make listobj_nox b25eirene_nox
-cd ${SOLPSTOP}/runs/examples/DIIID_3106_DN_D+C
+cd ..
 mkdir run_CI_test_20
 cd run_CI_test_20
 cp ../run_for_CI/b2.*.parameters .

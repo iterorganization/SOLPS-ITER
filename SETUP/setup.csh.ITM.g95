@@ -39,9 +39,11 @@ if (`where paraview-config` == "") then
   echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
+  setenv PARAVIEW_MAJOR_VERSION `sh -c 'paraview --version 2>/dev/null' | cut -d '.' -f 1 | cut -d ' ' -f 3`
   setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
-  if (${CMAKE_MAJOR_VERSION} > 2) then
+  if ("${PARAVIEW_MAJOR_VERSION}" == "") then
+    echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
+  else if (${CMAKE_MAJOR_VERSION} > 2) then
     setenv LD_CATALYST "`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel` -lstdc++"
     setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
   else
