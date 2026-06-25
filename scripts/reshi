@@ -4,6 +4,16 @@ if (-s b2mn.exe.dir/b2ftrace) then
 else
   set FILE=b2ftrace
 endif
+set solps_fluids=`climb_and_look_for SOLPS_FLUIDS`
+if (-s $solps_fluids) then
+  setenv SOLPS_FLUIDS "`cat $solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on $solps_fluids)"
+else
+  setenv SOLPS_FLUIDS "`get_solps_fluids`"
+  echo Set SOLPS_FLUIDS to $SOLPS_FLUIDS "(based on log file)"
+endif
+set n=`echo $SOLPS_FLUIDS | wc -w`
+echo $n
 if (-X zcat) then
   set ZCAT="zcat --force"
 else
@@ -19,5 +29,5 @@ setenv PLOT_FROM_FILE "gnuplot.temp"
 $ZCAT $FILE | \
   awk 'BEGIN{ig=0}/data/&&ig==0{ig=1}/data/&&ig==2{printf "\n"}/^[^*]/&&ig>0{ig=2;printf "%s",$0}' | \
   resopt $argv | \
-  awk '{print $2,$9}' >! ${tmpdir}PLOT_FROM_FILE
+  awk '{print $2,$(2+2*'$n'+3)}' >! ${tmpdir}PLOT_FROM_FILE
 plot xlyplot '' iteration 'norm of residual of ion energy equation' $PWD

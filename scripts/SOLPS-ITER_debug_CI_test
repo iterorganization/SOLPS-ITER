@@ -21,15 +21,25 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecta.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecti.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xstpi.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+
+# Start the debug build from clean build dirs.  The CI agent workspace is
+# persistent across builds; a stale/partial CMake build tree left by an earlier
+# (possibly interrupted) build makes the coupled-Eirene cmake configure emit no
+# Makefile ("No targets specified and no makefile found").  Note that
+# "make clean_*" does NOT help here: the clean_*eirene* targets clean via the
+# legacy config/Makefile and never touch the CMake builds/ trees.  Remove the
+# debug build dirs explicitly.  Compiler-agnostic: matches *.ifort64.debug,
+# *.gfortran.debug and any .openmp/.mpi debug variant (no-op if none exist).
+rm -rf ${SOLPSTOP}/modules/Eirene/builds/*.debug \
+       ${SOLPSTOP}/modules/B2.5/builds/*.debug
 
 # Compile the code with debug options activated
 echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-make VERSION_nox
-make listobj_nox_debug depend_nox_debug
-make nc2text_simple nc_reduce
+make prereqs_nox_debug
 make divgeo_nox_debug
-make MAKE_OPTIONS=-j8 solps_nox_debug b25_nox_debug
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh

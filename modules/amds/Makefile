@@ -147,10 +147,11 @@ src/git_version.h: force
 
 ${OBJDIR}/dependencies.${COMPILER}:
 	-mkdir -p ${OBJDIR}
-	touch ${OBJDIR}/dependencies.${COMPILER}
+	printf '# Dummy dependencies file for amds\n' > ${OBJDIR}/dependencies.${COMPILER}
 	${MAKE} VERSION
 	${MAKE} tags
 	${MAKE} listobj
 	${MAKE} depend
 
+$(shell [ -s ${OBJDIR}/dependencies.${COMPILER} ] || rm -f ${OBJDIR}/dependencies.${COMPILER})
 include ${OBJDIR}/dependencies.${COMPILER}
