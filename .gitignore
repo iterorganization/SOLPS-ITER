@@ -47,6 +47,7 @@ cray*
 git_version.h
 git_version_*.h
 make.log.*
+.deduped.stamp
 
 linux.*/
 g77*/

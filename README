@@ -103,6 +103,29 @@ Compile instructions
 %% WE STRONGLY RECOMMEND ALWAYS COMPILING FROM THE TOP-LEVEL DIRECTORY OF SOLPS-ITER
 
 
+Parallel compilation
+--------------------
+
+The recommended way to accelerate compilation is to invoke make with a
+top-level -j flag, e.g.:
+
+    make -j 8 solps
+    make -j $(nproc) solps_openmp
+
+This allows GNU make's jobserver to share compilation jobs across all
+submodules. In a SLURM batch job the number of available cores is:
+
+    make -j ${SLURM_CPUS_PER_TASK:-$(nproc)} solps
+
+Note: the Triang submodule is automatically forced to build serially
+(-j1) because its makedepend-generated dependency file does not capture
+Fortran USE dependencies. This has negligible impact on overall build
+time since Triang is small (~50 sources).
+
+The older form "make MAKE_OPTIONS=-j8" is still supported but only
+parallelises within each submodule, not across them.
+
+
 Basic make-targets
 ------------------
 

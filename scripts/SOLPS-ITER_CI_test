@@ -9,10 +9,9 @@ rm -rf ${SOLPSTOP}/modules/Eirene/builds/* \
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
-make VERSION_nox
-make listobj_nox depend_nox
+make prereqs_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox b25_nox
 
 # Run test cases
 
