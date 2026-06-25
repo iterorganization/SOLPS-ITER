@@ -39,7 +39,7 @@ echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.IT
 export NO_MANUAL="true"
 make prereqs_nox_debug
 make divgeo_nox_debug
-make MAKE_OPTIONS=-j8 solps_nox_debug b25_nox_debug
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox_debug b25_nox_debug
 
 # Run test case
 . ${SOLPSTOP}/SETUP/debug.ksh

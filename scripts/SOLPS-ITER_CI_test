@@ -7,7 +7,7 @@ echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/
 export NO_MANUAL="true"
 make prereqs_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox b25_nox
 
 # Run test cases
 

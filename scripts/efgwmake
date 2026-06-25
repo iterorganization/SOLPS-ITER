@@ -3,6 +3,7 @@
 set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
+sep nproc=1
 set hours=4
 set mem=10GB
 set part="gw"
@@ -30,6 +31,7 @@ Available options are:
   -c <<JOB_ID>>      job ID of the previous job in a chain submission
   -o <<OPTIONS>>     options to be passed to the Makefile (within quotes)
   -T <<HOURS>>       number of elapsed hours requested (default $hours)
+  -N <<NODES>>       number of processors over which to multi-thread the compilation (default $nproc)
   -M <<MEM_SIZE>>    memory size (default $mem)
   -Q <<PARTITION>>   partition on which to submit the job (default $part)
 
@@ -53,6 +55,12 @@ EOF
     else
       echo Requested time is ${hours} hours
     endif
+    shift
+    goto argloop
+  endif
+  if ("X${1}X" == "X-NX") then
+    shift
+    set nproc="$1"
     shift
     goto argloop
   endif
@@ -117,6 +125,7 @@ sed \
   -e 's:#MEM#:'$mem':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
+  -e 's:#THREADS#:'$nproc':g' \
   -e "s:#JOBNAME#:'$JOB_NAME':g" \
   -e 's:#USER#:'$USER':g' \
   -e "s:#OBJECTS#:'$objects':g" \
@@ -126,6 +135,11 @@ sed \
 echo "set build_failed = 0" >> $NAME
 if ("X${options}X" != "XX") then
   echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+else if ($nproc > 1) then
+  foreach i ($objects)
+    echo "${MAKE} -j "$nproc $i" >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+    echo 'if ($build_failed != 0) exit $build_failed' >> $NAME
+  end
 else
   echo "${MAKE} ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
 endif

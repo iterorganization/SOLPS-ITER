@@ -530,12 +530,44 @@ course be replaced by {\tt gmake solps(\_debug)},
 and proceed with the recompilation as above.
 \end{sloppypar}
 
-It is possible to pass down Makefile options with the syntax
+It is possible to accelerate the compilation by invoking {\tt make} with a top-level {\tt -j} flag, e.g.:
+\begin{verbatim}
+  gmake -j 8 solps
+  gmake -j $(nproc) solps_openmp
+\end{verbatim}
+This allows GNU make's jobserver to share compilation jobs across all submodules.
+In a SLURM batch job where {\tt SLURM\_CPUS\_PER\_TASK} is set, the following command will automatically use the allocated number of cores:
+\begin{verbatim}
+  gmake -j ${SLURM_CPUS_PER_TASK:-$(nproc)} solps
+\end{verbatim}
+\index{parallel compilation}\index{Makefile, parallel}
+
+For a \emph{fresh build} (no object files yet), it is recommended to run the {\tt prereqs} target once
+before the parallel compilation.
+This generates version headers, local stubs, object-list files ({\tt LISTOBJ}), and dependency files
+for all build variants in a single serial pass, preventing each parallel sub-make from redundantly
+regenerating the same shared files:
+\begin{verbatim}
+  gmake prereqs
+  gmake -j $(nproc) solps
+\end{verbatim}
+For debug builds use {\tt prereqs\_debug} in the same way:
+\begin{verbatim}
+  gmake prereqs_debug
+  gmake -j $(nproc) solps_debug
+\end{verbatim}
+For no-X11 builds (e.g.\ on headless nodes or in CI), use the targeted variants:
+\begin{verbatim}
+  gmake prereqs_nox       && gmake -j $(nproc) solps_nox
+  gmake prereqs_nox_debug && gmake -j $(nproc) solps_nox_debug
+\end{verbatim}
+Note: the {\tt Triang} submodule is automatically forced to build serially ({\tt -j1}) because its {\tt makedepend}-generated dependency file does not capture Fortran {\tt USE} dependencies for the Eirene modules it compiles. This has negligible impact on overall build time.
+
+The older form
 \begin{verbatim}
   gmake MAKE_OPTIONS=-j8
 \end{verbatim}
-for instance to multi-thread on the compilation. It is not recommended to give compilation options directly in the compilation line (say, with {\tt gmake -j8 solps})
-because the \SOLPSITER compilation includes many parts which must be done in order and sometimes serially.
+is still supported but only parallelises within each submodule's sub-make, not across them, because it bypasses the top-level jobserver.
 
 Once the configuration files and dimensions have been filled in with the appropriate information for the
 local implementation desired, one proceeds with the compilation of the code. For this
