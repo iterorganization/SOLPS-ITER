@@ -75,7 +75,7 @@ endif
 solps.ind: solps.idx
 	makeindex solps
 
-solps.idx: solps.tex
+solps.idx: solps.tex solps.bbl
 	@echo 'Building index'
 	[ -e solps.ind ] || touch solps.ind
 	${LATEX} solps
