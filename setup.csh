@@ -107,7 +107,7 @@ endif
 limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
   set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
   if ((-f $setup.env.local.${USER}) && \
       ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
@@ -360,7 +360,7 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
   set setup_post = `mktemp`
   env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
      -e '1i# Generated environment cache. Do not edit!' >! $setup_post
