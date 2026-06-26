@@ -115,6 +115,10 @@ case "*.nscc-hf.cn":
 case "sms.hlsm.local":
   echo DLUT
   breaksw
+case "tylogin0?":
+case "tyadmin0?":
+  echo SCNET
+  breaksw
 case "*.swip.ac.cn":
 case "mgmt":
   echo SWIP
