@@ -3,7 +3,7 @@
 set NAME=$SCRATCH_DIR/.run.$$.$USER.`date +%Y%m%d%H%M%S`
 set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
-sep nproc=1
+set nproc=1
 set hours=4
 set mem=10GB
 set part="gw"
