@@ -330,6 +330,8 @@ endif
 if (! $?NO_MOTIF) then
   if ($?EBROOTMOTIF) then
     set _xm_found = `sh -c 'find ${EBROOTMOTIF} -name "Xm.h" -print 2>/dev/null' | wc -l`
+  else
+    set _xm_found = 0
   endif
   if ($_xm_found == 0) set _xm_found = `sh -c 'find /usr/include /usr/local/include -name "Xm.h" -print 2>/dev/null' | wc -l`
   if ($_xm_found == 0) setenv NO_MOTIF 1
