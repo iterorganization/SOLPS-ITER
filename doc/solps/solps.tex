@@ -11841,6 +11841,8 @@ b_\alpha = \left\{
 \right.
 \end{equation*}
 
+Satisfying this boundary condition may require internal iterations for the potential equation. These are triggered with the {\tt b2news\_max\_iter\_po} switch (default {\tt 0}, off), and the absolute and relative convergence criteria are set by {\tt b2stbc\_bcpot11\_epsa} and {\tt b2stbc\_bcpot11\_epsr}, respectively (default value for both: $10^{-4}$).
+
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
 $\left. \frac{\sqrt g}{h_x} j_x \right|_W =
@@ -11867,6 +11869,8 @@ To be used in conjunction with {\tt BCENE = 15}, {\tt BCENI = 15}, {\tt BCMOM = 
         \sqrt{\frac{T_e}{m_e}} \exp \left( -\frac{e \left( \Phi - p_{\Phi,2} \right)}{T_e} \right)
 \right] \right|_E
 \end{equation*}\normalsize
+
+Satisfying this boundary condition may require internal iterations for the potential equation. These are triggered with the {\tt b2news\_max\_iter\_po} switch (default {\tt 0}, off), and the absolute and relative convergence criteria are set by {\tt b2stbc\_bcpot11\_epsa} and {\tt b2stbc\_bcpot11\_epsr}, respectively (default value for both: $10^{-4}$).
 
 {\em Imposing a sheath potential boundary condition:} {\tt BCPOT = 3}
 
