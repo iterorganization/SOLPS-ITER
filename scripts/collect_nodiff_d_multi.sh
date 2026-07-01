@@ -48,6 +48,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/set_tgt_perturbation.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_tgt_gradient.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/calc_res_fp_multi.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/invert_matrix_dv.F .
+cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx ../
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

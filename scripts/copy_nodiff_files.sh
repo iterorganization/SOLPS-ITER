@@ -24,7 +24,6 @@ cp $SOLPSTOP/modules/B2.5/src/b2plot/rlshdw.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/ank_interface.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/species.F .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
-cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
 cp $SOLPSTOP/modules/B2.5/src/convert/find_faces.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxcm.F .
 cp $SOLPSTOP/modules/B2.5/src/equations/b2nxst.F .

@@ -58,6 +58,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2xpnn_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2trnu_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/species_dv.F90 .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/tangent/b2ruzd_dv.F90 .
+cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx ../
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`
