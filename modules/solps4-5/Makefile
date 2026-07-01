@@ -618,7 +618,7 @@ ${OBJDIR}/eircolsp.o: ${SRCDIR}/Eirene_modules/eircolsp.F ${MAKES}
 ${OBJDIR}/eirdiag.o: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD} ${SRCDIR}/Eirene_modules/eirdiag.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
-${OBJDIR}/eirgrid.o: ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
+${OBJDIR}/eirgrid.o: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
 
 ${OBJDIR}/eirgrid_lib.o: ${OBJDIR}/eirmap.${MOD} ${SRCDIR}/Eirene_modules/eirgrid_lib.F ${MAKES}
@@ -955,7 +955,7 @@ ${OBJDIR}/eirdiag.${MOD}: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDI
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
-${OBJDIR}/eirgrid.${MOD}: ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
+${OBJDIR}/eirgrid.${MOD}: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
 
