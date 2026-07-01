@@ -205,18 +205,20 @@ sed -i -e 's/USE B2MOD_PLASMA_DIFF/USE B2MOD_PLASMA/g' heatdiff2D_b.F90 init_wal
 sed -i -e '/my_out_folder/a\#ifdef DBG\n  CHARACTER(len=16), SAVE :: my_out_sf(0:1)\n#endif' b2mod_ad_diff.F90
 
 # initialization missing for adjoint part, leading to floating point error with gfortran
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shedu = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidu = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidun = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shedd = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shidd = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivc = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shiva = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivcn = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shivan = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shefr = 0.0_R8' b2sihs__b.F90
-sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shifr = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shedu = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shidu = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shidun = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shedd = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shidd = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shivc = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shiva = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shivcn = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shivan = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shefr = 0.0_R8' b2sihs__b.F90
+sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, 1)/i\  shifr = 0.0_R8' b2sihs__b.F90
 sed -i -e '0,/!   ..velocity-dependent heat flux in the cell center/s/!   ..velocity-dependent heat flux in the cell center/!   ..velocity-dependent heat flux in the cell center\n  cfloi_vh = 0.0_R8/g' b2tfvh_b.F90
+sed -i -e '/CALL INTVERTEX_FWD(ncv, nvx, mpg, geo%vxvol, nete, netev)/i\    nete = ne*te\n    nete2 = ne*te*te' b2tepsch_b.F90
+sed -i -e '/CALL GRADC_P_FWD(ncv, nfc, nvx, 0, geo, geob, mpg, mpgb, nete/i\        nete = ne*te' b2nxfx_b.F90
 
 sed -i '/EXTERNAL OUTPUT_DS/d' b2mod_input_profile_diff.F90
 sed -i '/TRIM_B/d' b2mod_main_diff.F90
