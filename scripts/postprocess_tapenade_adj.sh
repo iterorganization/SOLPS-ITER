@@ -91,6 +91,21 @@ sed -i -e "/rtlcxb = rtlcxb0/i\    switchb = switchb0" b2mod_driver_diff.F90
 
 sed -i -e "/REAL(kind=r8) :: jb(nncf)/i\    integer :: ii" b2mod_main_diff.F90
 
-sed -i '/ADCONTEXTADJ/d' b2mod_main_diff.F90
-sed -i '/r8\*/d' b2mod_main_diff.F90
-sed -i '/r8\/8/d' b2mod_main_diff.F90
+# define block 1
+setenv l1 `grep -n ADCONTEXTADJ_INIT b2mod_main_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+setenv l2 `grep -n ADCONTEXTADJ_INITREAL8ARRAY b2mod_main_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+# define block 2
+setenv l3 `grep -n 'ADCONTEXTADJ_STARTCONCLUDE()' b2mod_main_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+setenv l4 `grep -n 'ADCONTEXTADJ_CONCLUDE()' b2mod_main_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+if ( "$l1" == "" || "$l2" == "" ) then
+    echo "ERROR: could not find markers for block1 in b2mod_main_diff, it needs to be manually modified"
+endif
+if ( "$l3" == "" || "$l4" == "" ) then
+    echo "ERROR: could not find markers for block2 in b2mod_main_diff, it needs to be manually modified"
+endif
+sed -i -e "${l3},${l4} d" b2mod_main_diff.F90
+sed -i -e "${l1},${l2} d" b2mod_main_diff.F90
+
+# include some extra stuff that allows saving of entire adjoint fileds in output
+sed -i -e '/REAL(kind=r8) :: jb(nncf)/a\    integer :: is\n    integer, save :: ncall = 0\n    character *64 filename, ss, s1\n    character(len=7), save :: my_out_folder' b2mod_main_diff.F90
+sed -i "/CALL B2MNDR_1_B(nout, ns, j, jb)/r $SOLPSTOP/modules/B2.5/src/differentiation/writing_adjoint_quantities.txt" b2mod_main_diff.F90

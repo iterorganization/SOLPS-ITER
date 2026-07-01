@@ -51,19 +51,22 @@ sed -i -e 's/incre1ment/increment/g' b2mod_driver_diffv.F90
 
 sed -i -e "0,/primal_iterations = itim/s/primal_iterations = itim/primal_iterations = itim\n      gradient_iterations = itim/" b2mod_driver_diffv.F90
 
-sed -i "/ADCONTEXTTGT/d" b2mod_main_diffv.F90 b2stbr_dv.F90 b2mod_user_namelist_diffv.F90
-sed -i "/r8\*nbcd\*2/d" b2mod_main_diffv.F90
-sed -i "/\*8\*nsdecl\/8/d" b2mod_main_diffv.F90
-sed -i "/r8\/8/d" b2mod_main_diffv.F90
-sed -i "/r8\*nsdmax/d" b2mod_main_diffv.F90
-sed -i "/nsigmx/d" b2mod_main_diffv.F90
-sed -i "/\*nkind_coeff/d" b2mod_main_diffv.F90
-sed -i '/b2sikt_fac_sheath/d' b2mod_main_diffv.F90
-sed -i '/b2sikt_fac_diss/d' b2mod_main_diffv.F90
-sed -i '/b2sikt_fac_vis_rs/d' b2mod_main_diffv.F90
-sed -i '/b2tfhi_fkt_hie/d' b2mod_main_diffv.F90
-sed -i '/b2tqna_ballooning/d' b2mod_main_diffv.F90
-sed -i '/\&                            8)/d' b2mod_main_diffv.F90
+# define block 1
+setenv l1 `grep -n ADCONTEXTTGT_INIT b2mod_main_diffv.F90 | head -n 1 | awk -F ':' '{print $1}'`
+setenv l2 `grep -n B2MNDR_1_DV b2mod_main_diffv.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+# define block 2
+setenv l3 `grep -n 'ADCONTEXTTGT_STARTCONCLUDE()' b2mod_main_diffv.F90 | head -n 1 | awk -F ':' '{print $1}'`
+setenv l4 `grep -n 'ADCONTEXTTGT_CONCLUDE()' b2mod_main_diffv.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+@ l2m1 = $l2 - 1
+if ( "$l1" == "" || "$l2" == "" ) then
+    echo "ERROR: could not find markers for block1 in b2mod_main_diffv, it needs to be manually modified"
+endif
+if ( "$l3" == "" || "$l4" == "" ) then
+    echo "ERROR: could not find markers for block2 in b2mod_main_diffv, it needs to be manually modified"
+endif
+sed -i -e "${l3},${l4} d" b2mod_main_diffv.F90
+sed -i -e "${l1},${l2m1} d" b2mod_main_diffv.F90
+
 
 sed -i -e '/enkpard(nd, :, :) = 0.D0/d' b2mod_driver_diffv.F90
 sed -i -e '/parm_dnad(nd, 1) = 0.D0/d' b2tqna_dv.F90

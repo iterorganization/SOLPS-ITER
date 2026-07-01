@@ -22,6 +22,7 @@ cp $SOLPSTOP/modules/B2.5/src/b2plot/wallon.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/b2pwsort.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/rlshdw.F .
 cp $SOLPSTOP/modules/B2.5/src/b2plot/ank_interface.F .
+cp $SOLPSTOP/modules/B2.5/src/b2plot/species.F .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/fortranAdaptor.F90 .
 cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx .
 cp $SOLPSTOP/modules/B2.5/src/convert/find_faces.F .
@@ -38,6 +39,7 @@ cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_connectivity.F90 .
 cp $SOLPSTOP/modules/B2.5/src/ids/b2mod_interp.F90 .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rflb.F .
 cp $SOLPSTOP/modules/B2.5/src/input/b2rusr.F .
+cp $SOLPSTOP/modules/B2.5/src/input/b2ruzd.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_openmp.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rates.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_geo_corner.F .
@@ -78,6 +80,12 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_ppout.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_sources.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_graphics.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_rdload.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmpa.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmpb.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_elements.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_pardiso.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_plasma.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2us_work.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
 cp $SOLPSTOP/modules/B2.5/src/output/tallies.F .
@@ -92,6 +100,7 @@ cp $SOLPSTOP/modules/B2.5/src/transport/b2trca.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2trcv.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2trhw.F .
 cp $SOLPSTOP/modules/B2.5/src/transport/b2trtf.F .
+cp $SOLPSTOP/modules/B2.5/src/transport/b2trnu.F .
 cp $SOLPSTOP/modules/B2.5/src/user/batch_average.F .
 cp $SOLPSTOP/modules/B2.5/src/user/b2mod_file.F .
 cp $SOLPSTOP/modules/B2.5/src/user/b2mod_trace.F .
@@ -163,3 +172,5 @@ cp $SOLPSTOP/modules/B2.5/src/utility/interp2d.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/invert_matrix.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/mass_density.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/ma28copy.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/find_loc.F .
+cp $SOLPSTOP/modules/B2.5/src/utility/my_out.F .

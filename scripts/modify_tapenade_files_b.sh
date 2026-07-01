@@ -1,7 +1,7 @@
 
 # all files are .f90 files, move them to .F90 extension
 move_to_F90.sh
-rm b2uxus_b.F90 solve_covariance_b.F90 calc_res_fp_b.F90 cfwure_b.F90 cfwuin_b.F90 invert_matrix_b.F90
+rm b2uxus_b.F90 solve_covariance_b.F90 calc_res_fp_b.F90 cfwure_b.F90 cfwuin_b.F90 invert_matrix_b.F90 b2mod_blns_b.F90
 collect_nodiff_b.sh
 rm damax_b.F90 smin_b.F90 smax_b.F90 get_jsep_b.F90 my_outi_us_b.F90
 
@@ -18,11 +18,15 @@ sed -i -e 's/DIMENSION(SIZE(x2, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x3, 1), SIZE(x3, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x4, 1))/DIMENSION(mpg%nCv)/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(SIZE(x5, 1), SIZE(x5, 2))/DIMENSION(mpg%nCv, 0:state%pl%ns-1)/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(:, :) :: dabs0/DIMENSION(SIZE(rza0, 1), SIZE(rza0, 2)) :: dabs0/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(:, :) :: dabs1/DIMENSION(SIZE(rz20, 1), SIZE(rz20, 2)) :: dabs1/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(:, :) :: dabs2/DIMENSION(SIZE(rpt0, 1), SIZE(rpt0, 2)) :: dabs2/g' b2mod_driver_diff.F90
-sed -i -e 's/DIMENSION(:, :) :: dabs3/DIMENSION(SIZE(rpi0, 1), SIZE(rpi0, 2)) :: dabs3/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs0/DIMENSION(mpg%nCv, 0:ns-1) :: dabs0/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs1/DIMENSION(mpg%nCv, 0:ns-1) :: dabs1/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs2/DIMENSION(mpg%nCv, 0:ns-1) :: dabs2/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(:, :) :: dabs3/DIMENSION(mpg%nCv, 0:ns-1) :: dabs3/g' b2mod_driver_diff.F90
 sed -i -e 's/DIMENSION(:) :: dabs4/DIMENSION(mpg%nCv) :: dabs4/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(rza0, 1), SIZE(rza0, 2)) :: mask/DIMENSION(mpg%nCv, 0:ns-1) :: mask/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(rz20, 1), SIZE(rz20, 2)) :: mask0/DIMENSION(mpg%nCv, 0:ns-1) :: mask0/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(rpt0, 1), SIZE(rpt0, 2)) :: mask1/DIMENSION(mpg%nCv, 0:ns-1) :: mask1/g' b2mod_driver_diff.F90
+sed -i -e 's/DIMENSION(SIZE(rpi0, 1), SIZE(rpi0, 2)) :: mask2/DIMENSION(mpg%nCv, 0:ns-1) :: mask2/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFne/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE1OFabs/mpg%nCv/g' b2mod_driver_diff.F90
 sed -i -e 's/ISIZE2OFabs/0:state%pl%ns-1/g' b2mod_driver_diff.F90
@@ -72,6 +76,7 @@ sed -i -e 's/ISIZE1OFcvbb/nCv/g' b2trno_b.F90 b2tqna_b.F90 b2trcl_b.F90 b2sikt_b
 sed -i -e 's/ISIZE1OFco%fllim0fhi/nfc/g' b2trno_b.F90
 sed -i -e 's/ISIZE3OFco%fllim0fhi/0:ns-1/g' b2trno_b.F90
 sed -i -e 's/\&              pl%tn, chcib, co%chcb)/\&              pl%tn, chcib, co%chcb, co%fllim0fhi)/g' b2trno_b.F90
+sed -i -e 's/DIMENSION(SIZE(nal, 1))/DIMENSION(nCv)/g' b2tvspa_b.F90 b2tvsq_b.F90
 sed -i -e 's/CHARACTER(len=\*) :: arg1/CHARACTER(len=20) :: arg1/g' b2usco_b.F90 b2usmo_b.F90
 sed -i '/PUSHCHARACTERARRAY(name/d' b2usco_b.F90 
 sed -i '/POPCHARACTERARRAY(name/d' b2usco_b.F90 
@@ -191,8 +196,13 @@ sed -i -e 's/#DIM_B#/DIM_B/g' dim_b.F90
 sed -i -e 's/REAL(kind=r8) FUNCTION DIM_FWD(x, y) RESULT (dim)/FUNCTION DIM_FWD(x, y) RESULT (dim)/g' dim_b.F90
 sed -i -e 's/SIZE(sy, 1)+1/n/g' myblas_b.F90
 sed -i -e 's/SIZE(sx, 1)+1/n/g' sfill_b.F90
-sed -i -e 's/SFILL_FWD(n, sa, sab, sx, sxb, incx)/SFILL_FWD(n, sa, sx, sxb, incx)/g' sfill_b.F90
+sed -i -e 's/SFILL_FWD(n, sa, sab, sx, incx)/SFILL_FWD(n, sa, sx, incx)/g' sfill_b.F90
 sed -i -e '0,/REAL(kind=r8) :: sab/{/REAL(kind=r8) :: sab/d}' sfill_b.F90
+sed -i '/EXTERNAL MINVAL_B/d' *.F90
+sed -i '/EXTERNAL MAXVAL_B/d' *.F90
+sed -i -e 's/USE B2MOD_PLASMA_DIFF/USE B2MOD_PLASMA/g' heatdiff2D_b.F90 init_wall_b.F90
+
+sed -i -e '/my_out_folder/a\#ifdef DBG\n  CHARACTER(len=16), SAVE :: my_out_sf(0:1)\n#endif' b2mod_ad_diff.F90
 
 # initialization missing for adjoint part, leading to floating point error with gfortran
 sed -i -e '/CALL B2SAXPY_FWD(arg1, 1.0_R8, shedu, 1, she0, she0b, 1)/i\  shedu = 0.0_R8' b2sihs__b.F90
@@ -222,7 +232,7 @@ sed -i '/EXTERNAL B2TRACE/d' b2mod_driver_diff.F90
 sed -i '/EXTERNAL B2MWTI/d' b2mod_driver_diff.F90
 sed -i '/EXTERNAL B2FILE./d' b2mndt_b.F90
 sed -i '/EXTERNAL GEOMETRYID/d' b2sihs__b.F90 b2us_feedback_diff.F90
-sed -i '/EXTERNAL REPEAT/d' b2trzh_b.F90 b2mod_geometry_diff.F90 b2mod_elements_diff.F90
+sed -i '/EXTERNAL REPEAT/d' b2trzh_b.F90 b2mod_geometry_diff.F90 b2mod_running_average_diff.F90
 sed -i '/INTEGER :: GEOMETRYID/d' b2sihs__b.F90 b2us_feedback_diff.F90
 sed -i '/INTEGER :: geometry_sn/d' b2sihs__b.F90
 sed -i '/INTEGER :: geometry_linear/d' b2sihs__b.F90
@@ -245,7 +255,6 @@ sed -i '/EXTERNAL ALLOC_B2MOD_B2_TO_ASTRA/d' b2mod_main_diff.F90
 sed -i '/EXTERNAL DEALLOC_B2MOD_MWTI/d' b2mod_driver_diff.F90
 sed -i 's/sfill/sfill_nodiff/g' b2xpne_st.F
 sed -i 's/call intcell/call intcell_nodiff/g' b2mod_mwti.F90
-sed -i 's/call species/call species_nodiff/g' tallies.F
 
 sed -i -e 's/DAMAX_NODIFF/damax/g' b2mndt_b.F90 b2mxac_b.F90 b2stcx_b.F90 b2stel_b.F90
 sed -i -e 's/SMIN_NODIFF/smin/g' ./*.F90
@@ -277,7 +286,7 @@ sed -i -e 's/REAL(kind=r8) :: result10/integer :: result10/g' b2srdt_b.F90 b2usc
 sed -i -e 's/REAL(kind=r8) :: result1/integer :: result1/g' b2us_map_diff.F90 b2usmo_b.F90 b2uspo_b.F90
 sed -i -e 's/mb%cvalongboundary = 0.D0/mb%cvalongboundary = .false./g' b2us_map_diff.F90
 
-sed -i '/INTRINSIC ABS/d' b2mod_feedback_diff.F90
+sed -i '/INTRINSIC ABS/d' b2mod_feedback_diff.F90 b2srdt_b.F90
 
 sed -i -e "s/(:)//g" b2mod_driver_diff.F90 #extend to all?
 
@@ -288,15 +297,13 @@ sed -i -e "/CALL B2UXUS_B/i\  aab = 0.0_R8" b2usco_b.F90 b2usmo_b.F90 b2usht_b.F
 sed -i -e 's/B2UXUS_NODIFF/B2UXUS/g' b2usco_b.F90 b2usmo_b.F90 b2usht_b.F90 b2uspo_b.F90
 
 # missing argument lnlam in calls to b2siav_zh_nodiff in b2npmo
-sed -i -e 's/\&                     dv%ne2, rt%rz2, co%hci_a, co_ns%hci_al_ast, co%\&/\&                     dv%ne2, rt%rz2, dv%lnlam, co%hci_a, co_ns%hci_al_ast, co%\&/g' b2npmo_b.F90
+sed -i -e 's/\&                     rt%rz2, dv%lnlam, co%hci_a, co_ns%hci_al_ast, co%\&/\&                     dv%ne2, rt%rz2, dv%lnlam, co%hci_a, co_ns%hci_al_ast, co%\&/g' b2npmo_b.F90
 
 # missing argument in calls to b2saxpy in b2stbc
 sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%sna0ep, incx=1, sy=srw%sna0(1, 0, is)/CALL B2SAXPY_FWD(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is)/g" b2stbc_b.F90
-sed -i -e "s/syb=srwb%sna0(1, 0, is), incy=1)/srwb%sna0(1, 0, is), 1)/g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%she0ep, incx=1, sy=srw%she0(1, 0), syb=/CALL B2SAXPY_FWD(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), /g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%shi0ep, incx=1, sy=srw%shi0(1, 0), syb=/CALL B2SAXPY_FWD(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), /g" b2stbc_b.F90
-sed -i -e "s/srwb%she0(1, 0), incy=1)/srwb%she0(1, 0), 1)/g" b2stbc_b.F90
-sed -i -e "s/srwb%shi0(1, 0), incy=1)/srwb%shi0(1, 0), 1)/g" b2stbc_b.F90
+sed -i -e "s/\&              incy=1)/\&              1)/g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%she0ep, incx=1, sy=srw%she0(1, 0), incy=1/CALL B2SAXPY_FWD(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), 1/g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%shi0ep, incx=1, sy=srw%shi0(1, 0), incy=1/CALL B2SAXPY_FWD(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), 1/g" b2stbc_b.F90
 
 # missing argument in calls to calcflow in b2tfnb
 sed -i -e "s/\&             fna_32(:, :, isb))/\&             fna_32(:, :, isb), dv%fna_52(:, :, isb))/g" b2tfnb_b.F90
@@ -309,6 +316,13 @@ sed -i -e '/\&     READ_NEUTRALS_NAMELIST_US_B0/d' b2mod_neutrals_namelist_diff.
 l1=`grep -n READ_NEUTRALS_NAMELIST_US_B0 b2mod_neutrals_namelist_diff.F90 | head -n 1| awk -F ':' '/1/ {print $1}'`
 l2=`grep -n READ_NEUTRALS_NAMELIST_US_B0 b2mod_neutrals_namelist_diff.F90 | tail -n 1| awk -F ':' '/1/ {print $1}'`
 sed -i -e "$l1,$l2 d" b2mod_neutrals_namelist_diff.F90
+
+# adjusting get_mult_dt
+sed -i -e 's/LOG(10)/LOG(10.0)/g' get_mult_dt_b.F90
+sed -i -e "/IF (style .NE. 0) THEN/a\    call xerrab('get_mult_dt_b to be checked and manually adjusted for adjoint AD!')" get_mult_dt_b.F90
+sed -i -e 's/CALL MAXVAL_B/\!CALL MAXVAL_B/g' get_mult_dt_b.F90
+sed -i -e 's/CALL MINVAL_B/\!CALL MINVAL_B/g' get_mult_dt_b.F90
+sed -i -e 's/\&                 dt_var4_minb(icv))/\!\&                 dt_var4_minb(icv))/g' get_mult_dt_b.F90
 
 sed -i -e "/TYPE(B2PLASMASNAPSHOT_DIFF) :: psnc/i\      TYPE(B2PLASMASNAPSHOT_DIFF) :: psnl" b2us_plasma_diff.F90
 sed -i -e 's/CHARACTER(len=13), DIMENSION(:), DIMENSION(:), ALLOCATABLE :: text/CHARACTER(len=13), DIMENSION(:), ALLOCATABLE :: text(:)/g' b2us_plasma_diff.F90
@@ -395,7 +409,6 @@ sed -i "/stateb2/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb3/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb4/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 sed -i "/stateb5/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
-sed -i "/cumul = cumul/d" b2mod_driver_diff.F90 ## CAREFUL! might be needed in future
 
 ## some changes for modification to the fixed point loop
 sed -i -e '/DO WHILE (ADFIXEDPOINT_TOOLARGE/a\      stateb1 = stateb' b2mod_driver_diff.F90
@@ -436,6 +449,37 @@ sed -i -e "s/rtlcxb = diffparam_save12/rtlcxb = rtlcxb0/g" b2mod_driver_diff.F90
 sed -i -e "s/rtlqab = diffparam_save11/rtlqab = rtlqab0/g" b2mod_driver_diff.F90
 sed -i -e "s/rtlrab = diffparam_save10/rtlrab = rtlrab0/g" b2mod_driver_diff.F90
 sed -i -e "s/rtlsab = diffparam_save9/rtlsab = rtlsab0/g" b2mod_driver_diff.F90
+# attempt to automatically remove some parts in b2mod_driver
+## CAREFUL! below might be needed in future
+# define block 1
+l1=`grep -n 'stateb0%pl%na = stateb%pl%na' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+l2=`grep -n 'diffparam_save13%b2npht_rxg = switchb%b2optim_reset_drift' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+# define block 2
+l3=`grep -n 'stateb1%pl%na = stateb%pl%na' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+l4=`grep -n 'stateb1%update%zt = stateb%update%zt' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+# define block 3
+l5=`grep -n 'cumul = cumul + (stateb%pl%na-stateb1%pl%na)\*\*2' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+l6=`grep -n 'cumul = cumul + (stateb%update%zt-stateb1%update%zt)\*\*2' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+# define block 4
+l7=`grep -n 'stateb%pl%na = diffparam_save15%ns' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
+l8=`grep -n 'switchb%b2optim_reset_drift = diffparam_save13%b2npht_rxg' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+if [ -z "$l1" ] || [ -z "$l2" ]; then
+    echo "ERROR: could not find markers for block1 in b2mod_driver_diff, it needs to be manually modified"
+fi
+if [ -z "$l3" ] || [ -z "$l4" ]; then
+    echo "ERROR: could not find markers for block2 in b2mod_driver_diff, it needs to be manually modified"
+fi
+if [ -z "$l5" ] || [ -z "$l6" ]; then
+    echo "ERROR: could not find markers for block3 in b2mod_driver_diff, it needs to be manually modified"
+fi
+if [ -z "$l7" ] || [ -z "$l8" ]; then
+    echo "ERROR: could not find markers for block4 in b2mod_driver_diff, it needs to be manually modified"
+
+fi
+sed -i -e "${l7},${l8} d" b2mod_driver_diff.F90
+sed -i -e "${l5},${l6} d" b2mod_driver_diff.F90
+sed -i -e "${l3},${l4} d" b2mod_driver_diff.F90
+sed -i -e "${l1},${l2} d" b2mod_driver_diff.F90
 sed -i -e '/diffparam_save9/d' b2mod_driver_diff.F90
 sed -i -e '/diffparam_save10/d' b2mod_driver_diff.F90
 sed -i -e '/diffparam_save11/d' b2mod_driver_diff.F90
