@@ -349,6 +349,10 @@ endif
 if (! -x `which cmake`) then
   setenv NO_CMAKE true
   echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+else
+  if (! $?CMAKE_MAJOR_VERSION) then
+    setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  endif
 endif
 
 # Add any local settings if present

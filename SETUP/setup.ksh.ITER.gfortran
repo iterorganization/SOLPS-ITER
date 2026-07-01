@@ -36,24 +36,59 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   export QTDIR=${EBROOTQT5}
   export SYSNAME="amd64_sles15"
 } || {
-  module load IMAS-Fortran/5.5.0-foss-2023b-DD-4.1.0
-  module load IDStools/2.4.0-foss-2023b
-  module load GGD/1.14.0-foss-2023b-DD-4.1.0
-  module load AMNS/1.6.0-foss-2023b-DD-4.1.0
-  module load SimDB/0.14.1-foss-2023b
-  module load makedepend/1.0.9-GCCcore-13.2.0
-  module load MSCL/1.2.5-GCCcore-13.2.0
-  module load Doxygen/1.9.8-GCCcore-13.2.0
-# module load ParaView/5.12.0-foss-2023b
-  module load texlive/20230313-GCC-13.2.0
-  module load Ghostscript/10.02.1-GCCcore-13.2.0
-  module load netCDF/4.9.2-gompi-2023b
-  module load netCDF-Fortran/4.6.1-gompi-2023b
-  module load netcdf4-python/1.7.1.post2-foss-2023b
-# module load NAG/26-GCC-13.2.0
-  module load CMake/3.27.6-GCCcore-13.2.0
-  module load IMAS-ParaView/2.3.0-foss-2023b
-  module load json-fortran/8.5.2-GCC-13.2.0
+  # RHEL9: select the EasyBuild toolchain generation. Default is 2023b
+  # (existing production toolchain). Set SOLPS_TOOLCHAIN_VERSION=2025b
+  # before sourcing setup.ksh to opt-in to the foss/intel 2025b stack.
+  : ${SOLPS_TOOLCHAIN_VERSION:=2023b}
+  echo "Loading modules for "$SOLPS_TOOLCHAIN_VERSION" toolchain"
+  echo "Use the SOLPS_TOOLCHAIN_VERSION environment variable to change this choice"
+  echo "and restart the session"
+  case "$SOLPS_TOOLCHAIN_VERSION" in
+  2025b)
+    module use /work/imas/etc/modules-2025b/all
+    module load IMAS-Fortran/5.6.0-foss-2025b-DD-4.1.1
+    module load IDStools/2.4.0-foss-2025b
+    module load GGD/1.14.0-foss-2025b-DD-4.1.1
+    module load AMNS/1.6.0-foss-2025b-DD-4.1.1
+    module load SimDB/0.15.1-foss-2025b
+    module load makedepend/1.0.9-GCCcore-14.3.0
+    module load MSCL/1.2.5-GCCcore-14.3.0
+    module load Doxygen/1.14.0-GCCcore-14.3.0
+    module load texlive/20250308-GCC-14.3.0
+    module load Ghostscript/10.05.1-GCCcore-14.3.0
+    module load netCDF/4.9.3-gompi-2025b
+    module load netCDF-Fortran/4.6.2-gompi-2025b
+    module load netcdf4-python/1.7.2-foss-2025b
+    module load NCL/6.6.2-foss-2025b
+    module load motif/2.3.8-GCCcore-14.3.0
+    module load libtirpc/1.3.6-GCCcore-14.3.0
+#   NAG is not (yet) available in 2025b; config.ITER.gfortran falls back to
+#   OpenBLAS automatically when NAGDIR is unset.
+    module load CMake/4.0.3-GCCcore-14.3.0
+    module load json-fortran/9.0.5-GCC-14.3.0
+    module load IMAS-ParaView/2.3.0-foss-2025b
+    ;;
+  2023b|*)
+    module load IMAS-Fortran/5.5.0-foss-2023b-DD-4.1.0
+    module load IDStools/2.4.0-gfbf-2023b
+    module load GGD/1.14.0-foss-2023b-DD-4.1.0
+    module load AMNS/1.6.0-foss-2023b-DD-4.1.0
+    module load SimDB/0.14.1-foss-2023b
+    module load makedepend/1.0.9-GCCcore-13.2.0
+    module load MSCL/1.2.5-GCCcore-13.2.0
+    module load Doxygen/1.9.8-GCCcore-13.2.0
+#   module load ParaView/5.12.0-foss-2023b
+    module load texlive/20230313-GCC-13.2.0
+    module load Ghostscript/10.02.1-GCCcore-13.2.0
+    module load netCDF/4.9.2-gompi-2023b
+    module load netCDF-Fortran/4.6.1-gompi-2023b
+    module load netcdf4-python/1.7.1-post2-foss-2023b
+#   module load NAG/26-GCC-13.2.0
+    module load CMake/3.27.6-GCCcore-13.2.0
+    module load IMAS-ParaView/2.3.0-foss-2023b
+    module load json-fortran/8.5.2-GCC-13.2.0
+    ;;
+  esac
   export QTDIR=${EBROOTQT6}
   export SYSNAME="x86_64_rhel9"
 }

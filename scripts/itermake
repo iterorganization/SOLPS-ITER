@@ -6,7 +6,7 @@ set EMAIL=`get_git_email`
 set JOB_NAME="gmake"
 set nproc=1
 set hours=2
-set mem=4GB
+set mem=8GB
 if ($os == "CentOS") then
   set part="altair"
 else
