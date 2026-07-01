@@ -55,7 +55,7 @@ else
     module load AMNS/1.6.0-intel-2025b-DD-4.1.1
     module load CMake/4.0.3-GCCcore-14.3.0
     module load makedepend/1.0.9-GCCcore-14.3.0
-    module load MSCL/1.2.5-GCCcore-14.3.0
+    module load MSCL/1.2.5-iimkl-2025b
     module load GR/0.0.94-GCCcore-14.3.0
     module load GLI/4.5.31-GCCcore-14.3.0
     module load NCL/6.6.2-intel-2025b

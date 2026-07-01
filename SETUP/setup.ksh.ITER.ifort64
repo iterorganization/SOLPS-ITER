@@ -46,7 +46,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
     module load AMNS/1.6.0-intel-2025b-DD-4.1.1
     module load SimDB/0.15.1-intel-2025b
     module load makedepend/1.0.9-GCCcore-14.3.0
-    module load MSCL/1.2.5-GCCcore-14.3.0
+    module load MSCL/1.2.5-iimkl-2025b
     module load Doxygen/1.14.0-GCCcore-14.3.0
     module load texlive/20250308-intel-compilers-2025.2.0
     module load Ghostscript/10.05.1-GCCcore-14.3.0
