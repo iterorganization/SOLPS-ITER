@@ -13,14 +13,8 @@
 #SBATCH -o testjob-%j.out
 #SBATCH -e testjob-%j.err
 
-### This script submits the job, which launches SOLPS-ITER, on the SCNET.CN computing system in China,
-### and resubmits the job again after successful finish of SOLPS-ITER in a loop manner.
+### This script submits the job, which launches SOLPS-ITER, on the SCNET.CN computing system in China
 ###
-### Successful finish means that either the prescribed (by 'b2mndr_ntim') number of steps is reached
-### or the prescribed (by 'b2mndr_cpu' or 'b2mndr_elapsed') time of run is elapsed.
-###
-### If the .quit (or _quit) is seen, or end time (specified by 'b2mndr_etim') is reached, then
-### the loop breaks, i.e. the job is not resubmitted again.
 ###
 ### Usage:
 ###   Submit the job:     `scnetsubmit SBATCH.scnet`

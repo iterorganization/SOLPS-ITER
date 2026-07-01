@@ -59,7 +59,7 @@ Available options are:
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
   -M <<MEM_SIZE>>          memory size per CPU in MB (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
-  -Q <<PARTITION>>         partition on which to submit the job (default "sirius")
+  -Q <<PARTITION>>         partition on which to submit the job (default "tyhcnormal")
   -p <<STEP>>              activates making the output in Lisa Kaveeva style "on the fly" from plasmastates with a provided step (default $STEP)  - to be added
 
 EOF
