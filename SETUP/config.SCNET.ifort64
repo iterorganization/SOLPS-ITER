@@ -31,7 +31,7 @@ NO_MANUAL = 1
       NAGDIR ?= ${SOLPSTOP}/../${COMPILER}/nag
  MDSPLUS_DIR ?= ${SOLPSTOP}/../${COMPILER}/MDSPLUS
   CAIRO_ROOT ?= ${SOLPSTOP}/../${COMPILER}/cairo
-FREE_TYPE_ROOT ?= ${SOLPSTOP}/../${COMPILER}/free_type
+FREETYPE_ROOT ?= ${SOLPSTOP}/../${COMPILER}/free_type
 
        MPDIR ?=
 
