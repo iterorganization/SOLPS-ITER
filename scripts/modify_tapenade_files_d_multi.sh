@@ -459,35 +459,35 @@ sed -i -e "/END TYPE MAPPING_DIFFV/i\&     ncmxnv(nbdirsmax), ncf(nbdirsmax), mx
 
 sed -i -e '/par_opt_physd(nd, 1:npar_opt) = 0.D0/a\        par_opt_physd(nd, nd) = 1.0_R8' b2mod_driver_diffv.F90
 
-sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_tao.F90 set_parameters.F
-sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_tao.F90
-sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_tao.F90
-sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_tao.F90
-sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2mod_facdrift_exb_diff/b2mod_facdrift_exb_diffv/g" b2optim_tao.F90
-sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_tao.F90 set_parameters.F
-sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_tao.F90 set_parameters.F
-sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_tao.F90 set_parameters.F
+sed -i -e "s/b2mod_main_diff/b2mod_main_diffv/g" b2optim_*.F90
+sed -i -e "s/b2mod_ad_diff/b2mod_ad_diffv/g" b2optim_*.F90
+sed -i -e "s/b2mod_par_opt_diff/b2mod_par_opt_diffv/g" b2optim_*.F90 set_parameters.F
+sed -i -e "s/b2mn_init_diff/b2mn_init_dv/g" b2optim_*.F90
+sed -i -e "s/b2mn_fin_diff/b2mn_fin_dv/g" b2optim_*.F90
+sed -i -e "s/b2mn_step_diff/b2mn_step_dv/g" b2optim_*.F90
+sed -i -e "s/b2us_data_diff/b2us_data_diffv/g" b2optim_*.F90
+sed -i -e "s/b2us_io_diff/b2us_io_diffv/g" b2optim_*.F90
+sed -i -e "s/b2mod_b2cmpa_diff/b2mod_b2cmpa_diffv/g" b2optim_*.F90
+sed -i -e "s/b2mod_facdrift_exb_diff/b2mod_facdrift_exb_diffv/g" b2optim_*.F90
+sed -i -e "s/b2mod_transport_namelist_diff/b2mod_transport_namelist_diffv/g" b2optim_*.F90 set_parameters.F
+sed -i -e "s/b2mod_input_profile_diff/b2mod_input_profile_diffv/g" b2optim_*.F90 set_parameters.F
+sed -i -e "s/b2mod_boundary_namelist_diff/b2mod_boundary_namelist_diffv/g" b2optim_*.F90 set_parameters.F
 sed -i -e "s/b2mod_switches_diff/b2mod_switches_diffv/g" set_parameters.F
 sed -i -e "s/b2mod_neutrals_namelist_diff/b2mod_neutrals_namelist_diffv/g" set_parameters.F
-sed -i -e "s/geodiff/geod/g" b2optim_tao.F90
-sed -i -e "s/mpgdiff/mpgd/g" b2optim_tao.F90
-sed -i -e "s/statediff/stated/g" b2optim_tao.F90
-sed -i -e "s/state_extdiff/state_extd/g" b2optim_tao.F90
-sed -i -e "s/state_avgdiff/state_avgd/g" b2optim_tao.F90
-sed -i -e "s/switchdiff/switchd/g" b2optim_tao.F90
-sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_tao.F90
-sed -i -e "s/b2mn_init_dv()/b2mn_init_dv(npar_opt)/g" b2optim_tao.F90
-sed -i -e "s/b2mn_fin_dv()/b2mn_fin_dv(npar_opt)/g" b2optim_tao.F90
-sed -i -e "s/b2mn_step_dv(j, jdiff)/b2mn_step_dv(j, jdiff, npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g" b2optim_tao.F90
-sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_tao.F90
+sed -i -e "s/geodiff/geod/g" b2optim_*.F90
+sed -i -e "s/mpgdiff/mpgd/g" b2optim_*.F90
+sed -i -e "s/statediff/stated/g" b2optim_*.F90
+sed -i -e "s/state_extdiff/state_extd/g" b2optim_*.F90
+sed -i -e "s/state_avgdiff/state_avgd/g" b2optim_*.F90
+sed -i -e "s/switchdiff/switchd/g" b2optim_*.F90
+sed -i -e "s/par_opt_physdiff/par_opt_physd/g" b2optim_*.F90
+sed -i -e "s/b2mn_init_dv()/b2mn_init_dv(npar_opt)/g" b2optim_*.F90
+sed -i -e "s/b2mn_fin_dv()/b2mn_fin_dv(npar_opt)/g" b2optim_*.F90
+sed -i -e "s/b2mn_step_dv(j, jdiff)/b2mn_step_dv(j, jdiff, npar_opt-nsigma_opt-nmean_opt-nshift_opt-ncorr_opt)/g" b2optim_*.F90
+sed -i -e 's/jdiff(nncf)/jdiff(nbdirsmax,nncf)/g' b2optim_*.F90
 sed -i -e "/subroutine FormFunctionGradient(/a\      use b2mod_diffsizes" b2optim_tao.F90
-sed -i -e "s/g_v(ipar) = jdiff(1)/g_v(ipar) = jdiff(ipar,1)/g" b2optim_tao.F90
-
+sed -i -e "/subroutine FormFunctionGradient(/a\    use b2mod_diffsizes" b2optim_bfgs.F90
+sed -i -e "s/jdiff(1)\*par_rescale(ipar)/jdiff(ipar,1)\*par_rescale(ipar)/g" b2optim_*.F90
 
 # fixed point loop variables
 sed -i -e '0,/REAL(kind=r8) :: EPOCH_SECONDS/s//REAL(kind=r8) :: EPOCH_SECONDS\n    LOGICAL, SAVE :: first_opt_call=.true./'  b2mod_driver_diffv.F90

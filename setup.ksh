@@ -279,6 +279,8 @@ alias set_adj='. $SOLPSTOP/SETUP/adj'
 alias unset_adj='. $SOLPSTOP/SETUP/noadj'
 alias set_tao='. $SOLPSTOP/SETUP/tao'
 alias unset_tao='. $SOLPSTOP/SETUP/notao'
+alias set_bfgs='. $SOLPSTOP/SETUP/bfgs'
+alias unset_bfgs='. $SOLPSTOP/SETUP/nobfgs'
 
 # Check if Motif library is present
 

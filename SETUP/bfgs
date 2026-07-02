@@ -1,0 +1,17 @@
+if ($?SOLPS_PATH) then
+  # Check whether HOST_NAME and COMPILER are defined
+  if (! $?HOST_NAME) then
+    echo "HOST_NAME not defined. Exiting."
+    exit 1
+  endif
+  if (! $?COMPILER) then
+    echo "COMPILER not defined. Exiting."
+    exit 1
+  endif
+
+  setenv OPT bfgs
+  echo "Built-in BFGS compilation and optimization turned on"
+else
+  echo "SOLPS_PATH not set. Exiting."
+endif
+
