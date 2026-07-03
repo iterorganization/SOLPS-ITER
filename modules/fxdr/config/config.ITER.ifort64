@@ -31,7 +31,7 @@ INCLUDE    = -Isrc
 COMPILE    = ${FC} -c ${FFLAGS}
 CPP        = /lib/cpp -traditional
 
-LDLIBS     = ${LD_SONNET} ${LD_MSCL} -L/usr/local/lib
+LDLIBS     = ${LD_SONNET} ${LD_MSCL}
 LDEXTRA    =
 
 #!!!Local Variables:

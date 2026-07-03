@@ -1,5 +1,6 @@
 #! /bin/tcsh
 
+#SBATCH --cpus-per-task=#THREADS#
 #SBATCH --time=#HOURS#:00:00
 #SBATCH --mem-per-cpu=#MEM#
 #SBATCH --mail-user=#EMAIL#
