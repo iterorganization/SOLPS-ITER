@@ -30,6 +30,11 @@ ifeq ($(strip ${FN}),)
   endif
 endif
 
+# Initialise uninitialized local variables to zero so that the mpi_version
+# probe in the top-level Makefile does not produce a spurious OPEN_MPI=1
+# from uninitialized stack memory when compiled with Intel MPI (mpiifort).
+FCVOPTS += -init zero
+
 # Build with NetCDF tools if available
 ifdef LD_NETCDF
   SOLPS_CPP   += -DCDF_MOVIE
