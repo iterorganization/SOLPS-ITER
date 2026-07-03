@@ -14,7 +14,6 @@ endif
 
 GKS       = ${LD_GR} ${LD_GKS} -lX11 -lXt -lXmu
 
-#LDLIBS   = ${LD_MSCL} -L/usr/local/lib
 LDLIBS    =
 
 #!!!Local Variables:

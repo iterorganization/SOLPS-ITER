@@ -59,10 +59,17 @@ tcsh
 To define the environment variables of SOLPS-ITER, a setup script has to be sourced:
 source setup.csh [<COMPILER>]
 
-The optional parameter <COMPILER> above can be used to force SOLPS-ITER to use a different compiler than the default one already specified for your <HOST_NAME> environment (see below).
+An alternative setup script, setup.ksh, is also available for bash/ksh users, and
+is recommended for environment without graphics, such as CI test suites.
+Note that setup.ksh may not support all features provided by setup.csh.
+
+The optional parameter <COMPILER> above can be used to force SOLPS-ITER to use
+a different compiler than the default one already specified for your
+<HOST_NAME> environment (see below).
 
 If you want to define any additional variables, create a script setup.csh.local.
-The general setup script will automatically look for this script and source it if present.
+The general setup script will automatically look for this script and source it
+if present.
 
 
 
@@ -94,6 +101,29 @@ Compile instructions
 ====================
 
 %% WE STRONGLY RECOMMEND ALWAYS COMPILING FROM THE TOP-LEVEL DIRECTORY OF SOLPS-ITER
+
+
+Parallel compilation
+--------------------
+
+The recommended way to accelerate compilation is to invoke make with a
+top-level -j flag, e.g.:
+
+    make -j 8 solps
+    make -j $(nproc) solps_openmp
+
+This allows GNU make's jobserver to share compilation jobs across all
+submodules. In a SLURM batch job the number of available cores is:
+
+    make -j ${SLURM_CPUS_PER_TASK:-$(nproc)} solps
+
+Note: the Triang submodule is automatically forced to build serially
+(-j1) because its makedepend-generated dependency file does not capture
+Fortran USE dependencies. This has negligible impact on overall build
+time since Triang is small (~50 sources).
+
+The older form "make MAKE_OPTIONS=-j8" is still supported but only
+parallelises within each submodule, not across them.
 
 
 Basic make-targets

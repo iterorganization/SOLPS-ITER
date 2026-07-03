@@ -122,9 +122,17 @@ ifdef LD_NETCDF
 # Use actual exe file paths so parallel b25*/b25eirene* targets share a single
 # real-file prerequisite, which GNU Make builds exactly once per invocation
 # (unlike phony targets, which are re-run once per dependent in parallel builds).
-NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}${EXT_DBG}
+NC_EXE_DIR   = ${SOLPSTOP}/scripts/${TOOLSHORT}
 NCEXECS      = ${NC_EXE_DIR}/nc2text_simple.exe ${NC_EXE_DIR}/nc_reduce.exe
 NCEXEC_NAMES = nc2text_simple nc_reduce
+# Debug-mode NC executables.  NC_EXE_DIR deliberately omits the debug suffix
+# so the two paths form a consistent pair: non-debug = TOOLSHORT,
+# debug = TOOLSHORT.debug.  The debug NC executables are pre-built via
+# real-file targets before b25*_debug / solps*_debug sub-makes start (see the
+# b25%_debug / solps%_debug rules below), so those sub-makes find the non-debug
+# NCEXECS files already present and skip rebuilding nc_reduce/nc2text_simple.
+DEBUG_NC_EXE_DIR = ${SOLPSTOP}/scripts/${TOOLSHORT}.debug
+DEBUG_NCEXECS    = ${DEBUG_NC_EXE_DIR}/nc_reduce.exe ${DEBUG_NC_EXE_DIR}/nc2text_simple.exe
 endif
 # B25_SERIAL: targets that must be built serially before the parallel compilation.
 # nc exes are excluded here because they are already handled once at the outer
@@ -440,9 +448,8 @@ ifndef NO_CMAKE
 
 # Each eirene* cmake build is anchored to a real-file target (libeirene.a).
 # GNU Make builds real-file targets at most once per invocation, so when
-# multiple top-level targets (e.g. all: eirene … triang→eirene_nox) run in
-# parallel, the cmake build directory is entered only once for the initial
-# full build.
+# multiple top-level targets run in parallel, the cmake build directory
+# is entered only once for the initial full build.
 #
 # eirene_nox* always reconfigures cmake to GRAPHICS=OFF and copies the
 # resulting libeirene.a to libeirene_nox.a.  eirene* then reconfigures
@@ -527,20 +534,6 @@ eirene_nox_openmp_mpi:
 
 endif
 
-# In both cmake and non-cmake modes, eirene* and eirene_nox* share the
-# same build directory (standalone.${TOOLCHAIN}/).  Two concurrent builds
-# in the same directory race on object compilation and ar updates to
-# libeirene.a.  These order-only prerequisites ensure eirene_nox* always
-# finishes before eirene* starts, without forcing eirene* to rebuild when
-# only eirene_nox* has run.
-# In cmake mode this also prevents two cmake configure processes from
-# writing to build.make simultaneously (eirene* reconfigures GRAPHICS=ON
-# after eirene_nox* has set GRAPHICS=OFF).
-eirene: | eirene_nox
-eirene_mpi: | eirene_nox_mpi
-eirene_openmp: | eirene_nox_openmp
-eirene_openmp_mpi: | eirene_nox_openmp_mpi
-
 eirene_mpi_openmp: eirene_openmp_mpi
 
 eirene_nox_mpi_openmp: eirene_nox_openmp_mpi
@@ -552,10 +545,10 @@ b25: ${NCEXECS}
 b25_diff_d: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} DIFF_D
 
-b25_diff_b: ${NC_EXECS}
+b25_diff_b: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} DIFF_B
 
-b25_diff_dd: ${NC_EXECS}
+b25_diff_dd: ${NCEXECS}
 	cd modules/B2.5; ${MAKE} DIFF_DD
 
 b25_tgt: ${NCEXECS}
@@ -821,18 +814,18 @@ uinp_mpi_openmp_nox: uinp_nox_openmp_mpi
 uinp_openmp_mpi_nox: uinp_nox_openmp_mpi
 
 triang:
-	cd modules/Triang; ${MAKE}
+	cd modules/Triang; ${MAKE} -j1
 
 triang_mpi:
-	cd modules/Triang; ${MAKE} ${MPI_OPTS}
+	cd modules/Triang; ${MAKE} -j1 ${MPI_OPTS}
 
 triang_nox:
 	cd modules/Triang; ${MAKE} ${OPT_NOX} mods
-	cd modules/Triang; ${MAKE} ${OPT_NOX}
+	cd modules/Triang; ${MAKE} -j1 ${OPT_NOX}
 
 triang_nox_mpi:
 	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX} mods
-	cd modules/Triang; ${MAKE} ${MPI_OPTS} ${OPT_NOX}
+	cd modules/Triang; ${MAKE} -j1 ${MPI_OPTS} ${OPT_NOX}
 
 ifndef NO_MOTIF
 amds: b25eirene
@@ -883,6 +876,18 @@ ${NC_EXE_DIR}/nc_reduce.exe:
 ${NC_EXE_DIR}/nc2text_simple.exe: | ${NC_EXE_DIR}/nc_reduce.exe
 	@-mkdir -p ${NC_EXE_DIR}
 	cd modules/B2.5; ${MAKE} nc2text_simple
+
+# Debug-mode NC executables: real-file targets pre-built before b25*_debug /
+# solps*_debug sub-makes start (see b25%_debug / solps%_debug rules).
+# Building them here (outer make, no SOLPS_DEBUG) keeps the debug and non-debug
+# B2.5 utility objects in separate directories, avoiding any parallel race.
+${DEBUG_NC_EXE_DIR}/nc_reduce.exe:
+	@-mkdir -p ${DEBUG_NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc_reduce SOLPS_DEBUG=yes
+
+${DEBUG_NC_EXE_DIR}/nc2text_simple.exe: | ${DEBUG_NC_EXE_DIR}/nc_reduce.exe
+	@-mkdir -p ${DEBUG_NC_EXE_DIR}
+	cd modules/B2.5; ${MAKE} nc2text_simple SOLPS_DEBUG=yes
 endif
 
 ifndef SOLPS4_MISSING
@@ -1157,9 +1162,18 @@ endif
 
 debug: solps_debug
 
-# b25* and b25eirene* debug targets: build NetCDF executables in debug mode first
-# to avoid race conditions when multiple targets are compiled in parallel.
-b25%_debug: nc2text_simple_debug nc_reduce_debug
+# b25* and b25eirene* debug targets: pre-build both debug and non-debug NC
+# executables as real-file prerequisites before launching any sub-make.  The
+# outer make (no SOLPS_DEBUG) builds them in separate OBNDIR directories, so
+# there is no parallel race.  The sub-makes (SOLPS_DEBUG=yes) then derive
+# NC_EXE_DIR = scripts/${TOOLSHORT} (no EXT_DBG suffix) and find the non-debug
+# NCEXECS files already present, skipping the nc_reduce/nc2text_simple build.
+b25%_debug: ${DEBUG_NCEXECS} ${NCEXECS}
+	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
+
+# solps* debug targets (e.g. solps_nox_debug) spawn a sub-make that independently
+# re-derives NCEXECS; apply the same real-file prerequisites as b25%_debug.
+solps%_debug: ${DEBUG_NCEXECS} ${NCEXECS}
 	${MAKE} $(@:%_debug=%) SOLPS_DEBUG=yes
 
 %_debug:
@@ -1413,8 +1427,10 @@ clean_fxdr:
 clean_sonnet-light:
 	cd modules/Sonnet-light; ${MAKE} clean
 
+ifndef SOLPS4_MISSING
 clean_b2sxdr:
 	cd modules/solps4-5; ${MAKE} clean
+endif
 
 clean_manual:
 	cd doc/solps; ${MAKE} clean
