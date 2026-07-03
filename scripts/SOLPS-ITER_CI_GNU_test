@@ -8,7 +8,7 @@ echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.g
 export NO_MANUAL="true"
 make prereqs_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} solps_nox b25_nox b25_adj b25_tgt b25_hess_tgt
 
 # Run test case sensitivity for tangent, adjoint and hessian
 
