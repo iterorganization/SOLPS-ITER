@@ -1,84 +1,15 @@
-string=''
+#!/usr/bin/env bash
 
-cat $SOLPSTOP/modules/B2.5/src/differentiation/files_to_exclude.txt > excluded.txt
+base="$SOLPSTOP/modules/B2.5/src"
+excluded_file="./excluded.txt"
+to_keep="$base/differentiation/files_to_keep.txt"
 
-to_keep=$SOLPSTOP/modules/B2.5/src/differentiation/files_to_keep.txt
+cat "$base/differentiation/files_to_exclude.txt" > "$excluded_file"
 
-find $SOLPSTOP/modules/B2.5/src/b2plot -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
+for dir in b2plot convert documentation postprocessing preprocessing output; do
+    while read -r filename; do
+        if ! grep -qw "$filename" "$to_keep"; then
+            printf '%s\n' "$filename" >> "$excluded_file"
+        fi
+    done < <(find "$base/$dir" -name '*.F*' -exec basename {} .F \;)
 done
-
-echo $string >> excluded.txt)
-
-
-find $SOLPSTOP/modules/B2.5/src/convert -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do 
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
-done
-
-echo $string >> excluded.txt)
-
-
-find $SOLPSTOP/modules/B2.5/src/documentation -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do 
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
-done
-
-echo $string >> excluded.txt)
-
-
-find $SOLPSTOP/modules/B2.5/src/postprocessing -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do 
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
-done
-
-echo $string >> excluded.txt)
-
-
-find $SOLPSTOP/modules/B2.5/src/preprocessing -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do 
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
-done
-
-echo $string >> excluded.txt)
-
-
-find $SOLPSTOP/modules/B2.5/src/output -name \*.F* -exec basename \{} .F \; | ( while read filename 
-do 
-if grep -q -w "$filename" "$to_keep"
-then
-string+=""
-else
-string+=" "$filename
-fi
-done
-
-echo $string >> excluded.txt)
-
-
