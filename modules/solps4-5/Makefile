@@ -382,7 +382,7 @@ ${OBJDIR}/xstel.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/parmmod.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
@@ -1011,6 +1011,10 @@ endif
 	@egrep -ai '^ *use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@for f in ${MODLIST}; do \
+		b=`basename $$f`; b=$${b%.F90}; b=$${b%.F}; \
+		printf '$${OBJDIR}/%s.o: $${OBJDIR}/%s.${MOD}\n\t@:\n' "$$b" "$$b" >> ${OBJDIR}/dependencies; \
+	done
 endif
 
 ${BASEDIR}/TAGS: tags
