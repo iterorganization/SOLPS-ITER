@@ -270,7 +270,7 @@ For later updates of the {\tt master} branches, it is recommended you use the {\
 
 {\em {\bf \underline{IMPORTANT:}} When updating the code, some routines or other configuration files may have been moved, renamed, added, or deleted, and the updating script itself may have changed. In that case, compilation will likely fail on the first update attempt. The user should then start afresh with a new session, and run the update script a second time. If compilation still fails, then the user should remove old compiled files by means of the appropriate {\tt gmake clean} instruction and attempt another compilation, from scratch.}
 
-Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, {\tt .ig}, {\tt .tgt}, or {\tt .adj}.
+Please note that because of the way some of the \SOLPSITER utility scripts function, the path to the \SOLPSITER top directory must not contain any of the strings {\tt .debug}, {\tt .mpi}, {\tt .openmp}, {\tt .ig}, {\tt .tgt}, {\tt .adj}, or {\tt .hess\_tgt}.
 
 Since the user-id is immutably encoded into any changes, it is always a good idea to properly configure a local installation of Git on all the systems on which one plans on making code revisions with, e.g.:
 
@@ -871,6 +871,7 @@ The {\tt setup.csh} file and its subsidiaries {\tt \$\{SOLPSTOP\}/SETUP/setup.cs
 \item two aliases to swap between the ADJ and no\_ADJ versions of the code ({\tt set\_adj} and {\tt unset\_adj})
 \item two aliases to swap between the TAO and no\_TAO versions of the code ({\tt set\_tao} and {\tt unset\_tao})
 \item two aliases to swap between the BFGS and no\_BFGS versions of the code ({\tt set\_bfgs} and {\tt unset\_bfgs})
+\item two aliases to swap between the HESS\_TGT and no\_HESS\_TGT versions of the code ({\tt set\_hess\_tgt} and {\tt unset\_hess\_tgt})
 \end{enumerate}
 Of course, any additional desired definitions can be added. The preferred place for those is, for those variables that need not be shared by other users, the {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} and {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} files. Variables that are needed at compilation time need to appear in the {\tt config.*.*(.local)} file, while variables needed at runtime must appear in {\tt setup.csh.*.*(.local)} file.
 \end{sloppypar}

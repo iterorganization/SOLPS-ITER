@@ -52,6 +52,10 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
+if ($?SOLPS_HESS_TGT) then
+  set STANDALONE=-${SOLPS_OPT}hess_tgt
+endif
+
 if ($RUN_NUMBER == 1) then
 
   b2run ${STANDALONE} ${USE_MPI} ${USE_OMP} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}

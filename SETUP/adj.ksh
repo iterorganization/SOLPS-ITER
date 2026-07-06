@@ -16,7 +16,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
   export SOLPS_PATH=`echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.adj|g"`
   export PATH=${SOLPS_PATH}:${OLD_PATH}
   export SOLPS_ADJ="yes"
-  unset OLD_SOLPS_PATH SOLPS_TGT
+  unset OLD_SOLPS_PATH SOLPS_TGT SOLPS_HESS_TGT
   rehash
   echo "SOLPS-ITER ADJ mode turned on"
 else

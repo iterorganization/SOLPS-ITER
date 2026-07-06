@@ -9,16 +9,16 @@ if [[ -n "$SOLPS_PATH" ]]; then
     exit 1
   fi
 
-  # Pragmatic approach: assume for now only B2.5 has tangent version
+  # Pragmatic approach: assume for now only B2.5 has hess_tgt version
   export OLD_SOLPS_PATH=$SOLPS_PATH
   export PATH=`echo $PATH | sed "s|${SOLPS_PATH}:||"`
-  export SOLPS_PATH=`echo $SOLPS_PATH | sed 's|\.tgt||g'` # remove .tgt if already present
-  export SOLPS_PATH=`echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.tgt|g"`
+  export SOLPS_PATH=`echo $SOLPS_PATH | sed 's|\.hess_tgt||g'` # remove .hess_tgt if already present
+  export SOLPS_PATH=`echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.hess_tgt|g"`
   export PATH=${SOLPS_PATH}:${OLD_PATH}
-  export SOLPS_TGT="yes"
-  unset  OLD_SOLPS_PATH SOLPS_ADJ HESS_TGT
+  export SOLPS_HESS_TGT="yes"
+  unset OLD_SOLPS_PATH SOLPS_TGT SOLPS_ADJ
   rehash
-  echo "SOLPS-ITER TGT mode turned on"
+  echo "SOLPS-ITER HESS_TGT mode turned on"
 else
   echo "SOLPS_PATH not set. Exiting."
 fi

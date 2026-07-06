@@ -9,6 +9,7 @@ if ($?SOLPS_PATH) then
     exit 1
   endif
 
+  unset_bfgs
   setenv OPT tao
   setenv TAO yes
   setenv TAO_OPT "$1"

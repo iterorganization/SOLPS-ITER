@@ -41,6 +41,10 @@ if ($?SOLPS_ADJ) then
   set STANDALONE=-${SOLPS_OPT}adj
 endif
 
+if ($?SOLPS_HESS_TGT) then
+  set STANDALONE=-${SOLPS_OPT}hess_tgt
+endif
+
 time b2run ${STANDALONE} ${USE_MPI} b2mn #COMPRESS_ARG# >! run.log${COMPRESS_SUFFIX}
 
 QSUB.postprocess${COUPLED_SUFFIX}
