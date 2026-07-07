@@ -297,7 +297,7 @@ alias unset_hess_tgt='. $SOLPSTOP/SETUP/nohess_tgt'
 }
 # Compilation also requires Motif development headers; restore NO_MOTIF if they are absent
 [ -z "$NO_MOTIF" ] && {
-  [ "$(find /usr/include /usr/local/include -name 'Xm.h' 2>/dev/null | wc -l)" -eq 0 ] && export NO_MOTIF=1
+  [ "$(find /usr/include /usr/local/include ${EBROOTMOTIF} -name 'Xm.h' 2>/dev/null | wc -l)" -eq 0 ] && export NO_MOTIF=1
 }
 
 # Check if Manual can be built
@@ -312,6 +312,10 @@ export CMAKE=`which cmake`
 [ "$CMAKE" = "" ] && {
   export NO_CMAKE=true
   echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+} || {
+  [ "$CMAKE_MAJOR_VERSION" = "" ] && {
+    export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  }
 }
 
 # Add any local settings if present

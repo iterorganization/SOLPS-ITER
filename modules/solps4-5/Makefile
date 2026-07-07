@@ -382,7 +382,7 @@ ${OBJDIR}/xstel.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/parmmod.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
@@ -618,7 +618,7 @@ ${OBJDIR}/eircolsp.o: ${SRCDIR}/Eirene_modules/eircolsp.F ${MAKES}
 ${OBJDIR}/eirdiag.o: ${OBJDIR}/clgin.${MOD} ${OBJDIR}/ccoupl.${MOD} ${SRCDIR}/Eirene_modules/eirdiag.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
-${OBJDIR}/eirgrid.o: ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
+${OBJDIR}/eirgrid.o: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
 
 ${OBJDIR}/eirgrid_lib.o: ${OBJDIR}/eirmap.${MOD} ${SRCDIR}/Eirene_modules/eirgrid_lib.F ${MAKES}
@@ -955,7 +955,7 @@ ${OBJDIR}/eirdiag.${MOD}: ${OBJDIR}/braeir.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDI
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirdiag.o -c ${SRCDIR}/Eirene_modules/eirdiag.F
 
-${OBJDIR}/eirgrid.${MOD}: ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
+${OBJDIR}/eirgrid.${MOD}: ${OBJDIR}/eirbase.${MOD} ${SRCDIR}/Eirene_modules/eirgrid.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/eirgrid.o -c ${SRCDIR}/Eirene_modules/eirgrid.F
 
@@ -1023,6 +1023,10 @@ endif
 	@egrep -ai '^ *use ' ${FFLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".o:",$$1);sub("\\.F:",".o:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
 ifneq (${MOD},o)
 	@egrep -ai '^ *use ' ${MODLIST} | grep -v 'IGNORE' | tr , ' ' | awk '{sub("\\.F90:",".${MOD}:",$$1);sub("\\.F:",".${MOD}:",$$1);sub("^.*/","$${OBJDIR}/",$$1); print $$1,"$${OBJDIR}/"tolower($$3)".${MOD}"}' >> ${OBJDIR}/dependencies
+	@for f in ${MODLIST}; do \
+		b=`basename $$f`; b=$${b%.F90}; b=$${b%.F}; \
+		printf '$${OBJDIR}/%s.o: $${OBJDIR}/%s.${MOD}\n\t@:\n' "$$b" "$$b" >> ${OBJDIR}/dependencies; \
+	done
 endif
 
 ${BASEDIR}/TAGS: tags

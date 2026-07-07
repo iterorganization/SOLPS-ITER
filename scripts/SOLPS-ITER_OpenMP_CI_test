@@ -9,7 +9,7 @@ echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.g
 export NO_MANUAL="true"
 make prereqs_nox
 make divgeo_nox
-make MAKE_OPTIONS=-j8 b25_nox_openmp b25eirene_nox_openmp
+make -j${SLURM_CPUS_PER_TASK:-$(nproc)} b25_nox_openmp b25eirene_nox_openmp
 
 # Run test case
 . ${SOLPSTOP}/SETUP/openmp.ksh

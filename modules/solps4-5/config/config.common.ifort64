@@ -1,13 +1,7 @@
 ifeq (${FC},f77)
+ ifneq ($(shell command -v ifort 2>/dev/null),)
   FC = ifort
-else
-  ifeq (${FC},ifx)
-    ifdef SOLPS_DEBUG
-      ifneq ($(shell command -v ifort 2>/dev/null),)
-        FC = ifort
-      endif
-    endif
-  endif
+ endif
 endif
 EQUIV4 = ${SOLPS_CPP} -DNO_USERTIME -DNO_SNAPSHOT -DUSE_CDF_B2STIME -DMA28 -DNO_F01AAF -DNO_LONG_LINES -DNO_B2GXDR # -DNO_CDF -DNO_PROCESS 
 
@@ -24,25 +18,26 @@ LINK_MOD =
 COMPILER_MAJOR_VERSION = $(shell ${FC} -V 2>&1 | grep -o "Version [0-9]*" | cut -d ' ' -f 2 )
 
 ifdef SOLPS_DEBUG
-FCOPTS += -g -C -debug all
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
-FCOPTS += -diag-disable:10440
-endif
+ FCOPTS += -g -C -debug all
+ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+  FCOPTS += -check nouninit -diag-disable:10440
+  LDOPTS += -check nouninit
+ endif
 else
-ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
-FCOPTS += -O0
-else
-FCOPTS += -O3
-endif
+ ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 2023; echo $$?),0)
+  FCOPTS += -O0
+ else
+  FCOPTS += -O3
+ endif
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -ge 21; echo $$?),0)
-FCOPTS += -r8
-DBLOPTION =
+ FCOPTS += -r8
+ DBLOPTION =
 else
-DBLOPTION = -r8
+ DBLOPTION = -r8
 endif
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-FCOPTS += -vec_report0
+ FCOPTS += -vec_report0
 endif
 
 DBLFC = ${FC}
@@ -61,7 +56,7 @@ LDLIBES = ${LD_NETCDF} ${LD_NAG} ${LD_MSCL}
 LD = ${FC}
 # LDOPTS = -Bstatic
 ifeq ($(shell test ${COMPILER_MAJOR_VERSION} -le 12; echo $$?),0)
-LDOPTS += -i_dynamic
+ LDOPTS += -i_dynamic
 endif
 
 LCPP = ${LD_SONNET}
