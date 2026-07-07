@@ -102,21 +102,17 @@ TOOLSHORT = ${HOST_NAME}.${COMPILER}
 TOOLCHAIN = ${HOST_NAME}.${COMPILER}${EXT_OPENMP}${EXT_MPI}${EXT_DBG}
 
 # Sentinel files for the eirene cmake builds.  cmake places libeirene.a in
-# the build directory; this real-file target anchors the GRAPHICS=ON build.
-# Each eirene_nox* build produces libeirene_nox.a (GRAPHICS=OFF) in the
-# same directory by copying libeirene.a after the OFF cmake configure+build.
-# Both library files are independent Make targets with separate recipes.
-# Unconditional order-only rules (after the cmake/non-cmake endif below)
-# prevent eirene* and eirene_nox* from running concurrently in the same
-# build directory in both cmake and non-cmake modes.
+# the build directory; this real-file target anchors each eirene* build.
+# eirene_nox* no longer produces a separate libeirene_nox.a: since
+# modules/Eirene/src/CMakeLists.txt always builds both the real-graphics
+# (eirobj) and dummy-graphics (eirobjx) executables from the exact same
+# EIRENE library in one configure, eirene_nox reduces to a plain alias
+# for eirene (see the eirene_nox* recipes below).
 LIBEIRENE_A            = modules/Eirene/builds/standalone.${TOOLCHAIN}/libeirene.a
 LIBEIRENE_A_MPI        = modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}/libeirene.a
 LIBEIRENE_A_OPENMP     = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}/libeirene.a
 LIBEIRENE_A_OPENMP_MPI = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}/libeirene.a
-LIBEIRENE_A_NOX            = modules/Eirene/builds/standalone.${TOOLCHAIN}/libeirene_nox.a
-LIBEIRENE_A_NOX_MPI        = modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}/libeirene_nox.a
-LIBEIRENE_A_NOX_OPENMP     = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}/libeirene_nox.a
-LIBEIRENE_A_NOX_OPENMP_MPI = modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}/libeirene_nox.a
+
 
 ifdef LD_NETCDF
 # Use actual exe file paths so parallel b25*/b25eirene* targets share a single
@@ -228,36 +224,25 @@ OPT_MPI += -DOPEN_MPI=${OPEN_MPI}
 endif
 endif
 CMAKE_STEM = cmake ../../src -DEIRENE_INTERFACE=SOLPS-ITER -DEIRENE_USER-ROUTINES=iter ${DEFLIBS} ${DEFOPTS} ${DEFMAKES}
-CMAKX_STEM = ${CMAKE_STEM} -DGRAPHICS=OFF -DLibGRS="" -DLibGKS=""
 MAKEC = FC=${FC} ${CMAKE_STEM} ${DEGLIBS}
 MAKEM = FC="${MPI_FC}" ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
-MAKEX = FC=${FC} ${CMAKX_STEM}
-MAKEY = FC="${MPI_FC}" ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION}
 ifdef OPEN_MPI
 MAKEM += -DOPEN_MPI=${OPEN_MPI}
-MAKEY += -DOPEN_MPI=${OPEN_MPI}
 endif
 # Special treatment to avoid using ifx with OpenMP options when ifort is available
 ifneq (${FC},ifx)
 MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
 MAKEP = ${MAKEM} -DOPENMP=ON
-MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
-MAKEA = ${MAKEY} -DOPENMP=ON
 else
 ifneq ($(shell command -v ifort 2>/dev/null),)
 MAKEN = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=OFF -DOPENMP=ON
 MAKEP = FC=ifort ${CMAKE_STEM} ${DEGLIBS} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
-MAKEZ = FC=mpiifort ${CMAKX_STEM} -DMPI=OFF -DOPENMP=ON
-MAKEA = FC=mpiifort ${CMAKX_STEM} -DMPI=ON -DMPI_VERSION=${MPI_VERSION} -DOPENMP=ON
 else
 MAKEN = ${MAKEC} -DMPI=OFF -DOPENMP=ON
 MAKEP = ${MAKEM} -DOPENMP=ON
-MAKEZ = ${MAKEX} -DMPI=OFF -DOPENMP=ON
-MAKEA = ${MAKEY} -DOPENMP=ON
 endif
 ifdef OPEN_MPI
 MAKEP += -DOPEN_MPI=${OPEN_MPI}
-MAKEA += -DOPEN_MPI=${OPEN_MPI}
 endif
 endif
 endif
@@ -449,60 +434,76 @@ ifndef NO_CMAKE
 # parallel, the cmake build directory is entered only once for the initial
 # full build.
 #
-# eirene_nox* always reconfigures cmake to GRAPHICS=OFF and copies the
-# resulting libeirene.a to libeirene_nox.a.  eirene* then reconfigures
-# cmake back to GRAPHICS=ON before the incremental make.  Two cmake
-# processes in the same directory simultaneously would corrupt build.make;
-# the order-only rules added after the endif block below ensure that
-# eirene_nox* always completes before eirene* starts its cmake configure.
+# The standalone Eirene build directory always produces BOTH the
+# real-graphics executable (eirobj) and the dummy-graphics executable
+# (eirobjx) from a single cmake configure (see the split of the EIRENE and
+# GR-DUMMY libraries in modules/Eirene/src/CMakeLists.txt).  Because of
+# this, "eirene" and "eirene_nox" now use the exact same cmake configure
+# command and share the exact same build directory/library with nothing
+# left to toggle between them -- eirene_nox therefore simply reduces to
+# eirene below, and there is no longer any race to order between them.
+#
+# CMAKE_CONFIGURE_IF_NEEDED guards every cmake (re)configure invocation.
+# CMake's generated Makefiles make every compiled object depend on
+# flags.make, and `cmake <args>` rewrites flags.make (with a fresh mtime)
+# on every single configure call -- even when none of the arguments
+# actually changed.  Left unguarded, that means a second, otherwise
+# no-op, "make solps" reconfigures cmake again, touches flags.make, and
+# forces GNU Make to consider every Fortran source in Eirene out of
+# date, triggering a full rebuild for no reason.
+#
+# This macro records the exact configure command last used for a given
+# build directory (in .cmake_configure_args, inside that directory) and
+# only re-runs cmake when the directory has not been configured yet, or
+# when the requested arguments differ from the recorded ones.  Genuine
+# reconfigures (e.g. a real -D... option actually changing) still happen
+# because the argument strings differ.  Repeating the exact same build
+# (e.g. running "make solps" twice in a row) now skips the reconfigure
+# step entirely, leaving flags.make untouched and the build a true no-op.
+define CMAKE_CONFIGURE_IF_NEEDED
+echo $(1) > .cmake_configure_args.new; \
+if [ -f CMakeCache.txt ] && cmp -s .cmake_configure_args.new .cmake_configure_args 2>/dev/null; then \
+	rm -f .cmake_configure_args.new; \
+else \
+	$(1) && mv -f .cmake_configure_args.new .cmake_configure_args; \
+fi
+endef
 
 ${LIBEIRENE_A}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}); ${MAKEO}
 
 eirene: ${LIBEIRENE_A}
-	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}); ${MAKEO}
 
 ${LIBEIRENE_A_MPI}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEM} ${OPT_DBG}); ${MAKEO}
 
 eirene_mpi: ${LIBEIRENE_A_MPI}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEM} ${OPT_DBG}); ${MAKEO}
 
 ${LIBEIRENE_A_OPENMP}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEN} ${OPT_DBG}); ${MAKEO}
 
 eirene_openmp: ${LIBEIRENE_A_OPENMP}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEN} ${OPT_DBG}); ${MAKEO}
 
 ${LIBEIRENE_A_OPENMP_MPI}:
 	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEP} ${OPT_DBG}); ${MAKEO}
 
 eirene_openmp_mpi: ${LIBEIRENE_A_OPENMP_MPI}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEP} ${OPT_DBG}); ${MAKEO}
 
-eirene_nox: | ${LIBEIRENE_A}
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLCHAIN}
-	+cd modules/Eirene/builds/standalone.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${OPT_DBG}; ${MAKEO}; \
-	cp libeirene.a libeirene_nox.a
+eirene_nox: eirene
 
-eirene_nox_mpi: | ${LIBEIRENE_A_MPI}
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${OPT_DBG}; ${MAKEO}; \
-	cp libeirene.a libeirene_nox.a
+eirene_nox_mpi: eirene_mpi
 
-eirene_nox_openmp: | ${LIBEIRENE_A_OPENMP}
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_DBG}; ${MAKEO}; \
-	cp libeirene.a libeirene_nox.a
+eirene_nox_openmp: eirene_openmp
 
-eirene_nox_openmp_mpi: | ${LIBEIRENE_A_OPENMP_MPI}
-	@-mkdir -p modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/standalone.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEA} ${OPT_DBG}; ${MAKEO}; \
-	cp libeirene.a libeirene_nox.a
+eirene_nox_openmp_mpi: eirene_openmp_mpi
 
 else
 
@@ -531,20 +532,6 @@ eirene_nox_openmp_mpi:
 	+cd modules/Eirene; ${MAKEE} ${OMP_OPTE} ${MPI_OPTS} ${OPT_NOX}
 
 endif
-
-# In both cmake and non-cmake modes, eirene* and eirene_nox* share the
-# same build directory (standalone.${TOOLCHAIN}/).  Two concurrent builds
-# in the same directory race on object compilation and ar updates to
-# libeirene.a.  These order-only prerequisites ensure eirene_nox* always
-# finishes before eirene* starts, without forcing eirene* to rebuild when
-# only eirene_nox* has run.
-# In cmake mode this also prevents two cmake configure processes from
-# writing to build.make simultaneously (eirene* reconfigures GRAPHICS=ON
-# after eirene_nox* has set GRAPHICS=OFF).
-eirene: | eirene_nox
-eirene_mpi: | eirene_nox_mpi
-eirene_openmp: | eirene_nox_openmp
-eirene_openmp_mpi: | eirene_nox_openmp_mpi
 
 eirene_mpi_openmp: eirene_openmp_mpi
 
@@ -631,7 +618,7 @@ b25_all_mpi_openmp: b25_all_openmp_mpi
 b25eirene: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE
 endif
@@ -641,7 +628,7 @@ endif
 b25eirene_all: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene;   ${MAKEE} USE_B25=-DB25_EIRENE
 endif
@@ -654,7 +641,7 @@ endif
 b25eirene_nox: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; ${MAKEX} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLCHAIN}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEC} ${OPT_MPI} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX}
 endif
@@ -664,7 +651,7 @@ endif
 b25eirene_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
@@ -674,7 +661,7 @@ endif
 b25eirene_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEM} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
@@ -684,7 +671,7 @@ endif
 b25eirene_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
@@ -696,7 +683,7 @@ b25eirene_mpi_openmp: b25eirene_openmp_mpi
 b25eirene_nox_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEZ} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} SOLPS_OPENMP=yes
 endif
@@ -706,7 +693,7 @@ endif
 b25eirene_nox_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEY} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEM} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} ${OPT_NOX}
 endif
@@ -721,7 +708,7 @@ b25eirene_ig: ${NCEXECS}
 b25eirene_all_openmp: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; ${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEN} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE SOLPS_OPENMP=yes
 endif
@@ -734,7 +721,7 @@ endif
 b25eirene_all_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; ${MAKEM} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEM} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS}
 endif
@@ -747,7 +734,7 @@ endif
 b25eirene_all_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${MPI_OPTS} SOLPS_OPENMP=yes
 endif
@@ -762,7 +749,7 @@ b25eirene_all_mpi_openmp: b25eirene_all_openmp_mpi
 b25eirene_nox_openmp_mpi: ${NCEXECS}
 ifndef NO_CMAKE
 	@-mkdir -p modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}
-	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; ${MAKEY} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}; ${MAKEO}
+	+cd modules/Eirene/builds/couple_SOLPS-ITER.${TOOLSHORT}.openmp.mpi${EXT_DBG}; $(call CMAKE_CONFIGURE_IF_NEEDED,${MAKEP} ${OPT_OPENMP} ${CPLOPTS} ${OPT_DBG}); ${MAKEO}
 else
 	+cd modules/Eirene; ${MAKEE} USE_B25=-DB25_EIRENE ${OPT_NOX} ${MPI_OPTS} SOLPS_OPENMP=yes
 endif

@@ -382,7 +382,7 @@ ${OBJDIR}/xstel.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/parmmod.${MOD}
+${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/parmmod.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
