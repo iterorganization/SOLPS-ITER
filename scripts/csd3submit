@@ -1,4 +1,3 @@
-it
 #! /bin/tcsh -f
 
 set NAME=/tmp/.run.$$.$USER.`date +%Y%m%d%H%M%S`
@@ -151,7 +150,7 @@ EOF
     set LOOP_OPTS="-adj ${LOOP_OPTS}"
     goto argloop
   endif
-  if ("X${1}X" == "X-hess_tgt") then
+  if ("X${1}X" == "X-hess_tgtX") then
     set standalone_arg="-s"
     if (! $?SOLPS_HESS_TGT) then
       source $SOLPSTOP/SETUP/hess_tgt

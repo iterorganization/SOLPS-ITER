@@ -106,6 +106,6 @@ endif
 sed -i -e "${l3},${l4} d" b2mod_main_diff.F90
 sed -i -e "${l1},${l2} d" b2mod_main_diff.F90
 
-# include some extra stuff that allows saving of entire adjoint fileds in output
+# include some extra stuff that allows saving of entire adjoint fields in output
 sed -i -e '/REAL(kind=r8) :: jb(nncf)/a\    integer :: is\n    integer, save :: ncall = 0\n    character *64 filename, ss, s1\n    character(len=7), save :: my_out_folder' b2mod_main_diff.F90
 sed -i "/CALL B2MNDR_1_B(nout, ns, j, jb)/r $SOLPSTOP/modules/B2.5/src/differentiation/writing_adjoint_quantities.txt" b2mod_main_diff.F90

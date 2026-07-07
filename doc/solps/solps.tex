@@ -2204,7 +2204,7 @@ for tangent, adjoint, and Hessian tangent on tangent AD respectively. This can b
 itersubmit -opt_tgt <<OPT_OPTIONS>>
 itersubmit -opt_adj <<OPT_OPTIONS>>
 \end{verbatim}
-again for tangent and adjoint AD respectively. The user can select the optimization library beforehand, e.g. using {\tt set\_tao} or another available one, otherwise the script will default to the built-in BFGS algortihm. A concrete example is:
+again for tangent and adjoint AD respectively. The user can select the optimization library beforehand, e.g. using {\tt set\_tao} or another available one, otherwise the script will default to the built-in BFGS algorithm. A concrete example is:
 \begin{verbatim}
 set_tao; itersubmit -opt_tgt '-tao_ls_type armijo'
 \end{verbatim}
