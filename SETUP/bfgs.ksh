@@ -9,6 +9,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
     exit 1
   fi
 
+  unset_tao
   export OPT="bfgs"
   echo "Built-in BFGS compilation and optimization turned on"
 else

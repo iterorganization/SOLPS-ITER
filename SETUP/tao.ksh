@@ -9,6 +9,7 @@ if [[ -n "$SOLPS_PATH" ]]; then
     exit 1
   fi
 
+  unset_bfgs
   export OPT="tao"
   export TAO="yes"
   export TAO_OPT="$1"
