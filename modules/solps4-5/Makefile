@@ -230,6 +230,8 @@ ${OBJDIR}/ducttr.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/clgin.${MOD}
 
 ${OBJDIR}/eirene_f30f31.o: ${OBJDIR}/ctrig.${MOD}
 
+${OBJDIR}/eirsamsp.o: ${OBJDIR}/eirbase.${MOD}
+
 ${OBJDIR}/ello.o: ${OBJDIR}/clmsur.${MOD}
 
 ${OBJDIR}/ellu.o: ${OBJDIR}/clmsur.${MOD}
@@ -290,6 +292,10 @@ ${OBJDIR}/impneut_interface.o: ${OBJDIR}/impdns.${MOD} ${OBJDIR}/impmom.${MOD} $
 
 ${OBJDIR}/impsrc.o: ${OBJDIR}/ccoupl.${MOD} ${OBJDIR}/ctrig.${MOD}
 
+${OBJDIR}/indmap.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/indmpi.o: ${OBJDIR}/comprt.${MOD}
+
 ${OBJDIR}/infcop.o: ${OBJDIR}/brascl.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/braspoi.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/ifwrite.${MOD} ${OBJDIR}/impdns.${MOD}
 
 ${OBJDIR}/infstat.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/eirbra.${MOD}
@@ -298,9 +304,33 @@ ${OBJDIR}/init.o: ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/input.o: ${OBJDIR}/adsp.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/cdiprl.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/censav.${MOD} ${OBJDIR}/cgrptl.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comsmu.${MOD} ${OBJDIR}/comsou.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cpl3d.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/photon.${MOD}
 
-${OBJDIR}/inspect.o: ${OBJDIR}/eircolsp.${MOD}
+${OBJDIR}/inspect.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eircolsp.${MOD} ${OBJDIR}/eirmod_mpi.${MOD}
+
+${OBJDIR}/learca.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/leer.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masage.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masbox.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masbr2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masir2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj1.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj1r.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj3.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj4.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masprm.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr1.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/octree.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/eirmod_octree.${MOD}
 
