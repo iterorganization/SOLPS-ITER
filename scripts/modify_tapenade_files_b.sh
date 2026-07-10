@@ -101,13 +101,14 @@ sed -i '/CALL INTCELL_FWD/i\    wrkf = 1.0_R8 \!csc added this here for safety i
 
 # some incorrect tapenade arrays
 sed -i -e "s/REAL8(potpar(0:0), r8\/8)/REAL8ARRAY(potpar, r8*nbcd*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90
-sed -i -e "s/REAL8(enepar(0:0), r8\/8)/REAL8ARRAY(enepar, r8*nbcd*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90
-sed -i -e "s/REAL8(enipar(0:0), r8\/8)/REAL8ARRAY(enipar, r8*nbcd*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90
+sed -i -e "s/REAL8(enepar(0:0), r8\/8)/REAL8ARRAY(enepar, r8*nbcd*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90 b2stbc_phys_b.F90
+sed -i -e "s/REAL8(enipar(0:0), r8\/8)/REAL8ARRAY(enipar, r8*nbcd*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90 b2stbc_phys_b.F90
 sed -i -e "s/REAL8(cfhci, r8\/8)/REAL8ARRAY(cfhci, r8*nsdecl*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90
 sed -i -e "s/REAL8(cfvsa, r8\/8)/REAL8ARRAY(cfvsa, r8*nsdecl*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90
 sed -i -e "s/REAL8(cfvla, r8\/8)/REAL8ARRAY(cfvla, r8*nsdecl*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90
 sed -i -e "s/REAL8(cfdpa, r8\/8)/REAL8ARRAY(cfdpa, r8*nsdecl*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90
 sed -i -e "s/REAL8(cfdna, r8\/8)/REAL8ARRAY(cfdna, r8*nsdecl*8\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2tral_b.F90 b2trno_b.F90
+sed -i -e "s/ARRAY(bccon14_is(0:1), 2)/ARRAY(bccon14_is, nbcd)/g" b2stbc_b.F90
 sed -i -e "s/REAL8ARRAY(cfhci(0, is), r8)/REAL8(cfhci(0, is), r8)/g" b2tqna_b.F90
 sed -i -e "s/REAL8ARRAY(cfvsa(0, is), r8)/REAL8(cfvsa(0, is), r8)/g" b2tqna_b.F90
 sed -i -e "s/REAL8ARRAY(cfvla(0, is), r8)/REAL8(cfvla(0, is), r8)/g" b2tqna_b.F90
@@ -122,7 +123,7 @@ sed -i -e "s/ARRAY(omp(0:1), 2)/ARRAY(omp, nromp)/g" b2mod_driver_diff.F90 b2mnd
 sed -i -e "s/ARRAY(imp(0:1), 2)/ARRAY(imp, nromp)/g" b2mod_driver_diff.F90 b2mndt_b.F90
 sed -i -e "s/ARRAY(msns(0:1), 2)/ARRAY(msns, 2*nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
 sed -i -e "s/ARRAY(lsns(0:1), 2)/ARRAY(lsns, nstraid*def_nsrfs)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
-sed -i -e "s/ARRAY(maxw_eff(0:1), 2)/ARRAY(maxw_eff, nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
+sed -i -e "s/ARRAY(maxw_eff(0:1), 2)/ARRAY(maxw_eff, nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbr_b.F90
 sed -i -e "s/ARRAY(b2species_end(0:1), 2)/ARRAY(b2species_end, nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
 sed -i -e "s/ARRAY(b2species_start(0:1), 2)/ARRAY(b2species_start, nstraid)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90
 sed -i -e "s/REAL8(userfluxparm(0:0), r8\/8)/REAL8ARRAY(userfluxparm, r8*nstraid*2\/8)/g" b2mod_driver_diff.F90 b2mndt_b.F90 b2news__b.F90 b2news_m_b.F90 b2sral_b.F90 b2stbc_b.F90
@@ -303,9 +304,10 @@ sed -i -e 's/\&                     rt%rz2, dv%lnlam, co%hci_a, co_ns%hci_al_ast
 
 # missing argument in calls to b2saxpy in b2stbc
 sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%sna0ep, incx=1, sy=srw%sna0(1, 0, is)/CALL B2SAXPY_FWD(ncv, switch%sna0ep, geo%cvvol, 1, srw%sna0(1, 0, is)/g" b2stbc_b.F90
-sed -i -e "s/\&              incy=1)/\&              1)/g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%she0ep, incx=1, sy=srw%she0(1, 0), incy=1/CALL B2SAXPY_FWD(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), 1/g" b2stbc_b.F90
-sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%shi0ep, incx=1, sy=srw%shi0(1, 0), incy=1/CALL B2SAXPY_FWD(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), 1/g" b2stbc_b.F90
+sed -i -e "s/\&                , incy=1)/\&                , 1)/g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%she0ep, incx=1, sy=srw%she0(1, 0), incy/CALL B2SAXPY_FWD(ncv, switch%she0ep, geo%cvvol, 1, srw%she0(1, 0), /g" b2stbc_b.F90
+sed -i -e "s/CALL B2SAXPY_FWD(ncv, switch%shi0ep, incx=1, sy=srw%shi0(1, 0), incy/CALL B2SAXPY_FWD(ncv, switch%shi0ep, geo%cvvol, 1, srw%shi0(1, 0), /g" b2stbc_b.F90
+sed -i -e "s/\&              =1)/\&              1)/g" b2stbc_b.F90
 
 # missing argument in calls to calcflow in b2tfnb
 sed -i -e "s/\&             fna_32(:, :, isb))/\&             fna_32(:, :, isb), dv%fna_52(:, :, isb))/g" b2tfnb_b.F90
@@ -455,7 +457,7 @@ sed -i -e "s/rtlsab = diffparam_save9/rtlsab = rtlsab0/g" b2mod_driver_diff.F90
 ## CAREFUL! below might be needed in future
 # define block 1
 l1=`grep -n 'stateb0%pl%na = stateb%pl%na' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
-l2=`grep -n 'diffparam_save13%b2npht_rxg = switchb%b2optim_reset_drift' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+l2=`grep -n 'diffparam_save13%xfm0 = switchb%b2optim_reset_drift' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
 # define block 2
 l3=`grep -n 'stateb1%pl%na = stateb%pl%na' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
 l4=`grep -n 'stateb1%update%zt = stateb%update%zt' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
@@ -464,7 +466,7 @@ l5=`grep -n 'cumul = cumul + (stateb%pl%na-stateb1%pl%na)\*\*2' b2mod_driver_dif
 l6=`grep -n 'cumul = cumul + (stateb%update%zt-stateb1%update%zt)\*\*2' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
 # define block 4
 l7=`grep -n 'stateb%pl%na = diffparam_save15%ns' b2mod_driver_diff.F90 | head -n 1 | awk -F ':' '{print $1}'`
-l8=`grep -n 'switchb%b2optim_reset_drift = diffparam_save13%b2npht_rxg' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
+l8=`grep -n 'switchb%b2optim_reset_drift = diffparam_save13%xfm0' b2mod_driver_diff.F90 | tail -n 1 | awk -F ':' '{print $1}'`
 if [ -z "$l1" ] || [ -z "$l2" ]; then
     echo "ERROR: could not find markers for block1 in b2mod_driver_diff, it needs to be manually modified"
 fi

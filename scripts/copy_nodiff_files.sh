@@ -84,6 +84,7 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_b2cmpb.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_elements.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_pardiso.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_plasma.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_convergence.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_work.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .

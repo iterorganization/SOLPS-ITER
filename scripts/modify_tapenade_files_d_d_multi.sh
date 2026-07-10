@@ -287,15 +287,35 @@ sed -i -e '/xnewd(nd0, 1:npar_opt) = 0.D0/d' b2mod_driver_diffv_diffv.F90
 # disappearing argument in call to calcflow in b2tfnb
 sed -i -e 's/\&               fna_32(:, :, :, :, isb), dummyzerodiffd0, dummyzerodiffd\&/\&               fna_32(:, :, :, :, isb), dv%fna_52(:, :, isb), dummyzerodiffd0, dummyzerodiffd\&/g' b2tfnb_dv_dv.F90
 
-# disappearing argument in calls to b2xazpy in b2stbc
+# disappearing argument in calls to b2saxpy in b2stbc
 sed -i -e 's/CALL B2SAXPY_DV_DV(ncv, switch%sna0ep, dummyzerodiffd/CALL B2SAXPY_DV_DV(ncv, switch%sna0ep, geo%cvvol, dummyzerodiffd/g' b2stbc_dv_dv.F90
 sed -i -e 's/CALL B2SAXPY_DV_DV(ncv, switch%she0ep, dummyzerodiffd/CALL B2SAXPY_DV_DV(ncv, switch%she0ep, geo%cvvol, dummyzerodiffd/g' b2stbc_dv_dv.F90
 sed -i -e 's/CALL B2SAXPY_DV_DV(ncv, switch%shi0ep, dummyzerodiffd/CALL B2SAXPY_DV_DV(ncv, switch%shi0ep, geo%cvvol, dummyzerodiffd/g' b2stbc_dv_dv.F90
 
 # missing calls to some diff'ed functions CONTAINed inside b2stbc_phys
 sed -i -e '0,/CONTAINS/s/CONTAINS/CONTA11INS/g' b2stbc_phys_dv_dv.F90
-sed -i -e "/CONTA11INS/a\!\n  FUNCTION PIT(icv)\n  USE B2MOD_DIFFSIZES\n    IMPLICIT NONE\n    INTEGER, INTENT(IN) :: icv\n    REAL(kind=r8) :: pit\n    INTRINSIC ABS\n    REAL(kind=r8) :: abs23\n    IF (geo%cvbb(icv, 0) .GE. 0.) THEN\n      abs23 = geo%cvbb(icv, 0)\n    ELSE\n      abs23 = -geo%cvbb(icv, 0)\n    END IF\n!\n    pit = abs23/geo%cvbb(icv, 3)\n!\n    RETURN\n  END FUNCTION PIT" b2stbc_phys_dv_dv.F90
-sed -i -e "/CONTA11INS/a\  FUNCTION SHEATH_G(t0)\n    USE B2MOD_TYPES\n  USE B2MOD_DIFFSIZES\n    IMPLICIT NONE\n    REAL(kind=r8) :: sheath_g, t0\n    INTRINSIC SQRT, ERF, EXP\n    REAL(kind=r8) :: result12\n    REAL(kind=r8) :: result21\n    REAL(kind=r8) :: arg13\n!\n    result12 = SQRT(pi)\n    result21 = ERF(t0)\n    arg13 = t0**2\n    sheath_g = 1.0_R8 + result12*t0*(1+result21)*EXP(arg13)\n!\n    RETURN\n  END FUNCTION SHEATH_G\n" b2stbc_phys_dv_dv.F90
+SSS="${SOLPSTOP}/modules/B2.5/src/differentiation/tangent/b2stbc_phys_dv.F90"
+TTT="b2stbc_phys_dv_dv.F90"
+MARKER="CONTA11INS"
+BLOCKFILE=/tmp/combined_block.txt
+rm -f $BLOCKFILE
+for pair in "SUBROUTINE:CSBC_IS" "SUBROUTINE:VBC_IS" "FUNCTION:SHEATH_G" "FUNCTION:PIT"
+do
+    kind=$(echo $pair | cut -d: -f1)
+    name=$(echo $pair | cut -d: -f2)
+
+    sed -n "/^[[:space:]]*${kind}[[:space:]]\+${name}[[:space:]]*(/,/^[[:space:]]*END[[:space:]]\+${kind}[[:space:]]\+${name}/{p; /^[[:space:]]*END[[:space:]]\+${kind}[[:space:]]\+${name}/q}" \
+        $SSS >> $BLOCKFILE
+
+    echo "" >> $BLOCKFILE
+done
+cat > /tmp/insert.sed << EOF
+0,/${MARKER}/{
+/${MARKER}/r $BLOCKFILE
+}
+EOF
+sed -i -f /tmp/insert.sed $TTT
+rm -f /tmp/insert.sed $BLOCKFILE
 sed -i -e 's/CONTA11INS/CONTAINS/g' b2stbc_phys_dv_dv.F90
 
 # missing argument in calls to b2srsm, b2srst, b2srdt in b2mndt
