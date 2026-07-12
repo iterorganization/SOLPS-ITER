@@ -216,7 +216,7 @@ ${OBJDIR}/condense.o: ${OBJDIR}/comxs.${MOD}
 
 ${OBJDIR}/cone.o: ${OBJDIR}/comprt.${MOD}
 
-${OBJDIR}/couple_core.o: ${OBJDIR}/cspei.${MOD} ${OBJDIR}/eirmap.${MOD}
+${OBJDIR}/couple_core.o: ${OBJDIR}/cspei.${MOD} ${OBJDIR}/ctrig.${MOD} ${OBJDIR}/eirmap.${MOD}
 
 ${OBJDIR}/ctell.o: ${OBJDIR}/ccona.${MOD}
 
@@ -229,6 +229,10 @@ ${OBJDIR}/default.o: ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 ${OBJDIR}/ducttr.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/clgin.${MOD}
 
 ${OBJDIR}/eirene_f30f31.o: ${OBJDIR}/ctrig.${MOD}
+
+${OBJDIR}/eirsamsp.o: ${OBJDIR}/eirbase.${MOD}
+
+${OBJDIR}/ellipsoid.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/ello.o: ${OBJDIR}/clmsur.${MOD}
 
@@ -270,7 +274,7 @@ ${OBJDIR}/geradx.o: ${OBJDIR}/clmsur.${MOD}
 
 ${OBJDIR}/gerady.o: ${OBJDIR}/clmsur.${MOD}
 
-${OBJDIR}/grid.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/grid.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
 
 ${OBJDIR}/grid_1.o: ${OBJDIR}/comprt.${MOD}
 
@@ -290,6 +294,10 @@ ${OBJDIR}/impneut_interface.o: ${OBJDIR}/impdns.${MOD} ${OBJDIR}/impmom.${MOD} $
 
 ${OBJDIR}/impsrc.o: ${OBJDIR}/ccoupl.${MOD} ${OBJDIR}/ctrig.${MOD}
 
+${OBJDIR}/indmap.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/indmpi.o: ${OBJDIR}/comprt.${MOD}
+
 ${OBJDIR}/infcop.o: ${OBJDIR}/brascl.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/braspoi.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/coutau.${MOD} ${OBJDIR}/eirbra.${MOD} ${OBJDIR}/ifwrite.${MOD} ${OBJDIR}/impdns.${MOD}
 
 ${OBJDIR}/infstat.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/eirbra.${MOD}
@@ -298,11 +306,59 @@ ${OBJDIR}/init.o: ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
 ${OBJDIR}/input.o: ${OBJDIR}/adsp.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/cdiprl.${MOD} ${OBJDIR}/ceirsrt.${MOD} ${OBJDIR}/censav.${MOD} ${OBJDIR}/cgrptl.${MOD} ${OBJDIR}/clogau.${MOD} ${OBJDIR}/comsmu.${MOD} ${OBJDIR}/comsou.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/cpl3d.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD} ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/cspei.${MOD} ${OBJDIR}/cstep.${MOD} ${OBJDIR}/photon.${MOD}
 
-${OBJDIR}/inspect.o: ${OBJDIR}/eircolsp.${MOD}
+${OBJDIR}/inspect.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/eircolsp.${MOD} ${OBJDIR}/eirmod_mpi.${MOD}
+
+${OBJDIR}/learca.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/leer.o: ${OBJDIR}/comprt.${MOD}
 
+${OBJDIR}/masage.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masbox.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masbr2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masir2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj1.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj1r.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj3.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masj4.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masprm.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr1.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr3.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr4.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masr6.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masrr1.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masrr2.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/masrr4.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/modplasm.o: ${OBJDIR}/cestim.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comusr.${MOD}
+
+${OBJDIR}/mpi_wrappers.o: ${OBJDIR}/eirmod_mpi.${MOD}
+
+${OBJDIR}/multi.o: ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/cinit.${MOD} ${OBJDIR}/comusr.${MOD}
+
+${OBJDIR}/neutrs.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/clgin.${MOD}
+
 ${OBJDIR}/octree.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/eirmod_octree.${MOD}
+
+${OBJDIR}/page.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/para1.o: ${OBJDIR}/clmsur.${MOD}
 
@@ -310,15 +366,23 @@ ${OBJDIR}/para2o.o: ${OBJDIR}/clmsur.${MOD}
 
 ${OBJDIR}/para2u.o: ${OBJDIR}/clmsur.${MOD}
 
-${OBJDIR}/plasma.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/pl3d.o: ${OBJDIR}/cplot.${MOD}
 
-${OBJDIR}/plasma_deriv.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cspei.${MOD}
+${OBJDIR}/plane.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/plasma.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
+
+${OBJDIR}/plasma_deriv.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/cspei.${MOD}
+
+${OBJDIR}/plausr.o: ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comusr.${MOD}
 
 ${OBJDIR}/plgell.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/pltadd.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/clmsur.${MOD} ${OBJDIR}/crech.${MOD}
 
 ${OBJDIR}/pltaxi.o: ${OBJDIR}/cplmsk.${MOD}
+
+${OBJDIR}/pltin.o: ${OBJDIR}/clmsur.${MOD} ${OBJDIR}/ctrcei.${MOD}
 
 ${OBJDIR}/pltka.o: ${OBJDIR}/clmsur.${MOD} ${OBJDIR}/crech.${MOD}
 
@@ -328,53 +392,91 @@ ${OBJDIR}/pltku.o: ${OBJDIR}/clmsur.${MOD} ${OBJDIR}/crech.${MOD}
 
 ${OBJDIR}/pltmsk.o: ${OBJDIR}/cplmsk.${MOD}
 
-${OBJDIR}/plt2d.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/crech.${MOD} ${OBJDIR}/cplmsk.${MOD} ${OBJDIR}/cpl3d.${MOD}
+${OBJDIR}/pltusr.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comusr.${MOD}
+
+${OBJDIR}/plt2d.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/cplmsk.${MOD} ${OBJDIR}/cpl3d.${MOD} ${OBJDIR}/crech.${MOD} ${OBJDIR}/ctrig.${MOD}
+
+${OBJDIR}/plt3d.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/cinit.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comsou.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/ctext.${MOD} ${OBJDIR}/ctrcei.${MOD} ${OBJDIR}/cupd.${MOD}
 
 ${OBJDIR}/pl3d.o: ${OBJDIR}/cpl3d.${MOD}
 
-${OBJDIR}/profe.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/profe.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
 
-${OBJDIR}/profn.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/profn.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
 
 ${OBJDIR}/profr.o: ${OBJDIR}/cspei.${MOD}
 
-${OBJDIR}/profs.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/profs.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD}
 
-${OBJDIR}/pside.o: ${OBJDIR}/crech.${MOD}
+${OBJDIR}/prousr.o: ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/comusr.${MOD}
+
+${OBJDIR}/prttal.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/pside.o: ${OBJDIR}/cplot.${MOD} ${OBJDIR}/crech.${MOD}
 
 ${OBJDIR}/read_photdbk.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/photon.${MOD}
 
 ${OBJDIR}/rdtrim.o: ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD}
 
+${OBJDIR}/readtl.o: ${OBJDIR}/comprt.${MOD}
+
 ${OBJDIR}/refdat.o: ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD}
 
-${OBJDIR}/reflec.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/crand.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD}
+${OBJDIR}/reflec.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/crand.${MOD} ${OBJDIR}/cref.${MOD} ${OBJDIR}/crefmod.${MOD}
+
+${OBJDIR}/rotadd.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/ctrcei.${MOD}
+
+${OBJDIR}/save_tallies.o: ${OBJDIR}/braspoi.${MOD} ${OBJDIR}/ccoupl.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/coutau.${MOD}
+
+${OBJDIR}/sccone.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/secang.o: ${OBJDIR}/ccona.${MOD}
+
+${OBJDIR}/second_own.o: ${OBJDIR}/eirmod_mpi.${MOD}
+
+${OBJDIR}/secqua.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/setamd.o: ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/photon.${MOD}
 
 ${OBJDIR}/setcon.o: ${OBJDIR}/ccona.${MOD}
 
+${OBJDIR}/seteq.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/ctrcei.${MOD}
+
 ${OBJDIR}/setfit.o: ${OBJDIR}/ccona.${MOD}
+
+${OBJDIR}/setref.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/setrot.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/settxt.o: ${OBJDIR}/coutau.${MOD}
 
 ${OBJDIR}/sheath.o: ${OBJDIR}/ccona.${MOD}
 
+${OBJDIR}/shnitt.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/slap_interface.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/slreac.o: ${OBJDIR}/comxs.${MOD} ${OBJDIR}/photon.${MOD}
+
+${OBJDIR}/smach.o: ${OBJDIR}/comprt.${MOD}
+
 ${OBJDIR}/sneigh.o: ${OBJDIR}/avltree.${MOD} ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/sputer.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/crand.${MOD}
+${OBJDIR}/sputer.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cpes.${MOD} ${OBJDIR}/crand.${MOD}
 
-${OBJDIR}/srcusr.o: ${OBJDIR}/eirsamsp.${MOD}
+${OBJDIR}/srcusr.o: ${OBJDIR}/comprt.${MOD} ${OBJDIR}/eirsamsp.${MOD}
 
 ${OBJDIR}/stcoor.o: ${OBJDIR}/crech.${MOD}
 
 ${OBJDIR}/step.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cstep.${MOD}
 
+${OBJDIR}/suche_nachbarn.o: ${OBJDIR}/ctetra.${MOD}
+
 ${OBJDIR}/tetra_schnitt.o: ${OBJDIR}/ccona.${MOD}
 
 ${OBJDIR}/timea.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/eirmod_octree.${MOD}
+
+${OBJDIR}/tstchm.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/user_default.o: ${OBJDIR}/eirdiag.${MOD}
 
@@ -382,35 +484,65 @@ ${OBJDIR}/user_input.o: ${OBJDIR}/impdns.${MOD} ${OBJDIR}/impmom.${MOD} ${OBJDIR
 
 ${OBJDIR}/velocs.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/crand.${MOD}
 
-${OBJDIR}/volume.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/volume.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/ctrig.${MOD}
+
+${OBJDIR}/vtkout.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/ctext.${MOD}
 
 ${OBJDIR}/wneutral.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD} ${OBJDIR}/comusr.${MOD} ${OBJDIR}/comxs.${MOD} ${OBJDIR}/ifwrite.${MOD}
 
 ${OBJDIR}/wneutral_fluxes.o: ${OBJDIR}/amark_mod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cestim.${MOD}
 
+${OBJDIR}/wrgeom.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/cgrid.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/ctrig.${MOD}
+
+${OBJDIR}/wrmesh.o: ${OBJDIR}/cadgeo.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/cgeom.${MOD} ${OBJDIR}/clgin.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/cplot.${MOD} ${OBJDIR}/cpolyg.${MOD} ${OBJDIR}/ctrcei.${MOD}
+
 ${OBJDIR}/wrplam.o: ${OBJDIR}/ccrm.${MOD} ${OBJDIR}/ifwrite.${MOD}
 
-${OBJDIR}/xsecta.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/wrsnap.o: ${OBJDIR}/comnnl.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/comsou.${MOD} ${OBJDIR}/ctrcei.${MOD}
 
-${OBJDIR}/xsectm.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/wrstrt.o: ${OBJDIR}/comprt.${MOD}
+
+${OBJDIR}/xsecta.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xsecta_param.o: ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xsecti.o: ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xsecti_param.o: ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xsectm.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xsectm_param.o: ${OBJDIR}/comxs.${MOD}
 
 ${OBJDIR}/xsectp.o: ${OBJDIR}/caprmc.${MOD} ${OBJDIR}/ccona.${MOD} ${OBJDIR}/photon.${MOD}
+
+${OBJDIR}/xsectp_param.o: ${OBJDIR}/comxs.${MOD}
 
 ${OBJDIR}/xsectph.o: ${OBJDIR}/photon.${MOD}
 
 ${OBJDIR}/xsectph_param.o: ${OBJDIR}/photon.${MOD}
 
-${OBJDIR}/xstapi.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/xshadd.o: ${OBJDIR}/cadgeo.${MOD}
 
-${OBJDIR}/xstcx.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/xstapi.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
 
-${OBJDIR}/xstei.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/xstapi_param.o: ${OBJDIR}/comxs.${MOD}
 
-${OBJDIR}/xstel.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/xstcx.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xstei.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/xstel.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comxs.${MOD}
+
+${OBJDIR}/yshadd.o: ${OBJDIR}/cadgeo.${MOD}
+
+${OBJDIR}/zshadd.o: ${OBJDIR}/cadgeo.${MOD}
+
+${OBJDIR}/zylind.o: ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD}
 
-${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/parmmod.${MOD}
+${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/parmmod.${MOD}
 
 ${OBJDIR}/b2_4to5.o: ${OBJDIR}/eirmod_parmmod.${MOD} ${OBJDIR}/braeir.${MOD} ${OBJDIR}/eirdiag.${MOD}
 
@@ -598,7 +730,7 @@ ${OBJDIR}/csdvi.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi.F ${M
 ${OBJDIR}/csdvi_bgk.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi_bgk.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/csdvi_bgk.o -c ${SRCDIR}/Eirene_modules/csdvi_bgk.F
 
-${OBJDIR}/csdvi_cop.o: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi_cop.F ${MAKES}
+${OBJDIR}/csdvi_cop.o: ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi_cop.F ${MAKES}
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${OBJDEST} -o ${OBJDIR}/csdvi_cop.o -c ${SRCDIR}/Eirene_modules/csdvi_cop.F
 
 ${OBJDIR}/cspars.o: ${SRCDIR}/Eirene_modules/cspars.F ${MAKES}
@@ -919,7 +1051,7 @@ ${OBJDIR}/csdvi_bgk.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/cs
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/csdvi_bgk.o -c ${SRCDIR}/Eirene_modules/csdvi_bgk.F
 
-${OBJDIR}/csdvi_cop.${MOD}: ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi_cop.F ${MAKES}
+${OBJDIR}/csdvi_cop.${MOD}: ${OBJDIR}/csdvi.${MOD} ${OBJDIR}/parmmod.${MOD} ${SRCDIR}/Eirene_modules/csdvi_cop.F ${MAKES}
 	@[ -e $@ ] && rm $@ || echo > /dev/null
 	${DBLFC} ${DBLOPTION} ${FCOPTS} ${DEFINES} ${EQUIV4} ${SOLPSINCLUDE} ${INCMOD}${OBJDIR} ${OBJDEST} -o ${OBJDIR}/csdvi_cop.o -c ${SRCDIR}/Eirene_modules/csdvi_cop.F
 
@@ -1092,17 +1224,17 @@ links: local
 	@[ -L ${SRCDIR}/B2_include.local ] && rm -Rf ${SRCDIR}/B2_include.local || echo > /dev/null
 ifeq ($(shell [ -d ${SOLPS4}/src/Braams/b2/include.local ] && echo yes || echo no ),yes)
 	-mkdir -p ${SRCDIR}/B2_include.local
-	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
+	@[ -r `which lndir 2>/dev/null` ] && ( lndir ${SOLPS4}/src/Braams/b2/include.local ${SRCDIR}/B2_include.local >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include.local/* ${SRCDIR}/B2_include.local/
 endif
 	@[ -L ${SRCDIR}/B2_include ] && rm -Rf ${SRCDIR}/B2_include || echo > /dev/null
 	-mkdir -p ${SRCDIR}/B2_include
-	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
+	@[ -r `which lndir 2>/dev/null` ] && ( lndir ${SOLPS4}/src/Braams/b2/include ${SRCDIR}/B2_include >& /dev/null ) || ln -sf ${SOLPS4}/src/Braams/b2/include/* ${SRCDIR}/B2_include/
 ifdef LD_NETCDF
 	@rm -f ${SRCDIR}/B2_include/netcdf.inc
 endif
 	@[ -L ${SRCDIR}/Eirene_modules ] && rm -Rf ${SRCDIR}/Eirene_modules || echo > /dev/null
 	-mkdir -p ${SRCDIR}/Eirene_modules
-	@[ -r `which lndir` ] && ( lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules >& /dev/null ) || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
+	@[ -r `which lndir 2>/dev/null` ] && ( lndir ${SOLPS4}/src/Eirene/src/modules ${SRCDIR}/Eirene_modules >& /dev/null ) || ln -sf ${SOLPS4}/src/Eirene/src/modules/* ${SRCDIR}/Eirene_modules/
 	-mkdir -p ${SRCDIR}/solps4_B2
 	@cat B2_4.3.source_files | sed -e 's:[^ ]*/: ${SRCDIR}/solps4_B2/:' | paste B2_4.3.source_files - | sed -e "s:^:ln -sf ${SOLPS4}/src/Braams/b2/src/:" > B2_links
 	. ./B2_links
