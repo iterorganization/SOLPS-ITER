@@ -131,7 +131,7 @@ sed -i -e "s/INTEGER :: dummyzerodiffd1/INTEGER :: dummyzerodiffd1(nbdirsmax)/g"
 sed -i -e "s/INTEGER :: dummyzerodiffd4/INTEGER :: dummyzerodiffd4(nbdirsmax)/g" b2xpve_dv.F90
 sed -i -e "s/INTEGER :: dummyzerodiffd7/INTEGER :: dummyzerodiffd7(nbdirsmax)/g" b2xpve_dv.F90
 sed -i -e 's/REAL :: result1$/integer :: result1/g' b2mod_input_profile_diffv.F90
-sed -i -e '/she0d(nd, :, :) = 0.D0/a\        sne0d(nd, :, :) = 0.D0' b2mod_input_profile_diffv.F90
+sed -i -e '/sna0d = 0.D0/a\      sne0d = 0.D0' b2mod_input_profile_diffv.F90
 sed -i -e 's/#NBDirsMax#/nbdirsmax/g' ./*.F90 #why?
 sed -i -e 's/#DIM_DV#/DIM_DV/g' dim_dv.F90 #why?
 sed -i -e 's/DAMAX_NODIFF/damax/g' b2mndt_dv.F90 b2mxac_dv.F90 b2stcx_dv.F90 b2stel_dv.F90
@@ -141,6 +141,7 @@ sed -i -e 's/calc_dist(/calc_dist_nodiff(/g' b2wdat.F
 sed -i -e 's/calc_dist_f/calc_dist_f_nodiff/g' b2wdat.F
 sed -i '/REAL(kind=r8) :: const_h/i\# ifndef CONSTANTS_PROVIDED' heatdiff1D_dv.F90 ratstr_dv.F90
 sed -i '/PARAMETER (const_h/a\# endif' heatdiff1D_dv.F90 ratstr_dv.F90
+sed -i -e 's/csbcd(1, icv1, is), wrk, nbdirs)/csbcd(:, icv1, is), wrk, nbdirs)/g' b2stbc_phys_dv.F90
 
 sed -i -e 's/INTEGER, SAVE :: ank_tracing=0/INTEGER :: ank_tracing=0/g' b2mod_diag_diffv.F90
 sed -i '/INTRINSIC HUGE/d' b2mod_neutrals_namelist_diffv.F90 b2mod_boundary_namelist_diffv.F90

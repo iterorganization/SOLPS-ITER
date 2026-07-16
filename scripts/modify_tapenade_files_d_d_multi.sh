@@ -183,7 +183,7 @@ sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g
 sed -i '/EXTERNAL SUBINI/d' *.F90
 sed -i '/EXTERNAL SUBEND/d' *.F90
 sed -i -e '/EXTERNAL OUTPUT_DS_CV/d' b2mod_input_profile_diffv_diffv.F90
-sed -i -e '/she0d(nd, :, :) = 0.d0/a\        sne0d(nd, :, :) = 0.d0' b2mod_input_profile_diffv_diffv.F90
+sed -i -e '/sna0d = 0.d0/a\      sne0d = 0.d0' b2mod_input_profile_diffv_diffv.F90
 sed -i '/EXTERNAL IPSETC/d' b2mnds_dv_dv.F90 
 sed -i '/EXTERNAL IPPRHP/d' b2mnds_dv_dv.F90 
 sed -i '/EXTERNAL B2FILE./d' b2mndt_dv_dv.F90
@@ -327,8 +327,20 @@ sed -i -e 's/\&                   dummyzerodiffd20, dummyzerodiffd19, dummyzerod
 sed -i -e 's/\&                   , dummyzerodiffd17, st%pl%kt, dummyzerodiffd16, st%\&/\&                   , st%dv%kinrgy, dummyzerodiffd17, st%pl%kt, dummyzerodiffd16, st%\&/g' b2mndt_dv_dv.F90
 sed -i -e 's/\&                   dummyzerodiffd26, dummyzerodiffd25, dummyzerodiffd24\&/\&                   dummyzerodiffd26, st%dv%ni, dummyzerodiffd25, st%dv%nn, dummyzerodiffd24\&/g' b2mndt_dv_dv.F90
 
-# missing argument in calls to b2treq in b2news_ and b2news_m
+# missing argument in calls to b2treq, b2srsm, b2srst, b2srdt in b2news_ and b2news_m
 sed -i -e 's/CALL B2TREQ_DV_DV(ncv, switch, switchd0, switchd, dummyzerodiffd/CALL B2TREQ_DV_DV(ncv, switch, switchd0, switchd, geo%cvvol, dummyzerodiffd/g' b2news__dv_dv.F90 b2news_m_dv_dv.F90
+sed -i -e 's/\&               %dv%ni, std%dv%ni, stdd%dv%ni, dummyzerodiffd/\&               %dv%ni, std%dv%ni, stdd%dv%ni, st%dv%nn, dummyzerodiffd/g' b2news__dv_dv.F90 b2news_m_dv_dv.F90
+sed -i -e 's/\&               , dummyzerodiffd9, st%pl%tn, dummyzerodiffd8, \&/\&               , dummyzerodiffd9, st%pl%tn, dummyzerodiffd8, st%dv%ne, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               , dummyzerodiffd21, st%pl%tn, dummyzerodiffd20, \&/\&               , dummyzerodiffd21, st%pl%tn, dummyzerodiffd20, st%dv%ne, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               , dummyzerodiffd10, st%pl%tn, dummyzerodiffd9, \&/\&               , dummyzerodiffd10, st%pl%tn, dummyzerodiffd9, st%dv%ne, \&/g' b2news_m_dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd7, dummyzerodiffd6, dummyzerodiffd5, \&/\&               dummyzerodiffd7, st%dv%ni, dummyzerodiffd6, st%dv%nn, dummyzerodiffd5, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd19, dummyzerodiffd18, dummyzerodiffd17, \&/\&               dummyzerodiffd19, st%dv%ni, dummyzerodiffd18, st%dv%nn, dummyzerodiffd17, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd8, dummyzerodiffd7, dummyzerodiffd6, \&/\&               dummyzerodiffd8, st%dv%ni, dummyzerodiffd7, st%dv%nn, dummyzerodiffd6, \&/g' b2news_m_dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd4, st%pl%kt, dummyzerodiffd3, st%pl%zt, \&/\&               st%dv%kinrgy, dummyzerodiffd4, st%pl%kt, dummyzerodiffd3, st%pl%zt, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd16, st%pl%kt, dummyzerodiffd15, st%pl%zt, \&/\&               st%dv%kinrgy, dummyzerodiffd16, st%pl%kt, dummyzerodiffd15, st%pl%zt, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               dummyzerodiffd5, st%pl%kt, dummyzerodiffd4, st%pl%zt, \&/\&               st%dv%kinrgy, dummyzerodiffd5, st%pl%kt, dummyzerodiffd4, st%pl%zt, \&/g' b2news_m_dv_dv.F90
+sed -i -e 's/\&               po, stdd%pl%po, dummyzerodiffd13, dummyzerodiffd12, \&/\&               po, stdd%pl%po, st%dv%ne, dummyzerodiffd13, st%dv%ni, dummyzerodiffd12, st%dv%nn, \&/g' b2news__dv_dv.F90
+sed -i -e 's/\&               po, stdd%pl%po, dummyzerodiffd14, dummyzerodiffd13, \&/\&               po, stdd%pl%po, st%dv%ne, dummyzerodiffd14, st%dv%ni, dummyzerodiffd13, st%dv%nn, \&/g' b2news_m_dv_dv.F90
 
 # missing argument in call to b2sihs in b2npht
 sed -i -e 's/\&                dv%ne, dvd0%ne, dvd%ne, dvdd%ne, dummyzerodiffd, dv%ni\&/\&                dv%ne, dvd0%ne, dvd%ne, dvdd%ne, dv%ne2, dummyzerodiffd, dv%ni\&/g' b2npht_dv_dv.F90
@@ -344,3 +356,9 @@ sed -i -e 's/\&               tn, std0%pl%tn, std%pl%tn, stdd%pl%tn, dummyzerodi
 
 # adjust get_mult_dt
 sed -i -e 's/LOG(10)/LOG(10.0)/g' get_mult_dt_dv_dv.F90
+
+# wrong argument in call to VB_IS_DV in b2stbc_phys_dv_dv
+sed -i -e 's/csbcd(1, icv1, is), wrk, nbdirs)/csbcd(:, icv1, is), wrk, nbdirs)/g' b2stbc_phys_dv_dv.F90
+sed -i -e 's/\&                     , csbcd0(:, icv1, is), csbcd(1, icv1, is), csbcdd(\&/\&                     , csbcd0(:, icv1, is), csbcd(:, icv1, is), csbcdd(\&/g' b2stbc_phys_dv_dv.F90
+sed -i -e 's/\&                     :, 1, icv1, is), wrk, nbdirs, nbdirs0)/\&                     :, :, icv1, is), wrk, nbdirs, nbdirs0)/g' b2stbc_phys_dv_dv.F90
+
