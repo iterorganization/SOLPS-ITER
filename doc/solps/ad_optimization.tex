@@ -244,7 +244,7 @@ In tangent AD mode, the user can thus specify as many cost functions as desired,
 
 To compile the tangent code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
 \begin{verbatim}
-$ gmake listobj depend
+$ gmake prereqs
 \end{verbatim}
 Then compile with:
 \begin{verbatim}
@@ -410,7 +410,7 @@ While in principle adjoint vector mode exists and allows to retrieve the full Ja
 
 To compile the adjoint code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
 \begin{verbatim}
-$ gmake listobj depend
+$ gmake prereqs
 \end{verbatim}
 Then compile with:
 \begin{verbatim}
@@ -536,7 +536,7 @@ On other clusters a similar configuration could be used. One may take care in pa
 
 To compile the optimization version with the built-in BFGS algorithm:\index{set\_bfgs}
 \begin{verbatim}
-	$ game listobj depend
+	$ gmake prereqs
 	$ set_bfgs
 	$ gmake b25_tgt b25_adj
 \end{verbatim}
@@ -544,7 +544,7 @@ where the {\tt set\_bfgs} script sets extra compilation flags in the configurati
 
 To compile the optimization version with the {\tt PETSc/TAO} optimization library:\index{set\_tao}
 \begin{verbatim}
-$ game listobj depend
+$ gmake prereqs
 $ set_tao
 $ gmake b25_tgt b25_adj
 \end{verbatim}
@@ -777,7 +777,7 @@ Second order derivatives can be obtained by applying AD a second time on an alre
 
 To compile the tangent over tangent code make the objects and dependencies list in the standard way from {\tt \$SOLPSTOP}:
 \begin{verbatim}
-	$ gmake listobj depend
+	$ gmake prereqs
 \end{verbatim}
 Then compile with:
 \begin{verbatim}
