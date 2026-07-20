@@ -57,7 +57,7 @@ Available options are:
   -m <<MPI OPTIONS>>       use the MPI options specified (default serial version)
   -t <<THREADS>>           use OpenMP parallelization with <<THREADS>> threads (default $THREADS)
   -T <<HOURS>>             number of elapsed hours requested (default $hours)
-  -M <<MEM_SIZE>>          memory size per CPU in MB (default $mem)
+  -M <<MEM_SIZE>>          memory size per CPU in GB (default $mem)
   -N <<NODES>>             number of nodes requested (default $NODES)
   -Q <<PARTITION>>         partition on which to submit the job (default "tyhcnormal")
   -p <<STEP>>              activates making the output in Lisa Kaveeva style "on the fly" from plasmastates with a provided step (default $STEP)  - to be added
@@ -161,13 +161,13 @@ EOF
     set MPIOPTS="$1"
     echo Using MPI options: $MPIOPTS
     set PROCS=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-np" | tail -n 1`
-    set PROCS_ACTUAL=$PROCS
+#    set PROCS_ACTUAL=$PROCS
     set PROCS_ACTUAL=`echo $MPIOPTS | awk.transpose | grep -A 1 "\-na" | tail -n 1`
-    echo Asking for MPI run with a total of $PROCS processors
     echo PROCS_ACTUAL= $PROCS_ACTUAL
     if ( $PROCS_ACTUAL == "" ) then
-      @ PROCS_ACTUAL = $PROCS + 1
+      @ PROCS_ACTUAL = $PROCS
     endif
+    echo Asking for MPI run with a total of $PROCS_ACTUAL processors
     shift
     set HELP_STRING=`echo \"$MPIOPTS\"`
 #    echo $HELP_STRING
@@ -301,9 +301,6 @@ endif
 
 echo $TASKS tasks per node is set to SLURM
 
-@ MEM_TOT = $mem * $NODES
-@ MEM_TOT = $mem
-
 sed \
   -e 's:#PWD#:'$PWD':g' \
   -e 's:#SOLPSTOP#:'$SOLPSTOP':g' \
@@ -315,7 +312,6 @@ sed \
   -e 's:#PROCS_ACTUAL#:'$PROCS_ACTUAL':g' \
   -e 's:#THREADS#:'$THREADS':g' \
   -e 's:#MEM#:'${mem}G':g' \
-  -e 's:#MEM_TOTAL#:'${MEM_TOT}G':g' \
   -e 's:#HOURS#:'$hours':g' \
   -e 's:#PART#:'$part':g' \
   -e 's:#JOBNAME#:'$JOB_NAME':g' \
