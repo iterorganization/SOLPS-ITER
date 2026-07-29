@@ -9,11 +9,9 @@ if [[ -n "$SOLPS_PATH" ]]; then
     exit 1
   fi
 
-  unset_bfgs
-  export OPT="tao"
-  export TAO="yes"
-  export TAO_OPT="$1"
-  echo "PETSC-TAO compilation and optimization turned on with TAO options $TAO_OPT"
+  unset_tao
+  export OPT="bfgs"
+  echo "Built-in BFGS compilation and optimization turned on"
 else
   echo "SOLPS_PATH not set. Exiting."
 fi

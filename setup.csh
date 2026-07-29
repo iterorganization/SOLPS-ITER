@@ -324,6 +324,10 @@ alias   set_adj    'source $SOLPSTOP/SETUP/adj'
 alias unset_adj    'source $SOLPSTOP/SETUP/noadj'
 alias   set_tao    'source $SOLPSTOP/SETUP/tao'
 alias unset_tao    'source $SOLPSTOP/SETUP/notao'
+alias   set_bfgs   'source $SOLPSTOP/SETUP/bfgs'
+alias unset_bfgs   'source $SOLPSTOP/SETUP/nobfgs'
+alias   set_hess_tgt    'source $SOLPSTOP/SETUP/hess_tgt'
+alias unset_hess_tgt    'source $SOLPSTOP/SETUP/nohess_tgt'
 
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1

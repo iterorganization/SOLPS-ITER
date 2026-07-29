@@ -49,6 +49,7 @@ Available options are:
   -x                       requests an exclusive job allocation
   -tgt                     specify a standalone B2.5 run with tangent AD derivatives
   -adj                     specify a standalone B2.5 run with adjoint AD derivatives
+  -hess_tgt                specify a standalone B2.5 run with tangent-over-tangent hessian AD derivatives
   -opt_tgt <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with tangent AD derivatives
   -opt_adj <<OPT_OPTIONS>> specify a standalone B2.5 optimization run with adjoint AD derivatives
   -c <<JOB_ID>>            job ID of the previous job in a chain submission
@@ -147,6 +148,17 @@ EOF
     echo Asking for a B2.5 standalone run with adjoint AD
     shift
     set LOOP_OPTS="-adj ${LOOP_OPTS}"
+    goto argloop
+  endif
+  if ("X${1}X" == "X-hess_tgtX") then
+    set standalone_arg="-s"
+    if (! $?SOLPS_HESS_TGT) then
+      source $SOLPSTOP/SETUP/hess_tgt
+    endif
+    if ($JOB_NAME == "SOLPS-ITER") set JOB_NAME="B2.5_HESS_TGT"
+    echo Asking for a B2.5 standalone run with tangent hessian AD
+    shift
+    set LOOP_OPTS="-hess_tgt ${LOOP_OPTS}"
     goto argloop
   endif
   if ("X${1}X" == "X-mX") then

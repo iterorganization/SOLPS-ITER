@@ -16,7 +16,7 @@ if ($?SOLPS_PATH) then
   setenv   SOLPS_PATH `echo $SOLPS_PATH | sed "s|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}|B2.5/builds/standalone.${HOST_NAME}.${COMPILER}.tgt|g"`
   setenv   PATH ${SOLPS_PATH}:${OLD_PATH}
   setenv   SOLPS_TGT yes
-  unsetenv OLD_SOLPS_PATH SOLPS_ADJ
+  unsetenv OLD_SOLPS_PATH SOLPS_ADJ SOLPS_HESS_TGT
   rehash
   echo "SOLPS-ITER TGT mode turned on"
 else

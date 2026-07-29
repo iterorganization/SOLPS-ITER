@@ -2,12 +2,9 @@
 ## strip git hashes and cost function information from run.log
 if ( -s run.log ) then
   grep -i -w 'version' run.log >! run.info
-  grep -e 'tao' run.log >> run.info
   grep -e 'ntim' run.log | tail >> run.info
   grep -i 'stopping' run.log | tail >> run.info
   grep -i -w 'Calculating gradient of' run.log >> run.info
-  grep -i -w 'OPTIM' run.log >> run.info
-  grep -i -w 'TAO' run.log >> run.info
   set npar_opt=`grep -i npar_opt run.log | awk '{print $3}' | awk -F"," '{print $1}'`
   echo npar_opt = $npar_opt >> run.info
   @ npar_opt = $npar_opt + 1

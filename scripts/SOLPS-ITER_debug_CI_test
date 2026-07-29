@@ -1,6 +1,9 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
+# Create additional B2.5 dependencies file to avoid a recurring compiler timing error
+echo '${OBJDIR}/b2npmo.o: ${OBJDIR}/b2urmo.o' > ${SOLPSTOP}/modules/B2.5/config/dependencies.local
+
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/file-handling/wrplam.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/file-handling/wrplam_long.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/mathematics/fl2o.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/mathematics/parebe.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt

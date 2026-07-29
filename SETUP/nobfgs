@@ -1,0 +1,7 @@
+if ($?SOLPS_PATH) then
+  unsetenv OPT
+  echo "Built-in BFGS compilation and optimization turned off"
+else
+  echo "SOLPS_PATH not set. Exiting."
+endif
+
