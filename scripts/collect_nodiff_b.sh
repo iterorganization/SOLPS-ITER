@@ -44,6 +44,7 @@ cp $SOLPSTOP/modules/B2.5/src/differentiation/set_adj_gradient.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/print_adj_parameters.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/write_b2fstate_diff.F .
 cp $SOLPSTOP/modules/B2.5/src/differentiation/invert_matrix_b.F .
+cp $SOLPSTOP/modules/B2.5/src/catalyst/cxxAdaptor.cxx ../
 
 # and now modify the 'use modules' which have been differentiated
 files=`ls *.F*`

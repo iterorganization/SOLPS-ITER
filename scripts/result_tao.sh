@@ -10,6 +10,9 @@
   endif
 
   run_info
+  grep -e 'tao' run.log >> run.info
+  grep -i -w 'OPTIM' run.log >> run.info
+  grep -i -w 'TAO' run.log >> run.info
   cp b2mn.exe.dir/*.OUT .
   grep -i 'TAO,  Function value' run.info | awk '{print $5}' | awk -F"," '{print $1}' > objval.dat
   grep -i 'TAO GRADIENT NORM' run.info | awk '{print $4}' > grad.dat

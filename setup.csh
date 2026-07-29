@@ -107,7 +107,7 @@ endif
 limit stacksize unlimited
 
 # Load environment cache if it exists and the setup files have not changed
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
   set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
   if ((-f $setup.env.local.${USER}) && \
       ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
@@ -324,6 +324,10 @@ alias   set_adj    'source $SOLPSTOP/SETUP/adj'
 alias unset_adj    'source $SOLPSTOP/SETUP/noadj'
 alias   set_tao    'source $SOLPSTOP/SETUP/tao'
 alias unset_tao    'source $SOLPSTOP/SETUP/notao'
+alias   set_bfgs   'source $SOLPSTOP/SETUP/bfgs'
+alias unset_bfgs   'source $SOLPSTOP/SETUP/nobfgs'
+alias   set_hess_tgt    'source $SOLPSTOP/SETUP/hess_tgt'
+alias unset_hess_tgt    'source $SOLPSTOP/SETUP/nohess_tgt'
 
 # Check for Motif library
 if (! -e `which mwm`) setenv NO_MOTIF 1
@@ -369,7 +373,7 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then   # Assuming to work on some HPC cluster
+if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
   set setup_post = `mktemp`
   env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
      -e '1i# Generated environment cache. Do not edit!' >! $setup_post

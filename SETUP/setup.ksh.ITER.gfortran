@@ -65,13 +65,6 @@ module load Fundamental-Constants/0.2.0
 
 [ -n "$PETSC_DIR" ] && {
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PETSC_DIR}/lib
-  export PETSC_VERSION_MAJOR=`grep -i PETSC_VERSION_MAJOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
-  export PETSC_VERSION_MINOR=`grep -i PETSC_VERSION_MINOR $PETSC_DIR/include/petscversion.h | head -n 1 | awk '{print $3}'`
-  export PETSC_VERSION=${PETSC_VERSION_MAJOR}${PETSC_VERSION_MINOR}
-  unset PETSC_VERSION_MAJOR PETSC_VERSION_MINOR
-  if  [ $PETSC_VERSION -gt 316 ]; then
-    export TAO_NEW=yes
-  fi
 }
 
 export GGD_VERSION=`pkg-config ggd --modversion`
