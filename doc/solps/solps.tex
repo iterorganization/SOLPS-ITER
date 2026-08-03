@@ -797,9 +797,9 @@ After the cases have been downloaded to your system, make sure that the timestam
 
 \section{Using a central installation}
 \label{Using a central installation}
-\index{add\_central\_device}\index{setup.csh}
+\index{add\_central\_device}\index{setup.csh}\index{setup.ksh}
 
-For systems with several users it is advisable to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a {\tt \$\{SOLPSWORK\}} directory that is different from the default {\tt \$\{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Each user will then have a directory for their runs, {\tt \$SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for {\tt \$\{SOLPSTOP\}}. Using an example where each user has their runs in {\tt \$\{HOME\}/solps-runs} then the central installation could have a {\tt SETUP/setup.csh.local} with the following lines:
+For systems with several users it is possible to set up a central \SOLPSITER installation that can be maintained by an administrator. The scripts have been set up to allow this by specifying a {\tt \$\{SOLPSWORK\}} directory that is different from the default {\tt \$\{SOLPSTOP\}/runs} and setting the environment variable {\tt SOLPS\_CENTRAL} to {\tt 'yes'}. Both {\tt setup.csh} and {\tt setup.ksh} preserve a value of {\tt SOLPSWORK} that is already present in the environment, and use {\tt \$\{SOLPSTOP\}/runs} when it is not defined. When {\tt SOLPS\_CENTRAL} is not set, the standard {\tt sbr} alias continues to select {\tt \$\{SOLPSTOP\}/runs}. When {\tt SOLPS\_CENTRAL} is set, a site-defined {\tt sbr} alias is retained, as in the example below. Each user will then have a directory for their runs, {\tt \$SOLPSWORK}, which should contain a file named {\tt SOLPSTOP} which contains the value for {\tt \$\{SOLPSTOP\}}. Using an example where each user has their runs in {\tt \$\{HOME\}/solps-runs} then the central installation could have a {\tt SETUP/setup.csh.local} with the following lines:
 \begin{verbatim}
 setenv SOLPSWORK /home/$USER/solps-runs
 alias sbr 'cd ${SOLPSWORK}'
@@ -810,6 +810,14 @@ endif
 setenv SOLPS_CENTRAL "yes"
 \end{verbatim}
 This will set {\tt SOLPSWORK}, create the appropriate {\tt SOLPSTOP} file, and load a {\tt setup.csh.local} for each user if it exists. The scripts such as {\tt dg}, {\tt carre2}, and {\tt triang} then check if {\tt SOLPS\_CENTRAL} is set and will create the meshes, etc under {\tt \$\{DEVICE\}/\$\{USER\}} instead of just {\tt \$\{DEVICE\}}. It is therefore important that the {\tt DivGeo/device}, {\tt Carre2/meshes} and {\tt Triang/triangles} and each {\tt \$\{DEVICE\}} subdirectory have the permissions set such that each user can write to it. This can be achieved by having a {\tt solps} group, for example, or by providing write access for all users. Users should also have read and execute access throughout the arboresence emanating from the central installation directory. To avoid issues where the first user to create a {\tt \$\{DEVICE\}} directory will do so without the correct permissions, an {\tt add\_central\_device} script has been provided which will create the appropriate directories with write access for all users. The administrator should run this and add each {\tt DEVICE} that will be used by the group.
+
+The setup scripts create links under {\tt \$\{SOLPSTOP\}/scripts} for each host and compiler combination. When the central installation is read-only, existing links will be used but missing or incorrect links cannot be created or replaced. The administrator should therefore source the setup script for each supported host and compiler combination while the installation is writable. A warning is printed when a required path is unavailable and cannot be created or updated after the installation has been made read-only.
+
+Host- and compiler-specific commands that must be evaluated before the environment cache is read can be placed in {\tt SETUP/setup.csh.HOST\_NAME.COMPILER.pre}, where {\tt HOST\_NAME} and {\tt COMPILER} are replaced by their selected values. For example, the following command in this file disables both reading and writing the {\tt setup.csh} environment cache:
+\begin{verbatim}
+setenv SOLPS_DISABLE_ENV_CACHE 1
+\end{verbatim}
+The corresponding {\tt SETUP/setup.ksh.HOST\_NAME.COMPILER.pre} file is sourced before the main host- and compiler-specific {\tt setup.ksh} file. The {\tt setup.ksh} script does not currently use an environment cache, so {\tt SOLPS\_DISABLE\_ENV\_CACHE} applies only to {\tt setup.csh}.
 
 Before each session, each user will then set up the \SOLPSITER environment by running
 \begin{verbatim}
