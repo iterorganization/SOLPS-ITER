@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# ADAS is access-controlled, but equivalent open data can be downloaded. Check
+# it separately so an inaccessible optional repository cannot block updates of
+# the required submodules. Set SOLPS_SKIP_ADAS_REPOSITORY to force the fallback.
+
+if [ -n "${SOLPS_SKIP_ADAS_REPOSITORY:-}" ]; then
+  exit 1
+fi
+
+repo_root=${SOLPSTOP:-}
+if [ -z "$repo_root" ]; then
+  repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 2
+fi
+
+adas_url=$(git -C "$repo_root" config --get submodule.ADAS.url 2>/dev/null)
+if [ -z "$adas_url" ]; then
+  adas_url=$(git -C "$repo_root" config -f .gitmodules \
+    --get submodule.ADAS.url 2>/dev/null)
+fi
+[ -n "$adas_url" ] || exit 2
+
+case "$adas_url" in
+  ssh://*|git+ssh://*|*@*:*)
+    if [ -n "${GIT_SSH_COMMAND:-}" ] || [ -n "${GIT_SSH:-}" ]; then
+      GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code "$adas_url" HEAD \
+        >/dev/null 2>&1
+    else
+      connect_timeout=${SOLPS_ADAS_CONNECT_TIMEOUT:-5}
+      GIT_TERMINAL_PROMPT=0 \
+        GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=$connect_timeout -o ConnectionAttempts=1" \
+        git ls-remote --exit-code "$adas_url" HEAD >/dev/null 2>&1
+    fi
+    ;;
+  *)
+    GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code "$adas_url" HEAD \
+      >/dev/null 2>&1
+    ;;
+esac
+
+status=$?
+[ "$status" -eq 0 ] && exit 0
+exit 1

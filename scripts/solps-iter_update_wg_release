@@ -6,7 +6,27 @@ set repo="SOLPS-ITER"
 git fetch --prune
 git checkout feature/wg-release && echo "Checked out SOLPS-ITER WG-release branch" || goto branch
 git submodule init
-git submodule update || git -c submodule.ADAS.update=none submodule update
+
+# ADAS is access-controlled and has an open-data fallback. Update the required
+# submodules first so an ADAS connection failure cannot interrupt their update.
+git -c submodule.ADAS.update=none submodule update
+if ($status != 0) then
+  echo "ERROR: Failed to update one or more required submodules."
+  exit 1
+endif
+
+set adas_available = 0
+$SOLPSTOP/scripts/check_adas_repository_access
+if ($status == 0) set adas_available = 1
+if ($adas_available) then
+  git submodule update modules/adas
+  if ($status != 0) then
+    echo "Warning: ADAS submodule update failed; continuing without a remote ADAS update."
+    set adas_available = 0
+  endif
+else
+  echo "Skipping the ADAS submodule; its repository is unavailable or disabled."
+endif
 git pull && goto b25 || goto local
 
 b25:
@@ -57,11 +77,16 @@ DivGeo:
 ADAS:
   echo "Updating ADAS"
   if (-s $SOLPSTOP/modules/adas/.gitattributes) then
-    cd $SOLPSTOP/modules/adas
-    set repo="ADAS"
-    git fetch --prune
-    git checkout develop && echo "Checked out ADAS develop branch" || goto branch
-    git pull && goto compile || goto local
+    if ($adas_available) then
+      cd $SOLPSTOP/modules/adas
+      set repo="ADAS"
+      git fetch --prune
+      git checkout develop && echo "Checked out ADAS develop branch" || goto branch
+      git pull && goto compile || goto local
+    else
+      echo "Using the existing local ADAS checkout without updating it."
+      goto compile
+    endif
   else
     $SOLPSTOP/scripts/fetch_adas_datafiles && goto compile || exit
   endif
@@ -86,4 +111,3 @@ compile:
   ${MAKE} depend depend_debug
   ${MAKE} tags
   ${MAKE} solps MAKE_OPTIONS=-j8
-

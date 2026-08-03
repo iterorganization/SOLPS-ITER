@@ -9,7 +9,12 @@ set data_root    = "$SOLPSTOP/data.local/adas"
 set bundled_root = "$data_root/adas_bundled"
 set adf11_root   = "$data_root/adf11"
 set adf15_root   = "$data_root/adf15"
-set work_dir     = "/tmp/fetch_adas_datafiles.$$"
+set bundled_marker = "$bundled_root/.solps-fetch-complete"
+set tmp_root = "/tmp"
+if ($?TMPDIR) then
+  if ("$TMPDIR" != "") set tmp_root = "$TMPDIR"
+endif
+set work_dir     = "$tmp_root/fetch_adas_datafiles.$$"
 set adf11_manifest = "$work_dir/adf11_manifest"
 set adf15_manifest = "$work_dir/adf15_manifest"
 
@@ -439,37 +444,59 @@ set archive_file = "$work_dir/adas_bundled_archive"
 set extract_dir  = "$work_dir/adas_bundled_extract"
 mkdir -p "$extract_dir"
 
-if ("$downloader" == "curl") then
-  curl -fsSL -g --retry 3 --retry-delay 2 --connect-timeout 30 -o "$archive_file" "$bundled_url"
+# A nonempty destination is not proof of a complete archive: an interrupted
+# extraction may leave a partial tree. Record the source URL only after a
+# nonempty archive has been copied successfully, and refresh if the URL changes.
+set completed_bundle_url = ""
+if (-f "$bundled_marker") set completed_bundle_url = `cat "$bundled_marker"`
+set bundled_status = "already present"
+if ("$completed_bundle_url" == "$bundled_url") then
+  echo "Skipping adas_bundled archive; a completed download is already present"
 else
-  wget -q -O "$archive_file" "$bundled_url"
-endif
-
-set bundled_status = "failed"
-if ($status != 0) then
-  echo "Download of adas_bundled archive failed"
-  @ errors = $errors + 1
-else
-  tar -xf "$archive_file" -C "$extract_dir"
-  if ($status != 0) then
-    unzip -q "$archive_file" -d "$extract_dir"
+  set bundled_status = "failed"
+  if ("$downloader" == "curl") then
+    curl -fsSL -g --retry 3 --retry-delay 2 --connect-timeout 30 -o "$archive_file" "$bundled_url"
+  else
+    wget -q -O "$archive_file" "$bundled_url"
   endif
+
   if ($status != 0) then
-    echo "ERROR: Failed to extract adas_bundled archive. Expected a tar-compatible or zip archive."
+    echo "Download of adas_bundled archive failed"
     @ errors = $errors + 1
   else
-    if (-d "$extract_dir/adas_bundled") then
-      set bundled_source = "$extract_dir/adas_bundled"
-    else
-      set bundled_source = "$extract_dir"
-    endif
-    tar -cf - -C "$bundled_source" . | tar -xf - -C "$bundled_root"
+    tar -xf "$archive_file" -C "$extract_dir"
     if ($status != 0) then
-      echo "ERROR: Failed to copy extracted adas_bundled content into $bundled_root"
+      unzip -q "$archive_file" -d "$extract_dir"
+    endif
+    if ($status != 0) then
+      echo "ERROR: Failed to extract adas_bundled archive. Expected a tar-compatible or zip archive."
       @ errors = $errors + 1
     else
-      set bundled_status = "downloaded"
-      echo "Download of adas_bundled archive completed"
+      if (-d "$extract_dir/adas_bundled") then
+        set bundled_source = "$extract_dir/adas_bundled"
+      else
+        set bundled_source = "$extract_dir"
+      endif
+      set bundled_file_count = `find "$bundled_source" -type f -print | awk 'NR == 1 { found=1; exit } END { print found+0 }'`
+      if ($bundled_file_count == 0) then
+        echo "ERROR: The adas_bundled archive contains no files."
+        @ errors = $errors + 1
+      else
+        tar -cf - -C "$bundled_source" . | tar -xf - -C "$bundled_root"
+        if ($status != 0) then
+          echo "ERROR: Failed to copy extracted adas_bundled content into $bundled_root"
+          @ errors = $errors + 1
+        else
+          echo "$bundled_url" >! "$bundled_marker"
+          if ($status != 0) then
+            echo "ERROR: Failed to mark the adas_bundled download as complete"
+            @ errors = $errors + 1
+          else
+            set bundled_status = "downloaded"
+            echo "Download of adas_bundled archive completed"
+          endif
+        endif
+      endif
     endif
   endif
 endif
