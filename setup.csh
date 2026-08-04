@@ -452,7 +452,8 @@ if ($cache_enabled) then   # Assuming to work on some HPC cluster
   rm -f $setup_pre $setup_post $alias_pre
 endif
 
-# List loaded modules, assuming to work on some HPC cluster
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then
+# List loaded modules when the site environment provides the module command
+which module >& /dev/null
+if ($status == 0) then
   module list
 endif
