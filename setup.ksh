@@ -301,6 +301,10 @@ export CMAKE=`which cmake`
 [ "$CMAKE" = "" ] && {
   export NO_CMAKE=true
   echo 'Did not find a CMake installation. Will revert to traditional Eirene compilation style'
+} || {
+  [ "$CMAKE_MAJOR_VERSION" = "" ] && {
+    export CMAKE_MAJOR_VERSION=`cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
+  }
 }
 
 # Add any local settings if present
