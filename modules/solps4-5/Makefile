@@ -540,7 +540,7 @@ ${OBJDIR}/zshadd.o: ${OBJDIR}/cadgeo.${MOD}
 
 ${OBJDIR}/zylind.o: ${OBJDIR}/comprt.${MOD}
 
-${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD}
+${OBJDIR}/zylnd2.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comprt.${MOD}
 
 ${OBJDIR}/zylpln.o: ${OBJDIR}/ccona.${MOD} ${OBJDIR}/comprt.${MOD} ${OBJDIR}/parmmod.${MOD}
 
