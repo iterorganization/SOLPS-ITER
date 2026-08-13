@@ -17,6 +17,9 @@
 #   3. output of `whereami` script
 #   4. fallback to UNKNOWN
 #
+# SETUP/setup.ksh.HOST_NAME.COMPILER.pre is sourced after HOST_NAME and
+# COMPILER are determined, before the main machine/compiler setup file.
+#
 # Variable COMPILER is determined with decreasing priority from:
 #   1. First argument to `source setup.ksh` command
 #   2. $SOLPS_COMPILER_FORCE
@@ -45,7 +48,9 @@ elif [ "$LAST_COMMAND" = "" ]; then
 else
   export SOLPSTOP=$PWD
 fi
-export SOLPSWORK=$SOLPSTOP/runs
+# Preserve a site/user value for central run directories; otherwise use the
+# traditional runs directory under SOLPSTOP.
+[ -z "$SOLPSWORK" ] && export SOLPSWORK=${SOLPSTOP}/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
@@ -89,6 +94,14 @@ else
 fi
 
 [ -z "$COMPILER" ] && echo 'COMPILER not defined!'
+
+setup_pre=${SOLPSTOP}/SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.pre
+if [ -s "${setup_pre}" ]; then
+  echo Loading SETUP/setup.ksh.${HOST_NAME}.${COMPILER}.pre.
+  . "${setup_pre}"
+fi
+unset setup_pre
+
 [ -x "`which gmake`" ] && {
   export MAKE=`which gmake`
 } || {
@@ -144,22 +157,70 @@ S45_PATH=${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 # Create mirror scripts directory links
 #   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
 link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
-if [ -z "$NO_MPI" ]; then
-  for suffix in ".mpi" ".openmp.mpi"; do
-    [ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
-    [ "`readlink ${link_scripts}${suffix}`" != "${link_scripts}" ] && ln -sf ${link_scripts} ${link_scripts}${suffix}
-    [ -d ${link_scripts}${suffix}.debug ] && rm -Rf ${link_scripts}${suffix}.debug
-    [ "`readlink ${link_scripts}${suffix}.debug`" != "${link_scripts}.debug" ] && ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
-  done
+scripts_writable=0
+[ -w "${SOLPSTOP}/scripts" ] && scripts_writable=1
+links_available=1
+if [ ! -d "${link_scripts}" ]; then
+  if [ "${scripts_writable}" -eq 1 ]; then
+    mkdir -p "${link_scripts}"
+    [ "$?" -eq 0 ] || links_available=0
+  else
+    echo "Warning: cannot create ${link_scripts}; ${SOLPSTOP}/scripts is not writable"
+    links_available=0
+  fi
 fi
-suffix=".openmp"
-[ -d ${link_scripts}${suffix} ] && rm -Rf ${link_scripts}${suffix}
-[ "`readlink ${link_scripts}${suffix}`" != "${link_scripts}" ] && ln -sf ${link_scripts} ${link_scripts}${suffix}
-[ -d ${link_scripts}${suffix}.debug ] && rm -Rf ${link_scripts}${suffix}.debug
-[ "`readlink ${link_scripts}${suffix}.debug`" != "${link_scripts}.debug" ] && ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
-if [ "`readlink ${link_scripts}.debug`" == "${link_scripts}" ]; then
-  rm -Rf ${link_scripts}.debug
-  mkdir -p ${link_scripts}.debug
+
+if [ "${links_available}" -eq 1 ]; then
+  link_current="`readlink "${link_scripts}.debug"`"
+  if [ "${link_current}" = "${link_scripts}" ]; then
+    if [ "${scripts_writable}" -eq 1 ]; then
+      rm -Rf "${link_scripts}.debug"
+      mkdir -p "${link_scripts}.debug"
+    else
+      echo "Warning: cannot update ${link_scripts}.debug; ${SOLPSTOP}/scripts is not writable"
+    fi
+  fi
+
+  active_suffixes=".openmp"
+  [ -z "$NO_MPI" ] && active_suffixes="${active_suffixes} .mpi .openmp.mpi"
+  for suffix in ${active_suffixes}; do
+    for debug_mode in normal debug; do
+      debug_suffix=""
+      [ "${debug_mode}" = "debug" ] && debug_suffix=".debug"
+      link_target="${link_scripts}${suffix}${debug_suffix}"
+      link_source="${link_scripts}${debug_suffix}"
+      link_current="`readlink "${link_target}"`"
+      if [ "${link_current}" != "${link_source}" ]; then
+        if [ "${scripts_writable}" -eq 1 ]; then
+          rm -Rf "${link_target}"
+          ln -s "${link_source}" "${link_target}"
+        else
+          echo "Warning: cannot update ${link_target}; ${SOLPSTOP}/scripts is not writable"
+        fi
+      fi
+    done
+  done
+
+  if [ -n "$NO_MPI" ]; then
+    mpi_links_present=0
+    for suffix in ".mpi" ".openmp.mpi"; do
+      for debug_mode in normal debug; do
+        debug_suffix=""
+        [ "${debug_mode}" = "debug" ] && debug_suffix=".debug"
+        link_target="${link_scripts}${suffix}${debug_suffix}"
+        if [ -e "${link_target}" ] || [ -L "${link_target}" ]; then
+          if [ "${scripts_writable}" -eq 1 ]; then
+            rm -Rf "${link_target}"
+          else
+            mpi_links_present=1
+          fi
+        fi
+      done
+    done
+    if [ "${mpi_links_present}" -eq 1 ]; then
+      echo "Warning: cannot remove MPI toolchain links; ${SOLPSTOP}/scripts is not writable"
+    fi
+  fi
 fi
 
 # Note: in case of name clash between script and executable, script will be found first
@@ -217,7 +278,9 @@ alias sst='cd ${SOLPSTOP}/modules/Triang'
 alias ssu='cd ${SOLPSTOP}/modules/Uinp'
 alias sbin='cd ${SOLPSTOP}/scripts'
 alias slib='cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
-alias sbr='cd ${SOLPSTOP}/runs'
+if [ -z "$SOLPS_CENTRAL" ]; then
+  alias sbr='cd ${SOLPSTOP}/runs'
+fi
 alias scr='cd ${SOLPSTOP}/scripts'
 alias stop='cd ${SOLPSTOP}'
 alias sdg='cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'

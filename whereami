@@ -75,7 +75,12 @@ case "freia*.hpc.l":
 case "*.mech.kuleuven.be":
 case "*.icts.leuven.vsc":
 case "*.hpc.kuleuven.be":
-  echo LEUVEN
+  set genius=`echo $fullhost | grep -i genius`
+  if ("$genius" == "") then
+    echo LEUVEN-WICE
+  else
+    echo LEUVEN
+  endif
   breaksw
 case "*.snellius.surf.nl":
 case "*.bullx":
@@ -97,8 +102,12 @@ case "cori*":
   echo NERSC
   breaksw
 case "*.ornl.gov":
-case "megabucky*":
-case "*.cm.cluster":
+case "JLORE*":
+case "jlore*":
+case "eos*":
+case "fusion3":
+case "ultrabucky*":
+case "*bucky*":
   echo ORNL
   breaksw
 case "*.ipp.cas.cn":
@@ -109,6 +118,10 @@ case "*.nscc-hf.cn":
   breaksw
 case "sms.hlsm.local":
   echo DLUT
+  breaksw
+case "tylogin0?":
+case "tyadmin0?":
+  echo SCNET
   breaksw
 case "*.swip.ac.cn":
 case "mgmt":
