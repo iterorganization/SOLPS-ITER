@@ -1,0 +1,5 @@
+# ORNL uses one checkout across several machine configurations. Disable the
+# environment cache so machine-specific modules and paths are selected whenever
+# the setup script is sourced.
+
+setenv SOLPS_DISABLE_ENV_CACHE 1

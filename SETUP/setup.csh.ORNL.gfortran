@@ -1,38 +1,318 @@
-# Load modules
-module load solps-libs/gcc
+# ORNL site setup for gfortran builds.
+#
+# The compiler and library details below are selected by ORNL_SYSTEM.
+
 set fullhost=`hostname -f`
+set shorthost=`hostname -s | tr '[:upper:]' '[:lower:]'`
 
-#if (-e /cm/shared/apps/texlive/2017/bin/x86_64-linux) then
-#  setenv PATH /cm/shared/apps/texlive/2017/bin/x86_64-linux:${PATH}
-#endif
-
-# Environment variables
-if (! $?DEVICE) then
-  setenv DEVICE d3d
+if (! $?ORNL_SYSTEM) then
+  switch ("$shorthost")
+    case jlore*:
+      setenv ORNL_SYSTEM WSL
+      breaksw
+    case eos*:
+      setenv ORNL_SYSTEM EOS
+      breaksw
+    case ultrabucky:
+      setenv ORNL_SYSTEM ultrabucky
+      breaksw
+    case virtualbucky*:
+    case buckynimbus*:
+    case buckycloud*:
+    case cumulo*:
+      setenv ORNL_SYSTEM virtualbucky
+      breaksw
+    default:
+      setenv ORNL_SYSTEM default
+      breaksw
+  endsw
 endif
 
-# Debugger
+echo "Using ORNL system ${ORNL_SYSTEM}."
+
+# Shared defaults
+if (! $?DEVICE) setenv DEVICE d3d
+if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "ps"
+if (! $?FC) setenv FC gfortran
 setenv DBX gdb
+unsetenv NO_MOTIF
 
-# Compiler
-setenv FC gfortran
+switch ("$ORNL_SYSTEM")
+  case WSL:
+  case virtualbucky*:
+    # Local WSL or cloud Ubuntu build.  No module system is expected: gcc, OpenMPI,
+    # BLAS/LAPACK, and netCDF come from Ubuntu packages.  Conda is used only
+    # for NCAR Graphics/NCL and the Python tools that are convenient beside
+    # SOLPS.
+    setenv CC gcc
+    setenv FC gfortran
+    setenv CXX g++
+    setenv MPI_FC /usr/bin/mpif90
+    setenv SOLPS_MPIRUN /usr/bin/mpirun
+    alias ls 'ls --color=auto'
+    setenv NO_MANUAL
 
-echo "Not using ParaView with Catalyst!"
-#if (`where paraview-config` == "") then
-#  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
-#else
-#  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-#  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-#  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
-#  if (${CMAKE_MAJOR_VERSION} > 2) then
-#    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
-#    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
-#  else
-#    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
-#    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-#    setenv PARAVIEW_INCLUDE `paraview-config --include`
-#    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-#    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-#    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-#  endif
-#endif
+    if ( $?SOLPS_CONDA_ROOT ) then
+      set solps_conda_root = ${SOLPS_CONDA_ROOT}
+    else if ( $?CONDA_EXE ) then
+      set solps_conda_root = `dirname "$CONDA_EXE"`
+      set solps_conda_root = `dirname "$solps_conda_root"`
+    else if (-d ${HOME}/miniforge3) then
+      set solps_conda_root = ${HOME}/miniforge3
+    else if (-d ${HOME}/mambaforge) then
+      set solps_conda_root = ${HOME}/mambaforge
+    else if (-d ${HOME}/miniconda3) then
+      set solps_conda_root = ${HOME}/miniconda3
+    else
+      set solps_conda_root = ""
+    endif
+
+    if ( $?SOLPS_CONDA_ENV ) then
+      set solps_conda_env = ${SOLPS_CONDA_ENV}
+    else
+      set solps_conda_env = solps
+    endif
+
+    if ("$solps_conda_root" != "" && ! -d ${solps_conda_root}/envs/${solps_conda_env}) then
+      if (-d ${solps_conda_root}/envs/solps-ncarg) then
+        set solps_conda_env = solps-ncarg
+      endif
+    endif
+
+    if ("$solps_conda_root" != "" && -e ${solps_conda_root}/etc/profile.d/conda.csh) then
+      source ${solps_conda_root}/etc/profile.d/conda.csh
+      if (-d ${solps_conda_root}/envs/${solps_conda_env}) then
+        conda activate ${solps_conda_env}
+      else
+        echo "Warning: no SOLPS conda environment found under ${solps_conda_root}/envs."
+      endif
+    else
+      echo "Warning: SOLPS conda root not found. Run setup_solps_goat_user_env or set SOLPS_CONDA_ROOT."
+    endif
+
+    setenv BLAS_DIR /usr/lib/x86_64-linux-gnu
+    setenv NAG_DIR /usr/lib/x86_64-linux-gnu
+    if (! $?NCARG_LIB_DIR) then
+      if ( $?CONDA_PREFIX ) then
+        if (-e ${CONDA_PREFIX}/lib/libncarg.a) then
+          setenv NCARG_ROOT ${CONDA_PREFIX}
+          setenv NCARG_LIB_DIR ${CONDA_PREFIX}/lib
+        endif
+      endif
+    endif
+
+    if (! $?NCARG_LIB_DIR) then
+      if (-e /usr/lib/x86_64-linux-gnu/libncarg.a) then
+        setenv NCARG_ROOT /usr
+        setenv NCARG_LIB_DIR /usr/lib/x86_64-linux-gnu
+      else if (-e /mnt/SOLPS/solps-libs/lib_gfortran/lib/libncarg.a) then
+        setenv NCARG_ROOT /mnt/SOLPS/solps-libs/lib_gfortran
+        setenv NCARG_LIB_DIR /mnt/SOLPS/solps-libs/lib_gfortran/lib
+      endif
+    endif
+
+    if ( $?NCARG_LIB_DIR ) then
+      echo "ORNL setup: NCAR Graphics enabled using NCARG_LIB_DIR=${NCARG_LIB_DIR}"
+    else
+      if ( $?CONDA_PREFIX ) then
+        echo "ORNL setup: NCAR Graphics disabled; expected ${CONDA_PREFIX}/lib/libncarg.a from the ncl package"
+      else
+        echo "ORNL setup: NCAR Graphics disabled; no SOLPS conda environment is active"
+      endif
+    endif
+
+    if (! $?MKLROOT) then
+      if (-d /opt/intel/oneapi/mkl/latest) then
+        setenv MKLROOT /opt/intel/oneapi/mkl/latest
+        setenv MKL_LIB_DIR ${MKLROOT}/lib
+      else if (-e /usr/lib/x86_64-linux-gnu/libmkl_rt.so) then
+        setenv MKLROOT /usr
+        setenv MKL_LIB_DIR /usr/lib/x86_64-linux-gnu
+      endif
+    else
+      if (! $?MKL_LIB_DIR) then
+        if (-e ${MKLROOT}/lib/libmkl_rt.so) then
+          setenv MKL_LIB_DIR ${MKLROOT}/lib
+        else if (-e ${MKLROOT}/lib/x86_64-linux-gnu/libmkl_rt.so) then
+          setenv MKL_LIB_DIR ${MKLROOT}/lib/x86_64-linux-gnu
+        endif
+      endif
+    endif
+
+    if ( $?MKL_LIB_DIR ) then
+      if ( -e ${MKL_LIB_DIR}/libmkl_rt.so ) then
+        echo "ORNL setup: PARDISO enabled using MKLROOT=${MKLROOT}, MKL_LIB_DIR=${MKL_LIB_DIR}"
+        setenv MKL_NUM_THREADS 1
+        setenv MKL_THREADING_LAYER SEQUENTIAL
+        if ( $?LD_LIBRARY_PATH ) then
+          setenv LD_LIBRARY_PATH "${MKL_LIB_DIR}:${LD_LIBRARY_PATH}"
+        else
+          setenv LD_LIBRARY_PATH "${MKL_LIB_DIR}"
+        endif
+      else
+        echo "ORNL setup: PARDISO disabled; ${MKL_LIB_DIR}/libmkl_rt.so was not found"
+      endif
+    else
+      echo "ORNL setup: PARDISO disabled; MKL library directory was not found"
+    endif
+    set nfincl = `/usr/bin/nf-config --includedir`
+    set nflib  = `/usr/bin/nf-config --flibs | sed 's/.*-L\([^ ]*\).*/\1/'`
+    set ncincl = `/usr/bin/nc-config --includedir`
+    set nclib  = `/usr/bin/nc-config --libs | sed 's/.*-L\([^ ]*\).*/\1/'`
+    setenv NETCDF_F_INC $nfincl
+    setenv NETCDF_C_INC $ncincl
+    setenv NETCDF_F_LIB $nflib
+    setenv NETCDF_C_LIB $nclib
+    setenv NETCDF_F_ROOT `dirname "$nfincl"`
+    setenv NETCDF_C_ROOT `dirname "$ncincl"`
+    setenv LD_NETCDF "`/usr/bin/nf-config --flibs`"
+    if ( $?SOLPSINCLUDE ) then
+        setenv SOLPSINCLUDE "-I${nfincl} -I${ncincl} ${SOLPSINCLUDE}"
+    else
+        setenv SOLPSINCLUDE "-I${nfincl} -I${ncincl}"
+    endif
+
+    set mpishow = `${MPI_FC} --showme 2> /dev/null`
+    if ("$mpishow" == "") set mpishow = `${MPI_FC} -show`
+    set mpilib  = `echo "$mpishow" | sed -n 's/.*-L\([^ ]*\).*/\1/p' | head -n 1`
+    set mpiinc  = `echo "$mpishow" | sed -n 's/.*-I\([^ ]*\).*/\1/p' | head -n 1`
+    if ("$mpiinc" != "") setenv MPI_ROOT `dirname "$mpiinc"`
+    if ("$mpilib" != "") setenv MPI_LIBDIR $mpilib
+    if ("$mpiinc" != "") setenv MPI_INCDIR $mpiinc
+
+    if (-d /mnt/SOLPS/solps-libs/lib_gfortran) then
+      setenv solpslibsroot /mnt/SOLPS/solps-libs/lib_gfortran
+    else if (-d /mnt/SOLPS/solps_libs/lib_gfortran) then
+      setenv solpslibsroot /mnt/SOLPS/solps_libs/lib_gfortran
+    else
+      setenv solpslibsroot ${HOME}/SOLPS/solps_libs/lib_gfortran
+    endif
+    setenv GLI_HOME  $solpslibsroot
+    setenv MSCL_ROOT $solpslibsroot/lib
+    setenv GR_SOURCE $solpslibsroot
+    setenv SOLPSLIB $solpslibsroot
+    if ( $?LD_LIBRARY_PATH ) then
+        setenv LD_LIBRARY_PATH "${solpslibsroot}/lib:${solpslibsroot}:${LD_LIBRARY_PATH}"
+    else
+        setenv LD_LIBRARY_PATH "${solpslibsroot}/lib:${solpslibsroot}"
+    endif
+    breaksw
+
+  case EOS:
+    # Managed Linux server.  Compilers, MPI, netCDF, NCL, and math libraries
+    # come from environment modules.  Paths are derived from the loaded tools.
+    module load lapack ncl openblas
+    module load gcc/15.2.0
+    module load openmpi/4.1.7-gcc15.2.0
+    module load hdf5/1.14.5-gcc15.2.0
+    module load netcdf-c/4.9.2-gcc15.2.0
+    module load netcdf-fortran/4.6.1-gcc15.2.0
+    module load cmake doxygen
+    rehash
+
+    alias ls 'ls --color=auto'
+    setenv NO_MANUAL
+    setenv MPI_FC mpif90
+    setenv SOLPS_MPIRUN `which mpirun`
+
+    setenv BLAS_DIR  `echo "$LIBRARY_PATH" | tr ':' '\n' | awk '{ cmd="test -e " $0 "/libopenblas.so || test -e " $0 "/libopenblas.a"; if (system(cmd)==0) { print $0; exit } }'`
+    setenv NAG_DIR   `echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '{ cmd="test -e " $0 "/liblapack.so || test -e " $0 "/liblapack.a"; if (system(cmd)==0) { print $0; exit } }'`
+    set ncarglib = `echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '{ cmd="test -e " $0 "/libncarg.so || test -e " $0 "/libncarg.a"; if (system(cmd)==0) { print $0; exit } }'`
+    if ("$ncarglib" != "") setenv NCARG_ROOT `dirname "$ncarglib"`
+
+    set nfincl = `nf-config --includedir`
+    set nflib  = `nf-config --flibs | sed 's/.*-L\([^ ]*\).*/\1/'`
+    set ncincl = `nc-config --includedir`
+    set nclib  = `nc-config --libs | sed 's/.*-L\([^ ]*\).*/\1/'`
+    setenv NETCDF_F_INC $nfincl
+    setenv NETCDF_C_INC $ncincl
+    setenv NETCDF_F_LIB $nflib
+    setenv NETCDF_C_LIB $nclib
+    setenv NETCDF_F_ROOT `dirname "$nfincl"`
+    setenv NETCDF_C_ROOT `dirname "$ncincl"`
+    setenv LD_NETCDF "`nf-config --flibs`"
+    if ( $?SOLPSINCLUDE ) then
+        setenv SOLPSINCLUDE "-I${nfincl} -I${ncincl} ${SOLPSINCLUDE}"
+    else
+        setenv SOLPSINCLUDE "-I${nfincl} -I${ncincl}"
+    endif
+
+    set mpishow = `${MPI_FC} -show`
+    set mpilib  = `echo "$mpishow" | sed -n 's/.*-L\([^ ]*\).*/\1/p' | head -n 1`
+    set mpiinc  = `echo "$mpishow" | sed -n 's/.*-I\([^ ]*\).*/\1/p' | head -n 1`
+    if ("$mpiinc" != "") setenv MPI_ROOT `dirname "$mpiinc"`
+    if ("$mpilib" != "") setenv MPI_LIBDIR $mpilib
+    if ("$mpiinc" != "") setenv MPI_INCDIR $mpiinc
+
+    setenv solpslibsroot /projects/solps/solps-libs/lib_gfortran
+    setenv GLI_HOME  $solpslibsroot
+    setenv MSCL_ROOT $solpslibsroot/lib
+    setenv GR_SOURCE $solpslibsroot
+    setenv SOLPSLIB $solpslibsroot
+    if ( $?LD_LIBRARY_PATH ) then
+        setenv LD_LIBRARY_PATH "${solpslibsroot}/lib:${solpslibsroot}:${LD_LIBRARY_PATH}"
+    else
+        setenv LD_LIBRARY_PATH "${solpslibsroot}/lib:${solpslibsroot}"
+    endif
+    breaksw
+
+  case ultrabucky:
+    # Closest to the historical ORNL setup in this tree.
+    module load solps-libs/gcc
+    rehash
+
+    alias ls 'ls --color=auto'
+    setenv MPI_FC mpif90
+
+    breaksw
+endsw
+
+# Settings for central ORNL-style installations
+if (! $?SOLPSWORK) setenv SOLPSWORK /home/$USER/solps-runs
+alias sbr 'cd ${SOLPSWORK}'
+if (-e $SOLPSWORK/setup.csh.local) then
+  source $SOLPSWORK/setup.csh.local
+endif
+setenv SOLPS_CENTRAL "yes"
+
+# Common SOLPS workflow aliases
+alias 2dtne '2dt.py "nesepm nesepa nesepi"'
+alias 2dtte '2dt.py "tesepm tesepa tesepi"'
+alias 2dtti '2dt.py "tisepm tisepa tisepi"'
+alias 2dtpo '2dt.py "posepm posepa posepi"'
+alias resall_D resall_D.py
+
+alias ct "cpu|tail"
+alias run_b2coupled "b2run b2mn > run.log &"
+alias run_b2standalone "b2run -s b2mn > run.log &"
+
+alias aaa 'cp b2fstate b2fstati'
+alias bbb 'b2run b2mn > run.log &'
+alias bbbs 'b2run -s b2mn > run.log &'
+alias bb1s 'b2run -s b2mn > run.log &'
+alias qqq 'touch b2mn.exe.dir/.quit'
+alias sss 'cp b2fstati b2fstati.save'
+alias zzz 'cp new_coeffs.txt b2.transport.inputfile'
+
+alias bb4   'b2run -m \"mpirun -np 4\"  b2mn > run.log &'
+alias bb8   'b2run -m \"mpirun -np 8\"  b2mn > run.log &'
+alias bb16  'b2run -m \"mpirun -np 16\" b2mn > run.log &'
+alias bb32  'b2run -m \"mpirun -np 32\" b2mn > run.log &'
+alias bb64  'b2run -m \"mpirun -np 64\" b2mn > run.log &'
+alias bb4s  'b2run -s -m \"mpirun -np 4\"  b2mn > run.log &'
+alias bb8s  'b2run -s -m \"mpirun -np 8\"  b2mn > run.log &'
+alias bb16s 'b2run -s -m \"mpirun -np 16\" b2mn > run.log &'
+alias bb32s 'b2run -s -m \"mpirun -np 32\" b2mn > run.log &'
+alias bb64s 'b2run -s -m \"mpirun -np 64\" b2mn > run.log &'
+
+alias ft 'paste ft3dl.last10 ft3dr.last10 | awk.first+even | xyplot2 ft_l ft_r'
+alias fn 'paste fn3dl.last10 fn3dr.last10 | awk.first+even | xyplot2 fn_l fn_r'
+alias te 'paste te3dl.last10 te3da.last10 te3dr.last10 | awk.first+even | xyplot3 te_l te_a te_r'
+alias ne 'paste ne3dl.last10 ne3da.last10 | awk.first+even | xyplot3 ne_l ne_a ne_r'
+
+alias coreion 'echo "brna 1 zsel sumx writ jxa f.y" | b2plot >& /dev/null'
+alias get_pressure 'echo "ny 2 i+ user 100 wlld" | b2plot > & /dev/null && cat b2pl.exe.dir/pressure.ntr'
+
+alias totrad_surf 'echo "phys b2ra b2br m+ abs 0 0 sumz neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ pvol surf" | b2plot > & /dev/null'
+alias totrad_write 'echo "phys b2ra b2br m+ abs 0 0 sumz neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ sumx sumy jxa write f.y" | b2plot > & /dev/null'
+alias totrad_outputfile "echo 'phys b2ra b2br m+ abs 0 0 sumz neutrad 0 0 sumz m+ molrad 0 0 sumz m+ ionrad 0 0 sumz m+ pvol "'"../output/totradpvol.out"'" mprt surf' | b2plot"

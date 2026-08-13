@@ -61,6 +61,7 @@ argloop:
     echo ' -d <debugger>: launch run with debugger <debugger> (or with $DBX if <debugger> not specified)'
     echo ' -h: Prints this message'
     echo ' -m <mpi-launcher + args>: run mpi-version (example: b2run -m \"mpiexec -np 2\" b2mn)'
+    echo '     SOLPS_MPIRUN replaces the launcher executable while preserving its arguments.'
     echo ' -n: dry run. Will show the sequences of commands requested by b2run.'
     echo ' -o <options>: any additional run options'
     echo ' -s: request a B2.5 stand-alone run. No Eirene input file required then.'
@@ -178,26 +179,53 @@ argloop:
   endif
   if ("X${1}X" == "X-mX") then
     shift
+    if ($#argv == 0) then
+      echo 'ERROR: -m requires a quoted MPI launcher command.'
+      exit 1
+    endif
+    if ("X${1}X" == "XX") then
+      echo 'ERROR: the MPI launcher command must not be empty.'
+      exit 1
+    endif
     if (! $?SOLPS_MPI) then
       source $SOLPSTOP/SETUP/mpi
       set MPI_SET=yes
     endif
-    set TMPI=`echo $argv | sed -e 's:^"::' -e 's:" .*::' -e 's:"$::' `
-    set nargs=`echo $TMPI | awk '{print split($0,args," ")}'`
+    set TMPI="$1"
+    shift
+    # Also accept literal quotes passed through an expanded shell variable.
+    set mpi_quote_open=`printf '%s\n' "$TMPI" | sed -n 's/^".*/yes/p'`
+    if ("X${mpi_quote_open}X" == "XyesX") then
+      set mpi_quote_closed=`printf '%s\n' "$TMPI" | sed -n 's/.*"$/yes/p'`
+      while ("X${mpi_quote_closed}X" != "XyesX")
+        if ($#argv == 0) then
+          echo 'ERROR: unmatched quote in the MPI launcher command.'
+          exit 1
+        endif
+        set TMPI="$TMPI $1"
+        shift
+        set mpi_quote_closed=`printf '%s\n' "$TMPI" | sed -n 's/.*"$/yes/p'`
+      end
+      set TMPI=`printf '%s\n' "$TMPI" | sed -e 's/^"//' -e 's/"$//'`
+      unset mpi_quote_closed
+    endif
+    unset mpi_quote_open
+    if ($?SOLPS_MPIRUN) then
+      if ("X${SOLPS_MPIRUN}X" != "XX") then
+        set mpi_command = ( $TMPI )
+        if ($#mpi_command > 1) then
+          set TMPI="$SOLPS_MPIRUN $mpi_command[2-]"
+        else
+          set TMPI="$SOLPS_MPIRUN"
+        endif
+        unset mpi_command
+      endif
+    endif
     if ("X${TIME}X" == "XtimeX") then
       set TIME="$TMPI"
     else
       set TIME="$TIME $TMPI"
     endif
-    mpiloop:
-      if ($nargs > 0) then
-        shift
-        @ nargs = $nargs - 1
-      else
-        goto mpiloopend
-      endif
-      goto mpiloop
-    mpiloopend:
     goto argloop
   endif
   if ("X${1}X" == "X-tX") then

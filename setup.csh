@@ -17,6 +17,9 @@
 #   3. output of `whereami` script
 #   4. fallback to UNKNOWN
 #
+# SETUP/setup.csh.HOST_NAME.COMPILER.pre is sourced after HOST_NAME and
+# COMPILER are determined, before any environment cache is loaded.
+#
 # Variable COMPILER is determined with decreasing priority from:
 #   1. First argument to `source setup.csh` command
 #   2. $SOLPS_COMPILER_FORCE
@@ -51,7 +54,9 @@ else
     setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
   endif
 endif
-setenv SOLPSWORK ${SOLPSTOP}/runs
+# Preserve a site/user value for central run directories; otherwise use the
+# traditional runs directory under SOLPSTOP.
+if (! $?SOLPSWORK) setenv SOLPSWORK ${SOLPSTOP}/runs
 
 # Set HOST_NAME and COMPILER, which will determine setup files to be used
 #------------------------------------------------------------------------
@@ -106,12 +111,25 @@ endif
 
 limit stacksize unlimited
 
+set setup_pre_cache=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.pre
+if (-s $setup_pre_cache) then
+  echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.pre.
+  source $setup_pre_cache
+endif
+
+set cache_enabled = 0
+if (`uname` != "Darwin" && ! $?SOLPS_DISABLE_ENV_CACHE) then
+  set cache_enabled = 1
+endif
+
 # Load environment cache if it exists and the setup files have not changed
-if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+if ($cache_enabled) then   # Assuming to work on some HPC cluster
   set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
   if ((-f $setup.env.local.${USER}) && \
       ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
       ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+      (!(-f $setup_pre_cache) || \
+        ( -M $setup.env.local.${USER} ) >= ( -M $setup_pre_cache )) && \
       (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
         ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
       (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
@@ -187,28 +205,71 @@ set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
 # Create mirror scripts directory links
 #   - only re-creating links if they are not correct, so that we are compatible with read-only file systems (container)
 set link_scripts="${SOLPSTOP}/scripts/${TOOLCHAIN}"
-if (! -d ${link_scripts}) mkdir -p ${link_scripts}
-if (! $?NO_MPI) then
-  foreach suffix ( ".mpi" ".openmp.mpi" )
-    if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-    if (`readlink ${link_scripts}${suffix}` != ${link_scripts} ) ln -sf ${link_scripts} ${link_scripts}${suffix}
-    if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
-    if (`readlink ${link_scripts}${suffix}.debug` != ${link_scripts}.debug ) ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
-  end
-else
-  foreach suffix ( ".mpi" ".openmp.mpi" )
-    if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-    if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
-  end
+set scripts_writable=0
+if (-w ${SOLPSTOP}/scripts) set scripts_writable=1
+set links_available=1
+if (! -d ${link_scripts}) then
+  if ($scripts_writable) then
+    mkdir -p ${link_scripts}
+    if ($status != 0) set links_available=0
+  else
+    echo "Warning: cannot create ${link_scripts}; ${SOLPSTOP}/scripts is not writable"
+    set links_available=0
+  endif
 endif
-set suffix=".openmp"
-if (-d ${link_scripts}${suffix}) rm -Rf ${link_scripts}${suffix}
-if (`readlink ${link_scripts}${suffix}` != ${link_scripts} ) ln -sf ${link_scripts} ${link_scripts}${suffix}
-if (-d ${link_scripts}${suffix}.debug) rm -Rf ${link_scripts}${suffix}.debug
-if (`readlink ${link_scripts}${suffix}.debug` != ${link_scripts}.debug ) ln -sf ${link_scripts}.debug ${link_scripts}${suffix}.debug
-if (`readlink ${link_scripts}.debug` == ${link_scripts} ) then
-  rm -Rf ${link_scripts}.debug
-  mkdir -p ${link_scripts}.debug
+
+if ($links_available) then
+  set link_current="`readlink ${link_scripts}.debug`"
+  if ("${link_current}" == "${link_scripts}") then
+    if ($scripts_writable) then
+      rm -Rf ${link_scripts}.debug
+      mkdir -p ${link_scripts}.debug
+    else
+      echo "Warning: cannot update ${link_scripts}.debug; ${SOLPSTOP}/scripts is not writable"
+    endif
+  endif
+
+  set active_suffixes = ( ".openmp" )
+  if (! $?NO_MPI) set active_suffixes = ( ${active_suffixes} ".mpi" ".openmp.mpi" )
+  foreach suffix ( ${active_suffixes} )
+    foreach debug_mode ( normal debug )
+      set debug_suffix=""
+      if ("${debug_mode}" == "debug") set debug_suffix=".debug"
+      set link_target="${link_scripts}${suffix}${debug_suffix}"
+      set link_source="${link_scripts}${debug_suffix}"
+      set link_current="`readlink ${link_target}`"
+      if ("${link_current}" != "${link_source}") then
+        if ($scripts_writable) then
+          rm -Rf ${link_target}
+          ln -s ${link_source} ${link_target}
+        else
+          echo "Warning: cannot update ${link_target}; ${SOLPSTOP}/scripts is not writable"
+        endif
+      endif
+    end
+  end
+
+  if ($?NO_MPI) then
+    set mpi_links_present=0
+    foreach suffix ( ".mpi" ".openmp.mpi" )
+      foreach debug_mode ( normal debug )
+        set debug_suffix=""
+        if ("${debug_mode}" == "debug") set debug_suffix=".debug"
+        set link_target="${link_scripts}${suffix}${debug_suffix}"
+        set link_current="`readlink ${link_target}`"
+        if (-e ${link_target} || "${link_current}" != "") then
+          if ($scripts_writable) then
+            rm -Rf ${link_target}
+          else
+            set mpi_links_present=1
+          endif
+        endif
+      end
+    end
+    if ($mpi_links_present) then
+      echo "Warning: cannot remove MPI toolchain links; ${SOLPSTOP}/scripts is not writable"
+    endif
+  endif
 endif
 
 # Note: in case of name clash between script and executable, script will be found first
@@ -262,7 +323,7 @@ alias ssc  'cd ${SOLPSTOP}/modules/Carre'
 alias ssc2 'cd ${SOLPSTOP}/modules/Carre2'
 alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
 alias slib 'cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
-alias sbr  'cd ${SOLPSTOP}/runs'
+if (! $?SOLPS_CENTRAL) alias sbr 'cd ${SOLPSTOP}/runs'
 alias scr  'cd ${SOLPSTOP}/scripts'
 alias stop 'cd ${SOLPSTOP}'
 
@@ -373,7 +434,7 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
 endif
 
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
-if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
+if ($cache_enabled) then   # Assuming to work on some HPC cluster
   set setup_post = `mktemp`
   env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
      -e '1i# Generated environment cache. Do not edit!' >! $setup_post
@@ -391,7 +452,8 @@ if (`uname` != "Darwin") then   # Assuming to work on some HPC cluster
   rm -f $setup_pre $setup_post $alias_pre
 endif
 
-# List loaded modules, assuming to work on some HPC cluster
-if (`uname` != "Darwin" && ${HOST_NAME} != "LINUX") then
+# List loaded modules when the site environment provides the module command
+which module >& /dev/null
+if ($status == 0) then
   module list
 endif
