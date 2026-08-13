@@ -28,7 +28,7 @@
 \usepackage{multicol}
 \usepackage{fancyvrb}
 \usepackage{listings}
-\usepackage{longtable}
+\usepackage{longtable}[=v4.13]
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
 \usepackage{exscale}
@@ -441,7 +441,7 @@ If your specific domain name is not on this list, please add it to {\tt whereami
 \end{enumerate}
 
 At the moment the following compiler platforms are supported, assuming a Linux work environment:\label{sec:platforms}
-\begin{description}\index{Platforms}
+\begin{description}\index{Platforms}\index{compilers}
   \item[cray] The Cray compiler, in use at the JFRS supercomputing center
   \item[pgf90] Portland Group 32-bit Fortran compiler, in use at JET and ORNL
   \item[ifort64] Intel 64-bit Fortran compiler, in use at ITER. From Intel oneAPI 2025 onwards, this identifier selects {\tt ifx} (the LLVM-based compiler) instead of the classic {\tt ifort}.
@@ -469,9 +469,7 @@ Then, if this is the first installation in your file space, please do:
 
 \begin{sloppypar}
 This will, if they are not already present in the distribution, create the various {\tt config.\$\{HOST\_NAME\}.\allowbreak \$\{COMPILER\}} files for each of the \SOLPSITER submodules. Feel free to modify them afterwards according to your local requirements. As with {\tt whereami} and {\tt default\_compiler}, if those modifications are worth sharing with the other users, please commit them back to the repository using a pull request.
-\end{sloppypar}
 
-\begin{sloppypar}
 For each combination of hostname and compiler, the set of corresponding environment variables are loaded
 from the {\tt \$\{SOLPSTOP\}\allowbreak /SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}} file and, subsequently,
 the {\tt \$\{SOLPSTOP\}/\allowbreak SETUP/setup.csh.\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}.local} file.
@@ -484,9 +482,10 @@ Users should make sure the settings within these files fit their run environment
 In particular, if the default {\tt python} command on the system points to version 2.7 or similar, and a newer version 3 executable is available, it is recommended to define the {\tt PYTHON} environment variable to point to that executable in the appropriate local {\tt \$\{SOLPSTOP\}/SETUP/setup.csh} file.
 If changes are needed, please forward them to the \SOLPSITER RO so that they may be included in the
 set of distributed files to help other future users.
-\end{sloppypar}
 
-\begin{sloppypar}
+\index{SOLPS\_TOOLCHAIN\_VERSION}
+On HPC environments where several versions of the compilers may co-exist, the {\tt SOLPS\_TOOLCHAIN\_VERSION} environment variable is available to specify with which compiler toolchain the code should be compiled and run. See the {\tt \$SOLPSTOP/SETUP/setup.csh.ITER.ifort64} file for such an example. This environment variable, if non-default, should be set {\em before} running the {\tt setup.csh} script.
+
 For the case where single submodules are cloned from the \SOLPSITER repository, without the full regalia of
 programs, additional sets of configuration files can be found in the {\tt config} directory in each module. The
 compiler settings specific to this module are included there. Users are encouraged to modify these as needed. If local
@@ -17455,6 +17454,7 @@ no longer needed.
   \begin{verbatim}
 setenv B2PLOT_DEV 'x11 ps'
   \end{verbatim}
+\item[SOLPS\_TOOLCHAIN\_VERSION]\index{SOLPS\_TOOLCHAIN\_VERSION} Used to specify the compiler toolchain with which the code is built, for HPC environments where several toolchains may co-exist (see ITER {\tt setup.csh} files for an example)
 \item[SOLPSTOP]\index{SOLPSTOP} used to specify the top of the {\tt SOLPS} tree
 \item[SOLPSTOP\_FORCE]\index{SOLPSTOP\_FORCE} used to override the value of {\tt \$SOLPSTOP} to force execution of code executables from a different tree (not defined by default)
 \end{description}
@@ -22597,7 +22597,9 @@ LEGACYCOMP & scoring/updphot.F \\
 LEGACYCOMP & startup-routines/find\_tet\_dim.F \\
 LEGACYCOMP & startup-routines/find\_triang\_dim.F \\
 LEGACYCOMP & startup-routines/read\_fixform.F \\
+MPI\_MOD & assistant/eirmod\_second\_own.F \\
 MPI\_MOD & modules/eirmod\_mpi.F90 \\
+MPI\_VERSION & assistant/eirmod\_second\_own.F \\
 MPI\_VERSION & modules/eirmod\_mpi.F90 \\
 MPI\_VERSION & startup-routines/read\_fixform.F \\
 NAGFOR & assistant/eirmod\_second\_own.F \\
