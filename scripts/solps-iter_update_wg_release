@@ -106,8 +106,6 @@ local:
 compile:
   cd $SOLPSTOP
   rehash
-  ${MAKE} VERSION
-  ${MAKE} listobj listobj_debug
-  ${MAKE} depend depend_debug
+  ${MAKE} prereqs prereqs_debug
   ${MAKE} tags
   ${MAKE} solps MAKE_OPTIONS=-j8
