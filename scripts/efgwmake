@@ -14,6 +14,7 @@ set job_count=0
 
 setenv SOLPSTOP "`determine_SOLPSTOP`"
 cd $SOLPSTOP
+echo Compiling $SOLPSTOP with $COMPILER compiler
 
 argloop:
   if ("X${1}X" == "X-hX") then
