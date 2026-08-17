@@ -39,6 +39,7 @@ sepdata  : nr_sep_N    : 1. : nr_sep_N   : a.u.
 sepdata  : nr_sep_O    : 1. : nr_sep_O   : a.u.
 sepdata  : nr_sep_Ne   : 1. : nr_sep_Ne  : a.u.
 sepdata  : nr_sep_Ar   : 1. : nr_sep_Ar  : a.u.
+sepdata  : nr_sep_Fe   : 1. : nr_sep_Fe  : a.u.
 sepdata  : nr_sep_W    : 1. : nr_sep_W   : a.u.
 user_SPb : Te_min_LCFS : 1. : Te_sep_min : eV
 
@@ -129,6 +130,7 @@ blne    : imp_rad_N  : 1.e-6 : Q_imp_N     : MW
 blne    : imp_rad_O  : 1.e-6 : Q_imp_O     : MW
 blne    : imp_rad_Ne : 1.e-6 : Q_imp_Ne    : MW
 blne    : imp_rad_Ar : 1.e-6 : Q_imp_Ar    : MW
+blne    : imp_rad_Fe : 1.e-6 : Q_imp_Fe    : MW
 blne    : imp_rad_W  : 1.e-6 : Q_imp_W     : MW
 
 b2time  : feesip_l : -1.e-6 : P_div_e_il  : MW
@@ -276,6 +278,15 @@ blnn_SPb : ntr_wall_pmp_Ar  : 1. : wll_pmp_Ar    : s^-1
 blnn_SPb : ntr_puff_Ar      : 1. : puff_Ar       : s^-1
 blnn_SPb : src_ext_Ar       : 1. : src_ext_Ar    : s^-1
 blnn_SPb : flux_tot_Ar      : 1. : flux_tot_Ar   : s^-1
+blnn_SPb : ion_core_Fe      : 1. : ion_core_Fe   : s^-1
+blnn_SPb : ntr_core_Fe      : 1. : neut_core_Fe  : s^-1
+blnn_SPb : ntr_targ_spt_Fe  : 1. : trg_spt_Fe    : s^-1
+blnn_SPb : ntr_wall_spt_Fe  : 1. : wll_spt_Fe    : s^-1
+blnn_SPb : ntr_targ_pmp_Fe  : 1. : trg_pmp_Fe    : s^-1
+blnn_SPb : ntr_wall_pmp_Fe  : 1. : wll_pmp_Fe    : s^-1
+blnn_SPb : ntr_puff_Fe      : 1. : puff_Fe       : s^-1
+blnn_SPb : src_ext_Fe       : 1. : src_ext_Fe    : s^-1
+blnn_SPb : flux_tot_Fe      : 1. : flux_tot_Fe   : s^-1
 blnn_SPb : ion_core_W       : 1. : ion_core_W   : s^-1
 blnn_SPb : ntr_core_W       : 1. : neut_core_W  : s^-1
 blnn_SPb : ntr_targ_spt_W   : 1. : trg_spt_W    : s^-1
@@ -298,6 +309,7 @@ integral : SSNI_tot_N   : 1.        : SNI_tot_N  : s^-1
 integral : SSNI_tot_O   : 1.        : SNI_tot_O  : s^-1
 integral : SSNI_tot_Ne  : 1.        : SNI_tot_Ne : s^-1
 integral : SSNI_tot_Ar  : 1.        : SNI_tot_Ar : s^-1
+integral : SSNI_tot_Fe  : 1.        : SNI_tot_Fe : s^-1
 integral : SSNI_tot_W   : 1.        : SNI_tot_W  : s^-1
 integral : SNI_rcmb     : 6.242e+18 : SNI_rcmb   : s^-1
 
@@ -397,6 +409,14 @@ integral : SSNIreg_05_Ar : 1. : SNI_05_Ar  : s^-1
 integral : SSNIreg_06_Ar : 1. : SNI_06_Ar  : s^-1
 integral : SSNIreg_07_Ar : 1. : SNI_07_Ar  : s^-1
 integral : SSNIreg_08_Ar : 1. : SNI_08_Ar  : s^-1
+integral : SSNIreg_01_Fe : 1. : SNI_01_Fe  : s^-1
+integral : SSNIreg_02_Fe : 1. : SNI_02_Fe  : s^-1
+integral : SSNIreg_03_Fe : 1. : SNI_03_Fe  : s^-1
+integral : SSNIreg_04_Fe : 1. : SNI_04_Fe  : s^-1
+integral : SSNIreg_05_Fe : 1. : SNI_05_Fe  : s^-1
+integral : SSNIreg_06_Fe : 1. : SNI_06_Fe  : s^-1
+integral : SSNIreg_07_Fe : 1. : SNI_07_Fe  : s^-1
+integral : SSNIreg_08_Fe : 1. : SNI_08_Fe  : s^-1
 integral : SSNIreg_01_W  : 1. : SNI_01_W   : s^-1
 integral : SSNIreg_02_W  : 1. : SNI_02_W   : s^-1
 integral : SSNIreg_03_W  : 1. : SNI_03_W   : s^-1
@@ -418,6 +438,7 @@ integral : N_s_slt_N  : 1. : N_t_edge_N  : part.
 integral : N_s_slt_O  : 1. : N_t_edge_O  : part.
 integral : N_s_slt_Ne : 1. : N_t_edge_Ne : part.
 integral : N_s_slt_Ar : 1. : N_t_edge_Ar : part.
+integral : N_s_slt_Fe : 1. : N_t_edge_Fe : part.
 integral : N_s_slt_W  : 1. : N_t_edge_W  : part.
 
 integral : N_a_tot_H  : 1. : N_a_tot_H  : part.
@@ -432,6 +453,7 @@ integral : N_a_tot_N  : 1. : N_a_tot_N  : part.
 integral : N_a_tot_O  : 1. : N_a_tot_O  : part.
 integral : N_a_tot_Ne : 1. : N_a_tot_Ne : part.
 integral : N_a_tot_Ar : 1. : N_a_tot_Ar : part.
+integral : N_a_tot_Fe : 1. : N_a_tot_Fe : part.
 integral : N_a_tot_W  : 1. : N_a_tot_W  : part.
 
 integral : N_e_reg_01 : 1. : N_e_01  : part.
@@ -539,6 +561,14 @@ integral : N_i_reg_05_Ar : 1. : N_i_05_Ar  : part.
 integral : N_i_reg_06_Ar : 1. : N_i_06_Ar  : part.
 integral : N_i_reg_07_Ar : 1. : N_i_07_Ar  : part.
 integral : N_i_reg_08_Ar : 1. : N_i_08_Ar  : part.
+integral : N_i_reg_01_Fe : 1. : N_i_01_Fe  : part.
+integral : N_i_reg_02_Fe : 1. : N_i_02_Fe  : part.
+integral : N_i_reg_03_Fe : 1. : N_i_03_Fe  : part.
+integral : N_i_reg_04_Fe : 1. : N_i_04_Fe  : part.
+integral : N_i_reg_05_Fe : 1. : N_i_05_Fe  : part.
+integral : N_i_reg_06_Fe : 1. : N_i_06_Fe  : part.
+integral : N_i_reg_07_Fe : 1. : N_i_07_Fe  : part.
+integral : N_i_reg_08_Fe : 1. : N_i_08_Fe  : part.
 integral : N_i_reg_01_W  : 1. : N_i_01_W   : part.
 integral : N_i_reg_02_W  : 1. : N_i_02_W   : part.
 integral : N_i_reg_03_W  : 1. : N_i_03_W   : part.
@@ -644,6 +674,14 @@ integral : N_a_reg_05_Ar : 1. : N_a_05_Ar  : part.
 integral : N_a_reg_06_Ar : 1. : N_a_06_Ar  : part.
 integral : N_a_reg_07_Ar : 1. : N_a_07_Ar  : part.
 integral : N_a_reg_08_Ar : 1. : N_a_08_Ar  : part.
+integral : N_a_reg_01_Fe : 1. : N_a_01_Fe  : part.
+integral : N_a_reg_02_Fe : 1. : N_a_02_Fe  : part.
+integral : N_a_reg_03_Fe : 1. : N_a_03_Fe  : part.
+integral : N_a_reg_04_Fe : 1. : N_a_04_Fe  : part.
+integral : N_a_reg_05_Fe : 1. : N_a_05_Fe  : part.
+integral : N_a_reg_06_Fe : 1. : N_a_06_Fe  : part.
+integral : N_a_reg_07_Fe : 1. : N_a_07_Fe  : part.
+integral : N_a_reg_08_Fe : 1. : N_a_08_Fe  : part.
 integral : N_a_reg_01_W  : 1. : N_a_01_W   : part.
 integral : N_a_reg_02_W  : 1. : N_a_02_W   : part.
 integral : N_a_reg_03_W  : 1. : N_a_03_W   : part.
