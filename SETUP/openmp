@@ -48,9 +48,11 @@ if ($?SOLPS_PATH) then
     setenv OMP_DISPLAY_AFFINITY true
     setenv OMP_DISPLAY_ENV true
   endif
+  if ($?KMP_AFFINITY) then
 # The settings below can be used if KMP_AFFINITY is not set
-#  setenv   OMP_PLACES cores
-#  setenv   OMP_PROC_BIND true
+    setenv OMP_PLACES cores
+    setenv OMP_PROC_BIND true
+  endif
   unsetenv OLD_SOLPS_PATH
   rehash
   echo "SOLPS-ITER OpenMP mode turned on"
