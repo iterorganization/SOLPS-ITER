@@ -414,7 +414,9 @@ c*** Error in the segment chains
       write(0,*) 
      . 'The targets must be numbered according to the B2 convention:'
       write(0,*) 
-     . 'going clockwise and starting from the bottom left corner.'
+     . 'going clockwise around the plasma and'
+      write(0,*)
+     . 'starting from the bottom left corner for DN cases.'
       flush(0)
  9999 call subend()
       return
