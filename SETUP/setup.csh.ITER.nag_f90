@@ -31,7 +31,7 @@ if (`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1` == "Cent
   module load SimDB/0.7.1-foss-2020b
   setenv SYSNAME amd64_sles15
   setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.56.0-GCCcore-10.2.0
-  setenv QTDIR ${EBROOTQT6}
+  setenv QTDIR ${EBROOTQT5}
 else
   # RHEL9: select the EasyBuild toolchain generation. Default is 2025b
   # (existing production toolchain). Set SOLPS_TOOLCHAIN_VERSION=2023b
