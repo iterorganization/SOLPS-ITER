@@ -4540,8 +4540,8 @@ Example of the {\tt b2ydm.dat} file:\\
 \VerbatimInput[fontsize=\footnotesize]{b2ydm.dat}
 
 \newpage
-\section{b2\_ual\_write, writing last state to IDS}
-\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}
+\section{b2\_ual\_write, writing last state as an IMAS data entry}
+\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}\index{IMAS}
 
 The program can be run with one of the following
 \begin{verbatim}
@@ -4554,27 +4554,28 @@ or
 \end{verbatim}
 
 \begin{sloppypar}
-This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
+This program saves the final output state of a run into an IMAS data entry. Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, and {\tt summary} IDSs (Interface Data Structures). If using Data Dictionary version 3, the {\tt dataset\_description} IDS is also filled. If the current run being saved is a time continuation of the run already present in that IMAS data entry, then a new time slice is appended, otherwise the data entry is overwritten. If the existing data entry was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
 \begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
-  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
+  \item {\tt b2mndr\_database} defines the IMAS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
   \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
-  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IMAS data entry being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
   \item {\tt b2mndr\_pulse\_number} defines the pulse (in Access Layer 5) or shot (in Access Layer 4) number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
   \item {\tt b2mndr\_shot\_number}, superseded by {\tt b2mndr\_pulse\_number}.
   \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_ids\_backend} provides the backend to be used. Only available for use with Access Layer 5 (for which the default is {\tt 'hdf5'}). When using Access Layer 4, the backend used will be {\tt 'mdsplus'}.
 \end{itemize}
-These switches are used as identification parameters for the IDS. Afterwards, a
-{\tt b2mn} run is initialized but {\em not} started, so that the final
-output state data is read. Then the data is written to an IDS, with the
-{\tt b2mndr\_id*} switchgroup used as identification descriptors.
+These switches are used as identification parameters for the IMAS data entry.
+ Afterwards, a {\tt b2mn} run is initialized but {\em not} started, so that
+ the final output state data is read. Then the data is written to IDSs, with
+ the {\tt b2mndr\_id*} switchgroup used as identification descriptors.
 \end{sloppypar}
 
-It is possible to replace (or supplement) the IDS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
+It is possible to replace (or supplement) the IMAS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
 \begin{verbatim}
   b2run -o "-s 123456 -r 1" b2_ual_write
 \end{verbatim}
@@ -4585,7 +4586,8 @@ which will recognize, within the quotes following the {\tt -o} additional option
   \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
   \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
   \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
+  \item {\tt -b}, {\tt --backend} The backend to be used. For Access Layer 5 only (default is {\tt 'hdf5'}).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt IMAS\_MAJOR\_VERSION}).
 \end{itemize}
 
 Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 4) and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER pulse or shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new pulse or shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
@@ -4594,7 +4596,7 @@ Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 
 With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} should be set as part of the local environment variables in a {\tt setup.csh.local} file. Otherwise, it will be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. The {\tt user}, {\tt database}, or {\tt version} input flags allow to overwrite their default values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
 \end{sloppypar}
 
-After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
+After the IMAS files are created, if using Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -4606,7 +4608,7 @@ ingest_simulation_to_SimDB [REMOTE]
 \end{verbatim}
 where {\tt [REMOTE]} is the name of the remote SimDB server where the run is to be pushed. It must be provided if more than one SimDB remotes are declared, but is otherwise optional. Please refer to the SimDB documentation at \href{https://simdb.readthedocs.io/en/stable}{https://simdb.readthedocs.io/} for more details.
 
-\subsection{b2\_ual\_rewrite, rewriting an existing IDS}
+\subsection{b2\_ual\_rewrite, rewriting an existing IMAS data entry}
 \label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
 
 The program can be run with one of the following
@@ -4620,7 +4622,7 @@ or
 \end{verbatim}
 
 \begin{sloppypar}
-This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IDS rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IDS will also indicate which old run it is replacing. The new run number must be larger than the old one.
+This program rewrites an existing IMAS data entry in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, and {\tt summary} data structures. If using IMAS Data Dictionary version 3, the {\tt dataset\_description} IDS is also filled. The program uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IMAS data entry rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in an IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IMAS data entry will also indicate which old run it is replacing. The new run number must be larger than the old one.
 \end{sloppypar}
 
 \newpage
