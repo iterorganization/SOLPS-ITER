@@ -135,14 +135,14 @@ sed \
 
 echo "set build_failed = 0" >> $NAME
 if ("X${options}X" != "XX") then
-  echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+  echo "${MAKE} MAKE_OPTIONS='${options}' ${objects} >>& ${SOLPSTOP}/make.log.${COMPILER} || set build_failed = 1" >> $NAME
 else if ($nproc > 1) then
   foreach i ($objects)
-    echo "${MAKE} -j "$nproc $i" >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+    echo "${MAKE} -j "$nproc $i" >>& ${SOLPSTOP}/make.log.${COMPILER} || set build_failed = 1" >> $NAME
     echo 'if ($build_failed != 0) exit $build_failed' >> $NAME
   end
 else
-  echo "${MAKE} ${objects} >>& make.log.${COMPILER} || set build_failed = 1" >> $NAME
+  echo "${MAKE} ${objects} >>& ${SOLPSTOP}/make.log.${COMPILER} || set build_failed = 1" >> $NAME
 endif
 echo 'exit $build_failed' >> $NAME
 

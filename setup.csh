@@ -395,6 +395,7 @@ if (! $?NO_MOTIF) then
     set _xm_found = 0
   endif
   if ($_xm_found == 0) set _xm_found = `sh -c 'find /usr/include /usr/local/include -name "Xm.h" -print 2>/dev/null' | wc -l`
+  if ($_xm_found == 0 && `uname` == Darwin) set _xm_found = `sh -c 'find -L /opt/homebrew/include /usr/local/include -name "Xm.h" -print 2>/dev/null' | wc -l`
   if ($_xm_found == 0) setenv NO_MOTIF 1
   unset _xm_found
 endif
