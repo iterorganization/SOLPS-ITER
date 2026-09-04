@@ -117,6 +117,7 @@
 :O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
+:Fe_flux_ion:\Gamma_{Fe+}:
 :W_flux_ion:\Gamma_{W+}:
 @page: Imp atom flux, inner lower divertor, m^{-2}s^{-1}
 @setx:x:r-r_{sep}, m:
@@ -130,6 +131,7 @@
 :O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
+:Fe_flux_atm:\Gamma_{Fe}:
 :W_flux_atm:\Gamma_{W}:
 @page: Imp atom pressure at the target, inner lower divertor, Pa
 @setx:x:r-r_{sep}, m:
@@ -143,6 +145,7 @@
 :O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
+:Fe_pres_atm:p_{Fe}:
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_o
@@ -234,6 +237,7 @@
 :O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
+:Fe_flux_ion:\Gamma_{Fe+}:
 :W_flux_ion:\Gamma_{W+}:
 @page: Imp atom flux, outer lower divertor, m^{-2}s^{-1}
 @setx:x:r-r_{sep}, m:
@@ -247,6 +251,7 @@
 :O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
+:Fe_flux_atm:\Gamma_{Fe}:
 :W_flux_atm:\Gamma_{W}:
 @page: Imp atom pressure at the target, outer lower divertor, Pa
 @setx:x:r-r_{sep}, m:
@@ -260,6 +265,7 @@
 :O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
+:Fe_pres_atm:p_{Fe}:
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_iu
@@ -351,6 +357,7 @@
 :O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
+:Fe_flux_ion:\Gamma_{Fe+}:
 :W_flux_ion:\Gamma_{W+}:
 @page: Imp atom flux, outer upper upper divertor, m^{-2}s^{-1}
 @setx:x:r-r_{sep}, m:
@@ -364,6 +371,7 @@
 :O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
+:Fe_flux_atm:\Gamma_{Fe}:
 :W_flux_atm:\Gamma_{W}:
 @page: Imp atom pressure at the target, outer upper upper divertor, Pa
 @setx:x:r-r_{sep}, m:
@@ -377,6 +385,7 @@
 :O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
+:Fe_pres_atm:p_{Fe}:
 :W_pres_atm:p_{W}:
 
 @file:ld_tg_ou
@@ -468,6 +477,7 @@
 :O_flux_ion:\Gamma_{O+}:
 :Ne_flux_ion:\Gamma_{Ne+}:
 :Ar_flux_ion:\Gamma_{Ar+}:
+:Fe_flux_ion:\Gamma_{Fe+}:
 :W_flux_ion:\Gamma_{W+}:
 @page: Imp atom flux, outer upper divertor, m^{-2}s^{-1}
 @setx:x:r-r_{sep}, m:
@@ -481,6 +491,7 @@
 :O_flux_atm:\Gamma_{O}:
 :Ne_flux_atm:\Gamma_{Ne}:
 :Ar_flux_atm:\Gamma_{Ar}:
+:Fe_flux_atm:\Gamma_{Fe}:
 :W_flux_atm:\Gamma_{W}:
 @page: Imp atom pressure at the target, outer upper divertor, Pa
 @setx:x:r-r_{sep}, m:
@@ -494,5 +505,6 @@
 :O_pres_atm:p_{O}:
 :Ne_pres_atm:p_{Ne}:
 :Ar_pres_atm:p_{Ar}:
+:Fe_pres_atm:p_{Fe}:
 :W_pres_atm:p_{W}:
 
