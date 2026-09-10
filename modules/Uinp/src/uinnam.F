@@ -16,7 +16,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=184)
+      parameter(lunm=188)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -74,7 +74,8 @@ c*** lugwt : counter for the grid-wall ties
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
      5    'set_list','n_points','linprfs' ,'lm_equ'  ,'refcell' ,
      6    'refpress','trefcell','trfpress','crr_mode','grd_mode',
-     7    'tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm' /
+     7    'tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm' ,'void_bnd',
+     8    'srt_edge','end_edge','vdfclbl' /
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -1128,6 +1129,36 @@ c***  input elements indices for current rectangle
         call resimi(omp_elm)
       case (184) ! imp_elm
         call resimi(imp_elm)
+      case (185)
+        call resimi(luswch)
+        if(.not.vddtinpt) then
+          nvoide=1
+          nvoidm=luswch
+        else
+          nvoide=nvoide+1
+          nvoidm=max(nvoidm,luswch)
+        end if
+        vddtinpt=.true.
+      case (186)
+        call resimi(vedgec(luswch))
+        if(vedgec(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     vedgec(luswch)
+          call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+        end if !}
+      case (187)
+        call resimi(vedgep(luswch))
+        if(vedgep(luswch).gt.nlim) then !{
+          write(0,*) 'Too many wall elements: maximum ',nlim
+          write(0,*) 'Current number of requested elements: ',
+     .     vedgep(luswch)
+          call xerrab
+     .   (' ==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+        end if !}
+      case (188) ! vdfclbl
+        call resimi(vdfclbl(luswch))
       case default
         call skipit
       end select

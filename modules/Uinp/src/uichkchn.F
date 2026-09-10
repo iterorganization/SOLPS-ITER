@@ -37,7 +37,8 @@ c=======================================================================
      ,  ind(max(nni,1)+ntrgts),irt
 
       integer i,j,k,l,m,n,i1,i2,j1,j2,jj,k1,k2,ntg,
-     ,  ltge(2*ntrgts),mtge(2*ntrgts),mtgb(2*ntrgts),
+     ,  ltge(2*max(ntrgts,nvoids)),mtge(2*max(ntrgts,nvoids)),
+     ,  mtgb(2*max(ntrgts,nvoids)),
      ,  kbnd(nnptseg),lbnd(nnptseg)
       integer ip,iz1,iz2,ik,loff(nbndknd),nz,lz(nnptseg)
       logical er,ex,lw(iztg,2)
@@ -57,7 +58,10 @@ c=======================================================================
       print '(20i5)',(indelm(i),i=1,nni)
       print *
 !###}
-      ntg=ntrgte
+c*** If plasma-void boundaries defined, compute chains based on those.
+c*** Otherwise, original treatment based on target definitions
+      if (ntrgte.gt.0) ntg = ntrgte
+      if (nvoide.gt.0) ntg = nvoide
 
 c*** Check some dimensions
 
@@ -94,8 +98,13 @@ c*** Check whether the specified chain consists of valid elements
 
 c*** Order the chain and check it for continuity
 
+      if (nvoide.gt.0) then
       call chkchain(p1,p2,3,nlim,indelm,nni,ntrgte,ind,irt,
-     .              jedgep,jedgec,jedge,ntrgte/2)
+     .                vedgep,vedgec,vedge,nvoide/2)
+      else
+        call chkchain(p1,p2,3,nlim,indelm,nni,ntrgte,ind,irt,
+     .                jedgep,jedgec,jedge,ntrgte/2)    
+      endif
       if(irt.le.0) then !{
         flush(6)
         write(0,*) 'uichkchn: unexpected error ',
@@ -142,7 +151,7 @@ c*** The chain is closed
         goto 9999
       end if !}
 
-c*** Check whether all the chains end with "target edges"
+c*** Check whether all the chains end with "target edges" or "void edges"
 c*** and prepare the "connection table"
 
       nno=0
@@ -177,14 +186,22 @@ c*** and prepare the "connection table"
         end if !}
         j1=0
         j2=0
+        write (0,*) 'uinchkchn: i1,i2:',i1,i2
+        if (nvoide.gt.0) then
+          do i=1,ntg !{
+            if(i1.eq.vedge(2,i)) j1=i
+            if(i2.eq.vedge(2,i)) j2=i
+          end do !}
+        else
         do i=1,ntg !{
           if(i1.eq.jedge(2,i)) j1=i
           if(i2.eq.jedge(2,i)) j2=i
         end do !}
+        endif
         if(j1.eq.0 .or. j2.eq.0) then !{
           flush(6)
           write(0,*) 
-     .     'uichkchn: the chain does not end at the target edges.'
+     .     'uichkchn: the chain does not end at the target/void edges.'
           write(0,'(a,4i5)') 'label,j,j1,j2= ',label,j,j1,j2
           flush(0)
           nno=-4
@@ -199,6 +216,42 @@ c*** and prepare the "connection table"
         if(nno.ge.0) nno=-100
         go to 900
       end if !}
+
+
+
+      if (nvoide.gt.0) then
+
+c*** Check the consistency of the void edges. 
+        nz=0
+        lz=0
+        mtge=0
+        mtgb=0
+        do k=1,ntg,2!{
+          if(ltge(k).eq.1) then !{
+            if(ltge(k+1).eq.0) then !{
+              flush(6)
+              write(0,*) 'uichkchn: inconsistent grid edge ',
+     ,                   'specification.'
+              write(0,*) 'Both ends of a segment of the grid edge ',
+     ,                   'must have the same label.'
+              write(0,*) 'label,k,k+1,ltge( 1 :',ntg,')= ',
+     ,                                    label,k,k+1,(ltge(i),i=1,ntg)
+              flush(0)
+              nno=-5
+              er=.true.
+              cycle
+            else !}{
+              ltge(k+1)=2
+              nz=nz+1
+              lz(nz)=nz
+            end if !}
+          end if !}
+        end do !}
+        if(er) then !{
+          if(nno.ge.0) nno=-100
+          go to 900
+        end if !}
+
 
 c*** Check the consistency of the target edges. 
 c***
@@ -225,15 +278,17 @@ c***                                    \ A  F  /
 c***                                     \     /
 c***                                      1   7
 
+      else if (ntrgte.gt.0) then
+
       mtge(1)=ntg-1
       mtge(3)=ntg-3
       mtgb(3)=mnptseg
-!###{
-      print '(1x,a,(12i5))','ntg = ',ntg
-      print '(1x,a,(12i5))','mtge= ',mtge
-      print '(1x,a,(12i5))','mtgb= ',mtgb
-      print '(1x,a,(12i5))','ltge= ',ltge
-!###}
+c!###{
+c      print '(1x,a,(12i5))','ntg = ',ntg
+c      print '(1x,a,(12i5))','mtge= ',mtge
+c      print '(1x,a,(12i5))','mtgb= ',mtgb
+c      print '(1x,a,(12i5))','ltge= ',ltge
+c!###}
       ip=0
       ik=0
       iz1=0
@@ -245,11 +300,12 @@ c***                                      1   7
           m=mtge(k)
           if(ltge(m).eq.0) then !{
             flush(6)
-            write(0,*) 'uichkchn: inconsistent grid edge specification.'
-            write(0,*) 'Both ends of a segment of the grid edge must ',
-     ,        'have the same label.'
+              write(0,*) 'uichkchn: inconsistent grid edge ',
+     ,                   'specification.'
+              write(0,*) 'Both ends of a segment of the grid edge ',
+     ,                   'must have the same label.'
             write(0,*) 'label,k,m,ltge( 1 :',ntg,')= ',
-     ,                                      label,k,m,(ltge(i),i=1,ntg)
+     ,                                    label,k,m,(ltge(i),i=1,ntg)
             flush(0)
             nno=-5
             er=.true.
@@ -262,6 +318,9 @@ c***                                      1   7
           end if !}
         end if !}
       end do !}
+
+      endif
+
       print '(a8,i4/(8x,20i4))','nz,lz: ',nz,(lz(i),i=1,nz)  !###
       if(er) then !{
         if(nno.ge.0) nno=-100
@@ -269,6 +328,29 @@ c***                                      1   7
       end if !}
 
 c*** Finally, produce the NSS list
+
+      if (nvoide.gt.0) then
+
+        ex=.true.
+        
+        nno=0
+        l=0
+        do j=1,irt !{
+          l=l+1
+          n=abs(ind(l))
+          i1=indasrfe(ind(l+1))
+          i2=indasrfe(ind(l+n))
+          do i=2,ntg,2 !{
+            if(i2.eq.vedge(2,i-1).or.i2.eq.vedge(2,i)) then 
+              nno=nno+1
+              indnss(nno)=i/2
+            end if
+          end do !}
+          l=l+n
+        end do !}
+        if (nno.ne.irt) ex=.false.
+
+      else 
 
       ex=.true.
       lw=.false.
@@ -321,9 +403,9 @@ c          print *,'l,ik,iz1,iz2=',l,ik,iz1,iz2  !###
           if(ik.eq.4) ip=irwl
 cvk       print *,'ik,ip,nznbndt(ik) ',ik,ip,nznbndt(ik)
 cvk       if(nznbndt(ik).gt.0) then !{
-cvk         print '(a,20i6)','jcpbnds ',(jcpbnds(j,ik),j=1,nznbndt(ik))
-cvk         print '(a,20i6)','jc1bnds ',(jc1bnds(j,ik),j=1,nznbndt(ik))
-cvk         print '(a,20i6)','jc2bnds ',(jc2bnds(j,ik),j=1,nznbndt(ik))
+cvk        print '(a,20i6)','jcpbnds ',(jcpbnds(j,ik),j=1,nznbndt(ik))
+cvk        print '(a,20i6)','jc1bnds ',(jc1bnds(j,ik),j=1,nznbndt(ik))
+cvk        print '(a,20i6)','jc2bnds ',(jc2bnds(j,ik),j=1,nznbndt(ik))
 cvk       end if !}
           do j=1,nznbndt(ik) !{
             if(jcpbnds(j,ik).eq.ip) then !{
@@ -331,8 +413,8 @@ cvk       end if !}
               i2=min(jc2bnds(j,ik),iz2)
 c!###{
 c              print '(a,7i4)',
-c     ,                     'j,i1,i2,iz1,iz2,jc1bnds,jc2bnds=',
-c     ,                      j,i1,i2,iz1,iz2,jc1bnds(j,ik),jc2bnds(j,ik)
+c  ,                     'j,i1,i2,iz1,iz2,jc1bnds,jc2bnds=',
+c  ,                      j,i1,i2,iz1,iz2,jc1bnds(j,ik),jc2bnds(j,ik)
 c!###}
               if(i2.gt.i1) then !{
                 nno=nno+1
@@ -349,6 +431,8 @@ c!###}
           l=lbnd(l)
         end do !}
       end do !}
+
+      end if
 
       if(nno.gt.nnx) then !{
         flush(6)
@@ -408,6 +492,7 @@ c*** Error in the segment chains
         j=abs(ind(l))
         write(0,'(1x,i5)') ind(l)
         write(0,'(1x,20i5)') (ind(l+k),k=1,j)
+        l=l+j
       end do !}
       write(0,*) '  ==> Check the "Index" specification in ',
      ,                        '"TRIA-EIRENE parameters" in DG variables'

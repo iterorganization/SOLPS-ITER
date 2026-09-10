@@ -12,6 +12,7 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       integer attrib(nlim),nattr,nchain,chain(nlim),
      ,  chain_sorted(nlim+ntrgts),nchain_seg
       integer NSS(nsts),nn,i,j,k,l,nnlbl
+      integer NSS0(nsts),nn0,nnn0
       logical ex 
       real txmin,txmax,tymin,tymax
     
@@ -47,10 +48,24 @@ c***  and check if they are closed
        write(*,*) 'chain number, attrib', i, attrib(i)
        if(attrib(i).EQ.0) goto 20
        k=0
+       nn0=0
        do 25 j=1,nlim
         if(attrib(i).EQ.ilplgdg(j) ) then
+         if (fclbl(j).ge.0) then
          k=k+1
          chain(k)=j
+         else
+          ! void element; take out of the chain, but include corresponding 
+          ! fclbl as one of the NSS
+          ex=.false.
+          do nnn0=1,nn0
+           if (NSS0(nnn0).eq.fclbl(j)) ex=.true.
+          end do
+          if (.not.ex) then
+           nn0=nn0+1
+           NSS0(nn0)=fclbl(j)
+          end if
+         end if
         end if     
    25  continue
        nchain=k
@@ -63,6 +78,13 @@ c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,chain_sorted,nchain_seg,
      ,   attrib(i))
        write(*,*) 'nn ',nn
+       if (nvoide.gt.0)then
+         ! on output of uichkchn, NSS contains number of void boundary
+         ! now convert to NSS number
+         do j=1,nn
+           NSS(j)=abs(vdfclbl(NSS(j)))+1
+         end do
+        end if
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
        if(nn.LT.0) then 
         write(0,*) 'ERROR in uichkchn, nn', nn
@@ -87,8 +109,14 @@ c***   store the sorted chain to construct polygons for void triangulation
      ,   chain_sorted(1:nchain+nchain_seg)
        triplgnss(1:nn,ntriplg)=NSS(1:nn)
        nnlbl = 0
+       if (nvoide.gt.0) then
        do j=1,nn
+          nnlbl = nnlbl+1
+          triplgfclbl(nnlbl,ntriplg)=-NSS(j)+1
+        end do
+       else
          if (index(topo,'SN').gt.0) then
+          do j=1,nn
            if (NSS(j).eq.4) then
              nnlbl = nnlbl+1
              triplgfclbl(nnlbl,ntriplg)=-23
@@ -102,7 +130,9 @@ c***   store the sorted chain to construct polygons for void triangulation
              write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
              stop 'Check DG model'
            endif
+          end do
          elseif (index(topo,'DN').gt.0) then
+          do j=1,nn
            if (NSS(j).eq.7) then
              nnlbl = nnlbl+1
              triplgfclbl(nnlbl,ntriplg)=-23
@@ -125,12 +155,13 @@ c***   store the sorted chain to construct polygons for void triangulation
              write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
              stop 'Check DG model'
            endif
+          end do
          else
            write (*,*) 'uinptriang -- warning: topology ',topo,
      ,                 'not yet supported for void triangulation'
+        endif
          endif
          nfclbltriplg(ntriplg)=nnlbl
-       enddo
    20 continue   
 
 c  Prepare data for TRIA input file (header with refinement zones data)

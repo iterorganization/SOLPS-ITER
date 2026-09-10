@@ -33,9 +33,11 @@ c***  [nm]nptseg: the maximum and actual numbers of poloidal grid zones,
 c***      nptseg: their segmentation (DG);
 c***  ntrgdflt  : default number of targets depending on the topology
 c***  ntrgts    : maximum number of targets
+c***  nvoids    : maximum number of plasma-void boundaries
 c***  nntrian   : maximum number of triangular mesh nodes for input
       integer, parameter :: nnpr=6, nnptseg=6, ntrgts=4, namdfs=20
       integer, parameter :: nntrian=1
+      integer, parameter :: nvoids=20
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
       integer nppol(nregmx),nprad(nregmx),nnreg,
      .        cflags(5,npmamx,nrmamx,nregmx),
@@ -287,6 +289,7 @@ c***                    Below, index "0" corresponds to a group default
       character*2 ewmbndx(0:nbndzon,nbndknd)*8,
      ,  escbndx(natm,0:nbndzon,nbndknd), eswbndx(natm,0:nbndzon,nbndknd)
       logical dfrbndx(nbndknd)
+      integer nfclblused,fclblused(nbndzon*nbndknd)
       integer
      ,  leebndx(0:nbndzon,nbndknd), lcobndx(nsdb2,0:nbndzon,nbndknd),
      ,  leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd),
@@ -335,6 +338,8 @@ c***           absorption, transparence forth and back;
 c***           material; flag "target data was read"
       integer ntrgte,jedgep(ntrgts),jedgec(ntrgts),jedgeo(ntrgts),
      ,  ntrgto,ntrgtm
+      integer nvoide,vedgep(nvoids),vedgec(nvoids),nvoidm,
+     ,  vdfclbl(nvoids)
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
      ,  tgnini(ntrgts),trefcell(ntrgts),tgfclbl(ntrgts)
@@ -343,7 +348,7 @@ c***           material; flag "target data was read"
      ,  tgabsrp(ntrgts),tgtrnsf(ntrgts),tgtrnsb(ntrgts),
      ,  trfpress(ntrgts)
       character*8 made_of(ntrgts)
-      logical tgdtinpt
+      logical tgdtinpt,vddtinpt
 
 c-----------------------------------------------------------------------
       integer mreac
@@ -1858,6 +1863,7 @@ c*** 15
       parameter (nnadmod=1)
       integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
      ,  nssir(8)
+      integer vedge(2,20)
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 

@@ -21,7 +21,7 @@ c=======================================================================
       integer find_matching_species
       external find_matching_species
       integer ispc
-      integer ncore, nvess
+      integer ncore, nvess, nvoid
 c=======================================================================
       call subini ('uinprpb2')
 #ifdef DBG
@@ -71,9 +71,14 @@ c-----------------------------------------------------------------------
 c*** Boundary
       ncore=nznbndt(1)   ! number of core regions
       if (grid_mode.eq.2) then
-        nvess=maxval(fclbl)   ! vessel elements for vessel mode
+        ! vessel elements and void boundaries for vessel mode
+        nvess=count(fclblused.gt.0)
+        nvoid=count(fclblused.lt.0)
+        write(*,*) 'Found nvess = ',nvess,' active vessel boundaries.'
+        write(*,*) 'Found nvoid = ',nvoid,' void interfaces.'
       else
         nvess=0
+        nvoid=0
       end if
       if (grid_mode.ne.2) then
         nbc=0
@@ -81,7 +86,7 @@ c*** Boundary
           nbc=nbc+nznbndt(i)
         end do !}
       else ! extended grid in vessel mode
-        nbc=ncore+nvess
+        nbc=ncore+nvess+nvoid
       end if
       do i=2,11 !{
         nmdpr(i,2)=nbc
@@ -209,9 +214,11 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
         rniprm(1:ncore,1,1,26,2)=benkbnds(1:ncore,1,1)
         rniprm(1:ncore,2,1,26,2)=benkbnds(1:ncore,2,1)
 !     set the other components of the vessel
-        do i=ncore+1,nbc
-          iniprm(i,1,1, 4,2)=i-ncore
-          iniprm(i,1,1, 5,2)=i-ncore
+        do i=ncore+1,ncore+nfclblused
+          iniprm(i,1,1, 4,2)=fclblused(i-ncore)
+          iniprm(i,1,1, 5,2)=fclblused(i-ncore)
+          if (fclblused(i-ncore).gt.0) then
+            ! solid surface => sheath BCs
           iniprm(i,1,1, 6,2)=15
           iniprm(i,1,1, 7,2)=15
           iniprm(i,1,1, 8,2)=11
@@ -224,6 +231,21 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
           rniprm(i,2,1,11,2)=0.
           rniprm(i,1,1,26,2)=1.
           rniprm(i,2,1,26,2)=0.
+          else
+            ! void boundary => leakage
+            iniprm(i,1,1, 6,2)=14
+            iniprm(i,1,1, 7,2)=14
+            iniprm(i,1,1, 8,2)=2
+            iniprm(i,1,1,25,2)=14
+            rniprm(i,1,1, 9,2)=-0.0025
+            rniprm(i,1,1,10,2)=-0.0025
+            rniprm(i,2,1, 9,2)=0.
+            rniprm(i,2,1,10,2)=0.
+            rniprm(i,1,1,11,2)=0.
+            rniprm(i,2,1,11,2)=0.
+            rniprm(i,1,1,26,2)=-0.001
+            rniprm(i,2,1,26,2)=0.
+          endif
         end do
 c*** bccon, conpar, bcmom, mompar
         ispc = 0
@@ -236,7 +258,7 @@ c*** bccon, conpar, bcmom, mompar
               iniprm(l,1:nbc,1,12,2)=5 !nh zero particle flux density at all boundaries
               iniprm(l,1:ncore,1,14,2)=2 !nh zero gradient at core boundary
               iniprm(l,ncore+1:nbc,1,14,2)=5 !nh zero momentum flux at other boundaries
-              nhyb=nhyb+nvess
+              nhyb=nhyb+nvess+nvoid
             else
               iniprm(l,1:ncore,1,12,2)=8
               iniprm(l,ncore+1:nbc,1,12,2)=5
@@ -252,12 +274,25 @@ c*** bccon, conpar, bcmom, mompar
             rniprm(l,1:ncore,1,15,2)=bmobnds(ifl(l),1:ncore,1,1)
             rniprm(l,1:ncore,2,15,2)=bmobnds(ifl(l),1:ncore,2,1)
 !    other components of the vessel
-            iniprm(l,ncore+1:nbc,1,12,2)=14
-            rniprm(l,ncore+1:nbc,1,13,2)=1.
-            rniprm(l,ncore+1:nbc,2,13,2)=0.
-            iniprm(l,ncore+1:nbc,1,14,2)=13
-            rniprm(l,ncore+1:nbc,1,15,2)=1.
-            rniprm(l,ncore+1:nbc,2,15,2)=0.
+            do i=ncore+1,ncore+nfclblused
+              if (fclblused(i-ncore).gt.0) then
+                ! solid surface => sheath BCs
+                iniprm(l,i,1,12,2)=14
+                rniprm(l,i,1,13,2)=1.
+                rniprm(l,i,2,13,2)=0.
+                iniprm(l,i,1,14,2)=13
+                rniprm(l,i,1,15,2)=1.
+                rniprm(l,i,2,15,2)=0.
+              else
+                ! void boundary => leakage
+                iniprm(l,i,1,12,2)=10
+                rniprm(l,i,1,13,2)=-0.001
+                rniprm(l,i,2,13,2)=0.
+                iniprm(l,i,1,14,2)=2
+                rniprm(l,i,1,15,2)=0.
+                rniprm(l,i,2,15,2)=0.
+              endif
+            enddo
           end if !}
         end do !}
       end if
@@ -347,7 +382,7 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
           end do !}
         end do !}
       else ! vessel mode
-        k=nvess*(natmi-nmeta)
+        k=(nvess+nvoid)*(natmi-nmeta)
       end if
       m=k+ngpfstr+nrcmstr
       n=m
@@ -417,8 +452,8 @@ cnh Surface with nonzero face label is a standard surface
         nmdpr(25,3)=nlimi-nskip+nstsi+1
         nmdpr(25,8)=nlimi-nskip+nstsi+1
       else !{ vessel mode
-        nmdpr(25,3)=nlimi-nskip+ncore+maxval(fclbl)+1
-        nmdpr(25,8)=nlimi-nskip+ncore+maxval(fclbl)+1
+        nmdpr(25,3)=nlimi-nskip+ncore+nfclblused+1
+        nmdpr(25,8)=nlimi-nskip+ncore+nfclblused+1
       end if       
       nmdpr(22,3)=nspcmol
       nmdpr(22,8)=nspcmol
@@ -648,7 +683,7 @@ cnh             values for additional hybrid strata
       else ! vessel mode
         k=0
         ihyb=0
-        do i=1,nvess !{
+        do i=1,nfclblused !{
           ispe=0
           do iatm=1,natmi !{
             if (is_meta(iatm)) cycle
@@ -666,10 +701,10 @@ cnh             values for additional hybrid strata
 c***        crcstra, rcstart, rcend
             cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
             cniprm(k+ihyb,1,1,2,8)='A'
-            iniprm(k,1,1,4,3)=i
-            iniprm(k,1,1,5,3)=i
-            iniprm(k+ihyb,1,1,4,8)=i
-            iniprm(k+ihyb,1,1,5,8)=i
+            iniprm(k,1,1,4,3)=fclblused(i)
+            iniprm(k,1,1,5,3)=fclblused(i)
+            iniprm(k+ihyb,1,1,4,8)=fclblused(i)
+            iniprm(k+ihyb,1,1,5,8)=fclblused(i)
 
 c***        species_start, species_end
             iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
@@ -741,11 +776,16 @@ c***        targsp
 c***        surf_mat
 cnh         find material of the face
 cnh         should be replaced by vessel properties in the future!
+            if (fclblused(i).gt.0) then
             do j=1,nlimi !{
-               if (fclbl(j).eq.i) exit
+               if (fclbl(j).eq.fclblused(i)) exit
             end do !}
             c2niprm(k,1,1,40,3) = umtrl(j)
             c2niprm(k+ihyb,1,1,40,8) = umtrl(j)
+            else
+              c2niprm(k,1,1,40,3) = ' '
+              c2niprm(k+ihyb,1,1,40,8) = ' '
+            endif
 
 c***        accel_ion
             iniprm(k,1,1,41,3) = 1
@@ -1507,7 +1547,8 @@ cnh Surface with nonzero face label is a standard surface
         end do !}
       else !{ vessel mode
         i=nlimi-nskip+ncore
-        do k=1,maxval(fclbl)
+        do k=1,nfclblused
+          if (fclblused(k).le.0) cycle
           i=i+1
           do l=laddsrfs+1,nlimi !{ find corresponding surface
             j=indasrfs(l)
@@ -1552,7 +1593,8 @@ cnh Surface with nonzero face label is a standard surface
               else !nh vessel mode ==> 3a surface
                 found=.false.
                 do isrf=i_spcsrf(i),i_spcsrf(i)+j-2
-                  if (nlimi-nskip+ncore+fclbl(n).eq.l_spcsrf(isrf)) then ! check if 3a surface is already written out
+                  if (nlimi-nskip+ncore+abs(fclbl(n)).eq.l_spcsrf(isrf))
+     .                then ! check if 3a surface is already written out
                     k=k-1
                     j_spcsrf(i)=k
                     nskip3=nskip3+1
@@ -1562,7 +1604,7 @@ cnh Surface with nonzero face label is a standard surface
                 enddo
                 if (.not.found) then
                   l_spcsrf(i_spcsrf(i)+j-1-nskip3)=nlimi-nskip+ncore+
-     ,              fclbl(n)
+     ,              abs(fclbl(n))
                 endif
               end if
             else !}{

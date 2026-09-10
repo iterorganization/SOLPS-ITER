@@ -366,14 +366,13 @@ c*** 3a.  data for non-default surface models on standard surfaces
      ,                        fchspts(ists),sptprm(ists),arfpress(ists)
           end if !}
         end do !}
-        i=nstsi-nskip
       else ! vessel mode
 c       count the number of core regions
         ncore=0
         do ists=1,nstsi
           if (iliin(ists).eq.2) ncore=ncore+1
         end do
-        write(iunoo,707) maxval(fclbl)+ncore
+        write(iunoo,707) nfclblused+ncore
 c       first write the core regions
         ncore=0
         do ists=1,nstsi !{
@@ -402,36 +401,43 @@ c       first write the core regions
      ,                      fchspts(ists),sptprm(ists),arfpress(ists)
           end if !}
         end do !}
-c       then write the positive face labels
-        do i=1,maxval(fclbl)
-c         detect the properties of an element with a certain face label
+c       then write the other face labels
+        do i=1,nfclblused
+          if (fclblused(i).gt.0) then ! positive fclbl => real surface
+c           detect the properties of an element with a certain face label
           do k=laddsrfs+1,nlimi !{
             j=indasrfs(k)
             if(j.eq.0) cycle
-            if (fclbl(j).eq.i) exit
+              if (fclbl(j).eq.fclblused(i)) exit
           end do
           write(iunoo,709) i+ncore, 'Vessel part'//repeat(' ',52)
           write(iunoo,707) i+ncore,1,1,1,1,0,0,0,0,i,i
           jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
-     +                               10000*jadjsw(j)+100000*jadisw(j)
+     +                                 10000*jadjsw(j)+100000*jadisw(j)
           jlcell=jlacll(j)+1000*jlblck(j)
           write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
-     ,      jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
           if(jscrd(j).gt.0) then !{
             write(iunoo,715) scard_name(jscrd(j))
           else if (jliin(j).eq.1) then !}{
             ii=10*jlsptc(j)+jlsptp(j)
             write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j),
-     ,                  refcell(i)
+     ,                    refcell(i)
             write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
-     ,                  trnspa(j,1),trnspa(j,2),fsheata(j)
+     ,                    trnspa(j,1),trnspa(j,2),fsheata(j)
             write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
-     ,                  exppla(j),expela(j),expila(j)
+     ,                    exppla(j),expela(j),expila(j)
             write(iunoo,703) rcycsa(j),rcycca(j),
-     ,                  echspta(j),fchspta(j),sptpra(j),refpress(i)
+     ,                    echspta(j),fchspta(j),sptpra(j),refpress(i)
           end if !}
+          else ! negative fclbl => void interface
+            write(iunoo,709) i+ncore, 'Void boundary'//repeat(' ',50)
+            write(iunoo,707) i+ncore,1,1,1,1,0,0,0,0,
+     .        fclblused(i),fclblused(i)
+            !wd todo: detect ilcol, ilplg for the void boundary?
+            write(iunoo,707) -3,0,0,0,0,0,0,0,0,0
+          endif
         end do
-        i=maxval(fclbl)
       end if
 
 c*** 3b.  data for additional surfaces
@@ -441,7 +447,7 @@ c*** 3b.  data for additional surfaces
       if (grid_mode.eq.2) then !nh vessel mode
         do k=laddsrfs+1,nlimi
           i=indasrfs(k)
-          if (fclbl(i).ne.0) then
+          if (fclbl(i).ne.0.and.ilplgdg(i).eq.0) then
             nvess=nvess+1
           endif
         enddo
@@ -455,10 +461,12 @@ c***  "ch0-cards"
       do 360 k=laddsrfs+1,nlimi !{
         i=indasrfs(k)
         if(i.eq.0) go to 360
-        if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+        if((grid_mode.eq.2).and. !nh surfaces already defined in 3a
+     .     ((fclbl(i).gt.0.and.ilplgdg(i).eq.0).or. ! solid surface, not part of a polygon
+     .      (fclbl(i).lt.0))) then ! void interface
           if(jliin(i).lt.0) then
             jsurpr=jsurpr+1
-            nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
+            nsrf(jsurpr)=nlimi-nvess+ncore+abs(fclbl(i))
           endif
           nskip=nskip+1
           go to 360
@@ -1084,7 +1092,7 @@ c     correct number of strata for vessel mode
      ,    (indsrc(i),i=nstrais+1,nstrai)
         nvess=0
       else ! vessel mode
-        nvess=maxval(fclbl)*(natmi-nmeta+nplsh)
+        nvess=nfclblused*(natmi-nmeta+nplsh)
         j=0
         indsrc7=0
         do i=1,nstrai

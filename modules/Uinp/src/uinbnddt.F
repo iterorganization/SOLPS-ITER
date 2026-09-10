@@ -195,7 +195,7 @@ c*** ... and then the recycling source if specified
 cnh   adapt some variables of block 14 for vessel mode
       if (grid_mode.eq.2) then
         k=0
-        do i=1,maxval(fclbl)
+        do i=1,nfclblused
           ispe=0
           do iatm=1,natmi
             if (is_meta(iatm)) cycle

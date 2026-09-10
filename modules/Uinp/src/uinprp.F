@@ -192,7 +192,17 @@ c*** Correct jadch1 (not tested yet!!!)
 
 c*** Prepare index of additional surfaces to be modified in geousr
 
-      if(ntrgte.gt.0) then
+      if (nvoide.gt.0) then
+        k=0
+        do i=1,nvoide
+          vedge(1,k+1)=2
+          vedge(2,k+1)=indasrfe(vedgep(i))
+          vedge(1,k+2)=1
+          vedge(2,k+2)=indasrfe(vedgec(i))
+          k=k+2
+        end do
+        nvoide=k
+      else if(ntrgte.gt.0) then
         k=0
         l=2
         do i=1,ntrgte
@@ -222,28 +232,53 @@ c*** Prepare index of additional surfaces to be modified in geousr
         end do
         ntrgte=k
       end if
-      if(ntrgte.le.0) then !{
-        write(0,*) 'Undefined target edges'
+      if(ntrgte.le.0.and.nvoide.le.0) then !{
+        write(0,*) 'Undefined target / void edges'
         call xerrab ('==> Check the specification in the DG model')
       end if !}
+      if(nvoide.gt.0) then !{
+        write(0,*) 'Void edges defined. Neglecting target edges ',
+     ,             'from the DG model'
+      end if !}
       uex=.false.
+      if (nvoide.gt.0) then
+        do i=1,k !{
+          if(vedge(2,i).le.0) then !{
+            uex = .true.
+            write(0,*) '"Void edge"',i,'  is specified as ',
+     ,                                              '"Not for Eirene"'
+          end if !}
+        end do !}
+      else
       do i=1,k !{
         if(jedge(2,i).le.0) then !{
           uex = .true.
-          write(0,*) '"Target edge"',i,'  is specified as "Not for ',
-     ,                                                        'Eirene"'
+            write(0,*) '"Target edge"',i,'  is specified as ',
+     ,                                              '"Not for Eirene"'
         end if !}
       end do !}
+      endif
       call xertst (.not.uex,
      . '==> Check the specification in the DG model')
 
 c*** Specify some comments to appear in the output file
 
+      if (nvoide.gt.0) then
+        do i=1,nvoide
+          j=vedge(2,i)
+          txtsfa(j)=utxsfa
+        end do
+      else
       do i=1,ntrgte
         j=jedge(2,i)
         txtsfa(j)=utxsfa
       end do
+      endif
 
+      do i=1,nvoide
+        write(0,*) 'Void edge ',i
+        write(0,*) 'i, vedge(1,i), vedge(2,i): ',i,vedge(1,i),vedge(2,i)
+      end do
 c*** Re-arrange specification of the time allocation: through B2
 
       ntcpub2=ntcpu

@@ -4,7 +4,7 @@
 !======================================================================
       use uinput_mod
       implicit none
-      integer :: lun, i,j, ireg
+      integer :: lun, i, j, ireg, ncount, minfclbl, maxfclbl
       character*80 uline
       character*12  dum0, dum1
       logical lfound
@@ -108,6 +108,26 @@
       nbcells = nbcells - ndfaces
       ncells = nicells + nbcells
       nfaces = (4*(nicells - ndfaces) + 3*ndfaces - nbcells)/2 + nbcells
+      ! check which values of fclbl are actually present in the grid (i.e. in cflags).
+      nfclblused = 0
+      fclblused = 0
+      minfclbl = minval(cflags(2:5,:,:,:))
+      maxfclbl = maxval(cflags(2:5,:,:,:))
+      do i=minfclbl,maxfclbl
+        !tmp: skip core labels, which are treated separately
+        if (i == 0) cycle
+        if (i == -21) cycle
+        !check whether the label appears in cflags
+        ncount = 0
+        do ireg = 1,nnreg
+          ncount = ncount + count(
+     .      cflags(2:5,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).eq.i)
+        enddo 
+        if (ncount.gt.0) then
+          nfclblused = nfclblused + 1
+          fclblused(nfclblused) = i
+        endif
+      enddo
 #ifdef DBG
       write (*,*) 'uincrr - nCv, nCi, nCg, nFc = ',
      .  ncells, nicells, nbcells, nfaces
