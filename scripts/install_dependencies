@@ -1324,6 +1324,69 @@ if ("$OSTYPE" == "darwin") then
 
 endif
 
+# Install SuiteSparse library
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w libsuitesparse-dev`
+  if ("$pkg_check" == "") then   # Check if the library is already installed
+
+    echo
+    echo SuiteSparse library not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set SUITESPARSE_INSTALL = $<
+
+    if ( "$SUITESPARSE_INSTALL" == "" ) then
+      set SUITESPARSE_INSTALL = "y"
+    endif
+
+    if ( "$SUITESPARSE_INSTALL" == "y" ) then
+      sudo apt-get install -y libsuitesparse-dev
+      echo SuiteSparse library successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+
+  else
+    echo
+    echo SuiteSparse library already locally installed.
+    sleep 1
+
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^suite-sparse$'` == 0 ) then   # Check if the library is already installed
+
+    echo
+    echo SuiteSparse library not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set SUITESPARSE_INSTALL = $<
+
+    if ( "$SUITESPARSE_INSTALL" == "" ) then
+      set SUITESPARSE_INSTALL = "y"
+    endif
+
+    if ( "$SUITESPARSE_INSTALL" == "y" ) then
+      brew install suite-sparse
+      echo SuiteSparse library successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+
+  else
+    echo
+    echo SuiteSparse library already locally installed.
+    sleep 1
+
+  endif
+
+endif
+
 # Install MPI library
 
 if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then

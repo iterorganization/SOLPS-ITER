@@ -43,6 +43,7 @@ endif
 # Add directories of compiled libraries, include directives, etc.
 
 setenv OPENBLAS_HOME `brew --prefix openblas`
+setenv SUITESPARSE_HOME `brew --prefix suite-sparse`
 setenv FREETYPE_HOME `brew --prefix freetype`
 setenv HDF5_HOME `brew --prefix hdf5`
 setenv LAPACK_DIR `brew --prefix lapack`
@@ -107,6 +108,9 @@ if ( `brew list | grep -c '^netcdf-fortran$'` == 0 ) then
     set MISSING_DEPENDENCY = 1
 endif
 if ( `brew list | grep -c '^openblas$'` == 0 ) then
+    set MISSING_DEPENDENCY = 1
+endif
+if ( `brew list | grep -c '^suite-sparse$'` == 0 ) then
     set MISSING_DEPENDENCY = 1
 endif
 if ( `brew list | grep -c '^open-mpi$'` == 0 ) then
