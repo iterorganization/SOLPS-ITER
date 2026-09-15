@@ -1,6 +1,6 @@
 GR_ROOT ?= ${GR_HOME}
 
-LD_NAG     = -L${LAPACK_LIB_DIR} -llapack -L${BLAS_LIB_DIR} -lblas
+LD_NAG     = $(addprefix -L,${LAPACK_LIB_DIR}) -llapack $(addprefix -L,${BLAS_LIB_DIR}) -lblas
 
 #CPP      = -/lib/cpp -traditional
 CPP       = /usr/bin/cpp -traditional

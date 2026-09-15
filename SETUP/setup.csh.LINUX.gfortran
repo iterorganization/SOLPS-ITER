@@ -56,6 +56,7 @@ end
 
 setenv FREETYPE_LIB_DIR `find $lib_paths -type f -name "libfreetype*.so*" -exec dirname {} \; | sort -u`
 setenv LAPACK_LIB_DIR `find $lib_paths -type f -name "liblapack*.so*" -exec dirname {} \; | sort -u`
+setenv SUITESPARSE_LIB_DIR `find $lib_paths -type f -name "libsuitesparseconfig*.so*" -exec dirname {} \; | sort -u`
 setenv BLAS_LIB_DIR `find $lib_paths -type f -name "libblas*.so*" -exec dirname {} \; | sort -u`
 setenv LIBPNG_LIB_DIR `find $lib_paths -type f -name "libpng*.so*" -exec dirname {} \; | sort -u`
 setenv LIBXPM_LIB_DIR `find $lib_paths -type f -name "libXpm*.so*" -exec dirname {} \; | sort -u`
@@ -126,6 +127,10 @@ if ("$pkg_check" == "") then
     set MISSING_DEPENDENCY = 1
 endif
 set pkg_check = `dpkg -l | grep -w libblas-dev`
+if ("$pkg_check" == "") then
+    set MISSING_DEPENDENCY = 1
+endif
+set pkg_check = `dpkg -l | grep -w libsuitesparse-dev`
 if ("$pkg_check" == "") then
     set MISSING_DEPENDENCY = 1
 endif
