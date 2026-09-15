@@ -8,7 +8,7 @@ c
 c======================================================================
       implicit none
 #include "impcon.inc"
-      integer i,j,iamd,ifile,imat,nmat,isp
+      integer i,j,iamd,ifile,imat,nmat,isp, ggselect
       logical uex,open_file,streql,match_found,skip_wall
       character*2 listmat(nmtr)
       logical, allocatable :: trim_found(:)
@@ -28,45 +28,68 @@ c
       promp(1) = repeat(' ',8)
       promp(2) = repeat(' ',8)
       fixkey=.false.
+      ggselect = 0 ! carre route
 c
 c*** Read the data from dg output
 c
       write(*,*) '... opening uinput.dg'
       open(iunii,file='uinput.dg')
       call import(uinnam)
-      write(*,*) '... opening uinput.trg'
-      open(iunii,file='uinput.trg')
-      call uintopo(iunii)
-      call xertst (.not.(streql(topo,' ')),
+
+      ! Check which grid generator was used to determine which data
+      ! to read
+      select case (gridgeneratorID)
+
+      case (0) ! carre 
+        
+        write(*,*) '... opening uinput.trg'
+        open(iunii,file='uinput.trg')
+        call uintopo(iunii)
+        call xertst (.not.(streql(topo,' ')),
      ,  'Old-style DG output. Please produce the new one -'//
      ,  ' or use uinp.1.42')
-      write (*,*) 'carre_mode = ', carre_mode
-      if (carre_mode.lt.2) then
-        ! obtain grid size from *.trg file
-        call import(uintrg)
-      else
-        ! obtain grid size from carre.out file
-        write(*,*) '... opening uinput.crr'
-        open(iunii,file='uinput.crr')
-        call uincrr(iunii)
-      endif
-      if(ntrgte.ne.ntrgtm) then !{
-        write(0,*) 'Something is wrong with target edge specification'
-        write(0,*) '  ==> check the target edges in the DG model'
-        call xerrab ('Wrong target edge specification')
-      end if !}
-      if(ntrgte.eq.0) then !{
-        if(index(topo,'SN').eq.0) then !{
-          write(0,*) 'Magnetic configuration inconsistent with old-',
-     ,               'style specification of the target edges'
-          write(0,*) '  ==> Add "Target specification" in the DG model'
-          call xerrab ('Inconsistent magnetic configuration')
+        write (*,*) 'carre_mode = ', carre_mode
+        if (carre_mode.lt.2) then
+          ! obtain grid size from *.trg file
+          call import(uintrg)
+        else
+          ! obtain grid size from carre.out file
+          write(*,*) '... opening uinput.crr'
+          open(iunii,file='uinput.crr')
+          call uincrr(iunii)
+        endif
+        if(ntrgte.ne.ntrgtm) then !{
+          write(0,*) 'Something is wrong with target edge specification'
+          write(0,*) '  ==> check the target edges in the DG model'
+          call xerrab ('Wrong target edge specification')
         end if !}
-        jedgep(1)=jedgeo(2)
-        jedgep(2)=jedgeo(3)
-        jedgec(1)=jedgeo(1)
-        jedgec(2)=jedgeo(4)
-      end if !}
+        if(ntrgte.eq.0) then !{
+          if(index(topo,'SN').eq.0) then !{
+            write(0,*) 'Magnetic configuration inconsistent with old-',
+     ,               'style specification of the target edges'
+            write(0,*) '  ==> Add "Target specification" in the DG ' //
+     ,               'model'
+            call xerrab ('Inconsistent magnetic configuration')
+          end if !}
+          jedgep(1)=jedgeo(2)
+          jedgep(2)=jedgeo(3)
+          jedgec(1)=jedgeo(1)
+          jedgec(2)=jedgeo(4)
+        end if !}
+
+      case (1) ! goat 
+
+        ! Read necessary grid data from goat directly (note: uinput.goat should be linked to grid file provided by goat)
+        write(*,*) '... opening uinput.goat'
+        open(iunii,file='uinput.goat')
+        call uingoat(iunii)
+        close(iunii)
+
+      case default 
+
+        call xerrab('Grid generator not yet supported')
+
+      end select
 c
 c*** Read the auxiliary, user data
 c

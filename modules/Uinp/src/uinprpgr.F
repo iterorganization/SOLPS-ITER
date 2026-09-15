@@ -95,6 +95,15 @@ c*** Grid dimensions and cut locations
 
       call subini ('uinprpgr')
       ex=.false.
+      if (gridgeneratorID == 1) then 
+        write(*,*) 'uinprpgr: Goat grid generator used, following ' //
+     ,   'goat route'
+
+        ! Determine number of cells
+        ncvp = ncells
+        ncip = nicells
+        nfcp = nfaces
+      else 
       if(lm_cnfg) then  !{
 c*** Limiter and linear configurations - a temporary, clumsy solution
         if(index(topo,'SN').eq.0) then !{
@@ -237,6 +246,7 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
         write(*,*) '      (should be one of SNL SNU DNL DNU DNS)'
         call xerrab ('Unrecognized topology')
       end if  !}
+      
 
       nr1st=irwl
       nrplg=iztg
@@ -300,6 +310,7 @@ cnh Grid parameters for unstructured format
         nssir(7) = ndxa-5
         nssir(8) = (ndxa-5)*(ndya+1)-2
       end if
+      end if 
 
 c!###{
 c      print *,'uinprpgr: nx,ny,nncut,nxcut{4},nycut{4},nniso,nxiso = ',

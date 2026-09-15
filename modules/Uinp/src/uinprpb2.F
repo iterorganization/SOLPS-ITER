@@ -40,9 +40,19 @@ c*** Initialization
       nmdpr(5,1)=nspcpls+nspcncl
 
 c*** nx, ny, ns
-      iniprm(1,1,1,1,1)=nx
-      iniprm(1,1,1,2,1)=ny
-      iniprm(1,1,1,3,1)=nspcpls+nspcncl
+      if (gridgeneratorID == 0) then 
+        ! Carre grid in structured format
+        iniprm(1,1,1,1,1)=nx
+        iniprm(1,1,1,2,1)=ny
+      elseif (gridgeneratorID == 1) then 
+        ! Goat grid in unstructured format
+        iniprm(1,1,1,1,1)=0
+        iniprm(1,1,1,2,1)=0
+      else
+        ! Unknown grid generator
+        call xerrab('uinprpb2: unknown grid generator')
+      end if 
+      iniprm(1,1,1,3,1)=nspcpls+nspcncl 
 
 c*** Establish species correspondence array
       i=1
