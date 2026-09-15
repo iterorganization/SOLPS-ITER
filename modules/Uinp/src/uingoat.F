@@ -32,7 +32,7 @@
      , ' Check if grid file is corrupt'
 
       ! Read in dimensions 
-      read (lun, *) nicells, nfaces, dumi(1), nbcells, dumi(2:3)
+      read (lun, *) nicells, nfaces, nvert, nbcells, dumi(2:3)
 
       ! Compute auxiliary dimensions
       ncells = nbcells + nicells ! total number of cells
@@ -56,7 +56,7 @@
 
       ! Read in fcLbl - expected format: face ID, vert1, vert2, fcLbl, fcReg, fcAligned
       allocate(fcLbl_in(nfaces))
-      fcLbl = 0
+      fcLbl_in = 0
       do i = 1, nfaces 
         read(lun, *) dumi(1:3), fcLbl_in(i), dumi(5:6)
       end do 

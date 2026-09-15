@@ -44,7 +44,7 @@ c***     0: carre, 1: goat
       integer nppol(nregmx),nprad(nregmx),nnreg,
      .        cflags(5,npmamx,nrmamx,nregmx),
      .        fdegen(4,npmamx,nrmamx,nregmx), gridgeneratorID
-      integer ncells,nicells,nbcells,nfaces,ndfaces
+      integer ncells,nicells,nbcells,nfaces,ndfaces, nvert
       integer carre_mode,grid_mode
       character*4 topo
       character*8 gridgeneratorname
