@@ -102,26 +102,45 @@ c*** Create the header for the b2ag.dat file
       if(uex) then !{
           print *,'    ... b2ag.dat file already present, not created'
       else !}{
-          open(2,file='b2ag.dat')
-          write(2,'(a)')
+          if (gridgeneratorID == 0) then ! Carre, structured format
+            open(2,file='b2ag.dat')
+            write(2,'(a)')
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
-          write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
-          write(2,'(a)') '*param          (param(0:99); free format)'
-          if (ln_cnfg) then
-            write(2,'(a)') ' -3.0, 99*0.0'
-          else
-            write(2,'(a)') ' -1.0, 99*0.0'
-          endif
-          write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
-          if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
+            write(2,'(4(3x,i4))') nrplg-npplg, ndya, nrplg-npplg, ndya
+            write(2,'(a)') '*param          (param(0:99); free format)'
+            if (ln_cnfg) then
+              write(2,'(a)') ' -3.0, 99*0.0'
+            else
+              write(2,'(a)') ' -1.0, 99*0.0'
+            endif
+            write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+            if (lm_cnfg.and..not.ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_periodic_bc''  ''1'''
-          if (ln_cnfg) write(2,'(a)')
+            if (ln_cnfg) write(2,'(a)')
      .                   '''b2agfs_lineardevice'' ''linear.geometry'''
-          ! temporary for target/vessel mode grids: disable redef_gmtry
-          if (carre_mode.ge.2) write(2,'(a)')
+            ! temporary for target/vessel mode grids: disable redef_gmtry
+            if (carre_mode.ge.2) write(2,'(a)')
      .                   '''b2agdr_redef_gmtry''  ''0'''
-          close(2)
-          print *,'    ... b2ag.dat created'
+            close(2)
+            print *,'    ... b2ag.dat created'
+          elseif (gridgeneratorID == 1) then ! Goat, unstructured format
+            open(2,file='b2ag.dat')
+            write(2, '(a)') '*format'
+            write(2, '(a)') '  unstructured'
+            write(2,'(a)')
+     .      '*dimens         (nCv, nFc, nVx; free format)'
+            write(2,'(3(3x,i4))') ncells, nfaces, nvert
+            write(2,'(a)') '*param          (param(0:99); free format)'
+            write(2,'(a)') ' -1.0, 99*0.0'
+            write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+            close(2)
+            print *,'    ... b2ag.dat created'
+          else
+            ! Unknown grid generator
+            call xerrab('uinput: unknown grid generator ID when ' //
+     .        'writing b2ag.dat')  
+          end if 
+             
       endif !}
 
 c*** Create the b2us.dat file for triangulation
