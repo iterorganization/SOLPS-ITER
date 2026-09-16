@@ -67,6 +67,7 @@ CURDAT=curtrngl.dat
 PLTINF=triplt.dat
 TRIPLT=tria
 
+# Only for carre based grids
 LEN=3   # minimum width of the serial number field in the filenames
 POS=1   # serial number field position in the filenames (counted from the right, starting with 0)
 unset f
@@ -80,6 +81,11 @@ triglnklist="fort.33 fort.34 fort.35"
 }
 b2usoutlist="$b2usnodes $b2uscells $b2uslinks"
 b2uslnklist=$triglnklist
+
+# Default settings
+gridgenerator=CARRE
+griddir=basename
+gridname=traduit.out.b2us
 
 NAME=`basename $0`
 stty erase ^H
@@ -144,19 +150,74 @@ TRIAGEOM="${SOLPSTOP}/modules/Triang/builds/$toolchain/triageom"
 TRIAINP="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainp"
 TRIAINQ="${SOLPSTOP}/modules/Triang/builds/$toolchain/triainq"
 
+# Initialize
 q=U
-griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
+
+# Look for the .dgo file with options and read basic options
 [ -s dg.dgo ] && {
   modelname=`lln dg.dgo`
   [ -s $modelname ] && {
     dgname=`basename $modelname`
-    carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+
+    # Extract the grid generator name
+    gridgenerator=$(awk '$1=="ggname" {print $2; exit}' "$modelname")
+    { case "$gridgenerator" in 
+      ( goat|GOAT|Goat ) 
+        print -u1 -- "Goat grid generator detected in DG model"
+        gridgenerator=goat
+        ;;
+      ( carre|CARRE|Carre|Carre2|CARRE2|carre2) 
+        print -u1 -- "Carre grid generator detected in DG model"
+        gridgenerator=carre
+        ;;
+      ( * ) 
+        print -u1 -- "Grid generator not set in DG model, assuming Carre grid generator"
+        gridgenerator=carre
+        ;;
+    esac; }
   } || {
     print -u2 -- "No valid DG model found. Limited capabilities available only"
   }
 } || {
   print -u2 -- "No valid dg.dgo file found. Did you run lns first?"
 }
+
+# Check grid location
+{ case "$gridgenerator" in
+  ( goat )
+    # First, we check the standard location of the grid, which is 
+    # assumed to be the current folder under 'traduit.file.b2us'
+    print -u2 -- "Looking for traduit.out.b2us in current folder..."
+    [ -s traduit.out.b2us ] && {
+      # The file exists, take it
+      gridname=traduit.out.b2us
+    } || {
+      # The file doesn't exist, ask the user
+      print -u2 -- "Could not find traduit.out.b2us in the current folder, please specify the grid file"
+      while true; do
+        read gridname
+
+        if [ -s "$gridname" ]; then
+            break
+        else
+            print -u2 -- "grid file does not exist, please try again"
+        fi
+      done
+      
+    }
+    # Print out
+    print -u2 -- "Grid name set to '$gridname'"
+    
+    # Link the file to uinput.goat
+    ln -sfn "$gridname" uinput.goat
+    ;;
+  ( carre ) 
+    # Follow the original carre route here
+    carre_stem=`echo $dgname | sed -e 's|\.dgo||' `
+    griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
+
+    # Check if the grid directory exists. If so, find the newest geometry
+    # file there
 [ -d $griddir ] && {
   n=`ls -1 $griddir | grep -E "$carre_stem.v[0-9][0-9][0-9].geo" | wc -l`
   set -- $griddir/$carre_stem.v[0-9][0-9][0-9].geo
@@ -178,6 +239,8 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
       q=q
     }
   }
+    # If it didn't exist, see if we should create it and whether the 
+    # necessary carre output is present
 } || {
   print -u2 -n -- "The directory $griddir does not exist. Create it? (y/n)"
   while true; do {
@@ -203,10 +266,20 @@ griddir=${CARRE_GRIDDIR-$SOLPSTOP/modules/Carre2/meshes/${DEVICE-iter}}
       q=q
     }
   }
-}
 
+      # Set the grid name
+      gridname="$carrename"
+}
+    ;;
+  ( * )
+    print -u2 -- "Grid generator still unknown at this stage, unexpected"
+    ;;
+esac; }
+
+# Set the template directory
 templatedir=$SOLPSTOP/modules/DivGeo/device/${DEVICE-iter}/templates
 
+# Checks
 e=
 [ -x "$TRIA" ] || {
   print -u2 -- "$NAME: $TRIA not found. Check run environment settings"
@@ -226,6 +299,7 @@ e=
 }
 [ -n "$e" ] && exit 4
 
+# See if all necessary links have been made
 [ -L uinput.dg ] && [ -L uinput.trg ] && [ -L uinput.crr ] && q=u
 
 export GRSOFT_DEVICE='62'
@@ -241,9 +315,11 @@ while true; do {
     extra="${u#*-}"
     [ "$u" = "$extra" ] && extra= || u="${u%%-*}"
     { case "${u:-$q}" in
-      ( h|H )                                               # help:
+      ( h|H )                                               
+            # help:
             echo "$Help"; break;;
-      (  u  )                                               # run uinp to produce the input for Eirene:
+      (  u  )                                               
+            # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp
             [ -r b2.neutrals.parameters_hybrid.stencil ] && {
@@ -256,14 +332,21 @@ while true; do {
               [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
+                # Link if grid is generated by carre
+                case $gridgenerator in 
+                  ( carre )
                 ln -sf $griddir/$carre_stem.v$n.geo .
-                /bin/echo -e "The last grid found is : $carrename"
-                echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
+                esac;
+                /bin/echo -e "The last grid found is : $gridname"
+
+                # Append filename in b2ag.dat (independent of grid generator)
+                echo -e "'b2agfs_geometry'\t'$gridname'" >> b2ag.dat
               }
               [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
-      (  U  )                                               # run uinp to produce the input for Eirene:
+      (  U  )                                               
+            # run uinp to produce the input for Eirene:
             [ -r $eirinp ] && rm $eirinp
             uinp -l
             [ -r b2.neutrals.parameters_hybrid.stencil ] && {
@@ -281,14 +364,21 @@ while true; do {
               [ -r $eirinp ] && q=n || q=q
             } || {
               [ -r b2ag.dat ] && {
+                # Link if grid is generated by carre
+                case $gridgenerator in 
+                  ( carre )
                 ln -sf $griddir/$carre_stem.v$n.geo .
-                /bin/echo -e "The last grid found is : $carrename"
-                echo -e "'b2agfs_geometry'\t'$carrename'" >> b2ag.dat
+                esac;
+                /bin/echo -e "The last grid found is : $gridname"
+
+                # Append filename in b2ag.dat (independent of grid generator)
+                echo -e "'b2agfs_geometry'\t'$gridname'" >> b2ag.dat
               }
               [ $eirinp -nt dg.dgo ] && q=b || q=q
             }
             break;;  
-      ( b|B )                                               # run b2ag/i/h to produce fort.30 file and b2 input files
+      ( b|B )                                               
+            # run b2ag/i/h to produce fort.30 file and b2 input files
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2ag.prt > b2ag.log"
             [ -r b2ag.prt ] && rm b2ag.prt
             [ -r $b2agout ] && rm $b2agout
@@ -352,7 +442,33 @@ while true; do {
               q=u
             }
             break;;
-      ( n|N )                                               # run TRIAINP to make input file for TRIA:
+      ( n|N )                                               
+            # run TRIAINP to make input file for TRIA:
+            # First, check if the grid generator already provided the 
+            # necessary output (i.e. void polygon)
+            case "$gridgenerator" in 
+              ( goat ) 
+                print -u2 -- "Goat grid generator detected, checking for "$tripout" file"
+                if [ -s $tripout ]; then 
+                  # Already provided, don't run triainp
+                  print -u2 -- " "$tripout" found, skipping triainp"
+
+                  # Prepend the header file if it exists
+                  [ -s "$triahed" ] && [ -r "$triahed" ] && {
+                        (cat "$triahed"; tail --lines=+2 "$tripout") > "$triain"
+                      } || {
+                        cp "$tripout" "$triain"
+                        print -u2 -- "No $triahed file found, using default provided by TRIAINP instead"
+                      }
+                  q=t
+                  true 
+                else 
+                  # Not found - maybe forgot to copy or did not run goat?
+                  print -u2 -- "Could not find "$tripout", did you run goat and copied it into this working directory?"
+                  q=u
+                fi
+                ;;
+              ( carre )
             [ -r $tripbin ] && {
               [ -r $tripuin ] && {
                 N=
@@ -384,8 +500,12 @@ while true; do {
               q=b
               [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
             }
+              ( * )
+                print -u2 -- "Grid generator not yet defined, unexpected"
+              esac; 
             break;;
-      ( t|T )                                               # run TRIA to make triangular mesh for the void regions:
+      ( t|T )                                               
+            # run TRIA to make triangular mesh for the void regions:
             [ -r "$triain" ] && [ -s "$triain" ] && {
               N=
               print -u2 -- "Starting a TRIA run."
@@ -408,7 +528,8 @@ while true; do {
               q=u
             } 
             break;;
-      ( g|G )                                               # run b2us to triangulate unstructured plasma Grid and build combined mesh
+      ( g|G )                                               
+            # run b2us to triangulate unstructured plasma Grid and build combined mesh
             print -u2 -- "Command line: ${MAKE} -f ${SOLPSTOP}/runs/Makefile b2us.prt > b2us.log"
             [ -r $b2usinp ] && {
               [ -r b2mn.dat ] && {
@@ -522,7 +643,8 @@ while true; do {
               q=u
             }
             break;;
-      ( s|S )                                             # assign a serial number and store the mesh:
+      ( s|S )                                             
+            # assign a serial number and store the mesh:
             check_files $trigoutlist || check_files $b2usoutlist && q=c || {
               print -u2 -- "Not all output files, $b2usoutlist, are produced"
               print -u2 -- "Probably, some of the previous steps forgotten?"
@@ -577,7 +699,8 @@ while true; do {
             unset f X
             q=c
             break;;
-      (  c  )                                               # convert the TRIA result to template:
+      (  c  )                                               
+            # convert the TRIA result to template:
             check_files $triaoutlist && {
               [ -z "$N" ] && stem="template.a" || stem="template.a$N"
               set -A f -- $triaoutlist
@@ -642,7 +765,8 @@ while true; do {
             }
             unset f 
             break;;
-      (  C  )                                               # convert the TRIAGEOM / B2US result to template:
+      (  C  )                                               
+            # convert the TRIAGEOM / B2US result to template:
             [ X"$extra" = X ] && NN="$N" || set -A NN -- $extra
             [ -z "$NN" ] && {
               check_files $b2usoutlist && {
@@ -720,7 +844,8 @@ while true; do {
               true
             unset f 
             break;;
-      ( p|P )                                               # plot the TRIA output:
+      ( p|P )                                               
+            # plot the TRIA output:
             e=
             [ -s "$STRDAT" ] && [ -s "$TRIPLT.ps" ] && [ "$STRDAT" -nt "$TRIPLT.ps" ] && e=y
             [ -s "$PLTINF" ] && [ -s "$TRIPLT.ps" ] && [ "$PLTINF" -nt "$TRIPLT.ps" ] && e=y
@@ -759,7 +884,8 @@ while true; do {
               print -u2 -- "Check the files $STRDAT and $TRIPLT.ps"
               q=t
             }; unset e; break;;
-      (  v  )                                               # view graphical output of TRIA:
+      (  v  )                                               
+            # view graphical output of TRIA:
             [ -r "$triaeps" ] && {
               $GV $triaeps &
               q=q
@@ -768,7 +894,8 @@ while true; do {
               print -u2 -- "No $triaeps file found - run TRIA first"
               q=t
             }; break;;
-      (  V  )                                               # view graphical output of TRIA:
+      (  V  )                                               
+            # view graphical output of TRIA:
             [ -r "$trigeps" ] && {
               $GV $trigeps &
               true
@@ -777,7 +904,8 @@ while true; do {
               print -u2 -- "No $trigeps file found - run TRIAGEOM first or use \"v\" to see the TRIA output"
               q=v
             }; break;;
-      ( l|L )                                               # list:
+      ( l|L )                                               
+            # list:
             e=
             for n in $extra; do {
               while [ "$LEN" -gt ${#n} ]; do n="0$n"; done
@@ -798,7 +926,8 @@ while true; do {
             for n in $listo; do echo "$n" | tr _ \ ; done | pr -T $w --columns=$c -o $m
             q=q
             break;;
-      ( r|R )                                               # remove:
+      ( r|R )                                               
+            # remove:
             [ -z "$extra" ] && {
               print -u2 -- "Input the mesh number(s) to be removed (space separated)"
               read extra
@@ -830,11 +959,13 @@ while true; do {
             }; done
             q=l
             break;;
-      ( m|M )                                               # remap using b2yt:
+      ( m|M )                                               
+            # remap using b2yt:
             print -u2 -- "Option is not realised yet. Please produce the $b2agout file separately"; break
             ####
             break;;
-      ( a|A  )                                               # Trap for tria:
+      ( a|A  )                                               
+            # Trap for tria:
             l=
             print -u2 -- "Enter the number of steps to be made in tria (integer to set or ENTER to remove) : \c"
             read l
@@ -845,7 +976,8 @@ while true; do {
             }
             q=t
             break;;
-      ( i|I )                                               # inquire:
+      ( i|I )                                               
+            # inquire:
             check_files $triglnklist && q=q || {
               print -u2 -- "Not all output files, $triglnklist, are produced"
               print -u2 -- "Probably, some of the previous steps forgotten?"
@@ -857,7 +989,8 @@ while true; do {
             }; done
             q=i
             break;;
-      ( q|Q )                                               # quit:
+      ( q|Q )                                               
+            # quit:
             break 2;;
       (  *  )
             echo 'Illegal response.'
