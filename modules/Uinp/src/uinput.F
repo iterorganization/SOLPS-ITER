@@ -129,10 +129,12 @@ c*** Create the header for the b2ag.dat file
             write(2, '(a)') '  unstructured'
             write(2,'(a)')
      .      '*dimens         (nCv, nFc, nVx; free format)'
-            write(2,'(3(3x,i4))') ncells, nfaces, nvert
+            write(2,'(3(3x,i8))') nicells, nfaces, nvert
             write(2,'(a)') '*param          (param(0:99); free format)'
             write(2,'(a)') ' -1.0, 99*0.0'
             write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+            ! temporary for goat mode grids: disable redef_gmtry
+            write(2,'(a)') '''b2agdr_redef_gmtry''  ''0'''
             close(2)
             print *,'    ... b2ag.dat created'
           else
