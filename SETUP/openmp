@@ -25,6 +25,7 @@ if ($?SOLPS_PATH) then
   if ( $COMPILER != 'ifort64' ) then
     setenv OMP_STACKSIZE 256M
   else
+    if ($?OMP_STACKSIZE) unsetenv OMP_STACKSIZE
     setenv KMP_STACKSIZE 256M
     if (`where ifort` != "") then
       # Older Intel toolchains (<=2024) still ship ifort, which is preferred
@@ -48,7 +49,7 @@ if ($?SOLPS_PATH) then
     setenv OMP_DISPLAY_AFFINITY true
     setenv OMP_DISPLAY_ENV true
   endif
-  if ($?KMP_AFFINITY) then
+  if (! $?KMP_AFFINITY) then
 # The settings below can be used if KMP_AFFINITY is not set
     setenv OMP_PLACES cores
     setenv OMP_PROC_BIND true

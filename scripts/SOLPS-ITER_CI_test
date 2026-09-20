@@ -1,6 +1,10 @@
 # Set up SOLPS-ITER environment
 . $(dirname $0)/SOLPS-ITER_CI_env
 
+# Start the build from clean dirs.
+rm -rf ${SOLPSTOP}/modules/Eirene/builds/* \
+       ${SOLPSTOP}/modules/B2.5/builds/*
+
 # Compile the code
 echo "LDOPTS += -mcmodel=large -shared-intel" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 echo "FCOPTS += -mcmodel=large -shared-intel -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
@@ -20,8 +24,6 @@ cd run_new
 cp ../test/b2.*.parameters .
 cp ../test/b2mn.dat .
 cp ../test/b2fstati .
-cp ../test/b2time.nc.i b2time.nc
-cp ../test/b2batch.nc.i b2batch.nc
 setup_baserun_B25_links
 touch b2fstati
 b2run -s b2mn

@@ -84,6 +84,7 @@ src/uinp/triang.hed
 # auxiliary files for manual
 doc/solps/solps_data_git.log
 doc/solps/solps-iter_git.log
+doc/solps/.latexmk.stamp
 doc/solps/solps.*
 doc/solps/solps-*.svg
 !doc/solps/solps.tex
