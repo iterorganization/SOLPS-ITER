@@ -99,7 +99,7 @@ c*** Check whether the specified chain consists of valid elements
 c*** Order the chain and check it for continuity
 
       if (nvoide.gt.0) then
-      call chkchain(p1,p2,3,nlim,indelm,nni,ntrgte,ind,irt,
+      call chkchain(p1,p2,3,nlim,indelm,nni,nvoide,ind,irt,
      .                vedgep,vedgec,vedge,nvoide/2)
       else
         call chkchain(p1,p2,3,nlim,indelm,nni,ntrgte,ind,irt,
