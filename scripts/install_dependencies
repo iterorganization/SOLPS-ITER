@@ -1922,7 +1922,7 @@ if ( ! -e "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/gr/libgr.a" ) then   # Check
     cd gr
     if ("$OSTYPE" == "linux") then
       sed -i 's/^all: libgr.a install$/all: libgr.a/' Makefile
-      sed -i '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
+      sed -i '/^install: libgr.a$/,/^  cp libgr.a $(SOLPSLIB)$/d' Makefile
       if ("$COMPILER" == "gfortran") then
         cat <<EOF >> Makefile
 linux.gfortran:
@@ -1941,7 +1941,7 @@ EOF
       endif
     else if ("$OSTYPE" == "darwin") then
       sed -i '' 's/^all: libgr.a install$/all: libgr.a/' Makefile
-      sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPS_LIB)$/d' Makefile
+      sed -i '' '/^install: libgr.a$/,/^  cp libgr.a $(SOLPSLIB)$/d' Makefile
       cat <<EOF >> Makefile
 darwin.gfortran:
 	@make all F77="gfortran" \\
