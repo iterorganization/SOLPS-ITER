@@ -29,6 +29,13 @@ Getting the latest code updates
 
     The recommended solution is to use the script:
     solps-iter_update
+    This will put you at the tip of the master branch.
+    If you wish to get to the tip of the develop branch, use instead:
+    solps-iter_update_develop
+    If you wish to get the 9-point stencil version, use:
+    solps-iter_update_3.1.2_release
+    If you wish to obtain the Wide Grids code version, use:
+    solps-iter_update_wg_release
 
     You can also do the update manually, by following the instructions below.
     It is then recommended to use section 2.2, and work with the development release.
@@ -67,8 +74,12 @@ The optional parameter <COMPILER> above can be used to force SOLPS-ITER to use
 a different compiler than the default one already specified for your
 <HOST_NAME> environment (see below).
 
-If you want to define any additional variables, create a script setup.csh.local.
-The general setup script will automatically look for this script and source it
+If you want to define any additional variables, create a script setup.csh.local or
+setup.csh.<HOST_NAME>.local. Store these in the SETUP/ directory.
+If you want to preload some environment settings before the setup.csh script does
+its thing, create a setup.csh.<HOST_NAME>.<COMPILER>.pre file. Again, it should live
+in the SETUP/ directory.
+The general setup script will automatically look for these scripts and source them
 if present.
 
 
@@ -83,8 +94,8 @@ Check whether a default compiler for your <HOST_NAME> is set in default_compiler
 Add new default <COMPILER> for your <HOST_NAME> if necessary.
 
 Check default SOLPS-ITER compiler settings for your <HOST_NAME> and <COMPILER> in SETUP/config.<HOST_NAME>.<COMPILER>.
-Create this config-file if necessary (example config-file: config.default.default).
-Note that shared compilation and option for a given compiler that are not hostname-dependent can be found in SETUP/config.common.<COMPILER>.
+Create this config-file if necessary (example config-file: SETUP/config.default.default).
+Note that shared compilation options for a given compiler that are not hostname-dependent can be found in SETUP/config.common.<COMPILER>.
 If local modifications to these default compiler options are needed,
 create a config-file SETUP/config.<HOST_NAME>.<COMPILER>.local file.
 
@@ -93,7 +104,7 @@ first_setup
 which will create the other config.<HOST_NAME>.<COMPILER> files needed by each of the individual SOLPS-ITER
 submodules. Modify as needed.
 If local modifications to these default compiler options are needed,
-create config-files <SOLPSTOP>/modules/*/config.<HOST_NAME>.<COMPILER>.local.
+create config-files <SOLPSTOP>/modules/*/config/config.<HOST_NAME>.<COMPILER>.local.
 
 
 
@@ -128,6 +139,9 @@ parallelises within each submodule, not across them.
 
 Basic make-targets
 ------------------
+
+To prepare the environment for compilation, it is recommend to start with:
+gmake prereqs
 
 In order to compile SOLPS-ITER, type either
 make
@@ -189,7 +203,7 @@ Debug make-targets
 ------------------
 
 Debug versions of SOLPS-ITER can be created by adding a suffix "_debug" to all make-targets
-defined above.
+defined above. This also includes "prereqs_debug", recommended before a first debug compilation.
 
 For example, to create debug versions of SOLPS-ITER, following targets are defined:
 make debug
