@@ -8,7 +8,7 @@ c=======================================================================
 c*** Determine the gross boundary regions
 c=======================================================================
       implicit none
-      integer i,j,k,l,nt_hlp
+      integer i,j,k,l,nt_hlp, thisfclbl
       logical ex
       parameter (nt_hlp=5)
       character*4 topo_hlp(nt_hlp)
@@ -18,6 +18,77 @@ c*** List of topologies valid for this routine
 c*** Boundary kinds: 1-core, 2-target, 3-PFR side, 4-outer side
 c=======================================================================
       call subini ('uinbndrg')
+      if (gridgeneratorID == 1) then 
+        write(*,*) 'uinbndrg: Goat grid generator used, following ' // 
+     , 'goat route'
+
+        ! Initialize boundary region counter
+        nrgbndt = 0
+
+        ! Initialize face labels
+        lblbndt_us = 0
+
+        ! Loop over all non-core labels, assume faces of each label correspond to
+        ! a simple boundary (closed or open, non-selfintersecting 
+        ! polygon)
+        do i = 1, nfclblused
+          ! Unpack the label
+          thisfclbl = fclblused(i)
+
+          ! Check its value
+          if (thisfclbl == 0) then 
+            ! Shouldn't be in fclbl, throw error
+            call xerrab('uinbndrg: found zero face label in used ' //
+     ,       'face labels, possibly bug in uingoat.F')
+          elseif (thisfclbl > 0) then 
+            ! Vessel wall boundary - counts as target
+            ! Update counter
+            nrgbndt(2) = nrgbndt(2) + 1
+
+            ! Add data (is this still necessary?)
+            crgbndt(nrgbndt(2), 2) = 'W' ! 'E' or 'W' doesn't/shouldn't matter ?
+            lblbndt_us(nrgbndt(2), 2) = thisfclbl
+             
+          elseif (mod(thisfclbl+21, -4) == 0) then 
+            ! Core boundary - this shouldn't happen
+            call xerrab('uinbndrg: found label that is supposed to ' // 
+     ,        'be a core region in the non-core labels, possibly ' // 
+     ,        'bug present in uingoat.F')            
+          else
+            ! Outermost flux surface - counts as wall
+            nrgbndt(4) = nrgbndt(4) + 1
+
+            ! Add data (is this still necessary?)
+            crgbndt(nrgbndt(4), 4) = 'N' ! 'S' or 'N' doesn't/shouldn't matter? 
+            lblbndt_us(nrgbndt(4), 4) = thisfclbl
+          end if 
+        end do 
+
+        ! Loop over all core regions
+        do i = 1, nfclblcoreused
+          ! Unpack
+          thisfclbl = fclblcoreused(i)
+          if ((mod(thisfclbl+21, -4) == 0) .and. thisfclbl < 0) then 
+            ! Core boundary
+            ! Update counter
+            nrgbndt(1) = nrgbndt(1) + 1
+
+            ! Add data (is this still necessary?)
+            crgbndt(nrgbndt(1), 1) = 'S' ! 'S' or 'N' doesn't/shouldn't matter?
+            lblbndt_us(nrgbndt(1), 1) = thisfclbl 
+          else 
+            call xerrab('uinbndrg: found label that is supposed to ' // 
+     ,        'be a non-core region in the core labels, possibly ' // 
+     ,        'bug present in uingoat.F') 
+          end if  
+        end do
+
+        ! Print out some info
+        print *, 'Boundary regions: ',nrgbndt
+        print *, 'Number of "core" regions: ', nrgbndt(1)
+        print *, 'Number of "target" regions: ', nrgbndt(2)
+        print *, 'Number of "wall" regions :', nrgbndt(4)
+      else 
 c*** Check the topology
       ex=.false.
       do i=1,nt_hlp !{
@@ -240,6 +311,7 @@ c!###{
         end do !}
       end do !}
       print *
+      end if 
 c!###}
 c=======================================================================
       call subend ()

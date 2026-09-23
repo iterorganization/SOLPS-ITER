@@ -23,6 +23,7 @@ c*** Check some dimensions
 
       call subini ('uinprp')
       uex=.false.
+      if (gridgeneratorID == 0) then ! topology only necessary for carre based grids
       if(index(topo,'SN').eq.1) then !{
         if(mnpr.ne.3) then !{
           uex=.true.
@@ -59,10 +60,19 @@ c*** Check some dimensions
         call xerrab ('Unknown topology')
       end if !}
       call xertst(.not.uex, 'Topological inconsistency found in Uinp')
+      elseif (gridgeneratorID == 1) then ! goat grid generator, no topological information necessary
+        write(*,*) 'not checking topology since grid generated with ',
+     ,    'goat'
+      else
+        ! Grid generator not yet supported
+        write(*,*) 'gridgeneratorID =', gridgeneratorID
+        call xerrab('Unknown grid generator ID detected in uinprp')
+      end if 
       
 c-----------------------------------------------------------------------
 c*** Modify some defaults for limiter and linear cases, if necessary
 
+      if (gridgeneratorID == 0) then 
       if(lm_cnfg) then !{
         jnpbndx(0,3)=lm_whst
         jnpbndx(0,4)=lm_whst
@@ -86,6 +96,7 @@ c*** Modify some defaults for limiter and linear cases, if necessary
         roa=roator
         zaa=zaator
       end if !}
+      end if 
 
 
 c*** Modify the toroidal dimension in p1, p2 arrays
@@ -191,7 +202,10 @@ c*** Correct jadch1 (not tested yet!!!)
       end do !}
 
 c*** Prepare index of additional surfaces to be modified in geousr
-
+      if (gridgeneratorID == 1) then 
+        write(*,*) 'goat grid generator used, not considering void ' // 
+     , 'or target surface specifications for geousr'
+      else 
       if (nvoide.gt.0) then
         k=0
         do i=1,nvoide
@@ -279,6 +293,7 @@ c*** Specify some comments to appear in the output file
         write(0,*) 'Void edge ',i
         write(0,*) 'i, vedge(1,i), vedge(2,i): ',i,vedge(1,i),vedge(2,i)
       end do
+      end if  
 c*** Re-arrange specification of the time allocation: through B2
 
       ntcpub2=ntcpu

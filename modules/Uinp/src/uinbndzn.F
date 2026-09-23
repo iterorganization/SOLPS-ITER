@@ -22,6 +22,44 @@ c=======================================================================
 c      print '(a,10i6)','uinbndzn: nx,ny,nncut,mdvbndx,nrgbndt = ',       !###
 c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
 
+      if (gridgeneratorID == 1) then ! Unstructured goat grid
+        ! Print 
+        write(*,*) 'uinbndzn: goat grid used, following goat route'
+
+        ! Note: here we can't do any divides based on the grid cuts, 
+        ! we can only follow face labels. 
+
+        do m = 1, nbndknd
+          iz = 0 ! zone counter for this region
+          do k = 1, nrgbndt(m)
+            ! Increment counter & check
+            iz = iz + 1
+            if (iz > nbndzon) then 
+              call xerrab('Too many boundary zones specified for ' // 
+     ,       'targets, increase nbndzon in uinput_mod.F')
+            end if 
+
+            ! Set face label - used to be tgfclbl, not sure if correct?
+            lzrbndt_us(iz, m, 1) = lblbndt_us(k, m)
+            lzrbndt_us(iz, m, 2) = lblbndt_us(k, m)
+
+            ! Propagate face label
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1) 
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+            ls1bnds(iz,m)=lc1bnds(iz,m)
+            ls2bnds(iz,m)=lc2bnds(iz,m)
+
+            ! Set character
+            cznbndt(iz, m) = crgbndt(k, m)
+            cskbnds(iz,m)=cznbndt(iz,m)
+          end do 
+
+          ! Set number of zones
+          nznbndt(m) = iz
+        end do 
+
+        
+      elseif (gridgeneratorID == 0) then ! Structured grid of carre   
       if(nx.gt.nxd) then !{
         write(0,*) 'Too many poloidal grid points: maximum ',nxd
         write(0,*)
@@ -602,6 +640,10 @@ c!###{
         end do !}
       end do !}
       print *
+      else ! Unknown grid generator
+        print *, 'grid generator ID = ', gridgeneratorID
+        call xerrab('uinbndzn: unknown grid generator ID')
+      end if 
 c!###}
 c=======================================================================
       call subend ()

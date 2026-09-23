@@ -337,6 +337,7 @@ c**  additional cells outside standard mesh
 c*** 3a.  data for non-default surface models on standard surfaces
 
       write(iunoo,700) utxthd(3)
+      if (gridgeneratorID == 0) then ! carre grid generator
       if (grid_mode.ne.2) then ! standard + target mode
         write(iunoo,707) nstsi
         do ists=1,nstsi !{
@@ -363,7 +364,7 @@ c*** 3a.  data for non-default surface models on standard surfaces
      ,                        fchspts(ists),sptprm(ists),arfpress(ists)
           end if !}
         end do !}
-      else ! vessel mode
+      else ! vessel mode 
 c       count the number of core regions
         ncore=0
         do ists=1,nstsi
@@ -439,6 +440,93 @@ c           detect the properties of an element with a certain face label
           endif
         end do
       end if
+      elseif (gridgeneratorID == 1) then ! goat grid
+        ! Very similar to vesselmode, but some slight changes
+        ! Print message 
+        print *, 'uinout: following goat route for block 3a'
+
+c       count the number of core regions - present in nfclblcoreused
+        ncore=nfclblcoreused
+        nvess=count(fclblused.gt.0)
+        nvoid=count(fclblused.lt.0)
+        write(iunoo,707) nvess+nvoid+ncore
+        
+c       first write the core regions
+        ncore=0
+        do ists=1,nstsi !{
+          if (iliin(ists).ne.2) cycle
+          ncore=ncore+1
+          write(iunoo,709) ncore,txtsfl(ists)
+          write(iunoo,707) ncore,idimp(ists),1,
+     ,                 irpta1(ists),irpte1(ists),irpta2(ists),
+     ,                 irpte2(ists),irpta3(ists),irpte3(ists),
+     ,                 ifclbla(ists),ifclble(ists)
+          write(iunoo,707) iliin(ists),ilside(ists),ilswch(ists),
+     .                 ilequi(ists),iltor(ists),ilcol(ists),
+     .                 ilfit(ists),ilcell(ists),ilbox(ists),
+     .                 ilplg(ists)
+          if(iscrd(ists).gt.0) then !{
+            write(iunoo,715) scard_name(iscrd(ists))
+          else if (iliin(ists).eq.1 .or. bliin(ists)) then !}{
+            ii=10*ilsptc(ists)+ilsptp(ists)
+            write(iunoo,707) ilref(ists),ii,isrss(ists),isrc(ists),
+     ,                      lchspnws(ists),arefcell(ists)
+            write(iunoo,703) xmlim(ists),ewall(ists),ewbin(ists),
+     ,                      transp(ists,1),transp(ists,2),fsheat(ists)
+            write(iunoo,703) recycf(ists),recyct(ists),recprm(ists),
+     ,                      exppl(ists),expel(ists),expil(ists)
+            write(iunoo,703) recycs(ists),recycc(ists),echspts(ists),
+     ,                      fchspts(ists),sptprm(ists),arfpress(ists)
+          end if !}
+        end do !}
+
+        ! Sanity check
+        if (ncore /= nfclblcoreused) then 
+          print *, 'ncore = ', ncore 
+          print *, 'nfclblcoreused = ', nfclblcoreused
+          call xerrab('uinout: in block 3a: inconsistent number of ' // 
+     ,     'core regions between data in "iliin" and "nfclblcoreused')
+        end if 
+
+c       then write the vessel/void boundaries based on face label
+        do i=1,nfclblused
+          if (fclblused(i).gt.0) then ! positive fclbl => real surface
+c           detect the properties of an element with a certain face label
+          do k=laddsrfs+1,nlimi !{
+            j=indasrfs(k)
+            if(j.eq.0) cycle
+              if (fclbl(j).eq.fclblused(i)) exit
+          end do
+          write(iunoo,709) i+ncore, 'Vessel part'//repeat(' ',52)
+            write(iunoo,707) i+ncore,1,1,1,1,0,0,0,0,
+     .        fclblused(i),fclblused(i)
+          jlswch=jadnsw(j)+10*jadmsw(j)+100*jadlsw(j)+1000*jadksw(j)+
+     +                                 10000*jadjsw(j)+100000*jadisw(j)
+          jlcell=jlacll(j)+1000*jlblck(j)
+          write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
+     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+          if(jscrd(j).gt.0) then !{
+            write(iunoo,715) scard_name(jscrd(j))
+          else if (jliin(j).eq.1) then !}{
+            ii=10*jlsptc(j)+jlsptp(j)
+            write(iunoo,707) jlref(j),ii,jsrss(j),jsrc(j),lchspnwa(j),
+     ,                  refcell(i)
+            write(iunoo,703) xmlma(j),ewala(j),ewbna(j),
+     ,                    trnspa(j,1),trnspa(j,2),fsheata(j)
+            write(iunoo,703) rcycfa(j),rcycta(j),rcprma(j),
+     ,                    exppla(j),expela(j),expila(j)
+            write(iunoo,703) rcycsa(j),rcycca(j),
+     ,                    echspta(j),fchspta(j),sptpra(j),refpress(i)
+          end if !}
+          else ! negative fclbl => void interface
+            write(iunoo,709) i+ncore, 'Void boundary'//repeat(' ',50)
+            write(iunoo,707) i+ncore,1,1,1,1,0,0,0,0,
+     .        fclblused(i),fclblused(i)
+            !wd todo: detect ilcol, ilplg for the void boundary?
+            write(iunoo,707) -3,0,0,0,0,0,0,0,0,0
+          endif
+        end do
+      end if 
 
 c*** 3b.  data for additional surfaces
 
