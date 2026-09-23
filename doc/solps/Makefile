@@ -1,7 +1,7 @@
 # make complete
 
 B25DIR=${SOLPSTOP}/modules/B2.5
-PATH+=:/usr/bin:/bin
+PATH:=${PATH}:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
 MAKES = Makefile
