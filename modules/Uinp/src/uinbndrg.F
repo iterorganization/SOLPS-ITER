@@ -49,7 +49,7 @@ c=======================================================================
             crgbndt(nrgbndt(2), 2) = 'W' ! 'E' or 'W' doesn't/shouldn't matter ?
             lblbndt_us(nrgbndt(2), 2) = thisfclbl
              
-          elseif (mod(thisfclbl+21, -4) == 0) then 
+          elseif (mod(thisfclbl+21, -4) == 0 .and.thisfclbl <= -21) then 
             ! Core boundary - this shouldn't happen
             call xerrab('uinbndrg: found label that is supposed to ' // 
      ,        'be a core region in the non-core labels, possibly ' // 
@@ -68,7 +68,7 @@ c=======================================================================
         do i = 1, nfclblcoreused
           ! Unpack
           thisfclbl = fclblcoreused(i)
-          if ((mod(thisfclbl+21, -4) == 0) .and. thisfclbl < 0) then 
+          if ((mod(thisfclbl+21, -4) == 0) .and.(thisfclbl <= -21)) then 
             ! Core boundary
             ! Update counter
             nrgbndt(1) = nrgbndt(1) + 1

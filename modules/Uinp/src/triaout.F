@@ -16,6 +16,10 @@ CVK output data for Triang grid (file header)
       write(*,*) '    ... ',filename, ' created'
 c       write(0,*) '    ... ',filename, ' created'
 cwdk  write additional file with (part of) the polygons for triangulation
+      select case (gridgeneratorID) 
+      case (1) ! Goat, no fort.48 needed
+        print *, 'triaout: following goat route, not creating fort.48'
+      case (0) ! Carre, fort.48 needed
       open(iunoo,file='fort.48')
       write(iunoo,'(a)') topo
       write(iunoo,'(i4)') ntriplg
@@ -39,6 +43,9 @@ cwdk  write additional file with (part of) the polygons for triangulation
       write(iunoo,*)
       close(iunoo)
       write(*,*) '    ... fort.48 created'
+      case default 
+        call xerrab('Unknown grid generator ID')
+      end select
       return
   703 format (1p,6e13.5)
       end subroutine triaout

@@ -70,7 +70,7 @@
       do i = minfclbl,maxfclbl
         !tmp: skip core labels, which are treated separately
         if (i == 0) cycle
-        if ((i < 0) .and. (mod(i+21, -4) == 0)) then ! core boundaries are assumed to be -21, -25, -29 ...
+        if ((i <= -21) .and. (mod(i+21, -4) == 0)) then ! core boundaries are assumed to be -21, -25, -29 ...
             if (any(i == fcLbl_in)) then 
                 nfclblcoreused = nfclblcoreused + 1
                 fclblcoreused(nfclblcoreused) = i 
