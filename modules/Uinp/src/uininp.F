@@ -81,8 +81,14 @@ c
 
         ! Read necessary grid data from goat directly (note: uinput.goat should be linked to grid file provided by goat)
         write(*,*) '... opening uinput.goat'
-        open(iunii,file='uinput.goat')
+        open(iunii,file='uinput.goat') 
         call uingoat(iunii)
+        close(iunii)
+
+        ! Read void polygon data from goat (uinput.goatvoids, again to be linked)
+        write (*,*) '...opening uinput.goatvoids'
+        open(iunii,file='uinput.goatvoids')
+        call uingoatvoids(iunii)
         close(iunii)
 
       case default 

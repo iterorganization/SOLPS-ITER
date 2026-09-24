@@ -5,10 +5,9 @@
 !======================================================================
       use uinput_mod
       implicit none
-      integer :: lun, i, j, ireg, ncount, minfclbl, maxfclbl, dumi(1:6)
+      integer :: lun, i, minfclbl, maxfclbl, dumi(1:6)
       integer, allocatable, dimension(:)    :: fcLbl_in
       character*80 uline
-      character*12  dum0, dum1
       logical lfound
 !======================================================================
 !

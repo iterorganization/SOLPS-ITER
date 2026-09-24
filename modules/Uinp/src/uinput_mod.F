@@ -99,6 +99,13 @@ c***    (see uinprpgr.F for detail)
      ,  nrsol,nrsol1,nrpfl,nzidv,nzinn,nzodv,nzidv2,nzinn2,nzodv2
       real(kind=R4) niiso(nsdb2),tiiso,teiso
 
+c*** Void elements when using goat: x, y coordinates, element ID it
+c***    it belongs to in DivGeo (maps back to elements p1n p2 in 
+c***    .dgo input)
+      integer, allocatable, dimension(:)  :: voidelID
+      real, allocatable, dimension(:)     :: voidelx1, voidelx2, 
+     .  voidely1, voidely2
+
 c-----------------------------------------------------------------------
 c*** Species lists: number of different nuclei, plasma ions, atoms,
 c***                molecules, and test ions; notations for them,

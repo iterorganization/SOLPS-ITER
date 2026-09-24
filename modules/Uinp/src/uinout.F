@@ -529,38 +529,40 @@ c           detect the properties of an element with a certain face label
       end if 
 
 c*** 3b.  data for additional surfaces
-
-      write(iunoo,700) utxthd(4)
-      nvess=0
-      if (grid_mode.eq.2) then !nh vessel mode
-        do k=laddsrfs+1,nlimi
-          i=indasrfs(k)
-          if (fclbl(i).ne.0.and.ilplgdg(i).eq.0) then
-            nvess=nvess+1
-          endif
-        enddo
-      endif
-      write(iunoo,707) nlimi-nvess
-c***  "ch0-cards"
-      call uichwr(iunoo,0,jadch0,nlimi)
-      icopy=0
-      jsurpr=nsurpr
-      nskip=0
-      do 360 k=laddsrfs+1,nlimi !{
-        i=indasrfs(k)
-        if(i.eq.0) go to 360
-        if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
-          if(jliin(i).lt.0) then
-            jsurpr=jsurpr+1
-            nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
-          endif
-          nskip=nskip+1
-          go to 360
+      select case (gridgeneratorID)
+        
+      case (0) ! Carre
+        write(iunoo,700) utxthd(4)
+        nvess=0
+        if (grid_mode.eq.2) then !nh vessel mode
+          do k=laddsrfs+1,nlimi
+            i=indasrfs(k)
+            if (fclbl(i).ne.0.and.ilplgdg(i).eq.0) then
+              nvess=nvess+1
+            endif
+          enddo
         endif
-        write(iunoo,714) k-nskip,i,txtsfa(k)
+        write(iunoo,707) nlimi-nvess
+c***  "ch0-cards"
+        call uichwr(iunoo,0,jadch0,nlimi)
+        icopy=0
+        jsurpr=nsurpr
+        nskip=0
+        do k=laddsrfs+1,nlimi !{
+          i=indasrfs(k)
+          if(i.eq.0) cycle 
+          if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+            if(jliin(i).lt.0) then
+              jsurpr=jsurpr+1
+              nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
+            endif
+            nskip=nskip+1
+            cycle
+          endif
+          write(iunoo,714) k-nskip,i,txtsfa(k)
 
-        icopy=icopy-1
-        if (icopy.ge.1) goto 360
+          icopy=icopy-1
+          if (icopy.ge.1) cycle
 
 c   general surface data
 
@@ -569,92 +571,208 @@ c% This should be changed
 c        call uichwr(iunoo,1,jadch1(1,i),nlimi)
 c*** "ch2-cards" here !
 
-        write(iunoo,703) rlb(i),sarea(i),rlwmn(i),rlwmx(i)
-        jlswch=jadnsw(i)+10*jadmsw(i)+100*jadlsw(i)+1000*jadksw(i)+
-     +                               10000*jadjsw(i)+100000*jadisw(i)
-        jlcell=jlacll(i)+1000*jlblck(i)
-        write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
-     ,    jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
-        if(jliin(i).lt.0) then
-          jsurpr=jsurpr+1
-          nsrf(jsurpr)=k-nskip
-        end if
+          write(iunoo,703) rlb(i),sarea(i),rlwmn(i),rlwmx(i)
+          jlswch=jadnsw(i)+10*jadmsw(i)+100*jadlsw(i)+1000*jadksw(i)+
+     +                                 10000*jadjsw(i)+100000*jadisw(i)
+         jlcell=jlacll(i)+1000*jlblck(i)
+          write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
+     ,      jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+          if(jliin(i).lt.0) then
+            jsurpr=jsurpr+1
+            nsrf(jsurpr)=k-nskip
+          end if
 
 c**  Surface coefficients
 
-        if (rlb(i).lt.2.) then !{
-          write(iunoo,703) a0lm(i),a1lm(i),a2lm(i),
+          if (rlb(i).lt.2.) then !{
+            write(iunoo,703) a0lm(i),a1lm(i),a2lm(i),
      ,                                      a3lm(i),a4lm(i),a5lm(i)
-          write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
-        else if (rlb(i).lt.3.) then !}{
-          write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+            write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
+          else if (rlb(i).lt.3.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
      ,                                      p2(1,i),p2(2,i),p2(3,i)
-        else if (rlb(i).lt.5.) then !}{
-          write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+          else if (rlb(i).lt.5.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
      ,                                      p2(1,i),p2(2,i),p2(3,i)
-          write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
+            write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
      ,                                      p4(1,i),p4(2,i),p4(3,i)
-        else if (rlb(i).lt.7.) then !}{
-          write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+          else if (rlb(i).lt.7.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
      ,                                      p2(1,i),p2(2,i),p2(3,i)
-          write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
+            write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
      ,                                      p4(1,i),p4(2,i),p4(3,i)
-          write(iunoo,703) p5(1,i),p5(2,i),p5(3,i),
+            write(iunoo,703) p5(1,i),p5(2,i),p5(3,i),
      ,                                      p6(1,i),p6(2,i),p6(3,i)
-        end if !}
+          end if !}
 
 c**  Boundary data
 
-        if (rlb(i).gt.0..and.rlb(i).lt.2.) then !{
-          write(iunoo,703) xlims1(i,1),ylims1(i,1),
+          if (rlb(i).gt.0..and.rlb(i).lt.2.) then !{
+            write(iunoo,703) xlims1(i,1),ylims1(i,1),
      ,                zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
-        else if (rlb(i).le.0.) then !}{
-          imrlb=-rlb(i)
-          ih=mod(imrlb,100)
-          icopy=(imrlb-ih)/100
-          iulin=idez(ih,1,2)
-          iuscn=idez(ih,2,2)
-          do j=1,iulin !{
-            write(iunoo,703) alims(i,j),xlims(i,j),
+          else if (rlb(i).le.0.) then !}{
+            imrlb=-rlb(i)
+            ih=mod(imrlb,100)
+            icopy=(imrlb-ih)/100
+            iulin=idez(ih,1,2)
+            iuscn=idez(ih,2,2)
+            do j=1,iulin !{
+              write(iunoo,703) alims(i,j),xlims(i,j),
      ,                                            ylims(i,j),zlims(i,j)
-          end do !}
-          do j=1,iuscn !{
-            write(iunoo,703) alims0(i,j),xlims1(i,j),
+            end do !}
+            do j=1,iuscn !{
+              write(iunoo,703) alims0(i,j),xlims1(i,j),
      ,                ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
-            write(iunoo,703) zlims2(i,j),xlims3(i,j),
+              write(iunoo,703) zlims2(i,j),xlims3(i,j),
      ,                                        ylims3(i,j),zlims3(i,j)
-          end do !}
-        end if !}
+            end do !}
+          end if !}
 
 c**  Local reflection model ?
 
-        if(jscrd(i).gt.0) then !{
-          write(iunoo,715) scard_name(jscrd(i))
-        else if (jliin(i).eq.1) then !}{
-          ii=10*jlsptc(i)+jlsptp(i)
-          write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i),
+          if(jscrd(i).gt.0) then !{
+            write(iunoo,715) scard_name(jscrd(i))
+          else if (jliin(i).eq.1) then !}{
+            ii=10*jlsptc(i)+jlsptp(i)
+            write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i),
      ,                refcell(i)
-          write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
+            write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
      ,                trnspa(i,1),trnspa(i,2),fsheata(i)
-          write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
+            write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
      ,                exppla(i),expela(i),expila(i)
-          write(iunoo,703) rcycsa(i),rcycca(i),
+            write(iunoo,703) rcycsa(i),rcycca(i),
      ,                echspta(i),fchspta(i),sptpra(i),refpress(i)
-        end if !}
+          end if !}
 
 c* Transform from convenient coordinate system to Eirene coordinate
 c* system. This is possible for all surfaces written by now, i.e.
 c* from itini=1 to itend=i
 
-        if(itini(i).ge.0) then !{
-          write(iunoo,'(a)') 'TRANSFORM'
-          write(iunoo,707) itini(i),itend(i)
-          write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
-          write(iunoo,703) xlref(i),ylref(i),zlref(i)
-          write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
-        end if !}
+          if(itini(i).ge.0) then !{
+            write(iunoo,'(a)') 'TRANSFORM'
+            write(iunoo,707) itini(i),itend(i)
+            write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
+            write(iunoo,703) xlref(i),ylref(i),zlref(i)
+            write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
+          end if !}
 
-  360 continue !}
+        end do
+
+      case (1) ! Goat
+
+        ! For goat, the additional surfaces are completely determined 
+        ! by the void polygon edges. 
+        
+        write(iunoo,700) utxthd(4)
+        write(iunoo,707) size(voidelID) ! equal number of surfaces as void elements
+c***  "ch0-cards"
+        call uichwr(iunoo,0,jadch0,nlimi) ! no idea?
+
+        ! write out all additional surfaces
+        do k = 1, size(voidelID)
+          i = voidelID(k)
+          write(iunoo, 714) k, i, txtsfa(voidelID(k))
+          jsurpr = nsurpr ! no idea, nsurpr is always zero?
+          nskip = 0 ! no idea
+         
+c   general surface data
+
+c*** "ch1-cards"
+c% This should be changed
+c        call uichwr(iunoo,1,jadch1(1,i),nlimi)
+c*** "ch2-cards" here !
+
+          write(iunoo,703) rlb(i),sarea(i),rlwmn(i),rlwmx(i)
+          jlswch=jadnsw(i)+10*jadmsw(i)+100*jadlsw(i)+1000*jadksw(i)+
+     +                                 10000*jadjsw(i)+100000*jadisw(i)
+         jlcell=jlacll(i)+1000*jlblck(i)
+          write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
+     ,      jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+          if(jliin(i).lt.0) then ! Still no idea
+            jsurpr=jsurpr+1
+            nsrf(jsurpr)=k-nskip
+          end if
+
+c**  Surface coefficients
+
+          if (rlb(i).lt.2.) then !{
+            write(iunoo,703) a0lm(i),a1lm(i),a2lm(i),
+     ,                                      a3lm(i),a4lm(i),a5lm(i)
+            write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
+          else if (rlb(i).lt.3.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
+          else if (rlb(i).lt.5.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
+            write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
+          else if (rlb(i).lt.7.) then !}{
+            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
+     ,                                      p2(1,i),p2(2,i),p2(3,i)
+            write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
+     ,                                      p4(1,i),p4(2,i),p4(3,i)
+            write(iunoo,703) p5(1,i),p5(2,i),p5(3,i),
+     ,                                      p6(1,i),p6(2,i),p6(3,i)
+          end if !}
+
+c**  Boundary data
+
+          if (rlb(i).gt.0..and.rlb(i).lt.2.) then !{
+            write(iunoo,703) xlims1(i,1),ylims1(i,1),
+     ,                zlims1(i,1),xlims2(i,1),ylims2(i,1),zlims2(i,1)
+          else if (rlb(i).le.0.) then !}{
+            imrlb=-rlb(i)
+            ih=mod(imrlb,100)
+            icopy=(imrlb-ih)/100
+            iulin=idez(ih,1,2)
+            iuscn=idez(ih,2,2)
+            do j=1,iulin !{
+              write(iunoo,703) alims(i,j),xlims(i,j),
+     ,                                            ylims(i,j),zlims(i,j)
+            end do !}
+            do j=1,iuscn !{
+              write(iunoo,703) alims0(i,j),xlims1(i,j),
+     ,                ylims1(i,j),zlims1(i,j),xlims2(i,j),ylims2(i,j)
+              write(iunoo,703) zlims2(i,j),xlims3(i,j),
+     ,                                        ylims3(i,j),zlims3(i,j)
+            end do !}
+          end if !}
+
+c**  Local reflection model ?
+
+          if(jscrd(i).gt.0) then !{
+            write(iunoo,715) scard_name(jscrd(i))
+          else if (jliin(i).eq.1) then !}{
+            ii=10*jlsptc(i)+jlsptp(i)
+            write(iunoo,707) jlref(i),ii,jsrss(i),jsrc(i),lchspnwa(i),
+     ,                refcell(i)
+            write(iunoo,703) xmlma(i),ewala(i),ewbna(i),
+     ,                trnspa(i,1),trnspa(i,2),fsheata(i)
+            write(iunoo,703) rcycfa(i),rcycta(i),rcprma(i),
+     ,                exppla(i),expela(i),expila(i)
+            write(iunoo,703) rcycsa(i),rcycca(i),
+     ,                echspta(i),fchspta(i),sptpra(i),refpress(i)
+          end if !}
+
+c* Transform from convenient coordinate system to Eirene coordinate
+c* system. This is possible for all surfaces written by now, i.e.
+c* from itini=1 to itend=i
+
+          if(itini(i).ge.0) then !{
+            write(iunoo,'(a)') 'TRANSFORM'
+            write(iunoo,707) itini(i),itend(i)
+            write(iunoo,703) xlcor(i),ylcor(i),zlcor(i)
+            write(iunoo,703) xlref(i),ylref(i),zlref(i)
+            write(iunoo,703) xlrot(i),ylrot(i),zlrot(i),alrot(i)
+          end if !}
+
+        end do 
+
+      case default 
+
+        call xerrab('uinout: unknown grid generator')
+      end select
 
 c*** 4.  Data for species specification and atomic physics module
 
