@@ -83,7 +83,7 @@
           end if
 
           ! Check if vertex is a void vertex
-          if (tempdosplit(i) == 1) then 
+          if (tempgridvertID(i) == 0) then 
             isvoidvertex(i) = .true. 
           else
             isvoidvertex(i) = .false. 
