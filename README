@@ -253,3 +253,28 @@ make clean_<module>_debug
 make clean_<module_XXX>_debug
 for a particular module.
 
+
+
+Testing a build
+===============
+
+The script scripts/SOLPS-ITER_test runs the regression cases for one build flavor
+and compares the results with the reference runs. Build the flavor first:
+    debug      : make solps_debug b25_debug
+    mpi        : make solps_mpi
+    openmp     : make solps_openmp b25_openmp
+    mpi_openmp : make solps_openmp_mpi
+
+Then run the script from an empty work directory outside of $SOLPSTOP, e.g.
+    mkdir <SCRATCH>/solps_test && cd <SCRATCH>/solps_test
+    $SOLPSTOP/scripts/SOLPS-ITER_test openmp
+
+The test cases are downloaded into the work directory and the script exits with
+a non-zero status if a comparison fails.
+
+On a shared system, request an interactive job on a compute node and run the
+script there rather than on a login node.
+
+The MPI flavors launch 4 ranks with "mpiexec -n 4". Set SOLPS_MPIRUN to use a
+different launcher (e.g. srun).
+

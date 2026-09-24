@@ -8,6 +8,7 @@
 !runs/
 !scripts/
 !SETUP/
+!lmod_modules/
 
 # backup files
 *~

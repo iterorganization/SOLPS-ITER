@@ -1,43 +1,299 @@
-# Load modules
-module unload PrgEnv-intel
-module load PrgEnv-gnu
-module load cray-netcdf
-module load ncl
-module load cray-hdf5
-module load cray-libsci
 
-setenv GLI_HOME /global/project/projectdirs/atom/atom-install-cori/solps-libs/lib_gfortran
-setenv MSCL_ROOT /global/project/projectdirs/atom/atom-install-cori/solps-libs/lib_gfortran
-setenv GR_SOURCE /global/project/projectdirs/atom/atom-install-cori/solps-libs/lib_gfortran
-setenv LD_LIBRARY_PATH /global/project/projectdirs/atom/atom-install-cori/solps-libs:$LD_LIBRARY_PATH
+#! /bin/tcsh -f
+
+echo Welcome to SOLPS-ITER!
+echo Documentation can be found at:
+echo https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER
+echo and
+echo https://user.iter.org/\?uid=Q92BAQ
+echo "(both require a valid ITER IDM account)"
+echo The full SOLPS-ITER manual can be found in \$SOLPSTOP/doc/solps/solps.pdf
+echo The Eirene manual is located at http://www.eirene.de/
+
+# Obtain the directory where setup.csh is located to use as SOLPSTOP
+# setenv LAST_COMMAND `echo $_`
+# if (`echo ${LAST_COMMAND}` == "") then
+#   setenv SOLPSTOP $PWD
+# else
+#   setenv SETUP_FILE `echo ${LAST_COMMAND} | cut -d " " -f 2`
+#   setenv REAL_FILE `eval echo ${SETUP_FILE}`
+#   setenv SETUP_PATH `dirname ${REAL_FILE}`
+#   setenv SOLPSTOP `cd ${SETUP_PATH}; pwd -L`
+# endif
+# setenv SOLPSWORK ${SOLPSTOP}/runs
+
+# Set HOST_NAME and COMPILER, which will determine setup files to be used
+#------------------------------------------------------------------------
+
+# if (-s ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local) then
+#   echo Loading SETUP/setup.csh.HOST_NAME.local.
+#   source ${SOLPSTOP}/SETUP/setup.csh.HOST_NAME.local
+# else
+if (-s ${SOLPSTOP}/whereami) then
+  set iamat=`${SOLPSTOP}/whereami|tail -1`
+  echo Running at $iamat.
+else
+  set iamat="UNKNOWN"
+endif
+switch ($iamat)
+case "*UNKNOWN":
+  setenv HOST_NAME UNKNOWN
+  breaksw
+default:
+  setenv HOST_NAME ${iamat}
+endsw
+# endif
+
+# COMPILER can also be the argument to setup.csh call
+if($1 == "") then
+  if (-s ${SOLPSTOP}/default_compiler) then
+    setenv COMPILER `${SOLPSTOP}/default_compiler|tail -1`
+    echo Using compiler $COMPILER.
+  else
+    setenv COMPILER gfortran
+    echo Assuming default compiler gfortran.
+  endif
+else
+  setenv COMPILER $1
+  echo Using specified compiler $1.
+endif
+if(! $?COMPILER) then
+  echo COMPILER not defined!
+endif
+
+limit stacksize unlimited
+
+# Load environment cache if it exists and the setup files have not changed
+# set setup=${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+# if ((-f $setup.env.local.${USER}) && \
+#     ( -M $setup.env.local.${USER} ) >= ( -M $setup ) && \
+#     ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/setup.csh ) && \
+#     (!(-f ${SOLPSTOP}/SETUP/setup.csh.local) || \
+#       ( -M $setup.env.local.${USER} ) >= ( -M ${SOLPSTOP}/SETUP/setup.csh.local )) && \
+#     (!(-f $setup.local) || ( -M $setup.env.local.${USER} ) >= ( -M $setup.local ))) then
+#     echo "Loading cached SETUP/setup.csh.${HOST_NAME}.${COMPILER}.env.local.${USER}."
+#     source $setup.env.local.${USER}
+#     exit 0
+# else
+#     set setup_pre = `mktemp` alias_pre = `mktemp` && alias >! $alias_pre
+#     env|sed -ne "/^[ }]\|=(/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" >! $setup_pre
+# endif
+
+if (-x `which gmake`) then
+  setenv MAKE `which gmake`
+else
+  setenv MAKE `which make`
+endif
+
+if ($?PYTHONPATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${SOLPSTOP}/lib/python
+else
+  setenv PYTHONPATH ${SOLPSTOP}/lib/python
+endif
+setenv SOLPSLIB ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}
+
+# setup files for combination of HOST_NAME and COMPILER, + local modifications if present
+# if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}) then
+#   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.
+#   source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}
+# else
+#   echo File SETUP/setup.csh.${HOST_NAME}.${COMPILER} not found!
+# endif
+# if (-s ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local) then
+#   echo Loading SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
+#   source ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+# endif
+
+if (! $?GRAPHCAP) setenv GRAPHCAP X11
+
+if (! $?B2PLOT_DEV) setenv B2PLOT_DEV "x11 ps"
+if (! $?GRSOFT_DEVICE) setenv GRSOFT_DEVICE "211 62"
+setenv SonnetTopDirectory ${SOLPSTOP}/modules/Sonnet-light
+setenv EscapeSonnet `echo ${SonnetTopDirectory} | sed 's:\/:\\\/:g'`
+
+setenv DG ${SOLPSTOP}/modules/DivGeo
+#setenv CARRE_STOREDIR ${SOLPSTOP}/modules/Carre/meshes
+
+# Set path to scripts and executables
+#------------------------------------
+
+# First, remove the old path to SOLPS if already set
+# (avoid too long paths)
+if ($?SOLPS_PATH) then
+  setenv PATH `echo $PATH | sed "s|${SOLPS_PATH}:||"`
+endif
+
+# Default PATH: no mpi, no openmp, no debug
+set      TOOLCHAIN =  ${HOST_NAME}.${COMPILER}
+set     CARRE_PATH =  ${SOLPSTOP}/modules/Carre/builds/${TOOLCHAIN}
+set    DIVGEO_PATH =  ${SOLPSTOP}/modules/DivGeo/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/equtrn/builds/${TOOLCHAIN}:${SOLPSTOP}/modules/DivGeo/convert/builds/${TOOLCHAIN}
+set    EIRENE_PATH =  ${SOLPSTOP}/modules/Eirene/builds/standalone.${TOOLCHAIN}
+set       B25_PATH =  ${SOLPSTOP}/modules/B2.5/builds/standalone.${TOOLCHAIN}
+set B25EIRENE_PATH =  ${SOLPSTOP}/modules/B2.5/builds/couple_SOLPS-ITER.${TOOLCHAIN}
+set      UINP_PATH =  ${SOLPSTOP}/modules/Uinp/builds/${TOOLCHAIN}
+set    TRIANG_PATH =  ${SOLPSTOP}/modules/Triang/builds/${TOOLCHAIN}
+set   SCRIPTS_PATH =  ${SOLPSTOP}/scripts.local:${SOLPSTOP}/scripts:${SOLPSTOP}/scripts/${TOOLCHAIN}:${SOLPSTOP}/modules/Eirene/scripts:${SOLPSTOP}/modules/Eirene/scripts/eirenex_v1.0.4:${SOLPSTOP}/modules/B2.5/src/test
+set      AMDS_PATH =  ${SOLPSTOP}/modules/amds/builds/${TOOLCHAIN}
+set       S45_PATH =  ${SOLPSTOP}/modules/solps4-5/builds/${TOOLCHAIN}
+
+# Create mirror scripts directories
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+# if (-d ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug) rm -Rf ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.debug
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.mpi.debug
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.debug
+# ln -sf ${SOLPSTOP}/scripts/${TOOLCHAIN} ${SOLPSTOP}/scripts/${TOOLCHAIN}.openmp.mpi.debug
+
+# Note: in case of name clash between script and executable, script will be found first
+setenv SOLPS_PATH  ${SCRIPTS_PATH}:${CARRE_PATH}:${DIVGEO_PATH}:${B25EIRENE_PATH}:${EIRENE_PATH}:${B25_PATH}:${UINP_PATH}:${TRIANG_PATH}:${AMDS_PATH}:${S45_PATH}
+setenv OLD_PATH    ${PATH}
+setenv PATH        ${SOLPS_PATH}:${PATH}
+if ($?LD_LIBRARY_PATH) then
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python:${LD_LIBRARY_PATH}
+else
+  setenv LD_LIBRARY_PATH ${SOLPSLIB}:${SOLPSTOP}/lib/python
+endif
+setenv PYTHONPATH ${PYTHONPATH}:${SCRIPTS_PATH}
+if ($?PYTHON_PATH) then
+  setenv PYTHONPATH ${PYTHONPATH}:${PYTHON_PATH}
+endif
+
+unset TOOLCHAIN SCRIPTS_PATH CARRE_PATH DIVGEO_PATH EIRENE_PATH B25_PATH B25EIRENE_PATH UINP_PATH TRIANG_PATH AMDS_PATH S45_PATH
+
+# Check whether SOLPS_DEBUG, SOLPS_OPENMP and SOLPS_MPI have been set already by the user
+if ($?SOLPS_OPENMP) source ${SOLPSTOP}/SETUP/openmp
+if ($?SOLPS_DEBUG)  source ${SOLPSTOP}/SETUP/debug
+if ($?SOLPS_MPI)    source ${SOLPSTOP}/SETUP/mpi
+
+# Set path to manuals
+#--------------------
+
+if ($?MANPATH) then
+  setenv MANPATH ${MANPATH}:${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
+else
+  setenv MANPATH ${SonnetTopDirectory}/man:${DG}/equtrn/doxygen/man
+endif
+
+# Remove double entries from some environment variables, if there are any
+
+setenv PATH  `echo $PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv LD_LIBRARY_PATH  `echo $LD_LIBRARY_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv MANPATH  `echo $MANPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv PYTHONPATH  `echo $PYTHONPATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+setenv OLD_PATH  `echo $OLD_PATH | awk -v RS=: -v ORS= '\\!a[$0]++ {if (NR>1) printf(":"); printf("%s",$0) }'`
+
+setenv PATH_FOR_LOOP ${PATH}
+setenv MANPATH_FOR_LOOP ${MANPATH}
+
+alias sb2  'cd ${SOLPSTOP}/modules/B2.5'
+alias sbb  'cd ${SOLPSTOP}/modules/B2.5'
+alias sei  'cd ${SOLPSTOP}/modules/Eirene'
+alias ssw  'cd ${SOLPSTOP}/modules/Sonnet-light'
+alias sst  'cd ${SOLPSTOP}/modules/Triang'
+alias ssd  'cd ${SOLPSTOP}/modules/DivGeo'
+alias ssc  'cd ${SOLPSTOP}/modules/Carre'
+alias ssu  'cd ${SOLPSTOP}/modules/Uinp'
+alias slib 'cd ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}'
+alias sbr  'cd ${SOLPSTOP}/runs'
+alias scr  'cd ${SOLPSTOP}/scripts'
+alias stop 'cd ${SOLPSTOP}'
+
+alias sdg 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
+alias ssf 'cd ${SOLPSTOP}/modules/DivGeo/device/${DEVICE}'
+
+alias xyplot plot xyplot
+alias xyplot2 plot xyplot2
+alias xyplot3 plot xyplot3
+alias xyplot4 plot xyplot4
+alias xyplot5 plot xyplot5
+alias xyplot6 plot xyplot6
+alias xyplot7 plot xyplot7
+alias xyplot8 plot xyplot8
+alias xyplot8 plot xyplot8
+alias xyplot9 plot xyplot9
+alias xlyplot plot xlyplot
+alias xlyplot2 plot xlyplot2
+alias xlyplot3 plot xlyplot3
+alias xlyplot4 plot xlyplot4
+alias xlyplot5 plot xlyplot5
+alias xlyplot6 plot xlyplot6
+alias xlyplot7 plot xlyplot7
+alias xlyplot8 plot xlyplot8
+alias xlyplot8 plot xlyplot8
+alias xlyplot9 plot xlyplot9
+alias xylplot plot xylplot
+alias xylplot2 plot xylplot2
+alias xylplot3 plot xylplot3
+alias xylplot4 plot xylplot4
+alias xylplot5 plot xylplot5
+alias xylplot6 plot xylplot6
+alias xylplot7 plot xylplot7
+alias xylplot8 plot xylplot8
+alias xylplot8 plot xylplot8
+alias xylplot9 plot xylplot9
+alias xlylplot plot xlylplot
+alias xlylplot2 plot xlylplot2
+alias xlylplot3 plot xlylplot3
+alias xlylplot4 plot xlylplot4
+alias xlylplot5 plot xlylplot5
+alias xlylplot6 plot xlylplot6
+alias xlylplot7 plot xlylplot7
+alias xlylplot8 plot xlylplot8
+alias xlylplot8 plot xlylplot8
+alias xlylplot9 plot xlylplot9
+
+alias   set_debug  'source $SOLPSTOP/SETUP/debug'
+alias unset_debug  'source $SOLPSTOP/SETUP/nodebug'
+alias   set_openmp 'source $SOLPSTOP/SETUP/openmp'
+alias unset_openmp 'source $SOLPSTOP/SETUP/noopenmp'
+alias   set_mpi    'source $SOLPSTOP/SETUP/mpi'
+alias unset_mpi    'source $SOLPSTOP/SETUP/nompi'
+alias   set_ig     'source $SOLPSTOP/SETUP/ig'
+alias unset_ig     'source $SOLPSTOP/SETUP/noig'
+
+# Motif installed through conda - skip check
+if ($?CONDA_PREFIX) then
+    if (-e ${CONDA_PREFIX}/lib/libXm.so && -e ${CONDA_PREFIX}/include/Xm/Xm.h) then
+        unsetenv NO_MOTIF
+        echo "Found Motif in conda env: ${CONDA_PREFIX}"
+    else
+        setenv NO_MOTIF 1
+    endif
+endif
+
+# Add any local settings if present
+if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
+  echo Loading SETUP/setup.csh.local.
+  source ${SOLPSTOP}/SETUP/setup.csh.local
+endif
+
+# Create environment cache for faster loading (setenv, unsetenv, and aliases)
+# set setup_post = `mktemp`
+# env | sed -ne "/^[ }]\|=()/b; s/\([^=]*\)=\(.*\)/setenv \1 '\2'/p" \
+#    -e '1i# Generated environment cache. Do not edit!' >! $setup_post
+# grep -F -v -f $setup_pre $setup_post >! $setup.env.local.${USER}
+# sed -i -e "s/setenv/unsetenv/; s/ '.*'//" $setup_pre $setup_post
+# grep -F -v -f $setup_post $setup_pre >> $setup.env.local.${USER}
+# alias | grep -F -v -f $alias_pre | sed -e 's/^/alias /' \
+#     -e "/\t(.*[;|&].*)/{s/\t(/\t'(/;s/)"'$'"/)'/;b}" \
+#     -e "s/\t\([^(].*\)/\t'\1'/" -e 's/\t(/\t/;s/)$//' >> $setup.env.local.${USER}
+# rm -f $setup_pre $setup_post $alias_pre
+
+# List loaded modules
+# module list
 
 # Environment variables
 if (! $?DEVICE) then
   setenv DEVICE d3d
 endif
-
 # Debugger
-setenv DBX gdb
-
-# Compiler
-setenv FC ftn
-
-echo "Not using ParaView with Catalyst!"
-#if (`where paraview-config` == "") then
-#  echo "Warning: paraview-config not found. ParaView with Catalyst will not be compiled-in!"
-#else
-#  # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
-#  setenv PARAVIEW_MAJOR_VERSION `paraview --version | cut -d '.' -f 1 | cut -d ' ' -f 3`
-#  setenv CMAKE_MAJOR_VERSION `cmake --version | head -1 | cut -d ' ' -f 3 | cut -d '.' -f 1`
-#  if (${CMAKE_MAJOR_VERSION} > 2) then
-#    setenv LD_CATALYST `paraview-config --ldflags -c PythonCatalyst -v CommonDataModel`
-#    setenv PARAVIEW_INCLUDE `paraview-config --cppflags`
-#  else
-#    setenv PARAVIEW_LIB `paraview-config --libs --python | sed s/-L//`
-#    setenv LD_CATALYST `paraview-config --libs vtkPVPythonCatalyst`
-#    setenv PARAVIEW_INCLUDE `paraview-config --include`
-#    setenv LD_LIBRARY_PATH "${PARAVIEW_LIB}:${LD_LIBRARY_PATH}"
-#    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages/vtk:${PYTHONPATH}"
-#    setenv PYTHONPATH "${PARAVIEW_LIB}/site-packages:${PYTHONPATH}"
-#  endif
-#endif
+setenv DBX totalview
+setenv LATEX pdflatex

@@ -1,0 +1,168 @@
+#!/bin/tcsh -f
+# Machine-independent variant of the test part of the SOLPS-ITER_*CI_test
+# scripts.  Runs the regression cases of one build flavor in the current
+# directory, leaving SOLPSTOP untouched.  Expects the SOLPS-ITER environment
+# (setup.csh or a site module) to be set up and the flavor to be built already:
+#
+#   debug      : make solps_debug b25_debug
+#   mpi        : make solps_mpi
+#   openmp     : make solps_openmp b25_openmp
+#   mpi_openmp : make solps_openmp_mpi
+#
+# MPI runs use "mpiexec -n 4"; set SOLPS_MPIRUN to use another launcher
+# (e.g. srun), see b2run.
+#
+# Usage: SOLPS-ITER_test debug|mpi|openmp|mpi_openmp
+
+if ($#argv != 1) then
+  echo "Usage: SOLPS-ITER_test debug|mpi|openmp|mpi_openmp"
+  exit 1
+endif
+set flavor = $1
+
+if (! $?SOLPSTOP) then
+  echo "SOLPSTOP not set. Set up the SOLPS-ITER environment first."
+  exit 1
+endif
+set solpstop = `echo ${SOLPSTOP} | sed 's:/*$::'`
+if ("${cwd}/" =~ "${solpstop}/*") then
+  echo "Run this from a work directory outside SOLPSTOP."
+  exit 1
+endif
+
+switch ($flavor)
+case debug:
+  source ${SOLPSTOP}/SETUP/debug
+  breaksw
+case mpi:
+  source ${SOLPSTOP}/SETUP/mpi
+  breaksw
+case openmp:
+  source ${SOLPSTOP}/SETUP/openmp
+  breaksw
+case mpi_openmp:
+  source ${SOLPSTOP}/SETUP/openmp
+  source ${SOLPSTOP}/SETUP/mpi
+  breaksw
+default:
+  echo "Unknown flavor ${flavor}. Use debug, mpi, openmp or mpi_openmp."
+  exit 1
+endsw
+
+# Do not abort on globs without matches (rm *.prt)
+set nonomatch
+
+set workdir = ${cwd}
+set examples = ${SOLPSTOP}/runs/examples/Makefile
+set checks = ${SOLPSTOP}/modules/B2.5/src/test
+set stamp = `datestamp`
+
+if ($flavor == debug) then
+  make -f ${examples} AUG_16151_D+C+He
+  cd AUG_16151_D+C+He
+  setenv DEVICE upgrade
+  cd baserun
+  rm *.prt
+  b2run b2ag b2ah b2ai b2ar
+  cd ..
+  mkdir run_standalone_debug_${stamp}
+  cd run_standalone_debug_${stamp}
+  cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2.*.parameters .
+  cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2mn.dat .
+  cp ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone/b2fstati .
+  touch b2fstati
+  setup_baserun_B25_links
+  echo "'b2mndr_ntim' '10'" >> b2mn.dat
+  b2run -s b2mn
+  ${checks}/run_checks.sh ../16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone ./ || exit 1
+endif
+
+# Run each case with 1 and N threads, compare both to the reference and to
+# each other (see run_omp_test.sh and run_coupled_omp_test.sh)
+if ($flavor == openmp) then
+  set omp_cases   = (AUG_16151_D+C+He AUG_16151_D+C+He ITER_535_D+He+Ar ITER_2171_D+He+Be+Ne)
+  set omp_srcs    = (16151_1.6MW_2.0e19_D=0.4_chi=1.6_standalone run_coupled_OpenMP_for_CI standalone standalone)
+  set omp_coupled = (0 1 0 0)
+  set omp_steps   = (10 10 100 100)
+  set omp_threads = (6 4 6 7)
+  set omp_devices = (upgrade upgrade iter iter)
+  @ i = 1
+  while ($i <= $#omp_cases)
+    cd ${workdir}
+    make -f ${examples} ${omp_cases[$i]}
+    cd ${omp_cases[$i]}
+    setenv DEVICE ${omp_devices[$i]}
+    correct_baserun_timestamps
+    foreach nthreads (1 ${omp_threads[$i]})
+      set rundir = test_${nthreads}threads_${stamp}
+      rsync -a ${omp_srcs[$i]}/. ${rundir}
+      cd ${rundir}
+      touch b2fstati
+      sed -i "s/\('b2mndr_ntim'\s*\)'[0-9]\+'/\1'${omp_steps[$i]}'/" b2mn.dat
+      sed -i "s/\('b2npmo_iout' *\)'.'/\1'0'/" b2mn.dat
+      if (${omp_coupled[$i]}) then
+        foreach f (*.i)
+          mv ${f} ${f:r}
+        end
+        setup_baserun_eirene_links
+        b2run -t ${nthreads} b2mn
+      else
+        foreach f (b2.feedback_save.parameters.i b2.sputter_save.parameters.i b2.wall_save.parameters.i)
+          if (-s ${f}) mv ${f} ${f:r}
+        end
+        sed -i "s/\('b2mndr_eirene'\s*\)'1'/\1'0'/" b2mn.dat
+        b2run -s -t ${nthreads} b2mn
+      endif
+      cd ..
+    end
+    if (${omp_coupled[$i]}) then
+      set check = ${checks}/run_checks_OpenMP_CI_coupled.sh
+    else
+      set check = ${checks}/run_checks.sh
+    endif
+    ${check} ${omp_srcs[$i]} test_1threads_${stamp} || exit 1
+    ${check} test_1threads_${stamp} test_${omp_threads[$i]}threads_${stamp} || exit 1
+    @ i++
+  end
+endif
+
+# mpi_openmp additionally runs with 4 threads per rank and compares against
+# the 1 thread run
+if ($flavor == mpi || $flavor == mpi_openmp) then
+  if ($flavor == mpi) then
+    set thread_counts = (1)
+  else
+    set thread_counts = (1 4)
+  endif
+  make -f ${examples} ITER_2360_0.95He+0.05H_40MW
+  cd ITER_2360_0.95He+0.05H_40MW
+  setenv DEVICE iter
+  correct_baserun_timestamps
+  foreach nthreads (${thread_counts})
+    set rundir = run_MPI_${nthreads}threads_${stamp}
+    mkdir ${rundir}
+    cd ${rundir}
+    cp ../ref_run_for_MPI_CI/b2.*.parameters .
+    cp ../ref_run_for_MPI_CI/b2.feedback_save.parameters.i b2.feedback_save.parameters
+    cp ../ref_run_for_MPI_CI/b2mn.dat .
+    cp ../ref_run_for_MPI_CI/b2fstati .
+    cp ../ref_run_for_MPI_CI/input.dat .
+    cp ../ref_run_for_MPI_CI/fort.11.i fort.11
+    cp ../ref_run_for_MPI_CI/fort.13.i fort.13
+    cp ../ref_run_for_MPI_CI/fort.44.i fort.44
+    cp ../ref_run_for_MPI_CI/fort.46.i fort.46
+    cp ../ref_run_for_MPI_CI/b2time.nc.i b2time.nc
+    touch b2fstati
+    setup_baserun_eirene_links
+    if ($flavor == mpi) then
+      b2run -m "mpiexec -n 4" b2mn
+    else
+      b2run -m "mpiexec -n 4" -t ${nthreads} b2mn
+    endif
+    ${checks}/run_checks_MPI_CI_coupled.sh ../ref_run_for_MPI_CI/ ./ || exit 1
+    cd ..
+  end
+  if ($flavor == mpi_openmp) then
+    ${checks}/run_checks_MPI_CI_coupled.sh run_MPI_1threads_${stamp}/ run_MPI_4threads_${stamp}/ || exit 1
+  endif
+endif

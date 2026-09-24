@@ -118,6 +118,13 @@ if ("$OSTYPE" == "linux") then
       endif
     endif
 
+  else if ("$HOST_NAME" == "NERSC") then
+    # Conda root set by module
+    if (! -d "${CONDA_ROOT}" ) then
+      echo
+      echo "ERROR: miniforge installation not found."
+      exit 1
+    endif
   else   # HPC cluster
 
     set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"

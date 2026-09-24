@@ -1,40 +1,54 @@
 #
 # Specify paths to root-directories of following libraries on your system
 #
+# Special notes:
+#
+# If you have NCAR version 3 on your system:
+# Remove -DNCAR4 from SOLPS_CPP
+#
+# If you do not have NAG on your system:
+# Use LD_NAG to link to the BLASLAPACK library instead
+# Add -DNO_NAG to SOLPS_CPP
+#
+# If you have NAG Mark 17 or greater on your system:
+# Add -DNO_F01AAF to SOLPS_CPP
+#
+# If you have NAG Mark 22 or greater on your system:
+# Add -DNAG22 to SOLPS_CPP
+#
+# If your compiler is compatible with Fortran 2003 features, you can:
+# Add -DF2003 to SOLPS_CPP
+#
 
-NCDIR = $(NETCDF_DIR)
-NAGDIR = $(CRAY_LIBSCI_PREFIX_DIR)
-BLAS_DIR = $(CRAY_LIBSCI_PREFIX_DIR)
-H5DIR =$(HDF5_DIR)
-#NCARG_ROOT = $(NCARG_ROOT)
-MDSPLUS_DIR =
 
 #
 # Variables for linking
 #
-LD_NETCDF  = -L${NCDIR}/lib -lnetcdf -lnetcdff -lstdc++ -L${H5DIR}/lib -lhdf5
-LD_NAG     = -L${NAGDIR}/lib -lsci_gnu
-LD_MSCL    = -L${MSCL_ROOT} -lmscl
-LD_GR      = -L${GR_ROOT} -lgr
-LD_GKS     = -L${GLI_HOME} -lgks
-LD_NCARG   = ${NCAR}
-LD_MDSPLUS =
-LD_SONNET  = -L${SOLPSLIB} -lsonnet -lstdc++ -lC
 
-LIBGKS     = ${GLI_HOME}/libgks.a
-LIBGRS     = ${GR_ROOT}/libgr.a
+LD_NETCDF  = -L${NCDIR}/lib -lnetcdff
+LD_NCARG   = -L${NCARG_ROOT}/lib -lncarg -lncarg_gks -lncarg_c -L/usr/lib64 -lX11 -lm -lcairo -lfreetype
 
-#
-# Provide compiler
-#
+# SOLPSLIB is ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}, so these follow the
+# toolchain automatically instead of pinning a NERSC.<compiler> directory.
+MSCL_ROOT = ${SOLPSLIB}/mscl/lib
+LD_MSCL = -L${MSCL_ROOT} -lmscl
+GLI_HOME = ${SOLPSLIB}/gli/src/gks
+LD_GKS = -L${GLI_HOME} -lgks
+GR_ROOT = ${SOLPSLIB}/gr
+LD_GR = -L${GR_ROOT} -lgr
 
-FC         = ftn
-CC         = cc
+LD_SONNET  = -lsonnet -lstdc++
+
+# Must be defined (even empty) so it wins over the module-level `LD_NAG ?=`
+# defaults, which point at -lblaslapack / -lblas -llapack inside SOLPSLIB and do
+# not exist here. On Perlmutter the ftn wrapper links cray-libsci for BLAS/LAPACK.
+LD_NAG     =
 
 #
 # Preprocessor options
 #
 
+# -DGFORTRAN is appended by SETUP/config.common.gfortran; do not repeat it here.
 SOLPS_CPP      = -DNCAR4 -DNO_NAG
 B25_DEFINES    =
 CARRE_DEFINES  =
@@ -45,3 +59,4 @@ FFLAGSEXTRA    =
 #!!!Local Variables:
 #!!! mode: Makefile
 #!!! End:
+
