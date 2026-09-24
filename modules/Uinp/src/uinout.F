@@ -1103,6 +1103,7 @@ c*** 7.  data for primary source
 
       write(iunoo,700) utxthd(8)
 c     correct number of strata for vessel mode
+      if (gridgeneratorID == 0) then ! carre
       if (grid_mode.ne.2) then ! standard + target mode
         write(iunoo,707) nstrai
         write(iunoo,707) (indsrc(i),i=1,nstrai)
@@ -1203,6 +1204,99 @@ c**  velocity space distribution
      ,                                                 sorctz(i)
 
       end do !}
+
+      elseif (gridgeneratorID == 1) then  ! Goat
+
+        nvess=nfclblused*(natmi-nmeta) ! number of surface strata
+        j=0
+        indsrc7=0
+        do i=1,nstrai
+          if (indsrc(i).ne.6) then ! gas puff or vol. rec.
+            j=j+1
+            indsrc7(j)=indsrc(i)
+          end if
+        end do
+        write(iunoo,707) nvess+j
+        write(iunoo,707) (6,i=1,nvess),(indsrc7(i),i=1,j)
+
+        write(iunoo,703) alloc
+        inum=0
+        istep=0
+        do i=1,nstrai !{
+          istep=istep+1
+          if(indsrc(i).eq.6) cycle
+
+          inum=inum+1 
+          write(iunoo,709) nvess+inum,txtsou(i)
+          write(iunoo,706) nlavrp(i),nlavrt(i),nlsymp(i),nlsymt(i),
+     ,                      nlray(i)
+          write(iunoo,707) npts(i),ninitl(i),nemods(i),namods(i),
+     ,                                                        nminpts(i)
+          write(iunoo,718) flux(i),scalv(i),ivlsf(i),iscls(i),isclt(i),
+     ,                      iscl1(i),iscl2(i),iscl3(i),isclb(i),iscla(i)
+          write(iunoo,706) nlatm(i),nlmol(i),nlion(i),nlpls(i),nlphot(i)
+          write(iunoo,707) nspez(i)
+          write(iunoo,706) nlpnt(i),nllne(i),nlsrf(i),nlvol(i),nlcns(i)
+
+c**  same for point-, line-, surface- and volume sources
+
+          write(iunoo,707) nsrfsi(i)
+          do j=1,nsrfsi(i) !{
+            if (j.ne.1) inum=inum+1
+            nskip=0
+            if (nlsrf(i)) then !{ correcting the surface index for vessel mode
+              do k=laddsrfs+1,nlimi !{ 
+                l=indasrfs(k)
+                if(l.eq.0) cycle
+                if(fclbl(l).ne.0.and.ilplgdg(l).eq.0) then
+                  if (k.eq.insor(j,i)) then
+                    print *, 'fclbl: ', fclbl(l)
+                    print *, 'Make sure that gas puff surface is not ',
+     ,              'part of the vessel wall '
+                    print *, 'and that it has fclbl = 0'
+                    call xerrab ('Wrong fclbl additional surface')
+                  else
+                    nskip=nskip+1
+                    cycle
+                  end if
+                elseif (k.eq.insor(j,i)) then
+                  exit
+                end if
+              end do
+            end if
+            if (insor(j,i).ne.0) k=indasrfs(insor(j,i))
+            if (nlsrf(i) .and. insor(j,i).ne.0) then !{
+              if (jlplg(k).ne.0) then !{
+                if (j.ne.1) istep=istep+1
+                sorind(j,i)=istep
+              else !}{
+                if (j.eq.1) istep=istep-1
+                sorind(j,i)=0
+              end if !}
+            end if !}
+            write(iunoo,707) nvess+inum,indim(j,i),insor(j,i)-nskip,
+     ,          ingrda(j,i,1),ingrde(j,i,1),ingrda(j,i,2),ingrde(j,i,2),
+     ,          ingrda(j,i,3),ingrde(j,i,3)
+            write(iunoo,703) sorwgt(j,i),sorlim(j,i),
+     ,                     sorind(j,i),sorexp(j,i),sorifl(j,i)
+            write(iunoo,707) nrsor(j,i),npsor(j,i),ntsor(j,i),
+     ,                     nbsor(j,i),nasor(j,i),nisor(j,i),istor(j,i)
+            write(iunoo,703) sorad1(j,i),sorad2(j,i),sorad3(j,i),
+     ,                     sorad4(j,i),sorad5(j,i),sorad6(j,i)
+          end do !}
+
+c**  velocity space distribution
+
+          write(iunoo,703) soreni(i),sorene(i),sorvdx(i),sorvdy(i),
+     ,                                                 sorvdz(i)
+          write(iunoo,703) sorcos(i),sormax(i),sorctx(i),sorcty(i),
+     ,                                                 sorctz(i)
+
+        end do !} 
+
+      else 
+        call xerrab('uinout: unknown grid generator ID')
+      end if 
 
 c*** 8.  additional data for some specific zones
 
@@ -1578,6 +1672,8 @@ c*** 15. additional information for geousr
 c*** segment numbers for the target edges to be modified by geousr
 
       write(iunoo,700) utxthd(27)
+      select case (gridgeneratorID)
+      case (0) ! Carre
       if (grid_mode.ne.2) then ! standard + target mode
         if(lm_cnfg) then
           write(iunoo,707) nadmod,ntrgte/2
@@ -1597,6 +1693,31 @@ c*** segment numbers for the target edges to be modified by geousr
       else ! vessel mode => no need for block 15
         write(iunoo,707) 0,0
       end if
+      case (1) ! Goat
+        ! Need to write out block 15 directly. Format: 
+        ! [surface index of 3B], [Point index of 3b], [grid vertex index]
+        if (grid_mode.ne.2) then ! standard + target mode
+        if(lm_cnfg) then
+          write(iunoo,707) nadmod,ntrgte/2
+        else
+          write(iunoo,707) nadmod,ntrgte
+        endif
+        do i=1,nadmod !{
+          write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
+     ,                                        xcoor(i),ycoor(i),zcoor(i)
+        end do !}
+        if(ntrgte.gt.0) then !{
+          do i=1,ntrgte !{
+            if (lm_cnfg.and.mod(i,2).eq.1) cycle
+            write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
+          end do !}
+        end if !}
+      else ! vessel mode => no need for block 15
+        write(iunoo,707) 0,0
+      end if
+      case default 
+        call xerrab('uinout: unknown grid generator ID')
+      end select 
 
       call subend ()
       return
