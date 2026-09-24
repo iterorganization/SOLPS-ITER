@@ -20,6 +20,12 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
       print *
       print *,'==== Starting uinptriang'
       TriMesh=.TRUE.
+      select case (gridgeneratorID)
+      case (1) ! Goat, void polygons are already provided. Skip this step
+        print *, 'uinptriang: following goat route, not creating ' // 
+     .    'void polygons here...'  
+      case (0) ! Carre, void polygons still need to be built
+      
 c*** makes list of polygon indices present in the input data
       attrib(1)=ilplgdg(1)
       k=1
@@ -163,6 +169,7 @@ c***   store the sorted chain to construct polygons for void triangulation
          endif
          nfclbltriplg(ntriplg)=nnlbl
    20 continue   
+      end select
 
 c  Prepare data for TRIA input file (header with refinement zones data)
       k=0
