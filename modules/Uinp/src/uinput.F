@@ -165,6 +165,16 @@ c*** Create the b2us.dat file for triangulation
           write(2,'(a)') '''b2us_write_b2fgmtry_us''    ''0'''
           write(2,'(a)') '''b2us_write_b2fstati_us''    ''0'''
           write(2,'(a)') '''b2us_tria_mode''   ''1'''
+          select case (gridgeneratorID)
+          case (0) ! Carre
+            ! for geousr: still need to process block 15
+            write(2,'(a)') '''b2us_nasmod_mode''   ''0'''
+          case (1) ! Goat
+            ! for geousr: specify that block 15 is already written out properly by uinp
+            write(2,'(a)') '''b2us_nasmod_mode''   ''1'''
+          case default 
+            call xerrab('Unknown grid generator ID')
+          end select
           close(2)
           print *,'    ... b2us.dat created'
       endif !}
