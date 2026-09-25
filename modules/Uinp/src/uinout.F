@@ -687,7 +687,7 @@ c*** "ch2-cards" here !
      +                                 10000*jadjsw(i)+100000*jadisw(i)
          jlcell=jlacll(i)+1000*jlblck(i)
           write(iunoo,707) jliin(i),jlside(i),jlswch,jlequi(i),
-     ,      jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),jlplg(i)
+     ,      jltor(i),jlcol(i),jlfit(i),jlcell,jlbox(i),ilplgdg(i)
           if(jliin(i).lt.0) then ! Still no idea
             jsurpr=jsurpr+1
             nsrf(jsurpr)=k-nskip
