@@ -95,6 +95,38 @@ b2run -s b2mn
 ${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh ../run_AFN_test_20 . || exit 3
 cd ..
 
+
+# Compare the different matrix solvers
+# run with ma28
+cp -r run_AFN_test_20 run_AFN_test_ma28
+cd run_AFN_test_ma28
+touch b2fstati
+setup_baserun_B25_links
+echo "'b2uxus_style' '2'" >> b2mn.dat
+b2run -s b2mn
+cd ..
+# run with PARDISO
+cp -r run_AFN_test_20 run_AFN_test_PARDISO
+cd run_AFN_test_PARDISO
+touch b2fstati
+setup_baserun_B25_links
+echo "'b2uxus_style' '3'" >> b2mn.dat
+b2run -s b2mn
+cd ..
+# run with UMFPACK
+cp -r run_AFN_test_20 run_AFN_test_UMFPACK
+cd run_AFN_test_UMFPACK
+touch b2fstati
+setup_baserun_B25_links
+echo "'b2uxus_style' '4'" >> b2mn.dat
+b2run -s b2mn
+cd ..
+
+# check that the different matrix solvers give the same result
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh run_AFN_test_ma28 run_AFN_test_PARDISO || exit 4
+${SOLPSTOP}/modules/B2.5/src/test/run_checks.sh run_AFN_test_ma28 run_AFN_test_UMFPACK || exit 5
+
+
 # Now test the coupled code
 mkdir run_CI_test_20
 cd run_CI_test_20
@@ -128,7 +160,7 @@ rm b2mn.prt
 mv b2fstate b2fstati
 echo "'eirene_repeat_first_call' '0'" >> b2mn.dat
 b2run b2mn
-${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20 . || exit 4
+${SOLPSTOP}/modules/B2.5/src/test/run_checks_CI_coupled.sh ../run_CI_test_20 . || exit 6
 
 # Go back to normal settings
 cd ${SOLPSTOP}/modules/B2.5

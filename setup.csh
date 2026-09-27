@@ -434,6 +434,11 @@ if (-s ${SOLPSTOP}/SETUP/setup.csh.local) then
   source ${SOLPSTOP}/SETUP/setup.csh.local
 endif
 
+# If sbr was left unaliased above (SOLPS_CENTRAL is set) and SOLPSWORK
+# has since been defined (e.g. in one of the .local files just sourced),
+# alias sbr to jump there instead.
+if ($?SOLPS_CENTRAL && $?SOLPSWORK) alias sbr 'cd ${SOLPSWORK}'
+
 # Create environment cache for faster loading (setenv, unsetenv, and aliases)
 if ($cache_enabled) then   # Assuming to work on some HPC cluster
   set setup_post = `mktemp`

@@ -19,6 +19,7 @@ module load gnuplot/6.0
 module load arm_ddt/22.1
 module load NCL/6.6.2-foss-2023b
 module load imkl/2023.2.0
+module load SuiteSparse/7.7.0-foss-2023b
 
 setenv DBX ddt
 setenv SYSNAME amd64_sles15

@@ -1,4 +1,16 @@
 \documentclass[a4paper,10pt]{report}
+\raggedbottom
+\makeatletter
+% Same as \raggedbottom, but with a large *finite* stretch instead of the
+% kernel default's infinite-order (.0001fil) one at the bottom of the page.
+% Finite stretch is still generous enough (bounded by \textheight, i.e. a
+% whole page) to absorb any real shortfall like \raggedbottom would, but
+% avoids tripping longtable's \vsplit "Infinite glue shrinkage found in box
+% being split" warning -- and, unlike \flushbottom (no bottom slack at all),
+% doesn't force every page to fill exactly, so it avoids the "Underfull
+% \vbox (badness 10000) ... \output is active" warnings \flushbottom caused.
+\def\@textbottom{\vskip \z@ \@plus \textheight\relax}
+\makeatother
 \usepackage{ifpdf}
 %% \newif\ifpdf
 %% \ifx\pdfoutput\undefined
@@ -28,7 +40,7 @@
 \usepackage{multicol}
 \usepackage{fancyvrb}
 \usepackage{listings}
-\usepackage{longtable}[=v4.13]
+\usepackage{longtable}
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
 \usepackage{exscale}
@@ -281,6 +293,8 @@ Since the user-id is immutably encoded into any changes, it is always a good ide
 
 ITER IDM account holders who have obtained {\tt REPO\_WRITE} permissions can, for their own development, create {\tt feature/[topic]}, {\tt bugfix/[topic]}, or {\tt hotfix/[topic]} branches and raise a "Pull Request" (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git\allowbreak.iter.org/projects/BND\allowbreak/repos/solps-iter/pull-requests}) to have them merged into the {\tt develop} branch after pushing them back to the ITER repository. The {\tt develop}, {\tt master} and {\tt svn/*} branches are protected and can only be manipulated by the owners of the repository. For developers, please create a fork in which to make your own development, and then trigger a Pull Request using the relevant GitHub machinery.
 
+For new users, a dedicated repository with extensive SOLPS-ITER-related documentation, tutorials and tips is available as \href{https://github.com/iterorganization/SOLPS-Tutorials}{https://github.com/iterorganization/SOLPS-Tutorials}.
+
 Issues are handled using the {\tt Issues} and {\tt Discussions} tabs on the GitHub site. You should feel free to create new items associated with \SOLPSITER or any of its submodules if you have any problems or suggestions. Use the {\tt Issues} tab to report bugs or unwanted code behaviour, and the {\tt Discussions} tab to propose new features and allow for debate about whether and how to implement them. The community of \SOLPSITER users is expected to provide support to each other with the ITER Organization providing help as far as possible.
 
 For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular. Another useful resource for novice Git users is the tutorial from Codecademy available at \href{https://www.codecademy.com/learn/learn-git}{https://www.codecademy.com/learn/learn-git}.
@@ -332,6 +346,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available as an open-source package at \href{https://github.com/iterorganization/MSCL}{https://github.com/iterorganization/MSCL})
 \item[MKL] Intel Math Kernel Library (optional)
+\item[SuiteSparse] Open-source package for solving sparse matrices, readily available on most clusters. Available from \href{https://github.com/DrTimothyAldenDavis/SuiteSparse/}{https://github.com/DrTimothyAldenDavis/SuiteSparse/} (optional)
 \item[makedepend] to build the dependencies needed by the {\tt Makefiles}
 \item[gnuplot] for many analysis scripts
 \item[nc2text] for obtaining time-dependent data traces (optional)
@@ -5297,52 +5312,50 @@ several values of $\Delta_t$.
 \section{Dynamic ("Time-dependent") mode}
 \label{sec:dynamic}\index{Dynamic mode}
 
-There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, and can be helpful to damp out numerical oscillations. This is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. The traditional time-dependent solution method is based on a $1^{st}$ order Euler scheme, but a more accurate $2^{nd}$ order Crank-Nicolson scheme is also available. These are chosen using the switch {\tt b2mndt\_ckn}, with values {\tt 1} (default) and {\tt 2} respectively. The Crank-Nicolson scheme can also be used for the "false time-stepping" done in steady-state runs if desired.
+There is an alternative solution method available, which does not rely on under-relaxation, and is called the dynamic mode, or, by abuse of language, the "time-dependent" mode. This solution mode allows for a more precise estimate of the time derivative terms, particularly for the momentum and energy equations, namely the inclusion of terms like $\displaystyle m_aV_a \frac{{\partial}n_a}{{\partial}t}$ and $\displaystyle \frac{3}{2} T_\alpha \frac{{\partial}n_\alpha}{{\partial}t}$, where $a$ is a species index and $\alpha$ stands for $e$ or $i$. The "time-dependent" mode may be helpful to damp out numerical oscillations. This mode is obtained by setting the switch {\tt b2mndt\_style} to {\tt 2}. The traditional time-dependent solution method is based on a $1^{st}$ order Euler scheme, but a more accurate $2^{nd}$ order Crank-Nicolson scheme is also available. These are chosen using the switch {\tt b2mndt\_ckn}, with values {\tt 1} (default) and {\tt 2} respectively. The Crank-Nicolson scheme can also be used for the "false time-stepping" done in steady-state runs if desired.
 
-The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, electron and ion temperature equations. The total momentum and energy equations are not solved.
+The dynamic mode triggers the use of the \SOLPSfivetwo physics model. It includes the terms mentioned above into the numerical approximation of the full time derivative terms, which is essential for the correct description of the time evolution of momentum and internal energy. To achieve this, the switch {\tt b2mndt\_style}, if set to {\tt 2}, changes the order of solution of the equations to solve first for the density equations, then the parallel momentum equations, followed by the electrical potential, then the electron and ion temperature equations. The total momentum and energy equations may still be solved (if, for example, it is desired to reduce numerical noise caused by momentum exchange or heat exchange terms), however, it breaks the {\tt b2mndt\_style.eq.2} numerical approximation of the full time derivative terms -- so that to get a true dynamic mode solving of these total momentum and energy equations is not recommended. If the user asks to solve these equations with {\tt b2mndt\_style} set to {\tt 2}, a warning message appears.
 
 When using the traditional solution method, relying on under-relaxation of the equations, the evolution in time of the solution is not a true reflection of the physical evolution of the system, but rather only a numerical approximation, and only the final steady-state solution can be fully trusted. If one is interested in the details of the time evolution of the plasma state, then this new solution method should be considered. Please note that the timestep may need to be decreased compared to a similar traditional case, using under-relaxation, to achieve convergence.
 
 More specifically, the way the time derivative terms are discretized is changed between the two code operation modes. For the traditional way of running the code, using the under-relaxation scheme, the time derivative term for the parallel momentum equations, (\ref{eq:mom_new}) or (\ref{eq:mom_old}), is discretized as:
 
 \begin{equation}\label{eq:mom_dt_1}
-m_a h_z \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
+m_a h_z \sqrt{g} n_a \frac{\partial V_{\parallel a}}{\partial t} \rightarrow m_a h_z \sqrt{g} \frac{n_a^{(k)} V_{\parallel a}^{(k+1)} - n_a^{(k)} V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f}
 \end{equation}
 
 and the time derivative terms for the energy equations, (\ref{eq:ene_new}) and (\ref{eq:eni}), are discretized as:
 
 \begin{equation}\label{eq:en_dt_1}
-\sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} T_\alpha^{(k+1)} - n_\alpha^{(k)} T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f}
+\sqrt{g} \frac{3}{2} n_\alpha \frac{{\partial} T_\alpha}{{\partial}t} \rightarrow \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} T_\alpha^{(k+1)} - n_\alpha^{(k)} T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f}
 \end{equation}
 
 where $\alpha$ stands for $e$ or $i$, $\tau$ is the time step size, $\delta_x$ is the time step multiplier for the $x$ equation (i.e. the value of the {\tt DTMO}, {\tt DTEE}, or {\tt DTEI} arrays for that region and species), and $\tau_f$ is an additional optional time step multiplier, governed by the {\tt CORE\_DT\_FACTOR} switch from the {\tt NUMERICS} namelist (see Section~\ref{lab:b2:numerics:parameters} and Appendix~\ref{lis:b2cdcn} for details).
 
 According to the under-relaxation scheme, the updated values of the parallel velocity and temperatures at time step $k+1$ are given by:
 
-\begin{equation*}
+\begin{equation}\label{eq:mom_underrelaxation}
 V_{\parallel a}^{(k+1)} = V_{\parallel a}^{(k)} + r_{xf_{V_{\parallel a}}} \left( \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)} \right)
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}\label{eq:en_underrelaxation}
 T_\alpha^{(k+1)} = T_\alpha^{(k)} + r_{xf_{T_\alpha}} \left( \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)} \right)
-\end{equation*}
+\end{equation}
 
 where $r_{xf_{V_{\parallel a}}}$ and $r_{xf_{T_\alpha}}$ are the under-relaxation factors, which are equal to {\tt rxf*xfm1} and {\tt rxf*xfm3} respectively, and the tilde quantities are the actual solutions to the equations. The factors {\tt rxf}, {\tt xfm1}, and {\tt xfm3}, are given by the values of the {\tt b2mndr\_rxf}, {\tt b2news\_xfm1}, and {\tt b2news\_xfm3} switches, respectively.
 
 When applying the dynamic mode, the discretization of the time derivative terms becomes, for the parallel momentum equations:
 
 \begin{equation}\label{eq:mom_dt_2}
-m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau} V_{\parallel a}^{(k)}
+m_a h_z \sqrt{g} \frac{\partial n_a  V_{\parallel a}}{\partial t} \rightarrow m_a h_z \sqrt{g} \frac{ \widetilde{V}_{\parallel a}^{(k+1)} - V_{\parallel a}^{(k)}}{\tau \delta_{ma} \tau_f} n_a^{(k+1)} + m_a h_z \sqrt{g} \frac{n_a^{(k+1)} - n_a^{(k)}}{\tau \delta_{ma} \tau_f \cdot r_{xf_{V_{\parallel a}}}} V_{\parallel a}^{(k)}
 \end{equation}
 
 and, for the energy equations:
 
 \begin{equation}\label{eq:en_dt_2}
-\sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau} T_\alpha^{(k)}
+\sqrt{g} \frac{3}{2} \frac{{\partial} n_\alpha T_\alpha}{{\partial}t} \rightarrow \sqrt{g} \frac{3}{2} \frac{ \widetilde{T}_\alpha^{(k+1)} - T_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f} n_\alpha^{(k+1)} + \sqrt{g} \frac{3}{2} \frac{n_\alpha^{(k+1)} - n_\alpha^{(k)}}{\tau \delta_{e \alpha} \tau_f \cdot r_{xf_{T_\alpha}} } T_\alpha^{(k)}
 \end{equation}
 
-Note that, since the order of solution of the equations has been changed in the dynamic mode, the updated density $n_a^{(k+1)}$ is now available for use in Eq.~(\ref{eq:mom_dt_2}), providing a more accurate evaluation of the parallel momentum time derivative term.
-
-The conditions
+Note that, since the order of solution of the equations has been changed in the dynamic mode, the updated density $n_a^{(k+1)}$ is now available for use in Eqs.~(\ref{eq:mom_dt_2}) and (\ref{eq:en_dt_2}), providing a more accurate evaluation of the parallel momentum and internal energy time derivative terms -- this is the reason why the order of solution is changed. Thus, in Eqs.~(\ref{eq:mom_dt_2}) and (\ref{eq:en_dt_2}), the second terms are treated as 'already known', while the first are 'unknown' and should be computed while solving the corresponding equations. The under-relaxation scheme (Eqs.~(\ref{eq:mom_underrelaxation}) and (\ref{eq:en_underrelaxation})) is applied as well, therefore the conditions
 \begin{equation}\label{eq:rxf_mo}
 \delta_{m_a} \tau_f r_{xf_{V_{\parallel a}}} = 1
 \end{equation}
@@ -5350,9 +5363,11 @@ The conditions
 \delta_{e \alpha} \tau_f r_{xf_{T_\alpha}} = 1
 \end{equation}
 \begin{equation}\label{eq:rxf_na}
-\delta_{n_a} \tau_f r_{xf_{f_{n_a}}} = 1
+\delta_{n_a} \tau_f r_{xf_{n_a}} = 1
 \end{equation}
-must be fulfilled for the numerical solution to converge to the exact solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
+must be fulfilled for the numerical solution to converge to the exact physically meaningful dynamic solution as $\tau \rightarrow 0$. Setting all parameters equal to one could be the best option, if it were not for the process of sequential separate solution of the equations, which can lead to a limitation of the time step $\tau$. To expand the region of convergence of this process, one can try to find parameters in Eqs.~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) other than unity.
+
+Alternatively, the products~(\ref{eq:rxf_mo})-(\ref{eq:rxf_na}) may be set bigger or smaller than unity to achieve a speed-up or slowing down of the evolution of species momentum, internal energy, or particle content, respectively -- in all such cases a warning message is printed if {\tt b2mndt\_style.eq.2} indicating that the numerical approximation of time-derivative terms becomes incorrect.
 
 When computing the residuals in dynamic mode, the contribution from the time derivative terms is not included. If using internal iterations ({\tt b2mndt\_nstg0}, {\tt b2mndt\_nstg1}, or {\tt b2mndt\_nstg2} larger than 1), the time derivative is computed from one internal iteration to the next.
 
@@ -21747,6 +21762,7 @@ AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+\_\_APPLE\_\_ & driver/b2mod\_driver.F \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\

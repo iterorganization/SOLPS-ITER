@@ -386,3 +386,10 @@ if [ -s ${SOLPSTOP}/SETUP/setup.ksh.local ]; then
    echo "Loading SETUP/setup.ksh.local"
    . ${SOLPSTOP}/SETUP/setup.ksh.local
 fi
+
+# If sbr was left unaliased above (SOLPS_CENTRAL is set) and SOLPSWORK
+# has since been defined (e.g. in one of the .local files just sourced),
+# alias sbr to jump there instead.
+if [ -n "$SOLPS_CENTRAL" ] && [ -n "$SOLPSWORK" ]; then
+  alias sbr='cd ${SOLPSWORK}'
+fi

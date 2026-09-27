@@ -4,13 +4,14 @@ B25DIR=${SOLPSTOP}/modules/B2.5
 AFNDIR=${SOLPSTOP}/doc/AFN_BCs_documentation
 AFNSRC=${AFNDIR}/LaTeX_source_code
 GEODIR=${SOLPSTOP}/doc/edit_geo_manual
-PATH+=:/usr/bin:/bin
+PATH:=${PATH}:/usr/bin:/bin
 SVN=svn
 GIT=`which git`
 MAKES = Makefile
 LATEX ?= $(shell which_latex)
 LATEX_VERSION = $(shell ${LATEX} --version | head -1 | cut -d ' ' -f 5 | cut -c 1-4 )
 PDFTOPS ?= $(shell which_pdftops)
+LATEXMK ?= latexmk
 PYTHON ?= python
 INCLUDES = b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F B2_5.Makefile B2_5.config.ITER.ifort64 B2_5.config.common.ifort64 solps-iter_git.log b2plot.commands SOLPS_versions LICENSE.tex CONTRIBUTING.tex Old_packages.tex
 ifeq ($(shell [ -s ${B25DIR}/src/modules/b2mod_dimensions.F ] && echo yes || echo no ),yes)
@@ -22,7 +23,7 @@ TARG_DIM = ${B25DIR}/src/include/DIMENSIONS.F
 endif
 INCLUDES += ${FILE_DIM}
 BIBFILES = adopt.bib afn.bib aps.bib aug.bib divgas.bib extern.bib general.bib keps.bib main.bib mnw.bib model.bib tok.bib WebofScience.bib xpb.bib
-STYFILES = fancyvrb.sty fullpage.sty groff.enc microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
+STYFILES = fancyvrb.sty fullpage.sty groff.enc longtable.sty microtype.sty microtype-pdftex.def parskip.sty pdftex.def relsize.sty stdclsdv.sty subfigure.sty supertabular.sty times.sty tocbibind.sty
 FILES = D/b2ag_structured.dat D/b2ag_unstructured.dat D/b2ah.dat D/b2ar.dat D/b2ar_AFN.dat D/b2ai.dat D/b2mn.dat D+C+He/b2ag.dat D+C+He/b2ah.dat D+C+He/b2ar.dat D+C+He/b2ai.dat D+C+He/b2mn.dat D+C+He/b2.boundary.parameters D+C+He/b2.numerics.parameters D+C+He/b2.transport.parameters D+C+He/b2.neutrals.parameters b2.transport.inputfile b2.sources.profile b2yg.dat b2yh.dat b2yi.dat b2ym.dat b2yn.dat b2yp.dat b2yq.dat b2yr.dat b2ymb.dat b2yrp.dat MDSPLUS/b2md.dat MDSPLUS/SOLPS_MODEL.TCL.index MDSPLUS/IDENT_MODEL.TCL.index MDSPLUS/SNAPSHOT_MODEL.TCL.index MDSPLUS/TALLIES_MODEL.TCL.index MDSPLUS/TIMEDEP_MODEL.TCL.index MDSPLUS/DIAG_MODEL.TCL.index shots.python_movie compare_shots.py QSUB.shot.python_movie sql_solps.py MacOS/compiler.darwin.gfortran MacOS/date2.c Makefile ${BIBFILES} ${STYFILES} ad_optimization.tex expert_features_ad.tex unstructured.tex
 AFN_FILES = ${AFNSRC}/cite.tex ${AFNSRC}/defs.tex ${AFNSRC}/future.tex ${AFNSRC}/guide.tex ${AFNSRC}/implementation.tex ${AFNSRC}/intro.tex ${AFNSRC}/main.tex ${AFNSRC}/nomenclaturechapter.tex ${AFNSRC}/theory.tex ${AFNSRC}/mybib.bib
 AFN_DOC = ${SOLPSTOP}/doc/AFN_BCs_documentation.pdf
@@ -50,6 +51,57 @@ all: solps.pdf solps.ps ${AFN_DOC} ${GEO_DOC}
 
 .PHONY: bibtex thumb update_log complete force
 
+HAVE_LATEXMK := $(shell command -v ${LATEXMK} 2>/dev/null)
+
+ifneq (${HAVE_LATEXMK},)
+# ---------------------------------------------------------------------
+# latexmk path: it determines the minimal number of passes itself
+# (bibtex, makeindex, reruns for changed refs) instead of the manually
+# choreographed multi-pass logic in the fallback branch below.
+#
+# solps.pdf and solps.dvi are kept as SEPARATE targets (no GNU Make
+# 4.3+ grouped-target '&:' syntax, since we can't assume the gmake
+# version). Both depend on one stamp file so that, even under
+# `gmake -jN`, make's dependency graph guarantees the (expensive,
+# non-reentrant) latexmk recipe runs exactly once no matter how many
+# targets need it.
+# ---------------------------------------------------------------------
+
+ifeq (${LATEX}, xelatex)
+LATEXMK_ENGINE = -pdfxe
+else
+ifeq (${LATEX}, pdflatex)
+LATEXMK_ENGINE = -pdf
+else
+LATEXMK_ENGINE = -dvi
+endif
+endif
+
+.latexmk.stamp: solps.tex ${INCLUDES} ${FILES} ${BIBFILES}
+	@echo 'Building manual via latexmk (${LATEX})'
+	${LATEXMK} ${LATEXMK_ENGINE} solps
+	touch .latexmk.stamp
+	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1
+
+solps.pdf: .latexmk.stamp
+	@test -f $@ || (echo "latexmk did not produce $@" ; exit 1)
+	@touch $@
+
+ifeq (${LATEX}, xelatex)
+else
+ifeq (${LATEX}, pdflatex)
+else
+solps.dvi: .latexmk.stamp
+	@test -f $@ || (echo "latexmk did not produce $@" ; exit 1)
+	@touch $@
+endif
+endif
+
+else
+# ---------------------------------------------------------------------
+# Fallback: latexmk not found on PATH -- original hand-rolled build,
+# unchanged from today.
+# ---------------------------------------------------------------------
 ifeq (${LATEX}, xelatex)
 solps.xdv: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building XDV manual'
@@ -58,9 +110,6 @@ solps.xdv: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 	[ -e solps.pdf ] && touch solps.pdf
 
-solps.ps: solps.pdf
-	${PDFTOPS} solps.pdf solps.ps
-
 else
 solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	@echo 'Building DVI manual'
@@ -68,14 +117,6 @@ solps.dvi: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	-grep 'Label(s) may have changed' solps.log && ${LATEX} -output-format dvi solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
 	[ -e solps.pdf ] && touch solps.pdf
-
-ifeq (${LATEX}, pdflatex)
-solps.ps: solps.pdf
-	${PDFTOPS} solps.pdf solps.ps
-else
-solps.ps: solps.dvi
-	dvips -o -ta4 solps
-endif
 
 endif
 
@@ -106,6 +147,26 @@ solps.pdf: solps.tex ${INCLUDES} ${FILES} solps.ind solps.bbl
 	${LATEX} solps
 	-grep 'Label(s) may have changed' solps.log && ${LATEX} solps
 	touch solps.idx ; sleep 1 ; touch solps.ind ; sleep 1 ; touch $@
+
+endif
+
+# ---------------------------------------------------------------------
+# Common to both branches: only cares that solps.pdf / solps.dvi
+# exist, not how they were built.
+# ---------------------------------------------------------------------
+
+ifeq (${LATEX}, xelatex)
+solps.ps: solps.pdf
+	${PDFTOPS} solps.pdf solps.ps
+else
+ifeq (${LATEX}, pdflatex)
+solps.ps: solps.pdf
+	${PDFTOPS} solps.pdf solps.ps
+else
+solps.ps: solps.dvi
+	dvips -o -ta4 solps
+endif
+endif
 
 thumb: solps.pdf
 	@echo 'Building thumbnails'
@@ -172,11 +233,11 @@ CONTRIBUTING.tex: ${SOLPSTOP}/CONTRIBUTING.md
 
 Old_packages.tex: ${MAKES}
 ifeq ($(shell test ${LATEX_VERSION} -lt 2015; echo $$?),0)
-	echo "\usepackage{fixltx2e}" > Old_packages.tex
+	echo "\usepackage{fixltx2e}" > Old_packages.tex.tmp
 else
-	@- rm -f Old_packages.tex
-	touch Old_packages.tex
+	touch Old_packages.tex.tmp
 endif
+	mv -f Old_packages.tex.tmp Old_packages.tex
 
 SOLPS_versions: force
 	@( cd ${SOLPSTOP} ; git describe --tags --always | awk '{print "SOLPS-ITER version : ",$$1}' ) > SOLPS_versions_new
@@ -187,7 +248,7 @@ SOLPS_versions: force
 	@if cmp -s SOLPS_versions_new SOLPS_versions ; then rm SOLPS_versions_new ; else mv SOLPS_versions_new SOLPS_versions ; fi
 
 solps-iter_git.log: ${MAKES}
-	( cd ${SOLPSTOP} ; ${GIT} log --oneline | sed -e "s:ü:ue:g" -e "s:ö:oe:g" ) > solps-iter_git.log
+	( cd ${SOLPSTOP} ; ${GIT} log --oneline | sed -e "s:ü:ue:g" -e "s:ö:oe:g" -e "s:≥:>=:g" -e "s:≤:<=:g" ) > solps-iter_git.log
 
 update_log: solps-iter_git.log
 
@@ -196,8 +257,10 @@ update: ${INCLUDES}
 complete:
 	@[ -e solps.ind ] || touch solps.ind
 	${MAKE} update
+ifeq (${HAVE_LATEXMK},)
 	${MAKE} bibtex
 	makeindex solps
+endif
 	${MAKE} thumb
 	${MAKE} solps.ps
 	${MAKE} solps.pdf
@@ -205,7 +268,7 @@ complete:
 	${MAKE} ${GEO_DOC}
 
 clean:
-	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex .latexmk.stamp
 	rm -f ${AFN_DOC} ; cd ${AFNSRC} ; rm -f defs.aux main-blx.bib main.aux main.bbl main.blg main.log main.out main.run.xml main.toc
 	rm -f ${GEO_DOC} ; cd ${GEODIR} ; rm -f edit_geo_manual.aux edit_geo_manual.log edit_geo_manual.out
 ### WORK
