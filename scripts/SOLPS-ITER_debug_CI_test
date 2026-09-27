@@ -41,7 +41,7 @@ rm -rf ${SOLPSTOP}/modules/Eirene/builds/*.debug \
        ${SOLPSTOP}/modules/B2.5/builds/*.debug
 
 # Compile the code with debug options activated
-echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -diag-enable=error" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
 make prereqs_nox_debug
 make divgeo_nox_debug
