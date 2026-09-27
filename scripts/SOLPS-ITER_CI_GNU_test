@@ -3,7 +3,7 @@
 
 # Compile the code
 echo "CXXFLAGS += -mcmodel=large" > ${SOLPSTOP}/SETUP/config.ITER.gfortran.local
-echo "FCOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
+echo "FCOPTS += -mcmodel=large" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 echo "LDOPTS += -mcmodel=large" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.gfortran.local
 export NO_MANUAL="true"
 make prereqs_nox
