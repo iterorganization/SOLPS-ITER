@@ -62,6 +62,7 @@ else
     module load SimDB/0.11.0-gfbf-2023b
     module load netcdf4-python/1.6.5-foss-2023b
     module load imkl/2023.2.0
+    module load SuiteSparse/7.7.0-gfbf-2023b
     setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCCcore-13.2.0
     setenv QTDIR ${EBROOTQT5}
   else
@@ -82,6 +83,7 @@ else
     module load SimDB/0.15.2-foss-2025b
     module load netcdf4-python/1.7.2-foss-2025b
     module load imkl/2025.2.0
+    module load SuiteSparse/7.11.0-gfbf-2025b
     setenv GKSDIR /work/imas/opt/EasyBuild/software/GR/0.73.6-GCC-14.3.0
     setenv QTDIR ${EBROOTQT6}
   endif

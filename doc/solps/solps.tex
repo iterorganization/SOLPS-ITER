@@ -21701,6 +21701,7 @@ if desired, be declared as part of either the {\tt SOLPS\_CPP} or the
 \item[PERFMON] \index{PERFMON} Enable performance monitoring
 \item[PLPLOT] \index{PLPLOT} Use {\tt PLPLOT} instead of {\tt NCAR} for plotting
 %\item[SCL\_IMP\_RCI] \index{SCL\_IMP\_RCI} Toggles scaling of impurities tallies
+\item[UMFPACK] \index{UMFPACK} Enables the UMFPACK solver from the SuiteSparse module (automatically set by the {\tt Makefile} if the module is loaded)
 \item[USE\_CDF\_B2STIME] \index{USE\_CDF\_B2STIME} Specific for \SOLPSfour {\tt CDF} tallies
 \item[WANT\_PROCESS] \index{WANT\_PROCESS} Enables the code for the \SOLPSfive to \SOLPSfour converter
 \item[WITH\_FTIMINGS] \index{WITH\_FTIMINGS} Enables debugging code for timing OpenMP parallelization implementation
@@ -22359,6 +22360,7 @@ SOLPS4\_3 & modules/b2mod\_mwti.F90 \\
 SOLPS4\_3 & modules/b2mod\_neutrals\_namelist.F \\
 SOLPS4\_3 & modules/b2us\_feedback.F \\
 SOLPS4\_3 & sources/eirene\_f30f31.F \\
+UMFPACK & modules/b2mod\_umfpack.F \\
 USE\_CDF\_B2STIME & modules/b2mod\_comtimpl.F \\
 USE\_CDF\_B2STIME & common/COUPLE/COMTIMPL.F \\
 USE\_EXT\_OPENMP & driver/b2mod\_driver.F \\
