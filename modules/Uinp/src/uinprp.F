@@ -11,7 +11,7 @@ c=======================================================================
       implicit none
       integer i,j,k,l,m,m_hlp(nlim,nlim),n_hlp
       parameter (n_hlp=nlim*nlim)
-      logical uex,hlp_l
+      logical uex,hlp_l, surffound(nlim)
       real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
@@ -126,6 +126,8 @@ c*** Prepare index of valid additional surfaces
 
       k=laddsrfs
       l=1
+      select case (gridgeneratorID) 
+      case (0)
       do i=1,nlimi !{
         uex=.false.
         if(jadch0(l).eq.i) then !{
@@ -145,6 +147,7 @@ c*** Prepare index of valid additional surfaces
           indasrfs(k)=i
         end if !}
       end do !}
+
 c!###{
 c      print *,'indasrfs:', k
 c      if(k.gt.0) print '(1x,30i4)',(indasrfs(i),i=1,k)
@@ -200,6 +203,44 @@ c*** Correct jadch1 (not tested yet!!!)
           jadch1(i,j)=m_hlp(i,j)
         end do !}
       end do !}
+
+      case (1)
+        ! Check on laddsrfs: not yet verified if /= 0
+        if (laddsrfs /= 0) then 
+          print *, 'uinprp: laddsrfs /= 0 is not yet verified for goat'
+        end if
+        
+        ! k = indasrfs(i) means that divgeo element i maps to 3b surface j 
+        ! -> in general, multiple surfaces could occur now on one element,
+        ! will simply pick one... 
+        ! i = indasrfe(k) means that 3b surface j maps to divgeo element i 
+        ! -> this can still be supported, and the same element i may be recovered for different surfaces k
+        surffound = .false. 
+        do i  = 1, size(voidelID)
+          k = voidelID(i) + laddsrfs
+          if(k.gt.nlim) then !{
+            write(0,*) 'Insufficient space for "additional  ',
+     ,        'surfaces" in Eirene.'
+            write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
+     ,        '  reserved ',laddsrfs
+            call xerrab('==> Check the DG model and ' //
+     .         'DEF_NLIM in b2mod_dimensions.F')
+          end if !}
+          if (surffound(k)) then 
+            write(0,*) 'uinprp: multiple surfaces in 3b present ' // 
+     .         'that map back to single divgeo element, picking one...'
+          end if 
+          surffound(k) = .true. 
+          indasrfs(i) = k 
+          indasrfe(k) = i
+
+        end do 
+        jadch0(1)=0
+
+      case default 
+        call xerrab('uinprp: unknown grid generator ID')
+      end select      
+
 
 c*** Prepare index of additional surfaces to be modified in geousr
       if (gridgeneratorID == 1) then 
