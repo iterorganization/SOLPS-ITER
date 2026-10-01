@@ -101,10 +101,14 @@ c***    (see uinprpgr.F for detail)
 
 c*** Void elements when using goat: x, y coordinates, element ID it
 c***    it belongs to in DivGeo (maps back to elements p1n p2 in 
-c***    .dgo input)
-      integer, allocatable, dimension(:)  :: voidelID
-      real, allocatable, dimension(:)     :: voidelx1, voidelx2, 
-     .  voidely1, voidely2
+c***    .dgo input), data for block 15 (3b surface index, 3b 
+c***    surface vertex, grid vertex ID), mapping between vertices
+c***    used for block 3b surfaces and grid/void polygon vertices
+      integer, allocatable, dimension(:)  :: voidelID, voidgridvertexID
+      real(R8), allocatable, dimension(:)     :: voidelx1, voidelx2, 
+     .  voidely1, voidely2 ! double precision
+      integer, allocatable, dimension(:)  :: surfind3bfor15, 
+     .  surfindvert3bfor15, gridvertfor15, voidelv1ID, voidelv2ID
 
 c-----------------------------------------------------------------------
 c*** Species lists: number of different nuclei, plasma ions, atoms,
