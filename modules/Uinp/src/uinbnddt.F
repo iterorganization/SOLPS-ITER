@@ -193,7 +193,32 @@ c*** ... and then the recycling source if specified
       end do !}
 
 cnh   adapt some variables of block 14 for vessel mode
-      if (grid_mode.eq.2) then
+      if (gridgeneratorID == 0) then ! carre route
+        if (grid_mode.eq.2) then
+          k=0
+          do i=1,nfclblused
+            ispe=0
+            do iatm=1,natmi
+              if (is_meta(iatm)) cycle
+              k=k+1
+              ndt2(k,1)=-i
+              ispi=ispe+1
+              ispe=ispi
+              do while (lkindp(min(ispe+1,nplsi)).eq.lkindp(ispi)) !{
+                ispe=ispe+1
+                if (ispe.gt.nplsi) then !{
+                  ispe=nplsi
+                  exit
+                end if !}
+              end do !}
+              nspzi(k,1)=ispi
+              nspze(k,1)=ispe
+            end do
+          end do
+          nstrai = k
+        end if
+      elseif (gridgeneratorID == 1) then ! goat route
+        ! Follow vessel mode route
         k=0
         do i=1,nfclblused
           ispe=0
@@ -215,7 +240,9 @@ cnh   adapt some variables of block 14 for vessel mode
           end do
         end do
         nstrai = k
-       end if
+      else
+        call xerrab('uinbnddt: unknown grid generator ID')
+      end if 
 
 c=======================================================================
       call subend ()
