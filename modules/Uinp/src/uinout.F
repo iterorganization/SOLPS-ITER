@@ -700,11 +700,11 @@ c**  Surface coefficients
      ,                                      a3lm(i),a4lm(i),a5lm(i)
             write(iunoo,703) a6lm(i),a7lm(i),a8lm(i),a9lm(i)
           else if (rlb(i).lt.3.) then !}{
-            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,                                      p2(1,i),p2(2,i),p2(3,i)
+            write(iunoo,703) voidelx1(k),voidely1(k),p1(3,i),
+     ,                                  voidelx2(k),voidely2(k),p2(3,i)
           else if (rlb(i).lt.5.) then !}{
-            write(iunoo,703) p1(1,i),p1(2,i),p1(3,i),
-     ,                                      p2(1,i),p2(2,i),p2(3,i)
+            write(iunoo,703) voidelx1(k),voidely1(k),p1(3,i),
+     ,                                  voidelx2(k),voidely2(k),p2(3,i)
             write(iunoo,703) p3(1,i),p3(2,i),p3(3,i),
      ,                                      p4(1,i),p4(2,i),p4(3,i)
           else if (rlb(i).lt.7.) then !}{
@@ -1611,10 +1611,10 @@ c*** 14.  data for interfacing subroutine infcop
         end do !}
 cnh        write(iunoo,707) ndxa,ndya
         write(iunoo,707) ncvp,ncip,nfcp
-        if (grid_mode.ne.2) then ! standard + target mode
+        if (grid_mode.ne.2 .and. gridgeneratorID /= 1) then ! standard + target mode
           write(iunoo,707) ntargi
           write(iunoo,707) (ntgprt(i),i=1,ntargi)
-        else ! vessel mode
+        else ! vessel mode or goat
           write(iunoo,707) nvess
           write(iunoo,707) (1,i=1,nvess)
         end if
@@ -1627,16 +1627,16 @@ cnh        write(iunoo,707) ndxa,ndya
         end if !}
         if(l.ge.10) k=100
         if(l.ge.100) k=1000
-        if (grid_mode.ne.2) then ! standard + target mode
+        if (grid_mode.ne.2 .and. gridgeneratorID /= 1) then ! standard + target mode
           do i=1,ntargi !{
             do j=1,ntgprt(i) !{
               write(iunoo,707) k*i+j*m,ndt2(i,j),nptc(i,j),nptcm(i,j),
      ,                                  nspzi(i,j),nspze(i,j),nemod(i,j)
             end do !}
           end do !}
-        else ! vessel mode
+        else ! vessel mode or goat
           do i=1,nvess !{
-            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(1,1),nptcm(1,1), ! for now using the number of histories specified for the first target
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(1,1), 
      ,                                  nspzi(i,1),nspze(i,1),7
           end do !}
         end if
@@ -1696,25 +1696,15 @@ c*** segment numbers for the target edges to be modified by geousr
       case (1) ! Goat
         ! Need to write out block 15 directly. Format: 
         ! [surface index of 3B], [Point index of 3b], [grid vertex index]
-        if (grid_mode.ne.2) then ! standard + target mode
-        if(lm_cnfg) then
-          write(iunoo,707) nadmod,ntrgte/2
-        else
-          write(iunoo,707) nadmod,ntrgte
-        endif
-        do i=1,nadmod !{
-          write (iunoo,'(2i6,1p,3e12.5)') nrs(i),ipunkt(i),
-     ,                                        xcoor(i),ycoor(i),zcoor(i)
-        end do !}
-        if(ntrgte.gt.0) then !{
-          do i=1,ntrgte !{
-            if (lm_cnfg.and.mod(i,2).eq.1) cycle
-            write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
-          end do !}
-        end if !}
-      else ! vessel mode => no need for block 15
-        write(iunoo,707) 0,0
-      end if
+
+        write(iunoo, 707) 0, size(surfind3bfor15) ! no nadmod? 
+        if (size(surfind3bfor15) > 0) then 
+          do i = 1, size(surfind3bfor15)
+            write(iunoo, '(3i6)') surfind3bfor15(i), 
+     .        surfindvert3bfor15(i), gridvertfor15(i)
+          end do 
+        end if 
+      
       case default 
         call xerrab('uinout: unknown grid generator ID')
       end select 
