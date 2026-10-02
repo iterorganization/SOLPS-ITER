@@ -50,7 +50,7 @@ else
   echo and restart the session
   if ("$SOLPS_TOOLCHAIN_VERSION" == "2023b") then
     module load IMAS-Fortran/5.5.0-intel-2023b-DD-4.1.0
-    module load IDStools/2.4.0-intel-2023b
+    module load IDStools/2.5.0-intel-2023b
     module load GGD/1.14.0-intel-2023b-DD-4.1.0
     module load AMNS/1.6.0-intel-2023b-DD-4.1.0
     module load IMAS-ParaView/2.3.0-intel-2023b
@@ -79,7 +79,7 @@ else
   else
     module load git/2.54.0-GCCcore-14.3.0
     module load IMAS-Fortran/5.6.0-intel-2025b-DD-4.1.1
-    module load IDStools/2.4.1-intel-2025b
+    module load IDStools/2.5.0-intel-2025b
     module load GGD/1.14.0-intel-2025b-DD-4.1.1
     module load AMNS/1.6.0-intel-2025b-DD-4.1.1
     module load CMake/4.0.3-GCCcore-14.3.0
