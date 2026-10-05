@@ -11,7 +11,7 @@ c=======================================================================
       implicit none
       integer i,j,k,l,m,m_hlp(nlim,nlim),n_hlp
       parameter (n_hlp=nlim*nlim)
-      logical uex,hlp_l, surffound(nlim)
+      logical uex,hlp_l
       real uzdim,rm_hlp,rx_hlp,zm_hlp,zx_hlp
       parameter (uzdim=1.e20)
       character utxsfa*44
@@ -210,31 +210,26 @@ c*** Correct jadch1 (not tested yet!!!)
           print *, 'uinprp: laddsrfs /= 0 is not yet verified for goat'
         end if
         
-        ! k = indasrfs(i) means that divgeo element i maps to 3b surface j 
-        ! -> in general, multiple surfaces could occur now on one element,
-        ! will simply pick one... 
-        ! i = indasrfe(k) means that 3b surface j maps to divgeo element i 
-        ! -> this can still be supported, and the same element i may be recovered for different surfaces k
-        surffound = .false. 
-        do i  = 1, size(voidelID)
-          k = voidelID(i) + laddsrfs
-          if(k.gt.nlim) then !{
-            write(0,*) 'Insufficient space for "additional  ',
-     ,        'surfaces" in Eirene.'
-            write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
+        ! Initialize
+        do i=1,nlimi !{
+          if(jadch0(l).eq.i) then !{
+            l=l+1
+            indasrfe(i)=0
+          else !}{
+            k=k+1
+            if(k.gt.nlim) then !{
+              write(0,*) 'Insufficient space for "additional surfaces" '
+     ,        // 'in Eirene.'
+              write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
      ,        '  reserved ',laddsrfs
-            call xerrab('==> Check the DG model and ' //
-     .         'DEF_NLIM in b2mod_dimensions.F')
+              call xerrab
+     .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+            end if !}
+            indasrfe(i)=k
+            indasrfs(k)=i
           end if !}
-          if (surffound(k)) then 
-            write(0,*) 'uinprp: multiple surfaces in 3b present ' // 
-     .         'that map back to single divgeo element, picking one...'
-          end if 
-          surffound(k) = .true. 
-          indasrfs(i) = k 
-          indasrfe(k) = i
+        end do !}
 
-        end do 
         jadch0(1)=0
 
       case default 
