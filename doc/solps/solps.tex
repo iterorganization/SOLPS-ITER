@@ -1618,6 +1618,7 @@ rm GNUPLOT_COUNT gnuplot.*data
   If the file {\tt GNUPLOT\_COUNT} exists, then an internal counter {\tt GNUPLOT\_COUNT} is set by reading the number from the file; incremented; and then saved to the file; instead of using {\tt gnuplot.data} for the data, the file {\tt gnuplot.\$\{GNUPLOT\_COUNT\}.data} is used and the commands for plotting are concatenated to {\tt gnuplot.cmd} allowing for multiple pages of plots.
   \item[plot\_cps \#1]\index{plot\_cps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_cps.cmd}, modifying it so that colour plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
   \item[plot\_it]\index{plot\_it} Utility script used to produce complex plots.
+  \item[plot\_fcreg.py]\index{plot\_fcreg.py} Python script to plot the grid faces with non-zero {\tt fcReg} face-based region indices (see Appendix~\ref{cha:regions} for a full definition).
   \item[plot\_mesh \#1 \#2]\index{plot\_mesh} Plots the mesh specified as \#1 accompanied by the {\tt mesh.extra} file specified as \#2 as \#1.ps.
   \item[plot\_png]\index{plot\_png} produces a PNG output file instead
   \item[plot\_ps \#1]\index{plot\_ps} Copies {\tt gnuplot.cmd} to {\tt gnuplot\_ps.cmd}, modifying it so that black-and-white plotting occurs to \#1 or by default {\tt out.ps}; executes {\tt gnuplot} on new file. The location of these files can be modified by use of the {\tt GNUPLOT\_TMP} variable.
@@ -17166,7 +17167,9 @@ a charge state below the considered ion (inclusive) within their isonuclear sequ
 \chapter{Region definitions}
 \label{cha:regions}\index{regions}\index{vreg}\index{freg}\index{NREG}
 
-Two types of regions are defined in {\tt b2agfs.F}: volume-based and face-based. Face-based regions may include either only flux-aligned faces, only non-aligned faces, or a mixture of both, as indicated. The numbers of volume-based and face-based regions should also be stored in the {\tt NREG} and {\tt FREG} environment variables respectively (or through the presence of an {\tt NREG} ASCII file containing only two numbers of regions, volume- then face-based, separated by a single space and on the same line) as they are used for a variety of analysis scripts. Typical configurations for 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake cases are shown below:
+Two types of regions are defined in {\tt b2agfs.F}: volume-based and face-based. Face-based regions may include either only flux-aligned faces, only non-aligned faces, or a mixture of both, as indicated. The numbers of volume-based and face-based regions should also be stored in the {\tt NREG} and {\tt FREG} environment variables respectively (or through the presence of an {\tt NREG} ASCII file containing only two numbers of regions, volume- then face-based, separated by a single space and on the same line) as they are used for a variety of analysis scripts. The following sections detail the region arrangements for typical configurations: 1-D, linear, limiter, SN, DN (Connected and Disconnected), periodic stellarator island, and LFS snowflake.
+
+The code is meant to understand complex topologies with more than two X-points as extensions of the standard topologies described below. The topology is detected based on the location of the active X-point (the one in contact with the closed flux surfaces region) and the first inactive X-point (the one closest in magnetic coordinates to the active X-point, for a CDN the other active X-point).
 
 \clearpage
 \section{Regions for 1-D and linear cases}
