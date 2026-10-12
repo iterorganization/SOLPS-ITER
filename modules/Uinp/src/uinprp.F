@@ -126,6 +126,8 @@ c*** Prepare index of valid additional surfaces
 
       k=laddsrfs
       l=1
+      select case (gridgeneratorID) 
+      case (0)
       do i=1,nlimi !{
         uex=.false.
         if(jadch0(l).eq.i) then !{
@@ -145,6 +147,7 @@ c*** Prepare index of valid additional surfaces
           indasrfs(k)=i
         end if !}
       end do !}
+
 c!###{
 c      print *,'indasrfs:', k
 c      if(k.gt.0) print '(1x,30i4)',(indasrfs(i),i=1,k)
@@ -200,6 +203,39 @@ c*** Correct jadch1 (not tested yet!!!)
           jadch1(i,j)=m_hlp(i,j)
         end do !}
       end do !}
+
+      case (1)
+        ! Check on laddsrfs: not yet verified if /= 0
+        if (laddsrfs /= 0) then 
+          print *, 'uinprp: laddsrfs /= 0 is not yet verified for goat'
+        end if
+        
+        ! Initialize
+        do i=1,nlimi !{
+          if(jadch0(l).eq.i) then !{
+            l=l+1
+            indasrfe(i)=0
+          else !}{
+            k=k+1
+            if(k.gt.nlim) then !{
+              write(0,*) 'Insufficient space for "additional surfaces" '
+     ,        // 'in Eirene.'
+              write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
+     ,        '  reserved ',laddsrfs
+              call xerrab
+     .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+            end if !}
+            indasrfe(i)=k
+            indasrfs(k)=i
+          end if !}
+        end do !}
+
+        jadch0(1)=0
+
+      case default 
+        call xerrab('uinprp: unknown grid generator ID')
+      end select      
+
 
 c*** Prepare index of additional surfaces to be modified in geousr
       if (gridgeneratorID == 1) then 

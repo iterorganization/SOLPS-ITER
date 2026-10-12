@@ -8,8 +8,8 @@ c=======================================================================
 c*** Prepare the gas puffing sources.
 c=======================================================================
       implicit none
-      integer i,j,k,l,isg,istr,isf
-      logical ex,uex,streql
+      integer i,j,k,l,isg,istr,isf, surf3bind(nlim)
+      logical ex,uex,streql, isvoidel(nlim)
       external streql, xerrab
 c=======================================================================
       call subini ('uinpsrcg')
@@ -17,6 +17,12 @@ c<<<
       print *,'uinpsrcg: ngpfstr=',ngpfstr
 c>>>
       isg=0
+      isvoidel = .false. 
+      surf3bind = 0
+      if (allocated(voidelID)) then 
+        isvoidel(voidelID) = .true. 
+        surf3bind(voidelID) = [(i, i = 1, size(voidelID))]
+      end if 
       do istr=1,ngpfstr !{
 
         nstrai=nstrai+1
@@ -103,7 +109,12 @@ c>>>
      ,             '"Elements not for Eirene"'
             call xerrab ('==> Check the DG model')
           end if !}
-          insor(isf,nstrai)=indasrfe(k)
+          if (isvoidel(k)) then 
+            insor(isf, nstrai) = surf3bind(k)
+          else
+            insor(isf,nstrai)=indasrfe(k)
+          end if 
+
           if (jlplg(i).ne.0) then !{ gas puff source on contour
             indim(isf,nstrai)=4
             ingrda(isf,nstrai,1)=1

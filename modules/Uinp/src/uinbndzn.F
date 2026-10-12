@@ -49,6 +49,9 @@ c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
             ls1bnds(iz,m)=lc1bnds(iz,m)
             ls2bnds(iz,m)=lc2bnds(iz,m)
 
+            ! Set index (?)
+            lrfbndt(iz,m)=k
+
             ! Set character
             cznbndt(iz, m) = crgbndt(k, m)
             cskbnds(iz,m)=cznbndt(iz,m)

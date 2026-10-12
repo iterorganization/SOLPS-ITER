@@ -268,6 +268,7 @@ endif
 	[ -s ../${fort_lc}33 ] && cp -p ../${fort_lc}33 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}34 ] && cp -p ../${fort_lc}34 . || echo > /dev/null ; \
 	[ -s ../${fort_lc}35 ] && cp -p ../${fort_lc}35 . || echo > /dev/null ; \
+	[ -s ../${fort_lc}36 ] && cp -p ../${fort_lc}36 . || echo > /dev/null ; \
 	[ -s ../eirene.input.json ] && cp -p ../eirene*.json . || echo > /dev/null ; \
 	[ -s ../user_data.input ] && cp -p ../user_data.input . || echo > /dev/null
 endif
@@ -304,6 +305,7 @@ ifndef STAND_ALONE
 	-[ -e b2mn.exe.dir/${fort_lc}33 ] && rm b2mn.exe.dir/${fort_lc}33 || echo > /dev/null
 	-[ -e b2mn.exe.dir/${fort_lc}34 ] && rm b2mn.exe.dir/${fort_lc}34 || echo > /dev/null
 	-[ -e b2mn.exe.dir/${fort_lc}35 ] && rm b2mn.exe.dir/${fort_lc}35 || echo > /dev/null
+	-[ -e b2mn.exe.dir/${fort_lc}36 ] && rm b2mn.exe.dir/${fort_lc}36 || echo > /dev/null
 ifdef SOLPS_MPI
 	-[ -e b2mn.exe.dir/output.0001 ] && mv b2mn.exe.dir/output.* . || echo > /dev/null
 else

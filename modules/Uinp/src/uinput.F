@@ -69,6 +69,21 @@ c*** Produce the input file for Eirene for TRIA mesh generation
        call uinptridg(.false.)
       end if !}
 
+c*** Produce a file with void elements but with higher precision
+      if (allocated(voidelID)) then 
+        print *, '    ... found void elements, writing fort.36'
+        open(unit=2,file='fort.36', status='unknown')
+        do i = 1, size(voidelID)
+          write(2, *) i, voidelx1(i), voidely1(i), voidelx2(i), 
+     .      voidely2(i)
+        end do 
+        close(2)
+        print *, '    ... fort.36 created'
+      else 
+        print *, '    ... no void elements found, not writing fort.36' 
+      end if 
+
+
 c*** Produce the input files for Eirene for averaging scheme runs
       uex=.true.
       call uinpavgdg(uex)

@@ -13,17 +13,17 @@
 !======================================================================
       use uinput_mod
       implicit none
-      integer :: lun, i, j, ireg, ncount, minfclbl, maxfclbl, dumi(1:6), 
-     .   readstatus, np, nvoidel
-      integer, allocatable, dimension(:)    :: fcLbl_in, tempelID1, 
-     .  tempelID2, tempvertID, tempgridvertID, tempdosplit, tempvoidelID
-      real, allocatable, dimension(:) :: tempx, tempy, tempvoidx1, 
+      integer :: lun, i, readstatus, np, nvoidel
+      integer, allocatable, dimension(:)    :: tempelID1, 
+     .  tempelID2, tempvertID, tempgridvertID, tempdosplit, 
+     .  tempvoidelID, voidelgridvertID1, voidelgridvertID2,
+     .  tempv1, tempv2
+      real(R8), allocatable, dimension(:) :: tempx, tempy, tempvoidx1, 
      .  tempvoidx2, tempvoidy1, tempvoidy2 
       logical, allocatable, dimension(:)  :: isvoidvertex
       character*80 uline
-      character*12  dum0, dum1
       logical lfound, templ1, templ2 
-      integer :: vc 
+      integer :: vc, voidelc
 !======================================================================
 !
       ! Rewind just in case the file was already operated on before
@@ -31,16 +31,24 @@
 
       ! Initialize
       !-----------
-      ! Check initialization
+      ! Check initialization of void surfaces (basically 3b with 
+      ! mapping for elements)
       if (allocated(voidelID)) deallocate(voidelID)
       if (allocated(voidelx1)) deallocate(voidelx1)
       if (allocated(voidelx2)) deallocate(voidelx2)
       if (allocated(voidely1)) deallocate(voidely1)
       if (allocated(voidely2)) deallocate(voidely2)
 
+      ! Check initialization of 'corner' vertices for block 15
+      if (allocated(surfind3bfor15)) deallocate(surfind3bfor15)
+      if (allocated(surfindvert3bfor15)) deallocate(surfindvert3bfor15)
+      if (allocated(gridvertfor15)) deallocate(gridvertfor15)
+
+
       ! Preallocate and grow dynamically later
       allocate(voidelID(0), voidelx1(0), voidelx2(0), voidely1(0), 
-     .  voidely2(0))
+     .  voidely2(0), surfind3bfor15(0), surfindvert3bfor15(0),
+     .  gridvertfor15(0), voidelgridvertID1(0), voidelgridvertID2(0))   
 
       ! Skip the first line - contains delta0
       read (lun, '(a)') uline 
@@ -56,6 +64,7 @@
       end do 
 
       ! Read polygons
+      voidelc = 0 ! total void element counter
       do while (.true.)
         ! Read the number of vertices of the next polygon, if present
         read(lun, *, iostat=readstatus) np
@@ -90,21 +99,20 @@
           end if 
         end do
 
-        ! Get an overestimate of the number of void elements of this polygon
-        nvoidel = count(isvoidvertex)
-
-        ! Allocate
-        allocate(tempvoidx1(nvoidel), tempvoidx2(nvoidel), 
-     .    tempvoidy1(nvoidel), tempvoidy2(nvoidel), 
-     .    tempvoidelID(nvoidel))
+        ! Allocate (overestimate)
+        allocate(tempvoidx1(np), tempvoidx2(np), 
+     .    tempvoidy1(np), tempvoidy2(np), 
+     .    tempvoidelID(np), tempv1(np), tempv2(np))
 
         ! Assign to void data structures 
-        vc = 0
+        vc = 0 ! local void element counter
         do i = 1, np-1
           ! Check if the next two vertices form a void element
-          if (isvoidvertex(i) .and. isvoidvertex(i+1)) then 
-            ! Update counter
+          ! only one void vertex required!
+          if (isvoidvertex(i) .or. isvoidvertex(i+1)) then 
+            ! Update counters
             vc = vc + 1
+            voidelc = voidelc + 1
 
             ! Checks
             if (tempelID1(i) == 0) then ! second entry can be zero, but not nonzero if the first one is zero
@@ -143,6 +151,8 @@
             tempvoidx2(vc) = tempx(i+1)
             tempvoidy1(vc) = tempy(i)
             tempvoidy2(vc) = tempy(i+1)
+            tempv1(vc) = tempgridvertID(i) ! may be zero
+            tempv2(vc) = tempgridvertID(i+1) ! may be zero
 
             templ1 = any(
      .         tempelID1(i) == [tempelID1(i+1), tempelID2(i+1)] 
@@ -150,26 +160,68 @@
             templ2 =  any(
      .         tempelID2(i) == [tempelID1(i+1), tempelID2(i+1)] 
      .         .and. ([tempelID1(i+1), tempelID2(i+1)] /= 0))
-            if (tempelID2(i) == 0) then 
-              if (templ1) then 
-                tempvoidelID(vc) = tempelID1(i)
+            if (isvoidvertex(i) .and. isvoidvertex(i+1)) then 
+              ! Both void vertices, need to find common element
+              if (tempelID2(i) == 0) then 
+                if (templ1) then 
+                  tempvoidelID(vc) = tempelID1(i)
+                else
+                  call xerrab('uingoatvoids: could not find element')
+                end if 
               else
-                call xerrab('uingoatvoids: could not find element')
+                if (templ1 .and. templ2) then
+                  ! Duplicate elements
+                  call xerrab('uingoatvoids: multiple elements found')
+                elseif (templ1) then 
+                  tempvoidelID(vc) = tempelID1(i)
+                elseif (templ2) then 
+                  tempvoidelID(vc) = tempelID2(i)
+                else
+                  ! None foud
+                  call xerrab('uingoatvoids: could not find element')
+                end if 
               end if 
-            else
-              if (templ1 .and. templ2) then
-                ! Duplicate elements
-                call xerrab('uingoatvoids: multiple elements found')
+             
+            elseif (isvoidvertex(i) .and. .not.(isvoidvertex(i+1))) then 
+              ! Only one void vertex, need to find element that is not in 
+              ! corner vertex (may be multiple)
+              if (templ1 .and. templ2) then 
+                ! Both elements found, shouldn't be possible
+                print *,'uingoatvoids: found two elements at transition'    
+                tempvoidelID(vc) = tempelID1(i) 
               elseif (templ1) then 
-                tempvoidelID(vc) = tempelID1(i)
-              elseif (templ2) then 
+                ! First element is equal, take second
                 tempvoidelID(vc) = tempelID2(i)
+              elseif (templ2) then 
+                ! Second element is equal, take first
+                tempvoidelID(vc) = tempelID1(i)
               else
-                ! None foud
-                call xerrab('uingoatvoids: could not find element')
+                ! None are equal, take any
+                print *, 'uingoatvoids: found no elements at transition'
+                tempvoidelID(vc) = tempelID1(i)
               end if 
-            end if   
-          end if         
+                
+              
+            elseif (.not. isvoidvertex(i) .and. isvoidvertex(i+1)) then 
+              ! Only one void vertex, need to find element that is not in 
+              ! corner vertex (may be multiple)
+              if (templ1 .and. templ2) then 
+                ! Both elements found, shouldn't be possible
+                print *,'uingoatvoids: found two elements at transition'    
+                tempvoidelID(vc) = tempelID1(i+1) 
+              elseif (templ1) then 
+                ! First element is equal, take second
+                tempvoidelID(vc) = tempelID2(i+1)
+              elseif (templ2) then 
+                ! Second element is equal, take first
+                tempvoidelID(vc) = tempelID1(i+1)
+              else
+                ! None are equal, take any
+                print *, 'uingoatvoids: found no elements at transition'
+                tempvoidelID(vc) = tempelID1(i+1)
+              end if 
+            end if 
+          end if     
         end do 
 
         ! Add
@@ -178,14 +230,48 @@
         voidelx2 = [voidelx2, tempvoidx2(1:vc)]
         voidely1 = [voidely1, tempvoidy1(1:vc)]
         voidely2 = [voidely2, tempvoidy2(1:vc)]
+        voidelgridvertID1 = [voidelgridvertID1, tempv1(1:vc)]
+        voidelgridvertID2 = [voidelgridvertID2, tempv2(1:vc)]
 
         ! Housekeeping
         deallocate(tempx, tempy, tempdosplit, tempgridvertID, 
      .    tempelID1, tempelID2, tempvertID)
         deallocate(tempvoidx1, tempvoidx2, tempvoidy1, tempvoidy2, 
-     .    tempvoidelID, isvoidvertex)
+     .    tempvoidelID, isvoidvertex, tempv1, tempv2)
 
       end do
+
+      ! Check for block 15 which void elements contain a 'corner'
+      ! vertex
+      do i = 1, size(voidelID)
+        if (voidelgridvertID1(i) == 0 .and. 
+     .    (voidelgridvertID2(i) /= 0)) then 
+          ! Second vertex is corner vertex
+          ! Surface index in 3b 
+          surfind3bfor15 = [surfind3bfor15, i]
+
+          ! Point index 
+          surfindvert3bfor15 = [surfindvert3bfor15, 2]
+
+          ! Grid vertex index
+          gridvertfor15 = [gridvertfor15, voidelgridvertID2(i)]
+        elseif (voidelgridvertID1(i) /= 0 .and. 
+     .    (voidelgridvertID2(i) == 0)) then 
+          ! First vertex is corner vertex
+          ! Surface index in 3b 
+          surfind3bfor15 = [surfind3bfor15, i]
+
+          ! Point index 
+          surfindvert3bfor15 = [surfindvert3bfor15, 1]
+
+          ! Grid vertex index
+          gridvertfor15 = [gridvertfor15, voidelgridvertID1(i)]
+        end if 
+        
+      end do 
+
+
+
       return
 !======================================================================
       end subroutine uingoatvoids

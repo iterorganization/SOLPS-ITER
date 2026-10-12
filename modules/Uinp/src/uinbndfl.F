@@ -87,7 +87,7 @@ c*** Set the data
       do iknd=1,nbndknd !{
         do izn=1,nznbndt(iknd) !{
           if(.not.bxsbndt(izn,iknd)) then !{
-            if(iknd.eq.2 .and. tgdtinpt) then !{
+            if(iknd.eq.2 .and. tgdtinpt .and. gridgeneratorID /= 1) then !{ ! not yet possible with goat grids
 c*** Take the neutral data from the "whole target" specification
               k=lrfbndt(izn,iknd)
               ewmbnds(izn,iknd)=made_of(k)
