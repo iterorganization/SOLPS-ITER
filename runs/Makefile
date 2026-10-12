@@ -274,6 +274,7 @@ endif
 ifdef IMAS_VERSION
 	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
+	-cd b2mn.exe.dir ; for f in b2time.nc b2batch.nc b2wall.nc b2movies.nc eirenemovies.nc b2tallies.nc b2chords.nc eirenechords.nc ; do [ -e ../$$f ] || ln -s ../$$f $$f ; done
 ifdef USE_IMPGYRO
 	-cd b2mn.exe.dir ; touch b2ig.conf ; echo "-n ${NPE_B2} : ${B2OBJ}/${MNEXE}.exe" >> b2ig.conf ; echo "-n ${NPE_EXT} : ${EXE_EXT}" >> b2ig.conf ; ln -s ../config ../pre . ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; \
 	touch use_impgyro ; [ -e ../restart_ext ] && cp ../restart_ext . || echo > /dev/null ; [ -e ../restart ] && cp ../restart . && cp ${WD_EXT}/.st.?* . || echo > /dev/null ; \
@@ -316,12 +317,15 @@ endif
 	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
+	-cd b2mn.exe.dir ; for f in b2time.nc b2batch.nc b2wall.nc b2movies.nc eirenemovies.nc b2tallies.nc b2chords.nc eirenechords.nc ; do [ -L $$f ] && rm -f $$f || echo > /dev/null ; done
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2timed.nc ] && mv b2mn.exe.dir/b2timed.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2chords.nc ] && mv b2mn.exe.dir/b2chords.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/eirenechords.nc ] && mv b2mn.exe.dir/eirenechords.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
@@ -381,6 +385,7 @@ endif
 ifdef IMAS_VERSION
 	-cd b2mn.exe.dir ; [ -s ../shotnumber.history ] && cp -p ../shotnumber.history . || echo > /dev/null
 endif
+	-cd b2mn.exe.dir ; for f in b2time.nc b2batch.nc b2wall.nc b2movies.nc eirenemovies.nc b2tallies.nc b2chords.nc eirenechords.nc ; do [ -e ../$$f ] || ln -s ../$$f $$f ; done
 	cd b2mn.exe.dir ; mkdir tracing ; mkdir output ; copy_tracing_files ; mkdir batch_av ; mkdir run_av ; ${DBX} ${INC} ${DBGOBJ}/b2mn.exe ${RUN_OPTIONS} ; move_optional_files ; mv $(target_mn) .. >& /dev/null
 	-[ -s b2mn.exe.dir/b2faveri ] && mv b2mn.exe.dir/b2faveri . || ( [ -e b2mn.exe.dir/b2faveri ] && rm b2mn.exe.dir/b2faveri || echo > /dev/null )
 	-cd b2mn.exe.dir ; rm -f $(notdir $^) .quit >& /dev/null
@@ -412,12 +417,15 @@ endif
 	-[ -e b2mn.exe.dir/eirene_input_json.out ] && mv b2mn.exe.dir/eirene_input_json.out . || echo > /dev/null
 endif
 	-[ -s b2mn.exe.dir/${fort_lc}31 ] && mv b2mn.exe.dir/${fort_lc}31 . || echo > /dev/null
+	-cd b2mn.exe.dir ; for f in b2time.nc b2batch.nc b2wall.nc b2movies.nc eirenemovies.nc b2tallies.nc b2chords.nc eirenechords.nc ; do [ -L $$f ] && rm -f $$f || echo > /dev/null ; done
 	-[ -s b2mn.exe.dir/b2time.nc ] && mv b2mn.exe.dir/b2time.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2timed.nc ] && mv b2mn.exe.dir/b2timed.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2batch.nc ] && mv b2mn.exe.dir/b2batch.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2wall.nc ] && mv b2mn.exe.dir/b2wall.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2movies.nc ] && mv b2mn.exe.dir/b2movies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/eirenemovies.nc ] && mv b2mn.exe.dir/eirenemovies.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/b2chords.nc ] && mv b2mn.exe.dir/b2chords.nc . || echo > /dev/null
+	-[ -s b2mn.exe.dir/eirenechords.nc ] && mv b2mn.exe.dir/eirenechords.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2tallies.nc ] && mv b2mn.exe.dir/b2tallies.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/balance.nc ] && mv b2mn.exe.dir/balance.nc . || echo > /dev/null
 	-[ -s b2mn.exe.dir/b2_to_astra.dat ] && mv b2mn.exe.dir/b2_to_astra.dat . || echo > /dev/null
@@ -469,6 +477,8 @@ endif
 	-[ -e b2co.exe.dir/b2batch.nc ] && rm b2co.exe.dir/b2batch.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2movies.nc ] && rm b2co.exe.dir/b2movies.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/eirenemovies.nc ] && rm b2co.exe.dir/eirenemovies.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/b2chords.nc ] && rm b2co.exe.dir/b2chords.nc || echo > /dev/null
+	-[ -e b2co.exe.dir/eirenechords.nc ] && rm b2co.exe.dir/eirenechords.nc || echo > /dev/null
 	-[ -e b2co.exe.dir/b2tallies.nc ] && rm b2co.exe.dir/b2tallies.nc || echo > /dev/null
 	-rmdir b2co.exe.dir
 
