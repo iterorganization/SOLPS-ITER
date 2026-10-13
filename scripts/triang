@@ -267,9 +267,10 @@ q=U
     }
   }
 
+
+}
       # Set the grid name
       gridname="$carrename"
-}
     ;;
   ( * )
     print -u2 -- "Grid generator still unknown at this stage, unexpected"
