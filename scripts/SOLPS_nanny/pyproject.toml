@@ -1,0 +1,24 @@
+[project]
+name = "SOLPS-nanny"
+version = "1.0.0"
+requires-python = ">=3.8"
+dependencies = [
+   "scienceplots",
+   "numpy",
+   "matplotlib",
+]
+
+authors = [ {name="Aaro Jarvinen", email="aaro.jarvinen@vtt.fi"}]
+
+[build-system]
+requires = [
+    "setuptools>=64, <70",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tools.setuptools]
+package-dir = {"" = "src"}
+
+[tools.setuptools.packages.find]
+where = ["src"]
