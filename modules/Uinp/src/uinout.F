@@ -1635,10 +1635,16 @@ cnh        write(iunoo,707) ndxa,ndya
             end do !}
           end do !}
         else ! vessel mode or goat
-          do i=1,nvess !{
-            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(1,1), 
-     ,                                  nspzi(i,1),nspze(i,1),7
+          nvess=count(fclblused.gt.0)
+          nvoid=count(fclblused.lt.0)
+          do i=1,nvoid !{
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(i,1), 
+     ,                                  nspzi(i,1),nspze(i,1),6
           end do !}
+          do i=nvoid+1,nvoid+nvess
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(i,1), 
+     ,                                  nspzi(i,1),nspze(i,1),7
+          end do
         end if
         if(lfchgs) then !{
           x=real(istramin)
