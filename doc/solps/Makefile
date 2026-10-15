@@ -244,7 +244,7 @@ endif
 	${MAKE} solps.pdf
 
 clean:
-	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex .latexmk.stamp
+	rm -f solps.pdf solps.ps solps.dvi solps.xdv solps.aux solps.ilg solps.ind solps.idx solps.lof solps.log solps.lot solps.out solps.toc b2input.xml b2cdca.F b2cdci.F b2cdcn.F b2cdcr.F b2cdcv.F solps_data_git.log solps-iter_git.log B2_5.config.ITER.ifort64 B2_5.Makefile ${FILE_DIM} SOLPS_versions solps.bbl solps.blg solps.brf solps.tpt Old_packages.tex .latexmk.stamp solps.fdb_latexmk solps.fls
 
 ### WORK
 COMPARE_10814_TESEPM=/scratch/dpc/solps5.0_HD+C+He/src/Braams/b2/runs/D+C+He/2MW/compare_10814_tesepm.ps
