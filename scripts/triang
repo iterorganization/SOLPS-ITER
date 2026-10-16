@@ -496,39 +496,41 @@ while true; do {
                 fi
                 ;;
               ( carre )
-            [ -r $tripbin ] && {
-              [ -r $tripuin ] && {
-                N=
-                print -u2 -- "Starting triainp"
-                print -u2 -- "Command line: $TRIAINP > $triplog"
-                [ -r $tripout ] && rm $tripout
-                "$TRIAINP" > "$triplog"
-                [ -s "$tripout" ] && [ -r "$tripout" ] && {
-                  [ -s "$triahed" ] && [ -r "$triahed" ] && {
-                    (cat "$triahed"; tail --lines=+2 "$tripout") > "$triain"
+                [ -r $tripbin ] && {
+                  [ -r $tripuin ] && {
+                    N=
+                    print -u2 -- "Starting triainp"
+                    print -u2 -- "Command line: $TRIAINP > $triplog"
+                    [ -r $tripout ] && rm $tripout
+                    "$TRIAINP" > "$triplog"
+                    [ -s "$tripout" ] && [ -r "$tripout" ] && {
+                      [ -s "$triahed" ] && [ -r "$triahed" ] && {
+                        (cat "$triahed"; tail --lines=+2 "$tripout") > "$triain"
+                      } || {
+                        cp "$tripout" "$triain"
+                        print -u2 -- "No $triahed file found, using default provided by TRIAINP instead"
+                      }
+                      q=t
+                      true
+                    } || {
+                      print -u2 -- "No valid $tripout file created ==> Check $triplog"
+                      q=u
+                    }
                   } || {
-                    cp "$tripout" "$triain"
-                    print -u2 -- "No $triahed file found, using default provided by TRIAINP instead"
+                    print -u2 -- "No $tripuin - run uinp first"
+                    q=u
+                    [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
                   }
-                  q=t
                   true
                 } || {
-                  print -u2 -- "No valid $tripout file created ==> Check $triplog"
-                  q=u
+                  print -u2 -- "No $tripbin - run b2ag first"
+                  q=b
+                  [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
                 }
-              } || {
-                print -u2 -- "No $tripuin - run uinp first"
-                q=u
-                [ -L uinput.dg ] && [ -L uinput.trg ] && q=u
-              }
-              true
-            } || {
-              print -u2 -- "No $tripbin - run b2ag first"
-              q=b
-              [ -s b2mn.dat ] && [ -r b2mn.dat ] && q=m
-            }
+                ;;
               ( * )
                 print -u2 -- "Grid generator not yet defined, unexpected"
+                ;;
               esac; 
             break;;
       ( t|T )                                               

@@ -537,7 +537,8 @@ c*** 3b.  data for additional surfaces
         if (grid_mode.eq.2) then !nh vessel mode
           do k=laddsrfs+1,nlimi
             i=indasrfs(k)
-            if (fclbl(i).ne.0.and.ilplgdg(i).eq.0) then
+            if ((fclbl(i).gt.0.and.ilplgdg(i).eq.0).or. ! solid surface, not part of a polygon
+     .          (fclbl(i).lt.0)) then                   ! void interface
               nvess=nvess+1
             endif
           enddo
@@ -551,10 +552,12 @@ c***  "ch0-cards"
         do k=laddsrfs+1,nlimi !{
           i=indasrfs(k)
           if(i.eq.0) cycle 
-          if((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !nh surface already defined in 3a
+          if((grid_mode.eq.2).and. !nh surfaces already defined in 3a
+     .       ((fclbl(i).gt.0.and.ilplgdg(i).eq.0).or. ! solid surface, not part of a polygon
+     .        (fclbl(i).lt.0))) then ! void interface
             if(jliin(i).lt.0) then
               jsurpr=jsurpr+1
-              nsrf(jsurpr)=nlimi-nvess+ncore+fclbl(i)
+              nsrf(jsurpr)=nlimi-nvess+ncore+abs(fclbl(i))
             endif
             nskip=nskip+1
             cycle
@@ -1635,10 +1638,16 @@ cnh        write(iunoo,707) ndxa,ndya
             end do !}
           end do !}
         else ! vessel mode or goat
-          do i=1,nvess !{
-            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(1,1), 
-     ,                                  nspzi(i,1),nspze(i,1),7
+          nvess=count(fclblused.gt.0)
+          nvoid=count(fclblused.lt.0)
+          do i=1,nvoid !{
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(i,1), 
+     ,                                  nspzi(i,1),nspze(i,1),6
           end do !}
+          do i=nvoid+1,nvoid+nvess
+            write(iunoo,707) i,ndt2(i,1)-ncore,nptc(i,1),nptcm(i,1), 
+     ,                                  nspzi(i,1),nspze(i,1),7
+          end do
         end if
         if(lfchgs) then !{
           x=real(istramin)
@@ -1690,8 +1699,15 @@ c*** segment numbers for the target edges to be modified by geousr
             write(iunoo,'(3i6)') jedge(2,i),jedge(1,i),nssir(i)
           end do !}
         end if !}
-      else ! vessel mode => no need for block 15
+      else ! vessel mode
         write(iunoo,707) 0,0
+!        ! no support for nadmod or lm_cnfg yet
+!        write(iunoo,707) 0,nvoide
+!        if(nvoide.gt.0) then !{
+!          do i=1,nvoide !{
+!            write(iunoo,'(3i6)') vedge(2,i),vedge(1,i),nssir(i) ! todo: way to identify vertex from plasma grid
+!          end do !}
+!        end if !}
       end if
       case (1) ! Goat
         ! Need to write out block 15 directly. Format: 

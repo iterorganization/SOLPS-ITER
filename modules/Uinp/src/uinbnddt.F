@@ -213,6 +213,15 @@ cnh   adapt some variables of block 14 for vessel mode
               end do !}
               nspzi(k,1)=ispi
               nspze(k,1)=ispe
+              !tmp setting hard default number of particles for vessel vs. void boundaries
+              !tmp pending more generic solution through divgeo input
+              if (fclblused(i).gt.0) then
+                nptc(k,1)=25000
+                nptcm(k,1)=1000
+              else
+                nptc(k,1)=5000
+                nptcm(k,1)=500
+              end if
             end do
           end do
           nstrai = k
@@ -237,6 +246,15 @@ cnh   adapt some variables of block 14 for vessel mode
             end do !}
             nspzi(k,1)=ispi
             nspze(k,1)=ispe
+            !tmp setting hard default number of particles for vessel vs. void boundaries
+            !tmp pending more generic solution through divgeo input
+            if (fclblused(i).gt.0) then
+              nptc(k,1)=25000
+              nptcm(k,1)=1000
+            else
+              nptc(k,1)=5000
+              nptcm(k,1)=500
+            end if
           end do
         end do
         nstrai = k

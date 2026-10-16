@@ -31,7 +31,7 @@ c=======================================================================
       character*50 hlp_frm
       character utxthd(35)*71, utxtfl(7)*50, ufnm*(*)
       character utxtgt*71
-      integer len_of_digits, idez, ncore, nskip, nvess
+      integer len_of_digits, idez, ncore, nskip, nvess, nvoid
       integer condense_from, nemodh, itype
       integer :: indsrc7(nstrai)
       external streql, silent_open, len_of_digits, idez, xerrab
@@ -372,7 +372,9 @@ c       count the number of core regions
         do ists=1,nstsi
           if (iliin(ists).eq.2) ncore=ncore+1
         end do
-        write(iunoo,707) nfclblused+ncore
+        nvess=count(fclblused.gt.0)
+        nvoid=count(fclblused.lt.0)
+        write(iunoo,707) nvess+nvoid+ncore
 c       first write the core regions
         ncore=0
         do ists=1,nstsi !{
