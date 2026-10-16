@@ -249,6 +249,8 @@ c*** Prepare index of additional surfaces to be modified in geousr
           vedge(2,k+1)=indasrfe(vedgep(i))
           vedge(1,k+2)=1
           vedge(2,k+2)=indasrfe(vedgec(i))
+          vedgefclbl(k+1) = vdfclbl(i)
+          vedgefclbl(k+2) = vdfclbl(i)
           k=k+2
         end do
         nvoide=k

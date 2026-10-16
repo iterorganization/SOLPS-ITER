@@ -357,7 +357,7 @@ c***           absorption, transparence forth and back;
 c***           material; flag "target data was read"
       integer ntrgte,jedgep(ntrgts),jedgec(ntrgts),jedgeo(ntrgts),
      ,  ntrgto,ntrgtm
-      integer nvoide,vedgep(nvoids),vedgec(nvoids),nvoidm,
+      integer nvoide,vedgep(nvoids),vedgec(nvoids), nvoidm,
      ,  vdfclbl(nvoids)
       integer tgrefsw(ntrgts),tgsppsw(ntrgts),tgspcsw(ntrgts),
      ,  tgsppsp(ntrgts),tgspcgr(ntrgts),tgnhst(ntrgts),tgmhst(ntrgts),
@@ -482,6 +482,7 @@ c-----------------------------------------------------------------------
 c*** Numbering offset for "additional surfaces" and surface indices:
 c***    indasrfe(i) is the new number for an old number i,
 c***    indasrfs(i) is the old number for a new number i
+c***    indasrfb(i) is the 3b number for an old number i
       integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
 
 c*** Coordinates of the O-point
@@ -1882,7 +1883,7 @@ c*** 15
       parameter (nnadmod=1)
       integer nadmod,nasmod,nrs(nnadmod),ipunkt(nnadmod),jedge(2,8),
      ,  nssir(8)
-      integer vedge(2,20)
+      integer vedge(2,20),vedgefclbl(20)
       real xcoor(nnadmod),ycoor(nnadmod),zcoor(nnadmod),
      ,  xpolpos(8),ypolpos(8)
 

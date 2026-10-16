@@ -417,7 +417,7 @@ c           detect the properties of an element with a certain face label
      +                                 10000*jadjsw(j)+100000*jadisw(j)
           jlcell=jlacll(j)+1000*jlblck(j)
           write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
-     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),0! the part of the plasma-wetted surface is not part of void polygon => 0
           if(jscrd(j).gt.0) then !{
             write(iunoo,715) scard_name(jscrd(j))
           else if (jliin(j).eq.1) then !}{
@@ -1705,7 +1705,7 @@ c*** segment numbers for the target edges to be modified by geousr
 !        write(iunoo,707) 0,nvoide
 !        if(nvoide.gt.0) then !{
 !          do i=1,nvoide !{
-!            write(iunoo,'(3i6)') vedge(2,i),vedge(1,i),nssir(i) ! todo: way to identify vertex from plasma grid
+!            write(iunoo,'(3i6)') vedge(2,i),vedge(1,i),vedgefclbl(i) ! todo: way to identify vertex from plasma grid
 !          end do !}
 !        end if !}
       end if

@@ -449,7 +449,8 @@ c*** 3b.  data for additional surfaces
       if (grid_mode.eq.2) then !nh vessel mode
         do k=laddsrfs+1,nlimi
           i=indasrfs(k)
-          if (fclbl(i).ne.0.and.ilplgdg(i).eq.0) then
+          if ((fclbl(i).gt.0.and.ilplgdg(i).eq.0).or. ! solid surface, not part of a polygon
+     .        (fclbl(i).lt.0)) then                   ! void interface
             nvess=nvess+1
           endif
         enddo
