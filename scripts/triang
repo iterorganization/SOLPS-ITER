@@ -210,6 +210,32 @@ q=U
     
     # Link the file to uinput.goat
     ln -sfn "$gridname" uinput.goat
+
+    # Now, we need to check the void file, which is assumed to be in 
+    # the current folder under 'fort_goat.78'
+    print -u2 -- "Looking for fort_goat.78 in current folder..."
+    [ -s traduit.out.b2us ] && {
+      # The file exists, take it
+      goatvoidsname=fort_goat.78
+    } || {
+      # The file doesn't exist, ask the user
+      print -u2 -- "Could not find fort_goat.78 in the current folder, please specify the void polygon file from goat (not fort.78! fort_goat.78, the one with additional information for Uinp)"
+      while true; do
+        read goatvoidsname
+
+        if [ -s "$goatvoidsname" ]; then
+            break
+        else
+            print -u2 -- "void polygon file does not exist, please try again"
+        fi
+      done
+      
+    }
+    # Print out
+    print -u2 -- "Void polygon file name set to '$goatvoidsname'"
+    
+    # Link the file to uinput.goat
+    ln -sfn "$goatvoidsname" uinput.goatvoids
     ;;
   ( carre ) 
     # Follow the original carre route here
