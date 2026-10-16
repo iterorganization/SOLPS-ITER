@@ -482,8 +482,9 @@ c-----------------------------------------------------------------------
 c*** Numbering offset for "additional surfaces" and surface indices:
 c***    indasrfe(i) is the new number for an old number i,
 c***    indasrfs(i) is the old number for a new number i
-c***    indasrfb(i) is the 3b number for an old number i
-      integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
+c***    indasrfb(i) is the 3b number for a new number i
+      integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim),
+     ,     indasrfb(0:nlim)
 
 c*** Coordinates of the O-point
       real(kind=R4) xlpcntr(3)
