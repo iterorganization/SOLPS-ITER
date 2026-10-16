@@ -672,10 +672,11 @@ c***  "ch0-cards"
         call uichwr(iunoo,0,jadch0,nlimi) ! no idea?
 
         ! write out all additional surfaces
+        jsurpr = nsurpr ! no idea, nsurpr is always zero?
         do k = 1, size(voidelID)
           i = voidelID(k)
           write(iunoo, 714) k, i, txtsfa(voidelID(k))
-          jsurpr = nsurpr ! no idea, nsurpr is always zero?
+          
           nskip = 0 ! no idea
          
 c   general surface data

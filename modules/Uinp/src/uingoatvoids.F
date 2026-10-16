@@ -51,12 +51,24 @@
      .  gridvertfor15(0), voidelgridvertID1(0), voidelgridvertID2(0))   
 
       ! Skip the first line - contains delta0
-      read (lun, '(a)') uline 
+      read (lun, '(a)', iostat=readstatus) uline 
+      if (readstatus /= 0) then 
+        ! EOF reached before voids found - assume none are present
+        print *, 'uingoatvoids: EOF of uinput.goatvoids reached ' // 
+     .     'without finding polygons, assuming no void polygons'
+        return 
+      end if 
 
       ! Read until a non-empty line is found
       lfound = .false.
       do while (.not. lfound)
-        read (lun, '(a)') uline
+        read (lun, '(a)', iostat=readstatus) uline
+        if (readstatus /= 0) then 
+          ! EOF reached before voids found - assume none are present
+          print *, 'uingoatvoids: EOF of uinput.goatvoids reached ' // 
+     .       'without finding polygons, assuming no void polygons'
+            exit 
+        end if 
         if (len(trim(uline)) /= 0) then 
           lfound = .true.
           backspace(lun)
@@ -64,6 +76,10 @@
       end do 
 
       ! Read polygons
+      if (.not. lfound) then 
+        ! No voids, return
+        return 
+      end if 
       voidelc = 0 ! total void element counter
       do while (.true.)
         ! Read the number of vertices of the next polygon, if present
