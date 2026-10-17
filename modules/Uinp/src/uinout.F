@@ -417,7 +417,7 @@ c           detect the properties of an element with a certain face label
      +                                 10000*jadjsw(j)+100000*jadisw(j)
           jlcell=jlacll(j)+1000*jlblck(j)
           write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
-     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),0! the part of the plasma-wetted surface is not part of void polygon => 0
           if(jscrd(j).gt.0) then !{
             write(iunoo,715) scard_name(jscrd(j))
           else if (jliin(j).eq.1) then !}{
@@ -534,15 +534,21 @@ c*** 3b.  data for additional surfaces
       case (0) ! Carre
         write(iunoo,700) utxthd(4)
         nvess=0
+        l=0
         if (grid_mode.eq.2) then !nh vessel mode
           do k=laddsrfs+1,nlimi
             i=indasrfs(k)
             if ((fclbl(i).gt.0.and.ilplgdg(i).eq.0).or. ! solid surface, not part of a polygon
      .          (fclbl(i).lt.0)) then                   ! void interface
               nvess=nvess+1
+            else 
+              l=l+1
+              indasrfb(k)=l
             endif
           enddo
         endif
+        if (l.ne.nlimi-nvess)
+     ,    call xerrab('uinout: inconsistent definition indasrfb')
         write(iunoo,707) nlimi-nvess
 c***  "ch0-cards"
         call uichwr(iunoo,0,jadch0,nlimi)
@@ -1701,14 +1707,15 @@ c*** segment numbers for the target edges to be modified by geousr
           end do !}
         end if !}
       else ! vessel mode
-        write(iunoo,707) 0,0
-!        ! no support for nadmod or lm_cnfg yet
-!        write(iunoo,707) 0,nvoide
-!        if(nvoide.gt.0) then !{
-!          do i=1,nvoide !{
-!            write(iunoo,'(3i6)') vedge(2,i),vedge(1,i),nssir(i) ! todo: way to identify vertex from plasma grid
-!          end do !}
-!        end if !}
+!        write(iunoo,707) 0,0
+        ! no support for nadmod or lm_cnfg yet
+        write(iunoo,707) 0,-nvoide
+        if(nvoide.gt.0) then !{
+          do i=1,nvoide !{
+            write(iunoo,'(3i6)') indasrfb(vedge(2,i)),vedge(1,i),
+     ,        vedgefclbl(i) ! todo: way to identify vertex from plasma grid
+          end do !}
+        end if !}
       end if
       case (1) ! Goat
         ! Need to write out block 15 directly. Format: 

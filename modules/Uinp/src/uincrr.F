@@ -113,9 +113,21 @@
       fclblused = 0
       minfclbl = minval(cflags(2:5,:,:,:))
       maxfclbl = maxval(cflags(2:5,:,:,:))
-      do i=minfclbl,maxfclbl
+      ! sort taking positive fclbls first
+      do i = 1,maxfclbl
+        !check whether the label appears in cflags
+        ncount = 0
+        do ireg = 1,nnreg
+          ncount = ncount + count(
+     .      cflags(2:5,1:nppol(ireg)-1,1:nprad(ireg)-1,ireg).eq.i)
+        enddo 
+        if (ncount.gt.0) then
+          nfclblused = nfclblused + 1
+          fclblused(nfclblused) = i
+        endif
+      end do
+      do i=-1,minfclbl,-1
         !tmp: skip core labels, which are treated separately
-        if (i == 0) cycle
         if (i == -21) cycle
         !check whether the label appears in cflags
         ncount = 0
