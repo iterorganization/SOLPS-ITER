@@ -504,7 +504,7 @@ c           detect the properties of an element with a certain face label
      +                                 10000*jadjsw(j)+100000*jadisw(j)
           jlcell=jlacll(j)+1000*jlblck(j)
           write(iunoo,707) jliin(j),jlside(j),jlswch,jlequi(j),
-     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),jlplg(j)
+     ,        jltor(j),jlcol(j),jlfit(j),jlcell,jlbox(j),0! the part of the plasma-wetted surface is not part of void polygon => 0
           if(jscrd(j).gt.0) then !{
             write(iunoo,715) scard_name(jscrd(j))
           else if (jliin(j).eq.1) then !}{

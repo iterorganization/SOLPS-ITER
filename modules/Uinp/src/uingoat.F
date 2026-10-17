@@ -67,9 +67,16 @@
       fclblcoreused = 0
       minfclbl = minval(fcLbl_in)
       maxfclbl = maxval(fcLbl_in)
-      do i = minfclbl,maxfclbl
-        !tmp: skip core labels, which are treated separately
-        if (i == 0) cycle
+
+      ! Sort, setting positive fclbl first (voids afterwards) - analogous to carre2 workflow
+      do i = 1, maxfclbl
+        if (any(i == fcLbl_in)) then 
+            nfclblused = nfclblused + 1
+            fclblused(nfclblused) = i 
+        end if 
+      end do 
+      do i = -1, minfclbl, -1
+        ! skip core labels, which are treated separately
         if ((i <= -21) .and. (mod(i+21, -4) == 0)) then ! core boundaries are assumed to be -21, -25, -29 ...
             if (any(i == fcLbl_in)) then 
                 nfclblcoreused = nfclblcoreused + 1
