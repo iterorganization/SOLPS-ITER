@@ -16140,6 +16140,216 @@ The arrays outputted to {\tt eirenemovies.nc} are, instead, described in the bel
 
 Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy. For example, on a grid consisting of 10000 triangles, the filesize can be roughly expected to be 360 kB per {\tt Eirene} atom/molecule species per outputted timestep. Therefore, if the write of this file is requested for 1000 timesteps on a D+He+C case (3 {\tt Eirene} atom species and 1 {\tt Eirene} molecule species), a filesize of roughly 1.4 GB can be expected.
 
+\chapter{Quantities stored in b2chords.nc and eirenechords.nc}
+\label{cha:b2chords}\index{b2chords.nc and eirenechords.nc, quantities stored
+  in}\index{chords, b2chords.nc, eirenechords.nc}\index{b2chords.nc, eirenechords.nc}\index{rzchords}
+
+The file {\tt b2chords.nc} stores the same physical quantities as {\tt
+b2movies.nc} (Chapter~\ref{cha:b2movies}), but interpolated along one or
+more custom straight chords rather than over the entire {\tt B2.5} grid.
+Similarly, chords interpolating quantities belonging to the {\tt Eirene}
+triangular grid, in case of runs with {\tt Eirene}, are stored in {\tt eirenechords.nc}.
+This is convenient, for example, to extract synthetic-diagnostic
+profiles at every requested timestep.
+
+The chords are defined in the {\tt b2.user.parameters} namelist through
+the single array {\tt rzchords(i,j,k)}: the first index selects the $R$
+($i=1$) or $Z$ ($i=2$) coordinate, the second index the start ($j=1$) or
+end ($j=2$) point of the chord, and the third index the chord number
+$k$. The number of chords is inferred automatically from the number of
+defined entries. For example:
+\begin{verbatim}
+ &user
+ rzchords(1,1,:) =   1.7000, 0.5000,
+ rzchords(2,1,:) =   0.0820, 0.0000,
+ rzchords(1,2,:) =   2.7000, 1.7000,
+ rzchords(2,2,:) =   0.0820, 0.0000,
+ /
+\end{verbatim}
+
+Each chord is sampled at a fixed spacing in length, set by the switch
+{\tt 'cdfchord\_resolution'} (in m, default $0.01$), between its two
+endpoints. At every sample point the requested cell-centered quantities
+are obtained by inverse-distance-weighted interpolation from the
+surrounding cell centers, and the face-centered fluxes are first reconstructed
+to cell centers and divided by the projected face area, so that the
+fluxes are stored as densities (e.g.\ $m^{-2}\,s^{-1}$ for particle
+fluxes, $W\,m^{-2}$ for heat fluxes, $A\,m^{-2}$ for the current), unlike
+the total fluxes stored in {\tt b2movies.nc}.
+
+The real-time interval between writes of the chord frames is controlled
+by the {\tt 'b2mndr\_cdfchordtim'} switch.
+
+If {\tt 'b2mndr\_stim'} is set to a negative value,
+data from the current \SOLPSITER run will be appended to
+the existing {\tt b2chords.nc} file, provided that the chords
+(and the resolution) are unchanged; otherwise the file is created anew.
+
+The files are written in netCDF-4 format with one group per
+chord. Each chord is a separate group named {\tt chord\_NNNN}, where {\tt NNNN} is the chord's
+original (zero-padded) index in the {\tt rzchords} namelist array. Every group
+has its own {\tt npt} dimension (sampled points per chord) and contains the coordinate
+variables {\tt crx}, {\tt cry} (the $R$ and $Z$ of each sample point) and
+{\tt ds} (the arc length along the chord from its start), the metadata
+scalars {\tt chord\_id}, {\tt rstart}, {\tt zstart}, {\tt rend}, {\tt zend} (the chords end points),
+and all the physics fields for that chord.
+
+Only the portion of each chord that lies \emph{inside} the relevant
+computational domain is written: at file-creation time every candidate
+sample point is located on the grid, points that fall outside are
+discarded, and any chord lying entirely outside is dropped altogether (no
+group is created for it). The test uses the {\tt B2.5} grid for {\tt b2chords.nc} and the
+Eirene triangular grid for {\tt eirenechords.nc}, so the two files can
+have different per-chord {\tt npt} and even a different set of surviving
+chords (for instance a chord lying in the vacuum region beyond the
+fluid grid has no group in {\tt b2chords.nc} but does have one in {\tt
+eirenechords.nc}). The stored {\tt rstart}/{\tt zstart} and {\tt
+rend}/{\tt zend} are the first and last \emph{kept} point of each chord
+(its in-domain extent), and {\tt ds} keeps its true arc length from the
+original chord start, so a chord that briefly leaves and re-enters the
+domain shows a gap in {\tt ds}.
+
+The number of arrays outputted to {\tt b2chords.nc} is controlled by a series of switches (which can be simultaneously used) as described in the below Table
+\ref{tab:b2chordsarrays}.
+
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_b25\_state\_variables} $\ge$ 1} \\
+  \hline
+    na \index{b2chords.nc, na} & Density of fluid species (for each species) & $m^{-3}$ \\
+    ne \index{b2chords.nc, ne} & Electron density & $m^{-3}$ \\
+    ua \index{b2chords.nc, ua} & Parallel velocity of fluid species (for each species) & $m s^{-1}$ \\
+    te \index{b2chords.nc, te} & Electron temperature & $eV$ \\
+    ti \index{b2chords.nc, ti} & Ion temperature & $eV$ \\
+    po \index{b2chords.nc, po} & Electric potential & $V$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_b25\_fluxes} $\ge$ 1} \\
+  \hline
+    fnax \index{b2chords.nc, fnax} & Poloidal particle flux density (for each fluid species) & $m^{-2} s^{-1}$ \\
+    fnay \index{b2chords.nc, fnay} & Radial particle flux density (for each fluid species) & $m^{-2} s^{-1}$ \\
+    fhex \index{b2chords.nc, fhex} & Poloidal electron heat flux density & $W m^{-2}$ \\
+    fhey \index{b2chords.nc, fhey} & Radial electron heat flux density & $W m^{-2}$ \\
+    fhix \index{b2chords.nc, fhix} & Poloidal ion heat flux density & $W m^{-2}$ \\
+    fhiy \index{b2chords.nc, fhiy} & Radial ion heat flux density & $W m^{-2}$ \\
+    fchx \index{b2chords.nc, fchx} & Poloidal electric current density & $A m^{-2}$ \\
+    fchy \index{b2chords.nc, fchy} & Radial electric current density & $A m^{-2}$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_b25\_sources} $\ge$ 1} \\
+  \hline
+    rsana \index{b2chords.nc, rsana} & Volumetric ionisation rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rsahi \index{b2chords.nc, rsahi} & Volumetric ionisation energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rsahisum \index{b2chords.nc, rsahisum} & Total volumetric ionisation energy source/sink & $W m^{-3}$ \\
+    rrana \index{b2chords.nc, rrana} & Volumetric recombination rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rrahi \index{b2chords.nc, rrahi} & Volumetric recombination energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rrahisum \index{b2chords.nc, rrahisum} & Total volumetric recombination energy source/sink & $W m^{-3}$ \\
+    rcxna \index{b2chords.nc, rcxna} & Volumetric charge exchange rate (for each fluid species) & $m^{-3} s^{-1}$ \\
+    rcxhi \index{b2chords.nc, rcxhi} & Volumetric charge exchange energy source/sink (for each fluid species) & $W m^{-3}$ \\
+    rcxhisum \index{b2chords.nc, rcxhisum} & Total volumetric charge exchange energy source/sink & $W m^{-3}$ \\
+    rqahe \index{b2chords.nc, rqahe} & Volumetric electron cooling rate (for each fluid species) & $W m^{-3}$ \\
+    rqahesum \index{b2chords.nc, rqahesum} & Total volumetric electron cooling rate & $W m^{-3}$ \\
+    rqrad \index{b2chords.nc, rqrad} & Volumetric line radiation rate (for each fluid species) & $W m^{-3}$ \\
+    rqradsum \index{b2chords.nc, rqradsum} & Total volumetric line radiation rate & $W m^{-3}$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_b25\_transport} $\ge$ 1} \\
+  \hline
+    dna \index{b2chords.nc, dna} & Particle density-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    dpa \index{b2chords.nc, dpa} & Particle pressure-driven diffusivity (for each fluid species) & $m^{-2} s^{-1}$ \\
+    hci \index{b2chords.nc, hci} & Ion thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    hce \index{b2chords.nc, hce} & Electron thermal anomalous diffusivity & $m^{-2} s^{-1}$ \\
+    vlax \index{b2chords.nc, vlax} & Poloidal anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vlay \index{b2chords.nc, vlay} & Radial anomalous pinch velocity (for each fluid species) & $m s^{-1}$ \\
+    vsa \index{b2chords.nc, vsa} & Anomalous viscosity (for each fluid species) & $m kg^{-1} s^{-1}$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_eirene\_state\_variables} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
+    dab2 \index{b2chords.nc, dab2} & Atom density (for each atom species) & $m^{-3}$ \\
+    tab2 \index{b2chords.nc, tab2} & Atom temperature (for each atom species) & $eV$ \\
+    dmb2 \index{b2chords.nc, dmb2} & Molecule density (for each molecule species) & $m^{-3}$ \\
+    tmb2 \index{b2chords.nc, tmb2} & Molecule temperature (for each molecule species) & $eV$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_eirene\_fluxes} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
+    rfluxa \index{b2chords.nc, rfluxa} & Atomic radial flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    pfluxa \index{b2chords.nc, pfluxa} & Atomic poloidal flux density (for each atom species) & $m^{-2} s^{-1}$ \\
+    refluxa \index{b2chords.nc, refluxa} & Atomic radial energy flux density (for each atom species) & $W m^{-2}$ \\
+    pefluxa \index{b2chords.nc, pefluxa} & Atomic poloidal energy flux density (for each atom species) & $W m^{-2}$ \\
+    rfluxm \index{b2chords.nc, rfluxm} & Molecular radial flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    pfluxm \index{b2chords.nc, pfluxm} & Molecular poloidal flux density (for each molecule species) & $m^{-2} s^{-1}$ \\
+    refluxm \index{b2chords.nc, refluxm} & Molecular radial energy flux density (for each molecule species) & $W m^{-2}$ \\
+    pefluxm \index{b2chords.nc, pefluxm} & Molecular poloidal energy flux density (for each molecule species) & $W m^{-2}$ \\
+  \hline
+  \multicolumn{3}{|c|}{If {\tt cdfchord\_eirene\_sources} $\ge$ 1 (if {\tt Eirene} is used)} \\
+  \hline
+    eirene\_papl\_sna \index{b2chords.nc, eirene\_papl\_sna} & Particle source density from atom-plasma collisions & \\
+                      & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pmpl\_sna \index{b2chords.nc, eirene\_pmpl\_sna} & Particle source density from molecule-plasma collisions & \\
+                      & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_pppl\_sna \index{b2chords.nc, eirene\_pppl\_sna} & Particle source density from recombinations & \\
+                      & \hspace{0.5cm} (for each fluid species) & $m^{-3} s^{-1}$ \\
+    eirene\_eael\_she \index{b2chords.nc, eirene\_eael\_she} & Electron energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_emel\_she \index{b2chords.nc, eirene\_emel\_she} & Electron energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_epel\_she \index{b2chords.nc, eirene\_epel\_she} & Electron energy source density from recombinations & $W m^{-3}$ \\
+    eirene\_eapl\_shi \index{b2chords.nc, eirene\_eapl\_shi} & Ion energy source density from atom-plasma collisions & $W m^{-3}$ \\
+    eirene\_empl\_shi \index{b2chords.nc, eirene\_empl\_shi} & Ion energy source density from molecule-plasma collisions & $W m^{-3}$ \\
+    eirene\_eppl\_shi \index{b2chords.nc, eirene\_eppl\_shi} & Ion energy source density from recombinations & $W m^{-3}$ \\
+    eneutrad \index{b2chords.nc, eneutrad} & Volumetric radiation rate due to {\tt Eirene} atoms & \\
+             & \hspace{0.5cm} (for each atom species) & $W m^{-3}$ \\
+    eneutradsum \index{b2chords.nc, eneutradsum} & Total volumetric radiation rate due to {\tt Eirene} atoms & $W m^{-3}$ \\
+    emolrad \index{b2chords.nc, emolrad} & Volumetric radiation rate due to {\tt Eirene} molecules & \\
+            & \hspace{0.5cm} (for each molecule species) & $W m^{-3}$ \\
+    emolradsum \index{b2chords.nc, emolradsum} & Total volumetric radiation rate due to {\tt Eirene} molecules & $W m^{-3}$ \\
+  \hline
+  \caption{Time-dependent quantities stored in each chord group of
+    b2chords.nc}
+  \label{tab:b2chordsarrays}
+\end{longtable}
+
+The arrays outputted to {\tt eirenechords.nc} are, instead, described in the below Table
+\ref{tab:eirenechordsarrays}. The file is created, in case of couples runs,
+only if the switch {\tt cdfchord\_triangles} $\ge$ 1.
+It has the same netCDF-4 group-per-chord structure as {\tt
+b2chords.nc} (each chord a group {\tt chord\_NNNN} with its own {\tt npt}
+and coordinate variables), but with its points filtered against the triangular grid.
+Each triangle quantity is taken from the Eirene triangle containing the
+sample point (mapped to its Eirene cell) and inverse-distance
+interpolated between neighbouring triangles.
+
+\begin{longtable}{|l|l|l|}
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued from previous page} \\
+  \hline quantity & description & units \\
+  \hline \endhead
+  \hline quantity & description & units \\
+  \hline \endfirsthead
+  \hline
+  \multicolumn{3}{|l|}{\small\it continued on next page} \\
+  \hline \endfoot
+  \endlastfoot
+    pdena \index{eirenechords.nc, pdena} & Atom particle density (for each atom species) & $m^{-3}$ \\
+    pdenm \index{eirenechords.nc, pdenm} & Molecule particle density (for each molecule species) & $m^{-3}$ \\
+    edena \index{eirenechords.nc, edena} & Atom energy density (for each atom species) & $eV m^{-3}$ \\
+    edenm \index{eirenechords.nc, edenm} & Molecule energy density (for each molecule species) & $eV m^{-3}$ \\
+    vxdena \index{eirenechords.nc, vxdena} & Atom x-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vxdenm \index{eirenechords.nc, vxdenm} & Molecule x-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vydena \index{eirenechords.nc, vydena} & Atom y-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vydenm \index{eirenechords.nc, vydenm} & Molecule y-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+    vzdena \index{eirenechords.nc, vzdena} & Atom z-directed momentum density (for each atom species) & $kg s^{-1} m^{-2}$ \\
+    vzdenm \index{eirenechords.nc, vzdenm} & Molecule z-directed momentum density (for each molecule species) & $kg s^{-1} m^{-2}$ \\
+  \hline
+  \caption{Time-dependent quantities stored in each chord group of
+    eirenechords.nc}
+  \label{tab:eirenechordsarrays}
+\end{longtable}
+
 \clearpage
 
 \chapter{Quantities stored in b2tallies.nc}
