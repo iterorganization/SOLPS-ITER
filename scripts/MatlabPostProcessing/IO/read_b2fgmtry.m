@@ -43,7 +43,7 @@ end
 
 % Geometry cannot be read
 if isempty(flag) == 1
-    error(['Error - file cannot be read']);
+    error('Error - file cannot be read');
 end
 
 end

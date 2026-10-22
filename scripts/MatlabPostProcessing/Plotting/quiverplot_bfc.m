@@ -68,8 +68,8 @@ y_c = (y1 + y2) / 2;
 
 % Plot velocity field using quiver
 h = quiver(x_c, y_c, vx, vy, 'k');
-h.AutoScale = 'on';
-h.AutoScaleFactor = scalefactor;   % default is 1
+set(h, 'AutoScale', 'on');
+set(h, 'AutoScaleFactor', scalefactor); % default is 1
 axis equal
 
 % Reset status of hold

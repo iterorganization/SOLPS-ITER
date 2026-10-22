@@ -1,5 +1,5 @@
 function [p] = Patchplot2(gmtry,field,scale,fmin,fmax,check_type,threshold)
-% [p] = Patchplot(gmtry,field,options)
+% [p] = Patchplot2(gmtry,field,options)
 %
 % Routine to make patchplot of cell-centered quantity.
 % 
@@ -25,10 +25,18 @@ if ~exist('scale','var') || isempty(scale)
   scale = 1;
 end
 if ~exist('fmin','var') || isempty(fmin)
-    fmin = min(min(field(1:gmtry.nCi)/scale));
+    if isfield(gmtry, 'nCi')
+        fmin = min(min(field(1:gmtry.nCi)/scale));
+    else
+        fmin = min(min(field/scale));
+    end
 end
 if ~exist('fmax','var') || isempty(fmax)
-    fmax = max(max(field(1:gmtry.nCi)/scale));
+    if isfield(gmtry, 'nCi')
+        fmax = max(max(field(1:gmtry.nCi)/scale));
+    else
+        fmax = max(max(field/scale));
+    end
 end
 if ~exist('threshold','var') || isempty(threshold)
     threshold = 9e99;
@@ -183,6 +191,9 @@ Faces = reshape(1:numel(Xv), nmax, nCells)';
 % Use one patch only
 hs = ishold;
 hold on;
+if ne(size(Faces,1),size(S.ZData,1))
+    S.ZData = S.ZData';
+end
 p = patch('Faces', Faces, ...
           'Vertices', [Xv Yv Zv], ...
           'FaceVertexCData', S.ZData, ...
@@ -193,8 +204,13 @@ colorbar
 caxis([fmin fmax]);
 
 % Highlight borders
-mask_g = (check_type == 'g') & (S.ZData > threshold) & (1:nCells)' <= gmtry.nCi;
-mask_s = (check_type == 's') & (S.ZData < threshold) & (1:nCells)' <= gmtry.nCi;
+if isfield(gmtry, 'nCi')
+    mask_g = (check_type == 'g') & (S.ZData > threshold) & (1:nCells)' <= gmtry.nCi;
+    mask_s = (check_type == 's') & (S.ZData < threshold) & (1:nCells)' <= gmtry.nCi;
+else
+    mask_g = (check_type == 'g') & (S.ZData > threshold);
+    mask_s = (check_type == 's') & (S.ZData < threshold);
+end
 highlight = mask_g | mask_s;
 
 if any(highlight)
