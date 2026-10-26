@@ -16,6 +16,12 @@ if ($?B2FSTATE_ONLY) then
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:eirenemovies.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2chords.nc:'`)
+    [ -e $i ] && rm $i || echo > /dev/null
+  end
+  foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:eirenechords.nc:'`)
+    [ -e $i ] && rm $i || echo > /dev/null
+  end
   foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2tallies.nc:'`)
     [ -e $i ] && rm $i || echo > /dev/null
   end
@@ -89,6 +95,12 @@ foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2movies.nc:'`)
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:eirenemovies.nc:'`)
   [ -s $i ] && mv -v $i ../eirenemovies.nc || echo > /dev/null
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2chords.nc:'`)
+  [ -s $i ] && mv -v $i ../b2chords.nc || echo > /dev/null
+end
+foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:eirenechords.nc:'`)
+  [ -s $i ] && mv -v $i ../eirenechords.nc || echo > /dev/null
 end
 foreach i (`echo $PLASMASTATE:t | sed -e 's:plasmastate:b2tallies.nc:'`)
   [ -s $i ] && mv -v $i ../b2tallies.nc || echo > /dev/null
