@@ -91,6 +91,7 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
     fig = plt.gcf()
     ax = plt.gca()
     poly_collection = PolyCollection(polygons, array=np.array(colors), cmap=cmap, edgecolors=edgecolor)
+    poly_collection.set_clim(fmin, fmax)
     ax.add_collection(poly_collection)
     ax.autoscale_view()
     #plt.colorbar(poly_collection)
