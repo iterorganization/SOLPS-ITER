@@ -73,6 +73,8 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
             start = gmtry.cvVxP[iCv, 0]
             vertices = [ (gmtry.vxX[gmtry.cvVx[start + j]], gmtry.vxY[gmtry.cvVx[start + j]]) 
                          for j in range(nverts) ]
+            if gmtry.isClassicalGrid == 1:
+                vertices[-2:] = vertices[-2:][::-1]
             # Close polygon
             vertices.append(vertices[0])
             polygons.append(np.array(vertices))
