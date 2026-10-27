@@ -27,7 +27,9 @@ def read_ifield(fid, fieldname, dims):
         line = fid.readline()
         if line == "":
             raise EOFError(f"EOF reached without finding {fieldname}.")
-        if fieldname in line:
+        header = line.split()
+        if (len(header) >= 4 and header[0] == '*cf:'
+                 and header[1] == 'int' and header[3] == fieldname):
             break
 
     # Consistency check: number of elements specified in the file
