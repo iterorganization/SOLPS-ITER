@@ -9,7 +9,9 @@ def read_rfield(fid, fieldname, dims):
         line = fid.readline()
         if line == "":
             raise EOFError(f"EOF reached without finding {fieldname}.")
-        if fieldname in line:
+        header = line.split()
+        if (len(header) >= 4 and header[0] == '*cf:'
+                and header[1] == 'real' and header[3] == fieldname):
             break
 
     # Parse number of elements from header
