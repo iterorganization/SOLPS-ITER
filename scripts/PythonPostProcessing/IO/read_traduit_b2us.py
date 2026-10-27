@@ -72,7 +72,10 @@ def read_cfruin(f, n_expected):
     header = f.readline()
     values = []
     while len(values) < n_expected:
-        values.extend(map(int, f.readline().split()))
+        line = f.readline()
+        if line == "":
+            raise EOFError(f"Unexpected EOF in {header.strip()}: expected {n_expected} integers, got {len(values)}")
+        values.extend(map(int, line.split()))
     return np.array(values[:n_expected], dtype=int)
 
 
