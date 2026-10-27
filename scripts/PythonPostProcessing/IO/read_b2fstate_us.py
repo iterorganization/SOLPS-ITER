@@ -6,7 +6,7 @@ class State:
     """Container for B2.5 unstructured grid state data."""
     pass
 
-def read_b2fstate(file):
+def read_b2fstate_us(file):
     state = State()
 
     # Open file
@@ -18,7 +18,7 @@ def read_b2fstate(file):
     # Get version
     line = fid.readline()
     version = line[7:17]
-    print(f"read_b2fstate -- file version {version}")
+    print(f"read_b2fstate_us -- file version {version}")
 
     dim = read_ifield(fid, "nCv,nFc,ns", (3,))
     nCv, nFc, ns = dim

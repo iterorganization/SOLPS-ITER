@@ -14,7 +14,7 @@ from .write_b2fgmtry_us import write_b2fgmtry_us
 from .read_structure import read_structure
 from .read_traduit_b2us import read_traduitoutb2us
 from .read_b2fplasmf_us import read_b2fplasmf_us
-from .read_b2fstate import read_b2fstate
+from .read_b2fstate_us import read_b2fstate_us
 
 __all__ = [
     "read_ifield",
@@ -27,5 +27,5 @@ __all__ = [
     "read_structure",
     "read_traduitoutb2us",
     "read_b2fplasmf_us",
-    "read_b2fstate"
+    "read_b2fstate_us"
 ]
