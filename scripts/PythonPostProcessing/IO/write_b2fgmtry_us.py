@@ -16,6 +16,8 @@ def write_b2fgmtry_us(file, label, gmtry):
     gmtry : object
         Geometry object containing all required fields.
     """
+    from copy import deepcopy
+    gmtry = deepcopy(gmtry)
     try:
         with open(file, 'wt') as fid:
 
