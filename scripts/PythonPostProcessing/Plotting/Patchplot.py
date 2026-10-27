@@ -28,7 +28,7 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
     poly : matplotlib.collections.PolyCollection
         Collection of patches for plotting.
     """
-    field = np.asarray(field) / scale
+    field = np.asarray(field).reshape(-1) / scale
 
     if fmin is None:
         fmin = field.min()
