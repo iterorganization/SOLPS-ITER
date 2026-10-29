@@ -204,23 +204,23 @@ def read_traduitoutb2us(filename):
             ftFc_len = np.sum(g.ftFcP[-1]) - 1
             g.ftFc = read_cfruin(f, ftFc_len)
 
-            shift_full(g.cvVx)
-            shift_full(g.cvFc)
-            shift_full(g.ftCv)
-            shift_full(g.ftFc)
-            shift_full(g.fsFc)
-            shift_full(g.fcVx)
+        shift_full(g.cvVx)
+        shift_full(g.cvFc)
+        shift_full(g.ftCv)
+        shift_full(g.ftFc)
+        shift_full(g.fsFc)
+        shift_full(g.fcVx)
 
-            shift_full(g.imapCv)
-            shift_full(g.imapFcx)
-            shift_full(g.imapFcy)
-            shift_full(g.imapVx)
+        shift_full(g.imapCv)
+        shift_full(g.imapFcx)
+        shift_full(g.imapFcy)
+        shift_full(g.imapVx)
 
-            shift_pointer_first_column(g.cvVxP)
-            shift_pointer_first_column(g.cvFcP)
-            shift_pointer_first_column(g.ftCvP)
-            shift_pointer_first_column(g.ftFcP)
-            shift_pointer_first_column(g.fsFcP)
+        shift_pointer_first_column(g.cvVxP)
+        shift_pointer_first_column(g.cvFcP)
+        shift_pointer_first_column(g.ftCvP)
+        shift_pointer_first_column(g.ftFcP)
+        shift_pointer_first_column(g.fsFcP)
 
 
 
