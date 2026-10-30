@@ -151,6 +151,9 @@ def read_b2fgmtry_us(file):
         'vxFc', 'vxCv', 'ftCv', 'ftFc',
         'cvFt', 'fsFc'
     ]
+    if gmtry.isClassicalGrid == 1:
+        index_arrays.extend(['imapCv','imapFcx','imapFcy','imapVx'])
+
 
     for arr in index_arrays:
         if hasattr(gmtry, arr):
