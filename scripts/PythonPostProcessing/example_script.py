@@ -96,8 +96,9 @@ plt.close()
 # Inner target
 lbl_IT = -13                                            # the face label (fcLbl) of the inner target
 cv_IT, fc_IT = find_cv_faces_lbl(lbl_IT, gmtry)         # find the cell and face IDs corresponding to innter target
-cv_IT = cv_IT[np.argsort(-gmtry.cvX[cv_IT])]            # sort according to decreasing X coordinate (to go from PFR to baffle for IT)
-fc_IT = fc_IT[np.argsort(-gmtry.fcX[fc_IT])]            # same for faces
+sorted_indices = np.argsort(-gmtry.cvX[cv_IT])          # sort according to decreasing X coordinate (to go from PFR to baffle for IT)
+cv_IT = cv_IT[sorted_indices]                           
+fc_IT = fc_IT[sorted_indices]                         
 n_cv_IT = [len(cv_IT)]                                  # number of cells
 tubes = gmtry.cvFt[cv_IT]                               # flux tube numbers of the cells
 icsep_IT = np.where(tubes == ft_sep)[0]                 # get the index of the cell that corresponds to the separatrix (outside)

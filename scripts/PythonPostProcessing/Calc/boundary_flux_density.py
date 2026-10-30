@@ -28,12 +28,7 @@ def boundary_flux_density(gmtry, fcList, flux):
     bFlux : ndarray
         Normal flux density with shape (n_boundary_faces, n_species).
     """
-
-    # Convert MATLAB 1-based indices to Python 0-based indices
-    #fcList = np.asarray(fcList, dtype=int) - 1
-
-    print(fcList)
-
+    
     # Determine face orientation
     fcOr = np.zeros(len(fcList))
 
@@ -49,7 +44,6 @@ def boundary_flux_density(gmtry, fcList, flux):
             raise ValueError(f"Face {fc + 1} is not a boundary face!")
 
     # Calculate normal flux density
-    print(flux.shape[2])
     bFlux = np.zeros((len(fcList), flux.shape[2]))
 
     for is_ in range(flux.shape[2]):
