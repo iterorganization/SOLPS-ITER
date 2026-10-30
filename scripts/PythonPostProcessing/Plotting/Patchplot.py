@@ -78,7 +78,7 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
             # Close polygon
             vertices.append(vertices[0])
             polygons.append(np.array(vertices))
-            colors.append(field[iCv] if len(field) != gmtry.nVx else None)
+            colors.append(field[iCv])
 
     # --- Triangle grid ---
     elif istrianglegrid(gmtry):
