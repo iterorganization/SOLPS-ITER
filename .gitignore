@@ -8,6 +8,7 @@
 !runs/
 !scripts/
 !SETUP/
+!tools/
 
 # backup files
 *~
