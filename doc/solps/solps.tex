@@ -341,7 +341,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NCAR] plotting library (available from \href{https://www.ncl.ucar.edu/Download/}{https://www.ncl.ucar.edu/Download/})
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available as an open-source package at \href{https://github.com/iterorganization/GR-Software}{https://github.com/iterorganization/GR-Software})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
-\item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/}). {\bf Note:} Do not use HDF5 version 1.14.3 as it contains a bug that will conflict with NetCDF file usage.
 \item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available as an open-source package at \href{https://github.com/iterorganization/MSCL}{https://github.com/iterorganization/MSCL})
@@ -1193,7 +1193,8 @@ advanced fluid neutral (AFN) models.
 Because some of these files can be very large, they are not stored on the
 GitHub repository but rather as a public-access Zenodo record, and the
 {\tt Makefile} automatically fetches them at first installation using the
-{\tt retrieve\_fnn\_datasets} script.
+{\tt retrieve\_fnn\_datasets} script. This requires the node on which the
+compilation takes place to have an open Internet connection.
 
 \newpage
 \subsection{modules/Eirene}
@@ -4885,10 +4886,8 @@ If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will tran
 
 \section{Input files}
 
-Below are given the input files used for the structured {\tt D+C+He} benchmark
-case that can be found on the SVN server. These files can be found in the {\em Examples} folder in the \SOLPSITER SharePoint
-web site
-(\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{\allowbreak https://sharepoint.iter.org/departments\allowbreak/POP/CM/IMAS/SOLPS-ITER}), or directly among the examples provided in {\tt \$\{SOLPSTOP\}/runs/examples}, as part of the {\tt AUG\_16151\_D+C+He} case.
+Below are given the input files used for the structured {\tt D+C+He} AUG benchmark
+case that can be found on the among the {\tt SOLPS-ITER 3.0.10a examples} record provided on the Zenodo server at \href{https://www.zenodo.org/communities/solps}{https://www.zenodo.org/communities/solps}. These files can be found as part of the {\tt AUG\_16151\_D+C+He} case.
 
 \subsection{b2ag.dat}
 \index{b2ag.dat, D+C+He example}
@@ -7692,7 +7691,7 @@ A pre-processor to create new databases for new combinations of incident particl
 A detailed description of the theoretical derivation, code implementation details, user instructions for running with AFN BCs, and user instructions for {\tt b2ab} are available under {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation.pdf}.
 The \LaTeX~source files for this PDF are available in {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/LaTeX\_source\_code}. An example {\tt b2ab.dat} file is available in the {\tt \$\{SOLPSTOP\}/doc/AFN\_BCs\_documentation/example\_input\_b2ab} directory.
 
-Additionally, there are two PDF presentations on the \SOLPSITER SharePoint website, in the \href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/SOLPS-ITER\%20Extended\%20Grids\%20Workshops}{SOLPS-ITER Extended Grids Workshops} directory, explaining the setup of AFN cases: {\tt workshop\_presentation\_AFN} and {\tt AFN handson session}.
+Additionally, there are two PDF presentations on the \SOLPSITER MS Teams workspace, explaining the setup of AFN cases: a theoretical description at \href{https://iterorganization.sharepoint.com/:b:/r/sites/SOLPS-ITER/Shared%20Documents/General/SOLPS-ITER%20meetings/SOLPS-ITER%20Extended%20Grids%20Workshops/workshop_presentation_AFN.pdf?d=wf176602ec9bb472e8c8bd6a05cd673ab&csf=1&web=1&e=8sgdRE}{workshop\_presentation\_AFN} and a tutorial at \href{https://iterorganization.sharepoint.com/:w:/r/sites/SOLPS-ITER/Shared%20Documents/General/Tutorials/2026_VanUytven_-_How_to_setup_AFN.docx?d=wa48654ae533d46428678b76078544fac&csf=1&web=1&e=dxMrUb}{2026\_VanUytven\_-\_How\_to\_setup\_AFN}.
 \end{sloppypar}
 
 \subsection{Spatially hybrid fluid-kinetic neutrals}
@@ -7703,7 +7702,7 @@ The goal is to keep neutrals kinetic in the regions where they have longer mean-
 but to have a fluid neutral model in the CX-dominated regions where the mean-free paths are short, and where consequently the {\tt Eirene} CPU time per particle trajectory is large.
 
 The spatially hybrid approach is discussed in detail in the references~\cite{blommaert2019spatially,VanUytven_advanced_SpH,horsten2021application,borodin2022fluid,van2023phd}.
-On the \SOLPSITER SharePoint website, in the \href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER/SOLPS-ITER\%20Extended\%20Grids\%20Workshops}{SOLPS-ITER Extended Grids Workshops} directory, there are two presentations explaining the setup of spatially hybrid cases: {\tt workshop\_presentation\_hybrid} and {\tt hybrid handson session}.
+On the \SOLPSITER MS Teams workspace, there are two presentations explaining the setup of spatially hybrid cases: a theoretical description at \href{https://iterorganization.sharepoint.com/:b:/r/sites/SOLPS-ITER/Shared%20Documents/General/SOLPS-ITER%20meetings/SOLPS-ITER%20Extended%20Grids%20Workshops/workshop_presentation_hybrid.pdf?d=wb34af90172e44888abfd929cce840c79&csf=1&web=1&e=bwfuV3}{workshop\_presentation\_hybrid} and a tutorial at \href{https://iterorganization.sharepoint.com/:b:/r/sites/SOLPS-ITER/Shared%20Documents/General/Tutorials/2023_Horsten_-_Hands-on_session_hybrid_neutral_model_for_AUG_case.pdf?d=w26183817e9864f08a100fce973345d3e&csf=1&web=1&e=wvE7TN}{2023\_Horsten\_-\_Hands-on\_session\_hybrid\_neutral\_model\_for\_AUG\_case}.
 
 Very good agreement between the hybrid and the fully kinetic methods has been achieved, while strongly reducing the average CPU time per particle. However, more work is needed before the SpH model can truly speed up simulations by orders of magnitude in all conditions:
 
