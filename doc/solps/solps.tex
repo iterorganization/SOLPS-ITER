@@ -16143,62 +16143,75 @@ Similarly as {\tt b2movies.nc}, also {\tt eirenemovies.nc} can become very heavy
 
 \chapter{Quantities stored in b2chords.nc and eirenechords.nc}
 \label{cha:b2chords}\index{b2chords.nc and eirenechords.nc, quantities stored
-  in}\index{chords, b2chords.nc, eirenechords.nc}\index{b2chords.nc, eirenechords.nc}\index{rzphichords}
+  in}\index{chords, b2chords.nc, eirenechords.nc}\index{b2chords.nc, eirenechords.nc}\index{chord files}
 
 The file {\tt b2chords.nc} stores the same physical quantities as {\tt
 b2movies.nc} (Chapter~\ref{cha:b2movies}), but interpolated along one or
-more custom straight 3D chords rather than over the entire {\tt B2.5} grid.
+more straight 3D chords rather than over the entire {\tt B2.5} grid.
 Similarly, chords interpolating quantities belonging to the {\tt Eirene}
 triangular grid, in case of runs with {\tt Eirene}, are stored in {\tt eirenechords.nc}.
 This is convenient, for example, to extract synthetic-diagnostic
 profiles at every requested timestep.
 
-The chords are defined in the {\tt b2.user.parameters} namelist through
-the single array {\tt rzphichords(i,j,k)}: the first index selects the
-major radius $R$ in m ($i=1$), the vertical coordinate $Z$ in m ($i=2$)
-or the toroidal angle $\phi$ in degrees ($i=3$), the second index the
-start ($j=1$) or end ($j=2$) point of the chord, and the third index the
-chord number $k$. The number of chords is inferred automatically from the
-number of defined entries. For example:
+The chords are read from the chord files of the run directory: every file
+with the extension {\tt .chords} is read, in the same format as the
+chord files of \btwoplot (see the {\bf chor} command, Section~\ref{sec:chor}),
+so that the same files can be used by \btwoplot and for {\tt b2chords.nc}.
+The first line of a chord file holds a label in single quotes and the
+number of points {\tt npoints} sampled along each chord; every following
+line defines one chord by the Cartesian coordinates $x_1$, $y_1$, $z_1$ of
+its start point and $x_2$, $y_2$, $z_2$ of its end point (in m, with $z$
+vertical, so that $R=\sqrt{x^2+y^2}$ and the toroidal angle is
+$\phi=\arctan(y/x)$), followed by a value (the abscissa of the chord in the
+\btwoplot {\bf chor} plots). For example, a file {\tt user.chords} with
 \begin{verbatim}
- &user
- rzphichords(:,:,1) = 1.70, 0.082, 0.0,   2.70, 0.082,  0.0,
- rzphichords(:,:,2) = 2.40, 0.082, 0.0,   2.40, 0.082, 60.0,
- /
+'ABC' 400
+ 1.70 0.0     0.082   2.70 0.0     0.082   1
+ 2.40 0.0     0.082   1.20 2.0785  0.082   2
 \end{verbatim}
+defines a chord set {\tt ABC} with a horizontal chord at $\phi=0$ and a
+chord between $R=2.40$\,m at $\phi=0$ and $R=2.40$\,m at $\phi=60^\circ$.
+The file name ({\tt user} here) is free; the chord set is identified by its
+label. A file with a format error is skipped with a warning, and two files
+with the same label stop the run. A negative {\tt npoints} (the vector
+mode of \btwoplotns) is used with its absolute value.
 
-Each chord is the straight line in 3D space between its two end points,
-i.e.\ between the Cartesian points $(R\cos\phi, R\sin\phi, Z)$. It is
-sampled at a fixed spacing in 3D arc length, set by the switch
-{\tt 'cdfchord\_resolution'} (in m, default $0.01$), and every sample
-point is mapped back to its $(R,Z)$, where the axisymmetric solution is
-evaluated. At every sample point the requested cell-centered quantities
-are obtained by inverse-distance-weighted interpolation from the
-surrounding cell centers, and the face-centered fluxes are first reconstructed
-to cell centers and divided by the projected face area, so that the
-fluxes are stored as densities (e.g.\ $m^{-2}\,s^{-1}$ for particle
-fluxes, $W\,m^{-2}$ for heat fluxes, $A\,m^{-2}$ for the current), unlike
-the total fluxes stored in {\tt b2movies.nc}.
+Each chord is the straight line in 3D space between its two end points.
+As in \btwoplotns, it is sampled at the midpoints of {\tt npoints} equal
+segments, and every sample point is mapped to its $(R,Z)$, where the
+axisymmetric solution is evaluated. At every sample point the requested
+cell-centered quantities are obtained by inverse-distance-weighted
+interpolation from the surrounding cell centers (whereas \btwoplot uses
+the value of the cell containing the point), and the face-centered fluxes
+are first reconstructed to cell centers and divided by the projected face
+area, so that the fluxes are stored as densities (e.g.\ $m^{-2}\,s^{-1}$
+for particle fluxes, $W\,m^{-2}$ for heat fluxes, $A\,m^{-2}$ for the
+current), unlike the total fluxes stored in {\tt b2movies.nc}.
 
 The real-time interval between writes of the chord frames is controlled
 by the {\tt 'b2mndr\_cdfchordtim'} switch.
 
 If {\tt 'b2mndr\_stim'} is set to a negative value,
 data from the current \SOLPSITER run will be appended to
-the existing {\tt b2chords.nc} file, provided that the chords
-(and the resolution) are unchanged; otherwise the file is created anew.
+the existing {\tt b2chords.nc} file, provided that the chords are
+unchanged; otherwise the file is created anew.
 
-The files are written in netCDF-4 format with one group per
-chord. Each chord is a separate group named {\tt chord\_NNNN}, where {\tt NNNN} is the chord's
-original (zero-padded) index in the {\tt rzphichords} namelist array. Every group
-has its own {\tt npt} dimension (sampled points per chord) and contains the coordinate
-variables {\tt crx}, {\tt cry} (the $R$ and $Z$ of each sample point, in m),
-{\tt cphi} (its toroidal angle, in degrees, continuous along the chord
-and starting from the given $\phi$ of the start point) and
-{\tt ds} (the 3D arc length along the chord from its start, in m), the metadata
-scalars {\tt chord\_id}, {\tt rstart}, {\tt zstart}, {\tt phistart}, {\tt rend}, {\tt zend},
-{\tt phiend} (the chords end points),
-and all the physics fields for that chord.
+The files are written in netCDF-4 format. Each chord set is a group named
+after its label (characters other than letters, digits, {\tt \_}, {\tt -},
+{\tt +} and {\tt .} are replaced by {\tt \_}), with the attributes
+{\tt label} (the label of the chord file) and {\tt npoints}. Each chord of
+the set is a group inside it, named {\tt <set>\_NNNN}, where {\tt NNNN} is
+the (zero-padded) line number of the chord in its chord file, e.g.\
+{\tt ABC/ABC\_0001} and {\tt ABC/ABC\_0002} in the example above. Every
+chord group has its own {\tt npt} dimension (sampled points of the chord)
+and contains the coordinate variables {\tt R}, {\tt z} (the $R$ and
+$Z$ of each sample point, in m), {\tt phi} (its toroidal angle, in
+degrees, continuous along the chord) and {\tt ds} (the 3D arc length
+along the chord from its start point, in m), the metadata scalars
+{\tt chord\_id} (the chord number {\tt NNNN}), {\tt chord\_value} (the
+last column of the chord file), {\tt Rstart}, {\tt zstart}, {\tt phistart},
+{\tt Rend}, {\tt zend}, {\tt phiend} (the chord end points), and all the
+physics fields for that chord.
 
 Only the portion of each chord that lies \emph{inside} the relevant
 computational domain is written: at file-creation time every candidate
@@ -16209,8 +16222,8 @@ Eirene triangular grid for {\tt eirenechords.nc}, so the two files can
 have different per-chord {\tt npt} and even a different set of surviving
 chords (for instance a chord lying in the vacuum region beyond the
 fluid grid has no group in {\tt b2chords.nc} but does have one in {\tt
-eirenechords.nc}). The stored {\tt rstart}/{\tt zstart}/{\tt phistart} and {\tt
-rend}/{\tt zend}/{\tt phiend} are the first and last \emph{kept} point of each chord
+eirenechords.nc}). The stored {\tt Rstart}/{\tt zstart}/{\tt phistart} and {\tt
+Rend}/{\tt zend}/{\tt phiend} are the first and last \emph{kept} point of each chord
 (its in-domain extent), and {\tt ds} keeps its true arc length from the
 original chord start, so a chord that briefly leaves and re-enters the
 domain shows a gap in {\tt ds}.
@@ -21125,6 +21138,9 @@ plotting the chord integrals.
 If the file does not exist in the current working directory, the
 directories {\tt \$\{SOLPSTOP\}/data.local/chords} and
 {\tt \$\{SOLPSTOP\}/data/chords} are searched in order.
+Chord files with the extension {\tt .chords} placed in the run directory
+also define the chords of the {\tt b2chords.nc} and {\tt eirenechords.nc}
+output files (Chapter~\ref{cha:b2chords}).
 
 \subsubsection{$<$chord file$>$ echor}\index{b2plot, echor}\label{sec:echor}\index{b2plot, chord plots}
 Same as {\bf chor} above, but does the line integral over the triangular grid.
