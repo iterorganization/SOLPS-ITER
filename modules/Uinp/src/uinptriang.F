@@ -4,16 +4,16 @@
 
 c  version : 01.04.2005 00:51
 
-c***  prepares the data for TRIA grid 
-c***  returns .TRUE. if successful and .FALSE. otherwise 
+c***  prepares the data for TRIA grid
+c***  returns .TRUE. if successful and .FALSE. otherwise
       implicit none
-    
-      logical TriMesh  
+
+      logical TriMesh
       integer attrib(nlim),nattr,nchain,chain(nlim)
       integer NSS(nsts),nn,i,j,k,l
-      logical ex 
+      logical ex
       real txmin,txmax,tymin,tymax
-    
+
       call subini ('uinptriang')
       print *
       print *,'==== Starting uinptriang'
@@ -21,16 +21,16 @@ c***  returns .TRUE. if successful and .FALSE. otherwise
 c*** makes list of polygon indices present in the input data
       attrib(1)=ilplgdg(1)
       k=1
-      do 10 i=2,nlim  
+      do 10 i=2,nlim
        ex=.true.
        do 15 j=1,k
         if(attrib(j).eq.ilplgdg(i)) ex=.false.
-   15  continue 
+   15  continue
        if(ex) then
         k=k+1
         attrib(k)=ilplgdg(i)
        end if
-   10 continue    
+   10 continue
       nattr=k
 c***  makes sets of elements with certain attribute
 c***  and check if they are closed
@@ -38,18 +38,18 @@ c***  and check if they are closed
       IF(nattr.GT.0) write(*,*) 'attrib', (attrib(l),l=1,nattr)
       if(nattr.EQ.1.AND.attrib(1).EQ.0) then
        TriMesh=.FALSE.
-       write(0,*) 'no TRIA polygons specified'  
+       write(0,*) 'no TRIA polygons specified'
        goto 9999
-      end if 
+      end if
       do 20 i=1,nattr
        write(*,*) 'chain number, attrib', i, attrib(i)
        if(attrib(i).EQ.0) goto 20
        k=0
        do 25 j=1,nlim
         if(attrib(i).EQ.ilplgdg(j) ) then
-         k=k+1
-         chain(k)=j
-        end if     
+          k=k+1
+          chain(k)=j
+        end if
    25  continue
        nchain=k
        write(*,*) 'nchain',nchain
@@ -61,7 +61,7 @@ c***   makes checking and outputs NSS indices if necessary
        call uichkchn(chain,nchain,nsts,NSS,nn,attrib(i))
        write(*,*) 'nn ',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
-       if(nn.LT.0) then 
+       if(nn.LT.0) then
         write(0,*) 'ERROR in uichkchn, nn', nn
         TriMesh=.FALSE.
         call xerrab('Contours did not close. Stopping.')
@@ -89,7 +89,7 @@ c  Prepare data for TRIA input file (header with refinement zones data)
         txmax=max(txmax,p1(1,trirefel(k)),p2(1,trirefel(k)))
         tymin=min(tymin,p1(2,trirefel(k)),p2(2,trirefel(k)))
         tymax=max(tymax,p1(2,trirefel(k)),p2(2,trirefel(k)))
-   35  continue   
+   35  continue
        trixmin(i)=txmin
        trixmax(i)=txmax
        triymin(i)=tymin

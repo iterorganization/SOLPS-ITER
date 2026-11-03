@@ -373,7 +373,7 @@ c***          targsp
                 if (ilsptp(ists).gt.0) then !{
                   if (isrss(ists).gt.0) then !{
                     isp = isrss(ists)
-                  else if (isrss(ists).lt.0) then !}{
+                  else if (isrss(ists).le.0) then !}{
                     ii = mod(nint(xmlim(ists)),100)
                     do jj = 1, nspcatm !{
                       if (isp.ne.0) cycle
