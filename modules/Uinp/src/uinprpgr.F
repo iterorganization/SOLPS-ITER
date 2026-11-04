@@ -95,7 +95,16 @@ c*** Grid dimensions and cut locations
 
       call subini ('uinprpgr')
       ex=.false.
-      if(lm_cnfg) then  !{
+      if (gridgeneratorID == 1) then
+        write(*,*) 'uinprpgr: Goat grid generator used, following ' //
+     ,   'Goat route'
+
+        ! Determine number of cells
+        ncvp = ncells
+        ncip = nicells
+        nfcp = nfaces
+      else
+       if(lm_cnfg) then  !{
 c*** Limiter and linear configurations - a temporary, clumsy solution
         if(index(topo,'SN').eq.0) then !{
           write(*,*) 'A single-null topology should be used for ',
@@ -142,7 +151,7 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
           nyiso1(2)=nyiso1(1)
           nyiso2(2)=nyiso2(1)
         end if !}
-      else if(index(topo,'DN').gt.0) then  !}{
+       else if(index(topo,'DN').gt.0) then  !}{
         ntrgdflt=4
         if(topo.eq.'DNS') then  !{
           nrsol1=0
@@ -193,7 +202,7 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
           nxcut1(4)=nxcut1(3)+nzinn2
           nx=nxcut1(4)+nzodv2
         end if  !}
-      else if(index(topo,'SN').gt.0) then !}{
+       else if(index(topo,'SN').gt.0) then !}{
         ntrgdflt=2
         if(topo.eq.'SNL') then  !{
           nzidv=nptseg(2)-1
@@ -230,67 +239,67 @@ c*** Limiter and linear configurations - a temporary, clumsy solution
           nxcut1(2)=nxcut1(1)+nzinn
           nx=nxcut1(2)+nzodv
         end if  !}
-      end if  !}
-      if(.not.ex) then  !{
+       end if  !}
+       if(.not.ex) then  !{
         write(*,*) 'Non-recognisable topology option : ',topo
         write(*,*) '  ==> Check the topology name in the DG model'
         write(*,*) '      (should be one of SNL SNU DNL DNU DNS)'
         call xerrab ('Unrecognized topology')
-      end if  !}
+       end if  !}
 
-      nr1st=irwl
-      nrplg=iztg
-      np2nd=nrplg
-      ndxa=nrplg-1
-      ndya=nr1st-1
-      npplg = max((nncut/2)*3,1)
-      if(lm_cnfg) npplg=1
+       nr1st=irwl
+       nrplg=iztg
+       np2nd=nrplg
+       ndxa=nrplg-1
+       ndya=nr1st-1
+       npplg = max((nncut/2)*3,1)
+       if(lm_cnfg) npplg=1
 
-      cbnrso=npplg
-      cbnrno=max(nncut/2,1)
-      cbnrwe=1
-      cbnrea=1
-      cbirso=0
-      cbirno=cbirso+cbnrso
-      cbirwe=cbirno+cbnrno
-      cbirea=cbirwe+cbnrwe
-      cbrbrk(cbirso+cbnrso-1)=2.
-      cbrbrk(cbirno+cbnrno-1)=2.
-      cbrbrk(cbirwe+cbnrwe-1)=2.
-      cbrbrk(cbirea+cbnrea-1)=2.
-      if (npplg.eq.3) then
+       cbnrso=npplg
+       cbnrno=max(nncut/2,1)
+       cbnrwe=1
+       cbnrea=1
+       cbirso=0
+       cbirno=cbirso+cbnrso
+       cbirwe=cbirno+cbnrno
+       cbirea=cbirwe+cbnrwe
+       cbrbrk(cbirso+cbnrso-1)=2.
+       cbrbrk(cbirno+cbnrno-1)=2.
+       cbrbrk(cbirwe+cbnrwe-1)=2.
+       cbrbrk(cbirea+cbnrea-1)=2.
+       if (npplg.eq.3) then
         cbrbrk(0) = rratio(nxcut1(1),nrplg-npplg)
         cbrbrk(1) = rratio(nxcut1(2),nrplg-npplg)
-      else if (npplg.eq.6) then
+       else if (npplg.eq.6) then
         cbrbrk(0) = rratio(nxcut1(1),nrplg-npplg)
         cbrbrk(1) = rratio(nxcut1(2),nrplg-npplg)
         cbrbrk(2) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
         cbrbrk(3) = rratio(nxcut1(3),nrplg-npplg)
         cbrbrk(4) = rratio(nxcut1(4),nrplg-npplg)
         cbrbrk(cbirno) = rratio(nxcut1(2)+nzodv+1,nrplg-npplg)
-      end if
+       end if
 cnh Grid parameters for unstructured format
-      if (carre_mode.lt.2) then
+       if (carre_mode.lt.2) then
         ncvp = (ndxa-npplg+3)*(ndya+2)-2*nncut
         ncip = (ndxa-npplg-nncut+3)*ndya
         nfcp = (ndxa-2*nncut+3)*ndya+(ndxa-npplg-nncut+3)*(ndya+1)
-      else
+       else
         ncvp = ncells
         ncip = nicells
         nfcp = nfaces
-      end if
+       end if
 
-      if (npplg.eq.1) then
+       if (npplg.eq.1) then
         nssir(1) = 1
         nssir(2) = ndxa+1
         nssir(3) = (ndxa+1)*ndya+1
         nssir(4) = (ndxa+1)*(ndya+1)
-      else if (npplg.eq.3) then
+       else if (npplg.eq.3) then
         nssir(1) = 1
         nssir(2) = (ndxa-1)*ndya
         nssir(3) = ndxa-1
         nssir(4) = (ndxa-1)*(ndya+1)-1
-      else if (npplg.eq.6) then
+       else if (npplg.eq.6) then
         nssir(1) = 1
         nssir(2) = (ndxa-5)*ndya-1
         nssir(3) = inump(3)-2
@@ -299,6 +308,7 @@ cnh Grid parameters for unstructured format
         nssir(6) = (ndxa-5)*ndya-2+inump(3)-1
         nssir(7) = ndxa-5
         nssir(8) = (ndxa-5)*(ndya+1)-2
+       end if
       end if
 
 c!###{

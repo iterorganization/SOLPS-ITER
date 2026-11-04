@@ -100,8 +100,9 @@ c*** Produce the input files for Eirene for averaging scheme runs
 c*** Create the header for the b2ag.dat file
       inquire(file='b2ag.dat', exist=uex)
       if(uex) then !{
-          print *,'    ... b2ag.dat file already present, not created'
+        print *,'    ... b2ag.dat file already present, not created'
       else !}{
+        if (gridgeneratorID == 0) then ! Carre, structured format
           open(2,file='b2ag.dat')
           write(2,'(a)')
      .     '*dimens         (nx, ny, nx1, ny1; free format)'
@@ -122,6 +123,25 @@ c*** Create the header for the b2ag.dat file
      .                   '''b2agdr_redef_gmtry''  ''0'''
           close(2)
           print *,'    ... b2ag.dat created'
+        elseif (gridgeneratorID == 1) then ! Goat, unstructured format
+          open(2,file='b2ag.dat')
+          write(2, '(a)') '*format'
+          write(2, '(a)') '  unstructured'
+          write(2,'(a)')
+     .      '*dimens         (nCv, nFc, nVx; free format)'
+          write(2,'(3(3x,i8))') nicells, nfaces, nvert
+          write(2,'(a)') '*param          (param(0:99); free format)'
+          write(2,'(a)') ' -1.0, 99*0.0'
+          write(2,'(a)') '''b2agfs_min_pitch''    ''0.01'''
+          ! temporary for Goat mode grids: disable redef_gmtry
+          write(2,'(a)') '''b2agdr_redef_gmtry''  ''0'''
+          close(2)
+          print *,'    ... b2ag.dat created'
+        else
+          ! Unknown grid generator
+          call xerrab('uinput: unknown grid generator ID when ' //
+     .      'writing b2ag.dat')
+        end if
       endif !}
 
 c*** Create the b2us.dat file for triangulation
