@@ -34,15 +34,18 @@ c***      nptseg: their segmentation (DG);
 c***  ntrgdflt  : default number of targets depending on the topology
 c***  ntrgts    : maximum number of targets
 c***  nntrian   : maximum number of triangular mesh nodes for input
+c***  gridgeneratorID : identification number of the grid generator:
+c***     0: Carre, 1: Goat
       integer, parameter :: nnpr=6, nnptseg=6, ntrgts=4, namdfs=20
       integer, parameter :: nntrian=1
       integer mnpr,mnptseg,npr(nnpr),nptseg(nnptseg),ntrgdflt,namdf
       integer nppol(nregmx),nprad(nregmx),nnreg,
      .        cflags(5,npmamx,nrmamx,nregmx),
-     .        fdegen(4,npmamx,nrmamx,nregmx)
-      integer ncells,nicells,nbcells,nfaces,ndfaces
+     .        fdegen(4,npmamx,nrmamx,nregmx), gridgeneratorID
+      integer ncells,nicells,nbcells,nfaces,ndfaces, nvert
       integer carre_mode,grid_mode
       character*4 topo
+      character*8 gridgeneratorname
       character*48 amd_file(namdfs)
 
 c*** B2 dimensions
@@ -267,6 +270,9 @@ c***      flags "use default recycling";
 c***      types of boundary conditions for Te, n, Ti, and v;
 c***      parameters for boundary conditions for Te, Ti, n, and v.
 c*** ldvbndx(0) is the number of radial markers
+c***      fclblused are the non-core face labels that are used in the
+c***      grid (and nfclblused the amount of non-zero values)
+c***      fclblcoreused are the labels used for the core regions
       integer mdvbndx,ldvbndx(0:nbnddvd),
      ,  mznbndx(nbndknd),lznbndx(nbndzon,nbndknd),
      ,  mmkbndx(nbndknd),lmkbndx(nbndzon,nbndknd)
@@ -287,6 +293,8 @@ c***                    Below, index "0" corresponds to a group default
       character*2 ewmbndx(0:nbndzon,nbndknd)*8,
      ,  escbndx(natm,0:nbndzon,nbndknd), eswbndx(natm,0:nbndzon,nbndknd)
       logical dfrbndx(nbndknd)
+      integer nfclblused, fclblused(nbndzon*nbndknd)
+      integer nfclblcoreused, fclblcoreused(nbndzon*nbndknd)
       integer
      ,  leebndx(0:nbndzon,nbndknd), lcobndx(nsdb2,0:nbndzon,nbndknd),
      ,  leibndx(0:nbndzon,nbndknd), lmobndx(nsdb2,0:nbndzon,nbndknd),
@@ -315,12 +323,13 @@ c***             their positions, zone range and position ;
 c***             flags "explicit boundary specified" and
 c***             "explicit recycling specified" for each zone;
 c***             boundary code (E, W, S, N) for each region and zone;
+c***             face label of boundary for unstructured grids
       integer nrgbndt(nbndknd),nznbndt(nbndknd),
      ,  lcmbndt(nbndrgn,nbndknd),lrfbndt(nbndzon,nbndknd),
      ,  lrrbndt(nbndrgn,nbndknd,2),lrpbndt(nbndrgn,nbndknd,2),
      ,  lrsbndt(nbndrgn,nbndknd),
      ,  lzrbndt(nbndzon,nbndknd,2),lzpbndt(nbndzon,nbndknd),
-     ,  lzrbndt_us(nbndzon,nbndknd,2)
+     ,  lzrbndt_us(nbndzon,nbndknd,2), lblbndt_us(nbndzon, nbndknd)
       logical bxsbndt(nbndzon,nbndknd),rxsbndt(nbndzon,nbndknd)
       character crgbndt(nbndrgn,nbndknd),cznbndt(nbndzon,nbndknd)
 
@@ -458,7 +467,9 @@ c-----------------------------------------------------------------------
 c*** Numbering offset for "additional surfaces" and surface indices:
 c***    indasrfe(i) is the new number for an old number i,
 c***    indasrfs(i) is the old number for a new number i
-      integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim)
+c***    indasrfb(i) is the 3b number for a new number i
+      integer laddsrfs, indasrfe(0:nlim), indasrfs(0:nlim),
+     ,     indasrfb(0:nlim)
 
 c*** Coordinates of the O-point
       real(kind=R4) xlpcntr(3)

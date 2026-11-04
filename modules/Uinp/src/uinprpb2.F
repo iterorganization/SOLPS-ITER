@@ -40,8 +40,18 @@ c*** Initialization
       nmdpr(5,1)=nspcpls+nspcncl
 
 c*** nx, ny, ns
-      iniprm(1,1,1,1,1)=nx
-      iniprm(1,1,1,2,1)=ny
+      if (gridgeneratorID == 0) then
+        ! Carre grid in structured format
+        iniprm(1,1,1,1,1)=nx
+        iniprm(1,1,1,2,1)=ny
+      elseif (gridgeneratorID == 1) then
+        ! Goat grid in unstructured format
+        iniprm(1,1,1,1,1)=0
+        iniprm(1,1,1,2,1)=0
+      else
+        ! Unknown grid generator
+        call xerrab('uinprpb2: unknown grid generator')
+      end if
       iniprm(1,1,1,3,1)=nspcpls+nspcncl
 
 c*** Establish species correspondence array
@@ -70,19 +80,35 @@ c*** mi, zi
 c-----------------------------------------------------------------------
 c*** Boundary
       ncore=nznbndt(1)   ! number of core regions
-      if (grid_mode.eq.2) then
-        nvess=maxval(fclbl)   ! vessel elements for vessel mode
-      else
-        nvess=0
-      end if
-      if (grid_mode.ne.2) then
-        nbc=0
-        do i=1,nbndknd !{
-          nbc=nbc+nznbndt(i)
-        end do !}
-      else ! extended grid in vessel mode
+      select case (gridgeneratorID)
+      case (0)
+        if (grid_mode.eq.2) then
+        ! vessel elements for vessel mode
+          nvess=count(fclblused.gt.0)
+          write(*,*) 'Found nvess = ',nvess,' active vessel boundaries.'
+        else
+          nvess=0
+        end if
+        if (grid_mode.ne.2) then
+          nbc=0
+          do i=1,nbndknd !{
+            nbc=nbc+nznbndt(i)
+          end do !}
+        else ! extended grid in vessel mode
+          nbc=ncore+nvess
+        end if
+      case (1)
+        print *, 'uinprpb2: Goat route followed'
+        ! Vessel elements and void boundaries
+        nvess=count(fclblused.gt.0)
+        write(*,*) 'Found nvess = ',nvess,' active vessel boundaries.'
+
+        ! Number of boundary conditions
         nbc=ncore+nvess
-      end if
+      case default
+        call xerrab('uinprpb2: unknown grid generator ID')
+      end select
+
       do i=2,11 !{
         nmdpr(i,2)=nbc
       end do !}
@@ -130,11 +156,14 @@ c*** nbc
 
       k=0
       nhyb=0 !nh additional number of strata for the hybrid model
-      if (grid_mode.ne.2) then
+      select case (gridgeneratorID)
+
+      case (0) ! Carre
+       if (grid_mode.ne.2) then
         do j=1,nbndknd !{
           do i=1,nznbndt(j) !{
             k=k+1
-c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, 
+c*** bcchar, bcpos, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar,
 c    enipar, enkpar, potpar
             cniprm(k,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
 cnh            iniprm(k,1,1, 3,2)=lcpbnds(i,j)-1 No longer used in wg code
@@ -190,7 +219,7 @@ c*** bccon, conpar, bcmom, mompar
             end do !}
           end do !}
         end do !}
-      else ! vessel mode
+       else ! vessel mode
 c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
         cniprm(1:nbc,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
 !    first set the core regions
@@ -209,21 +238,24 @@ c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
         rniprm(1:ncore,1,1,26,2)=benkbnds(1:ncore,1,1)
         rniprm(1:ncore,2,1,26,2)=benkbnds(1:ncore,2,1)
 !     set the other components of the vessel
-        do i=ncore+1,nbc
-          iniprm(i,1,1, 4,2)=i-ncore
-          iniprm(i,1,1, 5,2)=i-ncore
-          iniprm(i,1,1, 6,2)=15
-          iniprm(i,1,1, 7,2)=15
-          iniprm(i,1,1, 8,2)=11
-          iniprm(i,1,1,25,2)=15
-          rniprm(i,1,1, 9,2)=1.
-          rniprm(i,1,1,10,2)=1.5
-          rniprm(i,2,1, 9,2)=0.
-          rniprm(i,2,1,10,2)=0.
-          rniprm(i,1,1,11,2)=0.
-          rniprm(i,2,1,11,2)=0.
-          rniprm(i,1,1,26,2)=1.
-          rniprm(i,2,1,26,2)=0.
+        do i=ncore+1,ncore+nfclblused
+          iniprm(i,1,1, 4,2)=fclblused(i-ncore)
+          iniprm(i,1,1, 5,2)=fclblused(i-ncore)
+          if (fclblused(i-ncore).gt.0) then
+            ! solid surface => sheath BCs
+            iniprm(i,1,1, 6,2)=15
+            iniprm(i,1,1, 7,2)=15
+            iniprm(i,1,1, 8,2)=11
+            iniprm(i,1,1,25,2)=15
+            rniprm(i,1,1, 9,2)=1.
+            rniprm(i,1,1,10,2)=1.5
+            rniprm(i,2,1, 9,2)=0.
+            rniprm(i,2,1,10,2)=0.
+            rniprm(i,1,1,11,2)=0.
+            rniprm(i,2,1,11,2)=0.
+            rniprm(i,1,1,26,2)=1.
+            rniprm(i,2,1,26,2)=0.
+          endif
         end do
 c*** bccon, conpar, bcmom, mompar
         ispc = 0
@@ -252,15 +284,113 @@ c*** bccon, conpar, bcmom, mompar
             rniprm(l,1:ncore,1,15,2)=bmobnds(ifl(l),1:ncore,1,1)
             rniprm(l,1:ncore,2,15,2)=bmobnds(ifl(l),1:ncore,2,1)
 !    other components of the vessel
-            iniprm(l,ncore+1:nbc,1,12,2)=14
-            rniprm(l,ncore+1:nbc,1,13,2)=1.
-            rniprm(l,ncore+1:nbc,2,13,2)=0.
-            iniprm(l,ncore+1:nbc,1,14,2)=13
-            rniprm(l,ncore+1:nbc,1,15,2)=1.
-            rniprm(l,ncore+1:nbc,2,15,2)=0.
+            do i=ncore+1,ncore+nfclblused
+              if (fclblused(i-ncore).gt.0) then
+                ! solid surface => sheath BCs
+                iniprm(l,i,1,12,2)=14
+                rniprm(l,i,1,13,2)=1.
+                rniprm(l,i,2,13,2)=0.
+                iniprm(l,i,1,14,2)=13
+                rniprm(l,i,1,15,2)=1.
+                rniprm(l,i,2,15,2)=0.
+              endif
+            enddo
           end if !}
         end do !}
-      end if
+       end if
+
+      case (1)
+        print *, 'uinprpb2: Goat route followed for hybrid model strata'
+c*** bcchar, bcstart, bcend, bcene, bceni, bcenk, bcpot, enepar, enipar, potpar
+        cniprm(1:nbc,1,1, 2,2)='A'  !nh Always using 'A' in the wg code
+!    first set the core regions
+        iniprm(1:ncore,1,1, 4,2)=lc1bnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 5,2)=lc2bnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 6,2)=leebnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 7,2)=leibnds(1:ncore,1)
+        iniprm(1:ncore,1,1, 8,2)=lpobnds(1:ncore,1)
+        iniprm(1:ncore,1,1,25,2)=lenkbnds(1:ncore,1)
+        rniprm(1:ncore,1,1, 9,2)=beebnds(1:ncore,1,1)
+        rniprm(1:ncore,1,1,10,2)=beibnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1, 9,2)=beebnds(1:ncore,2,1)
+        rniprm(1:ncore,2,1,10,2)=beibnds(1:ncore,2,1)
+        rniprm(1:ncore,1,1,11,2)=bpobnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1,11,2)=bpobnds(1:ncore,2,1)
+        rniprm(1:ncore,1,1,26,2)=benkbnds(1:ncore,1,1)
+        rniprm(1:ncore,2,1,26,2)=benkbnds(1:ncore,2,1)
+!     set the other components of the vessel
+        do i=ncore+1,ncore+nfclblused
+          iniprm(i,1,1, 4,2)=fclblused(i-ncore)
+          iniprm(i,1,1, 5,2)=fclblused(i-ncore)
+          if (fclblused(i-ncore).gt.0) then
+            ! solid surface => sheath BCs
+            iniprm(i,1,1, 6,2)=15
+            iniprm(i,1,1, 7,2)=15
+            iniprm(i,1,1, 8,2)=11
+            iniprm(i,1,1,25,2)=15
+            rniprm(i,1,1, 9,2)=1.
+            rniprm(i,1,1,10,2)=1.5
+            rniprm(i,2,1, 9,2)=0.
+            rniprm(i,2,1,10,2)=0.
+            rniprm(i,1,1,11,2)=0.
+            rniprm(i,2,1,11,2)=0.
+            rniprm(i,1,1,26,2)=1.
+            rniprm(i,2,1,26,2)=0.
+          endif
+        end do
+c*** bccon, conpar, bcmom, mompar
+        ispc = 0
+        do l=1,nspcpls+nspcncl !{
+          if (ifl(l).eq.0) then !{ fluid neutral b.c.
+            ispc = ispc + 1
+            if (streql(spcigen(ispc),'H').or.
+     .          streql(spcigen(ispc),'D').or.
+     .          streql(spcigen(ispc),'T')) then !nh{ AFN b.c.'s for hydrogen species
+              iniprm(l,1:nbc,1,12,2)=5 !nh zero particle flux density at all boundaries
+              iniprm(l,1:ncore,1,14,2)=2 !nh zero gradient at core boundary
+              iniprm(l,ncore+1:nbc,1,14,2)=5 !nh zero momentum flux at other boundaries
+              nhyb=nhyb+nvess
+            else
+              iniprm(l,1:ncore,1,12,2)=8
+              iniprm(l,ncore+1:nbc,1,12,2)=5
+              iniprm(l,1:ncore,1,14,2)=2
+              iniprm(l,ncore+1:nbc,1,14,2)=1
+            end if
+          else !}{
+!    core regions
+            iniprm(l,1:ncore,1,12,2)=lcobnds(ifl(l),1:ncore,1)
+            rniprm(l,1:ncore,1,13,2)=bcobnds(ifl(l),1:ncore,1,1)
+            rniprm(l,1:ncore,2,13,2)=bcobnds(ifl(l),1:ncore,2,1)
+            iniprm(l,1:ncore,1,14,2)=lmobnds(ifl(l),1:ncore,1)
+            rniprm(l,1:ncore,1,15,2)=bmobnds(ifl(l),1:ncore,1,1)
+            rniprm(l,1:ncore,2,15,2)=bmobnds(ifl(l),1:ncore,2,1)
+!    other components of the vessel
+            do i=ncore+1,ncore+nfclblused
+              if (fclblused(i-ncore).gt.0) then
+                ! solid surface => sheath BCs
+                iniprm(l,i,1,12,2)=14
+                rniprm(l,i,1,13,2)=1.
+                rniprm(l,i,2,13,2)=0.
+                iniprm(l,i,1,14,2)=13
+                rniprm(l,i,1,15,2)=1.
+                rniprm(l,i,2,15,2)=0.
+              else
+                ! void boundary => leakage
+                iniprm(l,i,1,12,2)=10
+                rniprm(l,i,1,13,2)=-0.001
+                rniprm(l,i,2,13,2)=0.
+                iniprm(l,i,1,14,2)=2
+                rniprm(l,i,1,15,2)=0.
+                rniprm(l,i,2,15,2)=0.
+              endif
+            enddo
+          end if !}
+        end do !}
+
+      case default
+        call xerrab('uinprpb2: unknown grid generator ID')
+      end select
+
 c*** lcbs
       do i=1,nznbndt(1) !{
         iniprm(i,1,1,16,2)=i
@@ -339,16 +469,25 @@ c-----------------------------------------------------------------------
 c*** Neutrals
 
 c*** k, m, n are the numbers of recycling, specified, and all strata
-      if (grid_mode.ne.2) then ! standard + target mode
-        k=0
-        do j=1,nbndknd !{
-          do i=1,nznbndt(j) !{
-            if(nlrbnds(i,j)) k=k+(natmi-nmeta)
+      select case (gridgeneratorID)
+      case (0)
+        if (grid_mode.ne.2) then ! standard + target mode
+          k=0
+          do j=1,nbndknd !{
+            do i=1,nznbndt(j) !{
+              if(nlrbnds(i,j)) k=k+(natmi-nmeta)
+            end do !}
           end do !}
-        end do !}
-      else ! vessel mode
+        else ! vessel mode
+          k=nvess*(natmi-nmeta)
+        end if
+      case (1)
+        ! Goat: same as vessel mode here
         k=nvess*(natmi-nmeta)
-      end if
+      case default
+        call xerrab('uinprpb2: unknown grid generator ID')
+      end select
+
       m=k+ngpfstr+nrcmstr
       n=m
       if(usetmstr) n=m+1
@@ -406,20 +545,44 @@ c*** k, m, n are the numbers of recycling, specified, and all strata
       nmdlr(20,3)=m
       nmdlr(20,8)=m+nhyb
       nskip=0
-      if (grid_mode.eq.2) then !{ vessel mode
+
+      select case (gridgeneratorID)
+      case (0)
+
+        if (grid_mode.eq.2) then !{ vessel mode
+          do k = laddsrfs+1, nlimi !{
+            i=indasrfs(k)
+            if (i.eq.0) cycle
+cnh Surface with nonzero face label is a standard surface
+            if (fclbl(i).ne.0) nskip=nskip+1
+          end do !}
+        end if !}
+        if (grid_mode.ne.2) then !{ standard + target mode
+          nmdpr(25,3)=nlimi-nskip+nstsi+1
+          nmdpr(25,8)=nlimi-nskip+nstsi+1
+        else !{ vessel mode
+          nmdpr(25,3)=nlimi-nskip+ncore+nfclblused+1
+          nmdpr(25,8)=nlimi-nskip+ncore+nfclblused+1
+        end if
+
+      case (1)
+
+        ! Follow vessel mode routine
         do k = laddsrfs+1, nlimi !{
           i=indasrfs(k)
+          if (i.eq.0) cycle
 cnh Surface with nonzero face label is a standard surface
           if (fclbl(i).ne.0) nskip=nskip+1
         end do !}
-      end if !}
-      if (grid_mode.ne.2) then !{ standard + target mode
-        nmdpr(25,3)=nlimi-nskip+nstsi+1
-        nmdpr(25,8)=nlimi-nskip+nstsi+1
-      else !{ vessel mode
-        nmdpr(25,3)=nlimi-nskip+ncore+maxval(fclbl)+1
-        nmdpr(25,8)=nlimi-nskip+ncore+maxval(fclbl)+1
-      end if       
+        nmdpr(25,3)=nlimi-nskip+ncore+nfclblused+1
+        nmdpr(25,8)=nlimi-nskip+ncore+nfclblused+1
+
+      case default
+
+        call xerrab('uinprpb2: unknown grid generator ID')
+
+      end select
+
       nmdpr(22,3)=nspcmol
       nmdpr(22,8)=nspcmol
       nmdpr(23,3)=nspcion
@@ -477,7 +640,7 @@ c*** Recycling sources
       k=0
       kk=0
       ihyb = 0
-      if (grid_mode.ne.2) then ! target and vessel mode
+      if (grid_mode.ne.2 .and. gridgeneratorID == 0) then ! target and vessel mode
         do j=1,nbndknd !{
           do i=1,nznbndt(j) !{
             kk=kk+1
@@ -562,7 +725,7 @@ c***            targsp
                   if (ilsptp(ists).gt.0) then !{
                     if (isrss(ists).gt.0) then !{
                       isp = isrss(ists)
-                    else if (isrss(ists).lt.0) then !}{
+                    else if (isrss(ists).le.0) then !}{
                       ii = mod(nint(xmlim(ists)),100)
                       do jj = 1, nspcatm !{
                         if (isp.ne.0) cycle
@@ -648,7 +811,7 @@ cnh             values for additional hybrid strata
       else ! vessel mode
         k=0
         ihyb=0
-        do i=1,nvess !{
+        do i=1,nfclblused !{
           ispe=0
           do iatm=1,natmi !{
             if (is_meta(iatm)) cycle
@@ -666,10 +829,10 @@ cnh             values for additional hybrid strata
 c***        crcstra, rcstart, rcend
             cniprm(k,1,1,2,3)='A' !nh always 'A' for surface strata
             cniprm(k+ihyb,1,1,2,8)='A'
-            iniprm(k,1,1,4,3)=i
-            iniprm(k,1,1,5,3)=i
-            iniprm(k+ihyb,1,1,4,8)=i
-            iniprm(k+ihyb,1,1,5,8)=i
+            iniprm(k,1,1,4,3)=fclblused(i)
+            iniprm(k,1,1,5,3)=fclblused(i)
+            iniprm(k+ihyb,1,1,4,8)=fclblused(i)
+            iniprm(k+ihyb,1,1,5,8)=fclblused(i)
 
 c***        species_start, species_end
             iniprm(k,1,1,6,3)=ispi-1+(iatm-1)
@@ -707,12 +870,12 @@ c***        gpfc
             end do !}
 
 c***        targsp
-            ists = i
+            ists = ncore+i
             isp = 0
             if (ilsptp(ists).gt.0) then !{
               if (isrss(ists).gt.0) then !{
                 isp = isrss(ists)
-              else if (isrss(ists).lt.0) then !}{
+              else if (isrss(ists).le.0) then !}{
                 ii = mod(nint(xmlim(ists)),100)
                 do jj = 1, nspcatm !{
                   if (isp.ne.0) cycle
@@ -741,11 +904,13 @@ c***        targsp
 c***        surf_mat
 cnh         find material of the face
 cnh         should be replaced by vessel properties in the future!
-            do j=1,nlimi !{
-               if (fclbl(j).eq.i) exit
-            end do !}
-            c2niprm(k,1,1,40,3) = umtrl(j)
-            c2niprm(k+ihyb,1,1,40,8) = umtrl(j)
+            if (fclblused(i).gt.0) then
+              do j=1,nlimi !{
+                if (fclbl(j).eq.fclblused(i)) exit
+              end do !}
+              c2niprm(k,1,1,40,3) = umtrl(j)
+              c2niprm(k+ihyb,1,1,40,8) = umtrl(j)
+            endif
 
 c***        accel_ion
             iniprm(k,1,1,41,3) = 1
@@ -1491,15 +1656,16 @@ cxpb Second pass in case the molecules were not sorted in ascending order
       nskip=0
       do k = laddsrfs+1, nlimi !{
         i=indasrfs(k)
+        if (i.eq.0) cycle
 cnh Surface with nonzero face label is a standard surface
-        if ((grid_mode.eq.2).and.(fclbl(i).ne.0)) then !{ 
+        if (grid_mode.eq.2.and.fclbl(i).ne.0) then !{
           nskip=nskip+1
           cycle
-        endif         
+        endif
         rniprm(i-nskip,1,1,25,3)=rcycca(i)
         rniprm(i-nskip,1,1,25,8)=rcycca(i)
       end do !}
-      if (grid_mode.ne.2) then !{ standard+target mode
+      if (grid_mode.ne.2.and.gridgeneratorID.ne.1) then !{ standard+target mode
         do k = 1, nstsi !{
           i=nlim+k
           rniprm(i,1,1,25,3)=recycc(k)
@@ -1507,12 +1673,16 @@ cnh Surface with nonzero face label is a standard surface
         end do !}
       else !{ vessel mode
         i=nlimi-nskip+ncore
-        do k=1,maxval(fclbl)
+        do k=1,nfclblused
+          if (fclblused(k).le.0) cycle
           i=i+1
           do l=laddsrfs+1,nlimi !{ find corresponding surface
             j=indasrfs(l)
-            if (fclbl(j).eq.k) exit
+            if (j.ne.0) then
+              if (fclbl(j).eq.k) exit
+            end if
           end do
+          if(j.eq.0) cycle
           rniprm(i,1,1,25,3)=rcycca(j)
           rniprm(i,1,1,25,8)=rcycca(j)
         end do
@@ -1540,7 +1710,7 @@ cnh Surface with nonzero face label is a standard surface
               end do !}
             end do !}
             if(n.gt.0) then !{
-              if (grid_mode.ne.2) then !nh standard and target mode
+              if (grid_mode.ne.2.and.gridgeneratorID.ne.1) then !nh standard and target mode
                 l_spcsrf(i_spcsrf(i)+j-1)=indasrfe(n)
               elseif (fclbl(n).eq.0) then !nh vessel mode ==> 3b surface
                 nskip2=0

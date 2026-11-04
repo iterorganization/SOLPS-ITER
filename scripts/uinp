@@ -59,7 +59,6 @@ grep '^# topo ' uinput.trg > /dev/null && {
   true
 } || {
 # Old-style DG output: apply the old uinp
-
   print -- `basename $0`" : old file format - uinp version 1.42 to be applied"
   uinp.1.42.exe
 }

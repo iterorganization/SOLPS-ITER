@@ -57,7 +57,8 @@ c=======================================================================
       print '(20i5)',(indelm(i),i=1,nni)
       print *
 !###}
-      ntg=ntrgte
+c*** Original treatment based on target definitions
+      if (ntrgte.gt.0) ntg = ntrgte
 
 c*** Check some dimensions
 
@@ -408,6 +409,7 @@ c*** Error in the segment chains
         j=abs(ind(l))
         write(0,'(1x,i5)') ind(l)
         write(0,'(1x,20i5)') (ind(l+k),k=1,j)
+        l=l+j
       end do !}
       write(0,*) '  ==> Check the "Index" specification in ',
      ,                        '"TRIA-EIRENE parameters" in DG variables'

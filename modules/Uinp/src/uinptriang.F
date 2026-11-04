@@ -4,34 +4,40 @@
 
 c  version : 01.04.2005 00:51
 
-c***  prepares the data for TRIA grid 
-c***  returns .TRUE. if successful and .FALSE. otherwise 
+c***  prepares the data for TRIA grid
+c***  returns .TRUE. if successful and .FALSE. otherwise
       implicit none
-    
-      logical TriMesh  
+
+      logical TriMesh
       integer attrib(nlim),nattr,nchain,chain(nlim),
      ,  chain_sorted(nlim+ntrgts),nchain_seg
       integer NSS(nsts),nn,i,j,k,l,nnlbl
-      logical ex 
+      logical ex
       real txmin,txmax,tymin,tymax
-    
+
       call subini ('uinptriang')
       print *
       print *,'==== Starting uinptriang'
       TriMesh=.TRUE.
+      select case (gridgeneratorID)
+      case (1) ! Goat, void polygons are already provided. Skip this step
+        print *, 'uinptriang: following Goat route, not creating ' //
+     .    'void polygons here...'
+      case (0) ! Carre, void polygons still need to be built
+
 c*** makes list of polygon indices present in the input data
       attrib(1)=ilplgdg(1)
       k=1
-      do 10 i=2,nlim  
+      do 10 i=2,nlim
        ex=.true.
        do 15 j=1,k
         if(attrib(j).eq.ilplgdg(i)) ex=.false.
-   15  continue 
+   15  continue
        if(ex) then
         k=k+1
         attrib(k)=ilplgdg(i)
        end if
-   10 continue    
+   10 continue
       nattr=k
 c***  makes sets of elements with certain attribute
 c***  and check if they are closed
@@ -39,9 +45,9 @@ c***  and check if they are closed
       IF(nattr.GT.0) write(*,*) 'attrib', (attrib(l),l=1,nattr)
       if(nattr.EQ.1.AND.attrib(1).EQ.0) then
        TriMesh=.FALSE.
-       write(0,*) 'no TRIA polygons specified'  
+       write(0,*) 'no TRIA polygons specified'
        goto 9999
-      end if 
+      end if
       ntriplg=0
       do 20 i=1,nattr
        write(*,*) 'chain number, attrib', i, attrib(i)
@@ -49,9 +55,9 @@ c***  and check if they are closed
        k=0
        do 25 j=1,nlim
         if(attrib(i).EQ.ilplgdg(j) ) then
-         k=k+1
-         chain(k)=j
-        end if     
+          k=k+1
+          chain(k)=j
+        end if
    25  continue
        nchain=k
        write(*,*) 'nchain',nchain
@@ -64,7 +70,7 @@ c***   makes checking and outputs NSS indices if necessary
      ,   attrib(i))
        write(*,*) 'nn ',nn
        IF(nn.GT.0)  write(*,*) 'NSS', (NSS(l),l=1,nn)
-       if(nn.LT.0) then 
+       if(nn.LT.0) then
         write(0,*) 'ERROR in uichkchn, nn', nn
         TriMesh=.FALSE.
         call xerrab('Contours did not close. Stopping.')
@@ -78,7 +84,7 @@ c***   write intermediate arrays for output
    27  continue
 c***   store the sorted chain to construct polygons for void triangulation
        ntriplg=ntriplg+1
-       if (ntriplg.gt.ntriplgmax) 
+       if (ntriplg.gt.ntriplgmax)
      ,   stop 'uinptriang -- increase value of ntriplgmax and recompile'
        nntriplg(ntriplg)=nchain
        nsegtriplg(ntriplg)=nchain_seg
@@ -87,8 +93,8 @@ c***   store the sorted chain to construct polygons for void triangulation
      ,   chain_sorted(1:nchain+nchain_seg)
        triplgnss(1:nn,ntriplg)=NSS(1:nn)
        nnlbl = 0
-       do j=1,nn
-         if (index(topo,'SN').gt.0) then
+       if (index(topo,'SN').gt.0) then
+         do j=1,nn
            if (NSS(j).eq.4) then
              nnlbl = nnlbl+1
              triplgfclbl(nnlbl,ntriplg)=-23
@@ -102,7 +108,9 @@ c***   store the sorted chain to construct polygons for void triangulation
              write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
              stop 'Check DG model'
            endif
-         elseif (index(topo,'DN').gt.0) then
+         end do
+       elseif (index(topo,'DN').gt.0) then
+         do j=1,nn
            if (NSS(j).eq.7) then
              nnlbl = nnlbl+1
              triplgfclbl(nnlbl,ntriplg)=-23
@@ -125,13 +133,14 @@ c***   store the sorted chain to construct polygons for void triangulation
              write (*,*) 'Did not expect NSS = ',NSS(j),' in chain'
              stop 'Check DG model'
            endif
-         else
-           write (*,*) 'uinptriang -- warning: topology ',topo,
-     ,                 'not yet supported for void triangulation'
-         endif
-         nfclbltriplg(ntriplg)=nnlbl
-       enddo
-   20 continue   
+         end do
+       else
+          write (*,*) 'uinptriang -- warning: topology ',topo,
+     ,                'not yet supported for void triangulation'
+       endif
+       nfclbltriplg(ntriplg)=nnlbl
+   20 continue
+      end select
 
 c  Prepare data for TRIA input file (header with refinement zones data)
       k=0
@@ -147,7 +156,7 @@ c  Prepare data for TRIA input file (header with refinement zones data)
         txmax=max(txmax,p1(1,trirefel(k)),p2(1,trirefel(k)))
         tymin=min(tymin,p1(2,trirefel(k)),p2(2,trirefel(k)))
         tymax=max(tymax,p1(2,trirefel(k)),p2(2,trirefel(k)))
-   35  continue   
+   35  continue
        trixmin(i)=txmin
        trixmax(i)=txmax
        triymin(i)=tymin
