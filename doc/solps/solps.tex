@@ -7,7 +7,7 @@
 % whole page) to absorb any real shortfall like \raggedbottom would, but
 % avoids tripping longtable's \vsplit "Infinite glue shrinkage found in box
 % being split" warning -- and, unlike \flushbottom (no bottom slack at all),
-% doesn't force every page to fill exactly, so it avoids the "Underfull
+% does not force every page to fill exactly, so it avoids the "Underfull
 % \vbox (badness 10000) ... \output is active" warnings \flushbottom caused.
 \def\@textbottom{\vskip \z@ \@plus \textheight\relax}
 \makeatother

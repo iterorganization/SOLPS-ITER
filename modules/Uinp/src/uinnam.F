@@ -16,7 +16,7 @@ c=======================================================================
      .  lchrdgrp,lchrdlint,lchrdlprf
       integer :: ichlst(nchor)
       real(kind=R4) :: u
-      parameter(lunm=184)
+      parameter(lunm=185)
       character*8 unm(lunm),uun
       character*8, save :: chtyp
       character ubs*1,uam*52
@@ -74,7 +74,7 @@ c*** lugwt : counter for the grid-wall ties
      4    'set_id'  ,'chr_lbl' ,'chr_angl','chrdsdat','data_id' ,
      5    'set_list','n_points','linprfs' ,'lm_equ'  ,'refcell' ,
      6    'refpress','trefcell','trfpress','crr_mode','grd_mode',
-     7    'tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm' /
+     7    'tgfclbl' ,'fclbl'   ,'omp_elm' ,'imp_elm' ,'ggname'/
 c=======================================================================
       call subini ('uinnam')
 c*** Backslash:
@@ -1128,6 +1128,22 @@ c***  input elements indices for current rectangle
         call resimi(omp_elm)
       case (184) ! imp_elm
         call resimi(imp_elm)
+      case (185) ! ggname
+        call resima(gridgeneratorname)
+        select case (trim(gridgeneratorname))
+        case ('CARRE', 'Carre', 'carre')
+          write(*,*) 'Carre grid generator used, following Carre route'
+          gridgeneratorID = 0
+        case ('GOAT', 'Goat', 'goat')
+          write(*,*) 'Goat grid generator used, following Goat route'
+          gridgeneratorID = 1
+        case default
+          write(*,*) 'grid generator name ="' // trim(gridgeneratorname)
+     ,            // '".'
+          write(*,*) 'Unknown grid generator or name option not set ' //
+     ,     'in DivGeo, defaulting to Carre setup'
+          gridgeneratorID = 0
+        end select
       case default
         call skipit
       end select

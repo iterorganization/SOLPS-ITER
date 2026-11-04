@@ -22,89 +22,130 @@ c=======================================================================
 c      print '(a,10i6)','uinbndzn: nx,ny,nncut,mdvbndx,nrgbndt = ',       !###
 c     ,                            nx,ny,nncut,mdvbndx,nrgbndt !###
 
-      if(nx.gt.nxd) then !{
-        write(0,*) 'Too many poloidal grid points: maximum ',nxd
-        write(0,*)
-     .   'Current number of requested poloidal grid points: ',nx
-         call xerrab
-     .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
-      end if !}
-      if(ny.gt.nyd) then !{
-        write(0,*) 'Too many radial grid points: maximum ',nyd
-        write(0,*)
-     .   'Current number of requested radial grid points: ',ny
-        call xerrab
-     .   (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
-      end if !}
+      if (gridgeneratorID == 1) then ! Unstructured Goat grid
+        ! Print
+        write(*,*) 'uinbndzn: Goat grid used, following Goat route'
+
+        ! Note: here we cannot do any divides based on the grid cuts,
+        ! we can only follow face labels.
+
+        do m = 1, nbndknd
+          iz = 0 ! zone counter for this region
+          do k = 1, nrgbndt(m)
+            ! Increment counter & check
+            iz = iz + 1
+            if (iz > nbndzon) then
+              call xerrab('Too many boundary zones specified for ' //
+     ,       'targets, increase nbndzon in uinput_mod.F')
+            end if
+
+            ! Set face label - used to be tgfclbl, not sure if correct?
+            lzrbndt_us(iz, m, 1) = lblbndt_us(k, m)
+            lzrbndt_us(iz, m, 2) = lblbndt_us(k, m)
+
+            ! Propagate face label
+            lc1bnds(iz,m)=lzrbndt_us(iz,m,1)
+            lc2bnds(iz,m)=lzrbndt_us(iz,m,2)
+            ls1bnds(iz,m)=lc1bnds(iz,m)
+            ls2bnds(iz,m)=lc2bnds(iz,m)
+
+            ! Set index (?)
+            lrfbndt(iz,m)=k
+
+            ! Set character
+            cznbndt(iz, m) = crgbndt(k, m)
+            cskbnds(iz,m)=cznbndt(iz,m)
+          end do
+
+          ! Set number of zones
+          nznbndt(m) = iz
+        end do
+
+      elseif (gridgeneratorID == 0) then ! Structured grid of Carre
+
+        if(nx.gt.nxd) then !{
+          write(0,*) 'Too many poloidal grid points: maximum ',nxd
+          write(0,*)
+     .     'Current number of requested poloidal grid points: ',nx
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
+        end if !}
+        if(ny.gt.nyd) then !{
+          write(0,*) 'Too many radial grid points: maximum ',nyd
+          write(0,*)
+     .     'Current number of requested radial grid points: ',ny
+          call xerrab
+     .     (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
+        end if !}
 
 c*** Find the divides positions for each kind of boundary.
 
-      do i=0,nyd+1 !{
-        do j=1,ntrgts !{
-          i_tg(i,j)=0
-        end do !}
-      end do !}
-      do i=0,nxd+1 !{
-        i_cr(i)=0
-        do j=1,nbndrgn !{
-          do k=1,n_hlp !{
-            i_sw(i,j,k)=0
+        do i=0,nyd+1 !{
+          do j=1,ntrgts !{
+            i_tg(i,j)=0
           end do !}
         end do !}
-      end do !}
+        do i=0,nxd+1 !{
+          i_cr(i)=0
+          do j=1,nbndrgn !{
+            do k=1,n_hlp !{
+              i_sw(i,j,k)=0
+            end do !}
+          end do !}
+        end do !}
 
 c*** Radial divides (targets)
-      n=ldvbndx(0)
-      do i=1,n !{
-        k=ldvbndx(i)
-        if(k.ge.0) then !{
-          ix=mod(k,nx+2)
-          iy=(k-ix)/(nx+2)
-        else !}{
-          k=-k
-          ix=mod(k,nx+2)
-          iy=ny+2
-        end if !}
-        m=2
-        do k=1,nrgbndt(m) !{
-          if(lrpbndt(k,m,1).gt.nxd+1) then !{
-            write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
-            write(0,*)
-     .       'Current number of requested poloidal grid points: ',
-     .        lrpbndt(k,m,1)
-            call xerrab
+        n=ldvbndx(0)
+        do i=1,n !{
+          k=ldvbndx(i)
+          if(k.ge.0) then !{
+            ix=mod(k,nx+2)
+            iy=(k-ix)/(nx+2)
+          else !}{
+            k=-k
+            ix=mod(k,nx+2)
+            iy=ny+2
+          end if !}
+          m=2
+          do k=1,nrgbndt(m) !{
+            if(lrpbndt(k,m,1).gt.nxd+1) then !{
+              write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
+              write(0,*)
+     .         'Current number of requested poloidal grid points: ',
+     .          lrpbndt(k,m,1)
+              call xerrab
      .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
-          end if !}
-          if(lrpbndt(k,m,2).gt.nxd+1) then !{
-            write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
-            write(0,*)
-     .       'Current number of requested poloidal grid points: ',
-     .        lrpbndt(k,m,2)
-            call xerrab
+            end if !}
+            if(lrpbndt(k,m,2).gt.nxd+1) then !{
+              write(0,*) 'Too many poloidal grid points: maximum ',nxd+1
+              write(0,*)
+     .         'Current number of requested poloidal grid points: ',
+     .          lrpbndt(k,m,2)
+              call xerrab
      .    (' ==> Check the DG model and DEF_NXD in b2mod_dimensions.F')
-          end if !}
-          if(lrrbndt(k,m,1).gt.nyd+1) then !{
-            write(0,*) 'Too many radial grid points: maximum ',nyd+1
-            write(0,*)
-     .       'Current number of requested radial grid points: ',
-     .        lrrbndt(k,m,1)
-            call xerrab
+            end if !}
+            if(lrrbndt(k,m,1).gt.nyd+1) then !{
+              write(0,*) 'Too many radial grid points: maximum ',nyd+1
+              write(0,*)
+     .         'Current number of requested radial grid points: ',
+     .          lrrbndt(k,m,1)
+              call xerrab
      .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
-          end if !}
-          if(lrrbndt(k,m,2).gt.nyd+1) then !{
-            write(0,*) 'Too many radial grid points: maximum ',nyd+1
-            write(0,*)
-     .       'Current number of requested radial grid points: ',
-     .        lrrbndt(k,m,2)
-            call xerrab
+            end if !}
+            if(lrrbndt(k,m,2).gt.nyd+1) then !{
+              write(0,*) 'Too many radial grid points: maximum ',nyd+1
+              write(0,*)
+     .         'Current number of requested radial grid points: ',
+     .          lrrbndt(k,m,2)
+              call xerrab
      .    (' ==> Check the DG model and DEF_NYD in b2mod_dimensions.F')
-          end if !}
-          if(ix.ge.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
-     ,       iy.gt.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
-            i_tg(iy,k)=1
-          end if !}
+            end if !}
+            if(ix.ge.lrpbndt(k,m,1) .and. ix.le.lrpbndt(k,m,2) .and.
+     ,         iy.gt.lrrbndt(k,m,1) .and. iy.le.lrrbndt(k,m,2)) then !{
+              i_tg(iy,k)=1
+            end if !}
+          end do !}
         end do !}
-      end do !}
 c!###{
 c      print *,'i_tg:'
 c      do k=1,ntrgts !{
@@ -371,7 +412,7 @@ c           print *,'k,iz,iy =',k,iz,iy !###
         end if !}
       end do !}
       nznbndt(m)=iz
-cnh   replace face labels of targets with carre2 conventions for negative face labels
+cnh   replace face labels of targets with Carre2 conventions for negative face labels
 cnh   I think it is not correct yet for USN
       if (carre_mode.lt.2) then
         if (nznbndt(m).eq.4) then ! DN
@@ -587,22 +628,27 @@ c             print *,'m,k,iz,ix = ',m,k,iz,ix  !###
         nznbndt(m)=iz
       end do !}
 c!###{
-      print *,'Boundary zones: ',nznbndt
-      print *
-      print *,'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
-     ,  ' ls1 ls2'
-      do k=1,nbndknd !{
-        if (nznbndt(k).eq.0) cycle
+        print *,'Boundary zones: ',nznbndt
         print *
-        do j=1,nznbndt(k) !{
-          print '(2i4,1x,a1,1x,13i4)',k,j,cznbndt(j,k),lrfbndt(j,k),
-     ,      lzpbndt(j,k),lzrbndt(j,k,1),lzrbndt(j,k,2),jdrbnds(j,k),
-     ,      jcpbnds(j,k),jc1bnds(j,k),jc2bnds(j,k),lcpbnds(j,k),
-     ,      lc1bnds(j,k),lc2bnds(j,k),ls1bnds(j,k),ls2bnds(j,k)
+        print *,
+     ,   'knd  zone  ref pos  range  jdr jcp jc1 jc2 lcp lc1 lc2',
+     ,   ' ls1 ls2'
+        do k=1,nbndknd !{
+          if (nznbndt(k).eq.0) cycle
+          print *
+          do j=1,nznbndt(k) !{
+            print '(2i4,1x,a1,1x,13i4)',k,j,cznbndt(j,k),lrfbndt(j,k),
+     ,       lzpbndt(j,k),lzrbndt(j,k,1),lzrbndt(j,k,2),jdrbnds(j,k),
+     ,       jcpbnds(j,k),jc1bnds(j,k),jc2bnds(j,k),lcpbnds(j,k),
+     ,       lc1bnds(j,k),lc2bnds(j,k),ls1bnds(j,k),ls2bnds(j,k)
+          end do !}
         end do !}
-      end do !}
-      print *
+        print *
 c!###}
+      else ! Unknown grid generator
+        print *, 'grid generator ID = ', gridgeneratorID
+        call xerrab('uinbndzn: unknown grid generator ID')
+      end if
 c=======================================================================
       call subend ()
       return
