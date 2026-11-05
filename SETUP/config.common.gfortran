@@ -50,6 +50,11 @@ endif
 ifeq ($(shell `pkg-config --exists json-fortran`; echo $$?),0)
   JSON_INC = $(shell pkg-config json-fortran --cflags)
   LD_JSON = $(shell pkg-config json-fortran --libs)
+else
+  ifdef LIBJSON
+    JSON_INC = -I${LIBJSON}/../include
+    LD_JSON = -L${LIBJSON} -ljsonfortran
+  endif
 endif
 
 # Build with IMAS if imas module is loaded

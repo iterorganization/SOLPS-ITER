@@ -23,6 +23,7 @@
 #
 
 LD_NETCDF  = -L${NETCDF_LIB_DIR} -lnetcdf -L${NETCDF_FORTRAN_LIB_DIR} -lnetcdff
+NCDIR      = ${NETCDF_FORTRAN_LIB_DIR}/..
 LD_MSCL    = 
 LD_GR      = 
 LD_GKS     = 
