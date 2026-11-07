@@ -33,7 +33,7 @@ c---- coordinates
           write(6,*) 'stop in complete, new point is outside the',
      .         ' polygons.'
           print *,' ==> perhaps the direction of the polygon',
-     .         ' is incorrect'
+     .         ' is incorrect, or the triangle size is too small.'
           print '(a,i6,1p,2e12.4)',' new point: ',inodcon,xc
           print '(a,i5,a,1p,2(i6,a,2e12.4,a))',' triangle',nelm,
      ,      ' with ',ia,' (',x(ia),y(ia),' ),',ib,' (',x(ib),y(ib),' )'
