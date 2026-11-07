@@ -864,6 +864,7 @@ SOLPSTOP
 |   +---Matlab_SPb
 |   +---nc2text_simple
 |   +---palettes
+|   +---PythonPostProcessing
 |   +---ITER.ifort64
 +---scripts.local
 +---modules
@@ -2029,6 +2030,11 @@ Contains various Matlab routines used for postprocessing run results.
 \subsection{scripts/Matlab\_SPb}
 
 Contains a set of Matlab scripts to adjust meshes produced by {\tt Carre2} and stored in {\tt .geo} format. See full documentation in {\tt \$\{SOLPSTOP\}/doc/edit\_geo\_manual.pdf}.
+
+\subsection{scripts/PythonPostProcessing}
+
+Python translation of MatlabPostProcessing. Allows for basic postprocessing of results, such as 2D colorplots, wall fluxes, and OMP profiles.
+An example script {\tt example\_script.py} is provided as a starting point.
 
 \newpage\section{data}
 \index{data}
