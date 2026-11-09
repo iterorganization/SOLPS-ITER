@@ -23,7 +23,8 @@ c*** Check some dimensions
 
       call subini ('uinprp')
       uex=.false.
-      if(index(topo,'SN').eq.1) then !{
+      if (gridgeneratorID == 0) then ! topology only necessary for Carre based grids
+       if(index(topo,'SN').eq.1) then !{
         if(mnpr.ne.3) then !{
           uex=.true.
           write(0,*) 'Inconsistent number of radial zones for ',topo,
@@ -34,7 +35,7 @@ c*** Check some dimensions
           write(0,*) 'Inconsistent number of poloidal zones for ',topo,
      ,                '  (',mnptseg,' )'
         end if !}
-      else if(index(topo,'DN').eq.1) then !}{
+       else if(index(topo,'DN').eq.1) then !}{
         if(topo.eq.'DNS') then !{
           if(mnpr.ne.5) then !{
             uex=.true.
@@ -53,17 +54,26 @@ c*** Check some dimensions
           write(0,*) 'Inconsistent number of poloidal zones for ',topo,
      ,                '  (',mnptseg,' )'
         end if !}
-      else !}{
+       else !}{
         write(0,*) 'Unknown topology keyword "',topo,'".'
         write(0,*) '  ==> check the topology name in DG'
         call xerrab ('Unknown topology')
-      end if !}
-      call xertst(.not.uex, 'Topological inconsistency found in Uinp')
-      
+       end if !}
+       call xertst(.not.uex, 'Topological inconsistency found in Uinp')
+      elseif (gridgeneratorID == 1) then ! Goat grid generator, no topological information necessary
+        write(*,*)
+     ,   'Not checking topology since grid generated with Goat'
+      else
+        ! Grid generator not yet supported
+        write(*,*) 'gridgeneratorID =', gridgeneratorID
+        call xerrab('Unknown grid generator ID detected in uinprp')
+      end if
+
 c-----------------------------------------------------------------------
 c*** Modify some defaults for limiter and linear cases, if necessary
 
-      if(lm_cnfg) then !{
+      if (gridgeneratorID == 0) then
+       if(lm_cnfg) then !{
         jnpbndx(0,3)=lm_whst
         jnpbndx(0,4)=lm_whst
         do i=1,nstra !{
@@ -85,7 +95,8 @@ c*** Modify some defaults for limiter and linear cases, if necessary
         nttra=nttrator
         roa=roator
         zaa=zaator
-      end if !}
+       end if !}
+      end if
 
 
 c*** Modify the toroidal dimension in p1, p2 arrays
@@ -115,84 +126,125 @@ c*** Prepare index of valid additional surfaces
 
       k=laddsrfs
       l=1
-      do i=1,nlimi !{
-        uex=.false.
-        if(jadch0(l).eq.i) then !{
-          l=l+1
-          indasrfe(i)=0
-        else !}{
-          k=k+1
-          if(k.gt.nlim) then !{
-            write(0,*) 'Insufficient space for "additional surfaces" ',
-     ,        'in Eirene.'
-            write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
-     ,        '  reserved ',laddsrfs
-            call xerrab
+      select case (gridgeneratorID)
+      case (0)
+        do i=1,nlimi !{
+          uex=.false.
+          if(jadch0(l).eq.i) then !{
+            l=l+1
+            indasrfe(i)=0
+          else !}{
+            k=k+1
+            if(k.gt.nlim) then !{
+              write(0,*)
+     ,         'Insufficient space for "additional surfaces" '
+     ,         // 'in Eirene.'
+              write(0,*) 'Maximum ',nlim,', DG model ',nlimi,
+     ,         ' reserved ',laddsrfs
+              call xerrab
      .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+            end if !}
+            indasrfe(i)=k
+            indasrfs(k)=i
           end if !}
-          indasrfe(i)=k
-          indasrfs(k)=i
-        end if !}
-      end do !}
+        end do !}
 c!###{
 c      print *,'indasrfs:', k
 c      if(k.gt.0) print '(1x,30i4)',(indasrfs(i),i=1,k)
 c      print *,'indasrfe:',nlimi
 c      if(k.gt.0) print '(1x,30i4)',(indasrfe(i),i=1,nlimi)
 c!###}
-      jadch0(1)=0
-      nlimi=k
+        jadch0(1)=0
+        nlimi=k
 
 c*** Check for zero length additional surfaces
 
-      uex=.false.
-      do k=1,nlimi !{
-        i=indasrfs(k)
-        if(p1(1,i).eq.p2(1,i) .and. p1(2,i).eq.p2(2,i)) then !{
-          uex=.true.
-          write(*,'(1x,a,i5,a,1p,4(e15.6,a))') 'zero length: ',i,
+        uex=.false.
+        do k=1,nlimi !{
+          i=indasrfs(k)
+          if(p1(1,i).eq.p2(1,i) .and. p1(2,i).eq.p2(2,i)) then !{
+            uex=.true.
+            write(*,'(1x,a,i5,a,1p,4(e15.6,a))') 'zero length: ',i,
      ,         '  (',p1(1,i),',',p1(2,i),') - (',p2(1,i),',',p2(2,i),')'
+          end if !}
+        end do !}
+        if(uex) then !{
+          write(0,*) 'Zero-length segment(s) found in DG data'
+          call xerrab ('==> Check the geometry in the DG model')
         end if !}
-      end do !}
-      if(uex) then !{
-        write(0,*) 'Zero-length segment(s) found in DG data'
-        call xerrab ('==> Check the geometry in the DG model')
-      end if !}
 
 c*** Correct jadch1 (not tested yet!!!)
 
-      do j=1,nlim !{
-        if(indasrfe(j).gt.0) then !{
-          l=indasrfe(j)
-          if(jadch1(1,j).gt.0) then !{
-            k=0
-            uex=.true.
-            do i=1,nlim !{
-              if(uex) then !{
-                m=jadch1(i,j)
-                if(m.le.0) then !{
-                  uex=.false.
-                else !}{
-                  m=indasrfe(m)
-                  if(m.gt.0) then !{
-                    k=k+1
-                    m_hlp(k,l)=m
+        do j=1,nlim !{
+          if(indasrfe(j).gt.0) then !{
+            l=indasrfe(j)
+            if(jadch1(1,j).gt.0) then !{
+              k=0
+              uex=.true.
+              do i=1,nlim !{
+                if(uex) then !{
+                  m=jadch1(i,j)
+                  if(m.le.0) then !{
+                    uex=.false.
+                  else !}{
+                    m=indasrfe(m)
+                    if(m.gt.0) then !{
+                      k=k+1
+                      m_hlp(k,l)=m
+                    end if !}
                   end if !}
                 end if !}
-              end if !}
-            end do !}
+              end do !}
+            end if !}
           end if !}
-        end if !}
-      end do !}
-      do j=1,nlim !{
-        do i=1,nlim !{
-          jadch1(i,j)=m_hlp(i,j)
         end do !}
-      end do !}
+        do j=1,nlim !{
+          do i=1,nlim !{
+            jadch1(i,j)=m_hlp(i,j)
+          end do !}
+        end do !}
+
+      case (1)
+        ! Check on laddsrfs: not yet verified if /= 0
+        if (laddsrfs /= 0) then
+          print *, 'uinprp: laddsrfs /= 0 is not yet verified for Goat'
+        end if
+
+        ! Initialize
+        do i=1,nlimi !{
+          if(jadch0(l).eq.i) then !{
+            l=l+1
+            indasrfe(i)=0
+          else !}{
+            k=k+1
+            if(k.gt.nlim) then !{
+              write(0,*)
+     ,         'Insufficient space for "additional surfaces" '
+     ,         // 'in Eirene.'
+              write(0,*) 'Maximum ',nlim,', DG model ',nlimi,
+     ,         ' reserved ',laddsrfs
+              call xerrab
+     .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
+            end if !}
+            indasrfe(i)=k
+            indasrfs(k)=i
+          end if !}
+        end do !}
+
+        jadch0(1)=0
+
+      case default
+        call xerrab('uinprp: unknown grid generator ID')
+      end select
 
 c*** Prepare index of additional surfaces to be modified in geousr
-
-      if(ntrgte.gt.0) then
+      if (gridgeneratorID == 1) then
+        write(*,'(a)')
+     ,   'Goat grid generator used, not considering void ' //
+     ,   'or target surface specifications for geousr'
+        write(*,*)
+      else
+       if(ntrgte.gt.0) then
         k=0
         l=2
         do i=1,ntrgte
@@ -206,7 +258,7 @@ c*** Prepare index of additional surfaces to be modified in geousr
           k=k+2
         end do
         ntrgte=k
-      else if(ntrgto.gt.0) then
+       else if(ntrgto.gt.0) then
         k=0
         l=2
         do i=1,2
@@ -221,28 +273,30 @@ c*** Prepare index of additional surfaces to be modified in geousr
           jedge(2,i)=indasrfe(jedgeo(i))
         end do
         ntrgte=k
-      end if
-      if(ntrgte.le.0) then !{
+       end if
+       if(ntrgte.le.0) then !{
         write(0,*) 'Undefined target edges'
         call xerrab ('==> Check the specification in the DG model')
-      end if !}
-      uex=.false.
-      do i=1,k !{
+       end if !}
+       uex=.false.
+       do i=1,k !{
         if(jedge(2,i).le.0) then !{
           uex = .true.
-          write(0,*) '"Target edge"',i,'  is specified as "Not for ',
-     ,                                                        'Eirene"'
+            write(0,*) '"Target edge"',i,'  is specified as ',
+     ,                                              '"Not for Eirene"'
         end if !}
-      end do !}
-      call xertst (.not.uex,
-     . '==> Check the specification in the DG model')
+       end do !}
+       call xertst (.not.uex,
+     .  '==> Check the specification in the DG model')
 
 c*** Specify some comments to appear in the output file
 
-      do i=1,ntrgte
-        j=jedge(2,i)
-        txtsfa(j)=utxsfa
-      end do
+       do i=1,ntrgte
+         j=jedge(2,i)
+         txtsfa(j)=utxsfa
+       end do
+
+      end if
 
 c*** Re-arrange specification of the time allocation: through B2
 
@@ -250,10 +304,10 @@ c*** Re-arrange specification of the time allocation: through B2
       NTIM1=1
 
       NOPTIM=-1
-    
+
 c-----------------------------------------------------------------------
 c*** Particle and reaction data (sect. 4 and 5)
-     
+
       call uinprppt
       call uinprprc
       call uinprpbl
@@ -300,7 +354,7 @@ c-----------------------------------------------------------------------
 c*** Helium pumping data (B2/user)
 
       call uinprphe
-      
+
 c-----------------------------------------------------------------------
 c*** Output control
 
@@ -314,6 +368,7 @@ c*** Output control
         zx_hlp=-uzdim
         do i=1,nlimi !{
           j=indasrfs(i)
+          if (j.eq.0) cycle
           rm_hlp=min(rm_hlp,p1(1,j),p2(1,j))
           zm_hlp=min(zm_hlp,p1(2,j),p2(2,j))
           rx_hlp=max(rx_hlp,p1(1,j),p2(1,j))

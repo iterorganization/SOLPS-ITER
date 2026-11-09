@@ -104,6 +104,7 @@ c>>>
             call xerrab ('==> Check the DG model')
           end if !}
           insor(isf,nstrai)=indasrfe(k)
+
           if (jlplg(i).ne.0) then !{ gas puff source on contour
             indim(isf,nstrai)=4
             ingrda(isf,nstrai,1)=1
