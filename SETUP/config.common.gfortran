@@ -80,7 +80,7 @@ ifdef IMAS_VERSION
   endif
   IMAS_MAJOR_VERSION := $(shell echo ${IMAS_VERSION} | cut -d '.' -f1 )
   IMAS_MINOR_VERSION := $(shell echo ${IMAS_VERSION} | cut -d '.' -f2 )
-  IMAS_MICRO_VERSION := $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 )
+  IMAS_MICRO_VERSION := $(shell echo ${IMAS_VERSION} | cut -d '.' -f3 | cut -d '-' -f1 )
   ifeq ($(shell test ${AL_MAJOR_VERSION} -ge 5; echo $$?),0)
     ifeq (,$(findstring fortran,${IMAS_PKG_LIST}))
       IMAS_PKG_LIST += al-fortran al-identifiers-fortran
