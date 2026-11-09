@@ -1,15 +1,22 @@
-function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold)
+function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold,grid_lines,guard_cells)
 % [p] = Patchplot(gmtry,field,options)
 %
 % Routine to make patchplot of cell-centered quantity.
 % 
 % Input arguments:
 %
+% Required inputs:
 % - gmtry : struct read from b2fgmtry-file
 % - field : cell centered field to be plotted
-% - scale : scale factor for data in field (optional)
-% - fmin  : min. contour value (optional)
-% - fmax  : max. contour value (optional)
+%
+% Optional inputs (use an empty input argument [] to skip an optional argument and use its default value):
+% - scale      : scale factor for data in field 
+% - fmin       : min. contour value 
+% - fmax       : max. contour value 
+% - check_type : check if field contains values smaller ('s') or greater ('g') then threshold, and highlight them 
+% - threshold  : threshold for check_type 
+% - grid_lines : toggle to show or omit cell borders 
+% - guard cells: plot the guard cells with exaggerated size (only available for unstructured gmtry files)
 %
 % Output arguments:
 %
@@ -19,6 +26,7 @@ function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold)
 % Author: Wouter Dekeyser
 % E-mail: wouter.dekeyser@kuleuven.be
 % November 2016
+% with later additions from S. Carli, A. Piras, and W. Van Uytven
 
 % Set default values for some arguments, if not supplied
 if ~exist('scale','var') || isempty(scale)
@@ -36,10 +44,24 @@ end
 if ~exist('check_type','var') || isempty(check_type)
     check_type = 'g';
 end
+if ~exist('grid_lines','var') || isempty(grid_lines)
+    edge_color = 'k';
+else
+    if grid_lines == 1
+        edge_color = 'k'
+    elseif grid_lines == 0
+        edge_color = 'none'
+    else
+        error('grid_lines should be 0 (no grid lines), 1 (show grid lines), or empty (default = show grid lines)')
+    end
+end
+if ~exist('guard_cells','var') || isempty(guard_cells)
+    guard_cells =0;
+end
 
 % Consistency checks
 if fmin > fmax
-    error('patchplot: fmin > fmax.');
+    error('Patchplot: fmin > fmax.');
 end
 
 % Crop and scale field
@@ -78,6 +100,7 @@ elseif isunstructuredgrid(gmtry)
     S = struct([]);
     nmax = 1;
     for iCv = 1:length(gmtry.cvVol)
+        is_guard = 0;
         S(iCv).XData = [];
         S(iCv).YData = [];
         if (length(field)==gmtry.nVx)
@@ -102,20 +125,52 @@ elseif isunstructuredgrid(gmtry)
         end
         iVx1 = gmtry.cvVx(gmtry.cvVxP(iCv,1));
         for i = 1:gmtry.cvVxP(iCv,2)
-            iVx = gmtry.cvVx(gmtry.cvVxP(iCv,1)+i-1);
-            
-            S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx)];
-            S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx)];
-            if (length(field)==gmtry.nVx)
-                S(iCv).ZData = [S(iCv).ZData;field(iVx)];
+            if (gmtry.cvVxP(iCv,2)==2 && i==2) && guard_cells == 1 % it is a guard cell and we will plot it with an exaggerated size
+                is_guard = 1;
+                all_vertices = gmtry.cvVx(gmtry.cvVxP(iCv,1):gmtry.cvVxP(iCv,1)+gmtry.cvVxP(iCv,2)-1);
+                x1 = gmtry.vxX(all_vertices(1));
+                x2 = gmtry.vxX(all_vertices(2));
+                y1 = gmtry.vxY(all_vertices(1));
+                y2 = gmtry.vxY(all_vertices(2));
+                P1 = [x1, y1];
+                P2 = [x2, y2];
+                P3 = [gmtry.cvX(iCv), gmtry.cvY(iCv)];
+                v_seg = P2 - P1;
+                v_seg_unit = v_seg / norm(v_seg); 
+                v_P3_to_seg = P3 - P1;
+                projection = dot(v_P3_to_seg, v_seg_unit) * v_seg_unit;
+                normal = v_P3_to_seg - projection;
+                n = normal / norm(normal);
+                shift = 1e-2;
+                t = [shift * n(1), shift * n(2)];
+                sx1 = x1 + t(1);
+                sx2 = x2 + t(1);
+                sy1 = y1 + t(2);
+                sy2 = y2 + t(2);
+                S(iCv).XData = [x1;x2;sx2;sx1];
+                S(iCv).YData = [y1;y2;sy2;sy1];
+                if (length(field)==gmtry.nVx)
+                    S(iCv).ZData = [S(iCv).ZData;field(iVx)];
+                end
+                continue
+            else
+                iVx = gmtry.cvVx(gmtry.cvVxP(iCv,1)+i-1);
+                
+                S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx)];
+                S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx)];
+                if (length(field)==gmtry.nVx)
+                    S(iCv).ZData = [S(iCv).ZData;field(iVx)];
+                end
             end
         end
-        S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx1)];
-        S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx1)];
+        if is_guard == 0
+            S(iCv).XData = [S(iCv).XData;gmtry.vxX(iVx1)];
+            S(iCv).YData = [S(iCv).YData;gmtry.vxY(iVx1)];
+        end
         if (length(field)==gmtry.nVx)
         	S(iCv).ZData = [S(iCv).ZData;field(iVx1)];
         end
-        if (gmtry.isClassicalGrid==1)
+        if (gmtry.isClassicalGrid==1 && is_guard==0)
             S(iCv).XData(end-2:end-1) = [S(iCv).XData(end-1);S(iCv).XData(end-2)];
             S(iCv).YData(end-2:end-1) = [S(iCv).YData(end-1);S(iCv).YData(end-2)]; 
             if (length(field)==gmtry.nVx)
@@ -188,8 +243,11 @@ p = patch('Faces', Faces, ...
           'Vertices', [Xv Yv Zv], ...
           'FaceVertexCData', S.ZData, ...
           'FaceColor', 'flat', ...
-          'EdgeColor', 'k', ...
-          'LineWidth', 0.5);
+          'EdgeColor', edge_color');
+
+if ~strcmp(edge_color, 'none')
+    p.LineWidth = 1.0;
+end
 
 colorbar
 caxis([fmin fmax]);
