@@ -1,5 +1,4 @@
-function [p] = Patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold,grid_lines,guard_cells)
-% [p] = Patchplot(gmtry,field,options)
+function [p] = patchplot(gmtry,field,scale,fmin,fmax,check_type,threshold,grid_lines,guard_cells)
 %
 % Routine to make patchplot of cell-centered quantity.
 % 

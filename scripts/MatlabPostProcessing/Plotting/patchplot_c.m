@@ -28,7 +28,7 @@ function [p,seph,strh] = patchplot_c(structure,gmtry,field,varargin)
 % November 2016
 
 figure; hold on;
-p    = Patchplot(gmtry,field,varargin{:});
+p    = patchplot(gmtry,field,varargin{:});
 seph = plotsep(gmtry,'color',[1 1 1]);
 strh = plotstructure(structure,'color',[0 0 0],'LineWidth',2);
 hold off;
