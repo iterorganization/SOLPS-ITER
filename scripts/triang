@@ -331,7 +331,6 @@ while true; do {
                 print -u2 -- "    ==> Check $trialog"
                 q=p
               }
-              q=g
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
