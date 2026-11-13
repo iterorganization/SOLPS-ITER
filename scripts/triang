@@ -541,7 +541,6 @@ while true; do {
                 print -u2 -- "For extended cases without void regions, proceed with (f)"
                 q=p
               }
-              q=g
               true
             } || {
               print -u2 -- "No valid $triain file found. Probably, some of the previous steps forgotten?"
