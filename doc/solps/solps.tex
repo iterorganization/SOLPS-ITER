@@ -7442,7 +7442,12 @@ and then the boundary condition would require a plasma flow exiting the plate.
 Therefore, the pitch angle at the plates is limited to be no less than
 1 degree (user parameter, see switch {\tt b2agfs\_min\_pitch} in Appendix~\ref{lis:b2cdci}),
 motivated by the engineering limits met when attempting to align the
-divertor tiles with the magnetic field. The solution procedure of the code
+divertor tiles with the magnetic field. This is done in {\tt b2ag} by
+moving target vertices along the flux surfaces, without modifying the
+magnetic field and without making any cell non-convex
+(switch {\tt b2ag\_convexity\_tol}); where these constraints
+do not allow the minimum pitch to be reached, a warning is printed and
+the largest attainable pitch is used. The solution procedure of the code
 was also modified so as ensure that no unphysical flows were being created,
 and solves the parallel momentum equation using the updated electric potential.
 
