@@ -6,9 +6,9 @@ from ..Calc.isunstructuredgrid import isunstructuredgrid
 from ..Calc.istrianglegrid import istrianglegrid
 
 
-def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edgecolor='k'):
+def patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edgecolor='k'):
     """
-    Patchplot of cell-centered quantity for SOLPS-ITER grids.
+    patchplot of cell-centered quantity for SOLPS-ITER grids.
 
     Parameters
     ----------
@@ -35,7 +35,7 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
     if fmax is None:
         fmax = field.max()
     if fmin > fmax:
-        raise ValueError("Patchplot: fmin > fmax")
+        raise ValueError("patchplot: fmin > fmax")
 
     # Crop field
     field = np.clip(field, fmin, fmax)
@@ -88,7 +88,7 @@ def Patchplot(gmtry, field, scale=1.0, fmin=None, fmax=None, cmap='viridis', edg
             colors.append(field[0])  # assuming one value per triangle?
 
     else:
-        raise ValueError("Patchplot: wrong gmtry structure")
+        raise ValueError("patchplot: wrong gmtry structure")
 
     fig = plt.gcf()
     ax = plt.gca()

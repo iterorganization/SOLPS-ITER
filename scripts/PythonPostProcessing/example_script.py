@@ -48,7 +48,7 @@ ft_sep = gmtry.cvFt[cv_omp[icsep]]                      # identify flux tube num
 
 # 2D colorplot of electron density
 fig, ax = plt.subplots()
-sh = Patchplot(gmtry, np.log10(state.ne))
+sh = patchplot(gmtry, np.log10(state.ne))
 sh.set_edgecolor('none')
 ax.set_aspect('equal')
 plotsep_us(gmtry, icsep, cv_omp, 'k')
@@ -59,7 +59,7 @@ plt.close()
 
 # 2D colorplot of electron temperature
 fig, ax = plt.subplots()
-sh = Patchplot(gmtry, np.log10(state.te/ev))
+sh = patchplot(gmtry, np.log10(state.te/ev))
 sh.set_edgecolor('none')
 ax.set_aspect('equal')
 plotsep_us(gmtry, icsep, cv_omp, 'k')
@@ -70,7 +70,7 @@ plt.close()
 
 # Plot the region numbers
 fig, ax = plt.subplots()
-sh = Patchplot(gmtry, gmtry.cvReg)
+sh = patchplot(gmtry, gmtry.cvReg)
 sh.set_edgecolor('none')
 ax.set_aspect('equal')
 plotsep_us(gmtry, icsep, cv_omp, 'k')
