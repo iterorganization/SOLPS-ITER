@@ -2364,6 +2364,20 @@ Those files need to contain fields according to:
   field information that are read in from the mesh file (see Appendix~\ref{lis:b2cdci})
 \end{description}
 
+\index{Carre2}
+When reading a {\tt Carre2} grid with supplied flux-surface records,
+{\tt b2ag} uses these records to set the poloidal flux $\psi$ at the
+mesh vertices. For each surface, it takes the faces listed in
+{\tt fsFc} and assigns the surface value {\tt fsPsi} to both vertices
+of every listed face. Vertices not on a listed surface retain their
+input values at this step. This makes $\psi$ constant along each listed
+flux surface before guard cells are created and the magnetic field is
+calculated from the vertex values.
+
+This assignment is performed automatically during grid preparation
+by {\tt b2ag}. It does not affect an existing {\tt b2fgmtry}
+read by {\tt b2mn}.
+
 \newpage\section{b2ah, setting up the default physics parameters}
 \index{b2fpardf}\label{sec:b2ah}\index{b2ah}\index{b2run}
 
