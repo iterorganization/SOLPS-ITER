@@ -1,0 +1,108 @@
+{
+  "file_count": 22,
+  "files": {
+    "Baseline2008-li0.70.x4.efit": {
+      "bytes": 2152706,
+      "md5": "940d3da37b7ac1fd93ba9dca3f744c5b"
+    },
+    "Baseline2008-li0.70.x4.equ": {
+      "bytes": 2281623,
+      "md5": "4b0f27de4eea678da5a01a93f5525888"
+    },
+    "b2ag.dat": {
+      "bytes": 160,
+      "md5": "2f3d2caf87cf8fee822709a9035f8f33"
+    },
+    "b2ag.prt": {
+      "bytes": 50935,
+      "md5": "5c71e18ff64b5214c34b0374227fa1f7"
+    },
+    "b2ah.dat": {
+      "bytes": 12482,
+      "md5": "e566817ad79591ba5432c538d439bed8"
+    },
+    "b2ah.prt": {
+      "bytes": 14359,
+      "md5": "c8a6583a62b14a1465fcb75018f50f0c"
+    },
+    "b2ai.dat": {
+      "bytes": 377,
+      "md5": "7605fc2cbe2cebb31bea81ac8824ea51"
+    },
+    "b2ai.prt": {
+      "bytes": 824,
+      "md5": "f191e48270e688e680f8b9b71ab42246"
+    },
+    "b2ar.dat": {
+      "bytes": 381,
+      "md5": "adc95376c8843383d85fb91410eb1260"
+    },
+    "b2ar.prt": {
+      "bytes": 62785,
+      "md5": "93e2de8d32521716d84212135c704ba8"
+    },
+    "b2fgmtry": {
+      "bytes": 3570181,
+      "md5": "aa894fd419b2f58d526cfe3f818c31f3"
+    },
+    "b2fpardf": {
+      "bytes": 21573,
+      "md5": "67d53d25ce7dca29541caec8dcf00a5f"
+    },
+    "b2frates": {
+      "bytes": 604865,
+      "md5": "c045cc849a388348c24aeafa65065508"
+    },
+    "b2fstati": {
+      "bytes": 8915832,
+      "md5": "485cd92bd12f171922849533207673c7"
+    },
+    "fort.30": {
+      "bytes": 395439,
+      "md5": "a95bacde466b8e9f1a8557fa5b5bcfa9"
+    },
+    "fort.33": {
+      "bytes": 164639,
+      "md5": "073070f4d08bc4ae178439a48bbdc2d1"
+    },
+    "fort.34": {
+      "bytes": 216202,
+      "md5": "f1a70c7e049ded649f0de0cb0ceacec9"
+    },
+    "fort.35": {
+      "bytes": 696622,
+      "md5": "2d705df4b696ea87d0a5da0a8a361230"
+    },
+    "input.dat": {
+      "bytes": 97707,
+      "md5": "60ba349a34be9c2571adf1fcc5f93498"
+    },
+    "iterm.carre.105": {
+      "bytes": 1391726,
+      "md5": "31927796de567f14fec5f319a85ec096"
+    },
+    "param.dg": {
+      "bytes": 48395,
+      "md5": "f7114bf00d2bdd152b072bc3630a8674"
+    },
+    "vertex_data.out": {
+      "bytes": 705862,
+      "md5": "c49c2e5078bf2b9e36ae53b288299bc3"
+    }
+  },
+  "geometry": {
+    "bytes": 3570181,
+    "md5": "aa894fd419b2f58d526cfe3f818c31f3"
+  },
+  "kind": "input_deck",
+  "machine": "ITER",
+  "name": "example-runs/ITER_2588_drifts/baserun",
+  "note": "sibling input deck of the family's run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run",
+  "run_family": "example-runs/ITER_2588_drifts",
+  "run_markers": {
+    "b2fstate": false,
+    "b2time.nc": false,
+    "fort.44": false
+  },
+  "total_bytes": 21405675
+}

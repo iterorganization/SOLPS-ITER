@@ -1,0 +1,252 @@
+{
+  "file_count": 58,
+  "files": {
+    "Baseline2008-li0.70.x4.equ": {
+      "bytes": 2281623,
+      "md5": "4b0f27de4eea678da5a01a93f5525888"
+    },
+    "F57-Be_W-Ne.dg": {
+      "bytes": 100799,
+      "md5": "82e9fd32a36e7fce3d067d12afdc9659"
+    },
+    "F57-Be_W-Ne.dgo": {
+      "bytes": 48260,
+      "md5": "046ba3c122cf1cd362d395234d109d80"
+    },
+    "F57-Be_W-Ne.str": {
+      "bytes": 2648,
+      "md5": "5c249bb909703ba912d7af9648ce5b79"
+    },
+    "F57-Be_W-Ne.trg": {
+      "bytes": 3594,
+      "md5": "a3c358cae2f97f0dc27b1d34c56eb1bc"
+    },
+    "b2.user.parameters": {
+      "bytes": 441,
+      "md5": "8728acda442130e23f53db2f46f6f751"
+    },
+    "b2ag.dat": {
+      "bytes": 189,
+      "md5": "5d09dbec5c98abadb49e73f5514213ad"
+    },
+    "b2ag.prt": {
+      "bytes": 51025,
+      "md5": "5df800f3e7a8d14415386d34310d34a8"
+    },
+    "b2ah.dat": {
+      "bytes": 74266,
+      "md5": "135214bc18b139315ff7d16a889b58ad"
+    },
+    "b2ah.prt": {
+      "bytes": 86502,
+      "md5": "c9e70ec0e69f84d620c39dcc91fc7669"
+    },
+    "b2ai.dat": {
+      "bytes": 1382,
+      "md5": "e44cc1e22c468ca00fac729fb8cba65c"
+    },
+    "b2ai.prt": {
+      "bytes": 3180,
+      "md5": "ed42ea62ba40b67fc8b6cef6fac99bda"
+    },
+    "b2ar.dat": {
+      "bytes": 414,
+      "md5": "52e88dd3892bbd28713f506e2137b625"
+    },
+    "b2ar.prt": {
+      "bytes": 687094,
+      "md5": "b4960e01de47288b849717815c560ca5"
+    },
+    "b2fgmtry": {
+      "bytes": 3570181,
+      "md5": "c1093c57768387a386b890086fe5368a"
+    },
+    "b2fpardf": {
+      "bytes": 144541,
+      "md5": "ab58d0a0d23d6580b81e80656b6f2e2c"
+    },
+    "b2frates": {
+      "bytes": 6304430,
+      "md5": "c5d1be30d336230ace0a00643afc1c83"
+    },
+    "b2fstati": {
+      "bytes": 51617071,
+      "md5": "a81769d0f3423e88746a4d245edb4f48"
+    },
+    "b2yg.dat": {
+      "bytes": 133,
+      "md5": "d6e041d299ee54bb1a58824a0bcad819"
+    },
+    "b2yh.dat": {
+      "bytes": 43,
+      "md5": "1d1ca84106a2b9e20c56e4b8941a1a7e"
+    },
+    "b2yi.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2ym.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2yn.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2yp.dat": {
+      "bytes": 133,
+      "md5": "d6e041d299ee54bb1a58824a0bcad819"
+    },
+    "b2yq.dat": {
+      "bytes": 585,
+      "md5": "7f0a21b374627fbe66037ea9f5e46bb2"
+    },
+    "b2yr.dat": {
+      "bytes": 169,
+      "md5": "478a3eecbf050b0a46be2b92fd668169"
+    },
+    "b2yt.dat": {
+      "bytes": 124,
+      "md5": "ca3bd9365cd85010eac205271f9f2ff3"
+    },
+    "dg.dgo": {
+      "bytes": 48260,
+      "md5": "046ba3c122cf1cd362d395234d109d80"
+    },
+    "dg.equ": {
+      "bytes": 2281623,
+      "md5": "4b0f27de4eea678da5a01a93f5525888"
+    },
+    "dg.str": {
+      "bytes": 2648,
+      "md5": "5c249bb909703ba912d7af9648ce5b79"
+    },
+    "dg.trg": {
+      "bytes": 3594,
+      "md5": "a3c358cae2f97f0dc27b1d34c56eb1bc"
+    },
+    "fort.30": {
+      "bytes": 395439,
+      "md5": "45f357452b0b1005ad0f8de83973af32"
+    },
+    "fort.33": {
+      "bytes": 165179,
+      "md5": "f62c4a09aa1878405e27c8ebf1b85c93"
+    },
+    "fort.34": {
+      "bytes": 216958,
+      "md5": "9db39b1eaee4ca3ef93ab5dbbe0b8221"
+    },
+    "fort.35": {
+      "bytes": 699058,
+      "md5": "1d864df94fdcd71b1ffd4c5d0835c9a5"
+    },
+    "input.dat": {
+      "bytes": 102031,
+      "md5": "00cc747f89026c0eb8d6eb7c19a79ec6"
+    },
+    "input.eir": {
+      "bytes": 83821,
+      "md5": "3d062374b88174ec4adec6f4c7c47b50"
+    },
+    "input_avg.eir": {
+      "bytes": 83821,
+      "md5": "b9ee5d08b8768a2e5eb1154b47a76ae1"
+    },
+    "input_fin.eir": {
+      "bytes": 83821,
+      "md5": "00417d42741a4e6aee4963c63e06a28e"
+    },
+    "iterm.carre.128": {
+      "bytes": 1391726,
+      "md5": "1aef7b265bc3afbc250330654d400cfa"
+    },
+    "mesh.extra": {
+      "bytes": 8296,
+      "md5": "7d7601bd71c6b58a31c3da4c2b69eb54"
+    },
+    "param.dg": {
+      "bytes": 48260,
+      "md5": "046ba3c122cf1cd362d395234d109d80"
+    },
+    "structures.dat": {
+      "bytes": 91226,
+      "md5": "f80a4aea0a5be81d843426aeb3a08d62"
+    },
+    "test.eir": {
+      "bytes": 83821,
+      "md5": "56b32ee14de3480f8c4d96f2952381bc"
+    },
+    "tria.elemente": {
+      "bytes": 39888,
+      "md5": "be0926a1c98f5f826e34ae9f3cf486bd"
+    },
+    "tria.eps": {
+      "bytes": 80263,
+      "md5": "3c2884012aa49dbcb46ee4fb333dba4f"
+    },
+    "tria.in": {
+      "bytes": 11309,
+      "md5": "da1b2d6f52b36af30a0dbc21b6dc2b87"
+    },
+    "tria.neighbor": {
+      "bytes": 66013,
+      "md5": "6b0721079c6be123b4087fe44284bf79"
+    },
+    "tria.nodes": {
+      "bytes": 36445,
+      "md5": "adca823916e55316c2d467fc132b6915"
+    },
+    "triageom.elemente": {
+      "bytes": 216958,
+      "md5": "9db39b1eaee4ca3ef93ab5dbbe0b8221"
+    },
+    "triageom.eps": {
+      "bytes": 396423,
+      "md5": "5e51dc240095493776b31185b26b6533"
+    },
+    "triageom.neighbor": {
+      "bytes": 699058,
+      "md5": "1d864df94fdcd71b1ffd4c5d0835c9a5"
+    },
+    "triageom.nodes": {
+      "bytes": 165179,
+      "md5": "f62c4a09aa1878405e27c8ebf1b85c93"
+    },
+    "triang.eir": {
+      "bytes": 83821,
+      "md5": "33d05d51cf2f29fa708bf9cecbd1749c"
+    },
+    "triangles.dat": {
+      "bytes": 173276,
+      "md5": "09850672bdeb7952d03386d261b2d92d"
+    },
+    "uinput.dg": {
+      "bytes": 48260,
+      "md5": "046ba3c122cf1cd362d395234d109d80"
+    },
+    "uinput.trg": {
+      "bytes": 3594,
+      "md5": "a3c358cae2f97f0dc27b1d34c56eb1bc"
+    },
+    "vertex_data.out": {
+      "bytes": 696194,
+      "md5": "9a86bc8efe67076297bf507092df9396"
+    }
+  },
+  "geometry": {
+    "bytes": 3570181,
+    "md5": "c1093c57768387a386b890086fe5368a"
+  },
+  "kind": "input_deck",
+  "machine": "ITER",
+  "name": "example-runs/ITER_2171_D+He+Be+Ne/baserun",
+  "note": "sibling input deck of the family's run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run",
+  "run_family": "example-runs/ITER_2171_D+He+Be+Ne",
+  "run_markers": {
+    "b2fstate": false,
+    "b2time.nc": false,
+    "fort.44": false
+  },
+  "total_bytes": 73485258
+}

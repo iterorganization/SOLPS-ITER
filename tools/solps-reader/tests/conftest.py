@@ -1,0 +1,66 @@
+"""Shared synthetic fixture: a floor-perfect SOLPS-ITER checkout.
+
+Everything is built under ``tmp_path``: no run data, no network, no
+real repositories, no layout assumptions. The submodule paths mirror
+the real declaration list so the excepted-submodule logic is exercised
+exactly as it runs in production.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+# the real declaration list, order included (the floor reads
+# .gitmodules in file order)
+GITMODULES = """\
+[submodule "B2.5"]
+\tpath = modules/B2.5
+\turl = ../B2.5.git
+[submodule "Carre"]
+\tpath = modules/Carre
+\turl = ../CARRE.git
+[submodule "DivGeo"]
+\tpath = modules/DivGeo
+\turl = ../DivGeo.git
+[submodule "Eirene"]
+\tpath = modules/Eirene
+\turl = ../EIRENE.git
+[submodule "ADAS"]
+\tpath = modules/adas
+\turl = ssh://git@git.iter.org/imex/amns-adas.git
+"""
+
+# every declared submodule except the pinned non-public one
+INITIALIZABLE = ("modules/B2.5", "modules/Carre", "modules/DivGeo",
+                 "modules/Eirene")
+
+
+def make_checkout(tmp: Path, *, base: str = "repos",
+                  uninitialized: frozenset[str] = frozenset(),
+                  optional: tuple[str, ...] = ()) -> Path:
+    """A synthetic repos root: SOLPS-ITER shaped like a checkout, with
+    every initializable submodule initialized except *uninitialized*;
+    the optional legs named in *optional* exist beside it."""
+    root = tmp / base
+    iter_repo = root / "SOLPS-ITER"
+    (iter_repo / "modules").mkdir(parents=True)
+    (iter_repo / ".gitmodules").write_text(GITMODULES, encoding="utf-8")
+    for sub in INITIALIZABLE:
+        leg = iter_repo / sub
+        leg.mkdir()
+        if sub not in uninitialized:
+            (leg / ".git").mkdir()
+    # the excepted submodule is declared but never initialized
+    (iter_repo / "modules" / "adas").mkdir()
+    for name in optional:
+        (root / name).mkdir()
+    return root
+
+
+import pytest
+
+
+@pytest.fixture
+def checkout_factory(tmp_path):
+    """make_checkout bound to this test's tmp_path."""
+    return lambda **kw: make_checkout(tmp_path, **kw)

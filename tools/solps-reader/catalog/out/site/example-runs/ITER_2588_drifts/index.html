@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1632'/%3E%3Crect x='6' y='21' width='7' height='5' rx='1' fill='%232c6ecb'/%3E%3Crect x='14' y='21' width='7' height='5' rx='1' fill='%233ed9fd'/%3E%3Crect x='22' y='21' width='5' height='5' rx='1' fill='%23fdbb30'/%3E%3C/svg%3E">
+<title>example-runs/ITER_2588_drifts · SOLPS-ITER run catalog</title>
+<style>
+:root {
+  color-scheme: light;
+  /* Brand tokens sampled from iter.org stylesheet
+     /themes/custom/intuitiv/assets/css/intuitiv.style.css (2026-09-26):
+     ink navy #0f1632 (272x), ITER blue #2c6ecb (112x), plasma cyan
+     #3ed9fd (29x), ITER amber #fdbb30 (209x).  All neutrals are tinted
+     toward the navy hue — no raw grays.
+     The Console: slim navy topbar (identity + the
+     plasma rule as the one brand gesture), a sticky paper rail
+     (sections + the run list), and a full-width canvas.  Two voices:
+     the serif of the publication (names, verdicts, prose) over the
+     mono of the instrument (identifiers, numerals, labels). */
+  --hue: 262;
+  --navy: #0f1632;
+  --blue: #2c6ecb;
+  --cyan: #3ed9fd;
+  --amber: #fdbb30;
+  --bronze: #9a6200;
+  --bg: oklch(0.978 0.004 var(--hue));
+  --bg-rail: color-mix(in oklch, var(--ink) 3.5%, var(--bg));
+  --surface: #ffffff;
+  --ink: oklch(0.235 0.028 var(--hue));
+  --ink-soft: oklch(0.45 0.024 var(--hue));
+  --ink-faint: oklch(0.58 0.019 var(--hue));
+  --line: color-mix(in oklch, var(--ink) 13%, transparent);
+  --line-strong: color-mix(in oklch, var(--ink) 42%, transparent);
+  /* the askthedocs families lead; the former system stacks stay
+     as the fallback chain (graceful glyph gaps outside the latin
+     subsets, exactly as the docs face behaves). */
+  --font-serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype",
+                Palatino, Charter, Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas,
+               monospace;
+  --font-sans: "Sora", -apple-system, "Segoe UI", Roboto, Helvetica,
+               Arial, sans-serif;
+  /* the askthedocs radius ladder, role-for-role — small =
+     badges/chips/keys/marks, medium = controls, large = cards/figures/
+     code blocks. */
+  --r-1: 4px; --r-2: 8px; --r-3: 12px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --h1: clamp(1.65rem, 1.15rem + 1.7vw, 2.35rem);
+  --topbar-h: 58px;
+  --rail-w: 248px;
+}
+@view-transition { navigation: auto; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; font: 14px/1.6 var(--font-sans);
+       background: var(--bg); color: var(--ink);
+       -webkit-font-smoothing: antialiased;
+       /* inherited text-level containment (the responsive-enough
+          ruling): a machine token longer than its line (run names,
+          family/member chips, deck paths in prose) breaks mid-token
+          rather than pushing the page wide; fires only when no break
+          opportunity exists — normal prose wraps as always.  Elements
+          that must never wrap keep their own nowrap (chips, counts),
+          which wins over this */
+       overflow-wrap: break-word; }
+::selection { background: var(--amber); color: var(--navy); }
+
+/* ---- topbar: identity strip; the plasma rule is its bottom edge ---- */
+.topbar { position: sticky; top: 0; z-index: 20; background: var(--navy); }
+.tb-in { max-width: 1560px; margin: 0 auto; padding: 0 28px;
+         min-height: var(--topbar-h); display: flex; align-items: center;
+         justify-content: space-between; gap: 0; }
+/* the brand occupies the RAIL's column width, so the crumb
+   column starts at the CANVAS edge — the same x as the body's first
+   text (the kicker); the 44px left margin completes the shell's
+   column gap */
+.brand { display: flex; align-items: baseline; gap: 14px;
+         text-decoration: none; padding: 9px 0;
+         flex: none; width: var(--rail-w); }
+.brand:hover { text-decoration: none; }
+.b-kick { font: 600 10.5px/1 var(--font-mono); letter-spacing: 0.16em;
+          text-transform: uppercase; color: #8fa8dc; }
+.b-name { font: 400 19px/1 var(--font-serif); color: #ffffff;
+          letter-spacing: -0.01em; }
+.brand:hover .b-name { color: var(--cyan); }
+.tb-meta { font: 500 11.5px/1.5 var(--font-mono); color: #8fa8dc;
+           letter-spacing: 0.02em; text-align: right;
+           /* the counts are PINNED — one line, never shrunk,
+              never wrapped; a long crumb trail yields, not these */
+           flex: none; white-space: nowrap; }
+.tb-meta b { color: #ffffff; font-weight: 600; }
+.tb-meta .sep { color: #8fa8dc; margin: 0 8px; }
+.plasma { height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan) 45%, var(--amber)); }
+
+/* ---- shell: sticky rail + canvas ---- */
+.shell { max-width: 1560px; margin: 0 auto; padding: 0 28px;
+         display: grid; grid-template-columns: var(--rail-w) minmax(0, 1fr);
+         gap: 0 44px; }
+/* content-driven height: the block is exactly as tall
+   as its items, capped at the viewport MINUS PERMANENT SLACK (40px
+   beyond the offset) — an exact-fit cap still rides up a few px on
+   some viewport metrics (two monitors, two trigger clicks); the
+   slack makes the exhaustion zone unreachable on any resolution.
+   The vertical rule ends where the content ends — accepted */
+.rail { position: sticky; top: calc(var(--topbar-h) + 2px);
+        height: auto;
+        max-height: calc(100vh - var(--topbar-h) - 42px);
+        overflow-y: auto; padding: 26px 24px 26px 0;
+        border-right: 1px solid var(--line);
+        font: 500 12px/1.5 var(--font-mono); }
+.rail .r-h { font: 600 9.5px/1.4 var(--font-mono); letter-spacing: 0.14em;
+             text-transform: uppercase; color: var(--ink-faint);
+             margin: 18px 0 8px; }
+.rail .r-h:first-child { margin-top: 0; }
+/* the band's hamburger: dead at desktop (never shown) and
+   dead without scripting (the stacked full menu renders instead);
+   shown only by the <=1080px + html.js rules below */
+.burger { display: none; }
+.rail a { display: block; color: var(--ink-soft); text-decoration: none;
+          font-weight: 500; /* chrome keeps its own voice under the
+                               global 600 link treatment */
+          /* the section rows are the LADDER'S ORIGIN (owner review
+             2026-11-10 round 4: Runs must sit exactly one step LEFT
+             of its groups): border 2 + 12px marker = text at 14 —
+             the tree below steps 12 from THERE (26/38/50).  The
+             tree rows and the section children override this
+             padding-left with their own step */
+          padding: 5px 10px 5px 0; border-left: 2px solid transparent;
+          transition: color 0.15s var(--ease-out),
+                      border-color 0.15s var(--ease-out),
+                      background 0.15s var(--ease-out); }
+.rail a:hover { color: var(--ink); text-decoration: none;
+                background: color-mix(in oklch, var(--ink) 4%, transparent); }
+.rail a.here { color: var(--ink); border-left-color: var(--amber);
+               background: color-mix(in oklch, var(--amber) 8%, transparent); }
+/* the rail's open state (owner review of C, round 2 — the exclusive
+   accordion is RETIRED): sections open and close ONLY by the user's
+   click, multiple sections may stand open together, and the state
+   persists per browser tab; html.js (set by the head script before
+   the body parses) closes everything at FIRST layout, then the
+   DOMContentLoaded pass restores the tab's remembered opens and ADDS
+   the page's own ancestry — a navigation never removes anything.
+   Scripts off = no js class = the full expanded menu with hidden
+   markers (the no-JS guarantee).
+   grid-template-rows 0fr<->1fr animates open/close with no height
+   measurement; the inner wrapper carries the overflow/min-height
+   the trick needs, and layout containment keeps the per-frame cost
+   inside the rail.  Markers ship in the bytes, glyph-swapped by the
+   same state (+ closed, − open), hidden entirely without scripting.
+   The OPEN state is the USER'S (owner review of C, round 2: trees
+   never close but by a click — the amber mark and the scroll-spy
+   move the HIGHLIGHT, never the tree): sections carry an .open
+   class the script toggles and persists per browser tab; a section
+   with nothing to open hides its marker and keeps the row's
+   navigation.  Sub-links indent past the marker column */
+.r-mark { display: none; }
+html.js .r-mark { display: inline-block; width: 12px;
+                  text-align: center; color: var(--ink-faint); }
+html.js .r-sec.open .rm-c { display: none; }
+html.js .r-sec:not(.open) .rm-o { display: none; }
+html.js .r-sec:not(:has(.r-sub)) .r-mark { display: none; }
+.r-sub { display: grid; grid-template-rows: 1fr;
+         transition: grid-template-rows 0.28s var(--ease-out); }
+html.js .r-sec:not(.open) > .r-sub { grid-template-rows: 0fr; }
+/* a deep-linked fragment opens its section at FIRST LAYOUT — the
+   build stamp (Runs) yields until the script moves the highlight;
+   the attribute retires in the script's quiet arrival window so
+   later moves rule */
+html.js[data-frag] .r-sec > .r-sub { grid-template-rows: 0fr; }
+html.js[data-frag="runs"] .r-sec[data-sec="runs"] > .r-sub,
+html.js[data-frag="comparisons"] .r-sec[data-sec="comparisons"] > .r-sub,
+html.js[data-frag="switches"] .r-sec[data-sec="switches"] > .r-sub
+  { grid-template-rows: 1fr; }
+.r-sub-in { overflow: hidden; min-height: 0; contain: layout;
+            visibility: visible; transition: visibility 0s 0s; }
+/* closed children leave the tab order + pointer targeting only AFTER
+   the collapse finishes (visibility flips with the transition's own
+   delay: instant on open, 0.28s on close) */
+html.js .r-sec:not(.open) .r-sub-in { visibility: hidden;
+                                      transition: visibility 0s 0.28s; }
+/* the tree's own disclosure (owner round 5b: the group/family
+   details animate EXACTLY like the sections): the wrapper carries
+   the same 0fr<->1fr grid transition, the .d-open class drives the
+   geometry on the script's timing (the [open] attribute stays the
+   semantic state — close animates FIRST, then drops it), and without
+   scripting the native details rules alone */
+.d-sub { display: grid; grid-template-rows: 1fr;
+         transition: grid-template-rows 0.28s var(--ease-out); }
+html.js details:not(.d-open) > .d-sub { grid-template-rows: 0fr; }
+.d-sub-in { overflow: hidden; min-height: 0; contain: layout; }
+html.js details:not(.d-open) > .d-sub .d-sub-in { visibility: hidden; }
+/* ARRIVALS ARE QUIET (owner round 6): the load-time opens — the
+   per-tab store's apply, the page's own here-ancestry, the fragment
+   stamp's handoff — commit WITHOUT the 0.28s disclosure animation:
+   the tree lands open where the user left it instead of replaying a
+   close-then-reopen on every navigation (the animation belongs to
+   the user's own acts).  The class rides <html> for one synchronous
+   window around those opens; see the script's arrival block */
+html.no-anim .rail .r-sub, html.no-anim .rail .d-sub { transition: none; }
+.r-sub-in a { padding: 4px 10px 4px 24px; font-size: 11.5px;
+              white-space: nowrap; overflow: hidden;
+              text-overflow: ellipsis; }
+             /* section children (comparison pairs, switch groups)
+                share the GROUP column: one level under a section =
+                origin 26, the same step the run tree takes */
+/* the run tree (the ruled navigation shape): groups > families >
+   runs under the Runs toggle, shipped CLOSED with count-bearing
+   labels.  ONE LADDER, uniform 12px steps from the section level
+   down (owner review 2026-11-10 round 4: the section row sits at
+   origin 14, so Runs is exactly one step LEFT of Example runs):
+   sections 14 / groups 26 / families 38 / leaf dots 50 — the
+   disclosure marker is a fixed-width inline-block, so the leaf
+   step (no marker) is exact at any zoom; family blocks carry the
+   faint guide line down their leaves; every name is one line,
+   ellipsized, full name on hover (the page bytes always carry it
+   — find and copy still work).
+   MARKER TOGGLES, LABEL NAVIGATES: the group label is an anchor
+   inside the summary — a click follows it (native activation
+   behavior, no script), a click on the marker or the row's own
+   ground toggles the disclosure.  The count rides BESIDE the
+   label (never floating at the rail's far edge) but YIELDS FIRST
+   (owner review 2026-11-10: a count must never cost the folder
+   its name): the summary wraps, the count drops to its own line
+   under the name, and only a name that ALONE cannot hold the
+   rail ellipsizes — the count itself never truncates */
+.r-sub-in .r-grp > summary,
+.r-sub-in .r-fam > summary { display: flex; flex-wrap: wrap;
+  align-items: baseline; cursor: pointer;
+  font-size: 11.5px; line-height: 1.5; padding: 4px 10px 4px 0;
+  list-style: none; }
+.r-sub-in summary::-webkit-details-marker { display: none; }
+.r-sub-in summary::before { content: "+"; display: inline-block;
+  flex: none; width: 12px; color: var(--ink-faint); }
+.r-sub-in details[open] > summary::before { content: "\2212"; }
+.r-sub-in .s-lab, .r-sub-in a.r-lab { flex: 0 1 auto; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.r-sub-in a.r-lab { color: inherit; text-decoration: none;
+  /* the section-children padding (24px) must NOT ride the group
+     label — the group's step comes from its summary's own padding
+     (origin 26).  The anchor chrome's 2px here-border is stripped
+     too: labels never carry the amber bar (deliberately outside
+     the highlight machinery), and with it the group's text would
+     sit 2px deep of its column */
+  padding: 0; border-left: none; }
+.r-sub-in a.r-lab:hover { color: var(--ink); text-decoration: underline; }
+/* the group/family label's here state (its own page is the page):
+   the UNDERLINE voice — the amber here-bar rides the anchor chrome's
+   left border, which the label anchors deliberately strip (the
+   ladder's geometry rules), so the bar would break the step rhythm */
+.r-sub-in a.r-lab.here { color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px; }
+.r-sub-in .s-cnt { flex: none; margin-left: 6px;
+  font: 500 10px/1.5 var(--font-mono);
+  color: var(--ink-faint); letter-spacing: 0.02em; }
+.r-sub-in .r-grp > summary { font-weight: 600; color: var(--ink);
+  padding-left: 14px; }   /* + the 12px marker = group text at 26 */
+.r-sub-in .r-fam { margin-left: 25px;   /* + the 1px guide border = 26:
+  family text at 38, leaf dots at 50 — the ladder's lower steps */
+  border-left: 1px dotted var(--line); }
+.r-sub-in .r-fam > summary { font-weight: 500; color: var(--ink-soft);
+  padding-left: 0; }
+/* the leaf keeps the anchor chrome's 2px border (it IS the amber
+   here-bar's carrier on the active run) — 22px padding + 2px border
+   puts the dot at origin 50, the ladder's fourth step */
+.r-sub-in .r-fam a.r-run { padding-left: 22px; }
+/* the body's section title takes the menu's amber treatment:
+   same marker + tint voice, the band hugging the title's own width
+   (this restores the original look — the owner preferred it over
+    the full-width band); the bar grows into the gutter and the
+   vertical padding is margin-compensated, so the title's text never
+   shifts and the page never reflows when the highlight moves */
+h2.sec-hi { border-left: 3px solid var(--amber);
+            background: color-mix(in oklch, var(--amber) 8%, transparent);
+            padding: 5px 12px; margin: 39px 0 9px -15px;
+            width: fit-content;
+            border-radius: 0 var(--r-1) var(--r-1) 0;
+            transition: background 0.2s var(--ease-out); }
+/* breadcrumbs: the trail lives IN the sticky band —
+   brand | crumbs | counts — visible at every scroll.  The last crumb
+   is the FLEX POINT: it ellipsizes (full name on hover) before the
+   trail can crowd the counts; the landing's slot carries the section
+   indicator instead (script-managed: Catalog › section, scroll-spy) */
+.crumbs { display: flex; align-items: center; flex: 1 1 auto;
+          min-width: 0; white-space: nowrap; margin: 0 24px 0 44px;
+          font: 500 10.5px/1.4 var(--font-mono);
+          letter-spacing: 0.02em; }
+.crumbs a, .crumbs .c-here { color: #8fa8dc; }
+.crumbs a { flex: none; }
+.crumbs a:hover { color: #ffffff; text-decoration: none; }
+.crumbs .c-sep { flex: none; color: #8fa8dc; margin: 0 7px; }
+.crumbs .c-here { flex: 0 1 auto; min-width: 0;
+                  overflow: hidden; text-overflow: ellipsis; }
+/* the deep trail — while an anchored child (the switch page's
+   sections) is the rail's here, the page crumb yields its slot to a
+   working #top link and the section crumb names the place, taking
+   over the flex point (ancestors never truncate). Hidden
+   without the state; phone width keeps the page-crumb-only band the
+   ≤720 rules already paint (ancestors hide there — a deep trail with
+   dead links would be noise) */
+.crumbs .c-top, .crumbs .c-sec3 { display: none; }
+/* the section crumb carries the page crumb's own tint — an unclassed
+   span inherits the band's ink and vanishes into the navy */
+.crumbs .c-sec3 { color: #8fa8dc; flex: 0 1 auto; min-width: 0;
+                  overflow: hidden; text-overflow: ellipsis; }
+@media (min-width: 721px) {
+  .crumbs.deep .c-top, .crumbs.deep .c-sec3 { display: block; }
+  .crumbs.deep .c-here { display: none; }
+}
+/* the verdict dot — one base rule, used in the rail leaves AND the
+   landing legend (the legend names the palette the rail paints with;
+   same glyph, same size, one meaning) */
+.rdot { display: inline-block; width: 7px; height: 7px;
+        border-radius: 50%; vertical-align: 0.5px; }
+.rail a .rdot { margin-right: 7px; }
+.rail .r-run { white-space: nowrap; overflow: hidden;
+               text-overflow: ellipsis; }
+.rail-foot { margin-top: 20px; padding-top: 12px;
+             border-top: 1px solid var(--line);
+             color: var(--ink-faint); font-size: 10.5px;
+             letter-spacing: 0.04em; }
+
+/* ---- canvas ---- */
+.canvas { padding: 34px 0 80px; min-width: 0; }
+.kicker { font: 600 10.5px/1.4 var(--font-mono); letter-spacing: 0.16em;
+          text-transform: uppercase; color: var(--blue); margin: 0 0 10px; }
+h1 { font: 400 var(--h1)/1.12 var(--font-serif); color: var(--ink);
+     margin: 0 0 8px; letter-spacing: -0.01em; text-wrap: balance; }
+p.meta { font: 500 12px/1.9 var(--font-mono); color: var(--ink-soft);
+         letter-spacing: 0.01em; max-width: 80ch; margin: 0 0 6px; }
+p.sub { font-family: var(--font-serif); font-size: 15px; line-height: 1.65;
+        color: var(--ink-soft); margin: 0 0 18px; max-width: 78ch;
+        text-wrap: pretty; }
+/* the global rule (superseding the run-links-only carve-out): EVERY link
+   carries the one identity treatment — ink + semibold, blue on hover.
+   The runs table's run-name look, promoted to the base rule; nav
+   chrome pins its own weights/colors where needed. */
+a { color: var(--ink); font-weight: 600; text-decoration: none;
+    transition: color 0.15s var(--ease-out); }
+a:hover { color: var(--blue); text-decoration: none; }
+a:focus-visible, summary:focus-visible, button:focus-visible,
+input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.mono { font-family: var(--font-mono); font-size: 12px; }
+
+h2 { font: 600 11px/1.4 var(--font-mono); letter-spacing: 0.14em;
+     color: var(--ink-soft); text-transform: uppercase; margin: 44px 0 14px;
+     padding-bottom: 8px; border-bottom: 1px solid var(--line-strong);
+     display: flex; align-items: baseline; gap: 12px; }
+/* the scroll offset must sit on the ANCHOR TARGET — the section
+   (or row/footer) carrying the id — not on the heading inside it;
+   on the heading it never fires, and the target lands flush under
+   the sticky topbar with its title eaten. */
+section[id], tr[id], footer[id] {
+  scroll-margin-top: calc(var(--topbar-h) + 16px); }
+/* #top (the pagehead) is the Runs destination: a tighter stop
+   — the title area right under the band, not a section stop */
+#top { scroll-margin-top: calc(var(--topbar-h) + 4px); }
+h2 .sn { font-size: 13px; color: var(--bronze); letter-spacing: 0.06em; }
+/* scroll-driven section reveal (Baseline CSS, zero JS); static where
+   unsupported and under reduced motion */
+section.rise { animation: rise both; animation-timeline: view();
+               animation-range: entry 0% entry 55%; }
+@keyframes rise { from { opacity: 0; translate: 0 14px; } }
+
+/* ---- toolbar: the filter/search strip (progressive enhancement) ---- */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+           margin: 4px 0 14px; }
+.toolbar input[type="search"] {
+  font: 500 12.5px/1.4 var(--font-mono); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line-strong);
+  border-radius: var(--r-2); padding: 8px 12px; min-width: 300px; flex: 0 1 340px; }
+.toolbar input[type="search"]::placeholder { color: var(--ink-faint); }
+.fchip { font: 600 10.5px/1.4 var(--font-mono); letter-spacing: 0.03em;
+         color: var(--ink-soft); background: var(--surface);
+         border: 1px solid var(--line-strong); border-radius: var(--r-1);
+         padding: 6px 11px; cursor: pointer;
+         /* the paint properties only — 'all' would animate the focus
+            ring in from nothing (a keyboard user must see it at once) */
+         transition: color 0.15s var(--ease-out),
+                     background-color 0.15s var(--ease-out),
+                     border-color 0.15s var(--ease-out); }
+.fchip:hover { color: var(--ink); border-color: var(--ink-soft); }
+/* an ACTIVE chip paints itself in the color of the thing it
+   filters (--fbg/--fik declared per chip from the badge palette);
+   chips without a tint keep the neutral navy .on.  The stroke
+   derives from the ink, the badge rule. */
+.fchip.on { background: var(--fbg, var(--navy));
+            color: var(--fik, #ffffff);
+            border-color: color-mix(in oklch, var(--fik, var(--navy))
+                                    55%, transparent); }
+.fcount { font: 500 11px/1.4 var(--font-mono); color: var(--ink-faint);
+          margin-left: auto; }
+
+/* ---- verdict distribution strip (a labeled meter over real counts) ---- */
+.dist { display: flex; gap: 2px; margin: 2px 0 16px; max-width: 720px; }
+.dist .dseg { font: 600 10px/1 var(--font-mono); letter-spacing: 0.02em;
+              padding: 6px 8px; white-space: nowrap; overflow: hidden;
+              text-overflow: ellipsis; border-radius: var(--r-1);
+              min-width: 8px; }
+
+/* ---- tables: the instrument, full canvas width ---- */
+/* Contained at EVERY width (the responsive-enough ruling): an over-wide
+   table scrolls inside its own box — the PAGE never scrolls sideways,
+   not even at desktop (the runs table's ~1184px content only fits the
+   canvas above ~1544px, so laptops and projectors scrolled the whole
+   page before this).  The trade: sticky headers cannot survive
+   containment (sticky tracks one scroll container; a horizontally
+   scrollable box swallows the vertical stick) — the header scrolls
+   with its table, the price of never losing the page. */
+table { border-collapse: collapse; width: 100%; font-size: 13px;
+        margin: 4px 0 26px; display: block; overflow-x: auto; }
+/* the AFFORDANCE (the containment's missing half): a thin, quiet,
+   ALWAYS-VISIBLE scrollbar on every contained surface — a cropped
+   column with no signal reads as broken content, not scrollable
+   content (owner-reported at 1024px: "the table is cropped and no
+   horizontal scrollbar appears").  TWO MECHANISMS, STRICTLY
+   SEPARATED — setting the standard scrollbar-width/color on the
+   same element CANCELS the webkit pseudo styling in Chromium 121+
+   and keeps macOS's auto-hiding overlay (the bug: the thumb
+   ghosted after any scroll and the crop read as broken again).
+   Chromium + Safari: the bare pseudos below force CLASSIC
+   (non-overlay) scrollbars — the thumb permanently painted whenever
+   there is something to scroll, absent when the content fits.
+   Firefox: the standard pair, gated behind @supports so no
+   Chromium parse ever sees it.  Thumb-only on a transparent track:
+   fitting tables grow no empty rail */
+@supports not selector(::-webkit-scrollbar) {
+  table, .unset-names, pre.mono, .rail-body {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--ink) 45%, transparent)
+                     transparent;
+  }
+}
+table::-webkit-scrollbar, .unset-names::-webkit-scrollbar,
+pre.mono::-webkit-scrollbar, .rail-body::-webkit-scrollbar {
+  height: 8px; width: 8px; -webkit-appearance: none;
+}
+table::-webkit-scrollbar-track, .unset-names::-webkit-scrollbar-track,
+pre.mono::-webkit-scrollbar-track, .rail-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+table::-webkit-scrollbar-thumb, .unset-names::-webkit-scrollbar-thumb,
+pre.mono::-webkit-scrollbar-thumb, .rail-body::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--ink) 45%, transparent);
+  border-radius: 4px;
+}
+table::-webkit-scrollbar-thumb:hover, .unset-names::-webkit-scrollbar-thumb:hover,
+pre.mono::-webkit-scrollbar-thumb:hover, .rail-body::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklch, var(--ink) 62%, transparent);
+}
+th, td { text-align: left; padding: 10px 18px 10px 0;
+         border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font: 600 10.5px/1.4 var(--font-mono); letter-spacing: 0.1em;
+           text-transform: uppercase; color: var(--ink-soft);
+           white-space: nowrap; padding-top: 0;
+           border-bottom: 1px solid var(--line-strong);
+           background: var(--bg); }
+th.sort-key { cursor: pointer; user-select: none; }
+th.sort-key:hover { color: var(--ink); }
+th.sort-key[aria-sort]::after { content: "\2191"; color: var(--bronze);
+                                margin-left: 6px; }
+th.sort-key[aria-sort="descending"]::after { content: "\2193"; }
+tbody tr { transition: background 0.15s var(--ease-out); }
+tbody tr:hover { background: color-mix(in oklch, var(--ink) 2.5%, transparent); }
+tr:last-child td { border-bottom: none; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.kv { margin-bottom: 20px; }
+.kv th { font: 600 10.5px/1.5 var(--font-mono); letter-spacing: 0.08em;
+         text-transform: uppercase; color: var(--ink-faint);
+         width: 170px; padding-right: 18px; }
+/* the runs ledger: each run is ONE row; the first cell carries the
+   strong identity line (name) over the quiet context line (machine) */
+td.run-id { padding-top: 12px; padding-bottom: 12px; }
+.runname { font: 600 13.5px/1.45 var(--font-mono); letter-spacing: -0.01em;
+           display: block; white-space: nowrap; overflow: hidden;
+           text-overflow: ellipsis; max-width: 60ch; }
+.runctx { display: block; font: 500 11px/1.6 var(--font-mono);
+          color: var(--ink-faint); margin-top: 3px;
+          letter-spacing: 0.02em; text-transform: uppercase; }
+/* the landing's runs section : the INVENTORY — one block per
+   group (header with its source named — the examples carry their
+   fixed caption).  The block's payload is the STAT ROW (owner
+   review 2026-11-10: the counts were fine print; the numbers are
+   the inventory's headline): families + runs as large serif
+   numerals with small mono labels, the verdict badges baseline-
+   right, a compact verdict bar in the legend's own dot palette
+   (the global meter's language at group scale — counts ride the
+   badges, color never alone), and the analysis fingerprint as the
+   quiet provenance line.  The per-family tables live on the group
+   pages (checkpoint B) — the fam-h/table rules stay for that
+   return */
+.run-grp { margin: 30px 0 0; }
+/* the type voices (owner review of C, round 4): NAMES carry the
+   serif voice (the h1's own — group labels are names, not UI chrome),
+   LABELS carry the mono voice (the h2's, a step down), PROSE the
+   serif of p.sub.  The sans stays the body/UI voice alone. */
+.run-grp h3.grp-h { font: 600 16px/1.35 var(--font-serif);
+                    color: var(--ink); margin: 0 0 4px;
+                    border-bottom: 2px solid var(--ink);
+                    padding-bottom: 5px; letter-spacing: -0.005em; }
+.run-grp .grp-src { font: 500 11px/1.4 var(--font-mono);
+                    color: var(--ink-faint); font-weight: 400;
+                    letter-spacing: 0.01em; }
+.run-grp table.runs { margin-top: 0; }
+/* the group page's family blocks (checkpoint B): the family NAME in
+   the serif voice over its quiet count and verdict chips */
+.fam-blk { margin: 30px 0 0; }
+.fam-blk h3.fam-h { font: 600 15px/1.4 var(--font-serif);
+                    color: var(--ink); margin: 0 0 8px;
+                    border-bottom: 1px solid var(--line-strong);
+                    padding-bottom: 5px; letter-spacing: -0.005em; }
+.fam-blk .fam-h .s-cnt { color: var(--ink-soft); font-weight: 400; }
+/* sub-section LABELS — the h2's mono voice a step down (labels, not
+   names: never serif) */
+h3.rec-h { font: 600 11px/1.4 var(--font-mono); letter-spacing: 0.12em;
+           text-transform: uppercase; color: var(--ink-soft);
+           margin: 22px 0 10px; }
+.sick-grps h3.grp-h { font: 600 11px/1.4 var(--font-mono);
+                      letter-spacing: 0.12em; text-transform: uppercase;
+                      color: var(--ink-soft);
+                      border-bottom: 1px dashed var(--line-strong);
+                      padding-bottom: 6px; }
+.grp-stats { display: flex; align-items: baseline; flex-wrap: wrap;
+             column-gap: 26px; row-gap: 6px; margin: 12px 0 0; }
+.grp-stats .stat { display: inline-flex; align-items: baseline;
+                   white-space: nowrap; }
+.grp-stats .stat .n { font: 600 30px/1 var(--font-serif);
+                      color: var(--ink); letter-spacing: -0.01em; }
+.grp-stats .stat .l { font: 600 10px/1 var(--font-mono);
+                      letter-spacing: 0.14em; text-transform: uppercase;
+                      color: var(--ink-faint); margin-left: 7px; }
+.grp-stats .grp-verd { margin-left: auto; font-size: 12px;
+                       color: var(--ink-soft); }
+.grp-stats .grp-verd .badge { margin-left: 2px; }
+.grp-dist { display: flex; gap: 2px; height: 6px; max-width: 720px;
+            margin: 9px 0 0; border-radius: 2px; overflow: hidden; }
+p.grp-fp { margin: 7px 0 0; font: 500 10.5px/1.6 var(--font-mono);
+           color: var(--ink-faint); letter-spacing: 0.02em; }
+/* the sick-group rows — first-class : one line per group the
+   build could not catalog, its reason and remedy on the page, for
+   the user who did not read the CLI output */
+.sick-grps { margin: 26px 0 0; }
+.sick-grps p.ncat { margin: 10px 0 0; }
+p.ncat { margin: 18px 0 0; padding: 8px 12px;
+         border-left: 3px solid var(--amber);
+         background: color-mix(in oklch, var(--amber) 6%, transparent);
+         color: var(--ink-soft); font-family: var(--font-serif);
+         font-size: 14px; line-height: 1.6; }
+/* the empty-state teacher — rendered ONLY while zero user groups
+   stand; the moment a real group exists the landing is the plain
+   inventory.  Quiet: one hairline panel, the two commands, no paths;
+   the PROSE voice (serif, p.sub's own treatment) */
+.teacher { margin: 26px 0 0; padding: 14px 16px;
+           border: 1px dashed var(--line-strong);
+           border-radius: var(--r-1); color: var(--ink-soft); }
+.teacher p { font-family: var(--font-serif); font-size: 15px;
+             line-height: 1.65; }
+/* bold inside serif prose rides the REAL semibold face (the audit's
+   rule: no synthesized weights, ever — the vendored 600s make every
+   b and every semibold anchor a true face in all three voices) */
+.sub b, .teacher b { color: var(--ink); font-weight: 600; }
+/* the verdict-dot legend — the rail dots' palette named once on the
+   landing, right under the distribution meter that shares it */
+p.vlegend { margin: 8px 0 0; font: 500 11px/1.8 var(--font-mono);
+            color: var(--ink-soft); letter-spacing: 0.02em; }
+p.vlegend .rdot { margin: 0 5px 0 12px; }
+p.vlegend .rdot:first-child { margin-left: 0; }
+/* the user-seat build moment (the determinism rule): a wall
+   clock rides ONLY a build that carries user groups, handed down by
+   the CLI — proven bytes never see it */
+p.built-at { margin: 14px 0 0; font: 500 11px/1.6 var(--font-mono);
+             color: var(--ink-faint); letter-spacing: 0.02em; }
+ul.skips { margin: 0 0 20px; padding-left: 20px; color: var(--ink-soft);
+           font-size: 13px; }
+ul.skips li { margin: 4px 0; }
+ul.skips li::marker { color: var(--bronze); }
+/* the documented-but-unset block — collapsed by default (the
+   ledger above stays the page's business); the names render dense,
+   multi-column, inventory order. the summary is a CONTROL —
+   the chip button language (border, surface, hover lift), with an
+   explicit direction marker that flips when open; tiny quiet text
+   read as a label and got missed. */
+details.unset { margin: 6px 0 20px; }
+details.unset summary {
+  display: inline-block; cursor: pointer;
+  font: 600 12px/1.4 var(--font-mono); letter-spacing: 0.04em;
+  color: var(--ink-soft); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--r-1);
+  padding: 8px 14px; list-style: none;
+  transition: all 0.15s var(--ease-out); }
+details.unset summary::after { content: "  ▾"; color: var(--ink-faint); }
+details.unset[open] summary::after { content: "  ▴"; }
+details.unset summary:hover {
+  color: var(--ink); border-color: var(--ink-soft);
+  background: color-mix(in oklch, var(--ink) 4%, var(--surface)); }
+details.unset summary:hover::after { color: var(--ink); }
+/* contained like the tables (same ruling): an over-long nowrap name
+   scrolls inside the block, never the page */
+.unset-names { overflow-x: auto; margin: 10px 0 0;
+               columns: 240px 4; column-gap: 28px;
+               font-size: 11.5px; line-height: 2.1; }
+.unset-names .mono { white-space: nowrap; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: var(--r-1);
+         font: 600 10.5px/1.5 var(--font-mono); letter-spacing: 0.03em;
+         white-space: nowrap;
+         border: 1px solid color-mix(in oklch, currentColor 32%, transparent); }
+.badge::before { content: ""; display: inline-block; width: 6px; height: 6px;
+                 border-radius: 50%; margin-right: 6px; vertical-align: 1px;
+                 background: currentColor; }
+figure { margin: 18px 0; }
+figure img { max-width: 100%; border: 1px solid var(--line);
+             border-radius: var(--r-3);
+             background: var(--surface); }
+figcaption { font: italic 400 12.5px/1.5 var(--font-serif);
+             color: var(--ink-soft); margin-top: 7px; max-width: 72ch; }
+
+/* ---- triage: the verdict callout rides the canvas top (Layer 0) ---- */
+.verdict { margin: 14px 0 4px; padding: 12px 20px;
+           font: italic 400 17px/1.55 var(--font-serif); color: var(--ink);
+           background: color-mix(in oklch, var(--amber) 7%, transparent);
+           border-left: 3px solid var(--bronze); }
+.chips { margin: 10px 0 0; }
+.chips .badge { margin-right: 6px; }
+.card { background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--r-3); padding: 18px 20px 16px; margin: 16px 0; }
+.card > h3 { margin: 0 0 10px; font: 600 13.5px/1.4 var(--font-mono);
+             letter-spacing: -0.01em; }
+.card > h4 { margin: 16px 0 8px; }
+details.audit { border-top: 1px solid var(--line); margin: 0; }
+details.audit > summary { cursor: pointer; padding: 13px 2px;
+                          font: 600 11px/1.4 var(--font-mono);
+                          letter-spacing: 0.12em; text-transform: uppercase;
+                          color: var(--ink-soft); list-style: none;
+                          display: flex; gap: 10px; align-items: baseline; }
+details.audit > summary::before { content: "+"; color: var(--bronze);
+                                  font-weight: 700; font-size: 13px; }
+details.audit[open] > summary::before { content: "\2013"; }
+details.audit[open] > summary { color: var(--ink);
+                                border-bottom: 1px solid var(--line); }
+details.audit > .pad { padding: 14px 2px 18px; }
+details.case { border-top: 1px solid var(--line); margin: 0; }
+details.case > summary { cursor: pointer; padding: 10px 2px;
+                         font: 600 12px/1.4 var(--font-mono);
+                         list-style: none; display: flex; gap: 10px;
+                         align-items: baseline; }
+details.case > summary::before { content: "+"; color: var(--bronze);
+                                 font-weight: 700; }
+details.case[open] > summary::before { content: "\2013"; }
+summary::-webkit-details-marker { display: none; }
+details.case > .pad, details.case > div { padding: 4px 2px 14px; }
+
+/* ---- the dossier (run pages): document flow + sticky fact sheet ---- */
+.dossier { display: grid; grid-template-columns: minmax(0, 1fr) 292px;
+           gap: 0 48px; }
+.factsheet { position: sticky; top: calc(var(--topbar-h) + 26px);
+             align-self: start; padding: 18px 0 24px;
+             border-top: 2px solid var(--navy); }
+.factsheet h2 { margin-top: 20px; }
+.factsheet .kv { margin-bottom: 12px; }
+
+.spark polyline { fill: none; stroke: var(--ink-soft); stroke-width: 1;
+                  stroke-linejoin: round; stroke-linecap: round; }
+td.sparkcell { min-width: 128px; }
+.ddef { font-size: 12px; }
+.ddef-val { font-family: var(--font-mono); }
+.ddef-mute { color: var(--ink-soft); }
+.ddef-prose { color: var(--ink-soft); font-style: italic;
+              font-family: var(--font-serif); font-size: 12.5px; }
+pre.mono { overflow-x: auto; background: var(--navy); color: #c9d4e8;
+           border-radius: var(--r-3); padding: 16px 18px; margin: 8px 0 6px;
+           font-size: 12px; line-height: 1.6; }
+footer { font: italic 400 12.5px/1.65 var(--font-serif);
+         color: var(--ink-soft); margin-top: 56px;
+         border-top: 1px solid var(--line-strong); padding-top: 14px; }
+footer p { margin: 0 0 6px; }
+footer p:last-child { margin: 0; }
+.fnmark { color: var(--ink-soft); }
+a.fn { color: inherit; text-decoration: none; font-size: 9px;
+       vertical-align: super; line-height: 0; margin-left: 1px; }
+a.fn:hover { color: var(--blue); text-decoration: underline; }
+
+/* the switch-index ledger (its rows carry citation anchors — the only
+   .switches table with tr[id]): fixed two-column split, wrap header */
+table.switches:has(tbody tr[id]) { table-layout: fixed; }
+table.switches:has(tbody tr[id]) thead th { white-space: normal; }
+table.switches:has(tbody tr[id]) th:first-child { width: 31%; }
+table.switches:has(tbody tr[id]) td { padding-right: 14px; }
+
+@media (max-width: 1080px) {
+  /* the band's column alignment is meaningless stacked —
+     crumbs flow next to the brand again */
+  .brand { width: auto; }
+  .crumbs { margin-left: 24px; }
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .dossier { grid-template-columns: minmax(0, 1fr); }
+  .factsheet { position: static; border-top: 2px solid var(--navy); }
+  .tb-meta { display: none; }
+  /* scripts off (or any non-js agent): the FULL menu stacks above the
+     canvas — rule holds verbatim (headers, sections with their
+     sub-entries, the run list and the foot all rendered, nothing
+     hidden, no internal scroll, the page flows on) */
+  .rail { max-height: none; position: static; height: auto;
+          overflow: visible; border-right: none;
+          border-bottom: 1px solid var(--line); padding: 14px 0 12px; }
+  /* with scripting: content comes first — the menu is the band
+     burger's dropdown (amending the stacked-always clause
+     for js agents): a hamburger at the band's right end (the counts
+     slot, hidden at these widths), the menu drops as a panel FIXED
+     under the band — an overlay, so content never reflows and begins
+     immediately under the band.  The panel is opaque, capped at the
+     viewport (internal scroll only when it would otherwise clip).
+     STAY-OPEN MODEL: a working panel like the desktop rail —
+     menu choices never dismiss it (the band crumb above names the
+     destination); dismissal is the user's alone: the burger/X,
+     Escape, or an outside click */
+  html.js .burger {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; align-self: stretch; flex: none; margin-left: 12px;
+    background: none; border: none; padding: 0; cursor: pointer;
+  }
+  html.js .burger-box { display: inline-flex; flex-direction: column;
+                        gap: 4px; }
+  html.js .burger-line { width: 16px; height: 2px; border-radius: 1px;
+                         background: #8fa8dc;
+                         transition: transform 0.15s var(--ease-out),
+                                     background 0.15s var(--ease-out),
+                                     opacity 0.15s var(--ease-out); }
+  html.js .burger:hover .burger-line,
+  html.js .burger:focus-visible .burger-line { background: #ffffff; }
+  /* the open state morphs the three lines into an X (the standard
+     hamburger grammar; transform-only, no layout) */
+  html.js .burger[aria-expanded="true"] .burger-line { background: #ffffff; }
+  html.js .burger[aria-expanded="true"] .burger-line:nth-child(1) {
+    transform: translateY(6px) rotate(45deg); }
+  html.js .burger[aria-expanded="true"] .burger-line:nth-child(2) {
+    opacity: 0; }
+  html.js .burger[aria-expanded="true"] .burger-line:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg); }
+  /* the panel: fixed under the band, full width, overlaying content
+     (z below the band's 20, above the page) */
+  html.js .rail {
+    position: fixed; top: calc(var(--topbar-h) + 2px);
+    right: 0; left: 0; z-index: 19; background: var(--bg);
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow: 0 14px 30px color-mix(in oklch, var(--ink) 14%,
+                                      transparent);
+    margin: 0; padding: 0 28px 6px; max-height: none; height: auto;
+    overflow: visible; border-right: none; display: none;
+  }
+  html.js .rail.menu-open { display: block; }
+  html.js .rail-body {
+    display: block; padding: 4px 0 10px;
+    max-height: calc(100vh - var(--topbar-h) - 24px);
+    overflow-y: auto;
+  }
+}
+@media (max-width: 720px) {
+  .shell, .tb-in { padding-left: 18px; padding-right: 18px; }
+  /* the burger panel's side padding follows the shell's narrow
+     gutter (28px above) so the menu aligns with the content */
+  html.js .rail { padding-left: 18px; padding-right: 18px; }
+  /* the trail yields: ancestors never truncate by design, so at
+     phone width they hide instead — the current-page crumb (the flex
+     point, ellipsizing) is what names the page; the hidden links live
+     on in the rail and the landing */
+  .crumbs a, .crumbs .c-sep { display: none; }
+  .crumbs { margin-left: 18px; }
+  .kv th { width: 130px; }
+  .toolbar input[type="search"] { min-width: 0; flex: 1 1 100%; }
+}
+@media print {
+  .topbar { position: static; background: #ffffff; }
+  .b-kick, .tb-meta { color: #444444; }
+  .b-name { color: #000000; }
+  .rail { display: none; }
+  .shell { grid-template-columns: minmax(0, 1fr); padding: 0; }
+  .factsheet { position: static; }
+  tbody tr:hover { background: none; }
+  section.rise { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important; }
+  section.rise { animation: none; }
+}
+@font-face {
+  font-family: "Sora"; font-style: normal; font-weight: 400;
+  font-display: swap;
+  src: url("../../fonts/sora-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Sora"; font-style: normal; font-weight: 600;
+  font-display: swap;
+  src: url("../../fonts/sora-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4"; font-style: normal; font-weight: 400;
+  font-display: swap;
+  src: url("../../fonts/source-serif-4-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4"; font-style: italic; font-weight: 400;
+  font-display: swap;
+  src: url("../../fonts/source-serif-4-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4"; font-style: normal; font-weight: 600;
+  font-display: swap;
+  src: url("../../fonts/source-serif-4-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono"; font-style: italic; font-weight: 400;
+  font-display: swap;
+  src: url("../../fonts/ibm-plex-mono-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400;
+  font-display: swap;
+  src: url("../../fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500;
+  font-display: swap;
+  src: url("../../fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono"; font-style: normal; font-weight: 600;
+  font-display: swap;
+  src: url("../../fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono"; font-style: normal; font-weight: 700;
+  font-display: swap;
+  src: url("../../fonts/ibm-plex-mono-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}</style>
+<script>// the js flag gates every enhancement below: the page is
+// fully usable without scripting, and this class — set BEFORE the
+// body parses (the script lives in the head) — lets the CSS apply
+// the accordion's initial collapsed state at first layout: no flash
+// of the expanded menu on slow pages and no load-time animation —
+// sections move only when the user acts
+document.documentElement.classList.add("js");
+// a deep-linked fragment names the landing's opening section at
+// FIRST LAYOUT — the CSS opens it before any script-on-DOM moment
+// (engines that fire DOMContentLoaded after the fragment descent
+// would otherwise animate the section swap late, post-settle);
+// #top maps to runs (home).  The attribute retires inside the
+// arrival block's quiet window below — from then on the here-link
+// state rules alone.
+// LANDING-ONLY (data-frag-stamp rides the landing's script tag): on
+// sub-pages the four names are foreign anchors — the switch page's
+// #top is its Switches-indexed CHILD, and the stamp would map it to
+// runs: an open-but-empty runs menu (visibility-hidden content) that
+// the retire path never clears, because no landing toggle ever
+// matches a sub-page fragment
+(function () {
+  if (!document.currentScript.hasAttribute("data-frag-stamp")) return;
+  var m = (location.hash || "").match(/^#(top|comparisons|switches)$/);
+  if (m) document.documentElement.setAttribute(
+    "data-frag", m[1] === "top" ? "runs" : m[1]);
+})();
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  // ---- the rail's open state is the USER'S (owner review, round 2) ----
+  // trees open and close ONLY by a click: the amber mark, the
+  // scroll-spy and the fragment moves change the HIGHLIGHT, never
+  // the tree.  The state persists per browser tab across pages; a
+  // page's arrival ADDS its own ancestry (the auto-open rule,
+  // additive as before — a navigation never removes anything); and
+  // a label click on the page it names toggles that tree in place
+  // instead of reloading.  sessionStorage failures (private modes,
+  // exotic origins) degrade to the page-local behavior only.
+  var railStore = (function () {
+    var KEY = "catalog-rail-open";
+    var ids = [];
+    try {
+      ids = JSON.parse(sessionStorage.getItem(KEY)) || [];
+    } catch (e) { ids = []; }
+    if (!Array.isArray(ids)) ids = [];
+    function idOf(el) {
+      if (!el) return null;
+      if (el.classList.contains("r-sec"))
+        return "sec:" + (el.getAttribute("data-sec") || "");
+      if (el.classList.contains("r-fam"))
+        return "fam:" + (el.getAttribute("data-fam") || "");
+      if (el.classList.contains("r-grp"))
+        return "grp:" + (el.getAttribute("data-grp") || "");
+      return null;
+    }
+    function save() {
+      try { sessionStorage.setItem(KEY, JSON.stringify(ids)); }
+      catch (e) {}
+    }
+    function isOpen(el) {
+      return el.tagName === "DETAILS"
+        ? el.hasAttribute("open") : el.classList.contains("open");
+    }
+    return {
+      open: function (el) {
+        var id = idOf(el);
+        if (id && ids.indexOf(id) < 0) { ids.push(id); save(); }
+        if (el.tagName === "DETAILS") el.setAttribute("open", "");
+        else el.classList.add("open");
+      },
+      close: function (el) {
+        var id = idOf(el), i = id ? ids.indexOf(id) : -1;
+        if (i >= 0) { ids.splice(i, 1); save(); }
+        if (el.tagName === "DETAILS") el.removeAttribute("open");
+        else el.classList.remove("open");
+      },
+      toggle: function (el) {
+        if (isOpen(el)) this.close(el); else this.open(el);
+      },
+      apply: function () {
+        var els = document.querySelectorAll(
+          ".rail .r-sec, .rail details");
+        els.forEach(function (el) {
+          var id = idOf(el);
+          if (id && ids.indexOf(id) >= 0) railStore.open(el);
+        });
+      },
+    };
+  })();
+  // ---- arrivals are QUIET (owner review, round 6) ----
+  // the trees the user left open must LAND open on the next page,
+  // not replay a collapse-and-expand over 0.28s (measured: every
+  // page kind animated its arrival opens — the details' rAF-deferred
+  // .d-open always, the sections' class-add whenever the closed
+  // state had been computed pre-DOMContentLoaded; webkit showed
+  // both).  One synchronous window: html.no-anim kills the rail's
+  // grid transitions (the CSS rule above), the arrival opens land
+  // below, every open details takes its .d-open GEOMETRY class in
+  // the same step (the toggle events that follow asynchronously
+  // find both set and animate nothing), the fragment stamp hands
+  // its first-layout contract over and retires HERE — a stored-open
+  // non-fragment section would otherwise flip when the spy retires
+  // the attribute a moment later — a reflow commits the state, and
+  // transitions re-arm for the user's own acts
+  document.documentElement.classList.add("no-anim");
+  railStore.apply();
+  document.querySelectorAll(".rail a.here").forEach(function (a) {
+    var sec = a.closest(".r-sec");
+    if (sec) railStore.open(sec);
+    var d = a.closest("details");
+    while (d) {
+      railStore.open(d);
+      d = d.parentElement ? d.parentElement.closest("details") : null;
+    }
+  });
+  // a deep-linked landing fragment opens its section (additive, like
+  // every arrival; the CSS [data-frag] rules hold the first layout)
+  (function () {
+    var df = document.documentElement.getAttribute("data-frag");
+    if (!df) return;
+    var s = document.querySelector('.r-sec[data-sec="' + df + '"]');
+    if (s) railStore.open(s);
+  })();
+  document.documentElement.removeAttribute("data-frag");
+  document.querySelectorAll(".rail details[open]:not(.d-open)")
+    .forEach(function (d) { d.classList.add("d-open"); });
+  void document.documentElement.offsetWidth;   // commit, then re-arm
+  document.documentElement.classList.remove("no-anim");
+  // ---- the tree's own disclosure animates like the sections ----
+  // (owner round 5b): the [open] attribute stays the semantic state;
+  // the .d-open class drives the SAME 0fr<->1fr grid transition on
+  // the script's timing — opens animate from the toggle event, closes
+  // animate FIRST and drop the attribute at transition end, and a
+  // re-click mid-close cancels (the pending drop checks the class)
+  function detailsAnimate(d, open) {
+    if (open) {
+      d.setAttribute("open", "");        // reveal at 0fr; toggle animates
+      return;
+    }
+    var sub = d.querySelector(":scope > .d-sub");
+    if (!sub) { d.removeAttribute("open"); return; }
+    d.classList.remove("d-open");        // animate to 0fr
+    var done = function () {
+      sub.removeEventListener("transitionend", done);
+      if (!d.classList.contains("d-open")) d.removeAttribute("open");
+    };
+    sub.addEventListener("transitionend", done);
+    setTimeout(done, 340);               // the no-transition fallback
+  }
+  document.querySelectorAll(".rail details").forEach(function (d) {
+    // the toggle listener is the ONE open path: native marker clicks,
+    // arrivals, the store's apply — persistence rides it too
+    d.addEventListener("toggle", function () {
+      if (d.hasAttribute("open")) {
+        railStore.open(d);
+        requestAnimationFrame(function () {
+          void d.offsetWidth;            // flush: start collapsed
+          d.classList.add("d-open");     // animate to 1fr
+        });
+      } else {
+        railStore.close(d);
+      }
+    });
+    // a close must animate BEFORE the attribute drops: the summary's
+    // own clicks are intercepted (label clicks never reach this —
+    // they navigate or toggle themselves)
+    var s = d.querySelector(":scope > summary");
+    if (s) s.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return;
+      if (!d.hasAttribute("open")) return;   // native open animates
+      e.preventDefault();
+      if (d.classList.contains("d-open")) {
+        detailsAnimate(d, false);
+      } else {
+        d.classList.add("d-open");       // mid-close re-click: cancel
+      }
+    });
+  });
+
+  // ---- the toggles ----
+  (function () {
+    // MARKER TOGGLES, LABEL NAVIGATES (owner review of round 2: the
+    // row is a LINK to the landing's section again — the way back
+    // home from deep pages; the 12px marker column is the toggle,
+    // the same discipline the group and family rows follow).  A
+    // childless section hides its marker and keeps the pure link.
+    // OWNER ROUND 6: the label is a NAVIGATION first — on its own
+    // page it jumps to its section with the tree's state untouched;
+    // the toggle fires only once the URL already sits at the section
+    // (the click after the jump), closing in place; from any other
+    // page the label navigates home
+    document.querySelectorAll(".rail .r-sec > a").forEach(function (a) {
+      var sec = a.closest(".r-sec");
+      if (!sec.querySelector(".r-sub")) return;
+      var mark = a.querySelector(".r-mark");
+      if (mark) mark.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        railStore.toggle(sec);
+        a.setAttribute("aria-expanded",
+          sec.classList.contains("open") ? "true" : "false");
+      });
+      a.addEventListener("click", function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var samePage = new URL(a.href).pathname === location.pathname;
+        if (!samePage) return;      // the way home: navigate
+        e.preventDefault();
+        var m = (a.getAttribute("href") || "").match(/#(\w+)$/);
+        var isOpen = sec.classList.contains("open");
+        // OWNER ROUND 6: the label NAVIGATES FIRST.  Open and
+        // elsewhere -> the jump with the tree untouched; only once
+        // the URL already sits at this section — the click AFTER
+        // the jump — does the label close the tree, staying put;
+        // a closed tree opens and jumps in the one act.  The marker
+        // stays the pure toggle at all times
+        var there = !!(m && location.hash === "#" + m[1]);
+        function jump() {
+          if (!m) return;
+          if (location.hash === "#" + m[1]) {
+            var t = document.getElementById(m[1]);  // same hash: the
+            if (t) t.scrollIntoView();              // assignment alone
+          } else {                                  // would not move
+            location.hash = m[1];
+          }
+        }
+        if (isOpen && !there) {
+          jump();
+        } else if (isOpen) {
+          railStore.close(sec);
+        } else {
+          railStore.open(sec);
+          jump();
+        }
+        a.setAttribute("aria-expanded",
+          sec.classList.contains("open") ? "true" : "false");
+      });
+    });
+    // a group/family label click on the page it names toggles that
+    // tree in place instead of reloading — through the animated path
+    // (every other label click navigates as always).  The own-page
+    // test reads PATHNAMES (the round-6 sweep): a stray fragment on
+    // the URL must never turn the toggle into a reload
+    document.querySelectorAll(".rail summary a.r-lab").forEach(
+      function (a) {
+        a.addEventListener("click", function (e) {
+          if (new URL(a.href).pathname !== location.pathname) return;
+          e.preventDefault();
+          var d = a.closest("details");
+          if (d) detailsAnimate(d, d.hasAttribute("open") ? false : true);
+        });
+      });
+  })();
+  function cellText(row, i) {
+    var c = row.cells[i];
+    return c ? (c.textContent || "").replace(/[\s\u00a0]+/g, " ").trim() : "";
+  }
+  function numeric(s) {
+    var m = s.replace(/,/g, "").match(/-?\d+(?:\.\d+)?(?:e-?\d+)?/i);
+    return m ? parseFloat(m[0]) : null;
+  }
+  // ---- sort: click a column header, numeric-aware, stable ----
+  document.querySelectorAll("table[data-sort]").forEach(function (t) {
+    var ths = t.querySelectorAll("thead th");
+    var tbody = t.tBodies[0];
+    if (!tbody) return;
+    ths.forEach(function (th, i) {
+      th.setAttribute("scope", "col");
+      th.classList.add("sort-key");
+      th.addEventListener("click", function () {
+        var dir = th.getAttribute("aria-sort") === "ascending" ? -1 : 1;
+        ths.forEach(function (o) { o.removeAttribute("aria-sort"); });
+        th.setAttribute("aria-sort", dir > 0 ? "ascending" : "descending");
+        var rows = Array.prototype.slice.call(tbody.rows);
+        rows.forEach(function (r, k) { r._k = k; });
+        // numeric vs text mode is decided PER COLUMN, never per
+        // pair — a per-pair mix is non-transitive and sorts to
+        // garbage (owner-seen: the Run column, where names carry
+        // embedded numbers but MAST_U carries none).  A column goes
+        // numeric only when EVERY non-missing cell is number-led with
+        // no letters after the first number ("96\u00d736" qualifies,
+        // "ITER_2275_..." does not).  "\u2014"/empty are missing
+        // values: ignored for the decision, stable at their slots.
+        var numericCol = rows.some(function (r) {
+              var s = cellText(r, i);
+              return s && s !== "\u2014" && /^-?\d/.test(s);
+            }) && rows.every(function (r) {
+              var s = cellText(r, i);
+              if (!s || s === "\u2014") return true;
+              if (!/^-?\d/.test(s)) return false;
+              var m = s.replace(/,/g, "")
+                       .match(/^-?\d+(?:\.\d+)?(?:e-?\d+)?/i);
+              return !!m && !/[a-z]/i.test(s.slice(m[0].length));
+            });
+        rows.sort(function (a, b) {
+          var ta = cellText(a, i), tb = cellText(b, i);
+          var cv;
+          if (numericCol) {
+            var na = numeric(ta), nb = numeric(tb);
+            cv = (na === null || nb === null) ? 0
+              : na < nb ? -1 : na > nb ? 1 : 0;
+          } else {
+            cv = ta.localeCompare(tb);
+          }
+          return cv * dir || (a._k - b._k) * dir;
+        });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+      });
+    });
+  });
+  // ---- filter: one search box + contains-chips per marked table ----
+  // tables sharing a scope (the landing's per-family run tables under
+  // one toolbar) filter TOGETHER and their count aggregates; a lone
+  // table behaves exactly as before
+  (function () {
+    var scopes = new Map();
+    document.querySelectorAll("table[data-filter]").forEach(function (t) {
+      var scope = t.closest("[data-filter-scope]") || document;
+      if (!scopes.has(scope)) scopes.set(scope, []);
+      scopes.get(scope).push(t);
+    });
+    scopes.forEach(function (tables, scope) {
+      var input = scope.querySelector("input[data-filter-input]");
+      var chips = Array.prototype.slice.call(
+        scope.querySelectorAll("button[data-filter-contains]"));
+      var count = scope.querySelector("[data-filter-count]");
+      var all = [];
+      tables.forEach(function (t) {
+        if (t.tBodies[0]) all.push.apply(all,
+          Array.prototype.slice.call(t.tBodies[0].rows));
+      });
+      if (!all.length || (!input && chips.length === 0)) return;
+      var contains = null;
+      function apply() {
+        var q = input ? input.value.trim().toLowerCase() : "";
+        var n = 0;
+        all.forEach(function (r) {
+          var txt = (r.textContent || "").toLowerCase();
+          var ok = (!q || txt.indexOf(q) !== -1) &&
+                   (contains === null || txt.indexOf(contains) !== -1);
+          r.hidden = !ok;
+          if (ok) n++;
+        });
+        if (count) count.textContent =
+          n + " of " + all.length + " shown";
+        chips.forEach(function (c) {
+          var on = c.getAttribute("data-filter-contains") === contains;
+          c.classList.toggle("on", on);
+          c.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+      if (input) input.addEventListener("input", apply);
+      chips.forEach(function (c) {
+        c.addEventListener("click", function () {
+          contains = c.getAttribute("data-filter-contains") === contains
+            ? null : c.getAttribute("data-filter-contains");
+          apply();
+        });
+      });
+      apply();
+    });
+  })();
+  // ---- rail + band: the highlight follows fragment AND scroll ----
+  // "here" is stamped at build time per PAGE; the in-page sections are
+  // anchors INTO the landing page, so clicking them never navigates and
+  // the stamp stayed on Runs.  This module moves the highlight to the
+  // rail entry whose destination is "index.html" + the current fragment
+  // — click or deep link — and back to Runs when the fragment clears.
+  // Exact-string href matching scopes it to the landing page: subpage
+  // rails render "../index.html#..." and never match, nested
+  // sub-entries carry whole-page hrefs (never a landing fragment), and
+  // a fragment no rail entry owns (e.g. a bare #footnotes jump) leaves
+  // the build stamp as is; adds the BAND SECTION INDICATOR (the
+  // landing's crumbs slot reads the same state) and the SCROLL-SPY:
+  // on the landing, the current section is the last whose top passed
+  // the band — the highlight and the band indicator follow the ONE
+  // state; scrolling never touches the URL and NEVER the trees (the
+  // open state is the user's, round 2 — only the mark moves).
+  (function () {
+    // scope: SECTION toggles + their children only.  The run tree's
+    // label anchors (class r-lab: marker toggles, label
+    // navigates) are deliberately OUTSIDE this set — a label click
+    // must never take the amber mark or move the accordion; it is a
+    // plain navigation, and the section state rules alone.
+    var links = document.querySelectorAll(
+      ".rail .r-sec > a, .rail a.r-c");
+    if (!links.length) return;
+    function refreshAria() {
+      document.querySelectorAll(".rail .r-sec").forEach(function (sec) {
+        var a = sec.querySelector(":scope > a");
+        if (a) a.setAttribute("aria-expanded",
+          sec.classList.contains("open") ? "true" : "false");
+      });
+    }
+    // the landing's band slot: "Catalog" + a script-built section
+    // link. EVERY active section is named, Runs included —
+    // the open accordion already declares the position (children
+    // listed, toggle selected), and the indicator agrees with it;
+    // the landing's opening state reads "Catalog › Runs"
+    var ind = document.querySelector(
+      '.topbar .crumbs[aria-label="Section"] .c-here');
+    var indSep = null, indLink = null;
+    if (ind) {
+      indSep = document.createElement("span");
+      indSep.className = "c-sep";
+      indSep.textContent = "›";
+      indSep.hidden = true;
+      indLink = document.createElement("a");
+      indLink.className = "c-sec";
+      indLink.hidden = true;
+      ind.after(indSep, indLink);
+    }
+    var BAND = { runs: ["Runs", "#top"],
+                 comparisons: ["Comparisons", "#comparisons"],
+                 switches: ["Switch index", "#switches"] };
+    function refreshBand() {
+      if (!indLink) return;
+      var a = document.querySelector(".rail a.here");
+      var sec = a && a.closest(".r-sec");
+      var m = sec && BAND[sec.dataset.sec];
+      if (m) {
+        indLink.textContent = m[0];
+        indLink.setAttribute("href", m[1]);
+        indLink.hidden = false;
+        indSep.hidden = false;
+      } else {
+        indLink.hidden = true;
+        indSep.hidden = true;
+      }
+    }
+    // the sub-page trail deepens with the active
+    // anchored child.  The switch page's four rail children already
+    // drive the child highlight and the body title (fragment AND
+    // scroll) — the band trail reads the same ONE state:
+    // while a child is here the page crumb yields its slot to the
+    // SECTION crumb and the child names the place as the last crumb.
+    // EVERY child deepens, the first one included — the open
+    // accordion already declares the position, and the trail agrees
+    // with it ("Catalog › Switch index › Switches indexed" at the
+    // page top too; the two-level stand is retired). The
+    // section crumb behaves like every section crumb — it takes the
+    // LANDING's section anchor (read from the section toggle's own
+    // href, so it stays correct anywhere the site lives); the
+    // page-top jump is the rail child's job.  The deep crumbs are
+    // script-built and CSS-hidden without the state, so every other
+    // page (and scripts-off) renders the ruled static form
+    var bnav = document.querySelector(
+      '.topbar .crumbs[aria-label="Breadcrumb"]');
+    var bHere = bnav && bnav.querySelector(".c-here");
+    var bKids = document.querySelectorAll('.rail a.r-c[href^="#"]');
+    var bSec = null;
+    if (bnav && bHere && bKids.length) {
+      var bTop = document.createElement("a");
+      bTop.className = "c-top";
+      var bSec0 = bKids[0].closest(".r-sec");
+      var bTgl = bSec0 && bSec0.querySelector(":scope > a");
+      bTop.href = bTgl ? bTgl.getAttribute("href") : "#top";
+      bTop.textContent = bHere.textContent;
+      var bSep = document.createElement("span");
+      // rides the deep slot's own hidden-by-default class too — a
+      // bare c-sep would paint a stray "›" beside nothing at rest
+      bSep.className = "c-sep c-sec3";
+      bSep.textContent = "›";
+      bSec = document.createElement("span");
+      bSec.className = "c-sec3";
+      bnav.append(bTop, bSep, bSec);
+    }
+    function refreshTrail() {
+      if (!bnav || !bSec) return;
+      var here = document.querySelector(".rail a.here");
+      var href = here && here.classList.contains("r-c")
+               ? (here.getAttribute("href") || "") : "";
+      if (href.match(/^#([a-z-]+)$/)) {
+        bSec.textContent = here.textContent;
+        bSec.title = here.textContent;
+        bnav.classList.add("deep");
+      } else {
+        bnav.classList.remove("deep");
+      }
+    }
+    // the current section's TITLE in the body takes the menu's
+    // amber treatment — on the landing the section toggle names the
+    // body section; on the switch page the current child names an
+    // anchored section.  Other pages' links name no body section —
+    // no highlight there (owner ruling)
+    function refreshHi() {
+      var here = document.querySelector(".rail a.here");
+      var target = null;
+      if (here) {
+        var href = here.getAttribute("href") || "";
+        if (here.classList.contains("r-c")) {
+          var c = href.match(/^#([a-z-]+)$/);
+          target = c && document.getElementById(
+            c[1] === "top" ? "switches-indexed" : c[1]);
+        } else {
+          var k = href.match(/^index\.html#(\w+)$/);
+          target = k && document.getElementById(
+            k[1] === "top" ? "runs" : k[1]);
+        }
+      }
+      document.querySelectorAll(".sec-hi").forEach(function (h) {
+        h.classList.remove("sec-hi");
+      });
+      var h2 = target && target.querySelector("h2");
+      if (h2) h2.classList.add("sec-hi");
+    }
+    function moveTo(target) {
+      links.forEach(function (a) {
+        var on = a === target;
+        a.classList.toggle("here", on);
+        if (on) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      });
+      refreshAria();
+      refreshBand();
+      refreshTrail();
+      refreshHi();
+    }
+    // fragment-driven moves hold the scroll-spy briefly and
+    // GUARD positionally: the click owns the state until the
+    // user genuinely scrolls AWAY from where the click landed — the
+    // first idle records the rest position, later idles release the
+    // guard only past ~90px of displacement. Burst-counting (the
+    // single skip) lost to engines whose descent steps over several
+    // idle-separated bursts
+    var holdUntil = 0, guard = null;
+    function apply() {
+      var want = "index.html" + (location.hash || "");
+      var target = null;
+      links.forEach(function (a) {
+        if (a.getAttribute("href") === want) target = a;
+      });
+      if (target) {
+        moveTo(target);
+        // the section row navigated to OPENS its tree (additive —
+        // nothing else moves; owner review of round 2: jumping to a
+        // section and opening its list is one act)
+        var usec = target.closest(".r-sec");
+        if (usec) railStore.open(usec);
+        holdUntil = Date.now() + 600;
+        guard = { rest: null };
+        document.documentElement.removeAttribute("data-frag");
+        return;
+      }
+      if (location.hash) {
+        // same-page fragment children (the switch page's section
+        // anchors): the CHILD highlight follows the section in
+        // view — the toggle keeps the section stamp, the two-level
+        // pattern run pages already use; build stamps (aria-current
+        // "page") are never stripped, only client moves
+        var child = null;
+        links.forEach(function (a) {
+          if (a.getAttribute("href") === location.hash) child = a;
+        });
+        if (child) {
+          links.forEach(function (a) {
+            if (!a.classList.contains("r-c")) return;
+            var on = a === child;
+            a.classList.toggle("here", on);
+            if (on) a.setAttribute("aria-current", "location");
+            else a.removeAttribute("aria-current");
+          });
+          guard = { rest: null };
+        } else {
+          // a fragment no rail entry owns — the run tree's group-label
+          // anchors (index.html#g-… into the inventory blocks)
+          // and any bare jump.  The descent's own scroll burst must
+          // not let the spy hand the section mark to whatever sits at
+          // the midline when the target clamps near a section
+          // boundary — the same positional guard the matched moves
+          // get: the click owns the state until the user genuinely
+          // scrolls away
+          holdUntil = Date.now() + 600;
+          guard = { rest: null };
+        }
+      }
+      refreshAria();
+      refreshBand();
+      refreshTrail();
+      refreshHi();
+    }
+    window.addEventListener("hashchange", apply);
+    apply();
+    // scroll-spy (landing only — subpage toggles are ../-prefixed and
+    // never match; rAF-throttled, passive)
+    // the spy watches BOTH section kinds — the landing's
+    // toggles (index.html#… hrefs) and any same-page anchored
+    // children (the switch page's four #… entries); on the switch
+    // page the CHILD highlight and the body title follow the scroll
+    var spies = [];
+    document.querySelectorAll(".rail .r-sec > a").forEach(function (a) {
+      var m = (a.getAttribute("href") || "").match(/^index\.html#(\w+)$/);
+      var id = m && (m[1] === "top" ? "runs" : m[1]);
+      var el = id && document.getElementById(id);
+      if (el) spies.push({ el: el, a: a });
+    });
+    document.querySelectorAll(".rail a.r-c[href^='#']").forEach(
+      function (a) {
+        var id = (a.getAttribute("href") || "").slice(1);
+        var el = document.getElementById(
+          id === "top" ? "switches-indexed" : id);
+        if (el) spies.push({ el: el, a: a });
+      });
+    if (spies.length) {
+      // the spy acts only at scroll-IDLE (debounced past the last
+      // scroll event) and SKIPS the first idle after any
+      // fragment-driven move: the descent's own scroll burst must
+      // not hand the state to whatever section the middle line sits
+      // in when the click's target clamps near the page bottom
+      // (metric-dependent theft); from the user's next burst
+      // on, pure position rules
+      var idleTimer = null;
+      function spy() {
+        var line = window.scrollY + Math.round(window.innerHeight / 2);
+        var cur = spies[0];
+        for (var i = 0; i < spies.length; i++)
+          if (spies[i].el.offsetTop <= line) cur = spies[i];
+        // the page EDGE belongs to the last section
+        if (window.innerHeight + window.scrollY
+            >= document.documentElement.scrollHeight - 40)
+          cur = spies[spies.length - 1];
+        if (cur && !cur.a.classList.contains("here")) moveTo(cur.a);
+      }
+      window.addEventListener("scroll", function () {
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(function () {
+          if (Date.now() < holdUntil) return;
+          if (guard) {
+            if (guard.rest === null) { guard.rest = window.scrollY; return; }
+            if (Math.abs(window.scrollY - guard.rest) < 90) return;
+            guard = null;
+          }
+          spy();
+        }, 300);
+      }, { passive: true });
+    }
+  })();
+  // ---- the narrow-window menu: the band burger, content first ----
+  // the responsive-enough ruling (rework; stay-open model):
+  // below the breakpoint the CSS turns the menu into the band
+  // burger's dropdown panel (html.js agents only).  The menu is a
+  // WORKING PANEL, matching the desktop rail it folds — clicking an
+  // entry NEVER dismisses it (the band crumb above the panel names
+  // the destination; a page navigation lands content-first with the
+  // menu closed, which is arrival, not dismissal).  Dismissal is the
+  // user's alone: the burger/X, Escape, or an outside click.  Scripts
+  // off never runs this: the stacked full menu is the no-js fallback
+  // and the burger stays hidden
+  (function () {
+    var rail = document.querySelector(".rail");
+    var btn = document.querySelector(".burger");
+    if (!rail || !btn) return;
+    function setOpen(on) {
+      rail.classList.toggle("menu-open", on);
+      btn.setAttribute("aria-expanded", on ? "true" : "false");
+    }
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setOpen(!rail.classList.contains("menu-open"));
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(false);
+    });
+    document.addEventListener("click", function (e) {
+      if (!rail.contains(e.target) && !btn.contains(e.target))
+        setOpen(false);
+    });
+  })();
+});
+</script>
+</head>
+<body>
+<header class="topbar"><div class="tb-in"><a class="brand" href="../../index.html"><span class="b-kick">SOLPS-ITER</span><span class="b-name">Run catalog</span></a><nav class="crumbs" aria-label="Breadcrumb"><a href="../../index.html">Catalog</a><span class="c-sep">›</span><a href="../../example-runs/index.html">Example runs</a><span class="c-sep">›</span><span class="c-here" title="example-runs/ITER_2588_drifts" aria-current="page">example-runs/ITER_2588_drifts</span></nav>
+<div class="tb-meta"><b>9</b> runs<span class="sep">·</span><b>5</b> run families</div><button class="burger" type="button" aria-expanded="false" aria-label="Menu"><span class="burger-box"><span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span></span></button>
+</div><div class="plasma"></div></header>
+<div class="shell">
+<nav class="rail" aria-label="Catalog">
+<div class="rail-body">
+<p class="r-h">Catalog</p>
+<div class="r-sec" data-sec="runs">
+<a class="here" aria-current="page" href="../../index.html#top"><span class="r-mark"><span class="rm-c">+</span><span class="rm-o">−</span></span>Runs</a>
+<div class="r-sub"><div class="r-sub-in">
+<details class="r-grp" data-grp="example-runs">
+<summary title="Example runs"><a class="r-lab" href="../../example-runs/index.html">Example runs</a><span class="s-cnt">· 5 families · 9 runs</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<details class="r-fam" data-fam="example-runs/AUG_28903_D+N_drifts">
+<summary title="AUG_28903_D+N_drifts"><a class="r-lab" href="../../example-runs/AUG_28903_D%2BN_drifts/index.html">AUG_28903_D+N_drifts</a><span class="s-cnt">· 2</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<a class="r-c r-run" title="example-runs/AUG_28903_D+N_drifts/variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport" href="../../example-runs/AUG_28903_D%2BN_drifts/variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport/index.html"><span class="rdot" style="background:#a36a00"></span>variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport</a>
+<a class="r-c r-run" title="example-runs/AUG_28903_D+N_drifts/variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat" href="../../example-runs/AUG_28903_D%2BN_drifts/variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat/index.html"><span class="rdot" style="background:#0f7a38"></span>variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat</a>
+<a class="r-c" title="variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport vs variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat" href="../../comparisons/example-runs/AUG_28903_D%2BN_drifts/index.html"><span class="rdot" style="background:transparent"></span>A/B comparison</a>
+</div></div>
+</details>
+<details class="r-fam" data-fam="example-runs/ITER_2171_D+He+Be+Ne">
+<summary title="ITER_2171_D+He+Be+Ne"><a class="r-lab" href="../../example-runs/ITER_2171_D%2BHe%2BBe%2BNe/index.html">ITER_2171_D+He+Be+Ne</a><span class="s-cnt">· 2</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<a class="r-c r-run" title="example-runs/ITER_2171_D+He+Be+Ne/run" href="../../example-runs/ITER_2171_D%2BHe%2BBe%2BNe/run/index.html"><span class="rdot" style="background:#0f7a38"></span>run</a>
+<a class="r-c r-run" title="example-runs/ITER_2171_D+He+Be+Ne/standalone" href="../../example-runs/ITER_2171_D%2BHe%2BBe%2BNe/standalone/index.html"><span class="rdot" style="background:#0f7a38"></span>standalone</a>
+<a class="r-c" title="run vs standalone" href="../../comparisons/example-runs/ITER_2171_D%2BHe%2BBe%2BNe/index.html"><span class="rdot" style="background:transparent"></span>A/B comparison</a>
+</div></div>
+</details>
+<details class="r-fam" data-fam="example-runs/ITER_2275_Donly_20MW">
+<summary title="ITER_2275_Donly_20MW"><a class="r-lab" href="../../example-runs/ITER_2275_Donly_20MW/index.html">ITER_2275_Donly_20MW</a><span class="s-cnt">· 1</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<a class="r-c r-run" title="example-runs/ITER_2275_Donly_20MW/run_restart" href="../../example-runs/ITER_2275_Donly_20MW/run_restart/index.html"><span class="rdot" style="background:#0f7a38"></span>run_restart</a>
+</div></div>
+</details>
+<details class="r-fam" data-fam="example-runs/ITER_2588_drifts">
+<summary title="ITER_2588_drifts"><a class="r-lab here" aria-current="page" href="../../example-runs/ITER_2588_drifts/index.html">ITER_2588_drifts</a><span class="s-cnt">· 3</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<a class="r-c r-run" title="example-runs/ITER_2588_drifts/ramping_drifts" href="../../example-runs/ITER_2588_drifts/ramping_drifts/index.html"><span class="rdot" style="background:#c81f14"></span>ramping_drifts</a>
+<a class="r-c r-run" title="example-runs/ITER_2588_drifts/run_fac_vis_only" href="../../example-runs/ITER_2588_drifts/run_fac_vis_only/index.html"><span class="rdot" style="background:#a36a00"></span>run_fac_vis_only</a>
+<a class="r-c r-run" title="example-runs/ITER_2588_drifts/run_with_drifts" href="../../example-runs/ITER_2588_drifts/run_with_drifts/index.html"><span class="rdot" style="background:#0f7a38"></span>run_with_drifts</a>
+<a class="r-c" title="ramping_drifts vs run_fac_vis_only" href="../../comparisons/example-runs/ITER_2588_drifts/index.html"><span class="rdot" style="background:transparent"></span>A/B comparison</a>
+</div></div>
+</details>
+<details class="r-fam" data-fam="example-runs/MAST_U_SFminus_Donly">
+<summary title="MAST_U_SFminus_Donly"><a class="r-lab" href="../../example-runs/MAST_U_SFminus_Donly/index.html">MAST_U_SFminus_Donly</a><span class="s-cnt">· 1</span></summary>
+<div class="d-sub"><div class="d-sub-in">
+<a class="r-c r-run" title="example-runs/MAST_U_SFminus_Donly/ref" href="../../example-runs/MAST_U_SFminus_Donly/ref/index.html"><span class="rdot" style="background:#a36a00"></span>ref</a>
+</div></div>
+</details>
+</div></div>
+</details>
+</div></div>
+</div>
+<div class="r-sec" data-sec="comparisons">
+<a href="../../index.html#comparisons"><span class="r-mark"><span class="rm-c">+</span><span class="rm-o">−</span></span>Comparisons</a>
+<div class="r-sub"><div class="r-sub-in">
+<a class="r-c" title="example-runs/ITER_2588_drifts/run_with_drifts vs example-runs/ITER_2588_drifts/ramping_drifts" href="../../compare/example-runs__ITER_2588_drifts__run_with_drifts__vs__example-runs__ITER_2588_drifts__ramping_drifts/index.html">ITER_2588_drifts/run_with_drifts vs ITER_2588_drifts/ramping_drifts</a>
+</div></div>
+</div>
+<div class="r-sec" data-sec="switches">
+<a href="../../index.html#switches"><span class="r-mark"><span class="rm-c">+</span><span class="rm-o">−</span></span>Switch index</a>
+<div class="r-sub"><div class="r-sub-in">
+<a class="r-c" href="../../switches/index.html">Switches indexed</a>
+<a class="r-c" href="../../switches/index.html#honest-absence">Honest absence</a>
+<a class="r-c" href="../../switches/index.html#unset">Set by none of the runs</a>
+<a class="r-c" href="../../switches/index.html#provenance">Provenance</a>
+</div></div>
+</div>
+<div class="rail-foot"><b>9</b> runs<span class="sep">·</span><b>5</b> run families</div>
+</div>
+</nav>
+<main class="canvas">
+<div class="pagehead" id="top">
+<p class="kicker">Catalog · run family</p>
+<h1>example-runs/ITER_2588_drifts</h1>
+<p class="meta">machine ITER · 3 members</p>
+<p class="chips"><span class="badge" style="background:#f9e2de;color:#9e1f16">evolving 1</span> <span class="badge" style="background:#f9efd2;color:#6b4700">near-plateau 1</span> <span class="badge" style="background:#e2eee5;color:#17572c">plateaued 1</span></p>
+
+</div>
+<h2>Family base deck</h2>
+<table class="kv">
+<tbody>
+<tr><th>family</th><td><span class="mono">example-runs/ITER_2588_drifts</span></td></tr>
+<tr><th>deck</th><td><span class="mono">example-runs/ITER_2588_drifts/baserun · manifests/example-runs__ITER_2588_drifts__baserun.json</span></td></tr>
+<tr><th>geometry</th><td>present: <span class="mono">b2fgmtry</span>, 3.4 MB, md5 <span class="mono">aa894fd419b2…</span></td></tr>
+<tr><th>files</th><td>22 files, 20.4 MB total</td></tr>
+<tr><th>linkage</th><td>sibling input deck of the family&#x27;s run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run</td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>Deck file</th><th class="num">Size</th><th>MD5 (short)</th></tr></thead>
+<tbody>
+<tr><td class="mono">Baseline2008-li0.70.x4.efit</td><td class="num">2.1 MB</td><td class="mono">940d3da37b7a…</td></tr>
+<tr><td class="mono">Baseline2008-li0.70.x4.equ</td><td class="num">2.2 MB</td><td class="mono">4b0f27de4eea…</td></tr>
+<tr><td class="mono">b2ag.dat</td><td class="num">160 B</td><td class="mono">2f3d2caf87cf…</td></tr>
+<tr><td class="mono">b2ag.prt</td><td class="num">49.7 KB</td><td class="mono">5c71e18ff64b…</td></tr>
+<tr><td class="mono">b2ah.dat</td><td class="num">12.2 KB</td><td class="mono">e566817ad795…</td></tr>
+<tr><td class="mono">b2ah.prt</td><td class="num">14.0 KB</td><td class="mono">c8a6583a62b1…</td></tr>
+<tr><td class="mono">b2ai.dat</td><td class="num">377 B</td><td class="mono">7605fc2cbe2c…</td></tr>
+<tr><td class="mono">b2ai.prt</td><td class="num">824 B</td><td class="mono">f191e48270e6…</td></tr>
+<tr><td class="mono">b2ar.dat</td><td class="num">381 B</td><td class="mono">adc95376c884…</td></tr>
+<tr><td class="mono">b2ar.prt</td><td class="num">61.3 KB</td><td class="mono">93e2de8d3252…</td></tr>
+<tr><td class="mono">b2fgmtry</td><td class="num">3.4 MB</td><td class="mono">aa894fd419b2…</td></tr>
+<tr><td class="mono">b2fpardf</td><td class="num">21.1 KB</td><td class="mono">67d53d25ce7d…</td></tr>
+<tr><td class="mono">b2frates</td><td class="num">590.7 KB</td><td class="mono">c045cc849a38…</td></tr>
+<tr><td class="mono">b2fstati</td><td class="num">8.5 MB</td><td class="mono">485cd92bd12f…</td></tr>
+<tr><td class="mono">fort.30</td><td class="num">386.2 KB</td><td class="mono">a95bacde466b…</td></tr>
+<tr><td class="mono">fort.33</td><td class="num">160.8 KB</td><td class="mono">073070f4d08b…</td></tr>
+<tr><td class="mono">fort.34</td><td class="num">211.1 KB</td><td class="mono">f1a70c7e049d…</td></tr>
+<tr><td class="mono">fort.35</td><td class="num">680.3 KB</td><td class="mono">2d705df4b696…</td></tr>
+<tr><td class="mono">input.dat</td><td class="num">95.4 KB</td><td class="mono">60ba349a34be…</td></tr>
+<tr><td class="mono">iterm.carre.105</td><td class="num">1.3 MB</td><td class="mono">31927796de56…</td></tr>
+<tr><td class="mono">param.dg</td><td class="num">47.3 KB</td><td class="mono">f7114bf00d2b…</td></tr>
+<tr><td class="mono">vertex_data.out</td><td class="num">689.3 KB</td><td class="mono">c49c2e5078bf…</td></tr>
+</tbody>
+</table>
+<h2>Family A/B comparison</h2>
+<p class="sub"><a class="mono" href="../../comparisons/example-runs/ITER_2588_drifts/index.html">ramping_drifts vs run_fac_vis_only</a>: the figure deck this family's pair produced (its state diff; the same comparison stands under this family in the rail).</p>
+
+<h2>Members</h2>
+
+<table class="runs" data-sort>
+<thead><tr><th>Run</th><th>Convergence</th><th class="num">Grid</th><th>Species</th><th>Code</th><th>Wall</th></tr></thead>
+<tbody>
+<tr><td class="run-id"><span class="runname"><a title="example-runs/ITER_2588_drifts/ramping_drifts" href="../../example-runs/ITER_2588_drifts/ramping_drifts/index.html">example-runs/ITER_2588_drifts/ramping_drifts</a></span><span class="runctx">ITER</span></td><td><span class="badge" style="background:#f9e2de;color:#9e1f16">evolving</span></td><td class="num">—</td><td>—</td><td class="mono">—</td><td>—</td></tr>
+<tr><td class="run-id"><span class="runname"><a title="example-runs/ITER_2588_drifts/run_fac_vis_only" href="../../example-runs/ITER_2588_drifts/run_fac_vis_only/index.html">example-runs/ITER_2588_drifts/run_fac_vis_only</a></span><span class="runctx">ITER</span></td><td><span class="badge" style="background:#f9efd2;color:#6b4700">near-plateau</span></td><td class="num">—</td><td>—</td><td class="mono">—</td><td>—</td></tr>
+<tr><td class="run-id"><span class="runname"><a title="example-runs/ITER_2588_drifts/run_with_drifts" href="../../example-runs/ITER_2588_drifts/run_with_drifts/index.html">example-runs/ITER_2588_drifts/run_with_drifts</a></span><span class="runctx">ITER</span></td><td><span class="badge" style="background:#e2eee5;color:#17572c">plateaued</span></td><td class="num">—</td><td>—</td><td class="mono">—</td><td>—</td></tr>
+</tbody>
+</table>
+
+<footer>Generated by <span class="mono">catalog/build_catalog.py</span> from the manifest + switchsets JSON, never re-derived.</footer>
+
+</main>
+</div>
+</body>
+</html>

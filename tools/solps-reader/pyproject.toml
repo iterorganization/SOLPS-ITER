@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solps-reader"
+description = "Run-analysis package for SOLPS-ITER: the output-file readers & CLI (fort.44/fort.46, b2*.nc, b2fstate/b2fgmtry, b2fplasma/b2fplasmf), the 14-tool MCP server, and the run-catalog visualizer (static site + builders)"
+# the version lives ONLY in src/solps_reader/__init__.py (single
+# authority; runtime faces import it) and is pulled in below — a
+# second hand-written stamp here is one forgotten edit from drift.
+dynamic = ["version"]
+requires-python = ">=3.10"
+license = { text = "EUPL-1.1" }
+authors = [{ name = "Alfonso Sacco" }]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: European Union Public Licence 1.1 (EUPL 1.1)",
+]
+dependencies = [
+    "numpy>=2.0,<3",
+    "matplotlib>=3.9",
+    "mcp>=2.2",
+    # mcp's auth extra pulls cryptography transitively; capped below 49,
+    # and ONLY on x86_64 macOS (Rosetta Python included): the one platform
+    # class where newer lines ship no prebuilt binaries at all (50.x is
+    # macOS arm-only; verified by download 2026-11-16).  Everywhere else
+    # the marker is false, the library resolves freely to the newest line
+    # (50.x ships Linux x86_64/aarch64/ppc64le, musl, win64), and no
+    # ceiling of ours applies.  Neither package invokes it; on the capped
+    # class the resolved 48.0.1 clears seven of the advisories open on
+    # older lines (six remain, in certificate paths nothing here calls).
+    # Delete this line when the Intel Macs retire.
+    "cryptography<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+solps-reader = "solps_reader.cli:main"
+solps-mcp = "solps_reader.mcp:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "solps_reader.__version__" }

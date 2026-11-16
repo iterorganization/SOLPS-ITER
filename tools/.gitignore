@@ -1,0 +1,9 @@
+# local dev conveniences — never ship
+.venv/
+SOLPS-ITER
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.DS_Store
+askthedocs-db/

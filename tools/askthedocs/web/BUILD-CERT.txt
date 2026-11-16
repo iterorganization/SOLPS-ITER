@@ -1,0 +1,37 @@
+Certified web build — askthedocs 1.3.0 (the rebuild-status modal
+redesign: push-not-poll, render-on-settle, zero animation;
+post-closure amendment: one clock per window)
+============================================================
+
+tree digest (sha256 over the sorted manifest lines "<relpath>  <sha256>"
+of every file under web/build):
+99769565e600e1a5
+
+built:    2026-11-11 (a late amendment:
+          the elapsed clock beside the progress modal's title
+          "Rebuilding the index" is REMOVED — redundant with the
+          frame's own global line "total: x/y files indexed,
+          elapsed Ns", which the streamed CLI display already
+          refreshes every second (one clock per window; the
+          title-side twin covered no moment the frame did not).
+          The client-side 1 Hz ticker SURVIVES for the closed
+          chip's indexing text ("Currently indexing corpus ·
+          1m23s"), where no frame is visible. Everything else is
+          the 2026-11-10 checkpoint-B client unchanged: one
+          Server-Sent Events stream per page, render-on-event with
+          keyed per-line spans, static accent-edge chip, zero
+          infinite animations)
+node:     v24.11.1
+npm:      11.6.2
+command:  rm -rf web/.svelte-kit web/node_modules/.vite
+          (cd web && npm ci && npm run build:api)
+cache clear before the build — after big source changes the vite and
+svelte-kit caches must go (stale caches have produced broken builds).
+This was a FULL npm ci rebuild after the source change.
+
+This build/ directory is the CERTIFIED client shipped in the askthedocs
+package. It runs with no Node toolchain — the service serves it as-is.
+Rebuilding from web/ source is optional and yours: dependencies are
+exact-pinned with the committed lockfile (npm ci), but a rebuild may
+differ in bytes from the certified artifact; this digest is how you
+know which one you are serving.

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<!-- the wordmark tick — plasma square on ITER midnight navy -->
+	<rect width="16" height="16" rx="3" fill="#0f1632"/>
+	<rect x="9" y="3" width="5.2" height="5.2" fill="#fdbb30" transform="rotate(45 11.6 5.6)"/>
+	<path d="M3.5 12.5 L7 9 L9 11 L12.8 7.2" fill="none" stroke="#3ed9fd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "askthedocs"
+description = "Searchable knowledge layer over the SOLPS-ITER documentation corpus"
+# the version lives ONLY in src/askthedocs/__init__.py (single
+# authority; runtime faces import it) and is pulled in below — a
+# second hand-written stamp here is one forgotten edit from drift.
+dynamic = ["version"]
+requires-python = ">=3.10"
+authors = [{ name = "Alfonso Sacco" }]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: European Union Public Licence 1.1 (EUPL 1.1)",
+]
+dependencies = [
+    "fastapi>=0.141",
+    "pydantic>=2.13",
+    "starlette>=1.7",
+    "uvicorn>=0.53",
+    "pypdf==6.18.0",  # exact: extraction is pypdf-sensitive (field-found 2026-11-01: 6.21.4 reclassifies CPP_2006.pdf and thins three manuals — byte-reproducible stores need the exact extractor)
+    "mcp>=2.2",
+    # mcp's auth extra pulls cryptography transitively; capped below 49,
+    # and ONLY on x86_64 macOS (Rosetta Python included): the one platform
+    # class where newer lines ship no prebuilt binaries at all (50.x is
+    # macOS arm-only; verified by download 2026-11-16).  Everywhere else
+    # the marker is false, the library resolves freely to the newest line
+    # (50.x ships Linux x86_64/aarch64/ppc64le, musl, win64), and no
+    # ceiling of ours applies.  Neither package invokes it; on the capped
+    # class the resolved 48.0.1 clears seven of the advisories open on
+    # older lines (six remain, in certificate paths nothing here calls).
+    # Delete this line when the Intel Macs retire.
+    "cryptography<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+askthedocs = "askthedocs.cli:main"
+askthedocs-mcp = "askthedocs.mcp:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "askthedocs.__version__" }
+
+[tool.setuptools.package-data]
+askthedocs = ["assets/*", "web/**/*"]
