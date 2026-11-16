@@ -867,6 +867,7 @@ SOLPSTOP
 |   +---Matlab_SPb
 |   +---nc2text_simple
 |   +---palettes
+|   +---PythonPostProcessing
 |   +---ITER.ifort64
 +---scripts.local
 +---modules
@@ -2032,6 +2033,24 @@ Contains various Matlab routines used for postprocessing run results.
 \subsection{scripts/Matlab\_SPb}
 
 Contains a set of Matlab scripts to adjust meshes produced by {\tt Carre2} and stored in {\tt .geo} format. See full documentation in {\tt \$\{SOLPSTOP\}/doc/edit\_geo\_manual.pdf}.
+
+\subsection{scripts/PythonPostProcessing}
+
+The PythonPostProcessing scripts offer a lightweight toolchain to perform basic postprocessing of {\bf SOLPS-ITER} results in Python. 
+The scripts allow to read in basic {\bf SOLPS-ITER} output and subsequently to create 2D colorplots, plot the separatrix, and create 1D plots along boundary surfaces and along segments such as the OMP. 
+An example script {\tt example\_script.py} is provided as a starting point for new users. Functionality includes: 
+
+\begin{itemize} 
+\item Reading of {\tt b2fgmtry}, {\tt b2fstate}, {\tt b2fplasmf} and {\tt structure.dat}.
+\item Writing of {\tt b2fgmtry}.
+\item Plotting of 2D colorplots, the separatrix, and vessel structures.
+\item Computation of boundary flux densities. 
+\item Helper functions to compute cell-segment intersections, find the separatrix flux surfaces, etc.
+\end{itemize}
+
+Note that not all functionality of the MatlabPostProcessing scripts has been translated yet. This can be done by any user when necessary. The goal is to keep the PythonPostProcessing scripts 
+lightweight, easy to use, and allways up-to-date with changes in the input and output files of {\bf SOLPS-ITER}. Note also that more elaborate external postprocessing toolchains exit, but these are not officially
+supported. 
 
 \newpage\section{data}
 \index{data}
