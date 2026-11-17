@@ -223,6 +223,16 @@ def classify(value: str, inv_row: dict | None) -> str:
     return "same" if value == d else "differs"
 
 
+class MissingDeckError(RuntimeError):
+    """A run (and its family baserun) carries no b2mn.dat at all.
+
+    The deck is an input, not an output: a run can exist without one.
+    The build treats it as a named per-run absence (D-162's b2time
+    precedent), never a fatal error — one deck-less run must not cost
+    the other several hundred their switch sets.
+    """
+
+
 def effective_b2mn(run_dir: Path) -> tuple[Path, str]:
     """Resolve the ONE b2mn.dat make would hand the solver (vpath rule,
     runs/Makefile:131): run dir shadows the deck WHOLE-FILE."""
@@ -232,7 +242,7 @@ def effective_b2mn(run_dir: Path) -> tuple[Path, str]:
     deck_file = run_dir.parent / DECK_DIR / "b2mn.dat"
     if deck_file.is_file():
         return deck_file, "deck"
-    raise SystemExit(
+    raise MissingDeckError(
         f"no effective b2mn.dat for {run_dir} (neither the run dir nor "
         f"the family {DECK_DIR} carries one)"
    )
@@ -270,9 +280,18 @@ def build(inventory_path: Path | None = None,
             for run_dir in find_run_dirs(g["path"])]
     runs_block: dict[str, dict] = {}
     effective: dict[str, dict] = {}
+    absent: dict[str, str] = {}
     for root, group_slug, run_dir in walk:
         name = f"{group_slug}/{run_dir.relative_to(root)}"
-        deck_file, source = effective_b2mn(run_dir)
+        try:
+            deck_file, source = effective_b2mn(run_dir)
+        except MissingDeckError as exc:
+            # fires on BOTH the computed and the reused path: the run
+            # catalogs without a switch set, its page states the reason
+            print(f"warning: {name}: {exc}; "
+                  "switch set skipped, run cataloged without it")
+            absent[name] = str(exc)
+            continue
         switches = parse_deck(deck_file.read_bytes().decode("latin-1"))
         runs_block[name] = {
             "switch_count": len(switches),
@@ -385,11 +404,13 @@ def build(inventory_path: Path | None = None,
             "effective_b2mn": effective,
         },
         "runs": runs_block,
+        "absent": absent,
         "family_decks": family_decks,
         "inverted_index": inverted,
         "documented_not_set": not_set,
         "counts": {**{v: counts.get(v, 0) for v in VS_DEFAULT_VALUES},
                    "runs": len(runs_block),
+                   "absent_runs": len(absent),
                    "distinct_switches_set": len(inverted),
                    "documented_switches": inv["counts"]["switches"],
                    "documented_not_set": len(not_set)},
@@ -440,7 +461,10 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(art, indent=2, sort_keys=True) + "\n"
    , encoding="utf-8")
     c = art["counts"]
-    print(f"switchsets -> {OUT / 'switchsets.json'}: {c['runs']} runs, "
+    skipped = (f", {c['absent_runs']} without a deck (skipped)"
+               if c.get("absent_runs") else "")
+    print(f"switchsets -> {OUT / 'switchsets.json'}: {c['runs']} runs"
+          f"{skipped}, "
           f"{sum(rb['switch_count'] for rb in art['runs'].values())} "
           f"switch entries ({c['same']} same / {c['differs']} differs / "
           f"{c['no_default_in_inventory']} no-default / "

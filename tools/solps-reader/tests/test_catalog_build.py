@@ -912,8 +912,8 @@ def test_missing_b2time_warns_and_catalogs_without_convergence(
     (markers / "FAM1" / "run1" / "b2fstate").write_text(
         "", encoding="ascii")
     # the run carries its input deck — the b2time.nc absence is its
-    # ONLY defect (the no-b2mn-anywhere refusal is a different,
-    # still-standing rule the field shape does not hit)
+    # ONLY defect (a run with no b2mn.dat anywhere is a different
+    # absence with its own test below)
     (markers / "FAM1" / "run1" / "b2mn.dat").write_text(
         "* synthetic deck\n*endphy\n'b2eirene'   '.true.'\n",
         encoding="latin-1")
@@ -943,3 +943,58 @@ def test_missing_b2time_warns_and_catalogs_without_convergence(
     assert rc == 0
     assert ("warning: markers/FAM1/run1: no b2time.nc; "
             "cataloged without convergence") in captured.out
+
+
+def test_missing_b2mn_warns_and_catalogs_without_switch_set(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """A run whose family carries no b2mn.dat anywhere (the reviewer's
+    database shape) no longer kills the build at the switch-set stage:
+    the deck joins the b2time precedent as a named per-run absence.
+    The run catalogs in full, one warning names it, the artifact's
+    absent ledger carries the reason, the page's switch section states
+    it, and the MCP tool answers the run by name — never a non-match
+    and never a KeyError."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.chdir(tmp_path)
+    cat = _catalog_copy(tmp_path)
+    markers = tmp_path / "markers"
+    (markers / "FAM1" / "run1").mkdir(parents=True)
+    (markers / "FAM1" / "run1" / "b2fstate").write_text(
+        "", encoding="ascii")
+    _write_b2time(markers / "FAM1" / "run1" / "b2time.nc")
+    # NO b2mn.dat anywhere: neither the run dir nor a family baserun
+    # carries one — the switch set is the run's only absence
+
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(markers), "--catalog", str(cat)])
+    captured = capfd.readouterr()
+    assert rc == 0
+    assert ("warning: markers/FAM1/run1: no effective b2mn.dat"
+            in captured.out)
+    assert "run cataloged without it" in captured.out
+
+    seat = _share_out(tmp_path / "nohome")
+    index = json.loads((seat / "index.json").read_text(encoding="utf-8"))
+    assert [r["name"] for r in index["runs"]] == ["markers/FAM1/run1"]
+
+    ss = json.loads((seat / "switchsets.json").read_text(encoding="utf-8"))
+    assert ss["runs"] == {}
+    assert ss["counts"]["absent_runs"] == 1
+    assert "no effective b2mn.dat" in ss["absent"]["markers/FAM1/run1"]
+
+    run_pg = (seat / "site" / "markers" / "FAM1" / "run1" / "index.html"
+              ).read_text(encoding="utf-8")
+    assert ("Not assessed: no effective b2mn.dat"
+            in run_pg)
+    # the generic entry-less text is gone — the page names the reason
+    assert "no entry for this run" not in run_pg
+
+    # the MCP face answers the deck-less run by name (the guard that
+    # replaced the KeyError on provenance.effective_b2mn)
+    from solps_reader import mcp as mcp_face
+    # the artifact read is <root>/out/switchsets.json — the user
+    # build's seat root, not the checkout
+    answer = mcp_face.run_switches("markers/FAM1/run1", str(seat.parent))
+    assert "carries no switch set" in answer
+    assert "no effective b2mn.dat" in answer

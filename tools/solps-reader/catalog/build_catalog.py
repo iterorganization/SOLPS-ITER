@@ -2852,7 +2852,8 @@ def default_span(d) -> str:
     return f'<span class="ddef ddef-val">documented default {html.escape(d)}</span>'
 
 
-def switches_section(entry: dict | None) -> str:
+def switches_section(entry: dict | None,
+                     absent_reason: str | None = None) -> str:
     """the run page's Switches block (run -> switches direction).
 
     Rendered ONLY from the run's out/switchsets.json entry — nothing is
@@ -2869,9 +2870,14 @@ def switches_section(entry: dict | None) -> str:
     never an empty table (the honest-absence pattern).
     """
     if entry is None:
+        # the deck-less shape carries its own reason (the artifact's
+        # absent ledger); the generic text stays for any future
+        # entry-less shape that has none
+        reason = (html.escape(str(absent_reason)) if absent_reason
+                  else 'no entry for this run in <span class="mono">'
+                       'out/switchsets.json</span>')
         return (SWITCHES_HEAD + "\n"
-                '<p class="sub">Not assessed: no entry for this run in '
-                '<span class="mono">out/switchsets.json</span>.</p>')
+                f'<p class="sub">Not assessed: {reason}.</p>')
     switches = entry["switches"]
     tallies = Counter(e["vs_default"] for e in switches.values())
     chips = " · ".join(f"{badge(v)} {tallies.get(v, 0)}" for v in VS_DEFAULT_ORDER)
@@ -4304,6 +4310,7 @@ def build_run_page(
     comparison: dict | None = None, ss_entry: dict | None = None,
     case_href: str | None = None, fam_deck: dict | None = None,
     recorded_pairs: list[dict] | None = None,
+    ss_absent: str | None = None,
 ) -> str:
     parts = []
     # the lineage (checkpoint B): the page's place in the chain
@@ -4406,7 +4413,7 @@ def build_run_page(
 
     # the effective-deck switch state, read-only from the
     # switchsets artifact — the run's configuration beside its deck.
-    parts.append(switches_section(ss_entry))
+    parts.append(switches_section(ss_entry, ss_absent))
 
     conv = m.get("convergence") or {}
     spark = conv.get("sparklines")
@@ -4783,13 +4790,15 @@ def main(argv: list[str] | None = None) -> None:
         run_dir.mkdir(parents=True)
         comparison = comp_by_family.get(r.get("run_family", ""))
         ss_entry = switchsets["runs"].get(r["name"])
+        ss_absent = (switchsets.get("absent") or {}).get(r["name"])
         # the release-history cross-link is dormant with the axis
         # : the run-page machinery keeps its case_href branch,
         # the build hands it None
         (run_dir / "index.html").write_text(
             build_run_page(r, m, comparison, ss_entry, None,
                            fam_decks.get(r.get("run_family", "")),
-                           rec_pairs_by_run.get(r["name"])),
+                           rec_pairs_by_run.get(r["name"]),
+                           ss_absent),
             encoding="utf-8")
         # the wall gate: staging follows the manifest's record too — the
         # figure entry (recorded iff the wall gate passed) names

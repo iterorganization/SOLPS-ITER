@@ -1,5 +1,7 @@
 {
+  "absent": {},
   "counts": {
+    "absent_runs": 0,
     "differs": 299,
     "distinct_switches_set": 167,
     "documented_not_set": 725,

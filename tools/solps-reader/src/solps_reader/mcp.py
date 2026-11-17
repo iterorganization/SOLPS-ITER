@@ -816,6 +816,18 @@ def run_switches(run: str, catalog_dir: str = "") -> str:
     names = sorted(data["runs"])
     matches = [n for n in names if run == n] or [n for n in names if run in n]
     if not matches:
+        # a cataloged run without a deck answers by name, never as a
+        # non-match (it HAS a page; the switch set is the absent part)
+        absent = data.get("absent") or {}
+        hits = ([n for n in sorted(absent) if run == n]
+                or [n for n in sorted(absent) if run in n])
+        if hits:
+            if len(hits) > 1:
+                return (f"{run!r} is ambiguous across deck-less runs; "
+                        "matches:\n  " + "\n  ".join(hits))
+            return (f"{hits[0]} is cataloged but carries no switch set: "
+                    f"{absent[hits[0]]}. The run catalogs in full without "
+                    "one; its page states the absence.")
         return (f"no cataloged run matches {run!r}. Runs in the switchsets "
                 "artifact:\n  " + "\n  ".join(names))
     if len(matches) > 1:
