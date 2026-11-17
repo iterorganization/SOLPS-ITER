@@ -2718,7 +2718,8 @@ def spark_absence_note(conv: dict) -> str:
     sparklines block (the guard-skipped ramping_drifts, or a verdict-
     bearing manifest built before sparklines existed) states the absence with the
     skip reason VERBATIM from the manifest — wording follows the dated ruling ("figure" -> "sparklines"); never a blank."""
-    reason = (conv.get("skipped") or conv.get("error")
+    reason = (conv.get("absent") or conv.get("skipped")
+              or conv.get("error")
               or "no sparklines block recorded in the manifest")
     return ('<p class="sub">convergence sparklines not generated: '
             f'{html.escape(str(reason))}</p>')
@@ -4456,7 +4457,8 @@ def build_run_page(
             # absence — never a blank, never a filesystem guess.
             parts.append(spark_absence_note(conv))
     else:
-        reason = conv.get("skipped") or conv.get("error") or "no b2time.nc"
+        reason = (conv.get("absent") or conv.get("skipped")
+                  or conv.get("error") or "no b2time.nc")
         parts.append(f'<p class="sub">Not assessed: {html.escape(str(reason))}</p>')
         parts.append(spark_absence_note(conv))
 

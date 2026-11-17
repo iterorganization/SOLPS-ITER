@@ -44,7 +44,10 @@ key — the physical time span (timesa first/last) plus one downsampled
 series per ACTIVE monitor (keys exactly `active_verdicts`; fixed ruling:
 b2time.nc is read only for those named monitors' values and the span,
 never to re-derive verdicts or the active set).  A run directory found
-without b2time.nc is a HARD error, not an honest absence.
+without b2time.nc catalogs with the convergence section stating that
+absence — the file is optional SOLPS-ITER output, and the build warns
+once naming the run (the field ruling that reversed the workshop-era
+hard refusal).
 
 ConvSpark repealed the v0 500 MB guard for exactly one file,
 ITER_2588_drifts/ramping_drifts/b2time.nc, via a one-entry
@@ -475,8 +478,11 @@ def analyze_run(run_dir: Path, root: Path) -> dict:
     unit the stat-fingerprint cache stores.  Everything here reads the
     run's own bytes (plus the sibling deck's fort.30 through the wall
     gate); nothing knows the group's name, so reordering or relabeling
-    groups reuses every entry untouched.  The b2time.nc refusal stays
-    OUTSIDE the cache: it raises before anything is stored."""
+    groups reuses every entry untouched.  A missing b2time.nc stays
+    honest INSIDE the analysis (the file is optional SOLPS-ITER
+    output): the convergence block records the absence and the build
+    prints one warning line naming the run — cached entries warn
+    identically on every rebuild."""
     a: dict = {
         "files": {n: file_entry(run_dir / n) for n in KEY_FILES
                   if (run_dir / n).exists()},
@@ -499,16 +505,16 @@ def analyze_run(run_dir: Path, root: Path) -> dict:
     if f46.exists():
         a["fort46"] = fort46_provenance(f46)
     bt = run_dir / "b2time.nc"
-    if not bt.is_file():
-        # b2time.nc is the convergence + sparklines source.  A run
-        # found by fort.44/b2fstate alone would silently read as a verdict
-        # skip in the index — an ingest bug wearing an honest-absence mask.
-        raise BuildRefusal(
-            f"{run_dir.relative_to(root)}: no b2time.nc; "
-            "convergence/sparklines cannot be built (every cataloged "
-            "run must carry one; add the run's b2time.nc or drop the "
-            "folder from the catalog)")
-    a["convergence"] = convergence_block(bt)
+    if bt.is_file():
+        a["convergence"] = convergence_block(bt)
+    else:
+        # b2time.nc is the convergence + sparklines source, and
+        # optional SOLPS-ITER output: shared archives carry runs
+        # without it.  The run catalogs in full otherwise; the
+        # convergence section states the absence (the honest-absence
+        # doctrine, same shape as the oversized-file skip).
+        a["convergence"] = {
+            "absent": "b2time.nc not present in this run directory"}
     a["gate"] = wall_gate_outcome(
         run_dir, None if ft is None else ft.wall, root)
     return a
@@ -954,6 +960,12 @@ def main(argv: list[str] | None = None) -> int:
                         cache_note_shown = True
                 else:
                     n_reused += 1
+                if (analysis.get("convergence") or {}).get("absent"):
+                    # fires on BOTH the computed and the reused path:
+                    # a cached absence warns like a fresh one, every
+                    # rebuild, until the run gains its b2time.nc
+                    print(f"warning: {name}: no b2time.nc; "
+                          "cataloged without convergence")
                 m = build_manifest(run_dir, g["path"], g["slug"],
                                    analysis)
                 v = m["wall_geometry"]["verdict"]

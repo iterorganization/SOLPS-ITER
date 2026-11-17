@@ -849,10 +849,13 @@ def test_examples_wall_figure_keeps_the_tree_contract(
                          {"mesh": "FAM1/baserun/fort.30"})
 
 
-def test_missing_b2time_is_a_named_refusal_not_a_traceback(
+def test_missing_b2time_warns_and_catalogs_without_convergence(
         checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
-    """The manual pass's rider: a marker-only run refuses the build
-    with ONE named remedy line — no traceback under the banner."""
+    """b2time.nc is optional SOLPS-ITER output (the field ruling that
+    reversed the workshop-era hard refusal): a run without it
+    catalogs — one warning line names it, the page's convergence
+    section states the absence verbatim, and every other section
+    stands.  A cached absence warns identically on rebuild."""
     monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
     monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
     monkeypatch.chdir(tmp_path)
@@ -861,11 +864,35 @@ def test_missing_b2time_is_a_named_refusal_not_a_traceback(
     (markers / "FAM1" / "run1").mkdir(parents=True)
     (markers / "FAM1" / "run1" / "b2fstate").write_text(
         "", encoding="ascii")
+    # the run carries its input deck — the b2time.nc absence is its
+    # ONLY defect (the no-b2mn-anywhere refusal is a different,
+    # still-standing rule the field shape does not hit)
+    (markers / "FAM1" / "run1" / "b2mn.dat").write_text(
+        "* synthetic deck\n*endphy\n'b2eirene'   '.true.'\n",
+        encoding="latin-1")
 
     rc = cli.main(["catalog", "build",
                    "--runs", str(markers), "--catalog", str(cat)])
     captured = capfd.readouterr()
-    assert rc == 2
-    assert "error: FAM1/run1: no b2time.nc" in captured.err
-    assert "add the run's b2time.nc or drop the folder" in captured.err
-    assert "Traceback" not in captured.err + captured.out
+    assert rc == 0
+    assert ("warning: markers/FAM1/run1: no b2time.nc; "
+            "cataloged without convergence") in captured.out
+    seat = _share_out(tmp_path / "nohome")
+    index = json.loads((seat / "index.json").read_text(encoding="utf-8"))
+    assert [r["name"] for r in index["runs"]] == ["markers/FAM1/run1"]
+    assert index["runs"][0]["verdict"] is None
+    run_pg = (seat / "site" / "markers" / "FAM1" / "run1" / "index.html"
+              ).read_text(encoding="utf-8")
+    assert ("Not assessed: b2time.nc not present in this run directory"
+            in run_pg)
+    assert ("convergence sparklines not generated: "
+            "b2time.nc not present in this run directory") in run_pg
+
+    # the cached rebuild warns identically (the absence rides the
+    # analysis record, not the compute moment)
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(markers), "--catalog", str(cat)])
+    captured = capfd.readouterr()
+    assert rc == 0
+    assert ("warning: markers/FAM1/run1: no b2time.nc; "
+            "cataloged without convergence") in captured.out
