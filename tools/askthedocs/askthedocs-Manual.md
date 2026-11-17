@@ -34,6 +34,10 @@ python3 -m venv .venv
 .venv/bin/askthedocs setup            # builds the index, at most 6 minutes
 ```
 
+The line above runs from the clone root. From inside `tools/` the same install reads `pip install ./askthedocs`. The packages are not on PyPI, so pip always needs the folder path; the bare name cannot resolve.
+
+`setup` also probes the Python's SQLite for the FTS5 extension the index needs. Cluster Pythons are sometimes built without it; on Linux x86_64 the fallback wheel installs automatically with this package, and elsewhere the refusal names the one-command remedy (`pip install pysqlite3-binary`). No administrator is needed on any path.
+
 `setup` first checks the checkout. A missing or half-initialized clone is refused loudly, with the remedy named. It then builds the search index into the per-user location and installs the desktop icon. Over the full corpus set, the one-time build takes at most 6 minutes.
 
 Re-runs never rebuild silently. They re-hash the corpus and report freshness. Use `askthedocs setup --force` to rebuild on demand. Use `askthedocs setup --no-icon` to build without the icon.

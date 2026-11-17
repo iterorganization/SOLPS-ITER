@@ -16,6 +16,8 @@ python3 -m venv .venv
 .venv/bin/askthedocs setup            # builds the index, at most 6 minutes
 ```
 
+The line above runs from the clone root. From inside `tools/` the same install reads `pip install ./askthedocs`. The packages are not on PyPI, so pip always needs the folder path; the bare name cannot resolve.
+
 `setup` checks the checkout, then builds the index into `~/.local/share/askthedocs/` and installs the desktop icon. That location is outside every checkout. Every face finds it from any directory; no configuration is necessary. Re-runs report freshness and never rebuild silently. `setup --force` rebuilds on demand; `setup --no-icon` builds without the icon.
 
 The icon opens the web version: the full certified app, one gesture, no terminal. It lands in your platform's launcher, all user-level, no administrator needed. `askthedocs shortcut --remove` takes it back out:
@@ -34,7 +36,7 @@ Every refusal is loud and names its own fix. The three you might meet on day one
 
 - **The checkout is missing or half-initialized:** `setup` refuses and lists the submodule states with the missing ones named.
 - **No index yet:** every read face (search, web, MCP) refuses and points at `askthedocs setup`.
-- **No FTS5 in your Python:** named as such; standard python.org installers and mainstream distributions ship it.
+- **No FTS5 in your Python:** named as such, with the fix. The index needs an SQLite with the FTS5 extension; it is a compile-time option of SQLite, not a pip package. On Linux x86_64 the fallback wheel installs automatically with this package (no administrator anywhere). Elsewhere the remedy is `pip install pysqlite3-binary`, or a Python built with FTS5 (standard python.org installers and mainstream distributions ship it).
 
 ## Three ways in
 

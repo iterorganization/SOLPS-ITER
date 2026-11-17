@@ -66,7 +66,7 @@ import asyncio
 import json
 import logging
 import os
-import sqlite3
+from askthedocs._sqlite import sqlite3
 import subprocess
 import sys
 import threading

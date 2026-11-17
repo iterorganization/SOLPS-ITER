@@ -33,7 +33,7 @@ from __future__ import annotations
 
 import json
 import os
-import sqlite3
+from askthedocs._sqlite import sqlite3
 from pathlib import Path
 
 # Environment variable naming the store explicitly (ladder step 1).
@@ -104,8 +104,11 @@ def validate_store(path: Path) -> str:
     except sqlite3.OperationalError as exc:
         raise StoreValidationError(
             f"this Python's SQLite lacks the FTS5 module ({exc}); the "
-            "store needs a Python built with FTS5 (standard python.org "
-            "installers and mainstream distributions have it); validation "
+            "store needs an SQLite with FTS5: without any administrator, "
+            "'pip install pysqlite3-binary' provides one (a complete "
+            "SQLite, installed automatically with askthedocs on Linux "
+            "x86_64); alternatively use a Python built with FTS5 "
+            "(standard python.org installers have it); validation "
             f"stopped at {path}") from None
     except sqlite3.DatabaseError as exc:
         raise StoreValidationError(

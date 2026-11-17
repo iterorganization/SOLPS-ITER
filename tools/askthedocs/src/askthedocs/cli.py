@@ -18,7 +18,7 @@ every leg must be on disk or recorded in the current store.
 from __future__ import annotations
 
 import argparse
-import sqlite3
+from askthedocs._sqlite import sqlite3
 import sys
 from pathlib import Path
 

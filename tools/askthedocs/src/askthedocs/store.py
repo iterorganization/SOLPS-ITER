@@ -29,7 +29,7 @@ in the page's paragraph list.  IDs are the join key across every face
 from __future__ import annotations
 
 import hashlib
-import sqlite3
+from askthedocs._sqlite import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Sequence

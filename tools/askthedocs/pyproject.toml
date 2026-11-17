@@ -35,6 +35,15 @@ dependencies = [
     # older lines (six remain, in certificate paths nothing here calls).
     # Delete this line when the Intel Macs retire.
     "cryptography<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+    # FTS5 fallback for cluster Pythons built against an SQLite without
+    # the extension (a compile-time option of SQLite, not a pip package;
+    # no administrator can fix the system Python).  pysqlite3-binary
+    # ships a complete SQLite with FTS5 as a plain wheel, used ONLY when
+    # the stdlib binding fails the FTS5 probe (src/askthedocs/_sqlite.py);
+    # wheels exist for exactly this marker (manylinux x86_64, cp38-cp314,
+    # verified on PyPI 2026-11-17), so the dependency resolves nowhere
+    # else and other platforms keep the named-remedy refusal
+    "pysqlite3-binary>=0.5.4,<0.6; platform_system == 'Linux' and platform_machine == 'x86_64'",
 ]
 
 [project.optional-dependencies]

@@ -40,7 +40,7 @@ grows ~100x.
 from __future__ import annotations
 
 import hashlib
-import sqlite3
+from askthedocs._sqlite import sqlite3
 from pathlib import Path
 from typing import Iterable, Sequence
 

@@ -21,7 +21,8 @@ location that swaps in only on success.
 from __future__ import annotations
 
 import os
-import sqlite3
+from askthedocs import _sqlite  # the seam module (has_fts5)
+from askthedocs._sqlite import sqlite3
 from pathlib import Path
 
 from askthedocs import build as build_mod
@@ -39,20 +40,18 @@ def _display(path: Path) -> str:
 
 
 def _require_fts5() -> None:
-    """The build creates FTS5 tables; refuse before any work when this
-    Python's SQLite cannot."""
-    try:
-        conn = sqlite3.connect(":memory:")
-        try:
-            conn.execute("CREATE VIRTUAL TABLE probe USING fts5(x)")
-        finally:
-            conn.close()
-    except sqlite3.OperationalError as exc:
-        raise SystemExit(
-            f"error: this Python's SQLite lacks the FTS5 module ({exc}); "
-            "the index needs a Python built with FTS5 (standard "
-            "python.org installers and mainstream distributions have "
-            "it); nothing was built") from None
+    """The build creates FTS5 tables; refuse before any work when
+    neither the stdlib SQLite nor the pip-provided fallback carries
+    the extension (the seam module chose the best binding already)."""
+    if _sqlite.has_fts5:
+        return
+    raise SystemExit(
+        "error: this Python's SQLite lacks the FTS5 extension; the "
+        "index needs an SQLite with FTS5. Without any administrator: "
+        "'pip install pysqlite3-binary' provides one (a complete "
+        "SQLite; it installs automatically with askthedocs on Linux "
+        "x86_64). Alternatively use a Python built with FTS5 "
+        "(standard python.org installers have it). Nothing was built")
 
 
 def _merge_manifests(parts: list[dict], repos: dict[str, Path]) -> dict:

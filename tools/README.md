@@ -44,6 +44,8 @@ cd ../..
 .venv/bin/askthedocs open             # the web version
 ```
 
+The commands above run from the clone root. From inside `tools/` the same installs read `pip install ./solps-reader` and `pip install ./askthedocs`. The packages are not on PyPI, so pip always needs the folder path; the bare name cannot resolve.
+
 The catalog site needs no server and no network: it is static HTML that works offline. The askthedocs web app starts with a single command and its launcher icon is installed by `setup`; both packages also run as MCP servers for AI-assisted workflows, with the wiring recipes in their READMEs.
 
 ## License

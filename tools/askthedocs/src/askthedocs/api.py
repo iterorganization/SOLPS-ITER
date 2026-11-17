@@ -15,7 +15,7 @@ Errors (same contracts the CLI maps to exit codes):
 
 from __future__ import annotations
 
-import sqlite3
+from askthedocs._sqlite import sqlite3
 from dataclasses import dataclass, field
 from pathlib import Path
 
