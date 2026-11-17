@@ -59,7 +59,7 @@ c*** Check some dimensions
         call xerrab ('Unknown topology')
       end if !}
       call xertst(.not.uex, 'Topological inconsistency found in Uinp')
-      
+
 c-----------------------------------------------------------------------
 c*** Modify some defaults for limiter and linear cases, if necessary
 
@@ -123,10 +123,11 @@ c*** Prepare index of valid additional surfaces
         else !}{
           k=k+1
           if(k.gt.nlim) then !{
-            write(0,*) 'Insufficient space for "additional surfaces" ',
-     ,        'in Eirene.'
-            write(0,*) 'Maximum ',nlim,',  DG model ',nlimi,
-     ,        '  reserved ',laddsrfs
+            write(0,*)
+     ,       'Insufficient space for "additional surfaces" '
+     ,       // 'in Eirene.'
+            write(0,*) 'Maximum ',nlim,', DG model ',nlimi,
+     ,       ' reserved ',laddsrfs
             call xerrab
      .     ('==> Check the DG model and DEF_NLIM in b2mod_dimensions.F')
           end if !}
@@ -230,8 +231,8 @@ c*** Prepare index of additional surfaces to be modified in geousr
       do i=1,k !{
         if(jedge(2,i).le.0) then !{
           uex = .true.
-          write(0,*) '"Target edge"',i,'  is specified as "Not for ',
-     ,                                                        'Eirene"'
+          write(0,*) '"Target edge"',i,'  is specified as ',
+     ,                                              '"Not for Eirene"'
         end if !}
       end do !}
       call xertst (.not.uex,
@@ -250,10 +251,10 @@ c*** Re-arrange specification of the time allocation: through B2
       NTIM1=1
 
       NOPTIM=-1
-    
+
 c-----------------------------------------------------------------------
 c*** Particle and reaction data (sect. 4 and 5)
-     
+
       call uinprppt
       call uinprprc
       call uinprpbl
@@ -300,7 +301,7 @@ c-----------------------------------------------------------------------
 c*** Helium pumping data (B2/user)
 
       call uinprphe
-      
+
 c-----------------------------------------------------------------------
 c*** Output control
 
@@ -314,6 +315,7 @@ c*** Output control
         zx_hlp=-uzdim
         do i=1,nlimi !{
           j=indasrfs(i)
+          if (j.eq.0) cycle
           rm_hlp=min(rm_hlp,p1(1,j),p2(1,j))
           zm_hlp=min(zm_hlp,p1(2,j),p2(2,j))
           rx_hlp=max(rx_hlp,p1(1,j),p2(1,j))

@@ -10,6 +10,7 @@ set bundled_root = "$data_root/adas_bundled"
 set adf11_root   = "$data_root/adf11"
 set adf15_root   = "$data_root/adf15"
 set bundled_marker = "$bundled_root/.solps-fetch-complete"
+
 set tmp_root = "/tmp"
 if ($?TMPDIR) then
   if ("$TMPDIR" != "") set tmp_root = "$TMPDIR"
@@ -20,6 +21,11 @@ set adf15_manifest = "$work_dir/adf15_manifest"
 
 mkdir -p "$work_dir"
 mkdir -p "$bundled_root" "$adf11_root" "$adf15_root"
+if (-d "$SOLPSTOP/modules/adas" && ! -l "$SOLPSTOP/modules/adas" && `find "$SOLPSTOP/modules/adas" -mindepth 1 -maxdepth 1 -print -quit | wc -l` == 0) then
+  foreach adas_entry (`find "$data_root" -mindepth 1 -maxdepth 1 -print`)
+    ln -s "$adas_entry" "$SOLPSTOP/modules/adas/$adas_entry:t"
+  end
+endif
 
 set downloader = ""
 which curl >& /dev/null

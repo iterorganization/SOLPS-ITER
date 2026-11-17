@@ -53,6 +53,7 @@ function spec_symbol {
     (  8 )  S=O_;;
     ( 10 )  S=Ne;;
     ( 18 )  S=Ar;;
+    ( 26 )  S=Fe;;
     ( 74 )  S=W_;;
     (  * )  S=xx;;
   esac

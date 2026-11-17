@@ -7,7 +7,7 @@ set PAR_STRING = ""
 echo Started SOLPS-ITER run
 
 argloop:
-  if ("X${1}X" == "X-hX") then
+  if ("X${1}X" == "X-hX" || "X${1}X" == "X--helpX") then
     cat <<EOF
 
 Help for $0

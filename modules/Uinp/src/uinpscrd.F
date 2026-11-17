@@ -47,6 +47,7 @@ c** if we do not need surface card for this surface
 c*** Additional surfaces
       do 20 i=laddsrfs+1,nlimi !{
         ind=indasrfs(i)
+        if (ind.eq.0) cycle
         if (.NOT.jliin(ind).eq.1) then  !{
 c** if we do not need surface card for this surface
           jscrd(ind)=0

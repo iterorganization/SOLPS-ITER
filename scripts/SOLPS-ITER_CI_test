@@ -24,8 +24,6 @@ cd run_new
 cp ../test/b2.*.parameters .
 cp ../test/b2mn.dat .
 cp ../test/b2fstati .
-cp ../test/b2time.nc.i b2time.nc
-cp ../test/b2batch.nc.i b2batch.nc
 setup_baserun_B25_links
 touch b2fstati
 b2run -s b2mn
@@ -73,14 +71,7 @@ setup_baserun_eirene_links
 b2run b2mn
 ../run_checks_ITER_2360_coupled.sh ../ref_run_for_CI/ ./ || exit 3
 
-# Increase output precision to look for restart effects
-cd ${SOLPSTOP}/modules/B2.5
-cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
-touch src/modules/.new_modules
-cd ${SOLPSTOP}
-make listobj_nox b25eirene_nox
-cd ${SOLPSTOP}/runs/examples
-
+cd ../..
 make DIIID_3106_DN_D+C
 cd DIIID_3106_DN_D+C
 export DEVICE=d3d
@@ -128,8 +119,16 @@ setup_baserun_eirene_json_links
 b2run b2mn
 ../run_checks_DIIID_3106_coupled.sh ../run_for_CI/ ./ || exit 5
 
+# Increase output precision to look for restart effects
+cd ${SOLPSTOP}/modules/B2.5
+cat src/utility/cfwure.F | sed -e "s:ifmt=1:ifmt=0:" > src.local/cfwure.F
+touch src/modules/.new_modules
+cd ${SOLPSTOP}
+make listobj_nox b25eirene_nox
+cd ${SOLPSTOP}/runs/examples
+
 # Special test to look for restart effects
-cd ..
+cd DIIID_3106_DN_D+C
 mkdir run_CI_test_20
 cd run_CI_test_20
 cp ../run_for_CI/b2.*.parameters .

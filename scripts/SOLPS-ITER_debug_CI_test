@@ -2,11 +2,13 @@
 . $(dirname $0)/SOLPS-ITER_CI_env
 
 # Create additional Eirene dependencies file to avoid a recurring compiler timing error
-echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/geometry/time-routines/eirmod_timer.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/assistant/exit_own.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/interfaces/couple_SOLPS-ITER/eirmod_wneutrals.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/interfaces/couple_SOLPS-ITER/couple_specific.F.o)' > ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/geometry/time-routines/eirmod_timer.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/assistant/exit_own.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/file-handling/wrplam.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/file-handling/wrplam_long.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/mathematics/fl2o.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/mathematics/parebe.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/find_emis_line.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/emissivity.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/output/outeir.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/output/outflx.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/isolne.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/celint.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/pltadd.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/pltin.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/plotting/pltadd.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/plotting/pside.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/scoring/update.F PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/scoring/updphot.F.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
@@ -21,6 +23,7 @@ echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/feplel3.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/fpathph.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/fpath.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/ftabei1.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
+echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/ftabrc1.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/energy_rate_coeff.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecta.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsecti.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
 echo 'set_source_files_properties(${PROJECT_SOURCE_DIR}/volume-processes/xsectm.f PROPERTIES OBJECT_DEPENDS ${LOCAL_OBJDIR}/volume-processes/xstpi.f.o)' >> ${SOLPSTOP}/modules/Eirene/src.local/CMakeLists.txt
@@ -38,7 +41,7 @@ rm -rf ${SOLPSTOP}/modules/Eirene/builds/*.debug \
        ${SOLPSTOP}/modules/B2.5/builds/*.debug
 
 # Compile the code with debug options activated
-echo "FCOPTS += -diag-enable=error" >> ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
+echo "FCOPTS += -diag-enable=error" > ${SOLPSTOP}/modules/B2.5/config/config.ITER.ifort64.local
 export NO_MANUAL="true"
 make prereqs_nox_debug
 make divgeo_nox_debug

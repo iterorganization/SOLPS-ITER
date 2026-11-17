@@ -24,6 +24,7 @@ module load GLI/4.5.31-GCCcore-13.2.0
 module load GR/0.0.94-GCCcore-13.2.0
 module load MSCL/1.2.5-GCCcore-13.2.0
 module load NCL/6.6.2-intel-2023b
+module load gnuplot/6.0.1-GCCcore-13.2.0
 
 pkg-config ggd --exists && setenv GGD_VERSION `pkg-config ggd --modversion` || setenv GGD_VERSION '0.0.0'
 setenv GLI_HOME ${EBROOTGLI}
@@ -41,7 +42,8 @@ if (`where paraview-config` == "") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `sh -c 'paraview --version 2>/dev/null' | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  if ("${PARAVIEW_MAJOR_VERSION}" == "") then
+  if ("${PARAVIEW_MAJOR_VERSION}" == "") setenv PARAVIEW_MAJOR_VERSION 0
+  if ("${PARAVIEW_MAJOR_VERSION}" == "0") then
     echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
   else if (${CMAKE_MAJOR_VERSION} > 2) then
     setenv LD_CATALYST "`paraview-config --ldflags -c PythonCatalyst -v CommonDataModel` -lstdc++"

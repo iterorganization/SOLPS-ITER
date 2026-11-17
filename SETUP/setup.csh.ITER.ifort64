@@ -48,7 +48,7 @@ else
   echo and restart the session
   if ("$SOLPS_TOOLCHAIN_VERSION" == "2023b") then
     module load IMAS-Fortran/5.5.0-intel-2023b-DD-4.1.0
-    module load IDStools/2.4.0-intel-2023b
+    module load IDStools/2.5.0-intel-2023b
     module load GGD/1.14.0-intel-2023b-DD-4.1.0
     module load AMNS/1.6.0-intel-2023b-DD-4.1.0
     module load IMAS-ParaView/2.3.0-intel-2023b
@@ -76,7 +76,7 @@ else
   else
     module load git/2.54.0-GCCcore-14.3.0
     module load IMAS-Fortran/5.6.0-intel-2025b-DD-4.1.1
-    module load IDStools/2.4.1-intel-2025b
+    module load IDStools/2.5.0-intel-2025b
     module load GGD/1.14.0-intel-2025b-DD-4.1.1
     module load AMNS/1.6.0-intel-2025b-DD-4.1.1
     module load CMake/4.0.3-GCCcore-14.3.0
@@ -94,6 +94,9 @@ else
     module load Ghostscript/10.05.1-GCCcore-14.3.0
     module load Doxygen/1.14.0-GCCcore-14.3.0
     module load texlive/20250308-intel-compilers-2025.2.0
+    # The module sets TEXMFHOME to texmf-dist, which bypasses the ls-R database
+    # and makes every kpathsea lookup walk the whole tree on disk (very slow LaTeX)
+    unsetenv TEXMFHOME
     module load SimDB/0.15.2-intel-2025b
     module load json-fortran/9.2.1-intel-compilers-2025.2.0
     module load IMAS-ParaView/2.4.0-intel-2025b
@@ -141,7 +144,8 @@ if (`where paraview-config` == "") then
 else
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   setenv PARAVIEW_MAJOR_VERSION `sh -c 'paraview --version 2>/dev/null' | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  if ("${PARAVIEW_MAJOR_VERSION}" == "") then
+  if ("${PARAVIEW_MAJOR_VERSION}" == "") setenv PARAVIEW_MAJOR_VERSION 0
+  if ("${PARAVIEW_MAJOR_VERSION}" == "0") then
     echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
   else if (${CMAKE_MAJOR_VERSION} > 2) then
     # Avoid a naming clash

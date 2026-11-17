@@ -13,7 +13,7 @@ CVK output data for Triang grid (file header)
       write(iunoo,*)
       close(iunoo)
       write(*,*) '    ... ',filename, ' created'
-c       write(0,*) '    ... ',filename, ' created'
+c      write(0,*) '    ... ',filename, ' created'
       return
   703 format (1p,6e13.5)
       end subroutine triaout

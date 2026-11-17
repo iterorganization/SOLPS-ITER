@@ -1,0 +1,813 @@
+#!/usr/bin/env tcsh
+
+if ( ! $?RESTART_SOLPS ) set RESTART_SOLPS = 0
+if ( ! $?MISSING_DEPENDENCY ) set MISSING_DEPENDENCY = 0
+
+# This script is only meant to run on the supported local hosts
+
+if ( "$HOST_NAME" != "LINUX" && "$HOST_NAME" != "DARWIN" ) then
+  echo
+  echo "The install_imas script is only supported on the LINUX and DARWIN hosts."
+  exit 1
+endif
+
+# Create local setup and configuration files, if they do not already exist, where to append the new library paths
+
+if (! -e "${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local") then
+  touch ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local
+else
+  cp ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local ${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.bak
+endif
+
+# Set variables
+
+set SETUP_LOCAL = "${SOLPSTOP}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local"
+set IMAS_ROOT   = "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS"
+
+if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH ""
+if ( ! $?PKG_CONFIG_PATH ) setenv PKG_CONFIG_PATH ""
+
+# Define number of cores to use for the multi-code compilations
+
+if ("$OSTYPE" == "darwin") then
+  set NCORES = `sysctl -n hw.ncpu`
+else
+  set NCORES = `nproc`
+endif
+
+if ( $NCORES >= 10 ) then
+  set NJOBS = 8
+else
+  @ NJOBS = $NCORES - 2
+  if ( $NJOBS < 1 ) set NJOBS = 1
+endif
+
+# CMake C/C++ compiler override for DARWIN (force Apple clang so that IMAS AL matches the C++ runtime of the Homebrew Boost/HDF5 it links against)
+
+if ("$OSTYPE" == "darwin") then
+  set CMAKE_COMPILER_FLAGS = ( -D CMAKE_C_COMPILER=cc -D CMAKE_CXX_COMPILER=c++ )
+else
+  set CMAKE_COMPILER_FLAGS = ( )
+endif
+
+# Create the folder that will host the locally compiled IMAS libraries
+
+if (! -d "${IMAS_ROOT}" ) then
+  mkdir -p "${IMAS_ROOT}"
+endif
+
+# External required dependencies: Saxon, Boost, HDF5
+
+# Install Saxon-HE XSLT processor
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w libsaxonhe-java`
+  if ("$pkg_check" == "") then
+    echo
+    echo Saxon-HE XSLT processor not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set SAXON_INSTALL = $<
+    if ( "$SAXON_INSTALL" == "" ) set SAXON_INSTALL = "y"
+    if ( "$SAXON_INSTALL" == "y" ) then
+      sudo apt-get install -y libsaxonhe-java
+      echo Saxon-HE XSLT processor successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Saxon-HE XSLT processor already locally installed.
+    sleep 1
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^saxon$'` == 0 ) then
+    echo
+    echo Saxon-HE XSLT processor not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set SAXON_INSTALL = $<
+    if ( "$SAXON_INSTALL" == "" ) set SAXON_INSTALL = "y"
+    if ( "$SAXON_INSTALL" == "y" ) then
+      brew install saxon
+      echo Saxon-HE XSLT processor successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Saxon-HE XSLT processor already locally installed.
+    sleep 1
+  endif
+
+endif
+
+if ( `grep -c CLASSPATH ${SETUP_LOCAL}` == 0 ) then
+
+  set SAXON_JAR   = ""
+  set OPENJDK_BIN = ""
+  set nonomatch
+
+  if ("$OSTYPE" == "darwin") then
+    set OPENJDK_BIN = "`brew --prefix`/opt/openjdk/bin"
+    set _saxon_jars = ( `brew --prefix`/opt/saxon/libexec/saxon-he-*.jar )
+    if ( -e "$_saxon_jars[1]" ) set SAXON_JAR = "$_saxon_jars[1]"
+  else
+    set _saxon_jars = ( /usr/share/java/Saxon-HE*.jar )
+    if ( -e "$_saxon_jars[1]" ) set SAXON_JAR = "$_saxon_jars[1]"
+  endif
+
+  unset nonomatch
+
+  if ( "$OPENJDK_BIN" != "" || "$SAXON_JAR" != "" ) then
+    echo >> ${SETUP_LOCAL}
+    echo "# --- Java (openjdk) and Saxon-HE ---" >> ${SETUP_LOCAL}
+  endif
+  if ( "$OPENJDK_BIN" != "" ) then
+    echo setenv PATH \"${OPENJDK_BIN}:\$PATH\" >> ${SETUP_LOCAL}
+  endif
+  if ( "$SAXON_JAR" != "" ) then
+    echo 'if ( ! $?CLASSPATH ) setenv CLASSPATH ""' >> ${SETUP_LOCAL}
+    echo setenv CLASSPATH \"${SAXON_JAR}:\$CLASSPATH\" >> ${SETUP_LOCAL}
+  endif
+
+endif
+
+# Install Boost C++ libraries
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w libboost-all-dev`
+  if ("$pkg_check" == "") then
+    echo
+    echo Boost C++ libraries not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set BOOST_INSTALL = $<
+    if ( "$BOOST_INSTALL" == "" ) set BOOST_INSTALL = "y"
+    if ( "$BOOST_INSTALL" == "y" ) then
+      sudo apt-get install -y libboost-all-dev
+      echo Boost C++ libraries successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Boost C++ libraries already locally installed.
+    sleep 1
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^boost$'` == 0 ) then
+    echo
+    echo Boost C++ libraries not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set BOOST_INSTALL = $<
+    if ( "$BOOST_INSTALL" == "" ) set BOOST_INSTALL = "y"
+    if ( "$BOOST_INSTALL" == "y" ) then
+      brew install boost
+      echo Boost C++ libraries successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Boost C++ libraries already locally installed.
+    sleep 1
+  endif
+
+endif
+
+# Install Blitz++ C++ library
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w libblitz0-dev`
+  if ("$pkg_check" == "") then
+    echo
+    echo Blitz++ C++ library not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set BLITZ_INSTALL = $<
+    if ( "$BLITZ_INSTALL" == "" ) set BLITZ_INSTALL = "y"
+    if ( "$BLITZ_INSTALL" == "y" ) then
+      sudo apt-get install -y libblitz0-dev
+      echo Blitz++ C++ library successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Blitz++ C++ library already locally installed.
+    sleep 1
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^blitz$'` == 0 ) then
+    echo
+    echo Blitz++ C++ library not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set BLITZ_INSTALL = $<
+    if ( "$BLITZ_INSTALL" == "" ) set BLITZ_INSTALL = "y"
+    if ( "$BLITZ_INSTALL" == "y" ) then
+      brew install blitz
+      echo Blitz++ C++ library successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Blitz++ C++ library already locally installed.
+    sleep 1
+  endif
+
+endif
+
+# Install HDF5 C/C++ libraries
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w libhdf5-dev`
+  if ("$pkg_check" == "") then
+    echo
+    echo HDF5 C/C++ libraries not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set HDF5_INSTALL = $<
+    if ( "$HDF5_INSTALL" == "" ) set HDF5_INSTALL = "y"
+    if ( "$HDF5_INSTALL" == "y" ) then
+      sudo apt-get install -y libhdf5-dev
+      echo HDF5 C/C++ libraries successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo HDF5 C/C++ libraries already locally installed.
+    sleep 1
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^hdf5$'` == 0 ) then
+    echo
+    echo HDF5 C/C++ libraries not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set HDF5_INSTALL = $<
+    if ( "$HDF5_INSTALL" == "" ) set HDF5_INSTALL = "y"
+    if ( "$HDF5_INSTALL" == "y" ) then
+      brew install hdf5
+      echo HDF5 C/C++ libraries successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo HDF5 C/C++ libraries already locally installed.
+    sleep 1
+  endif
+
+endif
+
+# Install Ninja build system
+
+if ("$OSTYPE" == "linux" && "$HOST_NAME" == "LINUX") then
+
+  set pkg_check = `dpkg -l | grep -w ninja-build`
+  if ("$pkg_check" == "") then
+    echo
+    echo Ninja build system not locally installed.
+    echo -n "Do you wish to install it? The apt package manager will be used. (y/n) [y] "
+    set NINJA_INSTALL = $<
+    if ( "$NINJA_INSTALL" == "" ) set NINJA_INSTALL = "y"
+    if ( "$NINJA_INSTALL" == "y" ) then
+      sudo apt-get install -y ninja-build
+      echo Ninja build system successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Ninja build system already locally installed.
+    sleep 1
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list | grep -c '^ninja$'` == 0 ) then
+    echo
+    echo Ninja build system not locally installed.
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set NINJA_INSTALL = $<
+    if ( "$NINJA_INSTALL" == "" ) set NINJA_INSTALL = "y"
+    if ( "$NINJA_INSTALL" == "y" ) then
+      brew install ninja
+      echo Ninja build system successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo Ninja build system already locally installed.
+    sleep 1
+  endif
+
+endif
+
+#  Miniforge package manager
+
+if ("$OSTYPE" == "linux") then
+
+  set CONDA_ROOT = "$SOLPSTOP/lib/${HOST_NAME}.${COMPILER}/miniforge3"
+  if (! -d "${CONDA_ROOT}" ) then
+    echo
+    echo "Warning: miniforge installation not found."
+    echo -n "Do you wish to install it? (y/n) [y] "
+    set MINIFORGE_INSTALL = $<
+    if ( "$MINIFORGE_INSTALL" == "" ) set MINIFORGE_INSTALL = "y"
+    if ( "$MINIFORGE_INSTALL" == "y" ) then
+      install_miniforge
+      echo "Close your shell, re-open it, start a new SOLPS-ITER"
+      echo "and relaunch the install_imas script."
+      exit 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  endif
+
+else if ("$OSTYPE" == "darwin") then
+
+  if ( `brew list --cask | grep -c '^miniforge$'` == 0 ) then
+    echo
+    echo "miniforge package manager not locally installed."
+    echo -n "Do you wish to install it? The brew package manager will be used. (y/n) [y] "
+    set MINIFORGE_INSTALL = $<
+    if ( "$MINIFORGE_INSTALL" == "" ) set MINIFORGE_INSTALL = "y"
+    if ( "$MINIFORGE_INSTALL" == "y" ) then
+      brew install --cask miniforge
+      rehash
+      echo miniforge package manager successfully installed.
+      sleep 1
+    else
+      set MISSING_DEPENDENCY = 1
+      sleep 1
+    endif
+  else
+    echo
+    echo miniforge package manager already locally installed.
+    sleep 1
+  endif
+
+  set CONDA_ROOT = ""
+  which conda >& /dev/null
+  if ( $status == 0 ) set CONDA_ROOT = `conda info --base`
+  if ( "$CONDA_ROOT" == "" || ! -d "$CONDA_ROOT" ) set CONDA_ROOT = "`brew --prefix`/Caskroom/miniforge/base"
+
+endif
+
+# Create and activate the "IMAS" conda environment
+
+if (! -d "${CONDA_ROOT}" ) then
+  echo
+  echo "Error: no miniforge/conda installation available; cannot proceed with the IMAS installation."
+  exit 1
+endif
+
+if (! -d "${CONDA_ROOT}/envs/IMAS" ) then
+  echo
+  echo "The IMAS conda environment does not exist."
+  echo -n "Do you wish to create it? (y/n) [y] "
+  set IMASENV_INSTALL = $<
+  if ( "$IMASENV_INSTALL" == "" ) set IMASENV_INSTALL = "y"
+  if ( "$IMASENV_INSTALL" == "y" ) then
+    ${CONDA_ROOT}/bin/conda create -n IMAS -y python=3.10 pip
+  else
+    echo
+    echo "The IMAS conda environment is required to proceed; aborting the IMAS installation."
+    exit 1
+  endif
+endif
+
+# Activate the IMAS environment
+
+source ${CONDA_ROOT}/etc/profile.d/conda.csh
+conda activate ${CONDA_ROOT}/envs/IMAS
+rehash
+
+# Additional Python modules required by imas-idstools
+
+python -c "import cerberus, fortranformat, matplotlib, netCDF4, pandas, pyparsing, dateutil, yaml, rich, rich_argparse, six, tabulate" >& /dev/null
+if ( $status != 0 ) then
+  echo
+  echo "imas-idstools requires several additional Python modules."
+  echo -n "Do you wish to install them into the IMAS environment? (y/n) [y] "
+  set PYMODS_INSTALL = $<
+  if ( "$PYMODS_INSTALL" == "" ) set PYMODS_INSTALL = "y"
+  if ( "$PYMODS_INSTALL" == "y" ) then
+    pip install cerberus fortranformat matplotlib netCDF4 pandas pyparsing python-dateutil pyyaml rich rich-argparse six tabulate
+    sleep 1
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+else
+  echo
+  echo The additional Python modules required by imas-idstools are already installed.
+  sleep 1
+endif
+
+# IMAS-Core
+
+set nonomatch
+set _installed = ( ${IMAS_ROOT}/Core/install/lib/libal.* )
+unset nonomatch
+if (! -e "$_installed[1]" ) then
+
+  echo
+  echo IMAS-Core not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set CORE_INSTALL = $<
+  if ( "$CORE_INSTALL" == "" ) set CORE_INSTALL = "y"
+  if ( "$CORE_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/Core" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/IMAS-Core.git Core
+  endif
+
+  cd "${IMAS_ROOT}/Core"
+  git checkout main
+
+  setenv AL_BACKEND_HDF5 ON
+  setenv AL_BACKEND_MDSPLUS OFF
+  setenv AL_BACKEND_UDA OFF
+
+  pip install . --prefix $PWD/build
+  cmake -Bbuild -GNinja -DAL_PYTHON_BINDINGS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+  cmake --build build --target install
+
+  # Register the IMAS-Core environment in the SOLPS-ITER local setup file
+cat >> ${SETUP_LOCAL} << 'IMAS_CORE_ENV'
+
+# --- IMAS-Core ---
+setenv PATH "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/Core/install/bin:$PATH"
+setenv LD_LIBRARY_PATH "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/Core/install/lib:$LD_LIBRARY_PATH"
+setenv PKG_CONFIG_PATH "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/Core/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+setenv HDF5_USE_FILE_LOCKING FALSE
+'IMAS_CORE_ENV'
+
+  echo IMAS-Core successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-Core already installed.
+  sleep 1
+endif
+
+if ( -d "${IMAS_ROOT}/Core/install" ) then
+  setenv PATH "${IMAS_ROOT}/Core/install/bin:$PATH"
+  setenv LD_LIBRARY_PATH "${IMAS_ROOT}/Core/install/lib:$LD_LIBRARY_PATH"
+  setenv PKG_CONFIG_PATH "${IMAS_ROOT}/Core/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+  rehash
+endif
+
+# IMAS-Python
+
+python -c "import imas" >& /dev/null
+if ( $status != 0 ) then
+
+  echo
+  echo IMAS-Python not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set PYTHON_INSTALL = $<
+  if ( "$PYTHON_INSTALL" == "" ) set PYTHON_INSTALL = "y"
+  if ( "$PYTHON_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/Python" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/IMAS-Python.git Python
+  endif
+
+  cd "${IMAS_ROOT}/Python"
+  git checkout main
+
+  pip install ".[netcdf,xarray]"
+
+  echo IMAS-Python successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-Python already installed.
+  sleep 1
+endif
+
+# IMAS-Data-Dictionary
+
+python -c "import imas_data_dictionary" >& /dev/null
+if ( $status != 0 ) then
+
+  echo
+  echo IMAS-Data-Dictionary not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set DD_INSTALL = $<
+  if ( "$DD_INSTALL" == "" ) set DD_INSTALL = "y"
+  if ( "$DD_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/Data-Dictionary" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/IMAS-Data-Dictionary.git Data-Dictionary
+  endif
+
+  cd "${IMAS_ROOT}/Data-Dictionary"
+  git checkout main
+
+  pip install .
+
+  echo IMAS-Data-Dictionary successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-Data-Dictionary already installed.
+  sleep 1
+endif
+
+# IMAS-Fortran
+
+set nonomatch
+set _installed = ( ${IMAS_ROOT}/Fortran/install/lib/libal-fortran* )
+unset nonomatch
+if (! -e "$_installed[1]" ) then
+
+  echo
+  echo IMAS-Fortran not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set FORTRAN_INSTALL = $<
+  if ( "$FORTRAN_INSTALL" == "" ) set FORTRAN_INSTALL = "y"
+  if ( "$FORTRAN_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/Fortran" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/IMAS-Fortran.git Fortran
+  endif
+
+  cd "${IMAS_ROOT}/Fortran"
+  git checkout main
+
+  cmake -B $PWD/build $CMAKE_COMPILER_FLAGS -D CMAKE_INSTALL_PREFIX=$PWD/install -D AL_BACKEND_HDF5=ON -D AL_BACKEND_MDSPLUS=OFF -D CMAKE_INSTALL_RPATH="$PWD/install/lib" -D CMAKE_BUILD_WITH_INSTALL_RPATH=ON
+  make -C build -j${NJOBS} all
+  cd build
+  make install
+
+  # Register the IMAS-Fortran environment in the SOLPS-ITER local setup file
+cat >> ${SETUP_LOCAL} << 'IMAS_FORTRAN_ENV'
+
+# --- IMAS-Fortran ---
+set IMAS_BASE = "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/Fortran/install"
+setenv PATH "${IMAS_BASE}/bin:$PATH"
+setenv LD_LIBRARY_PATH "${IMAS_BASE}/lib:$LD_LIBRARY_PATH"
+setenv PKG_CONFIG_PATH "${IMAS_BASE}/lib/pkgconfig:$PKG_CONFIG_PATH"
+if ( -f "${IMAS_BASE}/include/IDSDef.xml" ) then
+    setenv IDSDEF_PATH "${IMAS_BASE}/include/IDSDef.xml"
+    setenv IMAS_VERSION `sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' $IDSDEF_PATH | head -1`
+    setenv AL_VERSION `pkg-config --modversion al-core`
+endif
+'IMAS_FORTRAN_ENV'
+
+  echo IMAS-Fortran successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-Fortran already installed.
+  sleep 1
+endif
+
+if ( -d "${IMAS_ROOT}/Fortran/install" ) then
+  setenv PATH "${IMAS_ROOT}/Fortran/install/bin:$PATH"
+  setenv LD_LIBRARY_PATH "${IMAS_ROOT}/Fortran/install/lib:$LD_LIBRARY_PATH"
+  setenv PKG_CONFIG_PATH "${IMAS_ROOT}/Fortran/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+  rehash
+endif
+
+# IMAS-Cpp
+
+set nonomatch
+set _installed = ( ${IMAS_ROOT}/Cpp/install/lib/libal-cpp* )
+unset nonomatch
+if (! -e "$_installed[1]" ) then
+
+  echo
+  echo IMAS-Cpp not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set CPP_INSTALL = $<
+  if ( "$CPP_INSTALL" == "" ) set CPP_INSTALL = "y"
+  if ( "$CPP_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/Cpp" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/IMAS-Cpp.git Cpp
+  endif
+
+  cd "${IMAS_ROOT}/Cpp"
+  git checkout main
+
+  cmake -B $PWD/build $CMAKE_COMPILER_FLAGS -D CMAKE_INSTALL_PREFIX=$PWD/install -D AL_BACKEND_HDF5=ON -D AL_BACKEND_MDSPLUS=OFF -D CMAKE_INSTALL_RPATH="$PWD/install/lib" -D CMAKE_BUILD_WITH_INSTALL_RPATH=ON
+  make -C build -j${NJOBS} all
+  cd build
+  make install
+
+  # Register the IMAS-Cpp environment in the SOLPS-ITER local setup file
+cat >> ${SETUP_LOCAL} << 'IMAS_CPP_ENV'
+
+# --- IMAS-Cpp ---
+set IMAS_BASE = "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/Cpp/install"
+setenv PATH "${IMAS_BASE}/bin:$PATH"
+setenv LD_LIBRARY_PATH "${IMAS_BASE}/lib:$LD_LIBRARY_PATH"
+setenv PKG_CONFIG_PATH "${IMAS_BASE}/lib/pkgconfig:$PKG_CONFIG_PATH"
+if ( -f "${IMAS_BASE}/include/IDSDef.xml" ) then
+    setenv IDSDEF_PATH "${IMAS_BASE}/include/IDSDef.xml"
+    setenv IMAS_VERSION `sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' $IDSDEF_PATH | head -1`
+    setenv AL_VERSION `pkg-config --modversion al-core`
+endif
+'IMAS_CPP_ENV'
+
+  echo IMAS-Cpp successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-Cpp already installed.
+  sleep 1
+endif
+
+if ( -d "${IMAS_ROOT}/Cpp/install" ) then
+  setenv PATH "${IMAS_ROOT}/Cpp/install/bin:$PATH"
+  setenv LD_LIBRARY_PATH "${IMAS_ROOT}/Cpp/install/lib:$LD_LIBRARY_PATH"
+  setenv PKG_CONFIG_PATH "${IMAS_ROOT}/Cpp/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+  rehash
+endif
+
+# IMAS-GGD
+
+if (! -e "${IMAS_ROOT}/GGD/install/lib/libggd.a" ) then
+
+  echo
+  echo IMAS-GGD not locally installed.
+  echo -n "Do you wish to install it? (y/n) [y] "
+  set GGD_INSTALL = $<
+  if ( "$GGD_INSTALL" == "" ) set GGD_INSTALL = "y"
+  if ( "$GGD_INSTALL" == "y" ) then
+
+  set RESTART_SOLPS = 1
+
+  if (! -d "${IMAS_ROOT}/GGD" ) then
+    cd "${IMAS_ROOT}"
+    git clone git@github.com:iterorganization/GGD.git GGD
+  endif
+
+  cd "${IMAS_ROOT}/GGD"
+  git checkout develop
+
+  # On DARWIN the case-insensitive filesystem collides INSTALL with autotools-generated install target, so rename the doc file first
+  if ("$OSTYPE" == "darwin" && -e INSTALL) mv INSTALL INSTALL.txt
+
+  ./bootstrap
+  ./configure --prefix=$PWD/install
+  make -j${NJOBS}
+  make install
+
+  # Register the IMAS-GGD environment in the SOLPS-ITER local setup file
+cat >> ${SETUP_LOCAL} << 'IMAS_GGD_ENV'
+
+# --- IMAS-GGD ---
+set GGD_BASE = "${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/IMAS/GGD/install"
+setenv PATH "${GGD_BASE}/bin:$PATH"
+setenv LD_LIBRARY_PATH "${GGD_BASE}/lib:$LD_LIBRARY_PATH"
+setenv PKG_CONFIG_PATH "${GGD_BASE}/lib/pkgconfig:$PKG_CONFIG_PATH"
+setenv GGD_VERSION `pkg-config --modversion ggd`
+'IMAS_GGD_ENV'
+
+  echo IMAS-GGD successfully installed.
+  sleep 1
+
+  else
+    set MISSING_DEPENDENCY = 1
+    sleep 1
+  endif
+
+else
+  echo
+  echo IMAS-GGD already installed.
+  sleep 1
+endif
+
+if ( -d "${IMAS_ROOT}/GGD/install" ) then
+  setenv PATH "${IMAS_ROOT}/GGD/install/bin:$PATH"
+  setenv LD_LIBRARY_PATH "${IMAS_ROOT}/GGD/install/lib:$LD_LIBRARY_PATH"
+  setenv PKG_CONFIG_PATH "${IMAS_ROOT}/GGD/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+  rehash
+endif
+
+# Finalization
+
+if ( $?MISSING_DEPENDENCY && "$MISSING_DEPENDENCY" == "1" ) then
+
+  echo
+  echo Warning: some pieces of the IMAS suite are still missing.
+  echo The IMAS installation may be incomplete, or SOLPS-ITER may not run properly with IMAS.
+
+else
+
+  echo
+  echo All IMAS components are correctly installed.
+  echo You are ready to use SOLPS-ITER with IMAS.
+
+endif
+
+if ( $?RESTART_SOLPS && "$RESTART_SOLPS" == "1" ) then
+
+  echo
+  echo The variables linking the IMAS libraries have been
+  echo written to \$\{SOLPSTOP\}/SETUP/setup.csh.${HOST_NAME}.${COMPILER}.local.
+  echo Please close your SOLPS-ITER session and your shell and restart them.
+  echo
+  echo IMPORTANT: if any SOLPS-ITER module had already been compiled before
+  echo this installation, it must be cleaned and recompiled from scratch
+
+endif
+
+set IMAS_DD_MAJOR = ""
+set IDSDEF_FILE = "${IMAS_ROOT}/Fortran/install/include/IDSDef.xml"
+if ( -f "${IDSDEF_FILE}" ) then
+  set IMAS_DD_VERSION = `sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' ${IDSDEF_FILE} | head -1`
+  set IMAS_DD_MAJOR = `echo ${IMAS_DD_VERSION} | cut -d. -f1`
+endif
+
+echo
+echo By default, when the IMASDIR environment variable is not set, SOLPS-ITER
+echo will store the IMAS IDS files under:
+if ( "${IMAS_DD_MAJOR}" != "" ) then
+  echo "  ${HOME}/public/imasdb/solps-iter/${IMAS_DD_MAJOR}/<pulse>/<run>"
+else
+  echo "  ${HOME}/public/imasdb/solps-iter/<DD major version>/<pulse>/<run>"
+endif
+echo This base location can be overridden by setting the IMASDIR environment variable.

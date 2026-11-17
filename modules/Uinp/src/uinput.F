@@ -95,7 +95,7 @@ c*** Produce the input files for Eirene for averaging scheme runs
 c*** Create the header for the b2ag.dat file
       inquire(file='b2ag.dat', exist=uex)
       if(uex) then !{
-          print *,'    ... b2ag.dat file already present, not created'
+        print *,'    ... b2ag.dat file already present, not created'
       else !}{
           open(2,file='b2ag.dat')
           write(2,'(a)')

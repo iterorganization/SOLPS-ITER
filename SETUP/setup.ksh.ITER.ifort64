@@ -38,7 +38,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
   case "$SOLPS_TOOLCHAIN_VERSION" in
   2023b)
     module load IMAS-Fortran/5.5.0-intel-2023b-DD-4.1.0
-    module load IDStools/2.4.0-intel-2023b
+    module load IDStools/2.5.0-intel-2023b
     module load GGD/1.14.0-intel-2023b-DD-4.1.0
     module load AMNS/1.6.0-intel-2023b-DD-4.1.0
     module load SimDB/0.14.1-intel-2023b
@@ -57,7 +57,7 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
     ;;
   2025b|*)
     module load IMAS-Fortran/5.6.0-intel-2025b-DD-4.1.1
-    module load IDStools/2.4.1-intel-2025b
+    module load IDStools/2.5.0-intel-2025b
     module load GGD/1.14.0-intel-2025b-DD-4.1.1
     module load AMNS/1.6.0-intel-2025b-DD-4.1.1
     module load SimDB/0.15.2-intel-2025b
@@ -65,6 +65,9 @@ export OS=`grep -m1 NAME /etc/os-release | cut -d '"' -f 2 | cut -d ' ' -f 1`
     module load MSCL/1.2.5-iimkl-2025b
     module load Doxygen/1.14.0-GCCcore-14.3.0
     module load texlive/20250308-intel-compilers-2025.2.0
+    # The module sets TEXMFHOME to texmf-dist, which bypasses the ls-R database
+    # and makes every kpathsea lookup walk the whole tree on disk (very slow LaTeX)
+    unset TEXMFHOME
     module load Ghostscript/10.05.1-GCCcore-14.3.0
     module load netCDF/4.9.3-iimpi-2025b
     module load netCDF-Fortran/4.6.2-iimpi-2025b
@@ -113,7 +116,8 @@ fi
 if [ -x paraview-config ]; then
   # See ParaViewCatalystUsersGuide_v2.pdf Sec 3.7.2 Linking with Python ...
   export PARAVIEW_MAJOR_VERSION=`paraview --version 2>/dev/null | cut -d '.' -f 1 | cut -d ' ' -f 3`
-  if [ -z "${PARAVIEW_MAJOR_VERSION}" ]; then
+  if [ -z "${PARAVIEW_MAJOR_VERSION}" ]; then export PARAVIEW_MAJOR_VERSION=0; fi
+  if [ "${PARAVIEW_MAJOR_VERSION}" = "0" ]; then
     echo "Warning: paraview-config found but paraview binary missing. ParaView with Catalyst will not be compiled-in!"
   elif [ $CMAKE_MAJOR_VERSION -gt 2 ]; then
     # Avoid a naming clash

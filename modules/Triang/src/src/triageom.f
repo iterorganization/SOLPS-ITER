@@ -238,7 +238,7 @@ c*
 c*            PITCH                             (CR,CZ)
 c*
 c*                                 (BR(1),BZ(1))       (BR(2),BZ(2))
-c      
+c
 c      allocate(br(0:10,0:10,4))
 c      allocate(bz(0:10,0:10,4))
 c      read (20,*)
@@ -258,48 +258,48 @@ c      if (ix .ge. size(br,1)) then
 c         dim1 = size(br,1)
 c         dim2 = size(br,2)
 c         allocate(help3(dim1,dim2,4))
-c         
+c
 c         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
 c         deallocate(br)
 c         allocate(br(0:dim1-1+10,0:dim2-1,4))
 c         br = 0.
 c         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-c         
+c
 c         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
 c         deallocate(bz)
 c         allocate(bz(0:dim1-1+10,0:dim2-1,4))
 c         bz = 0.
 c         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-c         
+c
 c         deallocate(help3)
 c      endif
 c      if (iy .ge. size(br,2)) then
 c         dim1 = size(br,1)
 c         dim2 = size(br,2)
 c         allocate(help3(dim1,dim2,4))
-c         
+c
 c         help3(1:dim1,1:dim2,1:4) = br(0:dim1-1,0:dim2-1,1:4)
 c         deallocate(br)
 c         allocate(br(0:dim1-1,0:dim2-1+10,4))
 c         br = 0.
 c         br(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-c         
+c
 c         help3(1:dim1,1:dim2,1:4) = bz(0:dim1-1,0:dim2-1,1:4)
 c         deallocate(bz)
 c         allocate(bz(0:dim1-1,0:dim2-1+10,4))
 c         bz = 0.
 c         bz(0:dim1-1,0:dim2-1,1:4) = help3(1:dim1,1:dim2,1:4)
-c         
+c
 c         deallocate(help3)
 c      endif
-c      
+c
 c      i1=index(zeile,': (')
 c      i2=index(zeile(i1+3:),')')+i1+2
 c      read (zeile(i1+3:i2-1),*) br(ix,iy,4),bz(ix,iy,4)
 c      i3=index(zeile(i2+1:),'(')+i2
 c      i4=i3+index(zeile(i3+1:),')')
 c      read (zeile(i3+1:i4-1),*) br(ix,iy,3),bz(ix,iy,3)
-c      
+c
 c*     READ SECOND LINE OF CELL DATA
 c      read (20,'(a110)') zeile
 c
@@ -423,7 +423,7 @@ c top side
               NEIGHS(2*NCELL(IX,IY)-1+NTRIA1,2)=0
               NEIGHR(2*NCELL(IX,IY)-1+NTRIA1,2)=2
             ENDIF
-              
+
 c left side
             IF (NCELL(IX-1,IY).NE.0) THEN
               NEIGHB(2*NCELL(IX,IY)-1+NTRIA1,3)=2*NCELL(IX-1,IY)+NTRIA1
@@ -603,9 +603,9 @@ C     FIND NEIGHBOURS
       LOGICAL PARA
       LOGICAL LDBG, LDBG0
 #ifdef DBG
-      DATA LDBG /.false./, LDBG0 /.false./
-#else
       DATA LDBG /.true./, LDBG0 /.true./
+#else
+      DATA LDBG /.false./, LDBG0 /.false./
 #endif
 
       CALL GRSPTS(25)
@@ -665,7 +665,7 @@ c two corners of triangle (b) coincide with two corners of triangle (a)
                     NEIGHS(ITRIA,K) = I
                     NEIGHR(ITRIA,K) = 0
                     if(ldbg) then !{
-                      
+
                     end if !}
                     CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,I))),
      .                         REAL(YCOORD(TRIA(ITRIA1,I))))
@@ -677,21 +677,21 @@ c two corners of triangle (b) coincide with two corners of triangle (a)
                   end if !}
                   IF ((NEIGHR(ITRIA1,I) .NE. 0) .AND.
      .                (NEIGHR(ITRIA,K) .NE. 0)) then !{
-c edges (i) and (k) of triangles (a) and (b) are of different length 
+c edges (i) and (k) of triangles (a) and (b) are of different length
 c but still have unindentified neighbors
-                  if(ldbg) then !{
-                    print *,'tria j k i l:',TRIA(ITRIA1,J),
-     ,                        TRIA(ITRIA,K),TRIA(ITRIA1,I),TRIA(ITRIA,L)
-                    print *,'para: ',PARA(XCOORD(TRIA(ITRIA1,J)),
-     .                                    YCOORD(TRIA(ITRIA1,J)),
-     .                                    XCOORD(TRIA(ITRIA1,I)),
-     .                                    YCOORD(TRIA(ITRIA1,I)),
-     .                                    XCOORD(TRIA(ITRIA,K)),
-     .                                    YCOORD(TRIA(ITRIA,K)),
-     .                                    XCOORD(TRIA(ITRIA,L)),
-     .                                    YCOORD(TRIA(ITRIA,L)))
-                    print '(2a17)','xcoord','ycoord'
-                    print '(a,1p,t4,2e17.8)',
+                    if(ldbg) then !{
+                      print *,'tria j k i l:',TRIA(ITRIA1,J),
+     ,                 TRIA(ITRIA,K),TRIA(ITRIA1,I),TRIA(ITRIA,L)
+                      print *,'para: ',PARA(XCOORD(TRIA(ITRIA1,J)),
+     .                                      YCOORD(TRIA(ITRIA1,J)),
+     .                                      XCOORD(TRIA(ITRIA1,I)),
+     .                                      YCOORD(TRIA(ITRIA1,I)),
+     .                                      XCOORD(TRIA(ITRIA,K)),
+     .                                      YCOORD(TRIA(ITRIA,K)),
+     .                                      XCOORD(TRIA(ITRIA,L)),
+     .                                      YCOORD(TRIA(ITRIA,L)))
+                      print '(2a17)','xcoord','ycoord'
+                      print '(a,1p,t4,2e17.8)',
      ,                           'j',xcoord(tria(itria1,j))*10.,
      ,                                ycoord(tria(itria1,j))*10.,
      ,                           'i',xcoord(tria(itria1,i))*10.,
@@ -700,8 +700,8 @@ c but still have unindentified neighbors
      ,                                ycoord(tria(itria,k))*10.,
      ,                           'l',xcoord(tria(itria,l))*10.,
      ,                                ycoord(tria(itria,l))*10.
-                  end if !}
-                  if(PARA(XCOORD(TRIA(ITRIA1,J)),
+                    end if !}
+                    if(PARA(XCOORD(TRIA(ITRIA1,J)),
      .                      YCOORD(TRIA(ITRIA1,J)),
      .                      XCOORD(TRIA(ITRIA1,I)),
      .                      YCOORD(TRIA(ITRIA1,I)),
@@ -711,53 +711,53 @@ c but still have unindentified neighbors
      .                      YCOORD(TRIA(ITRIA,L))) .AND.
      .                (TRIA(ITRIA1,J) .EQ. TRIA(ITRIA,K)) .AND.
      .                (TRIA(ITRIA1,I) .NE. TRIA(ITRIA,L))) THEN !{
-                    NTRIA = NTRIA + 1
-                    if(ldbg) print *,'ntria,size',ntria,size(tria,1)
-                    if(size(tria,1).lt.ntria) then !{
-                      call realloc_ctria('neigh',incr)
-                      call realloc_ctria('tria',incr)
-                      call realloc_ctria('trixy',incr)
-                    end if !}
-                    DO IS=1,3 !{
-                      TRIA(NTRIA,IS) = TRIA(ITRIA,IS)
-                      NEIGHB(NTRIA,IS) = NEIGHB(ITRIA,IS)
-                      NEIGHS(NTRIA,IS) = NEIGHS(ITRIA,IS)
-                      NEIGHR(NTRIA,IS) = NEIGHR(ITRIA,IS)
-                    ENDDO !}
-                    TRIA(NTRIA,K) = TRIA(ITRIA1,I)
-                    NEIGHB(NTRIA,M) = ITRIA
-                    NEIGHS(NTRIA,M) = L
-                    NEIGHR(NTRIA,M) = 0
-                    TRIX(NTRIA) = TRIX(ITRIA)
-                    TRIY(NTRIA) = TRIY(ITRIA)
-    
-                    TRIA(ITRIA,L) = TRIA(ITRIA1,I)
-                    NEIGHB(ITRIA,K) = ITRIA1
-                    NEIGHB(ITRIA,L) = NTRIA
-                    NEIGHS(ITRIA,K) = I
-                    NEIGHS(ITRIA,L) = M
-                    NEIGHR(ITRIA,K) = 0
-                    NEIGHR(ITRIA,L) = 0
-    
-                    NEIGHB(ITRIA1,I) = ITRIA
-                    NEIGHS(ITRIA1,I) = K
-                    NEIGHR(ITRIA1,I) = 0
+                      NTRIA = NTRIA + 1
+                      if(ldbg) print *,'ntria,size',ntria,size(tria,1)
+                      if(size(tria,1).lt.ntria) then !{
+                        call realloc_ctria('neigh',incr)
+                        call realloc_ctria('tria',incr)
+                        call realloc_ctria('trixy',incr)
+                      end if !}
+                      DO IS=1,3 !{
+                        TRIA(NTRIA,IS) = TRIA(ITRIA,IS)
+                        NEIGHB(NTRIA,IS) = NEIGHB(ITRIA,IS)
+                        NEIGHS(NTRIA,IS) = NEIGHS(ITRIA,IS)
+                        NEIGHR(NTRIA,IS) = NEIGHR(ITRIA,IS)
+                      ENDDO !}
+                      TRIA(NTRIA,K) = TRIA(ITRIA1,I)
+                      NEIGHB(NTRIA,M) = ITRIA
+                      NEIGHS(NTRIA,M) = L
+                      NEIGHR(NTRIA,M) = 0
+                      TRIX(NTRIA) = TRIX(ITRIA)
+                      TRIY(NTRIA) = TRIY(ITRIA)
 
-                    IF (NEIGHB(NTRIA,L).NE.0) 
-     >               NEIGHB(NEIGHB(NTRIA,L),NEIGHS(NTRIA,L)) = NTRIA
+                      TRIA(ITRIA,L) = TRIA(ITRIA1,I)
+                      NEIGHB(ITRIA,K) = ITRIA1
+                      NEIGHB(ITRIA,L) = NTRIA
+                      NEIGHS(ITRIA,K) = I
+                      NEIGHS(ITRIA,L) = M
+                      NEIGHR(ITRIA,K) = 0
+                      NEIGHR(ITRIA,L) = 0
 
-                    CALL GRNWPN(7)
-                    CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,J))),
-     .                         REAL(YCOORD(TRIA(ITRIA1,J))))
-                    CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,I))),
-     .                         REAL(YCOORD(TRIA(ITRIA1,I))))
-                    CALL GRJMP(REAL(XCOORD(TRIA(ITRIA,K))),
-     .                         REAL(YCOORD(TRIA(ITRIA,K))))
-                    CALL GRDRW(REAL(XCOORD(TRIA(ITRIA,L))),
-     .                         REAL(YCOORD(TRIA(ITRIA,L))))
-                    CALL GRNWPN(6)
-                    GOTO 13
-                  ENDIF !}
+                      NEIGHB(ITRIA1,I) = ITRIA
+                      NEIGHS(ITRIA1,I) = K
+                      NEIGHR(ITRIA1,I) = 0
+
+                     IF (NEIGHB(NTRIA,L).NE.0)
+     >                 NEIGHB(NEIGHB(NTRIA,L),NEIGHS(NTRIA,L)) = NTRIA
+
+                      CALL GRNWPN(7)
+                      CALL GRJMP(REAL(XCOORD(TRIA(ITRIA1,J))),
+     .                           REAL(YCOORD(TRIA(ITRIA1,J))))
+                      CALL GRDRW(REAL(XCOORD(TRIA(ITRIA1,I))),
+     .                           REAL(YCOORD(TRIA(ITRIA1,I))))
+                      CALL GRJMP(REAL(XCOORD(TRIA(ITRIA,K))),
+     .                           REAL(YCOORD(TRIA(ITRIA,K))))
+                      CALL GRDRW(REAL(XCOORD(TRIA(ITRIA,L))),
+     .                           REAL(YCOORD(TRIA(ITRIA,L))))
+                      CALL GRNWPN(6)
+                      GOTO 13
+                    ENDIF !}
                   end if !}
                   if(ldbg) then !{
                     print *,'neighr2',neighr(itria1,i),neighr(itria,k)
@@ -793,7 +793,7 @@ c but still have unindentified neighbors
                     NEIGHR(NTRIA,L) = 0
                     TRIX(NTRIA) = TRIX(ITRIA)
                     TRIY(NTRIA) = TRIY(ITRIA)
-    
+
                     TRIA(ITRIA,K) = TRIA(ITRIA1,J)
                     NEIGHB(ITRIA,K) = ITRIA1
                     NEIGHB(ITRIA,M) = NTRIA
@@ -801,12 +801,12 @@ c but still have unindentified neighbors
                     NEIGHS(ITRIA,M) = L
                     NEIGHR(ITRIA,K) = 0
                     NEIGHR(ITRIA,M) = 0
-    
+
                     NEIGHB(ITRIA1,I) = ITRIA
                     NEIGHS(ITRIA1,I) = K
                     NEIGHR(ITRIA1,I) = 0
 
-                    IF (NEIGHB(NTRIA,M).NE.0) 
+                    IF (NEIGHB(NTRIA,M).NE.0)
      >               NEIGHB(NEIGHB(NTRIA,M),NEIGHS(NTRIA,M)) = NTRIA
 
                     CALL GRNWPN(7)
@@ -846,7 +846,7 @@ C     CHECK COLINEARITY OF TWO MARGINS
 
 cxpb  We need to have not only (P1,P2) parallel to (Q1,Q2) but
 cxpb  also (P1,P2) shorter than (Q1,Q2)
- 
+
       tolx=tol*abs(xp1+xq1+xp2+xq2)/4.
       toly=tol*abs(yp1+yq1+yp2+yq2)/4.
       tol2=sqrt(tolx*toly)
@@ -871,7 +871,7 @@ cank  The segments must be not only parallel, but colinear {
       ENDIF
 cank }
 c DPC: additional constraint - (p1,p2) should be contained by (q1,q2)
-cank: need to introduce tolerance here, 
+cank: need to introduce tolerance here,
 c     otherwise some corners are not detected
 
       if(para) para=min(xp1,xp2)+tolx.ge.min(xq1,xq2)

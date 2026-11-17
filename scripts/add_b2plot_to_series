@@ -14,7 +14,7 @@
 #               second argument is the command file containing 
 #               the list of b2plot commands (see example in 
 #               $SOLPSTOP/scripts/commands) the local command 
-#               file will be used followed by (if absent) by
+#               file will be used followed (if absent) by
 #               the baserun one and then by the one in 
 #               $SOLPSTOP/scrits/commands
 #
@@ -110,6 +110,7 @@ then
   grep -E "series|run" $SFILE >"$AB2SER"
 else
   echo "required series file $SFILE is absent... aborting"
+  rm -rf $AB2SER $AB2CMD $MARK *.$TMP
   exit 1
 fi
 
@@ -141,9 +142,10 @@ while [ "$scount" -ge "$is" ]; do {
   then
     fchk=`cat $sname | wc -l`
     echo "fchk = $fchk"
-    [ ! "$fchk" = $((rcount+1)) ] && echo "Number of runs in data file $sname and series file $SFILE differ... aborting" && exit 1
+    [ ! "$fchk" = $((rcount+1)) ] && echo "Number of runs in data file $sname and series file $SFILE differ... aborting" && rm -rf $AB2SER $AB2CMD $MARK *.$TMP && exit 1
   else
     echo "No data file $sname, aborting..."
+    rm -rf $AB2SER $AB2CMD $MARK *.$TMP
     exit 1
   fi
   ic=1
@@ -169,7 +171,7 @@ while [ "$scount" -ge "$is" ]; do {
         echo "$cmd" | b2plot >b2pl.log 2>&1
         if [ "$B2PDIR"/"$CNAME" -nt "$STAMP" ]
 	then
-          val=`head -2 $B2PDIR/$cname | tail -1 | rev | cut -f 1 -d " " | rev`
+          val=`head -2 $B2PDIR/$cname | tail -1 | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | rev | cut -f 1 -d " " | rev`
 	  [ "$val" = "" ] && echo "ERROR command <"$cmd"> produced an empty file" && val="0.000000000000000E+000"
 	  [ ! "${val:0:1}" = "-" ] && val=" $val"
 	else
@@ -177,8 +179,8 @@ while [ "$scount" -ge "$is" ]; do {
 	  val=" 0.000000000000000E+000"
         fi
 	echo "  $val " >> "$GLOBCRT_DIR"/"$is"."$ic"."$TMP" 
-	echo "rm -rf b2pl.log"
-        rm -rf b2pl.log )
+	echo "rm -rf b2pl.log $STAMP"
+        rm -rf b2pl.log "$STAMP")
        let "ic=ic+1"
     }; done;
     let "ir=ir+1"

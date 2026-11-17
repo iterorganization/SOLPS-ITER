@@ -25,7 +25,7 @@ c*** Check the topology
       end do !}
       if(.not.ex) then !{
         write(0,*) 'Invalid topology name ( ',topo,') found in ',
-     ,        'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
+     ,   'uinbndrg - must be one of: ',(' ',topo_hlp(i),i=1,nt_hlp)
         call xerrab ('==> Check the topology name in the DG model')
       end if !}
       if(ln_cnfg) then  !{
@@ -235,8 +235,8 @@ c!###{
         print *
         do j=1,nrgbndt(k) !{
           print '(2i4,1x,a1,1x,6i4)',k,j,crgbndt(j,k),lrsbndt(j,k),
-     ,      lrpbndt(j,k,1),lrpbndt(j,k,2),lrrbndt(j,k,1),lrrbndt(j,k,2),
-     ,      lcmbndt(j,k)
+     ,      lrpbndt(j,k,1),lrpbndt(j,k,2),
+     ,      lrrbndt(j,k,1),lrrbndt(j,k,2),lcmbndt(j,k)
         end do !}
       end do !}
       print *

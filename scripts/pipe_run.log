@@ -2,7 +2,13 @@
 if ($?LAST10) then
   set FILE=run.log.last10
 else
-  if (-s run.log.gz) then
+  if (-s run.log.gz && -s run.log) then
+    if ("`find run.log -newer run.log.gz`" != "") then
+      set FILE=run.log
+    else
+      set FILE=run.log.gz
+    endif
+  else if (-s run.log.gz) then
     set FILE=run.log.gz
   else
     set FILE=run.log

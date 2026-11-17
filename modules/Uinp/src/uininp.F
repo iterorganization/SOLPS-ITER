@@ -29,7 +29,7 @@ c
       promp(2) = repeat(' ',8)
       fixkey=.false.
 c
-c*** Read the data from dg output
+c*** Read the data from DG output
 c
       write(*,*) '... opening uinput.trg'
       open(iunii,file='uinput.trg')

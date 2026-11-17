@@ -1,4 +1,16 @@
 \documentclass[a4paper,10pt]{report}
+\raggedbottom
+\makeatletter
+% Same as \raggedbottom, but with a large *finite* stretch instead of the
+% kernel default's infinite-order (.0001fil) one at the bottom of the page.
+% Finite stretch is still generous enough (bounded by \textheight, i.e. a
+% whole page) to absorb any real shortfall like \raggedbottom would, but
+% avoids tripping longtable's \vsplit "Infinite glue shrinkage found in box
+% being split" warning -- and, unlike \flushbottom (no bottom slack at all),
+% doesn't force every page to fill exactly, so it avoids the "Underfull
+% \vbox (badness 10000) ... \output is active" warnings \flushbottom caused.
+\def\@textbottom{\vskip \z@ \@plus \textheight\relax}
+\makeatother
 \usepackage{ifpdf}
 %% \newif\ifpdf
 %% \ifx\pdfoutput\undefined
@@ -28,7 +40,7 @@
 \usepackage{multicol}
 \usepackage{fancyvrb}
 \usepackage{listings}
-\usepackage{longtable}[=v4.13]
+\usepackage{longtable}
 \usepackage[scriptsize]{subfigure}
 \usepackage{amsmath}
 \usepackage{tocbibind}
@@ -179,7 +191,7 @@ and an excellent review of \SOLPSfour can be found in:
 Martine_Baelmans_-_Juelich_Report_1994.pdf .
 \end{verbatim}
 
-When referring to \SOLPSITER in scientific papers, please use \cite{WiesenPSI2014,BONNINPET15} and references therein. You will also find these references in the {\tt \$\{SOLPSTOP\}/doc} directory. For work involving {\tt Eirene}, also quote reference \cite{Reiter2005}.
+When referring to the open-source \SOLPSITER distribution in scientific papers, please use \cite{BONNIN2026}. For older code versions, cite \cite{WiesenPSI2014,BONNINPET15} and references therein. You will also find these references in the {\tt \$\{SOLPSTOP\}/doc} directory. For work involving {\tt Eirene}, also quote reference \cite{Reiter2005}.
 
 Several of the {\bf SOLPS4.2} features are detailed in {\tt Kotov\_SOLPS42\_Report.pdf}.
 
@@ -254,6 +266,8 @@ Since the user-id is immutably encoded into any changes, it is always a good ide
 
 ITER IDM account holders who have obtained {\tt REPO\_WRITE} permissions can, for their own development, create {\tt feature/[topic]}, {\tt bugfix/[topic]}, or {\tt hotfix/[topic]} branches and raise a "Pull Request" (\href{https://git.iter.org/projects/BND/repos/solps-iter/pull-requests}{https://git\allowbreak.iter.org/projects/BND\allowbreak/repos/solps-iter/pull-requests}) to have them merged into the {\tt develop} branch after pushing them back to the ITER repository. The {\tt develop}, {\tt master} and {\tt svn/*} branches are protected and can only be manipulated by the owners of the repository. For developers, please create a fork in which to make your own development, and then trigger a Pull Request using the relevant GitHub machinery.
 
+For new users, a dedicated repository with extensive SOLPS-ITER-related documentation, tutorials and tips is available as \href{https://github.com/iterorganization/SOLPS-Tutorials}{https://github.com/iterorganization/SOLPS-Tutorials}.
+
 Issues are handled using the {\tt Issues} and {\tt Discussions} tabs on the GitHub site. You should feel free to create new items associated with \SOLPSITER or any of its submodules if you have any problems or suggestions. Use the {\tt Issues} tab to report bugs or unwanted code behaviour, and the {\tt Discussions} tab to propose new features and allow for debate about whether and how to implement them. The community of \SOLPSITER users is expected to provide support to each other with the ITER Organization providing help as far as possible.
 
 For more general help with Git, we can recommend the documentation here (\href{http://git-scm.com/}{http://git-scm.com/}) and the Pro Git book (linked from there) in particular. Another useful resource for novice Git users is the tutorial from Codecademy available at \href{https://www.codecademy.com/learn/learn-git}{https://www.codecademy.com/learn/learn-git}.
@@ -300,7 +314,7 @@ To best use the \SOLPSITER code suite, the user will need, locally installed:
 \item[NCAR] plotting library (available from \href{https://www.ncl.ucar.edu/Download/}{https://www.ncl.ucar.edu/Download/})
 \item[GR] plotting library (optional, developed at FZ-J{\"u}lich, available as an open-source package at \href{https://github.com/iterorganization/GR-Software}{https://github.com/iterorganization/GR-Software})
 \item[GKS] graphical kernel library (available from \href{http://ngwww.ucar.edu}{http://ngwww.ucar.edu})
-\item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/})
+\item[HDF5] data storage library (available from \href{http://support.hdfgroup.org/HDF5/}{http://support.hdfgroup.org/HDF5/}). {\bf Note:} Do not use HDF5 version 1.14.3 as it contains a bug that will conflict with NetCDF file usage.
 \item[JSON] data storage library (Fortran version, available from \href{https://jacobwilliams.github.io/json-fortran/}{https://jacobwilliams.github.io/json-fortran/})
 \item[NetCDF]\index{netcdf} storage/archival library (optional) (available from \href{http://www.unidata.ucar.edu/netcdf/}{http://www.unidata.ucar.edu/netcdf/}) (\SOLPSITER needs at least version 4)
 \item[MSCL] utility library (available as an open-source package at \href{https://github.com/iterorganization/MSCL}{https://github.com/iterorganization/MSCL})
@@ -686,6 +700,11 @@ The various libraries required for the code to be fully operational need to be i
 > install_dependencies
 \end{verbatim}
 which will guide the user through all the required installation steps. The provided setup and configuration files already recognize the paths to the compiled libraries as automatically provided by the above script.\\
+Optionally, the entire suite of programs constituting the IMAS environment can be also locally installed, in a fully automatized way, by running the script
+\begin{verbatim}
+> install_imas
+\end{verbatim}
+As a result, the IMAS components will be loaded upon entering the \SOLPSITER environment, and full IMAS integration capabilities, such as reading/writing IMAS IDS, will be exploitable.\\
 The compilation of B2.5 and Eirene (both standalone and coupled versions) has been successfully tested. Both serial and parallelized versions of the code (OpenMP and MPI) can be built. All components (standalone B2.5 code, standalone Eirene code, coupled B2.5-Eirene code, DivGeo, Carre, Triang and Uinp) can be successfully compiled and used.
 
 \section{Before every \SOLPSITER session}
@@ -1766,7 +1785,8 @@ for the definitions of the regions and surfaces)\index{SOLPS\_FLUIDS}\index{NREG
   \item[grf]\index{grf} A more effective version of {\tt grep} when searching for use of a variable in the source code.
   \item[inspect\_plasmastate \#1]\index{inspect\_plasmastate} This script will return the plasma time stamp at which the {\tt plasmastate} savefile \#1 was written.
   \item[install\_dependencies]\index{install\_dependencies} This script locally downloads and installs all external dependencies needed to correctly compile and run \SOLPSITER, if not already present, in a fully automatized way. Additionally, if needed, it automatically appends the linking flags to the corresponding compiled binaries in a {\tt \$\{SOLPSTOP\}/SETUP/config.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file and in the corresponding configuration files of the various submodules. For local \SOLPSITER installations, all required external dependencies can be locally provided. For installations on HPC clusters, only the dependencies which may be missing are provided, namely the Blas/Lapack, NetCDF, NCARG, JSON-Fortran, MSCL, GKS, and GR libraries. Note that the NCARG library can be built only for cluster installations using a {\tt gfortran} compiler.
-  \item[install\_miniforge]\index{install\_miniforge} This script installs a \SOLPSITER-specific local Conda installation, based on {\tt miniforge}, located in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Such installation is required to obtain some external packages needed by the compilation of the code, namely Blas/Lapack, NetCDF and NCARG, using the {\tt install\_dependencies} script.
+  \item[install\_imas]\index{install\_imas} This script locally downloads and installs all relevant pieces of the IMAS environment (AL core library, data dictionary, data access libraries for Python, C++ and Fortran, GGD library, plus all needed dependencies) needed to fully exploit the \SOLPSITER capabilities within the IMAS environment. At the same time, it automatically appends the relevant paths into a {\tt \$\{SOLPSTOP\}/SETUP/setup.csh.\$\{HOST\_NAME\}.\$\{COMPILER\}.local} file, so that the IMAS environment results fully loaded upon entering the \SOLPSITER environment. The script only works on local hosts ({\bf LINUX} and {\bf DARWIN}).
+  \item[install\_miniforge]\index{install\_miniforge} This script installs a \SOLPSITER-specific local Conda installation, based on {\tt miniforge}, located in the {\tt \$\{SOLPSTOP\}/lib/\allowbreak\$\{HOST\_NAME\}.\allowbreak\$\{COMPILER\}} directory. Such installation is required to obtain some external packages needed by the compilation of the code when the local host is {\bf LINUX}, namely Blas/Lapack, NetCDF and NCARG, using the {\tt install\_dependencies} script, and to fully build a local IMAS environment using the {\tt install\_imas} script.
   \item[last\_2d]\index{last\_2d} Averaging script for {\tt tracing/*.trc}, {\tt b2time.nc} and {\tt b2tallies.nc} files. Averaging can be perfromed over the last {\tt N} iterations or last {\tt n} seconds. Writes raw output to {\tt last\_2d\_out} and formatted output to {\tt last\_2d\_out\_f}, the latter is governed by the {\tt last\_2d.cmd} file (default example of this file can be found in {\tt \$SOLPSTOP/scripts/commands}). Read the script header for further details.
   \item[lln]\index{lln} Lists the chain of symbolic links leading to a file.
   \item[lndr]\index{lndr} routine to generate shadow trees.
@@ -2532,7 +2552,7 @@ if ADAS datafiles were obtained by means of the {\tt fetch\_adas\_datafiles} scr
 \begin{verbatim}
 '8902' '8902' '8902' '8902' '8902' '8902' '8902' 'w '  'jett'
 \end{verbatim}
-The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP/modules} part of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas} or {\tt \$SOLPSTOP/data.local/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
+The syntax of the header line understands {\tt SOLPSTOP} to mean the current value of the {\tt \$SOLPSTOP} environment variable. The {\tt SOLPSTOP} or {\tt SOLPSTOP/modules} parts of the path can be skipped and will be added automatically by the code when searching for the ADAS datasets if the path provided was not absolute. Only the file path up to but not including the {\tt adf11/} directory should be included. If a dataset is not found in the provided path, the code will revert to the one stored in the default directory {\tt \$SOLPSTOP/modules/adas} or {\tt \$SOLPSTOP/data.local/adas}. The syntax of the tungsten data line contains seven four-digit numbers, one for each process ({\tt ycd} and {\tt zcd} must point to the same calculation, so only the latter appears in the file), followed by the name of the element and the label of the bundling scheme, all within single quotes. Each of the seven numbers is made up of the first two digits being the ADAS 'year' and the second set of two digits giving the 'partition level' of the bundling scheme being used for that process. A dataset containing all ions, unbundled, has partition level {\tt 01}. A bundle of ions will have partition level {\tt 02}. A bundle of bundles will have partition level {\tt 03}, and so on. The partition level appears in the dataset filename after the element name and before the bundling scheme label.
 
 The modified {\tt ratadas.filelist} file should be present in the {\tt baserun} directory from which {\tt b2ar} will be run. If this file is prepared before {\tt Uinp} is run, then the case build-up will assume that the indicated bundling scheme is to be used and create all appropriate input files accordingly. If one is introducing bundling to an existing case, then the recommended procedure is to use the {\tt b2yt} conversion program to modify all input files as needed. See the corresponding section~\ref{sec:b2yt} for the full details.
 
@@ -4552,8 +4572,8 @@ Example of the {\tt b2ydm.dat} file:\\
 \VerbatimInput[fontsize=\footnotesize]{b2ydm.dat}
 
 \newpage
-\section{b2\_ual\_write, writing last state to IDS}
-\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}
+\section{b2\_ual\_write, writing last state as an IMAS data entry}
+\label{sec:b2_ual_write}\index{b2\_ual\_write}\index{IDS, Interface Data Structues}\index{IMAS}
 
 The program can be run with one of the following
 \begin{verbatim}
@@ -4566,27 +4586,28 @@ or
 \end{verbatim}
 
 \begin{sloppypar}
-This program saves the final output state of a run into an IDS (Interface Data Structure). Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. If the current run being saved is a time continuation of the run already present in that IDS, then a new time slice is appended, otherwise the IDS is overwritten. If the existing IDS was written with an earlier Data Dictionary version, it is recreated with the current one.
+This program saves the final output state of a run into an IMAS data entry. Currently, it will populate the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, and {\tt summary} IDSs (Interface Data Structures). If using Data Dictionary version 3, the {\tt dataset\_description} IDS is also filled. If the current run being saved is a time continuation of the run already present in that IMAS data entry, then a new time slice is appended, otherwise the data entry is overwritten. If the existing data entry was written with an earlier Data Dictionary version, it is recreated with the current one.
 \end{sloppypar}
 
 \begin{sloppypar}\index{shotnumber.history}\index{IMASDIR}
 The program reads the {\tt b2mndr\_id*} switch group, defined in {\tt b2mn.dat}:
 \begin{itemize}
   \item {\tt b2mndr\_user} defines the user name and it is set by default to be the same as the {\tt USER} environment variable.
-  \item {\tt b2mndr\_database} defines the IMAS IDS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
+  \item {\tt b2mndr\_database} defines the IMAS database name and it is set by default to be the same as the {\tt DEVICE} environment variable. If {\tt DEVICE} has been left undefined, the default database name is {\tt 'solps-iter'}. If {\tt DEVICE} has been set to {\tt 'iter'}, the code internally modifies it to {\tt 'ITER'}, following the IMAS convention.
   \item {\tt b2mndr\_device}, superseded by {\tt b2mndr\_database}.
-  \item {\tt b2mndr\_ids\_path} defines the path to the IDS being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
+  \item {\tt b2mndr\_ids\_path} defines the path to the IMAS data entry being saved. May or may not contain the environment variable {\tt IMASDIR} as prefix. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Only available when using IMAS Access Layer 5. If it starts with a {\tt /} character and does not contain {\tt IMASDIR}, it is understood to be an absolute path.
   \item {\tt b2mndr\_pulse\_number} defines the pulse (in Access Layer 5) or shot (in Access Layer 4) number. If not provided, it is read from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
   \item {\tt b2mndr\_shot\_number}, superseded by {\tt b2mndr\_pulse\_number}.
   \item {\tt b2mndr\_run\_number} defines the run number. If not provided, it is deduced from the last line of the {\tt shotnumber.history} file. Superseded by {\tt b2mndr\_ids\_path}.
+  \item {\tt b2mndr\_ids\_backend} provides the backend to be used. Only available for use with Access Layer 5 (for which the default is {\tt 'hdf5'}). When using Access Layer 4, the backend used will be {\tt 'mdsplus'}.
 \end{itemize}
-These switches are used as identification parameters for the IDS. Afterwards, a
-{\tt b2mn} run is initialized but {\em not} started, so that the final
-output state data is read. Then the data is written to an IDS, with the
-{\tt b2mndr\_id*} switchgroup used as identification descriptors.
+These switches are used as identification parameters for the IMAS data entry.
+ Afterwards, a {\tt b2mn} run is initialized but {\em not} started, so that
+ the final output state data is read. Then the data is written to IDSs, with
+ the {\tt b2mndr\_id*} switchgroup used as identification descriptors.
 \end{sloppypar}
 
-It is possible to replace (or supplement) the IDS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
+It is possible to replace (or supplement) the IMAS switch settings coming from the {\tt b2mn.dat} file by using the command line {\tt -o} option, with the following syntax:
 \begin{verbatim}
   b2run -o "-s 123456 -r 1" b2_ual_write
 \end{verbatim}
@@ -4597,7 +4618,8 @@ which will recognize, within the quotes following the {\tt -o} additional option
   \item {\tt -r}, {\tt --run} The run number (superseded by {\tt --path}). If used, must be positive or zero.
   \item {\tt -u}, {\tt --user} The user name (default is {\tt USER}).
   \item {\tt -d}, {\tt --database}, {\tt --device} The IMAS database name (default is {\tt DEVICE}, if set, or {\tt 'solps-iter'} otherwise).
-  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt 3}).
+  \item {\tt -b}, {\tt --backend} The backend to be used. For Access Layer 5 only (default is {\tt 'hdf5'}).
+  \item {\tt -v}, {\tt --version} The IMAS version to be used (default is {\tt IMAS\_MAJOR\_VERSION}).
 \end{itemize}
 
 Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 4) and run numbers, the following rules are in effect. If not using IMAS Access Layer 5, the shot number must a six digit number between 1 and 214748. ITER pulse or shot numbers shall start with a 1, the second digit represents the majority fuelling species (0:H, 1:He, 2:D, 3:D-T, 4:T, 5:others, the sequence reflecting the order in which fuel gases are expected to be used in the ITER Research Plan), and the last four digits identify the simulation. Because multiple codes are all writing to the same database and we want to avoid clashes, different "slices" of numbers have been assigned for various codes. We will use numbers {\tt 1x2000} to {\tt 1x2999} for transferring existing simulations from the {\bf SOLPS 4.3} database to IMAS, and {\tt 1x3000} to {\tt 1x3499} for new \SOLPSITER cases. Run numbers should start at 1, and be incremented every time a new version of the same simulation (say after a re-run because a bug in the code was fixed) is being stored in the archive. When changing important run parameters such as gas puffing rates, turning on drifts, etc..., a new pulse or shot number should be used. If intending to publish the IMAS data entry in the IO database, please send an email to the IO code Responsible Officer ({\tt Xavier.Bonnin@iter.org}), when you wish to assign a new shot number, as the IO will keep track of those already used. IMPORTANT: {\em When publishing SOLPS-ITER results with IO co-authors involved, archiving into the public IMAS database of the simulations on which the published work is based is mandatory.}
@@ -4606,7 +4628,7 @@ Concerning the assignment of pulse (in Access Layer 5) or shot (in Access Layer 
 With Access Layer 5, the IMAS data entries will be written in the directory with absolute location given by {\tt path}, with the prefix {\tt \$IMASDIR/} if it was not provided. {\tt IMASDIR} should be set as part of the local environment variables in a {\tt setup.csh.local} file. Otherwise, it will be of the form {\tt <path\_to\_user\_public\_directory>/imasdb/\$\{database\}/\$\{version\}}. The {\tt user}, {\tt database}, or {\tt version} input flags allow to overwrite their default values in the {\tt IMASDIR} path. The {\tt path} may also contain {\tt \$HOME}, {\tt \$IMASDIR}, or {\tt \$SOLPSTOP}, which will be parsed by the code.
 \end{sloppypar}
 
-After the IDS files are created, if using IMAS Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
+After the IMAS files are created, if using Access Layer 3 or 4, one should also run the {\tt create\_db\_entry} script, with the syntax:
 \begin{verbatim}
 create_db_entry [-u USER] [-d DATABASE] -s SHOT -r RUN
 \end{verbatim}
@@ -4618,7 +4640,7 @@ ingest_simulation_to_SimDB [REMOTE]
 \end{verbatim}
 where {\tt [REMOTE]} is the name of the remote SimDB server where the run is to be pushed. It must be provided if more than one SimDB remotes are declared, but is otherwise optional. Please refer to the SimDB documentation at \href{https://simdb.readthedocs.io/en/stable}{https://simdb.readthedocs.io/} for more details.
 
-\subsection{b2\_ual\_rewrite, rewriting an existing IDS}
+\subsection{b2\_ual\_rewrite, rewriting an existing IMAS data entry}
 \label{sec:b2_ual_rewrite}\index{b2\_ual\_rewrite}
 
 The program can be run with one of the following
@@ -4632,7 +4654,7 @@ or
 \end{verbatim}
 
 \begin{sloppypar}
-This program rewrites an existing IDS in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, {\tt dataset\_description}, and {\tt summary} data structures. It uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IDS rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in the IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IDS will also indicate which old run it is replacing. The new run number must be larger than the old one.
+This program rewrites an existing IMAS data entry in case a correction needs to be made (because of a bug fix, for instance). It will rewrite the {\tt edge\_profiles}, {\tt edge\_transport}, {\tt edge\_sources}, {\tt radiation}, {\tt divertors}, and {\tt summary} data structures. If using IMAS Data Dictionary version 3, the {\tt dataset\_description} IDS is also filled. The program uses the same inputs as {\tt b2\_ual\_write}. In addition, one can have the IMAS data entry rewritten with a new run number, by means of the optional {\tt -n \it new\_run\_number} argument. Only the last time slice present in an IDS can be rewritten in this way, and data from older time slices will be lost. If a new run number is specified, the {\tt .yaml} file of the old run number will be modified to indicate that it is now obsolete and replaced by the new run number, and the {\tt .yaml} file for the new IMAS data entry will also indicate which old run it is replacing. The new run number must be larger than the old one.
 \end{sloppypar}
 
 \newpage
@@ -4915,10 +4937,8 @@ If only the {\tt input.dat} file is present (or is used), {\tt Eirene} will tran
 
 \section{Input files}
 
-Below are given the input files used for the {\tt D+C+He} benchmark
-case that can be found on the SVN server. These files can be found in the {\em Examples} folder in the \SOLPSITER SharePoint
-web site
-(\href{https://sharepoint.iter.org/departments/POP/CM/IMAS/SOLPS-ITER}{\allowbreak https://sharepoint.iter.org/departments\allowbreak/POP/CM/IMAS/SOLPS-ITER}), or directly among the examples provided in {\tt \$\{SOLPSTOP\}/runs/examples}, as part of the {\tt AUG\_16151\_D+C+He} case.
+Below are given the input files used for the structured {\tt D+C+He} AUG benchmark
+case that can be found on the among the {\tt SOLPS-ITER 3.0.10a examples} record provided on the Zenodo server at \href{https://www.zenodo.org/communities/solps}{https://www.zenodo.org/communities/solps}. These files can be found as part of the {\tt AUG\_16151\_D+C+He} case.
 
 \subsection{b2ag.dat}
 \index{b2ag.dat, D+C+He example}
@@ -7433,7 +7453,12 @@ and then the boundary condition would require a plasma flow exiting the plate.
 Therefore, the pitch angle at the plates is limited to be no less than
 1 degree (user parameter, see switch {\tt b2agfs\_min\_pitch} in Appendix~\ref{lis:b2cdci}),
 motivated by the engineering limits met when attempting to align the
-divertor tiles with the magnetic field. The solution procedure of the code
+divertor tiles with the magnetic field. This is done in {\tt b2ag} by
+moving target vertices along the flux surfaces, without modifying the
+magnetic field and without making any cell non-convex
+(switch {\tt b2ag\_convexity\_tol}); where these constraints
+do not allow the minimum pitch to be reached, a warning is printed and
+the largest attainable pitch is used. The solution procedure of the code
 was also modified so as ensure that no unphysical flows were being created,
 and solves the parallel momentum equation using the updated electric potential.
 
@@ -17498,7 +17523,7 @@ when calculating derived data.
     ni       & \index{b2plot, ni} Total density $(m^{-3})$ (\SOLPSfive and \SOLPSITER runs) \\
     ni       & \index{b2plot, ni} Ion density $(m^{-3})$ (\SOLPSfour runs) \\
     ni0      & \index{b2plot, ni0} Density {\em ni} at previous time step $(m^{-3})$ \\
-    niso     & \index{b2plot, niso} Isolating region number \\
+    niso     & \index{b2plot, niso} Isolated region number \\
     nreg     & \index{b2plot, nreg} Region number \\
     nua      & \index{b2plot, nua} Total collision frequency $(s^{-1})$ \\
     nuab     & \index{b2plot, nuab} Two species collision frequency $(s^{-1})$ \\
@@ -21116,6 +21141,7 @@ Additionally, system-wide compiler flags can be provided by means of the
 \item[AL\_MAJOR\_VERSION] \index{AL\_MAJOR\_VERSION} Major version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[AL\_MICRO\_VERSION] \index{AL\_MICRO\_VERSION} Micro version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
 \item[AL\_MINOR\_VERSION] \index{AL\_MINOR\_VERSION} Minor version number of the AL (IMAS Access Layer) library to which the code is linked (set internally by the configuration files)
+\item[\_\_APPLE\_\_] \index{\_\_APPLE\_\_} Automatically defined by the pre-processor when compiling on macOS devices; used to guard code expressions that are not compatible with the Darwin UNIX system
 \item[CATALYST] \index{CATALYST} Turns on the Paraview Catalyst utility (see the SOLPS-GUI manual for full details)
 \item[DIMENSIONS\_MODULE] \index{DIMENSIONS\_MODULE} Indicates whether the \SOLPSITER version is one that uses a {\tt b2mod\_dimensions.F} module file instead of the {\tt DIMENSIONS.F} include file (set internally by the configuration files)
 \item[COMPILER\_MAJOR\_VERSION] \index{COMPILER\_MAJOR\_VERSION} Major version number of the compiler being used (set internally by the configuration files)
@@ -21423,6 +21449,7 @@ AL\_MAJOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MINOR\_VERSION & ids/b2mod\_ual.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io.F90 \\
 AL\_MAJOR\_VERSION & ids/b2mod\_ual\_io\_grid.F90 \\
+\_\_APPLE\_\_ & driver/b2mod\_driver.F \\
 ALLOCATE\_AND\_NAMELIST & b2plot/init\_wall.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_boundary\_namelist.F \\
 ALLOCATE\_AND\_NAMELIST & modules/b2mod\_input\_profile.F \\

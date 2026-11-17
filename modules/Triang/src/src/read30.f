@@ -18,6 +18,9 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       character*44 format_string(2)
       integer, save :: new_format, exp_location
 
+      logical streql
+      external streql
+
       data new_format/1/
       data format_string/
      . '(T2,1E15.7,T17,1E15.7,T32,1E15.7,T47,1E15.7)',
@@ -50,17 +53,18 @@ C     READ PHYSICAL COORDINATES FROM FORT.30 FILE TO XCOORD, YCOORD
       else
         read(30,*)
       endif
-      if (nncut.gt.2) then
-        read(30,*) nniso
+      read(30,'(a80)') line
+      if (.not.streql(line,' ')) then
+        read(line,*) nniso
         allocate(nxiso1(0:nniso))
         allocate(nxiso2(0:nniso))
         allocate(nyiso1(0:nniso))
         allocate(nyiso2(0:nniso))
         read(30,*) (nxiso1(i),nxiso2(i),nyiso1(i),nyiso2(i),i=1,nniso)
+        read(30,*)
       else
         nniso = 0
       endif
-      read(30,*)
       read (30,'(A80)') line
       exp_location = 81
       write(*,'(A80)') line
