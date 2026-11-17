@@ -562,6 +562,32 @@ def test_catalog_build_skips_an_unreadable_baserun(
     assert "no shared base deck" in fam_pg
 
 
+def test_catalog_build_prints_one_line_per_case(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The long-build visibility rule: the manifests stage prints ONE
+    line per case as work on it starts — group-qualified, with a
+    running counter over the known total.  A build stuck on a heavy
+    case shows exactly where it stopped."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.chdir(tmp_path)
+    cat = _catalog_copy(tmp_path)
+    root = tmp_path / "myruns"
+    _write_run(root / "SYNTH1_demo", "run1")
+    _write_run(root / "SYNTH2_more", "run2")
+
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(root), "--catalog", str(cat)])
+    out = capfd.readouterr().out
+    assert rc == 0
+    assert "case 1/2: myruns/SYNTH1_demo/run1" in out
+    assert "case 2/2: myruns/SYNTH2_more/run2" in out
+    # one line per case, never more
+    case_lines = [ln for ln in out.splitlines()
+                  if ln.startswith("case ")]
+    assert len(case_lines) == 2
+
+
 def test_catalog_build_is_deterministic(
         checkout_factory, tmp_path: Path, monkeypatch, capsys) -> None:
     monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))

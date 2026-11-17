@@ -924,12 +924,21 @@ def main(argv: list[str] | None = None) -> int:
     cache_note_shown = False
     used_fps: set[str] = set()
     written: set[str] = set()
-    for g in ok_groups:
-        runs = find_run_dirs(g["path"])
+    # per-case progress (field feedback: hundreds of cases make the
+    # manifests stage long and silent): ONE printed line per case, at
+    # the moment work on it starts, naming it group-qualified with a
+    # running counter — a stuck build shows exactly where it stopped
+    group_runs = [(g, find_run_dirs(g["path"])) for g in ok_groups]
+    for g, runs in group_runs:
         if g["slug"] == runs_source.EXAMPLES_SLUG:
             EXAMPLES = g["path"]
+    n_total = sum(len(runs) for _g, runs in group_runs)
+    n_seen = 0
+    for g, runs in group_runs:
         for run_dir in runs:
+            n_seen += 1
             name = f"{g['slug']}/{run_dir.relative_to(g['path'])}"
+            print(f"case {n_seen}/{n_total}: {name}")
             try:
                 fp = analysis_fingerprint(run_dir, g["path"])
                 used_fps.add(fp)
