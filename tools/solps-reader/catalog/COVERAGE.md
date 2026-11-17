@@ -69,6 +69,21 @@ skipped everywhere (the manifest's own stability rule).
 | `structure.dat`, `rzpsi.dat`, `frontier.dat`, `btor.dat`, `.na_feedback` | — | — | omitted: auxiliary machine inputs; inventory + md5 only |
 | scripts & docs: `Makefile`, `*.py`, `*.scr`, `README.md`, `COMMENTS`, `ACKNOWLEDGEMENT`, `Instructions.*` | — | — | omitted: family tooling and prose; they live in the repository, not a run catalog |
 
+## Legacy compatibility names
+
+Older SOLPS versions and shared databases carry optional
+compatibility names beside the current ones.  None of them is
+consumed by either tier; presence and absence are both silent
+(`b2.log`/`b2.log.gz` are symlinks to `run.log`/`run.log.gz`; either
+name satisfies the solver family — the same content under a legacy
+name changes nothing here).
+
+| File | Consumed by | Derived into | Displayed |
+|---|---|---|---|
+| `b2.log`, `b2.log.gz` (symlinks to `run.log`/`run.log.gz`) | — | — | omitted: `legacy-log`; the content follows the current name's rule, the link itself is provenance |
+| `fort.21`, `fort.22` | — | — | omitted: `legacy-input`; superseded transport inputs kept for backward compatibility; inventory + md5 only |
+| `H2VIBR`, `AMMONX`, `HYDHEL`, `METHANE`, `SPUTER` | — | — | omitted: `legacy-input`; optional EIRENE namelist files the family may link in; inventory + md5 only |
+
 ## Machine-readable rules
 
 The suite test reads THIS block (single source; the table above is
@@ -80,7 +95,8 @@ Each rule name maps to the prose above: `b2time`, `b2fstate`,
 tables); `monitor-tail`, `trace`, `ps-snapshot`, `fort-block`,
 `stream`, `bookkeeping`, `deck-machinery`, `parameters`,
 `grid-input`, `plasmastate`, `aux-input`, `family-tooling`,
-`eirene-input`, `wall-def`, `eirene-derived` are omitted-with-reason;
+`eirene-input`, `wall-def`, `eirene-derived`, `legacy-log`,
+`legacy-input` are omitted-with-reason;
 `iterate`, `sidecar`, `junk` follow the base-file / skip rules.
 
 ```json coverage-rules
@@ -90,6 +106,14 @@ tables); `monitor-tail`, `trace`, `ps-snapshot`, `fort-block`,
   {"pattern": "*.i",                              "rule": "iterate"},
   {"pattern": "*_[0-9]",                          "rule": "iterate"},
   {"pattern": "run.log*",                         "rule": "bookkeeping"},
+  {"pattern": "b2.log*",                          "rule": "legacy-log"},
+  {"pattern": "fort.21",                          "rule": "legacy-input"},
+  {"pattern": "fort.22",                          "rule": "legacy-input"},
+  {"pattern": "H2VIBR",                           "rule": "legacy-input"},
+  {"pattern": "AMMONX",                           "rule": "legacy-input"},
+  {"pattern": "HYDHEL",                           "rule": "legacy-input"},
+  {"pattern": "METHANE",                          "rule": "legacy-input"},
+  {"pattern": "SPUTER",                           "rule": "legacy-input"},
   {"pattern": "b2time.nc*",                       "rule": "b2time"},
   {"pattern": "b2fstate*",                        "rule": "b2fstate"},
   {"pattern": "b2fplasma*",                       "rule": "b2fplasma"},

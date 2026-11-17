@@ -66,3 +66,20 @@ def test_every_rule_name_is_explained_in_the_prose() -> None:
         assert r["rule"] in prose or r["rule"] in (
             "iterate", "sidecar", "junk"), (
             f"rule {r['rule']!r} has no prose explanation")
+
+
+def test_legacy_compatibility_names_are_ruled_on() -> None:
+    """The reviewer's field list: the legacy log symlinks and the
+    optional compatibility inputs must never look like a miss when a
+    database carries them — absence is silent, presence stays ruled
+    (the whole list, including the names today's globs happen to
+    cover: a future glob narrowing must not reopen the hole)."""
+    rules = _rules()
+    names = ["b2.log", "b2.log.gz", "fort.21", "fort.22", "fort.33",
+             "fort.34", "fort.35", "H2VIBR", "AMMONX", "HYDHEL",
+             "METHANE", "SPUTER", "param.dg", "uinput.dg",
+             "uinput.trg", "dg.trg", "dg.dgo", "dg.equ", "dg.str"]
+    unruly = [n for n in names
+              if not any(fnmatch.fnmatchcase(n, r["pattern"])
+                         for r in rules)]
+    assert not unruly, f"legacy names without a rule: {unruly}"
