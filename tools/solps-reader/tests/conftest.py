@@ -71,9 +71,14 @@ def _clean_catalog_root(monkeypatch):
     """Catalog-root hygiene for every test: no process-level override
     and no environment redirect survive INTO a test (the --home flag
     sets a process-level override; one test's redirect must never
-    seat another test's catalog)."""
+    seat another test's catalog), no builders-tree environment var
+    leaks in, and the recorded-tree rung stays neutral unless a test
+    arms it (the real machine's record must never resolve a test's
+    tree)."""
     from solps_reader import catalog_sources
     catalog_sources.set_catalog_root(None)
     monkeypatch.delenv(catalog_sources.CATALOG_HOME_ENV, raising=False)
+    monkeypatch.delenv("SOLPS_READER_CATALOG", raising=False)
+    monkeypatch.setattr(catalog_sources, "recorded_tree", lambda: None)
     yield
     catalog_sources.set_catalog_root(None)

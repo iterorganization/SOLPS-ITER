@@ -373,3 +373,83 @@ def test_recorded_pairs_dedupes_the_reference_pair(tmp_path: Path) -> None:
     src.add_comparison(path, ref["b"], ref["a"])
     assert build_diff_decks.recorded_pairs(path, ex_ok) == [
         {"a": ref["b"], "b": ref["a"]}]
+
+
+# --------------------------------------- the field shape: paths + the tree
+
+def test_compare_refuses_filesystem_paths(
+        tmp_path: Path, monkeypatch, capfd) -> None:
+    """The field poisoning shape: a folder path was once recorded as
+    a run name and no build could ever resolve it.  Every path-shaped
+    selector (existing, absolute, or relative-prefix) is refused with
+    the two-step remedy; nothing is recorded."""
+    monkeypatch.setattr(Path, "home", lambda: _home(tmp_path))
+    monkeypatch.chdir(tmp_path)
+    run = tmp_path / "iter" / "2496" / "run5"
+    run.mkdir(parents=True)
+    bad_pairs = (
+        (str(run), "alpha/FAM/run2"),
+        (str(tmp_path / "no" / "such" / "dir"), "alpha/FAM/run2"),
+        ("./iter/2496/run5", "alpha/FAM/run2"),
+    )
+    for a, b in bad_pairs:
+        rc = cli.main(["catalog", "compare", a, b, "--no-build"])
+        captured = capfd.readouterr()
+        assert rc == 2, (a, captured.err)
+        assert "looks like a filesystem path" in captured.err
+        assert "catalog add" in captured.err
+    assert src.load(src.sources_path())["comparisons"] == []
+
+
+def test_compare_records_nothing_when_the_tree_cannot_be_found(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The ordering rule: the builders tree resolves BEFORE anything
+    is recorded.  A compare that would build refuses on the missing
+    tree with the plain-language remedy and leaves zero comparisons
+    behind (the field shape left a recorded path plus a failed
+    build)."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: _home(tmp_path))
+    monkeypatch.chdir(tmp_path)      # no catalog tree anywhere near
+    with pytest.raises(SystemExit) as ei:
+        cli.main(["catalog", "compare", "a/FAM/run1", "b/FAM/run1"])
+    assert ei.value.code == 2
+    captured = capfd.readouterr()
+    assert "catalog tree not found" in captured.err
+    assert "repository clone" in captured.err
+    assert "'solps-reader setup' once" in captured.err
+    assert src.load(src.sources_path())["comparisons"] == []
+
+
+def test_setup_records_the_tree_and_the_ladder_follows(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """Setup, run once from the package folder, records the builders
+    tree under the catalog home; the tree ladder then resolves it
+    from an unrelated directory (the recorded rung)."""
+    import argparse
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: _home(tmp_path))
+    pkg = tmp_path / "pkg"
+    (pkg / "catalog").mkdir(parents=True)
+    (pkg / "catalog" / "build_catalog.py").write_text("", encoding="utf-8")
+    monkeypatch.chdir(pkg)
+
+    assert cli.main(["setup"]) == 0
+    out = capfd.readouterr().out
+    assert "catalog builders recorded" in out
+    record = src.catalog_root() / "catalog-tree"
+    assert record.is_file()
+    # the first rung that holds the builders wins: beside this install
+    # (editable installs record the real checkout) or under the launch
+    # directory (pip installs record the clone they were run from)
+    here_tree = Path(cli.__file__).resolve().parents[2] / "catalog"
+    expected = (here_tree if (here_tree / "build_catalog.py").is_file()
+                else pkg / "catalog").resolve()
+    assert Path(record.read_text(encoding="utf-8").strip()) == expected
+
+    # from an unrelated directory the recorded rung resolves the tree
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        src, "recorded_tree", lambda: (pkg / "catalog").resolve())
+    tree = cli._catalog_tree(argparse.ArgumentParser(), None)
+    assert tree == (pkg / "catalog").resolve()

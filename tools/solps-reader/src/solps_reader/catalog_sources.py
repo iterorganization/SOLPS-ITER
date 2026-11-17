@@ -99,6 +99,37 @@ def sources_path(home: Path | None = None) -> Path:
     return catalog_root(home) / "sources.json"
 
 
+#: the builders tree's recorded location, one absolute path under
+#: the catalog root; the verbs' last-resort rung so they work from
+#: any directory after one setup (the same doctrine as the recorded
+#: repos root)
+_TREE_RECORD = "catalog-tree"
+
+
+def recorded_tree() -> Path | None:
+    """The catalog tree ``setup`` recorded (the builders folder
+    inside the package checkout).  None when never recorded or the
+    record went stale (the folder no longer holds the builders)."""
+    try:
+        line = (catalog_root() / _TREE_RECORD).read_text(
+            encoding="utf-8").strip()
+    except OSError:
+        return None
+    tree = Path(line)
+    return tree if (tree / "build_catalog.py").is_file() else None
+
+
+def record_tree(tree: Path) -> None:
+    """Record the catalog tree location (setup does this once when
+    the tree stands beside the install or under the launch
+    directory); one absolute path, written atomically."""
+    root = catalog_root()
+    root.mkdir(parents=True, exist_ok=True)
+    tmp = root / (_TREE_RECORD + ".tmp")
+    tmp.write_text(str(Path(tree).resolve()) + "\n", encoding="utf-8")
+    tmp.replace(root / _TREE_RECORD)
+
+
 def slugify(label: str) -> str:
     """The group's address slug: lowercase, ``[a-z0-9-]``, runs of
     non-address characters folded to one dash."""
@@ -304,11 +335,25 @@ def add_comparison(path: Path | None, a: str, b: str) -> dict:
     (``archive/ITER_2275/run_x``); existence is NOT checked here —
     runs come and go, the BUILD names a skip for a comparison whose
     runs no group provides (the honest-absence pattern).  A pair is
-    recorded once regardless of order."""
+    recorded once regardless of order.  A filesystem PATH is refused
+    with the two-step remedy (the field poisoning shape: a path was
+    once recorded as a name and no build could ever resolve it)."""
     for side in (a, b):
+        p = Path(side)
+        # absolute paths and explicit relative-path spellings are the
+        # field failure shape; a bare group/family/run name is never
+        # refused here even when a like-named folder happens to sit
+        # beside the working directory (the name IS the address)
+        if p.is_absolute() or side.startswith(("./", "../")):
+            raise SourcesError(
+                f"error: {side!r} looks like a filesystem path; compare "
+                "takes the group-qualified run names the site shows "
+                "(group/family/run) - 'solps-reader catalog add <runs "
+                "folder>' first, 'solps-reader catalog build' once, then "
+                "compare by the names the landing shows")
         if "/" not in side:
             raise SourcesError(
-                f"error: {side!r} is not a group-qualified run name — "
+                f"error: {side!r} is not a group-qualified run name - "
                 "name both sides as group/family/run, exactly as the "
                 "site shows them")
     if a == b:

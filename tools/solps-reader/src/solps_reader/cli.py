@@ -414,8 +414,9 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
     build.add_argument(
         "--catalog", metavar="PATH", default=None,
         help="the catalog tree holding the builders (default: "
-             "$SOLPS_READER_CATALOG, ./catalog, or the launch directory "
-             "itself when it is the catalog tree)",
+             "$SOLPS_READER_CATALOG, ./catalog under the launch "
+             "directory, the launch directory itself when it is the "
+             "catalog tree, or the tree your setup recorded)",
     )
     add = commands.add_parser(
         "add", parents=[catalog_home],
@@ -508,9 +509,11 @@ def _catalog_tree(parser: argparse.ArgumentParser,
     """Locate the catalog tree (the directory holding build_catalog.py).
 
     Ladder: the --catalog path > $SOLPS_READER_CATALOG > ./catalog
-    under the launch directory > the launch directory itself.  The
-    builders are repo-folder content, so the tree is found where the
-    package checkout lives — never inside an installed site-packages.
+    under the launch directory > the launch directory itself > the
+    tree setup recorded.  The builders are repo-folder content, so
+    the tree is found where the package checkout lives — never inside
+    an installed site-packages; the recorded rung makes the verbs
+    work from any directory after one setup.
     """
     candidates: list[tuple[str, Path]] = []
     if explicit:
@@ -522,14 +525,20 @@ def _catalog_tree(parser: argparse.ArgumentParser,
     cwd = Path.cwd()
     candidates.append(("./catalog under the launch directory", cwd / "catalog"))
     candidates.append(("the launch directory itself", cwd))
+    recorded = catalog_sources.recorded_tree()
+    if recorded is not None:
+        candidates.append(("the tree setup recorded", recorded))
     for via, cand in candidates:
         if (cand / "build_catalog.py").is_file():
             return cand
     tried = "\n".join(f"  - {v}: {c}" for v, c in candidates)
     parser.exit(2, "solps-reader: catalog tree not found (no "
                    "build_catalog.py beside it); tried:\n" + tried +
-                   "\nrun from the package checkout, or pass --catalog / "
-                   "set $SOLPS_READER_CATALOG\n")
+                   "\nthe catalog tree is the catalog/ folder inside the "
+                   "solps-reader repository clone (it holds the builder "
+                   "scripts). Run the command from that folder, pass "
+                   "--catalog PATH, or run 'solps-reader setup' once "
+                   "from the folder to record its location\n")
 
 
 def _run_catalog_build(parser: argparse.ArgumentParser,
@@ -777,8 +786,13 @@ def _run_catalog_compare(args: argparse.Namespace,
     """The compare verb: record (or remove) an A/B pair — pure
     share-file work, ungated like the other group verbs — then, unless
     --no-build, rebuild through the gated path so the pair's deck and
-    page land in the same command."""
+    page land in the same command.  The builders tree and the floor
+    resolve BEFORE anything is recorded: a failure must never leave a
+    half-recorded comparison behind (the field poisoning shape)."""
     path = catalog_sources.sources_path()
+    if not args.remove and not args.no_build:
+        _catalog_tree(parser, None)
+        _gate_floor()
     try:
         if args.remove:
             entry = catalog_sources.remove_comparison(path, args.a, args.b)
@@ -793,7 +807,6 @@ def _run_catalog_compare(args: argparse.Namespace,
     if args.no_build:
         print("next: solps-reader catalog build")
         return 0
-    _gate_floor()
     build_args = argparse.Namespace(
         family="catalog", command="build", runs=None, no_examples=False,
         in_tree=False, force=False, prune_cache=False, catalog=None)
@@ -828,6 +841,18 @@ def _run_setup(args: argparse.Namespace) -> int:
     # back (the same doctrine as the askthedocs setup): the floor and
     # the runs ladder resolve the checkout from any directory
     floor.record_root(report.root)
+    # the builders tree's recorded location, same doctrine: setup run
+    # from the package folder once lets every catalog verb resolve
+    # the tree from any directory afterwards
+    here = Path(__file__).resolve().parents[2] / "catalog"
+    for via, cand in (("beside this install", here),
+                      ("./catalog under the launch directory",
+                       Path.cwd() / "catalog"),
+                      ("the launch directory itself", Path.cwd())):
+        if (cand / "build_catalog.py").is_file():
+            catalog_sources.record_tree(cand)
+            print(f"catalog builders recorded: {cand} ({via})")
+            break
 
     catalog_root = Path(__file__).resolve().parents[2] / "catalog" / "out"
     index_path = catalog_root / "index.json"

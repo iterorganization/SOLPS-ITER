@@ -745,7 +745,7 @@ solps-reader catalog build [options]
 | `--in-tree` | no | write into the catalog tree's own out/ beside the builders: the maintainer's bump path; user builds seat in the per-user share | not used |
 | `--force` | no | recompute every run's analysis, bypassing the cache (outputs stay byte-identical either way) | not used |
 | `--prune-cache` | no | after a successful build, drop cache entries it did not reference (orphans are kept by default) | not used |
-| `--catalog PATH` | no | the catalog tree holding the builders (default: $SOLPS_READER_CATALOG, ./catalog, or the launch directory itself when it is the catalog tree) | not used |
+| `--catalog PATH` | no | the catalog tree holding the builders (default: $SOLPS_READER_CATALOG, ./catalog, the launch directory when it is the catalog tree, or the tree your setup recorded) | not used |
 ```bash
 # worked example: build the site for both groups, the examples, and the recorded pair
 $ .venv/bin/solps-reader catalog build
