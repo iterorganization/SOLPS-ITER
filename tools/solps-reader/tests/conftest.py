@@ -36,13 +36,15 @@ INITIALIZABLE = ("modules/B2.5", "modules/Carre", "modules/DivGeo",
 
 
 def make_checkout(tmp: Path, *, base: str = "repos",
+                  iter_name: str = "SOLPS-ITER",
                   uninitialized: frozenset[str] = frozenset(),
                   optional: tuple[str, ...] = ()) -> Path:
-    """A synthetic repos root: SOLPS-ITER shaped like a checkout, with
-    every initializable submodule initialized except *uninitialized*;
-    the optional legs named in *optional* exist beside it."""
+    """A synthetic repos root: a checkout shaped like SOLPS-ITER (named
+    *iter_name* — a clone may carry any name), with every
+    initializable submodule initialized except *uninitialized*; the
+    optional legs named in *optional* exist beside it."""
     root = tmp / base
-    iter_repo = root / "SOLPS-ITER"
+    iter_repo = root / iter_name
     (iter_repo / "modules").mkdir(parents=True)
     (iter_repo / ".gitmodules").write_text(GITMODULES, encoding="utf-8")
     for sub in INITIALIZABLE:
@@ -76,9 +78,14 @@ def _clean_catalog_root(monkeypatch):
     arms it (the real machine's record must never resolve a test's
     tree)."""
     from solps_reader import catalog_sources
+    from solps_reader import floor
     catalog_sources.set_catalog_root(None)
     monkeypatch.delenv(catalog_sources.CATALOG_HOME_ENV, raising=False)
     monkeypatch.delenv("SOLPS_READER_CATALOG", raising=False)
+    # repos-root ladder hygiene: neither the package variable nor
+    # $SOLPSTOP leaks in from the launching shell
+    monkeypatch.delenv(floor.REPOS_ENV, raising=False)
+    monkeypatch.delenv("SOLPSTOP", raising=False)
     monkeypatch.setattr(catalog_sources, "recorded_tree", lambda: None)
     yield
     catalog_sources.set_catalog_root(None)

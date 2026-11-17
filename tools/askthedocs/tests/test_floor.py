@@ -204,3 +204,88 @@ def test_check_floor_one_call(checkout_factory):
     report = floor.check_floor(root / "SOLPS-ITER")
     assert report.ok
     assert report.via == "the path given to setup"
+
+
+def test_discovery_differently_named_checkout_resolves_to_itself(
+        checkout_factory, monkeypatch):
+    """The field bug: a clone named anything but SOLPS-ITER, found by
+    the launch-directory walk, resolved to a phantom standard-named
+    sibling that does not exist — the floor then passed vacuously and
+    the build crashed deep inside on a raw missing-file error.  The
+    checkout resolves to ITSELF, whatever its folder is named."""
+    root = checkout_factory(iter_name="SOLPS-ITER_GitHub")
+    clone = root / "SOLPS-ITER_GitHub"
+    deep = clone / "modules" / "B2.5"
+    deep.mkdir(parents=True, exist_ok=True)
+    r, i, via = floor.discover(cwd=deep)
+    assert (r, i) == (root, clone)
+    assert via.startswith("the launch directory")
+    # the phantom sibling the old derivation answered with
+    assert not (root / "SOLPS-ITER").exists()
+
+
+def test_discovery_solpstop_rung(checkout_factory, tmp_path: Path):
+    # the SOLPS-ITER session pointer resolves like the package
+    # variable: as the repos root or as the checkout itself
+    root = checkout_factory()
+    r, i, via = floor.discover(env={"SOLPSTOP": str(root)},
+                               cwd=tmp_path / "empty")
+    assert (r, i, via) == (root, root / "SOLPS-ITER", "$SOLPSTOP")
+    r2, i2, _ = floor.discover(env={"SOLPSTOP": str(root / "SOLPS-ITER")},
+                               cwd=tmp_path / "empty")
+    assert (r2, i2) == (root, root / "SOLPS-ITER")
+
+
+def test_discovery_solpstop_below_repos_env(checkout_factory,
+                                            tmp_path: Path):
+    # an explicit package variable outranks the session pointer
+    from_env = checkout_factory(base="from-env")
+    from_solpstop = checkout_factory(base="from-solpstop")
+    r, i, via = floor.discover(
+        env={floor.REPOS_ENV: str(from_env),
+             "SOLPSTOP": str(from_solpstop)},
+        cwd=tmp_path / "empty")
+    assert via == f"${floor.REPOS_ENV}"
+    assert r == from_env
+
+
+def test_discovery_solpstop_above_launch_directory(checkout_factory):
+    # the session pointer is an explicit declaration: it outranks
+    # directory-shape guessing from the launch directory
+    from_solpstop = checkout_factory(base="from-solpstop")
+    from_launch = checkout_factory(base="from-launch")
+    r, i, via = floor.discover(
+        env={"SOLPSTOP": str(from_solpstop)},
+        cwd=from_launch / "SOLPS-ITER")
+    assert via == "$SOLPSTOP"
+    assert r == from_solpstop
+
+
+def test_discovery_stale_solpstop_named_in_the_trail(
+        checkout_factory, tmp_path: Path):
+    # a session pointer that resolves to nothing falls through to the
+    # lower rungs, and the loud stop names it like every stale rung
+    from_launch = checkout_factory()
+    r, i, via = floor.discover(env={"SOLPSTOP": "/definitely/not/a/checkout"},
+                               cwd=from_launch / "SOLPS-ITER")
+    assert via.startswith("the launch directory")
+    empty_home = tmp_path / "home"
+    empty_home.mkdir()
+    with pytest.raises(floor.FloorError) as exc:
+        floor.discover(env={"SOLPSTOP": "/definitely/not/a/checkout"},
+                       cwd=tmp_path / "empty", home=empty_home)
+    assert "$SOLPSTOP" in str(exc.value)
+
+
+def test_floor_refuses_a_phantom_checkout_path(checkout_factory):
+    """The vacuous-pass guard: a resolved path that is not a checkout
+    reports the missing shape — it can never read as zero declared
+    submodules and pass."""
+    root = checkout_factory()
+    phantom = root / "SOLPS-ITER_GitHub"   # does not exist
+    report = floor.check(root, phantom, "test")
+    assert not report.ok
+    assert report.missing[0][0] == "SOLPS-ITER checkout"
+    refusal = floor.format_refusal(report)
+    assert "point at a checkout" in refusal
+    assert "nothing was built or changed" in refusal

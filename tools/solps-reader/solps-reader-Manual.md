@@ -792,7 +792,7 @@ A group folder adopts the family layout the example runs use: a runs root whose 
 Browsing needs nothing: the compiled pages ship in this tree. Verifying inputs, rebuilding, or extending needs run data, which is **not** inside this tree. The build works over **groups**: the folders you remembered with `catalog add` (in list order), plus the example runs as a fixed last group. The examples are located by a fixed search order, first match wins:
 
 1. the per-user share: `~/.local/share/solps_reader/runs/examples` (where fetched bulk seats; `catalog/fetch_release_tarballs.py` pulls the public Zenodo release tarballs);
-2. a SOLPS-ITER checkout found by the same rules (`$ASKTHEDOCS_REPOS_ROOT`, the launch directory, the root `setup` recorded, `~/SOLPS-ITER`), whose `runs/examples` holds the cataloged run families (the public Zenodo release tarballs or the runs Makefile provide them).
+2. a SOLPS-ITER checkout found by the same rules (`$ASKTHEDOCS_REPOS_ROOT`, `$SOLPSTOP`, the launch directory, the root `setup` recorded, `~/SOLPS-ITER`; a checkout is recognized by its shape, whatever its folder is named), whose `runs/examples` holds the cataloged run families (the public Zenodo release tarballs or the runs Makefile provide them).
 
 A folder that is missing or holds no recognizable runs is named and skipped in the build output and on the landing page; never a failed build while another group stands, never a silent hole.
 

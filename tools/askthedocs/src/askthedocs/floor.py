@@ -149,17 +149,22 @@ def is_checkout(path: Path) -> bool:
     return (path / _GITMODULES).is_file() and (path / _MODULES_DIR).is_dir()
 
 
-def _repos_root_at(candidate: Path) -> Path | None:
+def _repos_root_at(candidate: Path) -> tuple[Path, Path] | None:
     """The sibling-repos root a candidate resolves to, or None.
 
     Accepts both shapes: a checkout itself (root is its parent), or a
-    directory holding the checkout (root is the directory).
+    directory holding the checkout (root is the directory).  Returns
+    the root AND the checkout itself — a checkout directory may carry
+    ANY name (a clone named SOLPS-ITER_GitHub is still a checkout);
+    the caller never re-derives it from the standard sibling name
+    (the field bug: a differently-named clone resolved to a phantom
+    sibling path that does not exist).
     """
     candidate = Path(candidate)
     if is_checkout(candidate):
-        return candidate.parent
+        return candidate.parent, candidate
     if is_checkout(candidate / ITER_REPO):
-        return candidate
+        return candidate, candidate / ITER_REPO
     return None
 
 
@@ -188,9 +193,10 @@ def _ladder_stop(tried: list[str]) -> str:
         "  1. the path given to setup",
         f"  2. ${REPOS_ENV} (a directory holding SOLPS-ITER, or a "
         "checkout itself)",
-        "  3. the launch directory and its parents",
-        "  4. the repos root this package's setup recorded",
-        "  5. ~/SOLPS-ITER",
+        "  3. $SOLPSTOP (the SOLPS-ITER session pointer, same shapes)",
+        "  4. the launch directory and its parents",
+        "  5. the repos root this package's setup recorded",
+        "  6. ~/SOLPS-ITER",
         "",
     ]
     if tried:
@@ -222,9 +228,10 @@ def discover(explicit: Path | str | None = None, *,
 
     if explicit is not None:
         path = Path(explicit).expanduser()
-        root = _repos_root_at(path)
-        if root is not None:
-            return root, root / ITER_REPO, "the path given to setup"
+        resolved = _repos_root_at(path)
+        if resolved is not None:
+            root, iter_path = resolved
+            return root, iter_path, "the path given to setup"
         raise FloorError(
             f"error: not a SOLPS-ITER checkout: {path}\n"
             f"       a checkout carries a {_GITMODULES} file beside a "
@@ -234,17 +241,33 @@ def discover(explicit: Path | str | None = None, *,
     env_value = env.get(REPOS_ENV)
     if env_value:
         path = Path(env_value).expanduser()
-        root = _repos_root_at(path)
-        if root is not None:
-            return root, root / ITER_REPO, f"${REPOS_ENV}"
+        resolved = _repos_root_at(path)
+        if resolved is not None:
+            root, iter_path = resolved
+            return root, iter_path, f"${REPOS_ENV}"
         tried.append(f"${REPOS_ENV}={path} (not a checkout)")
 
+    # the SOLPS-ITER session's own pointer (clusters export it at the
+    # install): an explicit user declaration, ranked under this
+    # package's variable and above any directory-shape guessing
+    solpstop = env.get("SOLPSTOP")
+    if solpstop:
+        path = Path(solpstop).expanduser()
+        resolved = _repos_root_at(path)
+        if resolved is not None:
+            root, iter_path = resolved
+            return root, iter_path, "$SOLPSTOP"
+        tried.append(f"$SOLPSTOP={path} (not a checkout)")
+
     # the launch directory and every parent: running from inside a
-    # clone (the tools ship inside it) finds that clone
+    # clone (the tools ship inside it) finds that clone — whatever
+    # the clone's directory is named
     for candidate in [cwd, *cwd.parents]:
-        root = _repos_root_at(candidate)
-        if root is not None:
-            return root, root / ITER_REPO, f"the launch directory (via {candidate})"
+        resolved = _repos_root_at(candidate)
+        if resolved is not None:
+            root, iter_path = resolved
+            return root, iter_path, \
+                f"the launch directory (via {candidate})"
 
     # the install-time fact: the root setup stood beside when it
     # built this package's index (the index knows where it was born;
@@ -252,9 +275,10 @@ def discover(explicit: Path | str | None = None, *,
     # record)
     recorded = _recorded_root(home)
     if recorded is not None:
-        root = _repos_root_at(recorded)
-        if root is not None:
-            return root, root / ITER_REPO, \
+        resolved = _repos_root_at(recorded)
+        if resolved is not None:
+            root, iter_path = resolved
+            return root, iter_path, \
                 f"the recorded root {recorded} (setup wrote it)"
         tried.append(f"the recorded root {recorded} (not a checkout)")
 
@@ -274,6 +298,15 @@ def check(root: Path, iter_path: Path, via: str) -> FloorReport:
     absent, never refused.
     """
     report = FloorReport(root=Path(root), iter_path=Path(iter_path), via=via)
+    if not is_checkout(report.iter_path):
+        # the checkout shape is the gate's premise: without this guard
+        # an absent declarations file reads as no declarations and a
+        # phantom path passes vacuously (the field bug: the build then
+        # crashed deep inside with a raw traceback)
+        report.missing.append((
+            "SOLPS-ITER checkout", report.iter_path,
+            "point at a checkout carrying a .gitmodules file beside a "
+            "modules/ directory, submodules initialized"))
     for path in declared_submodules(report.iter_path):
         full = report.iter_path / path
         excepted = path == EXCEPTED_SUBMODULE

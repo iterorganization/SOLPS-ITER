@@ -80,3 +80,25 @@ def test_absent_verdict_rollup(checkout_factory):
     assert roll.absent_legs == ["SOLPS-GUI", "SOLPS-Tutorials"]
     # absent legs are information, never drift
     assert not any((roll.new, roll.changed, roll.removed))
+
+
+def test_setup_resolves_a_differently_named_clone_from_within(
+        indexable_checkout, tmp_path: Path, monkeypatch, capsys):
+    """The reviewer's shape, end to end: setup launched from inside a
+    clone whose folder is NOT named SOLPS-ITER resolves THAT clone.
+    Previously the ladder answered with a phantom standard-named
+    sibling that does not exist, the floor passed vacuously, and the
+    build crashed deep inside on a raw missing-file error."""
+    clone = indexable_checkout / "SOLPS-ITER"
+    renamed = clone.parent / "SOLPS-ITER_GitHub"
+    clone.rename(renamed)
+    monkeypatch.chdir(renamed)
+    from askthedocs import setup as setup_mod
+    share = tmp_path / "share"
+    setup_mod.run_setup(None, share=share, install_icon=False)
+    out = capsys.readouterr().out
+    assert f"SOLPS-ITER checkout: {renamed}" in out
+    assert "found via the launch directory" in out
+    # the build completed, and the phantom sibling never existed
+    assert "what's next:" in out
+    assert not (renamed.parent / "SOLPS-ITER").exists()

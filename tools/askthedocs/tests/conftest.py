@@ -43,13 +43,15 @@ INITIALIZABLE = ("modules/B2.5", "modules/Carre", "modules/DivGeo",
 
 
 def make_checkout(tmp: Path, *, base: str = "repos",
+                  iter_name: str = "SOLPS-ITER",
                   uninitialized: frozenset[str] = frozenset(),
                   optional: tuple[str, ...] = ()) -> Path:
-    """A synthetic repos root: SOLPS-ITER shaped like a checkout, with
-    every initializable submodule initialized except *uninitialized*;
-    the optional legs named in *optional* exist beside it."""
+    """A synthetic repos root: a checkout shaped like SOLPS-ITER (named
+    *iter_name* — a clone may carry any name), with every
+    initializable submodule initialized except *uninitialized*; the
+    optional legs named in *optional* exist beside it."""
     root = tmp / base
-    iter_repo = root / "SOLPS-ITER"
+    iter_repo = root / iter_name
     (iter_repo / "modules").mkdir(parents=True)
     (iter_repo / ".gitmodules").write_text(GITMODULES, encoding="utf-8")
     for sub in INITIALIZABLE:
@@ -208,3 +210,14 @@ def make_corpus_store(dir_path: Path, rows: list[dict],
     finally:
         conn.close()
     return db_path
+
+
+@pytest.fixture(autouse=True)
+def _clean_repos_root_env(monkeypatch):
+    """Repos-root ladder hygiene for every test: neither the package
+    variable nor $SOLPSTOP leaks in from the launching shell (a
+    machine that exports SOLPSTOP must never resolve a test's tree
+    through the real one)."""
+    from askthedocs import floor
+    monkeypatch.delenv(floor.REPOS_ENV, raising=False)
+    monkeypatch.delenv("SOLPSTOP", raising=False)
