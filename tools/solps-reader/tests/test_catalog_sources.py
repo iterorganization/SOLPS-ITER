@@ -345,3 +345,59 @@ def test_cli_corrupt_file_refuses_cleanly_for_every_verb(
         assert "cannot read the sources file" in captured.err
         assert "re-add your folders" in captured.err
         assert "Traceback" not in captured.err + captured.out
+
+
+# ------------------------------------------------- the catalog home redirect
+
+def test_catalog_home_env_moves_the_root(
+        monkeypatch, tmp_path: Path) -> None:
+    """The one redirect: $SOLPS_READER_HOME moves the whole
+    catalog root (the sources file derives from it); the default
+    share stands when neither the env var nor the override is set."""
+    scratch = tmp_path / "scratch-catalog"
+    monkeypatch.setenv(src.CATALOG_HOME_ENV, str(scratch))
+    assert src.catalog_root() == scratch
+    assert src.sources_path() == scratch / "sources.json"
+    # an explicit home argument still anchors the DEFAULT ladder
+    assert src.sources_path(home=tmp_path / "h") == scratch / "sources.json"
+    monkeypatch.delenv(src.CATALOG_HOME_ENV)
+    assert src.catalog_root() == src.default_share_root()
+    assert (src.sources_path(home=tmp_path / "h")
+            == tmp_path / "h" / ".local" / "share" / "solps_reader"
+            / "catalog" / "sources.json")
+
+
+def test_catalog_root_override_beats_the_env(
+        monkeypatch, tmp_path: Path) -> None:
+    """Ladder order: the --home process override > the environment
+    variable > the per-user share; clearing the override falls back
+    through the env, not to the share."""
+    monkeypatch.setenv(src.CATALOG_HOME_ENV, str(tmp_path / "envroot"))
+    src.set_catalog_root(tmp_path / "flagged")
+    try:
+        assert src.catalog_root() == tmp_path / "flagged"
+    finally:
+        src.set_catalog_root(None)
+    assert src.catalog_root() == tmp_path / "envroot"
+
+
+def test_cli_home_flag_moves_the_remembered_catalog(
+        monkeypatch, tmp_path: Path, capfd) -> None:
+    """--home on a group verb: the sources file lands under the given
+    root, not the per-user share (quota-limited home filesystems) —
+    and the later verbs read it back from there."""
+    _floorless(monkeypatch, tmp_path)
+    scratch = tmp_path / "scratch-catalog"
+    folder = _runs_folder(tmp_path, "myruns")
+    rc = cli.main(["catalog", "add", str(folder),
+                   "--home", str(scratch)])
+    out = capfd.readouterr().out
+    assert rc == 0
+    assert (scratch / "sources.json").is_file()
+    assert not (tmp_path / "home" / ".local").exists()
+    assert "scratch-catalog" in out
+    # the follow-up verb needs no flag: the env-free default would
+    # miss it, the env var finds it
+    monkeypatch.setenv(src.CATALOG_HOME_ENV, str(scratch))
+    assert cli.main(["catalog", "list"]) == 0
+    assert "myruns" in capfd.readouterr().out

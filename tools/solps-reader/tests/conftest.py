@@ -64,3 +64,16 @@ import pytest
 def checkout_factory(tmp_path):
     """make_checkout bound to this test's tmp_path."""
     return lambda **kw: make_checkout(tmp_path, **kw)
+
+
+@pytest.fixture(autouse=True)
+def _clean_catalog_root(monkeypatch):
+    """Catalog-root hygiene for every test: no process-level override
+    and no environment redirect survive INTO a test (the --home flag
+    sets a process-level override; one test's redirect must never
+    seat another test's catalog)."""
+    from solps_reader import catalog_sources
+    catalog_sources.set_catalog_root(None)
+    monkeypatch.delenv(catalog_sources.CATALOG_HOME_ENV, raising=False)
+    yield
+    catalog_sources.set_catalog_root(None)

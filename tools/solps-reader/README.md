@@ -80,6 +80,8 @@ cd tools/solps-reader
 
 Every value on every page renders from a JSON manifest with an MD5 inventory of its inputs. A gate proves the whole site rebuilds byte-identically.
 
+**Moving the catalog off your home directory.** The remembered sources, the analysis cache, and every built site seat in your per-user share by default. Home filesystems are often quota-limited, and a catalog over hundreds of runs is large. One redirect moves all of it, wholesale: pass `--home /scratch/wherever` to any catalog verb, or export `SOLPS_READER_HOME=/scratch/wherever` once in your shell and every verb (including `catalog open`) follows it.
+
 ![A run dossier: provenance, verdict sparklines, wall loads, the switch table](assets/run-dossier.png)
 
 **The maintainer contract.** The shipped catalog is a certified snapshot of the upstream example runs. When a new example run is published, or a SOLPS-ITER release changes the documented switches, the maintainer fetches the new release, runs the one build command with `--in-tree` (the rebuild that reproduces the shipped bytes for the gate), passes the gate, bumps the version, and pushes; upstream's release tasks carry the notification line.

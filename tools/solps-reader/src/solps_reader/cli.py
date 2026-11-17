@@ -61,7 +61,10 @@ Commands per family:
   cached analysis (``--force`` recomputes everything, byte-identical
   either way; ``--prune-cache`` drops entries a build did not
   reference). ``catalog open`` opens the built site (yours first,
-  else the shipped example pages, named).
+  else the shipped example pages, named). Every catalog verb also
+  takes ``--home PATH`` (and honors ``$SOLPS_READER_HOME``):
+  the one redirect moving the whole catalog — sources file, analysis
+  cache, built sites, gallery — off the quota-limited per-user share.
 """
 
 from __future__ import annotations
@@ -362,8 +365,21 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
         help="the run-catalog site: rebuild it from a runs tree",
     )
     commands = catalog.add_subparsers(dest="command", metavar="<command>")
+    # every catalog verb takes --home: the one redirect that moves the
+    # whole catalog (sources file, analysis cache, built sites, the
+    # gallery) off the quota-limited per-user share; the
+    # $SOLPS_READER_HOME environment variable moves it for a
+    # whole shell
+    catalog_home = argparse.ArgumentParser(add_help=False)
+    catalog_home.add_argument(
+        "--home", metavar="PATH", default=None,
+        help="where this catalog lives: the sources file, the "
+             "analysis cache, and every built site seat under one "
+             "root (default: the per-user share; "
+             "$SOLPS_READER_HOME moves it wholesale)",
+    )
     build = commands.add_parser(
-        "build",
+        "build", parents=[catalog_home],
         help="rebuild the site (run manifests -> switch sets -> pages)",
     )
     build.add_argument(
@@ -402,7 +418,7 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
              "itself when it is the catalog tree)",
     )
     add = commands.add_parser(
-        "add",
+        "add", parents=[catalog_home],
         help="remember a runs folder as a catalog group (display "
              "order = list order)",
     )
@@ -422,13 +438,14 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
              "after the last remembered group",
     )
     remove = commands.add_parser(
-        "remove", help="drop a group from the remembered list")
+        "remove", parents=[catalog_home],
+        help="drop a group from the remembered list")
     remove.add_argument(
         "group", metavar="GROUP",
         help="the group's label or its path",
     )
     move = commands.add_parser(
-        "move",
+        "move", parents=[catalog_home],
         help="reposition a group in display order (the order never "
              "auto-sorts)",
     )
@@ -443,14 +460,16 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
              "up / down",
     )
     commands.add_parser(
-        "list", help="the remembered groups in display order, with "
-                     "their status")
+        "list", parents=[catalog_home],
+        help="the remembered groups in display order, with "
+             "their status")
     commands.add_parser(
-        "open", help="open the built catalog site in a browser (your "
-                     "built site first, else the shipped example site, "
-                     "named)")
+        "open", parents=[catalog_home],
+        help="open the built catalog site in a browser (your "
+             "built site first, else the shipped example site, "
+             "named)")
     compare = commands.add_parser(
-        "compare",
+        "compare", parents=[catalog_home],
         help="record any two runs as an A/B comparison and rebuild "
              "(cross-group pairs included)",
     )
@@ -471,7 +490,7 @@ def _add_catalog_subparser(subparsers: argparse._SubParsersAction) -> None:
         help="record only; the next 'catalog build' picks it up",
     )
     gallery = commands.add_parser(
-        "gallery",
+        "gallery", parents=[catalog_home],
         help="build the bundled case gallery (two healthy groups, a "
              "family-name collision, two sick folders, one recorded "
              "cross-group comparison) into the share and print its "
@@ -538,8 +557,12 @@ def _run_catalog_build(parser: argparse.ArgumentParser,
         out = tree / "out"
         seat = "the catalog tree (--in-tree, the maintainer path)"
     else:
-        out = catalog_sources.sources_path().parent / "out"
-        seat = f"the per-user share ({out})"
+        root = catalog_sources.sources_path().parent
+        out = root / "out"
+        seat = (f"the per-user share ({out})"
+                if root == catalog_sources.default_share_root()
+                else f"the catalog home at {out} "
+                     "($SOLPS_READER_HOME / --home)")
     sources = (Path(sources_override)
                if sources_override is not None
                else catalog_sources.sources_path())
@@ -679,6 +702,12 @@ def _run_catalog_groups(args: argparse.Namespace) -> int:
     # remedy and exit 2, the refusal doctrine the file's own errors
     # promise
     try:
+        # name the redirected seat whenever the catalog lives away
+        # from the default share (quota-limited homes): the verbs
+        # that read and write here should say WHERE here is
+        if path.parent != catalog_sources.default_share_root():
+            print(f"catalog home: {path.parent} "
+                  "(--home / $SOLPS_READER_HOME)")
         if args.command == "add":
             entry = catalog_sources.add(path, args.path,
                                         label=args.label,
@@ -2047,6 +2076,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.family is None:
         parser.print_help()
         return 0
+    if args.family == "catalog":
+        # the one catalog-root redirect (quota-limited home
+        # filesystems), set OR cleared per invocation so no stale
+        # override leaks into the next in-process caller
+        catalog_sources.set_catalog_root(getattr(args, "home", None))
     if args.family == "setup":
         return _run_setup(args)
     # the remembered-group verbs edit a share file, not analysis —

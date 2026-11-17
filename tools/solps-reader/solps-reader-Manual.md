@@ -636,6 +636,7 @@ solps-reader catalog add PATH [options]
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `add` | yes | the command: remembers a runs folder as a group, once per folder, and prints the list with each group's status | `add` |
 | `PATH` | yes | a runs root: a directory whose subdirectories are run families | `current-runs` |
+| `--home PATH` | no | where this catalog lives: sources file, analysis cache, and built sites under one root (default: the per-user share; $SOLPS_READER_HOME moves it wholesale) | not used |
 | `--label NAME` | no | the group label shown in the site (default: the folder's name) | `--label current` |
 | `--before GROUP` | no | insert before this group (its label or path); default: after the last remembered group | not used |
 ```bash
@@ -656,6 +657,7 @@ solps-reader catalog list
 |----------|----------|---------|----------------|
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `list` | yes | the command: prints the remembered groups in display order, each with its status, plus the recorded comparisons | `list` |
+| `--home PATH` | no | where this catalog lives (same redirect as every catalog verb; the default is the per-user share) | not used |
 ```bash
 # worked example: the groups in display order, each with its status
 $ .venv/bin/solps-reader catalog list
@@ -674,6 +676,7 @@ solps-reader catalog move GROUP POSITION
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `move` | yes | the command: repositions a group; the display order never auto-sorts | `move` |
 | `GROUP` | yes | the group's label or its path | `current` |
+| `--home PATH` | no | where this catalog lives (same redirect as every catalog verb) | not used |
 | `POSITION` | yes | a 1-based number exactly as `catalog list` numbers them (out-of-range lands at the ends), or `first` / `last` / `up` / `down` | `1` |
 ```bash
 # worked example: move the current group to the top
@@ -694,6 +697,7 @@ solps-reader catalog remove GROUP
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `remove` | yes | the command: drops a group from the remembered list | `remove` |
 | `GROUP` | yes | the group's label or its path | `old-runs` |
+| `--home PATH` | no | where this catalog lives (same redirect as every catalog verb) | not used |
 ```bash
 # worked example: drop the experiments folder
 $ .venv/bin/solps-reader catalog remove old-runs
@@ -715,6 +719,7 @@ solps-reader catalog compare RUN-A RUN-B [options]
 | `compare` | yes | the command: records the pair and rebuilds; both runs must carry b2fstate; a grid or species mismatch is named, never a failed build | `compare` |
 | `RUN-A` | yes | group-qualified run name, exactly as the site shows it | `archive-runs/ITER_2275_Donly_20MW/run_restart` |
 | `RUN-B` | yes | group-qualified run name, exactly as the site shows it (cross-group pairs included) | `current/ITER_2275_Donly_20MW/run_restart` |
+| `--home PATH` | no | where this catalog lives (same redirect as every catalog verb) | not used |
 | `--no-build` | no | record only; the next 'catalog build' picks it up | `--no-build` |
 | `--remove` | no | drop the recorded pair instead (either order matches) | not used |
 ```bash
@@ -734,6 +739,7 @@ solps-reader catalog build [options]
 |----------|----------|---------|----------------|
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `build` | yes | the command: rebuilds everything: pair decks, manifests, switch sets, site, then prints the seat | `build` |
+| `--home PATH` | no | where this catalog lives: sources file, analysis cache, and built sites under one root (default: the per-user share; $SOLPS_READER_HOME moves it wholesale) | not used |
 | `--runs PATH` | no | a runs root, repeatable: the one-shot group set for THIS build, in display order (default: the remembered sources file, 'catalog add') | not used |
 | `--no-examples` | no | omit the example-runs group | not used |
 | `--in-tree` | no | write into the catalog tree's own out/ beside the builders: the maintainer's bump path; user builds seat in the per-user share | not used |
@@ -768,6 +774,7 @@ solps-reader catalog open
 |----------|----------|---------|----------------|
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `open` | yes | the command: opens your built catalog site in a browser (your built site first, else the shipped example site, named) | `open` |
+| `--home PATH` | no | where this catalog lives (opens the redirected seat; same redirect as every catalog verb) | not used |
 ```bash
 # worked example: open the built site
 $ .venv/bin/solps-reader catalog open
@@ -776,9 +783,9 @@ opened your built catalog site: /tmp/catalog-capture/.local/share/solps_reader/c
 
 Display order is yours and never auto-sorts: a new group sits last (the add output says so) and `catalog move <group> <position>` repositions it: a 1-based number exactly as `catalog list` numbers them, or `first` / `last` / `up` / `down`. `add --before <group>` inserts a new group elsewhere. A one-shot build without touching the remembered list: `catalog build --runs /path/a --runs /path/b` (repeatable; `--no-examples` omits the examples group).
 
-A group folder adopts the family layout the example runs use: a runs root whose subdirectories are run families (a family may carry a `baserun` input deck; every run directory carries its solver outputs, `b2time.nc` required for the convergence verdict).
+A group folder adopts the family layout the example runs use: a runs root whose subdirectories are run families (a family may carry a `baserun` input deck; every run directory carries its solver outputs). `b2time.nc` is optional output: a run without it catalogs in full, the build prints one warning naming the run, and the page's convergence section states the absence. A folder that cannot be read (permissions on a shared archive) names itself and is skipped; the other runs continue. The build prints one line per case as it goes, so a long build always shows where it is.
 
-**Seating.** Your builds write the per-user share (`~/.local/share/solps_reader/catalog/out/`) and never touch this checkout's shipped pages; `--in-tree` writes `catalog/out/` beside the builders instead; the maintainer's path, in the package README. The build output names its seat.
+**Seating.** Your builds write the per-user share (`~/.local/share/solps_reader/catalog/out/`) and never touch this checkout's shipped pages; `--in-tree` writes `catalog/out/` beside the builders instead; the maintainer's path, in the package README. The build output names its seat. Home filesystems are often quota-limited: `--home PATH` on any catalog verb, or `SOLPS_READER_HOME` exported once in your shell, moves the whole catalog (sources, cache, built sites, gallery) to a filesystem with room; `catalog open` follows the same root.
 
 ### 10. The catalog in depth
 
@@ -842,6 +849,7 @@ solps-reader catalog gallery [options]
 |----------|----------|---------|----------------|
 | `catalog` | yes | the family: the run catalog | `catalog` |
 | `gallery` | yes | the command: builds the bundled synthetic fixtures through the real build path (two healthy groups, a family-name collision, two sick folders, one recorded cross-group comparison) and prints where the site landed; never touches your own groups, site, or cache | `gallery` |
+| `--home PATH` | no | where this catalog lives (the gallery seats under the redirected root) | not used |
 | `--catalog PATH` | no | the catalog tree holding the builders (same ladder as build) | not used |
 ```bash
 # worked example: the bundled case gallery

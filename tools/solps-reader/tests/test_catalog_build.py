@@ -588,6 +588,53 @@ def test_catalog_build_prints_one_line_per_case(
     assert len(case_lines) == 2
 
 
+def test_catalog_build_and_open_honor_the_home_redirect(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The quota-limited-home shape: --home (and the environment
+    variable) move the WHOLE catalog — sources seat, analysis cache,
+    built site — off the per-user share, `catalog open` follows the
+    same root, and with neither given the default share stands
+    untouched."""
+    import webbrowser
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.delenv("SOLPS_READER_HOME", raising=False)
+    monkeypatch.chdir(tmp_path)
+    opened = []
+    monkeypatch.setattr(webbrowser, "open",
+                        lambda uri: opened.append(uri) or True)
+    cat = _catalog_copy(tmp_path)
+    runs = _synthetic_runs(tmp_path)
+    scratch = tmp_path / "scratch-catalog"
+
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(runs), "--catalog", str(cat),
+                   "--home", str(scratch)])
+    out = capfd.readouterr().out
+    assert rc == 0
+    assert f"seated in the catalog home at {scratch / 'out'}" in out
+    assert (scratch / "out" / "index.json").is_file()
+    assert (scratch / "cache").is_dir()
+    assert not (_share_out(tmp_path / "nohome") / "index.json").exists()
+
+    # open follows the same root (--home) and would browse the
+    # redirected site, not the default share's absence
+    rc = cli.main(["catalog", "open", "--home", str(scratch)])
+    out = capfd.readouterr().out
+    assert rc == 0
+    assert "opened your built catalog site" in out
+    assert str(scratch) in opened[0]
+
+    # the environment variable moves it for a whole shell, no flag
+    envroot = tmp_path / "env-catalog"
+    monkeypatch.setenv("SOLPS_READER_HOME", str(envroot))
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(runs), "--catalog", str(cat)])
+    out = capfd.readouterr().out
+    assert rc == 0
+    assert (envroot / "out" / "index.json").is_file()
+
+
 def test_catalog_build_is_deterministic(
         checkout_factory, tmp_path: Path, monkeypatch, capsys) -> None:
     monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))

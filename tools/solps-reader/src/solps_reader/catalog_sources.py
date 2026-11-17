@@ -1,12 +1,18 @@
 """The remembered catalog sources: the user's own runs folders, in
 display order, plus the recorded run comparisons.
 
-One JSON file in the per-user share (the placement doctrine:
-remembered and generated data seats in the share, never the
-checkout).  The file is the single authority for ``catalog build``
-run without ``--runs``: groups appear in the order they are
-listed here; the example runs always follow last and are rendered
-by the runs ladder, never stored in this file.
+One JSON file in the catalog root — the per-user share by default
+(the placement doctrine: remembered and generated data seats in the
+share, never the checkout).  The file is the single authority for
+``catalog build`` run without ``--runs``: groups appear in the order
+they are listed here; the example runs always follow last and are
+rendered by the runs ladder, never stored in this file.
+
+The catalog root moves wholesale (the sources file, the analysis
+cache seated beside it, every built site seat) when home filesystems
+are quota-limited: every catalog verb takes ``--home PATH``, and
+``$SOLPS_READER_HOME`` moves it for a whole shell — see
+:func:`catalog_root`.
 
 Every refusal names its remedy.  Labels slug to ``[a-z0-9-]``; a
 slug that would collide with the site's own namespaces or with
@@ -16,6 +22,7 @@ may share a basename, the second one must take ``--label``.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -37,20 +44,59 @@ RESERVED_SLUGS = frozenset({
 #: build_manifests.find_run_dirs walks on the same triple)
 RUN_MARKERS = ("fort.44", "b2fstate", "b2time.nc")
 
-_SOURCES_REL = ("catalog", "sources.json")
 _SLUG_STRIP = re.compile(r"[^a-z0-9]+")
+
+#: where the whole catalog lives, moved wholesale for quota-limited
+#: home filesystems (shared clusters): the remembered sources file,
+#: the analysis cache seated beside it, and every built site seat
+#: derive from this one root
+CATALOG_HOME_ENV = "SOLPS_READER_HOME"
+
+_catalog_root_override: Path | None = None
 
 
 class SourcesError(RuntimeError):
     """A sources-file operation refused; the message names the remedy."""
 
 
-def sources_path(home: Path | None = None) -> Path:
-    """The sources file: ``<share>/catalog/sources.json`` — the
-    package's per-user share, the index-placement doctrine."""
+def set_catalog_root(path: str | os.PathLike | None) -> None:
+    """Process-level catalog-root override (the CLI's ``--home``
+    flag).  ``None`` clears it; the environment variable and the
+    default share remain in force below it."""
+    global _catalog_root_override
+    _catalog_root_override = (None if path is None
+                              else Path(path).expanduser())
+
+
+def default_share_root(home: Path | None = None) -> Path:
+    """The pure default catalog root, ignoring any override: the
+    per-user share (what the seat wording names when nothing
+    redirected it)."""
     home = Path.home() if home is None else Path(home)
-    share = home / ".local" / "share" / "solps_reader"
-    return share.joinpath(*_SOURCES_REL)
+    return home / ".local" / "share" / "solps_reader" / "catalog"
+
+
+def catalog_root(home: Path | None = None) -> Path:
+    """The catalog root, one resolution for every consumer (the
+    sources file, the cache, the build/open/gallery seats).
+
+    Ladder: the ``--home`` process override >
+    ``$SOLPS_READER_HOME`` > the per-user share under
+    *home*.  An empty environment value counts as unset.
+    """
+    if _catalog_root_override is not None:
+        return _catalog_root_override
+    env_value = os.environ.get(CATALOG_HOME_ENV)
+    if env_value:
+        return Path(env_value).expanduser()
+    return default_share_root(home)
+
+
+def sources_path(home: Path | None = None) -> Path:
+    """The sources file: ``<catalog root>/sources.json`` — the
+    per-user share by default, wherever the catalog home points
+    otherwise (see :func:`catalog_root`)."""
+    return catalog_root(home) / "sources.json"
 
 
 def slugify(label: str) -> str:
