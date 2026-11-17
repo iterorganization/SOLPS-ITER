@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 #: the site's own address namespaces and the fixed examples label —
@@ -235,10 +236,17 @@ def move(path: Path | None, ref: str, position: str) -> tuple[dict, int]:
 def has_runs(root: Path) -> bool:
     """True when any directory under ``root`` holds a run marker —
     the same predicate ``find_run_dirs`` walks, answered as a
-    first-hit probe (status lines, not manifests)."""
-    for d in root.rglob("*"):
-        if d.is_dir() and any((d / m).exists() for m in RUN_MARKERS):
-            return True
+    first-hit probe (status lines, not manifests).  A tree that
+    cannot be read answers False with one named line (the recovery
+    doctrine: unreadable folders are named, never fatal)."""
+    try:
+        for d in root.rglob("*"):
+            if d.is_dir() and any((d / m).exists() for m in RUN_MARKERS):
+                return True
+    except OSError as exc:
+        print(f"note: cannot read under {root} "
+              f"({exc.strerror or type(exc).__name__}); "
+              "treating it as holding no runs", file=sys.stderr)
     return False
 
 

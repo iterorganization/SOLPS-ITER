@@ -73,6 +73,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
 from itertools import combinations
 from pathlib import Path
@@ -161,12 +162,35 @@ def file_entry(path: Path) -> dict:
     return {"bytes": path.stat().st_size, "md5": md5_of(path)}
 
 
+def _note_unreadable(where: object, exc: OSError, what: str) -> None:
+    """The one recovery line every filesystem denial prints: name the
+    path, name the reason, say what happens instead.  Shared by the
+    walk, the fingerprint, and the per-run guard so the wording never
+    drifts (the recovery doctrine: an unreadable folder costs its own
+    contents, never the build)."""
+    print(f"note: cannot read {where} "
+          f"({exc.strerror or type(exc).__name__}); {what}",
+          file=sys.stderr)
+
+
 def find_run_dirs(root: Path) -> list[Path]:
     found = []
-    for d in sorted(p for p in root.rglob("*") if p.is_dir()):
+
+    def _unreadable(err: OSError) -> None:
+        _note_unreadable(getattr(err, "filename", None) or root, err,
+                         "skipping its contents")
+
+    # os.walk with onerror (never a bare rglob): shared archives carry
+    # folders the user cannot read, and on some Python versions a bare
+    # rglob turns that denial into a traceback.  The onerror line
+    # names the folder; its contents cost only themselves.  Symlinked
+    # directories are not entered (the documented walk rule: real
+    # copies are the instrument).
+    for dirpath, _dirnames, _files in os.walk(root, onerror=_unreadable):
+        d = Path(dirpath)
         if any((d / m).exists() for m in MARKERS):
             found.append(d)
-    return found
+    return sorted(found)
 
 
 def fort46_provenance(path: Path) -> dict | None:
@@ -590,11 +614,23 @@ def deck_manifest(group_slug: str, family: str, deck_dir: Path) -> dict:
     content) is skipped so the manifest stays stable under browsing.
     """
     files: dict[str, dict] = {}
-    for p in sorted(deck_dir.rglob("*")):
-        if not p.is_file() or p.name == ".DS_Store":
-            continue
-        rel = p.relative_to(deck_dir).as_posix()
-        files[rel] = file_entry(p)
+
+    def _unreadable(err: OSError) -> None:
+        # re-raise: a deck that cannot be read is SKIPPED by the
+        # caller's guard (one named line), never inventoried as an
+        # empty deck — an unread baserun is an honest absence, not a
+        # zero-file deck
+        raise err
+
+    for dirpath, _dirnames, fnames in os.walk(deck_dir,
+                                              onerror=_unreadable):
+        for fn in sorted(fnames):
+            if fn == ".DS_Store":
+                continue
+            p = Path(dirpath) / fn
+            if not p.is_file():
+                continue
+            files[p.relative_to(deck_dir).as_posix()] = file_entry(p)
     return {
         "name": f"{group_slug}/{family}/{DECK_DIR}",
         "kind": "input_deck",
@@ -744,11 +780,27 @@ ANALYSIS_VERSION = 1
 def _stat_walk(root: Path) -> list[tuple[str, int, int]]:
     """The cheap identity of one directory's bytes: sorted
     (relpath, size, mtime_ns) over its files.  No parsing, no md5 —
-    that is the whole point of the key."""
-    return sorted(
-        (p.relative_to(root).as_posix(),
-         p.stat().st_size, p.stat().st_mtime_ns)
-        for p in root.rglob("*") if p.is_file())
+    that is the whole point of the key.  A directory that cannot be
+    read, or a file that cannot be stat'ed (vanished mid-build),
+    contributes one named note and nothing else — the same recovery
+    doctrine the run walk guarantees."""
+    out: list[tuple[str, int, int]] = []
+
+    def _unreadable(err: OSError) -> None:
+        _note_unreadable(getattr(err, "filename", None) or root, err,
+                         "fingerprinting the rest")
+
+    for dirpath, _dirnames, files in os.walk(root, onerror=_unreadable):
+        for fn in files:
+            p = Path(dirpath) / fn
+            try:
+                st = p.stat()
+            except OSError as exc:
+                _note_unreadable(p, exc, "fingerprinting the rest")
+                continue
+            out.append((p.relative_to(root).as_posix(),
+                        st.st_size, st.st_mtime_ns))
+    return sorted(out)
 
 
 def analysis_fingerprint(run_dir: Path, root: Path) -> str:
@@ -877,45 +929,59 @@ def main(argv: list[str] | None = None) -> int:
         if g["slug"] == runs_source.EXAMPLES_SLUG:
             EXAMPLES = g["path"]
         for run_dir in runs:
-            fp = analysis_fingerprint(run_dir, g["path"])
-            used_fps.add(fp)
-            analysis = (None if args.force
-                        else _cache_read(cache_dir, fp))
-            if analysis is None:
-                analysis = analyze_run(run_dir, g["path"])
-                n_computed += 1
-                if not _cache_write(cache_dir, fp, analysis) \
-                        and not cache_note_shown:
-                    print(f"note: cache unwritable ({cache_dir}); "
-                          "computing without it", file=sys.stderr)
-                    cache_note_shown = True
-            else:
-                n_reused += 1
-            m = build_manifest(run_dir, g["path"], g["slug"], analysis)
-            v = m["wall_geometry"]["verdict"]
-            wg_counts[v] = wg_counts.get(v, 0) + 1
-            slug = "__".join(m["name"].split("/"))
-            written.add(f"{slug}.json")
-            (manifests_dir / f"{slug}.json").write_text(
-                json.dumps(m, indent=2, sort_keys=True) + "\n"
-           , encoding="utf-8")
-            index.append({
-                "name": m["name"], "machine": m["machine"],
-                "run_family": m.get("run_family", m["machine"]),
-                "group": g["slug"], "group_label": g["label"],
-                "verdict": (m.get("convergence") or {}).get("verdict"),
-                "grid": (m.get("fort44") or {}).get("grid"),
-                "species": (m.get("fort44") or {}).get("species"),
-                "code_git": (m.get("fort44") or {}).get("git_hash"),
-                "has_wall_loads": bool((m.get("wall") or {}).get("loaded_rows")),
-                "manifest": f"manifests/{slug}.json",
-            })
-        n_runs += len(runs)
+            name = f"{g['slug']}/{run_dir.relative_to(g['path'])}"
+            try:
+                fp = analysis_fingerprint(run_dir, g["path"])
+                used_fps.add(fp)
+                analysis = (None if args.force
+                            else _cache_read(cache_dir, fp))
+                if analysis is None:
+                    analysis = analyze_run(run_dir, g["path"])
+                    n_computed += 1
+                    if not _cache_write(cache_dir, fp, analysis) \
+                            and not cache_note_shown:
+                        print(f"note: cache unwritable ({cache_dir}); "
+                              "computing without it", file=sys.stderr)
+                        cache_note_shown = True
+                else:
+                    n_reused += 1
+                m = build_manifest(run_dir, g["path"], g["slug"],
+                                   analysis)
+                v = m["wall_geometry"]["verdict"]
+                wg_counts[v] = wg_counts.get(v, 0) + 1
+                slug = "__".join(m["name"].split("/"))
+                written.add(f"{slug}.json")
+                (manifests_dir / f"{slug}.json").write_text(
+                    json.dumps(m, indent=2, sort_keys=True) + "\n"
+               , encoding="utf-8")
+                index.append({
+                    "name": m["name"], "machine": m["machine"],
+                    "run_family": m.get("run_family", m["machine"]),
+                    "group": g["slug"], "group_label": g["label"],
+                    "verdict": (m.get("convergence") or {}).get("verdict"),
+                    "grid": (m.get("fort44") or {}).get("grid"),
+                    "species": (m.get("fort44") or {}).get("species"),
+                    "code_git": (m.get("fort44") or {}).get("git_hash"),
+                    "has_wall_loads": bool((m.get("wall") or {})
+                                           .get("loaded_rows")),
+                    "manifest": f"manifests/{slug}.json",
+                })
+                n_runs += 1
+            except (PermissionError, FileNotFoundError) as exc:
+                # the recovery doctrine: a run that cannot be read (or
+                # vanished mid-build) costs ITSELF, never the build —
+                # named here, skipped, and the stale-manifest prune
+                # below drops any ghost an earlier build left behind
+                _note_unreadable(run_dir, exc,
+                                 f"skipping {name}; the other runs "
+                                 "continue")
+                continue
 
     # one deck manifest per run family that carries a baserun —
     # family identity is group-qualified (two groups may each carry
     # an ITER_2275 family; they are different families).
     decks = []
+    deck_skipped: set[str] = set()
     for g in ok_groups:
         fams = sorted({r["name"].split("/")[1] for r in index
                        if r["group"] == g["slug"]})
@@ -923,19 +989,43 @@ def main(argv: list[str] | None = None) -> int:
             deck_dir = g["path"] / family / DECK_DIR
             if not deck_dir.is_dir():
                 continue
-            dm = deck_manifest(g["slug"], family, deck_dir)
-            mslug = f"{g['slug']}__{family}__{DECK_DIR}"
-            written.add(f"{mslug}.json")
-            (manifests_dir / f"{mslug}.json").write_text(
-                json.dumps(dm, indent=2, sort_keys=True) + "\n"
-           , encoding="utf-8")
-            decks.append({
-                "run_family": f"{g['slug']}/{family}",
-                "manifest": f"manifests/{mslug}.json",
-                "file_count": dm["file_count"],
-                "total_bytes": dm["total_bytes"],
-                "geometry_file": dm["geometry"] is not None,
-            })
+            try:
+                dm = deck_manifest(g["slug"], family, deck_dir)
+                mslug = f"{g['slug']}__{family}__{DECK_DIR}"
+                written.add(f"{mslug}.json")
+                (manifests_dir / f"{mslug}.json").write_text(
+                    json.dumps(dm, indent=2, sort_keys=True) + "\n"
+               , encoding="utf-8")
+                decks.append({
+                    "run_family": f"{g['slug']}/{family}",
+                    "manifest": f"manifests/{mslug}.json",
+                    "file_count": dm["file_count"],
+                    "total_bytes": dm["total_bytes"],
+                    "geometry_file": dm["geometry"] is not None,
+                })
+            except (PermissionError, FileNotFoundError) as exc:
+                # the deck twin of the run guard: an unreadable
+                # baserun costs its own deck manifest, never the
+                # build (the family's runs stand without it)
+                _note_unreadable(deck_dir, exc,
+                                 f"skipping {g['slug']}/{family}'s "
+                                 "deck manifest; the runs continue")
+                deck_skipped.add(f"{g['slug']}/{family}")
+                continue
+    if deck_skipped:
+        # linkage honesty: the run manifests were written BEFORE the
+        # deck pass and reference the deck manifest by directory
+        # existence alone — a skipped deck leaves a dangling reference
+        # the site would chase.  Null it, so the family and run pages
+        # render their honest no-shared-base-deck absence instead.
+        for r in index:
+            if r["run_family"] not in deck_skipped:
+                continue
+            mp = manifests_dir / Path(r["manifest"]).name
+            m = json.loads(mp.read_text(encoding="utf-8"))
+            m["input_deck"] = None
+            mp.write_text(json.dumps(m, indent=2, sort_keys=True)
+                          + "\n", encoding="utf-8")
 
     comparisons: list[dict] = []
     for g in ok_groups:

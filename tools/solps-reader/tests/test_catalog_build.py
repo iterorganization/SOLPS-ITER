@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -479,6 +480,86 @@ def test_catalog_build_skips_a_sick_group_named(
     assert [r["name"] for r in index["runs"]] == [
         "myruns/SYNTH1_demo/run1"]
     assert index["groups"][0]["status"] == "no-runs"
+
+
+# permission recovery runs as the invoking user; root reads through
+# mode-000 directories, so the denial never happens there
+_needs_deniable_permissions = pytest.mark.skipif(
+    hasattr(os, "geteuid") and os.geteuid() == 0,
+    reason="root reads through mode-000 directories")
+
+
+@_needs_deniable_permissions
+def test_catalog_build_skips_an_unreadable_directory(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The shared-archive shape: a folder the user cannot read names
+    itself on stderr and costs only its own contents — the readable
+    runs still catalog and the build still exits 0."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.chdir(tmp_path)
+    cat = _catalog_copy(tmp_path)
+    root = tmp_path / "myruns"
+    _write_run(root / "SYNTH1_demo", "run1")
+    locked = root / "SECRET_locked"
+    _write_run(locked, "run_x")
+    os.chmod(locked, 0)
+
+    try:
+        rc = cli.main(["catalog", "build",
+                       "--runs", str(root), "--catalog", str(cat)])
+    finally:
+        os.chmod(locked, 0o755)      # let tmp_path cleanup delete it
+    captured = capfd.readouterr()
+    assert rc == 0
+    assert "cannot read" in captured.err
+    assert "SECRET_locked" in captured.err
+    assert "Permission denied" in captured.err
+    index = json.loads((_share_out(tmp_path / "nohome") / "index.json")
+                       .read_text(encoding="utf-8"))
+    assert [r["name"] for r in index["runs"]] == [
+        "myruns/SYNTH1_demo/run1"]
+    site = (_share_out(tmp_path / "nohome") / "site" / "index.html"
+            ).read_text(encoding="utf-8")
+    assert "SECRET_locked" not in site
+
+
+@_needs_deniable_permissions
+def test_catalog_build_skips_an_unreadable_baserun(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The field crash shape exactly: a family baserun the user cannot
+    read.  The run itself still catalogs; the deck manifest skips
+    with one named line (an unread baserun is an honest absence on
+    the family page, never an empty zero-file deck)."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.chdir(tmp_path)
+    cat = _catalog_copy(tmp_path)
+    root = tmp_path / "myruns"
+    _write_run(root / "SYNTH1_demo", "run1")
+    base = root / "SYNTH1_demo" / "baserun"
+    base.mkdir()
+    (base / "b2mn.dat").write_text("* synthetic base\n*endphy\n",
+                                   encoding="latin-1")
+    os.chmod(base, 0)
+
+    try:
+        rc = cli.main(["catalog", "build",
+                       "--runs", str(root), "--catalog", str(cat)])
+    finally:
+        os.chmod(base, 0o755)
+    captured = capfd.readouterr()
+    assert rc == 0
+    assert "cannot read" in captured.err
+    assert "baserun" in captured.err
+    index = json.loads((_share_out(tmp_path / "nohome") / "index.json")
+                       .read_text(encoding="utf-8"))
+    assert [r["name"] for r in index["runs"]] == [
+        "myruns/SYNTH1_demo/run1"]
+    assert index["decks"] == []
+    fam_pg = (_share_out(tmp_path / "nohome") / "site" / "myruns"
+              / "SYNTH1_demo" / "index.html").read_text(encoding="utf-8")
+    assert "no shared base deck" in fam_pg
 
 
 def test_catalog_build_is_deterministic(
