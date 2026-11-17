@@ -834,7 +834,19 @@ SOLPSTOP
 |   +---ITER.ifort64
 +---runs
 +---SETUP
++---tools
 \end{verbatim}
+
+The {\tt tools} directory ships two standalone Python packages for
+working with this distribution: {\tt solps-reader}, which reads the
+solver output files ({\tt fort.44}, {\tt fort.46}, the {\tt b2*.nc}
+monitors, {\tt b2fstate} and the {\tt b2fplasma} family) and builds
+a catalog of run directories, and {\tt askthedocs}, a ranked search
+over the manuals, the dated {\tt doc/LOG} change log, the
+{\tt b2mn.dat} switch inventory, and the B2.5 and EIRENE Fortran
+source. Both are installed from the repository folder with one
+command each; the {\tt README} file in the {\tt tools} directory and
+the documentation beside each package describe setup and use.
 
 In order to set up the appropriate environment variables and aliases, the command
 \begin{verbatim}
