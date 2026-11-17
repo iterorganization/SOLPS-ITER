@@ -865,7 +865,11 @@ over the manuals, the dated {\tt doc/LOG} change log, the
 {\tt b2mn.dat} switch inventory, and the B2.5 and EIRENE Fortran
 source. Both are installed from the repository folder with one
 command each; the {\tt README} file in the {\tt tools} directory and
-the documentation beside each package describe setup and use.
+the documentation beside each package describe setup and use. The
+{\tt askthedocs} index needs a Python whose SQLite includes the
+FTS5 extension (on Linux {\tt x86\_64} a fallback wheel installs
+automatically with the package; the README names the remedies for
+every other case).
 
 In order to set up the appropriate environment variables and aliases, the command
 \begin{verbatim}

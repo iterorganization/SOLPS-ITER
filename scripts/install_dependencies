@@ -2047,6 +2047,41 @@ else if ("$OSTYPE" == "darwin") then
 
 endif
 
+# tools (the Python packages solps-reader and askthedocs): the
+# documentation-search index needs a Python whose SQLite includes the
+# FTS5 extension (a compile-time option of SQLite, not a pip package)
+
+echo
+echo Checking the SQLite FTS5 extension for tools/askthedocs...
+
+set TOOLS_PYTHON = `which python3`
+
+if ( "$TOOLS_PYTHON" != "" ) then
+
+  python3 -c 'import sqlite3; sqlite3.connect(":memory:").execute("CREATE VIRTUAL TABLE probe USING fts5(x)")' >& /dev/null
+
+  if ( $status == 0 ) then
+    echo The FTS5 extension is present in this python3.
+    echo tools/askthedocs can build its search index as shipped.
+  else
+    echo This python3 lacks the SQLite FTS5 extension, needed only by
+    echo tools/askthedocs; SOLPS-ITER itself does not use it.
+    echo Remedy without administrator rights, inside the virtual
+    echo environment the tools README creates:
+    echo "    pip install pysqlite3-binary"
+    echo On Linux x86_64 that wheel installs automatically with the
+    echo package; alternatively use a Python built with FTS5.
+  endif
+
+else
+
+  echo python3 not found. The tools/ packages need Python >= 3.10;
+  echo see the README file in the tools directory.
+
+endif
+
+unset TOOLS_PYTHON
+
 if ( $?MISSING_DEPENDENCY && "$MISSING_DEPENDENCY" == "1" ) then
 
   echo
