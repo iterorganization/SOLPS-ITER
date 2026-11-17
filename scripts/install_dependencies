@@ -2065,18 +2065,18 @@ if ( "$TOOLS_PYTHON" != "" ) then
     echo tools/askthedocs can build its search index as shipped.
   else
     echo This python3 lacks the SQLite FTS5 extension, needed only by
-    echo tools/askthedocs; SOLPS-ITER itself does not use it.
+    echo tools/askthedocs. SOLPS-ITER itself does not use it.
     echo Remedy without administrator rights, inside the virtual
     echo environment the tools README creates:
     echo "    pip install pysqlite3-binary"
     echo On Linux x86_64 that wheel installs automatically with the
-    echo package; alternatively use a Python built with FTS5.
+    echo package. Alternatively use a Python built with FTS5.
   endif
 
 else
 
-  echo python3 not found. The tools/ packages need Python >= 3.10;
-  echo see the README file in the tools directory.
+  echo python3 not found. The tools/ packages need Python
+  echo 3.10 or newer. See the README file in the tools directory.
 
 endif
 
