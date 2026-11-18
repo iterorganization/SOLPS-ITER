@@ -178,6 +178,24 @@ def test_discovery_stale_record_falls_through(checkout_factory,
     assert "the recorded root" in str(exc.value)  # named in the tried list
 
 
+def test_discovery_recorded_root_reads_an_explicit_share(
+        checkout_factory, tmp_path: Path, monkeypatch):
+    # the index-home redirect: the record is read from the directory
+    # handed in, not the per-user package share; callers that pass no
+    # share keep the package-share path exactly
+    root = checkout_factory(optional=("SOLPS-GUI",))
+    home = tmp_path / "home"
+    index_home = tmp_path / "scratch" / "atd"
+    floor.record_root(root, share=index_home)
+    monkeypatch.delenv(floor.REPOS_ENV, raising=False)
+    with pytest.raises(floor.FloorError):
+        floor.discover(cwd=tmp_path / "unrelated", home=home)
+    r, i, via = floor.discover(cwd=tmp_path / "unrelated", home=home,
+                               share=index_home)
+    assert (r, i) == (root, root / "SOLPS-ITER")
+    assert via.startswith("the recorded root")
+
+
 def test_setup_records_the_repos_root(indexable_checkout, tmp_path: Path,
                                        capsys):
     # the e2e: run_setup writes the install-time fact beside the

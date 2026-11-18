@@ -24,6 +24,11 @@ Discovery ladder, first match wins and never a guess beyond:
    that no longer resolves simply falls through);
 5. ``~/SOLPS-ITER``.
 
+A ``share`` handed to ``recorded_root`` / ``discover`` /
+``check_floor`` redirects only where the recorded root is read from
+(that directory instead of the per-user package share); callers that
+pass none keep today's behavior exactly.
+
 A checkout is recognized by shape, never by name alone: a
 ``.gitmodules`` file beside a ``modules/`` directory.
 """
@@ -83,22 +88,25 @@ def record_root(root: Path, *, share: Path | None = None) -> Path:
         return share / RECORD_NAME
 
 
-def _recorded_root(home: Path) -> Path | None:
+def _recorded_root(home: Path, share: Path | None = None) -> Path | None:
     """The recorded repos root, or None when no readable record
-    holds a path."""
+    holds a path.  A given *share* is where the record is read from,
+    instead of the per-user package share."""
+    base = _package_share(home) if share is None else Path(share)
     try:
-        text = (_package_share(home) / RECORD_NAME).read_text(
-            encoding="utf-8").strip()
+        text = (base / RECORD_NAME).read_text(encoding="utf-8").strip()
     except OSError:
         return None
     return Path(text) if text else None
 
 
-def recorded_root(home: Path | None = None) -> Path | None:
+def recorded_root(home: Path | None = None, *,
+                  share: Path | None = None) -> Path | None:
     """The install-time repos root setup recorded beside the index,
     or None (public read: refusal messages name WHERE setup stood,
     never a guessed path)."""
-    return _recorded_root(Path.home() if home is None else Path(home))
+    return _recorded_root(
+        Path.home() if home is None else Path(home), share)
 
 # checkout shape: these two, together, are what the tools index
 _GITMODULES = ".gitmodules"
@@ -214,12 +222,14 @@ def _ladder_stop(tried: list[str]) -> str:
 def discover(explicit: Path | str | None = None, *,
              env: dict[str, str] | None = None,
              home: Path | None = None,
-             cwd: Path | None = None) -> tuple[Path, Path, str]:
+             cwd: Path | None = None,
+             share: Path | None = None) -> tuple[Path, Path, str]:
     """Resolve (repos root, SOLPS-ITER path, rung) through the ladder.
 
     Raises :class:`FloorError` with the ladder-stop message when no
     rung answers, or a named-shape refusal when a rung was given but
-    does not resolve to a checkout.
+    does not resolve to a checkout.  A given *share* redirects only
+    the recorded-root rung (the index's own directory).
     """
     env = dict(os.environ) if env is None else dict(env)
     home = Path.home() if home is None else Path(home)
@@ -273,7 +283,7 @@ def discover(explicit: Path | str | None = None, *,
     # built this package's index (the index knows where it was born;
     # a moved or deleted corpus falls through, never trusts a stale
     # record)
-    recorded = _recorded_root(home)
+    recorded = _recorded_root(home, share)
     if recorded is not None:
         resolved = _repos_root_at(recorded)
         if resolved is not None:
@@ -325,9 +335,11 @@ def check(root: Path, iter_path: Path, via: str) -> FloorReport:
 def check_floor(explicit: Path | str | None = None, *,
                 env: dict[str, str] | None = None,
                 home: Path | None = None,
-                cwd: Path | None = None) -> FloorReport:
+                cwd: Path | None = None,
+                share: Path | None = None) -> FloorReport:
     """Discover the checkout and run the floor checks in one call."""
-    root, iter_path, via = discover(explicit, env=env, home=home, cwd=cwd)
+    root, iter_path, via = discover(explicit, env=env, home=home,
+                                    cwd=cwd, share=share)
     return check(root, iter_path, via)
 
 
