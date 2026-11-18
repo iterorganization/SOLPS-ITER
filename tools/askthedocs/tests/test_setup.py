@@ -102,3 +102,82 @@ def test_setup_resolves_a_differently_named_clone_from_within(
     # the build completed, and the phantom sibling never existed
     assert "what's next:" in out
     assert not (renamed.parent / "SOLPS-ITER").exists()
+
+
+def test_setup_home_flag_builds_into_the_chosen_home(
+        indexable_checkout, tmp_path: Path, monkeypatch, capsys):
+    """--home moves the whole build: the database, the manifest, and
+    every companion file land in the chosen directory, the per-user
+    share is untouched, an index left in the default location is
+    named as untouched, and the completion block names the home."""
+    from askthedocs import cli
+    from askthedocs.locate import DB_NAME, SUMMARY_NAME
+    home = tmp_path / "home"
+    share_db = home / ".local" / "share" / "askthedocs" / DB_NAME
+    share_db.parent.mkdir(parents=True)
+    share_db.write_bytes(b"planted default-location index")
+    planted = share_db.read_bytes()
+    scratch = tmp_path / "scratch" / "atd"
+    monkeypatch.setenv("HOME", str(home))
+
+    code = cli.main(["setup", str(indexable_checkout / "SOLPS-ITER"),
+                     "--home", str(scratch), "--no-icon"])
+    out = capsys.readouterr().out
+    assert code == 0
+    # the whole index moved: database + manifest + companions + the
+    # recorded corpus root
+    for name in (DB_NAME, SUMMARY_NAME, "switches.json", "corpus.json",
+                 "repos-root"):
+        assert (scratch / name).is_file(), name
+    # the default-location index was neither read nor written
+    assert share_db.read_bytes() == planted
+    assert "stays untouched" in out
+    assert str(share_db) in out
+    # the completion block names the home and the export
+    assert f"index home: {scratch}" in out
+    assert f"export ASKTHEDOCS_HOME={scratch}" in out
+    assert "what's next:" in out  # the build completed
+
+
+def test_setup_env_var_builds_into_the_home(
+        indexable_checkout, tmp_path: Path, monkeypatch, capsys):
+    """$ASKTHEDOCS_HOME alone redirects the build; the per-user share
+    under the isolated home never comes into existence."""
+    from askthedocs import setup as setup_mod
+    from askthedocs.locate import DB_NAME
+    home = tmp_path / "home"
+    scratch = tmp_path / "scratch" / "atd"
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setenv("ASKTHEDOCS_HOME", str(scratch))
+    code = setup_mod.run_setup(indexable_checkout / "SOLPS-ITER",
+                               install_icon=False)
+    out = capsys.readouterr().out
+    assert code == 0
+    assert (scratch / DB_NAME).is_file()
+    assert f"index home: {scratch}" in out
+    assert not (home / ".local" / "share" / "askthedocs").exists()
+
+
+def test_setup_second_run_reads_the_redirected_home(
+        checkout: Path, live_source: Path, store_factory, capsys,
+        tmp_path: Path, monkeypatch):
+    """Freshness follows the redirect too: with $ASKTHEDOCS_HOME set,
+    the second run reads the index in that home (never rebuilds it,
+    never touches the default share), and the recorded corpus root
+    lands in the redirected home."""
+    scratch = tmp_path / "scratch" / "atd"
+    db = store_factory(scratch, source_file=live_source)
+    before = db.read_bytes()
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("ASKTHEDOCS_HOME", str(scratch))
+
+    code = run_setup(checkout / "SOLPS-ITER", install_icon=False)
+
+    out = capsys.readouterr().out
+    assert code == 0
+    assert "index already present" in out
+    assert "freshness: current" in out
+    assert db.read_bytes() == before      # nothing was rebuilt
+    assert (scratch / "repos-root").is_file()  # the record moved too
+    assert not (tmp_path / "home" / ".local" / "share" /
+                "askthedocs").exists()

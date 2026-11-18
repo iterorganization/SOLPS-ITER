@@ -25,7 +25,7 @@ def test_status_refuses_named_when_corpus_unresolvable(
     client = _app_with_store(tmp_path, repos=None)
     monkeypatch.delenv(floor.REPOS_ENV, raising=False)
 
-    def refuse():
+    def refuse(*_a, **_k):
         raise floor.FloorError("no SOLPS-ITER checkout found")
 
     monkeypatch.setattr(floor, "check_floor", refuse)
@@ -41,7 +41,7 @@ def test_reindex_refuses_named_when_corpus_unresolvable(
     client = _app_with_store(tmp_path, repos=None)
     monkeypatch.delenv(floor.REPOS_ENV, raising=False)
 
-    def refuse():
+    def refuse(*_a, **_k):
         raise floor.FloorError("no SOLPS-ITER checkout found")
 
     monkeypatch.setattr(floor, "check_floor", refuse)
@@ -95,13 +95,32 @@ def test_status_503_names_the_recorded_root_when_the_ladder_refuses(
     client = _app_with_store(tmp_path, repos=None)
     monkeypatch.delenv(floor.REPOS_ENV, raising=False)
 
-    def refuse():
+    def refuse(*_a, **_k):
         raise floor.FloorError("no SOLPS-ITER checkout found")
 
     monkeypatch.setattr(floor, "check_floor", refuse)
     monkeypatch.setattr(floor, "recorded_root",
-                        lambda: Path("/gone/repos-root"))
+                        lambda *_a, **_k: Path("/gone/repos-root"))
     res = client.get("/status")
     assert res.status_code == 503
     assert "/gone/repos-root" in res.json()["detail"]
     assert "not there anymore" in res.json()["detail"]
+
+
+def test_service_follows_the_home_env(tmp_path: Path, monkeypatch):
+    # the index home redirect reaches the service process: with
+    # $ASKTHEDOCS_HOME pointing at a valid index, the app resolves it
+    # through the same ladder and serves it (the isolated home has no
+    # index of its own; only the redirected home answers)
+    import json
+    from askthedocs.locate import BUILD_SCHEMA, SUMMARY_NAME
+    scratch = tmp_path / "scratch" / "atd"
+    db = make_store(scratch)
+    (scratch / SUMMARY_NAME).write_text(
+        json.dumps({"schema": BUILD_SCHEMA}), encoding="utf-8")
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("ASKTHEDOCS_HOME", str(scratch))
+    client = TestClient(service.create_app())
+    res = client.get("/search", params={"q": "drifts"})
+    assert res.status_code == 200
+    assert res.json()["total"] >= 1

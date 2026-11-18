@@ -19,13 +19,17 @@ from askthedocs.cli import build_parser, cmd_status
 from askthedocs.locate import BUILD_SCHEMA, SUMMARY_NAME
 
 
-def _make_share_store(home: Path) -> Path:
-    """A valid store in the per-user share under *home*."""
-    share = home / ".local" / "share" / "askthedocs"
-    db = make_store(share)
-    (share / SUMMARY_NAME).write_text(
+def _make_valid_store(directory: Path) -> Path:
+    """A valid index (database + manifest) inside *directory*."""
+    db = make_store(directory)
+    (directory / SUMMARY_NAME).write_text(
         json.dumps({"schema": BUILD_SCHEMA}), encoding="utf-8")
     return db
+
+
+def _make_share_store(home: Path) -> Path:
+    """A valid store in the per-user share under *home*."""
+    return _make_valid_store(home / ".local" / "share" / "askthedocs")
 
 
 def _isolate(monkeypatch, tmp_path: Path, home: Path) -> None:
@@ -66,6 +70,37 @@ def test_status_honors_explicit_db_verbatim(tmp_path: Path,
     _isolate(monkeypatch, tmp_path, tmp_path / "home")
     rc = cmd_status(build_parser().parse_args(
         ["status", "--db", str(db)]))
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "index built from" in out
+
+
+def test_status_follows_the_home_env(tmp_path: Path, monkeypatch,
+                                      capsys):
+    # $ASKTHEDOCS_HOME moves the share step: the index in the
+    # redirected home answers, the (empty) per-user share never does
+    scratch = tmp_path / "scratch" / "atd"
+    _make_valid_store(scratch)
+    _isolate(monkeypatch, tmp_path, tmp_path / "home")
+    monkeypatch.setenv("ASKTHEDOCS_HOME", str(scratch))
+    rc = cmd_status(build_parser().parse_args(["status"]))
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "index built from" in out
+
+
+def test_status_home_flag_beats_the_env(tmp_path: Path, monkeypatch,
+                                        capsys):
+    # --db beats --home beats $ASKTHEDOCS_HOME: the flag's home holds
+    # the index, the variable points at an empty directory, and the
+    # flag still wins (had it lost, discovery would refuse)
+    from askthedocs.cli import main
+    env_home = tmp_path / "env-home"          # empty on purpose
+    flag_home = tmp_path / "flag-home"
+    _make_valid_store(flag_home)
+    _isolate(monkeypatch, tmp_path, tmp_path / "home")
+    monkeypatch.setenv("ASKTHEDOCS_HOME", str(env_home))
+    rc = main(["status", "--home", str(flag_home)])
     out = capsys.readouterr().out
     assert rc == 0
     assert "index built from" in out

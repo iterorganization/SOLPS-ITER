@@ -100,7 +100,9 @@ def _repos_now(application: FastAPI) -> dict[str, Path] | None:
     if application.state.repos is not None:
         return application.state.repos
     try:
-        report = floor.check_floor()
+        # the recorded root is read from the index home (it moved with
+        # the index when the home is redirected)
+        report = floor.check_floor(share=locate.index_home())
     except floor.FloorError:
         return None
     repos = {floor.ITER_REPO: report.iter_path}
@@ -114,7 +116,7 @@ def _require_repos(application: FastAPI) -> dict[str, Path]:
     see one ('is the index stale?' always has an answer)."""
     repos_now = _repos_now(application)
     if repos_now is None:
-        recorded = floor.recorded_root()
+        recorded = floor.recorded_root(share=locate.index_home())
         where = (f", the root setup recorded ({recorded}) is not "
                  "there anymore" if recorded is not None else "")
         raise HTTPException(
@@ -1035,7 +1037,9 @@ def create_app(db_path: Path | None = None,
 
     ``db_path`` defaults to the discovery ladder — ``ASKTHEDOCS_DB``
     (env, honored verbatim), then the ``./askthedocs-db/`` launch-dir
-    artifact, then the user share; when nothing resolves the app is
+    artifact, then the index home (the per-user share by default;
+    ``--home`` / ``ASKTHEDOCS_HOME`` moves it wholesale); when
+    nothing resolves the app is
     still built with the store marked MISSING (importing this module
     never crashes) and every data route answers 503 carrying the
     ladder's placements message.  ``repos`` defaults to the sibling
@@ -1557,8 +1561,11 @@ def main(argv: list[str] | None = None) -> int:
         prog="askthedocs.service",
         description="FastAPI service over the chunk store")
     ap.add_argument("--db", type=Path, default=None,
-                    help="chunk store to serve (default: ASKTHEDOCS_DB env "
-                         "or <project>/out/askthedocs.db)")
+                    help="chunk store to serve (default: the discovery "
+                         "ladder: ASKTHEDOCS_DB env, the "
+                         "./askthedocs-db/ launch-dir artifact, the "
+                         "index home, ~/.local/share/askthedocs/ unless "
+                         "ASKTHEDOCS_HOME moves it)")
     ap.add_argument("--static", type=Path, default=None,
                     help="optional web-client directory to mount "
                          "at / (api-mode build; default: ASKTHEDOCS_STATIC "
@@ -1585,7 +1592,7 @@ def _startup_verdict(db_path: Path | None) -> None:
                   "store")
             return
         try:
-            report = floor.check_floor()
+            report = floor.check_floor(share=locate.index_home())
         except floor.FloorError:
             print("corpus freshness: skipped (no SOLPS-ITER checkout on "
                   "the discovery ladder); the index is complete as "

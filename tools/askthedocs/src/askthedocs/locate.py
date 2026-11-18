@@ -11,8 +11,12 @@ machine-specific knowledge:
    normal open path, never silently swapped);
 2. ``./askthedocs-db/askthedocs.db`` — relative to the launch
    directory;
-3. ``~/.local/share/askthedocs/askthedocs.db`` — where ``setup``
-   writes it: install once, use from anywhere.
+3. the index home: ``~/.local/share/askthedocs/`` by default,
+   where ``setup`` writes it (install once, use from anywhere);
+   ``--home`` or ``$ASKTHEDOCS_HOME`` moves that whole directory
+   (the database, the manifest, and every companion file together)
+   to a filesystem with room, the mirror of solps-reader's
+   ``$SOLPS_READER_HOME``.
 
 A path handed in EXPLICITLY by the caller bypasses the ladder and the
 validation: the caller owns what it points at (the same per-call
@@ -26,7 +30,9 @@ carry the schema id this package expects. A candidate that exists but
 fails validation raises immediately — a broken artifact in a ladder
 slot is reported, never silently skipped in favor of an older copy
 further down. When no candidate exists, the failure is loud, lists
-every accepted placement, and names ``setup`` as the fix.
+every accepted placement, and names ``setup`` as the fix; when the
+home is redirected while an index sits unread in the default
+location, the refusal names that index too.
 """
 
 from __future__ import annotations
@@ -38,6 +44,11 @@ from pathlib import Path
 
 # Environment variable naming the store explicitly (ladder step 1).
 DB_ENV = "ASKTHEDOCS_DB"
+
+# Environment variable moving the index home wholesale (ladder step
+# 3's directory): the database, the manifest, and every companion
+# file travel together (the mirror of $SOLPS_READER_HOME).
+HOME_ENV = "ASKTHEDOCS_HOME"
 
 # File names of the shipped data artifact (db + manifest travel together).
 DB_NAME = "askthedocs.db"
@@ -55,22 +66,56 @@ class StoreValidationError(ValueError):
 
 
 def user_share() -> Path:
-    """Ladder step 3: the per-user install-once location (where
-    ``setup`` writes the index it builds)."""
+    """Ladder step 3's default: the per-user install-once location
+    (where ``setup`` writes the index it builds)."""
     return Path.home() / ".local" / "share" / "askthedocs"
+
+
+# The per-process override set once per CLI invocation (the --home
+# flag); set OR cleared on every call so nothing leaks between
+# in-process callers (the reader's set_catalog_root pattern).
+_index_home_override: Path | None = None
+
+
+def set_index_home(path: Path | str | None) -> None:
+    """Set or clear this process's index-home override (``--home``)."""
+    global _index_home_override
+    _index_home_override = (None if path is None
+                            else Path(path).expanduser())
+
+
+def index_home() -> Path:
+    """Ladder step 3's directory: the ``--home`` override, then
+    ``$ASKTHEDOCS_HOME`` (an empty value counts as unset), then the
+    per-user share.  Everything the index owns derives from here."""
+    if _index_home_override is not None:
+        return _index_home_override
+    env = os.environ.get(HOME_ENV)
+    if env:
+        return Path(env).expanduser()
+    return user_share()
+
+
+def index_home_redirected() -> bool:
+    """True when the index home is not the per-user default (the
+    notices and the orphan note key off this)."""
+    return index_home() != user_share()
 
 
 def candidate_paths() -> list[tuple[Path, str]]:
     """The artifact-discovery steps, in resolution order.
 
-    (path, placement description) — the environment override is NOT a
-    candidate: it is honored verbatim before any discovery runs.
+    (path, placement description); the environment overrides are NOT
+    candidates: ``$ASKTHEDOCS_DB`` is honored verbatim before any
+    discovery runs, and ``$ASKTHEDOCS_HOME`` moves step 3's directory
+    wholesale.
     """
     return [
         (Path.cwd() / "askthedocs-db" / DB_NAME,
          "./askthedocs-db/ beside your launch directory"),
-        (user_share() / DB_NAME,
-         "~/.local/share/askthedocs/ (install once, use from anywhere)"),
+        (index_home() / DB_NAME,
+         "the index home (~/.local/share/askthedocs/ by default; "
+         "--home / $ASKTHEDOCS_HOME moves it wholesale)"),
     ]
 
 
@@ -155,6 +200,7 @@ def resolve_db(explicit: Path | str | None = None) -> Path:
     existing = [(path, where)
                 for path, where in candidate_paths() if path.is_file()]
     if not existing:
+        home = index_home()
         lines = [
             "no askthedocs index on this machine yet: it is built "
             "locally from the repositories, once, at setup time. "
@@ -164,12 +210,32 @@ def resolve_db(explicit: Path | str | None = None) -> Path:
             f"{DB_ENV}=/full/path/to/{DB_NAME}",
             f"  2. ./askthedocs-db/{DB_NAME} beside the directory you "
             "launch from",
-            f"  3. ~/.local/share/askthedocs/{DB_NAME} (where setup "
-            "writes it: install once, use from anywhere)",
-            "",
-            "fix: run `askthedocs setup` (it needs a SOLPS-ITER "
-            "checkout with initialized submodules)",
         ]
+        if index_home_redirected():
+            lines.append(
+                f"  3. {home / DB_NAME} (the index home, moved by "
+                f"--home / ${HOME_ENV})")
+            share_db = user_share() / DB_NAME
+            if share_db.is_file():
+                lines += [
+                    "",
+                    f"note: an index exists at {share_db} and is not "
+                    f"read: the index home points at {home}. Drop the "
+                    f"redirect (unset {HOME_ENV}, no --home) to read "
+                    "that index, or move the index directory into "
+                    "the home.",
+                ]
+            fix = ("fix: run `askthedocs setup` (it builds into the "
+                   f"index home {home} while the redirect is active; "
+                   "it needs a SOLPS-ITER checkout with initialized "
+                   "submodules)")
+        else:
+            lines.append(
+                f"  3. ~/.local/share/askthedocs/{DB_NAME} (where "
+                "setup writes it: install once, use from anywhere)")
+            fix = ("fix: run `askthedocs setup` (it needs a SOLPS-ITER "
+                   "checkout with initialized submodules)")
+        lines += ["", fix]
         raise FileNotFoundError("\n".join(lines))
     path, _where = existing[0]
     validate_store(path)  # a broken first candidate is reported, not skipped

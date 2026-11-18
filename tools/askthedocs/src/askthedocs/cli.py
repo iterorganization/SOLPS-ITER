@@ -42,11 +42,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command")
 
+    # the one redirect: every index-holding verb takes --home (the
+    # mirror of solps-reader's catalog --home); consumed ONCE in
+    # main() so the override is set or cleared per invocation
+    home_parent = argparse.ArgumentParser(add_help=False)
+    home_parent.add_argument(
+        "--home", type=Path, default=None, metavar="PATH",
+        help="where the index lives: the database, its build "
+             "manifest, and every companion file under one directory "
+             "(default: the per-user share; $ASKTHEDOCS_HOME moves it "
+             "wholesale; --db still names one file directly and wins)",
+    )
+
     p_setup = sub.add_parser(
         "setup",
+        parents=[home_parent],
         help="first-install command: check the floor, build the search "
-             "index into the per-user location (re-runs report "
-             "freshness instead of rebuilding; --force rebuilds)",
+             "index into the index home, the per-user location by "
+             "default (re-runs report freshness instead of "
+             "rebuilding; --force rebuilds)",
     )
     p_setup.add_argument(
         "path", type=Path, default=None, nargs="?",
@@ -112,7 +126,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_search = sub.add_parser(
         "search",
-        help="ranked search over the chunk store (out/askthedocs.db)",
+        parents=[home_parent],
+        help="ranked search over the chunk store",
     )
     p_search.add_argument(
         "query", nargs="+",
@@ -120,7 +135,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_search.add_argument(
         "--db", type=Path, default=None,
-        help="chunk-store database to read (default: <project>/out/askthedocs.db)",
+        help="chunk-store database to read (default: the discovery "
+             "ladder, same as every read face: $ASKTHEDOCS_DB, "
+             "./askthedocs-db/, the index home)",
     )
     p_search.add_argument(
         "--limit", type=int, default=20,
@@ -135,23 +152,29 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_show = sub.add_parser(
         "show",
+        parents=[home_parent],
         help="print one chunk in full, with its provenance",
     )
     p_show.add_argument("chunk_id", help="chunk ID from a search hit")
     p_show.add_argument(
         "--db", type=Path, default=None,
-        help="chunk-store database to read (default: <project>/out/askthedocs.db)",
+        help="chunk-store database to read (default: the discovery "
+             "ladder, same as every read face: $ASKTHEDOCS_DB, "
+             "./askthedocs-db/, the index home)",
     )
 
     p_status = sub.add_parser(
         "status",
+        parents=[home_parent],
         help="diff the corpus against the index's build manifest)",
     )
     p_status.add_argument(
         "--db", type=Path, default=None,
         help="chunk-store database to read (default: the discovery "
              "ladder, same as search: $ASKTHEDOCS_DB, "
-             "./askthedocs-db/, ~/.local/share/askthedocs/)",
+             "./askthedocs-db/, the index home, "
+             "~/.local/share/askthedocs/ unless --home / "
+             "$ASKTHEDOCS_HOME moves it)",
     )
     p_status.add_argument(
         "--iter", type=Path, default=None,
@@ -220,7 +243,9 @@ def _repos_from(args: argparse.Namespace, *,
     else:
         from askthedocs import floor
         try:
-            report = floor.check_floor()
+            # the recorded root is read from the index home (it moved
+            # with the index when the home is redirected)
+            report = floor.check_floor(share=locate.index_home())
         except floor.FloorError:
             repos = corpus.default_repos()
         else:
@@ -537,6 +562,10 @@ def cmd_status(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    # the --home override is set OR cleared per invocation, so no
+    # stale redirect leaks into the next in-process caller (the
+    # reader's set_catalog_root pattern)
+    locate.set_index_home(getattr(args, "home", None))
     if args.command == "setup":
         from askthedocs import floor, setup as setup_mod
         try:

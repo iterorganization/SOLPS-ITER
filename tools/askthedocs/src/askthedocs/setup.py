@@ -327,7 +327,12 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
     Raises :class:`askthedocs.floor.FloorError` when the floor fails;
     the caller prints it and exits nonzero.
     """
-    report = floor.check_floor(path)
+    # the destination resolves BEFORE the gate: the recorded root the
+    # gate's ladder reads moved with the index when the home is
+    # redirected (--home / $ASKTHEDOCS_HOME; the per-user share
+    # otherwise)
+    share = locate.index_home() if share is None else Path(share)
+    report = floor.check_floor(path, share=share)
     print(f"SOLPS-ITER checkout: {report.iter_path}  "
           f"(found via {report.via})")
     if not report.ok:
@@ -341,7 +346,6 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
           "figures; a single page of those can take tens of seconds "
           "(the line under the stage names the file being worked)")
 
-    share = locate.user_share() if share is None else Path(share)
     db_path = share / locate.DB_NAME
     # the install-time fact every later gate and freshness check
     # reads back: the index knows where it was born, so the
@@ -350,6 +354,16 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
     if db_path.is_file() and not force:
         return _freshness_block(db_path, report)
     _require_fts5()
+    # a redirected build names the default-location index it leaves
+    # untouched (the move recipe keeps that one instead of paying a
+    # fresh build)
+    if locate.index_home_redirected():
+        share_db = locate.user_share() / locate.DB_NAME
+        if share_db.is_file():
+            print(f"note: the index at {share_db} stays untouched; "
+                  f"this build writes the index home {share} (the "
+                  "README tells how to move an index without "
+                  "rebuilding)")
 
     repos = report.repos
     bar = Progress()
@@ -431,8 +445,15 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
     print(f"Total time: {elapsed_str(bar.elapsed)}")
     print("=" * 72)
     print(f"index can be found here: {db_path}")
-    print("  (the per-user location: outside every checkout, found from "
-          "any directory, survives re-clones)")
+    if locate.index_home_redirected():
+        print("  (the index home: outside every checkout, found from "
+              "any directory, survives re-clones)")
+        print(f"  index home: {share} (--home / $ASKTHEDOCS_HOME)")
+        print(f"  export ASKTHEDOCS_HOME={share} once and every face "
+              "finds it")
+    else:
+        print("  (the per-user location: outside every checkout, found from "
+              "any directory, survives re-clones)")
     print("=" * 72)
     print("what's next:")
     print("  1. the web version: ranked search with citations, in "

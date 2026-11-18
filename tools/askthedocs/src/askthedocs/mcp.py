@@ -7,8 +7,9 @@ same library results. The store covers the manuals (TeX), text-rich
 PDFs, the GUI reST docs, the doc/LOG changelog, the DivGeo HTML
 manual, the b2mn.dat switch inventory, and the B2.5 + EIRENE Fortran
 source indexed by procedure unit; it is located through the standard
-discovery ladder (environment override, launch-directory artifact,
-user share) and only ever opened read-only.
+discovery ladder (environment override, launch-directory artifact, the
+index home, the per-user share by default, moved wholesale by
+ASKTHEDOCS_HOME) and only ever opened read-only.
 
 Run with ``askthedocs-mcp`` (or ``python -m askthedocs.mcp``).
 """
