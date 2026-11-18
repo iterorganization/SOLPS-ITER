@@ -49,13 +49,23 @@ def wait_port(port: int, host: str = "127.0.0.1",
 
 
 def open_browser(url: str) -> None:
-    """The one platform branch the click-path needs."""
+    """The one platform branch the click-path needs.
+
+    The browser's own console noise never lands in the user's
+    terminal: on a headless cluster the browser may complain for
+    minutes about a missing system bus it will never find, and none
+    of it is ours to show.  The child gets the null streams; the
+    address is already printed by the caller."""
     if sys.platform == "darwin":
-        subprocess.run(["open", url], check=False)
+        subprocess.run(["open", url], check=False,
+                       stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
     elif os.name == "nt":
         os.startfile(url)  # type: ignore[attr-defined]
     else:
-        subprocess.run(["xdg-open", url], check=False)
+        subprocess.run(["xdg-open", url], check=False,
+                       stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
 
 
 def resolve_static() -> Path | None:
@@ -136,6 +146,55 @@ def _http_status(url: str, timeout: float = 3.0) -> int | None:
         return None
 
 
+def _probe_search(url: str, timeout: float = 3.0) -> tuple[int, str] | None:
+    """One cheap search against the running service: (status, detail),
+    where detail is the service's own refusal text when it answered
+    one (its 503s carry the full named reason: the accepted index
+    placements and the fix).  None when the probe itself got no
+    answer - nothing is concluded from silence."""
+    import json as _json
+    import urllib.error
+    import urllib.request
+    try:
+        with urllib.request.urlopen(
+                f"{url}search?q=solver&limit=1", timeout=timeout) as res:
+            return int(res.status), ""
+    except urllib.error.HTTPError as exc:
+        detail = ""
+        try:
+            detail = str(_json.loads(
+                exc.read().decode("utf-8")).get("detail", ""))
+        except Exception:  # noqa: BLE001 — the body is best-effort
+            pass
+        return int(exc.code), detail
+    except Exception:  # noqa: BLE001 — the probe degrades to unknown
+        return None
+
+
+def _report_blind_service(url: str, detail: str, *, fresh: bool) -> None:
+    """Print why the (running or freshly started) service cannot
+    search, in the service's own words, plus the remedy.
+
+    The named-refusal rule holds end to end: the service answers a
+    503 that names the accepted index placements and the fix, and
+    the web client's error card swallows it (a generic 'may be
+    unreachable').  This is the terminal's copy of that reason, so
+    a store-blind service is diagnosed at the desktop in one line,
+    never through a browser trip onto a failing page."""
+    print(f"the service on {url} is running but cannot search:")
+    for line in detail.splitlines() or [""]:
+        print(f"  {line}")
+    if fresh:
+        print("the service was just started from THIS shell, and this "
+              "shell sees no index: the reason above names the "
+              "accepted placements and the variable that points at "
+              "one. Export it, then start it again:")
+    else:
+        print("a service started from a shell that can see the index "
+              "finds it; start a fresh one:")
+    print(f"  {sys.argv[0]} open --restart")
+
+
 def _pids_on_port(port: int) -> list[int]:
     """The PID(s) listening on the port — lsof on macOS/Linux,
     netstat on Windows; loud when neither can answer (the manual
@@ -198,6 +257,15 @@ def open_cmd(port: int, host: str = "127.0.0.1",
                 print("start a fresh one with the web version:")
                 print(f"  {sys.argv[0]} open --restart")
                 return 0
+            probe = _probe_search(url)
+            if probe is not None and probe[0] == 503:
+                # a service whose index lookup sees nothing (an index
+                # built into a moved home this service's shell never
+                # knew, or no index at all): its 503 carries the full
+                # named reason. Print it here - the page's error card
+                # would swallow it - and skip the browser trip.
+                _report_blind_service(url, probe[1], fresh=False)
+                return 0
             print(f"askthedocs already running: opening {url}")
             open_browser(url)
             return 0
@@ -229,6 +297,13 @@ def open_cmd(port: int, host: str = "127.0.0.1",
         print(f"error: the service did not answer on {url} within the "
               f"timeout; the log above names why", file=sys.stderr)
         return 1
+    probe = _probe_search(url)
+    if probe is not None and probe[0] == 503:
+        # the just-started service sees no index either (spawned from
+        # this shell, which cannot see one): name it now rather than
+        # letting the browser land on the failing page
+        _report_blind_service(url, probe[1], fresh=True)
+        return 0
     if static is not None:
         open_browser(url)
         print(f"open: {url}")
