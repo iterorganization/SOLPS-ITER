@@ -49,6 +49,8 @@ python3 -m venv .venv
 
 `setup` verifies the SOLPS-ITER checkout (the clone and its submodules complete) and prints where it found it. The same gate fires on the CLI's analysis commands and at the MCP server's start. A missing or half-initialized checkout is refused loudly, the remedy named in the message.
 
+The virtual environment is the isolation guarantee. Everything this package needs installs inside `.venv`, so nothing it installs can affect any other Python on the machine, and no package held by any other Python can affect it.
+
 **Windows.** Every command in this manual applies with the venv's Scripts directory in place of bin: `.venv\Scripts\solps-reader` wherever you read `.venv/bin/solps-reader` (`py -3 -m venv .venv` creates the venv). That one translation rule covers them all.
 
 ## Part one: SOLPS-Reader, read the five families

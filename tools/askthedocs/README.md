@@ -18,6 +18,8 @@ python3 -m venv .venv
 
 The line above runs from the clone root. From inside `tools/` the same install reads `pip install ./askthedocs`. The packages are not on PyPI, so pip always needs the folder path; the bare name cannot resolve.
 
+The virtual environment is the isolation guarantee. Everything this package needs installs inside `.venv`, so nothing it installs can affect any other Python on the machine, and no package held by any other Python can affect it. The one case a private environment cannot cover is a property of the interpreter itself, not of its packages: the SQLite FTS5 extension, named under If it refuses with its remedies.
+
 `setup` checks the checkout, then builds the index into `~/.local/share/askthedocs/` and installs the desktop icon. That location is outside every checkout. Every face finds it from any directory; no configuration is necessary. Re-runs report freshness and never rebuild silently. `setup --force` rebuilds on demand; `setup --no-icon` builds without the icon.
 
 The icon opens the web version: the full certified app, one gesture, no terminal. It lands in your platform's launcher, all user-level, no administrator needed. `askthedocs shortcut --remove` takes it back out:

@@ -46,6 +46,8 @@ cd ../..
 
 The commands above run from the clone root. From inside `tools/` the same installs read `pip install ./solps-reader` and `pip install ./askthedocs`. The packages are not on PyPI, so pip always needs the folder path; the bare name cannot resolve.
 
+The virtual environment is the isolation guarantee. Everything the two packages need installs inside `.venv`, so nothing they install can affect any other Python on the machine, and no package held by any other Python can affect them. The one case a private environment cannot cover is a property of the interpreter itself, not of its packages: the SQLite FTS5 case is named in the askthedocs README with its remedies. Installing Python applications into a private environment of their own is the standard practice across the Python ecosystem; this delivery applies that principle from day one.
+
 The catalog site needs no server and no network: it is static HTML that works offline. The askthedocs web app starts with a single command and its launcher icon is installed by `setup`; both packages also run as MCP servers for AI-assisted workflows, with the wiring recipes in their READMEs.
 
 ## License
