@@ -1,0 +1,9 @@
+* a clean deck exercising every accepted line shape
+*endphy
+'b2eirene'   '.true.'
+'b2ntde' '1.0'
+	'b2ntab' 'value with blanks'
+'b2nnote' 'T'  # the trailing note is ignored
+'b2nreal' 2.5e-7
+not a switch line, ignored by the scan
+'b2ntde' '2.0'

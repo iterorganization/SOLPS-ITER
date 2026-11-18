@@ -43,6 +43,13 @@ cited per rule:
   storage (chcase, b2mod_ipmain.F:67-68); values stored verbatim
   (:96); re-setting replaces, so the LAST occurrence in file order wins
   (:83-87).
+- Unreadable lines: the two-token read has no error branch, so a line
+  whose quote never closes or whose name carries no value is a line
+  the SOLVER itself cannot read; there is no correct reading to
+  recover.  The scan skips such lines and NAMES them (per-line warning
+  + the run's parse_skips record in the artifact); a deck with no
+  `*endphy` at all (a pure switch-list file of an older version) is a
+  per-run named absence, the deck-less precedent, never a fatal error.
 - vs_default ladder: strip both sides (inventory defaults carry their
   b2input.xml quoting — unquoted first); if BOTH sides parse as Fortran
   reals (`D`/`d` -> `E`; the solver's re-read is e32.0, ipgetr.F:22) ->
@@ -151,13 +158,22 @@ def is_comment(line: str) -> bool:
     return not line.strip() or line[0] in "*!#"
 
 
-def parse_deck(text: str) -> dict[str, str]:
+def parse_deck(text: str) -> tuple[dict[str, str], list[dict]]:
     """Effective switch map {lowercased name: stripped value} per the
-    b2mnds.F post-*endphy scan (rules cited in the module docstring).
+    b2mnds.F post-*endphy scan (rules cited in the module docstring),
+    plus one record per switch line the scan could not read:
+    {"line": <1-based number>, "reason": <plain words>}.
 
-    Raises ValueError on a deck with no `*endphy` terminator or a switch
-    line lacking its value token — both mean the file is not a form the
-    recon validated, and guessing is forbidden (source-of-truth ruling).
+    A line whose value quote never closes, whose name quote never
+    closes, or whose switch name carries no value, is a line the
+    SOLVER itself cannot read (the two-token read in b2mnds.F has no
+    error branch: a solver run stops on such a line), so there is no
+    correct reading to recover.  The line is skipped and named, never
+    guessed.  Raises ValueError on a deck with no `*endphy` terminator
+    line: that is not a deck form this scan knows (the pure
+    switch-list files of some older versions carry none), and the
+    caller catalogs the run without a switch set, the deck-less
+    precedent, rather than guess.
     """
     lines = text.splitlines()
     try:
@@ -166,23 +182,37 @@ def parse_deck(text: str) -> dict[str, str]:
     except StopIteration:
         raise ValueError("no *endphy terminator line") from None
     switches: dict[str, str] = {}
-    for ln in lines[start:]:
+    skipped: list[dict] = []
+    for n, ln in enumerate(lines[start:], start + 1):
         if is_comment(ln):
             continue
         s = ln.strip(" \t")
         if not s.startswith("'"):
             continue  # not a switch line; the scan ignores it
         m = re.match(r"'([^']*)'", s)
+        if m is None:
+            skipped.append({"line": n, "reason":
+                            "the switch name opens with a quote that "
+                            "never closes"})
+            continue
         name = m.group(1)
         rest = s[m.end():].lstrip(" \t")
         if not rest:
-            raise ValueError(f"switch line without value token: {ln!r}")
+            skipped.append({"line": n, "reason":
+                            "no value after the switch name"})
+            continue
         if rest.startswith("'"):
-            value = re.match(r"'([^']*)'", rest).group(1)
+            vm = re.match(r"'([^']*)'", rest)
+            if vm is None:
+                skipped.append({"line": n, "reason":
+                                "the value opens with a quote that "
+                                "never closes"})
+                continue
+            value = vm.group(1)
         else:
             value = rest.split()[0]
         switches[name.lower()] = value.strip()
-    return switches
+    return switches, skipped
 
 
 _REAL = re.compile(r"^[+-]?(\d+\.?\d*|\.\d+)([eEdD][+-]?\d+)?$")
@@ -292,9 +322,30 @@ def build(inventory_path: Path | None = None,
                   "switch set skipped, run cataloged without it")
             absent[name] = str(exc)
             continue
-        switches = parse_deck(deck_file.read_bytes().decode("latin-1"))
+        disp = f"{group_slug}/{deck_file.relative_to(root).as_posix()}"
+        try:
+            switches, skipped = parse_deck(
+                deck_file.read_bytes().decode("latin-1"))
+        except ValueError as exc:
+            # a deck that IS present but is not the deck form this scan
+            # knows (a pure switch-list file of an older version, no
+            # *endphy): the deck-less precedent, named per run, never
+            # one bad deck costing every other run its switch set
+            print(f"warning: {name}: {disp}: {exc}; not a deck form "
+                  "this scan knows; switch set skipped, run cataloged "
+                  "without it")
+            absent[name] = (f"the effective b2mn.dat {disp}: {exc} "
+                            "(not a deck form this scan knows)")
+            continue
+        for sk in skipped:
+            print(f"warning: {name}: {disp}: line {sk['line']}: "
+                  f"{sk['reason']}; line skipped")
         runs_block[name] = {
             "switch_count": len(switches),
+            # additive, only when the scan skipped lines: the durable
+            # record behind the warnings (stdout scrolls, the
+            # artifact stays)
+            **({"parse_skips": skipped} if skipped else {}),
             "switches": {
                 key: {
                     "value": value, "source_file": source,
@@ -335,20 +386,36 @@ def build(inventory_path: Path | None = None,
     # families without a baserun dir carry no entry — the honest
     # absence the family page states.
     family_decks: dict[str, dict] = {}
+    families_failed: set[str] = set()
     for root, group_slug, run_dir in walk:
         rel = run_dir.relative_to(root)
         fam_key = (f"{group_slug}/{rel.parts[1]}" if len(rel.parts) > 2
                    else f"{group_slug}/{rel.parts[0]}")
-        if fam_key in family_decks:
+        if fam_key in family_decks or fam_key in families_failed:
             continue
         deck_file = run_dir.parent / DECK_DIR / "b2mn.dat"
         if not deck_file.is_file():
             continue
+        try:
+            fam_switches, fam_skipped = parse_deck(
+                deck_file.read_bytes().decode("latin-1"))
+        except ValueError as exc:
+            # named once per family (families_failed): the honest
+            # absence the family page already states for a family
+            # without a baserun dir
+            families_failed.add(fam_key)
+            print(f"warning: base deck {fam_key}: {exc}; not a deck "
+                  "form this scan knows; family carries no base deck "
+                  "entry")
+            continue
+        for sk in fam_skipped:
+            print(f"warning: base deck {fam_key}: line {sk['line']}: "
+                  f"{sk['reason']}; line skipped")
         family_decks[fam_key] = {
-            "switches": parse_deck(
-                deck_file.read_bytes().decode("latin-1")),
+            "switches": fam_switches,
             "bytes": deck_file.stat().st_size,
             "md5": md5_of(deck_file),
+            **({"parse_skips": fam_skipped} if fam_skipped else {}),
         }
 
     # Inverted index (citation -> runs): keys are exactly askthedocs
@@ -385,6 +452,10 @@ def build(inventory_path: Path | None = None,
     # the census's own.
     not_set = [s["switch"] for s in inv["switches"]
                if s["switch"] not in inverted]
+    skipped_total = (
+        sum(len(rb.get("parse_skips", ())) for rb in runs_block.values())
+        + sum(len(fd.get("parse_skips", ()))
+              for fd in family_decks.values()))
     return {
         "schema": SCHEMA,
         "vs_default_values": list(VS_DEFAULT_VALUES),
@@ -413,7 +484,11 @@ def build(inventory_path: Path | None = None,
                    "absent_runs": len(absent),
                    "distinct_switches_set": len(inverted),
                    "documented_switches": inv["counts"]["switches"],
-                   "documented_not_set": len(not_set)},
+                   "documented_not_set": len(not_set),
+                   # additive, only when lines were skipped: keeps a
+                   # corpus of clean decks byte-identical
+                   **({"skipped_switch_lines": skipped_total}
+                      if skipped_total else {})},
     }
 
 
@@ -463,12 +538,15 @@ def main(argv: list[str] | None = None) -> int:
     c = art["counts"]
     skipped = (f", {c['absent_runs']} without a deck (skipped)"
                if c.get("absent_runs") else "")
+    lines = (f", {c['skipped_switch_lines']} unreadable deck lines "
+             "skipped" if c.get("skipped_switch_lines") else "")
     print(f"switchsets -> {OUT / 'switchsets.json'}: {c['runs']} runs"
           f"{skipped}, "
           f"{sum(rb['switch_count'] for rb in art['runs'].values())} "
           f"switch entries ({c['same']} same / {c['differs']} differs / "
           f"{c['no_default_in_inventory']} no-default / "
-          f"{c['unknown_to_inventory']} unknown_to_inventory), "
+          f"{c['unknown_to_inventory']} unknown_to_inventory)"
+          f"{lines}, "
           f"{c['distinct_switches_set']} distinct indexed switches")
 
 
