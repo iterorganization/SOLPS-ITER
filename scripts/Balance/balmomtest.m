@@ -60,7 +60,6 @@ tot_smo = sum(tmp(:,:,isplot),3);
 tot_smo_compare = 0;
 tmp = ncread(balfile,'b2stbr_phys_smo_bal');
 tot_smo_compare = tot_smo_compare + sum(tmp(:,:,isplot),3);
-tot_smo_compare = tot_smo_compare + sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbc_smo_bal');
 tot_smo_compare = tot_smo_compare + sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'eirene_mc_mapl_smo_bal');

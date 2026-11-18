@@ -66,7 +66,6 @@ tmp = ncread(balfile,'tot_sna_bal');
 tot_sna_bal = sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbr_phys_sna_bal');
 tot_sna_bal_compare = sum(tmp(:,:,isplot),3);
-tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbr_first_flight_sna_bal');
 tot_sna_bal_compare = tot_sna_bal_compare+sum(tmp(:,:,isplot),3);
 tmp = ncread(balfile,'b2stbc_sna_bal');

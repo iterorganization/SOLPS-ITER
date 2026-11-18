@@ -84,7 +84,11 @@ for k = 1:numel(snew)
     hsrc(:,numel(sname)+k) = ncread_opt(balfile,snew{k},[nCv 1]);
 end
 % electron energy of the atomic processes by part, all species together
-hsrc(:,end-4) = sum(ncread_opt(balfile,'b2stel_rqrad_bal',[nCv ns]),2);
+[tmp,parts] = ncread_opt(balfile,'b2stel_rqrad_bal',[nCv ns],...
+    'b2stel_she_bal');
+hsrc(:,end-4) = sum(tmp,2);
+rqrad = 'b2stel\_rqrad';
+if ~parts, rqrad = 'b2stel\_she'; end    % older B2.5: b2stel_she_bal
 hsrc(:,end-3) = sum(ncread_opt(balfile,'b2stel_rqbrm_bal',[nCv ns]),2);
 hsrc(:,end-2) = sum(ncread_opt(balfile,'b2stel_iz_bal',[nCv ns]),2);
 hsrc(:,end-1) = sum(ncread_opt(balfile,'b2stel_rc_bal',[nCv ns]),2);
@@ -100,7 +104,7 @@ if eirene
         sum(ncread(balfile,'eirene_mc_eppl_shi_bal'),2);
 end
 hsname = [strrep(strrep([sname,snew],'_bal',''),'_','\_'),...
-    {'b2stel\_rqrad','b2stel\_rqbrm','b2stel\_iz','b2stel\_rc',...
+    {rqrad,'b2stel\_rqbrm','b2stel\_iz','b2stel\_rc',...
     'eirene\_mc el. and ion'}];
 % (equipartition, b2npht_shei_bal, cancels between electrons and ions)
 reshe = ncread(balfile,'reshe');
@@ -142,7 +146,8 @@ fname = {'fna_pinch','fna_pll','fna_ecrb','fna_dia','fna_ch',...
     'fna_nanom','fna_panom','fna_pschused'};
 fna = zeros(nFc,2,ns);
 for k = 1:numel(fname)
-    fna = fna + ncread_opt(balfile,fname{k},[nFc 2 ns]);
+    fna = fna + ncread_opt(balfile,fname{k},[nFc 2 ns],...
+        strrep(fname{k},'ecrb','drift'));   % older B2.5: fna_drift
 end
 pname = {'b2stbr_phys_sna_bal','b2stbr_first_flight_sna_bal',...
     'b2stbc_sna_bal','b2stbm_sna_bal','ext_sna_bal',...
