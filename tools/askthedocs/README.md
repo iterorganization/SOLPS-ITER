@@ -22,6 +22,8 @@ The virtual environment is the isolation guarantee. Everything this package need
 
 `setup` checks the checkout, then builds the index into `~/.local/share/askthedocs/` and installs the desktop icon. That location is outside every checkout. Every face finds it from any directory; no configuration is necessary. Re-runs report freshness and never rebuild silently. `setup --force` rebuilds on demand; `setup --no-icon` builds without the icon.
 
+**Moving the index off your home directory.** The index (the database, its build manifest, and the companion files) lives in `~/.local/share/askthedocs/` by default. Home filesystems are often quota-limited, and an index over the full corpus is large. One redirect moves all of it, wholesale: pass `--home /scratch/wherever` to `askthedocs setup`, `search`, `show`, or `status`, or export `ASKTHEDOCS_HOME=/scratch/wherever` once in your shell and every face follows it. An existing index moves without rebuilding: `mv ~/.local/share/askthedocs /scratch/` then `export ASKTHEDOCS_HOME=/scratch/askthedocs`. The desktop icon picks the location up the next time `setup` runs. An assistant reached through MCP needs the variable in the environment that starts the MCP server; the manual's MCP section says how.
+
 The icon opens the web version: the full certified app, one gesture, no terminal. It lands in your platform's launcher, all user-level, no administrator needed. `askthedocs shortcut --remove` takes it back out:
 
 | OS | The icon lands |
@@ -38,6 +40,7 @@ Every refusal is loud and names its own fix. The three you might meet on day one
 
 - **The checkout is missing or half-initialized:** `setup` refuses and lists the submodule states with the missing ones named.
 - **No index yet:** every read face (search, web, MCP) refuses and points at `askthedocs setup`.
+- **The index home points somewhere empty:** the refusal names the index it is not reading and the two ways back (drop the redirect, or move the index).
 - **No FTS5 in your Python:** named as such, with the fix. The index needs an SQLite with the FTS5 extension; it is a compile-time option of SQLite, not a pip package. On Linux x86_64 the fallback wheel installs automatically with this package (no administrator anywhere). Elsewhere the remedy is `pip install pysqlite3-binary`, or a Python built with FTS5 (standard python.org installers and mainstream distributions ship it).
 
 ## Three ways in

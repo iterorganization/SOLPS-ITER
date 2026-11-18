@@ -50,6 +50,8 @@ Re-runs never rebuild silently. They re-hash the corpus and report freshness. Us
 
 The index lives at `~/.local/share/askthedocs/`. That is outside every checkout. It is found from any directory, and it survives re-clones. The CLI, the web version, and MCP all find the index automatically. No configuration is necessary.
 
+Home filesystems are often quota-limited, and an index over the full corpus is large. One redirect moves all of it, wholesale: pass `--home /scratch/wherever` to `askthedocs setup`, `search`, `show`, or `status`, or export `ASKTHEDOCS_HOME=/scratch/wherever` once in your shell and every face follows it. An existing index moves without rebuilding: `mv ~/.local/share/askthedocs /scratch/` then `export ASKTHEDOCS_HOME=/scratch/askthedocs`. The desktop icon picks the location up the next time `setup` runs. The read order never changes: `ASKTHEDOCS_DB` (one database file, verbatim) still wins, the launch-directory `./askthedocs-db/` still comes next, and the index home answers third. When the home points somewhere empty while an index sits in the default location, the refusal names that index and the two ways back: drop the redirect, or move the index.
+
 A store is validated when found: readable SQLite, the expected schema, and FTS5 in your Python. Any failure names the exact problem. If no index exists yet, every face refuses loudly and names `askthedocs setup` as the fix.
 
 ### The icon
@@ -64,14 +66,15 @@ The icon is all user-level. No administrator is needed.
 
 ### When setup completes
 
-It prints the totals: chunks by origin, split into documents, switch entries, and procedures. It prints where the index landed. It prints the three doors: the web version, a terminal search, and MCP.
+It prints the totals: chunks by origin, split into documents, switch entries, and procedures. It prints where the index landed; when the index home is redirected, it prints the home and the one `export` line that makes every face find it. It prints the three doors: the web version, a terminal search, and MCP.
 
 ### If it refuses
 
-Every refusal is loud and names its own fix. The three you might meet on day one:
+Every refusal is loud and names its own fix. The four you might meet on day one:
 
 - **The checkout is missing or half-initialized:** `setup` refuses and lists the submodule states with the missing ones named. The remedy: initialize the submodules in your clone.
 - **No index yet:** every read face refuses and points at `askthedocs setup`.
+- **The index home points somewhere empty:** the refusal names the index it is not reading and the two ways back (drop the redirect, or move the index).
 - **No FTS5 in your Python:** named as such. Standard python.org installers and mainstream distributions ship it.
 
 Each message states its remedy. Following it is the whole procedure.
@@ -140,7 +143,7 @@ askthedocs speaks the Model Context Protocol (MCP). Two tools: `search_docs` (co
 .venv/bin/askthedocs-mcp
 ```
 
-The standard wiring needs no environment at all. The per-user index and the recorded corpus root resolve from any directory. That is what a client-launched server needs: no terminal directory to lean on.
+The standard wiring needs no environment at all. The per-user index and the recorded corpus root resolve from any directory. That is what a client-launched server needs: no terminal directory to lean on. A moved index is the one exception: the server process must see `ASKTHEDOCS_HOME`, so export it in the shell that launches the client, or add an `"env"` block carrying it beside the command in the JSON entries below.
 
 One-line registration, user scope, stdio:
 
@@ -191,6 +194,8 @@ Wire it once. Every session after starts with the usage card and both tools live
 .venv/bin/askthedocs show <chunk_id>                   # full passage + provenance
 .venv/bin/askthedocs status                            # corpus drifted since the build?
 ```
+
+Every read verb also takes `--home PATH`, the same redirect as `setup` (see "Where the index lands"); with `ASKTHEDOCS_HOME` exported, no flag is needed.
 
 The query syntax is the one from "How results rank": plain terms, quoted phrases, raw FTS5 for power users, and a plain fallback for the unparseable.
 
