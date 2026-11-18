@@ -38,8 +38,22 @@ CMD = ("askthedocs", "open")
 # env vars captured at INSTALL time and re-exported by the launcher
 # (a clicked icon inherits no shell environment — everything the
 # service resolves through env would otherwise be lost)
-BAKED_ENV = ("ASKTHEDOCS_DB", "ASKTHEDOCS_STATIC",
+BAKED_ENV = ("ASKTHEDOCS_HOME", "ASKTHEDOCS_DB", "ASKTHEDOCS_STATIC",
              "ASKTHEDOCS_REPOS_ROOT")
+
+
+def _baked_values() -> dict[str, str]:
+    """The environment the launcher re-exports: every captured var
+    present at install time, plus the live index home when a redirect
+    is active and nothing was exported (``setup --home`` without an
+    export would otherwise bake an icon that cannot find the index it
+    just built; an explicit export always wins).  os.environ is read,
+    never mutated."""
+    from askthedocs import locate
+    values = {k: os.environ[k] for k in BAKED_ENV if k in os.environ}
+    if locate.index_home_redirected() and locate.HOME_ENV not in values:
+        values[locate.HOME_ENV] = str(locate.index_home())
+    return values
 
 
 def _asset(name: str) -> Path | None:
@@ -81,7 +95,7 @@ def _env_lines(shell: str) -> str:
     """Export lines for every ASKTHEDOCS_* var present at install
     time (field-earned: without them, the icon loses the db, the
     client, or the repos root the terminal flow had)."""
-    present = [(k, os.environ[k]) for k in BAKED_ENV if k in os.environ]
+    present = list(_baked_values().items())
     if not present:
         return ""
     if shell == "sh":
@@ -148,8 +162,7 @@ def install_linux(cli: Path) -> Path:
     # .desktop Exec has no cd — the launcher shells out to restore
     # the install-time cwd and captured env before exec-ing open
     exports = "".join(
-        f"export {k}='{os.environ[k]}'; " for k in BAKED_ENV
-        if k in os.environ)
+        f"export {k}='{v}'; " for k, v in _baked_values().items())
     icon = _asset("favicon.svg")
     icon_line = ""
     if icon is not None:

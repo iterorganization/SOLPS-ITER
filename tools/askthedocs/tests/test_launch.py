@@ -3,6 +3,7 @@ no-browser-trip guard. Everything here is synthetic except the
 packaged client itself, which the byte-identity test pins against
 the repo's certified build."""
 
+import os
 from pathlib import Path
 
 import askthedocs
@@ -117,3 +118,27 @@ def test_open_page_service_running_opens_browser(tmp_path, monkeypatch,
                           static=None, status=200)
     assert launch.open_cmd(8993) == 0
     assert opened == ["http://127.0.0.1:8993/"]
+
+
+# ------------------------------------------------------ icon env baking
+
+def test_baked_env_captures_a_redirected_home(tmp_path, monkeypatch):
+    # `setup --home` without an export: the icon must still find the
+    # index it built, so the live home is captured beside the plain
+    # env; an explicit export always wins; os.environ is read, never
+    # mutated; no redirect bakes nothing
+    from askthedocs import locate, shortcut
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    scratch = tmp_path / "scratch" / "atd"
+    locate.set_index_home(scratch)
+    values = shortcut._baked_values()
+    assert values[locate.HOME_ENV] == str(scratch)
+    assert locate.HOME_ENV not in os.environ      # read, never mutated
+    assert (f"export {locate.HOME_ENV}='{scratch}'"
+            in shortcut._env_lines("sh"))         # the writer emits it
+    exported = tmp_path / "exported"
+    monkeypatch.setenv(locate.HOME_ENV, str(exported))
+    assert shortcut._baked_values()[locate.HOME_ENV] == str(exported)
+    locate.set_index_home(None)
+    monkeypatch.delenv(locate.HOME_ENV, raising=False)
+    assert locate.HOME_ENV not in shortcut._baked_values()
