@@ -867,6 +867,7 @@ SOLPSTOP
 |   +---Matlab_SPb
 |   +---nc2text_simple
 |   +---palettes
+|   +---PythonPostProcessing
 |   +---ITER.ifort64
 +---scripts.local
 +---modules
@@ -2033,6 +2034,24 @@ Contains various Matlab routines used for postprocessing run results.
 
 Contains a set of Matlab scripts to adjust meshes produced by {\tt Carre2} and stored in {\tt .geo} format. See full documentation in {\tt \$\{SOLPSTOP\}/doc/edit\_geo\_manual.pdf}.
 
+\subsection{scripts/PythonPostProcessing}
+
+The PythonPostProcessing scripts offer a lightweight toolchain to perform basic postprocessing of {\bf SOLPS-ITER} results in Python. 
+The scripts allow to read in basic {\bf SOLPS-ITER} output and subsequently to create 2D colorplots, plot the separatrix, and create 1D plots along boundary surfaces and along segments such as the OMP. 
+An example script {\tt example\_script.py} is provided as a starting point for new users. Functionality includes: 
+
+\begin{itemize} 
+\item Reading of {\tt b2fgmtry}, {\tt b2fstate}, {\tt b2fplasmf} and {\tt structure.dat}.
+\item Writing of {\tt b2fgmtry}.
+\item Plotting of 2D colorplots, the separatrix, and vessel structures.
+\item Computation of boundary flux densities. 
+\item Helper functions to compute cell-segment intersections, find the separatrix flux surfaces, etc.
+\end{itemize}
+
+Note that not all functionality of the MatlabPostProcessing scripts has been translated yet. This can be done by any user when necessary. The goal is to keep the PythonPostProcessing scripts 
+lightweight, easy to use, and allways up-to-date with changes in the input and output files of {\bf SOLPS-ITER}. Note also that more elaborate external postprocessing toolchains exit, but these are not officially
+supported. 
+
 \newpage\section{data}
 \index{data}
 
@@ -2344,6 +2363,20 @@ Those files need to contain fields according to:
 \item[...] other options can be used to modify the mesh and magnetic
   field information that are read in from the mesh file (see Appendix~\ref{lis:b2cdci})
 \end{description}
+
+\index{Carre2}
+When reading a {\tt Carre2} grid with supplied flux-surface records,
+{\tt b2ag} uses these records to set the poloidal flux $\psi$ at the
+mesh vertices. For each surface, it takes the faces listed in
+{\tt fsFc} and assigns the surface value {\tt fsPsi} to both vertices
+of every listed face. Vertices not on a listed surface retain their
+input values at this step. This makes $\psi$ constant along each listed
+flux surface before guard cells are created and the magnetic field is
+calculated from the vertex values.
+
+This assignment is performed automatically during grid preparation
+by {\tt b2ag}. It does not affect an existing {\tt b2fgmtry}
+read by {\tt b2mn}.
 
 \newpage\section{b2ah, setting up the default physics parameters}
 \index{b2fpardf}\label{sec:b2ah}\index{b2ah}\index{b2run}
