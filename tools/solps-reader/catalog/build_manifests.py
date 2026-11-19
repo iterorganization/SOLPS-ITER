@@ -100,6 +100,14 @@ HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
 FIGURES_DIR = HERE / "figures"
 
+#: A user-shaped build (share seat, not the maintainer's --in-tree
+#: bump): runs seated in the example slot are the USER'S data and
+#: paint their wall figures into --out like every user group, instead
+#: of demanding figures committed inside the package. The gate's
+#: --examples-only rebuild and the --in-tree bump never set it, so
+#: the certified missing-figure contract stands where it belongs.
+PAINT_EXAMPLE_FIGURES = False
+
 
 class BuildRefusal(RuntimeError):
     """A build refused with a named remedy — run() prints it as one
@@ -438,22 +446,24 @@ def _figure_entry(run_dir: Path, root: Path, group_slug: str,
     right root."""
     slug = "__".join((group_slug,
                       *run_dir.relative_to(root).parts))
-    examples = group_slug == runs_source.EXAMPLES_SLUG
-    figures_root = FIGURES_DIR if examples else OUT / "figures"
+    committed = (group_slug == runs_source.EXAMPLES_SLUG
+                 and not PAINT_EXAMPLE_FIGURES)
+    figures_root = FIGURES_DIR if committed else OUT / "figures"
     fig = figures_root / f"{slug}.png"
     if not fig.is_file():
-        if examples:
+        if committed:
             # Build-order invariant (figures -> manifests -> site): a
             # PASS without its committed figure is an ingest bug
             # wearing an honest-absence mask — loud, same ruling as
-            # the missing-b2time.nc error.
+            # the missing-b2time.nc error. The certified rebuild's
+            # contract only: a user-shaped build paints below.
             raise BuildRefusal(
                 f"{run_dir.relative_to(root)}: gate PASS but {fig} "
                 "missing; run build_wall_figure.py before "
                 "build_manifests.py")
         _paint_wall_figure(run_dir, root, gate, fig)
     return {"path": f"figures/{slug}.png",
-            "figures_seat": "tree" if examples else "out",
+            "figures_seat": "tree" if committed else "out",
             **file_entry(fig)}
 
 
@@ -861,7 +871,7 @@ def _cache_write(cache_dir: Path, fp: str, analysis: dict) -> bool:
 
 
 def main(argv: list[str] | None = None) -> int:
-    global EXAMPLES, OUT
+    global EXAMPLES, OUT, PAINT_EXAMPLE_FIGURES
     ap = argparse.ArgumentParser(
         description="Rebuild the run manifests + index from the "
                     "catalog groups (the remembered sources + the "
@@ -879,6 +889,13 @@ def main(argv: list[str] | None = None) -> int:
                          "maintainer's certified set, whatever this "
                          "machine's remembered sources hold (the gate "
                          "builds with this)")
+    ap.add_argument("--paint-example-figures", action="store_true",
+                    help="a user-shaped build: example-slot runs are "
+                         "the user's own data, so their wall figures "
+                         "paint into --out like every user group's, "
+                         "never demanding figures committed inside "
+                         "the package (the CLI passes this for every "
+                         "non---in-tree build)")
     ap.add_argument("--out", metavar="PATH", default=None,
                     help="the out tree to write (default: this catalog "
                          "tree's out/; the CLI seats user builds in the "
@@ -904,6 +921,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     if args.out:
         OUT = Path(args.out).expanduser()
+    PAINT_EXAMPLE_FIGURES = bool(args.paint_example_figures)
     cache_dir = (Path(args.cache).expanduser() if args.cache
                  else cache_dir_default())
     sources_file = (Path(args.sources).expanduser()

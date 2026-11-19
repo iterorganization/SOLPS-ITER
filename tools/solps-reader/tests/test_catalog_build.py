@@ -876,9 +876,10 @@ def test_user_group_wall_figure_paints_into_the_seat(
 
 def test_examples_wall_figure_keeps_the_tree_contract(
         tmp_path: Path, monkeypatch) -> None:
-    """The examples' figures are committed tree content: a PASS
-    without one stays the loud maintainer demand, never a seat
-    paint."""
+    """The certified rebuild's contract: the examples' figures are
+    committed tree content, so a PASS without one stays the loud
+    maintainer demand, never a seat paint (the paint flag is unset,
+    exactly as the gate's --examples-only and --in-tree leave it)."""
     import build_manifests as bm
     run = tmp_path / "examples" / "FAM1" / "run1"
     run.mkdir(parents=True)
@@ -894,6 +895,34 @@ def test_examples_wall_figure_keeps_the_tree_contract(
         bm._figure_entry(run, tmp_path / "examples",
                          runs_source.EXAMPLES_SLUG,
                          {"mesh": "FAM1/baserun/fort.30"})
+
+
+def test_example_slot_figure_paints_in_a_user_build(
+        tmp_path: Path, monkeypatch) -> None:
+    """A user-shaped build over data seated where the examples ladder
+    looks (the share's runs/examples, or a checkout's): those runs
+    are the user's own, so their figures paint into the build's own
+    results folder exactly like a user group's — the committed-tree
+    demand cannot apply to data the package never shipped."""
+    import build_manifests as bm
+    run = tmp_path / "mydata" / "FAM1" / "run1"
+    run.mkdir(parents=True)
+    monkeypatch.setattr(bm, "OUT", tmp_path / "seat" / "out")
+    monkeypatch.setattr(bm, "PAINT_EXAMPLE_FIGURES", True)
+
+    def fake_paint(run_dir, root, gate, out_png):
+        out_png.parent.mkdir(parents=True, exist_ok=True)
+        out_png.write_bytes(b"\x89PNG stub")
+    monkeypatch.setattr(bm, "_paint_wall_figure", fake_paint)
+
+    entry = bm._figure_entry(run, tmp_path / "mydata",
+                             runs_source.EXAMPLES_SLUG,
+                             {"mesh": "FAM1/baserun/fort.30"})
+    assert entry["figures_seat"] == "out"
+    assert entry["path"] == (
+        f"figures/{runs_source.EXAMPLES_SLUG}__FAM1__run1.png")
+    assert (tmp_path / "seat" / "out" / "figures"
+            / f"{runs_source.EXAMPLES_SLUG}__FAM1__run1.png").is_file()
 
 
 def test_missing_b2time_warns_and_catalogs_without_convergence(
