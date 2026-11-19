@@ -129,9 +129,7 @@ for iFc = 1:comuse.nFc
             iCvin = iCv2;
             iCvout = iCv1;
         end
-        iFt = comuse.cvFt(iCvin);
-        if (iCvout > comuse.nCi) && (comuse.cvFt(iCvout) == iFt) && ...
-                (comuse.fcQalf(iFc,1) ~= 0)
+        if (iCvout > comuse.nCi) && (comuse.fcQalf(iFc,1) ~= 0)
             if (iCvin == comuse.fcCv(iFc,2)) == (comuse.fcQalf(iFc,1) > 0)
                 facesup = [facesup,iFc];
             else

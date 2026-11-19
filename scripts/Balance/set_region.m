@@ -142,13 +142,46 @@ elseif comuse.nXpt==2
         otherwise
             error('Region name ''%s'' not supported.',region_name);
     end
+elseif comuse.nXpt == 0 && any(comuse.cvReg(1:comuse.nCi) == 2)
+    display('Assuming limiter case');
+    % Each flux tube of the SOL (region 2) runs from one side of the limiter
+    % to the other and is split at its poloidal middle: li and ui take the
+    % half that ends on the side at the smaller major radius, uo and lo the
+    % other half (with both sides at about the same radius, the two halves).
+    switch region_name(1:2)
+        case {'li','ui','uo','lo'}
+            inner = any(strcmp(region_name(1:2),{'li','ui'}));
+            reverse = false;
+            for iFt = 1:comuse.nFt
+                iFt1 = comuse.ftCvP(iFt,1);
+                cells = comuse.ftCv(iFt1:iFt1+comuse.ftCvP(iFt,2)-1);
+                cells = cells(cells <= comuse.nCi);
+                if isempty(cells) || comuse.cvReg(cells(1)) ~= 2
+                    continue
+                end
+                n = floor(numel(cells)/2);
+                first = (comuse.cvX(cells(1)) < comuse.cvX(cells(end))) == inner;
+                if first
+                    half = cells(1:n);
+                else
+                    half = cells(n+1:end);
+                end
+                indrad(half) = true;
+                if iFt == comuse.ftSep
+                    indpol(half) = true;
+                    reverse = first;
+                end
+            end
+        otherwise
+            error('Region name ''%s'' not supported.',region_name);
+    end
 elseif comuse.nXpt == 0
     display('Assuming continuous slab-like case');
     switch region_name(1:2)
         case {'li','ui','uo','lo'}
-            indrad(1:nCi) = true;
+            indrad(1:comuse.nCi) = true;
             if (region_name(3)=='s')
-                indrad(gmtry.cvReg == 1) = false;
+                indrad(comuse.cvReg == 1) = false;
             end
             indpol(comuse.cvFt == comuse.ftSep) = true;
             reverse = false;
@@ -159,10 +192,11 @@ end
 
 % Determine the faces of the upstream and downstream boundary of indrad.
 % Downstream faces are the ends of the flux tubes: faces between a cell of
-% the region and a guard cell of the same flux tube that the flux tube passes
-% through (cosine of alpha non-zero, as B2.5 itself tells them from radial
-% faces): the targets, or the walls that the flux tubes end on in extended
-% grids. This does not depend on the face labels, which differ between grids.
+% the region and a guard cell that the flux tube passes through (cosine of
+% alpha non-zero, as B2.5 itself tells them from radial faces): the targets,
+% the limiter, or the walls that the flux tubes end on in extended grids.
+% This does not depend on the face labels or on the flux tube of the guard
+% cell, which differ between grids.
 facesup = []; % list of faces at the upstream boundary
 facesdown = []; % list of faces at the downstream boundary
 for iFc = 1:comuse.nFc
@@ -176,11 +210,11 @@ for iFc = 1:comuse.nFc
             iCvin = iCv2;
             iCvout = iCv1;
         end
-        if (iCvout > comuse.nCi) && ...
-                (comuse.cvFt(iCvout) == comuse.cvFt(iCvin)) && ...
-                (comuse.fcQalf(iFc,1) ~= 0)
+        if (iCvout > comuse.nCi) && (comuse.fcQalf(iFc,1) ~= 0)
             facesdown = [facesdown,iFc];
-        elseif comuse.cvReg(iCv1) ~= comuse.cvReg(iCv2)
+        elseif (comuse.cvReg(iCv1) ~= comuse.cvReg(iCv2)) || ...
+                ((iCvout <= comuse.nCi) && ...
+                (comuse.cvFt(iCvout) == comuse.cvFt(iCvin)))
             facesup = [facesup,iFc];
         end
     end

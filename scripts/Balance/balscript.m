@@ -16,6 +16,9 @@
 %                 replaced by 'd' then the PFR region is also plotted. Any     %
 %                 other string will mean that the region is set by the user in %
 %                 user_set_region.                                             %
+%                 On a limiter grid the SOL flux tubes are split at their      %
+%                 poloidal middle: li and ui take the half ending on the inner %
+%                 side of the limiter, uo and lo the outer half.               %
 % AREAEND:        Either 'left', 'right' or 'none'. Defines the poloidal end   %
 %                 of the balance region at which areas will be calculated. The %
 %                 poloidal fluxes at both ends will then be divided by these   %
