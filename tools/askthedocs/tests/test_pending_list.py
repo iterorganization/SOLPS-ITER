@@ -154,11 +154,13 @@ def test_fortran_scan_opens_one_stage_per_category(indexable_checkout):
 def test_setup_build_end_to_end(indexable_checkout, tmp_path: Path,
                                  capsys, monkeypatch):
     root = indexable_checkout
-    share = tmp_path / "share"
     # the icon lands under a FAKE home (setup installs it by
-    # default) with a fake console path baked in
+    # default) with a fake console path baked in; the build itself
+    # goes into that home's DEFAULT location (this is the
+    # non-redirected completion block's pin)
     fake_home = tmp_path / "home"
     fake_home.mkdir()
+    share = fake_home / ".local" / "share" / "askthedocs"
     monkeypatch.setattr(Path, "home", lambda: fake_home)
     from askthedocs import shortcut
     monkeypatch.setattr(shortcut, "_cli_path",

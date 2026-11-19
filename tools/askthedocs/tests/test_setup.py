@@ -142,9 +142,10 @@ def test_setup_home_flag_builds_into_the_chosen_home(
 def test_setup_env_var_builds_into_the_home(
         indexable_checkout, tmp_path: Path, monkeypatch, capsys):
     """$ASKTHEDOCS_HOME alone redirects the build; the per-user share
-    under the isolated home never comes into existence."""
+    under the isolated home carries ONLY the one-line record of the
+    moved home (never an index)."""
     from askthedocs import setup as setup_mod
-    from askthedocs.locate import DB_NAME
+    from askthedocs.locate import DB_NAME, HOME_POINTER_NAME
     home = tmp_path / "home"
     scratch = tmp_path / "scratch" / "atd"
     monkeypatch.setenv("HOME", str(home))
@@ -155,7 +156,11 @@ def test_setup_env_var_builds_into_the_home(
     assert code == 0
     assert (scratch / DB_NAME).is_file()
     assert f"index home: {scratch}" in out
-    assert not (home / ".local" / "share" / "askthedocs").exists()
+    default = home / ".local" / "share" / "askthedocs"
+    assert not (default / DB_NAME).exists()
+    assert [p.name for p in default.iterdir()] == [HOME_POINTER_NAME]
+    assert (default / HOME_POINTER_NAME).read_text(
+        encoding="utf-8").strip() == str(scratch)
 
 
 def test_setup_second_run_reads_the_redirected_home(

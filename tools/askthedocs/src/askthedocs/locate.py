@@ -87,13 +87,61 @@ def set_index_home(path: Path | str | None) -> None:
 def index_home() -> Path:
     """Ladder step 3's directory: the ``--home`` override, then
     ``$ASKTHEDOCS_HOME`` (an empty value counts as unset), then the
-    per-user share.  Everything the index owns derives from here."""
+    home a redirected ``setup`` RECORDED in the default location,
+    then the per-user share.  Everything the index owns derives from
+    here.  The recorded rung is what lets a service started from any
+    shell find a moved index without the variable (a stale record,
+    whose directory no longer exists, falls through to the default)."""
     if _index_home_override is not None:
         return _index_home_override
     env = os.environ.get(HOME_ENV)
     if env:
         return Path(env).expanduser()
+    recorded = _recorded_home()
+    if recorded is not None:
+        return recorded
     return user_share()
+
+
+# The record a redirected setup leaves in the DEFAULT location: one
+# line, the absolute path of the real home.  Setup writes it after a
+# successful build into a moved home and clears it when a build lands
+# back in the default; every face reads it through index_home() when
+# the variable is absent (the service included — a process started
+# from a bare shell still finds the index).
+HOME_POINTER_NAME = "index-home.txt"
+
+
+def _recorded_home() -> Path | None:
+    """The home a redirected setup recorded, or None.  Valid only
+    while the recorded directory exists: a stale record is the
+    pre-record behavior (the default share), never a refusal."""
+    try:
+        first = (user_share() / HOME_POINTER_NAME).read_text(
+            encoding="utf-8").splitlines()[0].strip()
+    except (OSError, IndexError):
+        return None
+    if not first:
+        return None
+    home = Path(first).expanduser()
+    return home if home.is_dir() else None
+
+
+def record_home(home: Path) -> None:
+    """Write the moved-home record into the default location (setup,
+    after a successful build into a redirected home)."""
+    share = user_share()
+    share.mkdir(parents=True, exist_ok=True)
+    (share / HOME_POINTER_NAME).write_text(f"{home}\n", encoding="utf-8")
+
+
+def clear_recorded_home() -> None:
+    """Remove the moved-home record: a build into the default
+    location makes any old record a lie."""
+    try:
+        (user_share() / HOME_POINTER_NAME).unlink()
+    except FileNotFoundError:
+        pass
 
 
 def index_home_redirected() -> bool:

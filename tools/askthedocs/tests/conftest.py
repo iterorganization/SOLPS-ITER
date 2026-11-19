@@ -213,19 +213,22 @@ def make_corpus_store(dir_path: Path, rows: list[dict],
 
 
 @pytest.fixture(autouse=True)
-def _clean_repos_root_env(monkeypatch):
+def _clean_repos_root_env(tmp_path, monkeypatch):
     """Ladder hygiene for every test: neither repos-root variable nor
     $SOLPSTOP leaks in from the launching shell (a machine that
     exports SOLPSTOP must never resolve a test's tree through the
     real one), neither index-location variable ($ASKTHEDOCS_DB,
-    $ASKTHEDOCS_HOME) leaks in either, and a --home override an
+    $ASKTHEDOCS_HOME) leaks in either, a --home override an
     earlier test set on the locate module never survives into the
-    next one."""
+    next one, and HOME itself is sandboxed away from the real user
+    (a redirected build now writes its recorded home into the default
+    location — a test must never touch the machine's own)."""
     from askthedocs import floor, locate
     monkeypatch.delenv(floor.REPOS_ENV, raising=False)
     monkeypatch.delenv("SOLPSTOP", raising=False)
     monkeypatch.delenv(locate.DB_ENV, raising=False)
     monkeypatch.delenv(locate.HOME_ENV, raising=False)
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
     locate.set_index_home(None)
     yield
     locate.set_index_home(None)

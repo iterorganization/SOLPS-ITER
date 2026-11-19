@@ -290,6 +290,14 @@ def run_index_build(repos: dict[str, Path], *, bar: Progress,
     # the artifact names itself: prove the pair validates before
     # announcing completion
     locate.validate_store(final_dir / locate.DB_NAME)
+    # a proven index in a moved home leaves its address in the
+    # default location: every later face — the service included —
+    # finds it without the variable; a build back into the default
+    # clears any stale address
+    if final_dir != locate.user_share():
+        locate.record_home(final_dir)
+    else:
+        locate.clear_recorded_home()
 
     # the icon is part of initial setup: installed on every
     # build by default, refreshed when already present; refused with
@@ -456,8 +464,10 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
         print("  (the index home: outside every checkout, found from "
               "any directory, survives re-clones)")
         print(f"  index home: {share} (--home / $ASKTHEDOCS_HOME)")
-        print(f"  export ASKTHEDOCS_HOME={share} once and every face "
-              "finds it")
+        print("  every face finds it: the location is recorded, no "
+              "export needed")
+        print(f"  export ASKTHEDOCS_HOME={share} only to override the "
+              "recorded location")
     else:
         print("  (the per-user location: outside every checkout, found from "
               "any directory, survives re-clones)")
