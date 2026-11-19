@@ -66,7 +66,7 @@ The icon is all user-level. No administrator is needed.
 
 ### When setup completes
 
-It prints the totals: chunks by origin, split into documents, switch entries, and procedures. It prints where the index landed; when the index home is redirected, it prints the home and the one `export` line that makes every face find it. It prints the three doors: the web version, a terminal search, and MCP.
+It prints the totals: chunks by origin, split into documents, switch entries, and procedures. When a file could not be read, it prints one further line: how many sources were skipped, their names, and where the reasons are recorded (`build_summary.json`, beside the index). A skipped file is rare: it means the file is not valid UTF-8 text or is otherwise unreadable, and the rest of the corpus is indexed without it. It prints where the index landed; when the index home is redirected, it prints the home and the one `export` line that makes every face find it. It prints the three doors: the web version, a terminal search, and MCP.
 
 ### If it refuses
 

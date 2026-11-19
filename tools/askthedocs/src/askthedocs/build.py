@@ -137,6 +137,10 @@ class _Carry:
     pointers: dict[str, str] = field(default_factory=dict)
     skipped_labels: set[str] = field(default_factory=set)
     per_source: dict[str, int] = field(default_factory=dict)
+    # the previous store's own unreadable sources, verbatim (source +
+    # reason): a carried rebuild keeps them failed instead of
+    # relabeling zero chunks as extracted
+    failed_by_source: dict[str, dict] = field(default_factory=dict)
     from_sha: str = ""
     inventory_name: str | None = None
 
@@ -189,9 +193,10 @@ def _read_carry(carry_from: Path,
             carry.skipped_labels.update(labels or [])
         carry.per_source = dict(
             (prev_summary.get("chunks") or {}).get("per_source") or {})
-        failed_labels = {f["source"] for f in
-                         (prev_summary.get("sources") or {}).get("failed")
-                         or []}
+        carry.failed_by_source = {
+            f["source"]: f
+            for f in (prev_summary.get("sources") or {}).get("failed")
+            or []}
     # integrity: every carried corpus row's chunk count in
     # the previous store must EQUAL the count its own summary
     # records.  Zero==zero is legitimate — extraction succeeding with
@@ -207,11 +212,10 @@ def _read_carry(carry_from: Path,
         raise CarryError(
             "the carry store does not cover its own recorded sources ("
             + ", ".join(broken[:5]) + "); rebuild from clones")
-    for row in carry.corpus_rows:
-        if f"{row[1]}/{row[2]}" in failed_labels:
-            raise CarryError(
-                f"the carry store itself failed {row[1]}/{row[2]}; "
-                "rebuild from clones for a complete index")
+    # a source the previous store could not read is no longer a
+    # carry-refusal: an index with named unreadable sources is a
+    # legitimate store, and the merge below keeps each one failed
+    # (zero chunks, its recorded reason) instead of carrying silence
     return carry
 
 
@@ -345,6 +349,9 @@ def build(manifest: dict[str, Any], repos: dict[str, Path],
         if _kind == "carry":
             if _source in carry.skipped_labels:
                 skipped["needs_alt_extractor"].append(_source)
+                continue
+            if _source in carry.failed_by_source:
+                failed.append(carry.failed_by_source[_source])
                 continue
             for _c in carry.chunks_by_source.get(_source, ()):
                 carried_ids.add(id(_c))

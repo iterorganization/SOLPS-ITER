@@ -151,7 +151,12 @@ def main(argv: list[str] | None = None) -> int:
         # exactly these keys
         "chunks": summary.get("chunks"),
         "db_sha256": summary.get("db_sha256"),
-        "carry": summary.get("carry")})
+        "carry": summary.get("carry"),
+        # D-170 skip-and-name: additive; the web completion names
+        # these with the next client change (the F4 batch)
+        "failed_sources": [f["source"] for f in
+                           (summary.get("sources") or {}).get("failed")
+                           or []]})
     return 0
 
 

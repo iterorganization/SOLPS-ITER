@@ -144,7 +144,7 @@ def _apply(state: list[str], delta: dict) -> list[str]:
 
 _POLL_SHAPE = {"status", "started_at", "finished_at", "duration_s",
                "error", "chunks_total", "db_sha256_8", "carried_legs",
-               "drifted_legs", "frame"}
+               "skipped_sources", "drifted_legs", "frame"}
 
 
 def test_snapshot_then_deltas_then_terminal_and_the_diff_is_exact(

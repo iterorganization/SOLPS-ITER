@@ -447,6 +447,11 @@ class ReindexOut(BaseModel):
         default_factory=list,
         description="legs the rebuild carried at their pinned commits "
                     "(done only)")
+    skipped_sources: list[str] = Field(
+        default_factory=list,
+        description="sources the rebuild could not read and skipped, "
+                    "by name (done only): the index installed without "
+                    "them and the summary file records each reason")
     drifted_legs: list[str] = Field(
         default_factory=list,
         description="the on-disk drift this job consumed (running/"
@@ -522,6 +527,7 @@ class _ReindexJob:
         self.chunks_total: int | None = None
         self.db_sha256_8: str | None = None
         self.carried_legs: list[str] = []
+        self.skipped_sources: list[str] = []
         self.drifted_legs: list[str] = []
         # where the child streams its display frames (None until the
         # app resolves a store): GET /reindex serves this file's
@@ -543,6 +549,7 @@ class _ReindexJob:
             self.chunks_total = None
             self.db_sha256_8 = None
             self.carried_legs = []
+            self.skipped_sources = []
             self.drifted_legs = list(drifted)
             self._t0 = time.monotonic()
             return True
@@ -557,6 +564,8 @@ class _ReindexJob:
             self.db_sha256_8 = (summary.get("db_sha256") or "")[:8]
             self.carried_legs = list((summary.get("carry") or {})
                                      .get("legs") or [])
+            self.skipped_sources = list(
+                summary.get("failed_sources") or [])
 
     def fail(self, message: str) -> None:
         with self.lock:
@@ -585,6 +594,7 @@ class _ReindexJob:
             error=self.error, chunks_total=self.chunks_total,
             db_sha256_8=self.db_sha256_8,
             carried_legs=list(self.carried_legs),
+            skipped_sources=list(self.skipped_sources),
             drifted_legs=list(self.drifted_legs),
             frame=frame)
 

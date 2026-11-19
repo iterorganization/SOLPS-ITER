@@ -128,31 +128,59 @@ def test_reindex_discipline(tmp_path, monkeypatch):
     assert "current" in again.json()["detail"]
 
 
-def test_reindex_failure_leaves_the_world_unchanged(tmp_path):
+def test_reindex_skips_an_unextractable_document_and_names_it(tmp_path):
     client, root = _built(tmp_path)
-    doc = root / "SOLPS-ITER" / "doc" / "intro.rst"
-    doc.write_text(doc.read_text(encoding="utf-8") + "\nBoom tail\n",
-                   encoding="utf-8")
-    before = client.get("/search", params={"q": "drifts"}).json()
-    # a document the rebuild cannot extract: the child process fails
-    # on it with the source named (the review harness's --break
-    # state, pinned here) - the failure crosses a process boundary
-    # and must still map onto the job's failed record with the served
-    # store byte-untouched
+    # a document the rebuild cannot extract (the review harness's
+    # --break state): the rebuild no longer fails on it - the source
+    # is skipped and named in the job's record, the index installs,
+    # and the rest of the corpus stays searchable
     (root / "SOLPS-ITER" / "doc" / "broken.rst").write_bytes(
         b"Broken\n======\n\nnot utf-8 bytes: \x80\xff\n")
     started = client.post("/reindex")
     assert started.status_code == 202
-    job = None
-    for _ in range(240):
-        job = client.get("/reindex").json()
-        if job["status"] in ("done", "failed"):
-            break
-        import time; time.sleep(0.1)
-    assert job["status"] == "failed"
-    assert "broken.rst" in job["error"]
-    after = client.get("/search", params={"q": "drifts"}).json()
-    assert after == before            # the served store never changed
+    job = _drain(client)
+    assert job["status"] == "done"
+    assert job["skipped_sources"] == ["SOLPS-ITER/doc/broken.rst"]
+    assert client.get("/search", params={"q": "drifts"}).json()["total"] >= 1
+    assert client.get("/search", params={"q": "broken"}).json()["total"] == 0
+
+
+def test_child_failure_keeps_the_previous_index_and_cleans_up(tmp_path):
+    # a rebuild that genuinely fails (a carry source that is not a
+    # store) must leave the standing index untouched and remove its
+    # own temporary build directory - the swap stays all-or-nothing
+    import json
+    import shutil as _shutil
+
+    from askthedocs import reindexjob
+
+    root = make_indexable_checkout(tmp_path / "tree")
+    share = tmp_path / "share"
+    run_setup(root / "SOLPS-ITER", share=share, install_icon=False)
+    final = tmp_path / "final"
+    final.mkdir()
+    for name in ("askthedocs.db", "build_summary.json", "corpus.json"):
+        _shutil.copyfile(share / name, final / name)
+    before = (final / "askthedocs.db").read_bytes()
+    junk_carry = tmp_path / "junk.db"
+    junk_carry.write_bytes(b"this is not a sqlite store")
+
+    code = reindexjob.main([
+        "--leg", f"SOLPS-ITER={root / 'SOLPS-ITER'}",
+        "--leg", f"SOLPS-GUI={root / 'SOLPS-GUI'}",
+        "--build-dir", str(tmp_path / "build"),
+        "--final-dir", str(final),
+        "--carry-from", str(junk_carry),
+        "--frame-file", str(tmp_path / "frames.json"),
+        "--result-file", str(tmp_path / "result.json")])
+
+    assert code == 1
+    record = json.loads((tmp_path / "result.json").read_text(
+        encoding="utf-8"))
+    assert record["ok"] is False
+    assert record["error"]
+    assert (final / "askthedocs.db").read_bytes() == before
+    assert not (tmp_path / "build").exists()
 
 
 def test_reindex_requires_a_store(tmp_path):

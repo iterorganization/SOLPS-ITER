@@ -264,16 +264,10 @@ def run_index_build(repos: dict[str, Path], *, bar: Progress,
     except BaseException:
         shutil.rmtree(build_dir, ignore_errors=True)
         raise
-    failed = summary["sources"]["failed"]
-    if failed:
-        # extraction failures are collected, never raised, by the
-        # build: refuse HERE, before anything swaps, with the failed
-        # sources named (the served index is untouched either way)
-        names = ", ".join(f["source"] for f in failed[:5])
-        shutil.rmtree(build_dir, ignore_errors=True)
-        raise RuntimeError(
-            f"extraction failed for {len(failed)} sources "
-            f"({names}); the current index is untouched")
+    # an unreadable source no longer voids the build (D-170): the
+    # failure is collected with its reason, the summary records it,
+    # and the completion block names it. The index swaps as a whole
+    # or not at all, exactly as before.
     # every companion lands or none does: the store, its summary, the
     # switches inventory and the manifest swap in together, after the
     # build proved it produced them all
@@ -438,6 +432,19 @@ def run_setup(path: Path | str | None = None, *, force: bool = False,
         # uniform bound, so only some legs obeying it was arbitrary)
         print(f"  {name:<16} indexed: {leg_total:,} chunks "
               f"({', '.join(parts)})")
+    failed_srcs = summary["sources"]["failed"]
+    if failed_srcs:
+        # D-170 skip-and-name: ONE line, however long (the legs'
+        # own convention), first three names, the summary file holds
+        # every name with its reason
+        names = ", ".join(f["source"] for f in failed_srcs[:3])
+        more = len(failed_srcs) - 3
+        verb = "was" if len(failed_srcs) == 1 else "were"
+        extra = f", and {more} more" if more > 0 else ""
+        print(f"note: {_n(len(failed_srcs), 'source')} could not be "
+              f"read and {verb} skipped: {names}{extra} "
+              f"(each recorded in {locate.SUMMARY_NAME} beside the "
+              f"index)")
     import shutil
     import sys
     console = shutil.which("askthedocs") or str(
