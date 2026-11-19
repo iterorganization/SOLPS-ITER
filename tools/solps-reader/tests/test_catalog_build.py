@@ -1027,3 +1027,25 @@ def test_missing_b2mn_warns_and_catalogs_without_switch_set(
     answer = mcp_face.run_switches("markers/FAM1/run1", str(seat.parent))
     assert "carries no switch set" in answer
     assert "no effective b2mn.dat" in answer
+
+
+def test_dangling_compatibility_link_fingerprints_silently(
+        tmp_path: Path, capfd) -> None:
+    """The well-formed single-log run: b2.log resolves, b2.log.gz
+    dangles (the run carries run.log, not run.log.gz). The change
+    walk records the link itself and prints nothing — a note per run
+    for the healthy shape was field noise, and the 11-17 promise
+    says these names are silent by construction."""
+    import os
+    import build_manifests as bm
+    run = tmp_path / "FAM1" / "run1"
+    run.mkdir(parents=True)
+    (run / "run.log").write_text("log line\n", encoding="utf-8")
+    os.symlink("run.log", run / "b2.log")
+    os.symlink("run.log.gz", run / "b2.log.gz")   # target never exists
+
+    entries = bm._stat_walk(run)
+
+    names = {e[0] for e in entries}
+    assert {"run.log", "b2.log", "b2.log.gz"} <= names
+    assert "cannot read" not in capfd.readouterr().err

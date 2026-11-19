@@ -811,9 +811,18 @@ def _stat_walk(root: Path) -> list[tuple[str, int, int]]:
             p = Path(dirpath) / fn
             try:
                 st = p.stat()
-            except OSError as exc:
-                _note_unreadable(p, exc, "fingerprinting the rest")
-                continue
+            except OSError:
+                # a symlink whose target never existed is the NORMAL
+                # well-formed run shape (b2.log.gz -> run.log.gz while
+                # the run carries run.log): the analysis reads it as
+                # an absent file, so the fingerprint records the link
+                # itself, silently — one note per run for the healthy
+                # shape is noise (field finding 2026-11-19)
+                try:
+                    st = p.lstat()
+                except OSError as exc:
+                    _note_unreadable(p, exc, "fingerprinting the rest")
+                    continue
             out.append((p.relative_to(root).as_posix(),
                         st.st_size, st.st_mtime_ns))
     return sorted(out)
