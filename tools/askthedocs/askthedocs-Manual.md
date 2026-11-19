@@ -227,6 +227,20 @@ The index is built from what your clone carries. Over the full set (the SOLPS-IT
 
 Main programs are deliberately out. They are orchestration over procedures that are all indexed, and their identifiers are covered elsewhere in the corpus. An absent optional repository is named at build time and adds nothing. Your counts match your clone.
 
+### List the corpus before you index it
+
+`askthedocs corpus` walks the same repositories setup would and writes the listing to a JSON file, with the per-repository counts and how each file reads (text, PDF, code). Use it to see what a build would take before running one:
+
+```sh
+$ askthedocs corpus
+wrote corpus.json: 2423 sources
+  SOLPS-GUI: 130
+  SOLPS-ITER: 291
+  ...
+```
+
+The same rule as setup applies here. The SOLPS-ITER checkout with its submodules is required; a missing or never-initialized required leg refuses and names its remedy. SOLPS-GUI and SOLPS-Tutorials are optional: an absent one is named (`optional: ... not required`) and the listing continues without it.
+
 The index self-describes. The build manifest beside it records each repository's pinned commit. `askthedocs status` re-hashes the corpus and reports current or drifted:
 
 ```sh

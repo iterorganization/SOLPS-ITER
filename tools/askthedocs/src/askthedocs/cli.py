@@ -26,6 +26,7 @@ from askthedocs import __version__
 from askthedocs import api
 from askthedocs import build as build_mod
 from askthedocs import corpus
+from askthedocs import floor
 from askthedocs import locate
 from askthedocs import state
 from askthedocs import verdicts
@@ -262,10 +263,13 @@ def _d88_gate(repos: dict[str, Path], db_path: Path) -> None:
     """First-step gate: every leg must be on disk or
     recorded in the current store.  Absent-but-recorded legs print
     the informational carry notice (exit success — loud, not an
-    error); anything neither present nor carryable refuses BEFORE
-    any work, naming each leg and its expected path with both
-    remedies.  Refusal is the transition-and-integrity register:
-    steady-state operation with a shipped index cannot reach it."""
+    error); an absent OPTIONAL repository is named and skipped — the
+    same rule setup applies (a machine without it simply indexes
+    without it); anything else — required legs neither present nor
+    carryable — refuses BEFORE any work, naming each leg and its
+    expected path with both remedies.  Refusal is the
+    transition-and-integrity register: steady-state operation with a
+    shipped index cannot reach it."""
     recorded = state.read_from_db(db_path) or []
     recorded_legs = {verdicts.leg_name(r[1], r[2]) for r in recorded}
     present = {name: path for name, path in repos.items()
@@ -279,6 +283,10 @@ def _d88_gate(repos: dict[str, Path], db_path: Path) -> None:
             print(f"carried: {name} not on disk ({path}); recorded in "
                   f"the current index; it will be carried at its "
                   f"pinned commit")
+        elif name in floor.OPTIONAL_REPOS:
+            print(f"optional: {name} not on disk ({path}) and not in "
+                  f"the current index; it is not required and stays "
+                  f"unindexed until cloned")
         else:
             missing.append(f"{name} at {path}")
     # gitlink-declared submodules never initialized (parent present)
