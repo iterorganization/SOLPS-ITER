@@ -95,7 +95,11 @@ plot(xdata,coderes,'-m','parent',axbal(1),'displayname',[totname{3},' (code)']);
 postres = momfac*(sum(srcint,2)-diff(sum(fluxedge,2)))/pb.area_divide;
 plot(xdata,postres,'-g','parent',axbal(1),'displayname',[totname{3},' (post-cal.)']);
 plot(xdata,postres-coderes,'-c','parent',axbal(1),'displayname',[totname{3},' (post-cal.-code)']);
-% fprintf('Poloidal balance: the maximum difference between code- and post-calculated residuals is %e%%\n',max(abs((coderes-postres)./coderes)*100));
+fprintf(['Poloidal balance: max|post-calculated - code residual| = ' ...
+    '%.3e, max|code residual| = %.3e\n'],...
+    max(abs(postres-coderes)),max(abs(coderes)));
+pb.coderes = coderes;
+pb.postres = postres;
 
 legend(axbal(1),'show','location','best');
 title(axbal(1),'Total poloidal balance','fontweight','normal');

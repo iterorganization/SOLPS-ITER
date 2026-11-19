@@ -6,7 +6,8 @@
 % BALFILE:        Full path to the balance.nc file created by SOLPS-ITER with  %
 %                 balance_netcdf set non-zero in b2mn.dat.                     %
 % BAL_QUANT:      Either 'particles','momentum','totpress','elheat','ionheat', %
-%                 'totheat'.                                                   %
+%                 'totheat','toten' (total energy) or 'potential' (potential   %
+%                 equation, continuity of the electric current).               %
 % SPECIES_INDEX:  An array specifying the species indices to be summed over.   %
 %                 Has length 1 for a single species. Only applicable to        %
 %                 'particles' and 'momentum' balances.                         %
@@ -15,6 +16,9 @@
 %                 replaced by 'd' then the PFR region is also plotted. Any     %
 %                 other string will mean that the region is set by the user in %
 %                 user_set_region.                                             %
+%                 On a limiter grid the SOL flux tubes are split at their      %
+%                 poloidal middle: li and ui take the half ending on the inner %
+%                 side of the limiter, uo and lo the outer half.               %
 % AREAEND:        Either 'left', 'right' or 'none'. Defines the poloidal end   %
 %                 of the balance region at which areas will be calculated. The %
 %                 poloidal fluxes at both ends will then be divided by these   %
@@ -74,7 +78,6 @@ switch BAL_QUANT
     case 'momentum'
         balmom(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,SPECIES_INDEX,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'totpress'
-        warning('Use total pressure balance with caution. Balance not currently perfect.');
         baltotpress(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,POLBALDIST);
     case 'elheat'
         baleht(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
@@ -83,8 +86,11 @@ switch BAL_QUANT
     case 'totheat'
         baltotht(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
     case 'toten'
-        warning('Use total energy balance with caution. Balance not currently perfect.');
         baltoten(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,facesdown_pol,comuse,axbal,reverse,STRATA_PLOT,axstrat,true,AREAEND,area_divide,AREATYPE,POLBALDIST);
+    case 'potential'
+        balpot(BALFILE,indrad,indpol,facesup,facesdown,facesup_pol,...
+            facesdown_pol,comuse,axbal,reverse,true,AREAEND,area_divide,...
+            AREATYPE,POLBALDIST);
     otherwise
         error('Balance quantity ''%s'' not supported.',BAL_QUANT);
 end

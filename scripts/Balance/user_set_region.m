@@ -98,37 +98,44 @@ indpol(comuse.ftCv(iFt1:iFt2)) = true;
 % Set guard cells to zero
 indpol(comuse.nCi+1:end) = false;
 
-% Determine the faces of the upstream and downstream boundary of indrad
-display('Assuming that face labels of targets are 1, 2, -13 or -34');
-facesup = []; % list of faces at the upstream boundary
-facesdown = []; % list of faces at the downstream boundary
-for iFc = 1:comuse.nFc
-    iCv1 = comuse.fcCv(iFc,1);
-    iCv2 = comuse.fcCv(iFc,2);
-    if (indrad(iCv1) && ~indrad(iCv2)) || (~indrad(iCv1) && indrad(iCv2))
-        if comuse.fcLbl(iFc) == 1 || comuse.fcLbl(iFc) == -13
-            facesup = [facesup,iFc];
-        elseif comuse.fcLbl(iFc) == 2 || comuse.fcLbl(iFc) == -34
-            facesdown = [facesdown,iFc];
-        end
-    end
-end
-
-% Determine the faces of the upstream and downstream boundary of indpol
-facesup_pol = [];
-facesdown_pol = [];
-for iFc = 1:comuse.nFc
-    iCv1 = comuse.fcCv(iFc,1);
-    iCv2 = comuse.fcCv(iFc,2);
-    if (indpol(iCv1) && ~indpol(iCv2)) || (~indpol(iCv1) && indpol(iCv2))
-        if comuse.fcLbl(iFc) == 1 || comuse.fcLbl(iFc) == -13
-            facesup_pol = [facesup_pol,iFc];
-        elseif comuse.fcLbl(iFc) == 2 || comuse.fcLbl(iFc) == -34
-            facesdown_pol = [facesdown_pol,iFc];
-        end
-    end
-end
+% Determine the faces of the upstream and downstream boundary of indrad and
+% indpol: the two ends of the flux tubes, i.e. faces between a cell of the
+% region and a guard cell of the same flux tube that the flux tube passes
+% through (cosine of alpha non-zero, as B2.5 itself tells them from radial
+% faces). The upstream end is the one where the positive poloidal direction
+% of B2.5 (the sign of the cosine of alpha, with the face orientation from
+% fcCv) enters the region, the downstream end the one where it leaves. On
+% classical grids these are the inner and the outer target. This does not
+% depend on the face labels, which differ between grids.
+[facesup,facesdown] = tube_ends(indrad,comuse);
+[facesup_pol,facesdown_pol] = tube_ends(indpol,comuse);
 
 reverse = false;
 
+end
+
+% Faces at the upstream and downstream ends of the flux tubes in ind
+function [facesup,facesdown] = tube_ends(ind,comuse)
+facesup = [];
+facesdown = [];
+for iFc = 1:comuse.nFc
+    iCv1 = comuse.fcCv(iFc,1);
+    iCv2 = comuse.fcCv(iFc,2);
+    if xor(ind(iCv1),ind(iCv2))
+        if ind(iCv1)
+            iCvin = iCv1;
+            iCvout = iCv2;
+        else
+            iCvin = iCv2;
+            iCvout = iCv1;
+        end
+        if (iCvout > comuse.nCi) && (comuse.fcQalf(iFc,1) ~= 0)
+            if (iCvin == comuse.fcCv(iFc,2)) == (comuse.fcQalf(iFc,1) > 0)
+                facesup = [facesup,iFc];
+            else
+                facesdown = [facesdown,iFc];
+            end
+        end
+    end
+end
 end

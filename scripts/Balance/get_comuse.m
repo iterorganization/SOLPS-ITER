@@ -164,7 +164,7 @@ elseif comuse.nXpt == 0
         step = -1;
     end
     for i = istart:step:iend
-        if (comuse.cvReg(comuse.omp(i) == 2))
+        if (comuse.cvReg(comuse.omp(i)) == 2)
             comuse.ftSep = comuse.cvFt(comuse.omp(i));
             break;
         end
