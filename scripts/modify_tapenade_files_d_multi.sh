@@ -20,6 +20,30 @@ sed -i -e 's/result2 = MINVAL(arg2(1:mpg%cvvxp(icv, 2)))/result2 = MINVAL(gm%vxf
 sed -i '/arg1(1:mpg%cvvxp(icv, 2)) = gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2)))/d' b2us_geo_diffv.F90
 sed -i '/arg2(1:mpg%cvvxp(icv, 2)) = gm%vxfpsi(verts(1:mpg%cvvxp(icv, 2)))/d' b2us_geo_diffv.F90
 sed -i '/ISIZE1OFarg.INinit_geometry/d' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%xpt(mpg%nxpt))/ALLOCATE(mpgd%xpt(nbdirsmax,mpg%nxpt))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%xpt(nd) = 0/mpgd%xpt(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%strvxp(mpg%nxpt, 2))/ALLOCATE(mpgd%strvxp(nbdirsmax,mpg%nxpt, 2))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%strvxp(nd) = 0/mpgd%strvxp(nd,:,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%strvx(mpg%nstr))/ALLOCATE(mpgd%strvx(nbdirsmax,mpg%nstr))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%strvx(nd) = 0/mpgd%strvx(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%strdiv(mpg%nstr))/ALLOCATE(mpgd%strdiv(nbdirsmax,mpg%nstr))/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%strdiv(2))/ALLOCATE(mpgd%strdiv(nbdirsmax,2))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%strdiv(nd) = 0/mpgd%strdiv(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%tgvx(mpg%ntgc))/ALLOCATE(mpgd%tgvx(nbdirsmax,mpg%ntgc))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%tgvx(nd) = 0/mpgd%tgvx(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%strvxp(1, 2))/ALLOCATE(mpgd%strvxp(nbdirsmax,1, 2))/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%ifdiv(MAXVAL(mpg%strdiv)))/ALLOCATE(mpgd%ifdiv(nbdirsmax,MAXVAL(mpg%strdiv)))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%ifdiv(nd) = 0/mpgd%ifdiv(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%ivdiv(MAXVAL(mpg%strdiv)))/ALLOCATE(mpgd%ivdiv(nbdirsmax,MAXVAL(mpg%strdiv)))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%ivdiv(nd) = 0/mpgd%ivdiv(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%divfcp(MAXVAL(mpg%strdiv), 2))/ALLOCATE(mpgd%divfcp(nbdirsmax,MAXVAL(mpg%strdiv), 2))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%divfcp(nd) = 0/mpgd%divfcp(nd,:,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%divfc(icount))/ALLOCATE(mpgd%divfc(nbdirsmax,icount))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%divfc(nd) = 0/mpgd%divfc(nd,:) = 0/g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%cvalongboundary(mpg%ncv))/ALLOCATE(mpgd%cvalongboundary(nbdirsmax,mpg%ncv))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%cvalongboundary(nd) = 0.D0/mpgd%cvalongboundary(nd,:) = .false./g' b2us_geo_diffv.F90
+sed -i -e 's/ALLOCATE(mpgd%fcs_wall(mpg%ncg))/ALLOCATE(mpgd%fcs_wall(nbdirsmax,mpg%ncg))/g' b2us_geo_diffv.F90
+sed -i -e 's/mpgd%fcs_wall(nd) = 0/mpgd%fcs_wall(nd,:) = 0/g' b2us_geo_diffv.F90
 
 sed -i -e 's/REAL(r8), DIMENSION(:, nfc, 0:1), ALLOCATABLE :: fne_he/REAL(r8), DIMENSION(:, :, :), ALLOCATABLE :: fne_he/g' b2us_plasma_diffv.F90
 
@@ -211,7 +235,8 @@ sed -i 's/B2XVFF_NODIFF/B2XVFF/g' b2npp7_dv.F90 b2tr21_dv.F90 b2usp7_dv.F90
 sed -i '/PRGINI_DV/d' b2mod_main_diffv.F90
 sed -i 's/b2xvfy/b2xvfy_nodiff/g' b2xvff.F
 sed -i -e 's/B2WUZD_NODIFF/B2WUZD/g' b2mod_driver_diffv.F90 b2mnds_dv.F90 b2mod_running_average_diffv.F90 b2mod_batch_average_diffv.F90 b2wucp_dv.F90
-sed -i 's/call intcell/call intcell_nodiff/g' b2mod_mwti.F90
+sed -i 's/call intcell/call intcell_nodiff/g' b2mod_mwti.F90 b2mod_chord_interp.F90
+sed -i 's/external :: intcell/external :: intcell_nodiff/g' b2mod_chord_interp.F90
 sed -i -e 's/USE B2MOD_ANOMALOUS_TRANSPORT_DIFFV/USE B2MOD_ANOMALOUS_TRANSPORT/g' b2txvspr_dv.F90
 sed -i -e 's/USE B2MOD_NEUTR_SRC_SCALING_DIFFV/USE B2MOD_NEUTR_SRC_SCALING/g' b2mod_diag_diffv.F90 b2mod_driver_diffv.F90 b2mod_main_diffv.F90 b2stbr_dv.F90
 sed -i -e 's/MY_OUT_US_NODIFF/MY_OUT_US/g' ./*.F90
@@ -417,8 +442,6 @@ sed -i -e "s/md0%cvalongboundary = 0.D0/md0%cvalongboundary = .false./g" b2us_ma
 sed -i -e "s/md0%cvonclosedsurface = 0.D0/md0%cvonclosedsurface = .false./g" b2us_map_diffv.F90
 sed -i -e "s/md0%cfoncv = 0.D0/md0%cfoncv = .true./g" b2us_map_diffv.F90
 
-sed -i -e 's/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv, &/alloc_geometry_dv, dealloc_geometry_dv, read_geometry_dv/g' b2us_geo_diffv.F90
-sed -i '/& check_geometry_dv/d' b2us_geo_diffv.F90
 sed -i -e 's/read_b2fgmtry_dv, read_b2fstate_dv, write_b2fstate_dv, &/read_b2fgmtry_dv, read_b2fstate_dv/g' b2us_io_diffv.F90
 sed -i '/& write_b2fplasma_dv/d' b2us_io_diffv.F90
 sed -i -e 's/USE B2MOD_RESIDUALS_DIFFV/USE B2MOD_RESIDUALS/g' b2mod_diag_diffv.F90

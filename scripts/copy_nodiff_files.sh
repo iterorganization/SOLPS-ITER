@@ -85,6 +85,10 @@ cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_elements.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_pardiso.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_plasma.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_convergence.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_chord_interp.F90 .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_chord_interp_tri.F90 .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_chords.F .
+cp $SOLPSTOP/modules/B2.5/src/modules/b2mod_umfpack.F .
 cp $SOLPSTOP/modules/B2.5/src/modules/b2us_work.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wdat.F .
 cp $SOLPSTOP/modules/B2.5/src/output/b2wuzd.F .
@@ -111,6 +115,7 @@ cp $SOLPSTOP/modules/B2.5/src/user/combfile.F .
 cp $SOLPSTOP/modules/B2.5/src/user/parsehdr.F .
 cp $SOLPSTOP/modules/B2.5/src/user/cdfmovie.F .
 cp $SOLPSTOP/modules/B2.5/src/user/map_and_interpolate_cf.F .
+cp $SOLPSTOP/modules/B2.5/src/user/cdfchord.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_ipmain.F .
 cp $SOLPSTOP/modules/B2.5/src/utility/xer* .
 cp $SOLPSTOP/modules/B2.5/src/utility/b2mod_xerset.F .
