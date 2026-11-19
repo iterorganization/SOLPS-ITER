@@ -46,6 +46,9 @@ switch type
         title(axgrid,'TOTAL INTERNAL ENERGY BALANCE','fontweight','normal');
     case 'toten'
         title(axgrid,'TOTAL ENERGY BALANCE','fontweight','normal');
+    case 'potential'
+        title(axgrid,'POTENTIAL EQUATION (CURRENT) BALANCE',...
+            'fontweight','normal');
     otherwise
         error('Figure type unknown.');
 end

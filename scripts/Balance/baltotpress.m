@@ -53,8 +53,6 @@ fmoy_hybr = sum(tmp(:,2,za>0),3);
 % Sources:
 tmp = ncread(balfile,'b2stbr_phys_smo_bal');
 b2stbr_phys_smo = sum(tmp(:,za>0),2);
-tmp = ncread(balfile,'b2stbr_bas_smo_bal');
-b2stbr_bas_smo = sum(tmp(:,za>0),2);
 tmp = ncread(balfile,'b2stbc_smo_bal');
 b2stbc_smo = sum(tmp(:,za>0),2);
 if (comuse.b2mndr_eirene~=0)
@@ -102,6 +100,8 @@ tmp = ncread(balfile,'b2srdt_smo_bal');
 b2srdt_smo = sum(tmp(:,za>0),2);
 tmp = ncread(balfile,'b2srst_smo_bal');
 b2srst_smo = sum(tmp(:,za>0),2);
+tmp = ncread_opt(balfile,'b2smdt_smo_bal',[nCv comuse.ns]);
+b2smdt_smo = sum(tmp(:,za>0),2);
 
 % b2sigp_style=='1':
 tmp = ncread(balfile,'b2sifr_smoch_bal');
@@ -126,6 +126,8 @@ tmp = ncread(balfile,'b2siav_smovh_bal');
 b2siav_smovh = sum(tmp(:,za>0),2);
 tmp = ncread(balfile,'b2siav_smovv_bal');
 b2siav_smovv = sum(tmp(:,za>0),2);
+tmp = ncread(balfile,'b2siav_smovi_bal');
+b2siav_smovi = sum(tmp(:,za>0),2);
 tmp = ncread(balfile,'b2sicf_smo_bal');
 b2sicf_smo = sum(tmp(:,za>0),2);
 tmp = ncread(balfile,'b2sian_smo_bal');
@@ -155,13 +157,16 @@ apllf = comuse.fcS.*abs(comuse.fcQalf(:,1)).*hzf.*...
 %%
 
 %% Calculate the radial divergence...
-% Radial balance
-raddiv_flua = raddiv(fmox_flua,fmoy_flua,comuse,facesup,facesdown,'parallel');
+% Radial balance (radial component only: the poloidal convected flux enters
+% through the fluxes at the ends of the region and the geometric term)
+raddiv_flua = raddiv(zeros(size(fmox_flua)),fmoy_flua,comuse,...
+    facesup,facesdown,'parallel');
 raddiv_visc = raddiv(zeros(size(fmox_cvsa)),fmoy_cvsa,comuse,facesup,facesdown,'parallel');
 raddiv_hybr = raddiv(zeros(size(fmox_hybr)),fmoy_hybr,comuse,facesup,facesdown,'parallel');
 
-% Poloidal balance
-raddiv_flua_pol = raddiv(fmox_flua,fmoy_flua,comuse,[],[],'parallel');
+% Poloidal balance (radial component only, as above)
+raddiv_flua_pol = raddiv(zeros(size(fmox_flua)),fmoy_flua,comuse,[],[],...
+    'parallel');
 raddiv_visc_pol = raddiv(zeros(size(fmox_cvsa)),fmoy_cvsa,comuse,[],[],'parallel');
 raddiv_hybr_pol = raddiv(zeros(size(fmox_hybr)),fmoy_hybr,comuse,[],[],'parallel');
 %%
@@ -204,57 +209,21 @@ pe = ne.*te;
 pi = ti.*sum(na(:,za>0),2);
 pef = intface(pe,comuse);
 pif = intface(pi,comuse);
-% Radial balance
-pex = zeros(nFc,1);
-pix = zeros(nFc,1);
-pex(facesdown) = -pef(facesdown);
-pix(facesdown) = -pif(facesdown);
-pe0 = zeros(comuse.nFt,1);
-pi0 = zeros(comuse.nFt,1);
-% Correct sign
-for i = 1:length(facesdown)
-    iFc = facesdown(i);
-    if indrad(comuse.fcCv(iFc,1))
-        iFt = comuse.cvFt(comuse.fcCv(iFc,1));
-    else
-        iFt = comuse.cvFt(comuse.fcCv(iFc,2));
-        pex(iFc) = -pex(iFc);
-        pix(iFc) = -pix(iFc);
-    end
-    pe0(iFt) = pe0(iFt) + abs(pex(iFc));
-    pi0(iFt) = pi0(iFt) + abs(pix(iFc));
-end
-% Integrate pressure gradient over the flux tubes in indrad
-inte = zeros(comuse.nFt,1);
-inti = zeros(comuse.nFt,1);
-for iFt = 1:comuse.nFt % integration in flux tube
-    iCv1 = comuse.ftCvP(iFt,1);
-    iCv2 = iCv1 + comuse.ftCvP(iFt,2) - 1;
-    for i = iCv1:iCv2
-        iCv = comuse.ftCv(i);
-        if indrad(iCv)
-            inte(iFt) = inte(iFt) + b2sigp_smogpe(iCv)/apll(iCv);
-            inti(iFt) = inti(iFt) + b2sigp_smogpi(iCv)/apll(iCv);
-        end
-    end
-end
-for i = 1:length(facesup)
-    iFc = facesup(i);
-    if indrad(comuse.fcCv(iFc,1))
-        iFt = comuse.cvFt(comuse.fcCv(iFc,1));
-        pex(iFc) = pex(iFc) - inte(iFt) + pe0(iFt);
-        pix(iFc) = pix(iFc) - inti(iFt) + pi0(iFt);
-    else
-        iFt = comuse.cvFt(comuse.fcCv(iFc,2));
-        pex(iFc) = pex(iFc) + inte(iFt) - pe0(iFt);
-        pix(iFc) = pix(iFc) + inti(iFt) - pi0(iFt);
-    end
-end
+% Radial balance: static pressures on the end faces of the flux tubes, as
+% sign(cos alpha)*p. Their sum over the end faces of a flux tube, with
+% sigma = +1 where the positive direction of B2.5 enters the region and -1
+% where it leaves, is close to the integrated pressure-gradient source of the
+% flux tube; the faces chosen in endface_pressures take the remainder, so
+% that each flux tube balances exactly.
+[pex,pix] = endface_pressures(pef,pif,b2sigp_smogpe./apll,...
+    b2sigp_smogpi./apll,indrad,facesup,facesdown,comuse);
 % Poloidal balance
 pex2 = zeros(nFc,1);
 pix2 = zeros(nFc,1);
-pex2(facesdown_pol) = -pef(facesdown_pol);
-pix2(facesdown_pol) = -pif(facesdown_pol);
+% Same convention as above at the downstream faces: sign(cos alpha)*p
+sigma_pol = endface_sigma(facesdown_pol,indpol,comuse);
+pex2(facesdown_pol) = -sigma_pol.*pef(facesdown_pol);
+pix2(facesdown_pol) = -sigma_pol.*pif(facesdown_pol);
 sign2 = ones(nFc,1);
 % Correct sign
 for i = 1:length(facesdown_pol)
@@ -318,11 +287,12 @@ bm = radial_balance(...
        b2stel_smq_ion./apll,b2stel_smq_rec./apll,b2stcx_smq./apll,...
        b2sifr_smoch./apll+b2sifr_smotf_ehxb./apll+b2sifr_smotf_cthe./apll+b2sifr_smotf_cthi./apll,...
        b2sifr_smofrea./apll+b2sifr_smofria./apll+b2sifr_smotfea./apll+b2sifr_smotfia./apll,...
-       b2siav_smovh./apll,b2siav_smovv./apll,b2sicf_smo./apll,b2sian_smo./apll,b2nxdv_smo./apll,...
+       b2siav_smovh./apll,b2siav_smovv./apll,b2siav_smovi./apll,b2sicf_smo./apll,b2sian_smo./apll,b2nxdv_smo./apll,...
        b2sigp_smogpgr./apll,...
-       b2stbr_phys_smo./apll,b2stbr_bas_smo./apll,...
+       b2stbr_phys_smo./apll,...
        b2stbm_smo./apll,ext_smo./apll,...
-       b2srsm_smo./apll,b2srdt_smo./apll,b2srst_smo./apll,b2stbc_smo./apll,geomterm./apll),...
+       b2srsm_smo./apll,b2srdt_smo./apll,b2srst_smo./apll,b2stbc_smo./apll,...
+       b2smdt_smo./apll,geomterm./apll),...
  resmo./apll,...
  {'total upstream flux',...
   'total downstream flux',...
@@ -335,11 +305,12 @@ bm = radial_balance(...
   'B2 ionisation','B2 recombination','B2 charge exchange',...
   'sum b2sifr (b2sigp==1)',...
   'sum b2sifr (b2sigp==2)',...
-  'b2siav\_smovh','b2siav\_smovv','b2sicf','b2sian','b2nxdv',...
+  'b2siav\_smovh','b2siav\_smovv','b2siav\_smovi','b2sicf','b2sian','b2nxdv',...
   'pressure gradient restriction',...
-  'b2stbr\_phys','b2stbr\_bas',...
+  'b2stbr\_phys',...
   'b2stbm','external source',...
-  'b2srsm','b2srdt','b2srst','b2stbc','geometric term'},...
+  'b2srsm','b2srdt','b2srst','b2stbc',...
+  'b2smdt','geometric term'},...
  comuse,indrad,facesup,facesdown,ones(nFc),reverse,true,axbal(1:4),'Nm^{-2}',makeplot,'right');
 
 if ~makeplot
@@ -354,11 +325,12 @@ pb = poloidal_balance(...
        b2stel_smq_ion./apll,b2stel_smq_rec./apll,b2stcx_smq./apll,...
        b2sifr_smoch./apll+b2sifr_smotf_ehxb./apll+b2sifr_smotf_cthe./apll+b2sifr_smotf_cthi./apll,...
        b2sifr_smofrea./apll+b2sifr_smofria./apll+b2sifr_smotfea./apll+b2sifr_smotfia./apll,...
-       b2siav_smovh./apll,b2siav_smovv./apll,b2sicf_smo./apll,b2sian_smo./apll,b2nxdv_smo./apll,...
+       b2siav_smovh./apll,b2siav_smovv./apll,b2siav_smovi./apll,b2sicf_smo./apll,b2sian_smo./apll,b2nxdv_smo./apll,...
        b2sigp_smogpgr./apll,...
-       b2stbr_phys_smo./apll,b2stbr_bas_smo./apll,...
+       b2stbr_phys_smo./apll,...
        b2stbm_smo./apll,ext_smo./apll,...
-       b2srsm_smo./apll,b2srdt_smo./apll,b2srst_smo./apll,b2stbc_smo./apll,geomterm./apll),...
+       b2srsm_smo./apll,b2srdt_smo./apll,b2srst_smo./apll,b2stbc_smo./apll,...
+       b2smdt_smo./apll,geomterm./apll),...
  resmo./apll,...
  {'total radially-integrated flux',...
   'total radially-integrated source',...
@@ -370,12 +342,13 @@ pb = poloidal_balance(...
   'B2 ionisation','B2 recombination','B2 charge exchange',...
   'sum b2sifr (b2sigp==1)',...
   'sum b2sifr (b2sigp==2)',...
-  'b2siav\_smovh','b2siav\_smovv','b2sicf','b2sian','b2nxdv',...
+  'b2siav\_smovh','b2siav\_smovv','b2siav\_smovi','b2sicf','b2sian','b2nxdv',...
   'pressure gradient restriction',...
-  'b2stbr\_phys','b2stbr\_bas',...
+  'b2stbr\_phys',...
   'b2stbm','external source',...
-  'b2srsm','b2srdt','b2srst','b2stbc','geometric term'},...
- comuse,indpol,facesup_pol,facesdown_pol,ones(nFc),reverse,true,axbal(5:7),'Nm^{-2}','right',polbaldist,1);
+  'b2srsm','b2srdt','b2srst','b2stbc',...
+  'b2smdt','geometric term'},...
+ comuse,indpol,facesup_pol,facesdown_pol,ones(nFc),reverse,true,axbal(5:7),'Nm^{-2}','right',polbaldist,0);
 
 if strata_plot
     make_strata_plots({squeeze(eirene_mc_mapl_smo)},{squeeze(eirene_mc_mmpl_smo)},{squeeze(eirene_mc_mipl_smo)},{squeeze(eirene_mc_mppl_smo)},...
@@ -386,6 +359,62 @@ end
 %%
 end
 
+% sigma of end faces: +1 where the positive direction of B2.5 enters the
+% region (the region cell is the second cell of the face and cos alpha > 0,
+% or the first and cos alpha < 0), -1 where it leaves
+function sigma = endface_sigma(faces,ind,comuse)
+sigma = zeros(numel(faces),1);
+for i = 1:numel(faces)
+    iFc = faces(i);
+    side = 2*ind(comuse.fcCv(iFc,2)) - 1;
+    sigma(i) = side*sign(comuse.fcQalf(iFc,1));
+end
+end
 
-
-
+% Static pressures on the end faces of the flux tubes in ind, in the form
+% that radial_balance adds to the fluxes. Reference faces take
+% sign(cos alpha)*p; per flux tube, the upstream faces (if there are none,
+% the faces where the positive direction leaves the region) share the rest
+% of the integrated pressure-gradient source, so that each flux tube
+% balances exactly, also when it has several faces at an end or ends on a
+% wall at both ends.
+function [pex,pix] = endface_pressures(pef,pif,gpe,gpi,ind,facesup,...
+    facesdown,comuse)
+pex = zeros(comuse.nFc,1);
+pix = zeros(comuse.nFc,1);
+faces = [facesup(:);facesdown(:)];
+isup = [true(numel(facesup),1);false(numel(facesdown),1)];
+sigma = endface_sigma(faces,ind,comuse);
+tube = zeros(numel(faces),1);
+side = zeros(numel(faces),1);
+for i = 1:numel(faces)
+    iFc = faces(i);
+    if ind(comuse.fcCv(iFc,2))
+        tube(i) = comuse.cvFt(comuse.fcCv(iFc,2));
+        side(i) = 1;
+    else
+        tube(i) = comuse.cvFt(comuse.fcCv(iFc,1));
+        side(i) = -1;
+    end
+end
+% contribution of each face to the balance of its flux tube: sigma*p
+ce = sigma.*pef(faces);
+ci = sigma.*pif(faces);
+for iFt = unique(tube)'
+    in = find(tube == iFt);
+    k = in(isup(in));
+    if isempty(k)
+        k = in(sigma(in) < 0);
+    end
+    if isempty(k)
+        k = in;
+    end
+    cells = ind & (comuse.cvFt == iFt);
+    ref = setdiff(in,k);
+    ce(k) = (sum(gpe(cells)) - sum(ce(ref)))/numel(k);
+    ci(k) = (sum(gpi(cells)) - sum(ci(ref)))/numel(k);
+end
+% radial_balance adds side*value of each face to the balance
+pex(faces) = ce./side;
+pix(faces) = ci./side;
+end
