@@ -802,7 +802,7 @@ A folder that is missing or holds no recognizable runs is named and skipped in t
 
 **The analysis cache.** The cache is keyed on run content, not paths: unchanged runs, byte-identical copies, and reordered groups all reuse their cached analysis, so an everyday rebuild pays only for what changed (the build prints "N reused, M computed"); a cached build and a forced full recompute produce byte-identical sites; pinned by a test, so the shortcut can never change the product. `--force` recomputes everything; `--prune-cache` drops entries a build did not reference (orphaned entries are kept by default, so re-adding a folder stays cheap).
 
-**The suite and the gate.** Both run with a Python that can `import solps_reader` (the venv above qualifies).
+**The suite and the gate.** Both run with a Python that can `import solps_reader` (the venv above qualifies). The suite also needs pytest itself, which the quick start does not install: `.venv/bin/pip install "tools/solps-reader[test]"` adds it, from the clone root.
 
 ```bash
 ../../.venv/bin/python -m pytest tests -q

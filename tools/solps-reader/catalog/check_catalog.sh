@@ -23,11 +23,15 @@ HERE="$(CDPATH='' cd "$(dirname "$0")" && pwd)"
 # interpreter override: any Python with the reader library importable
 # interpreter override: any Python with the reader library importable;
 # default resolves the venv of either tree shape — the folded repo
-# (tools/.venv, two levels up) or the standalone package (one level up)
+# (tools/.venv, two levels up), the SOLPS-ITER clone (the root .venv
+# the package README's quick start creates, three levels up), or the
+# standalone package (one level up)
 if [ -n "${CATALOG_PYTHON:-}" ]; then
   PY="$CATALOG_PYTHON"
 elif [ -x "$HERE/../../.venv/bin/python" ]; then
   PY="$HERE/../../.venv/bin/python"
+elif [ -x "$HERE/../../../.venv/bin/python" ]; then
+  PY="$HERE/../../../.venv/bin/python"
 else
   PY="$HERE/../.venv/bin/python"
 fi
