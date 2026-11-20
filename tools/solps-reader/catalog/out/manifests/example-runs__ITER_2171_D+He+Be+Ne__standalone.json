@@ -1,0 +1,108 @@
+{
+  "convergence": {
+    "active_verdicts": {
+      "tmne": "plateaued",
+      "tmte": "plateaued",
+      "tmti": "plateaued"
+    },
+    "counts": {
+      "constant": 3,
+      "evolving": 1,
+      "near-plateau": 0,
+      "plateaued": 3
+    },
+    "n_active": 3,
+    "nrecords": 11,
+    "ntraces": 7,
+    "sparklines": {
+      "monitors": {
+        "tmne": {
+          "units": "",
+          "values": [
+            8.190069173951699e+21,
+            8.189952595949492e+21,
+            8.189823076868748e+21,
+            8.189693570572271e+21,
+            8.189564076811645e+21,
+            8.189434591870045e+21,
+            8.189305115293017e+21,
+            8.189175647655448e+21,
+            8.189046189446634e+21,
+            8.188916741091837e+21,
+            8.18878730296531e+21
+          ]
+        },
+        "tmte": {
+          "units": "eV",
+          "values": [
+            1.1848327717033646e+25,
+            1.1848299921333355e+25,
+            1.1848269031147888e+25,
+            1.1848238134560825e+25,
+            1.1848207231567402e+25,
+            1.1848176322207596e+25,
+            1.1848145406464986e+25,
+            1.1848114484315096e+25,
+            1.1848083555738621e+25,
+            1.184805262071755e+25,
+            1.1848021679234593e+25
+          ]
+        },
+        "tmti": {
+          "units": "eV",
+          "values": [
+            1.1623043411189737e+25,
+            1.162300611816871e+25,
+            1.1622964682387558e+25,
+            1.1622923247553493e+25,
+            1.1622881813657226e+25,
+            1.1622840380707483e+25,
+            1.1622798948718317e+25,
+            1.162275751769066e+25,
+            1.1622716087619317e+25,
+            1.1622674658496532e+25,
+            1.1622633230313467e+25
+          ]
+        }
+      },
+      "time_span_s": {
+        "end": 1.5000000000000017e-05,
+        "start": 1.5e-07
+      }
+    },
+    "time_bases": [
+      "timesa"
+    ],
+    "verdict": "plateaued"
+  },
+  "files": {
+    "b2fmovie": {
+      "bytes": 4125109,
+      "md5": "de34ce43961c37411bb300a20aa5fbfe"
+    },
+    "b2fplasma": {
+      "bytes": 93906554,
+      "md5": "d05501c3098da07a56a4ff59c60efc12"
+    },
+    "b2fstate": {
+      "bytes": 61008381,
+      "md5": "ff317d255b64d167978c00d5e896bb3c"
+    },
+    "b2mn.dat": {
+      "bytes": 1249,
+      "md5": "96f55f7acc74f14f562eb932146b78bd"
+    },
+    "b2time.nc": {
+      "bytes": 1317796,
+      "md5": "0ab9f3c3e19485464c58a0713cd5935a"
+    }
+  },
+  "input_deck": "manifests/example-runs__ITER_2171_D+He+Be+Ne__baserun.json",
+  "machine": "ITER",
+  "name": "example-runs/ITER_2171_D+He+Be+Ne/standalone",
+  "run_family": "example-runs/ITER_2171_D+He+Be+Ne",
+  "wall_geometry": {
+    "note": "no fort.44 wall-load section among this run's outputs",
+    "verdict": "no-wall-data"
+  }
+}

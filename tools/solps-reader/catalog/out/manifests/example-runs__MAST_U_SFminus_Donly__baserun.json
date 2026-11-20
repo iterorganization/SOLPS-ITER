@@ -1,0 +1,144 @@
+{
+  "file_count": 31,
+  "files": {
+    "b2ag.dat": {
+      "bytes": 181,
+      "md5": "543ae34e51e045938d10b7336c56ef87"
+    },
+    "b2ag.prt": {
+      "bytes": 55015,
+      "md5": "52fd719651d1d05871f7b9978b12ca55"
+    },
+    "b2ah.dat": {
+      "bytes": 17930,
+      "md5": "700beb9d99c6078766e581f2622e9353"
+    },
+    "b2ah.prt": {
+      "bytes": 18053,
+      "md5": "263dc40d09e2977feb93044fa3e81026"
+    },
+    "b2ai.dat": {
+      "bytes": 375,
+      "md5": "ba81bf25110cfb094de18e9e8d91e5cf"
+    },
+    "b2ai.prt": {
+      "bytes": 824,
+      "md5": "2de684909e6ff50fd1aea1a35a7fcd45"
+    },
+    "b2ar.dat": {
+      "bytes": 381,
+      "md5": "4379652fa02ab0bf5bd59529a2b2195e"
+    },
+    "b2ar.prt": {
+      "bytes": 62785,
+      "md5": "a1f3470cc23859fde89a911cd041a806"
+    },
+    "b2fgmtry": {
+      "bytes": 2796305,
+      "md5": "bf8521e704d0c6b61137db89030dba36"
+    },
+    "b2fpardf": {
+      "bytes": 27276,
+      "md5": "1b87391f1edb946e9c93bc205845f1f6"
+    },
+    "b2frates": {
+      "bytes": 604865,
+      "md5": "512d56b4169d69b553d0968f09dbe80a"
+    },
+    "b2fstati": {
+      "bytes": 6981017,
+      "md5": "0e282619e6158ea7b502b3c3bda00a78"
+    },
+    "fort.30": {
+      "bytes": 319728,
+      "md5": "5a9dfa79ca9c9855fed84147287fd78c"
+    },
+    "fort.33": {
+      "bytes": 112781,
+      "md5": "46f2113bd48c9909e2160f5db6384904"
+    },
+    "fort.34": {
+      "bytes": 148000,
+      "md5": "455333091b59c4a2a4afdf2195a85d4e"
+    },
+    "fort.35": {
+      "bytes": 476860,
+      "md5": "45521daf5b3f191b04dfd07a8883056b"
+    },
+    "frontier.dat": {
+      "bytes": 26,
+      "md5": "2e69492de969b8f4ec9c2d5b314327bd"
+    },
+    "grid.geo": {
+      "bytes": 489950,
+      "md5": "cb3286d136741a39fa09b5a0f42e0705"
+    },
+    "structures.dat": {
+      "bytes": 41378,
+      "md5": "cf0c77d9568dc3d81f6bfeb54d86aab7"
+    },
+    "tria.elemente": {
+      "bytes": 18486,
+      "md5": "1e29f49d63e9e05da92b6a9fd8859314"
+    },
+    "tria.eps": {
+      "bytes": 45126,
+      "md5": "1e080a6488a195f6013c0d2446956284"
+    },
+    "tria.in": {
+      "bytes": 13227,
+      "md5": "1c1909abce4597d0744ba68ea27b6f82"
+    },
+    "tria.log": {
+      "bytes": 105029,
+      "md5": "ee8a4668f79c57dfb5e09aa457cbc1a2"
+    },
+    "tria.neighbor": {
+      "bytes": 30589,
+      "md5": "ff2b4caaec56eee7cb6c8b799a3486b9"
+    },
+    "tria.nodes": {
+      "bytes": 16885,
+      "md5": "0c62fe950d5bc28fa7c7767939c10845"
+    },
+    "triageom.elemente": {
+      "bytes": 148000,
+      "md5": "455333091b59c4a2a4afdf2195a85d4e"
+    },
+    "triageom.eps": {
+      "bytes": 276009,
+      "md5": "aa70b32840f60d8b9a693e38c57e90bf"
+    },
+    "triageom.neighbor": {
+      "bytes": 476860,
+      "md5": "45521daf5b3f191b04dfd07a8883056b"
+    },
+    "triageom.nodes": {
+      "bytes": 112781,
+      "md5": "46f2113bd48c9909e2160f5db6384904"
+    },
+    "triangles.dat": {
+      "bytes": 80288,
+      "md5": "2d8ad983c384be22c0f58a77e5a7c55e"
+    },
+    "vertex_data.out": {
+      "bytes": 564924,
+      "md5": "db033508d9e946628dadaaa141aa714b"
+    }
+  },
+  "geometry": {
+    "bytes": 2796305,
+    "md5": "bf8521e704d0c6b61137db89030dba36"
+  },
+  "kind": "input_deck",
+  "machine": "MAST",
+  "name": "example-runs/MAST_U_SFminus_Donly/baserun",
+  "note": "sibling input deck of the family's run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run",
+  "run_family": "example-runs/MAST_U_SFminus_Donly",
+  "run_markers": {
+    "b2fstate": false,
+    "b2time.nc": false,
+    "fort.44": false
+  },
+  "total_bytes": 14041934
+}

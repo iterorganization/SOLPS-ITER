@@ -8,6 +8,7 @@
 !runs/
 !scripts/
 !SETUP/
+!tools/
 
 # backup files
 *~
@@ -71,6 +72,8 @@ bins/
 builds/
 lib/
 libs/
+# tools/ carries a tracked web-client source library under that name
+!tools/askthedocs/web/src/lib/
  
 # temporary link files for scripts
 grep.lis

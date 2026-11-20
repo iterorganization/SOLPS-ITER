@@ -1,0 +1,12 @@
+# regenerables — pip and pytest recreate these on every install/run;
+# ignored here (not only at the repo root) so the rule travels with
+# the folder and no clone's status ever dirties. Root-anchored: the
+# certified web client under web/build is a committed artifact.
+/build/
+*.egg-info/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+/web/node_modules/

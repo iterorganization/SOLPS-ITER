@@ -1,0 +1,2866 @@
+{
+  "cases": [
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "a04335257c76e6bc8d79cf6ec1c1f6a7",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "4bce5844bf84bec382d99eb257b3845a",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "a04335257c76e6bc8d79cf6ec1c1f6a7",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "4bce5844bf84bec382d99eb257b3845a",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "AUG_16151_D+C+He.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "4230093c5fef5065e12341456ab561d5",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "fc1623a6e21f4b5061159ed87e394bae",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "4230093c5fef5065e12341456ab561d5",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "fc1623a6e21f4b5061159ed87e394bae",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "AUG_16151_D.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "convergence": {
+              "new": {
+                "n_active": 2,
+                "nrecords": 101,
+                "verdict": "near-plateau"
+              },
+              "old": null
+            },
+            "fields": [
+              {
+                "field": "te",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 574.186428608932,
+                  "mean": 98.74766765336689,
+                  "min": 0.700579952003282,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ti",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 498.9381365830355,
+                  "mean": 104.83405780567338,
+                  "min": 0.5486531519560096,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ne",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.0968108517389e+21,
+                  "mean": 1.3897967722972668e+20,
+                  "min": 8.0056159168928e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_0",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 36129066715.452,
+                  "mean": 11068259210.533606,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_1",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.0956843552274e+21,
+                  "mean": 1.3869959278936288e+20,
+                  "min": 7.9726203923705e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_2",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 19769893763.645,
+                  "mean": 10331678450.704485,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_3",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 9.3504711744492e+17,
+                  "mean": 9.205595433148219e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_4",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.9810430600263e+17,
+                  "mean": 1.1736086993888828e+16,
+                  "min": 87263126756.262,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_5",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.3842402312458e+17,
+                  "mean": 3795427482926718.0,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_6",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 6.5656941419856e+16,
+                  "mean": 2829361950846649.0,
+                  "min": 15663344840.694,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_7",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 9.0020376599562e+16,
+                  "mean": 7406618627278471.0,
+                  "min": 14647183719.146,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_8",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.5548030501867e+16,
+                  "mean": 2539593669550426.5,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_9",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 9.1024780038472e+16,
+                  "mean": 1.2797418091237104e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "po",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 140.45204380129,
+                  "mean": 29.945857356089576,
+                  "min": -125.45121030862,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              }
+            ],
+            "grid": {
+              "ns": 10,
+              "nx": 96,
+              "ny": 36
+            },
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "note": "stats are new-side-only",
+              "side": "new"
+            },
+            "run": "variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport",
+            "state": "out/deltarun/extract/710d9f4100d5b471192efae386f8424a/AUG_28903_D+N_drifts/variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport/b2fstate"
+          },
+          {
+            "comparison": "one-sided",
+            "convergence": {
+              "new": {
+                "n_active": 2,
+                "nrecords": 2501,
+                "verdict": "plateaued"
+              },
+              "old": null
+            },
+            "fields": [
+              {
+                "field": "te",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 621.8958528852319,
+                  "mean": 115.11581142682684,
+                  "min": 0.7821349212543192,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ti",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 716.6180721475934,
+                  "mean": 158.07070550281176,
+                  "min": 0.9528933144109878,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ne",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 9.4780417237203e+20,
+                  "mean": 6.2168326892418695e+19,
+                  "min": 9.1906987785618e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_0",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 4.6014979920755e+20,
+                  "mean": 4.3470200530851635e+19,
+                  "min": 32088342898391.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_1",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 9.4759505169439e+20,
+                  "mean": 6.210383820291766e+19,
+                  "min": 9.1822668698325e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_2",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.0824075094143e+17,
+                  "mean": 1.1206561378914716e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_3",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.7014612926499e+17,
+                  "mean": 4708317481144126.0,
+                  "min": 31922487321.304,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_4",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 3.214512183656e+16,
+                  "mean": 371422988193277.5,
+                  "min": 29760436813.143,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_5",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.8012230439331e+16,
+                  "mean": 363716483200691.1,
+                  "min": 128990249780.33,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_6",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.3157543315515e+16,
+                  "mean": 430974167879181.56,
+                  "min": 48807369714.001,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_7",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.702414071814e+16,
+                  "mean": 1685913973340248.2,
+                  "min": 24823611539.895,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_8",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.1825542106254e+16,
+                  "mean": 1737922260821785.0,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_9",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 3.6543643453536e+16,
+                  "mean": 5337910927247646.0,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "po",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 167.09462004887,
+                  "mean": -46.61023415590961,
+                  "min": -609.49085491461,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              }
+            ],
+            "grid": {
+              "ns": 10,
+              "nx": 96,
+              "ny": 36
+            },
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "note": "stats are new-side-only",
+              "side": "new"
+            },
+            "run": "variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat",
+            "state": "out/deltarun/extract/710d9f4100d5b471192efae386f8424a/AUG_28903_D+N_drifts/variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat/b2fstate"
+          }
+        ],
+        "summary_figure": {
+          "field": null,
+          "max_abs_rel": null,
+          "selected_by": "none"
+        },
+        "tier": "analyzed"
+      },
+      "code": {
+        "new": {
+          "extract_path": "out/deltarun/extract/710d9f4100d5b471192efae386f8424a/AUG_28903_D+N_drifts",
+          "md5": "710d9f4100d5b471192efae386f8424a",
+          "runs": [
+            {
+              "run": "variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport",
+              "stamps": [
+                {
+                  "file": "fort.44",
+                  "git_stamp": "68af8ded-dirty",
+                  "kind": "fort44",
+                  "resolution": {
+                    "base": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "hex": "68af8ded",
+                    "note": "stamped '68af8ded-dirty': build tree had uncommitted changes on modules/Eirene@68af8ded \u2014 exact state code state not publicly reproducible",
+                    "stamp": "68af8ded-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "20240627"
+                },
+                {
+                  "file": "fort.46",
+                  "git_stamp": "68af8ded-dirty",
+                  "kind": "fort46",
+                  "resolution": {
+                    "base": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "hex": "68af8ded",
+                    "note": "stamped '68af8ded-dirty': build tree had uncommitted changes on modules/Eirene@68af8ded \u2014 exact state code state not publicly reproducible",
+                    "stamp": "68af8ded-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "20170930"
+                },
+                {
+                  "file": "b2fstate",
+                  "git_stamp": "4a81a2ca-dirty",
+                  "kind": "b2fstate",
+                  "resolution": {
+                    "base": {
+                      "commit": "4a81a2ca367c23b1d2e202482b5f1cd81171d79d",
+                      "github": "https://github.com/iterorganization/B2.5",
+                      "repo": "modules/B2.5",
+                      "subject": "Initial 3.0.10 commit"
+                    },
+                    "hex": "4a81a2ca",
+                    "note": "stamped '4a81a2ca-dirty': build tree had uncommitted changes on modules/B2.5@4a81a2ca \u2014 exact state code state not publicly reproducible",
+                    "stamp": "4a81a2ca-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "03.000.010"
+                }
+              ]
+            },
+            {
+              "run": "variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat",
+              "stamps": [
+                {
+                  "file": "b2fstate",
+                  "git_stamp": "51597834-dirty",
+                  "kind": "b2fstate",
+                  "resolution": {
+                    "base": {
+                      "commit": "515978344986236e552d253a1679a108112254da",
+                      "github": "https://github.com/iterorganization/B2.5",
+                      "repo": "modules/B2.5",
+                      "subject": "- Bug fixes to new NetCDF quantities: corrected DN/snowflake and limiter treatments, fixed neutral species indices, made dimensions internally consistent, label corrections, code clean-up - Bug fix for IMAS edge_profiles neutral state dimension handling - Correcting IMAS DD/4.1.1 identifiers - Added b2yt conversion rule for NEOCLASSICAL_TRANSPORT namelist"
+                    },
+                    "hex": "51597834",
+                    "note": "stamped '51597834-dirty': build tree had uncommitted changes on modules/B2.5@51597834 \u2014 exact state code state not publicly reproducible",
+                    "stamp": "51597834-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "03.000.010"
+                }
+              ]
+            }
+          ],
+          "side_state": "extracted"
+        },
+        "old": {
+          "md5": "7fc2f69722e2478cac64cf0c6222f992",
+          "note": "side bytes never obtained \u2014 code state not publicly reproducible",
+          "reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+          "side_state": "skipped",
+          "skip_kind": "zenodo-absent"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "convergence": {
+            "variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport": {
+              "n_active": 2,
+              "nrecords": 101,
+              "verdict": "near-plateau"
+            },
+            "variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat": {
+              "n_active": 2,
+              "nrecords": 2501,
+              "verdict": "plateaued"
+            }
+          },
+          "extract_path": "out/deltarun/extract/710d9f4100d5b471192efae386f8424a/AUG_28903_D+N_drifts",
+          "md5": "710d9f4100d5b471192efae386f8424a",
+          "outcome": "extracted",
+          "run_dirs": [
+            "variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport",
+            "variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat"
+          ]
+        },
+        "old": {
+          "md5": "7fc2f69722e2478cac64cf0c6222f992",
+          "outcome": "skipped",
+          "skip_kind": "zenodo-absent",
+          "skip_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "AUG_28903_D+N_drifts.tar.gz",
+      "status": "changed",
+      "wall": {
+        "figure": {
+          "bytes": 61198,
+          "md5": "49072202bab6225c966fa42fd160734e",
+          "path": "figures/deltarun/79bb46bc_ab87f750/AUG_28903_D+N_drifts__wall.png"
+        },
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "driver_command": "../solps-reader/.venv/bin/python build_release_report.py 79bb46bc00c8 ab87f75097b1 --analyze AUG_28903_D+N_drifts.tar.gz",
+              "note": "no old side fetched \u2014 fetch to compare",
+              "side": "new"
+            },
+            "rows": null,
+            "run": "variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport",
+            "sides": {
+              "new": "ok",
+              "old": "absent"
+            },
+            "wall": {
+              "new": {
+                "integrated_si": {
+                  "atom": {
+                    "unit": "particles s-1",
+                    "value": 1.7369864649568e+23,
+                    "what": "net-emitted atom flux (wldpa)"
+                  },
+                  "eb": {
+                    "unit": "W",
+                    "value": 1178517.79784,
+                    "what": "power of emitted particles (wldpeb)"
+                  },
+                  "ion": {
+                    "unit": "particles s-1",
+                    "value": 2.7059478000507005e+23,
+                    "what": "impinging plasma-ion flux (wldpp)"
+                  },
+                  "mol": {
+                    "unit": "particles s-1",
+                    "value": 4.844806673e+22,
+                    "what": "net-emitted molecule flux (wldpm)"
+                  }
+                },
+                "loaded_rows": [
+                  210,
+                  211,
+                  212,
+                  213,
+                  214
+                ],
+                "loaded_rows_si": [
+                  {
+                    "area_m2": 3.72839,
+                    "emitted_power_w": 26314.0146,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 3.90902365881618e+22,
+                    "particle_flux_s1": 1.4574364719293657e+23,
+                    "row": 210
+                  },
+                  {
+                    "area_m2": 3.79063,
+                    "emitted_power_w": 1044823.89,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 4.6837598761987045e+22,
+                    "particle_flux_s1": 1.7754400699515097e+23,
+                    "row": 211
+                  },
+                  {
+                    "area_m2": 1.64221,
+                    "emitted_power_w": 1776.03164,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 1.3574637905250534e+22,
+                    "particle_flux_s1": 2.229240611438148e+22,
+                    "row": 212
+                  },
+                  {
+                    "area_m2": 2.28687,
+                    "emitted_power_w": 13369.7148,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.3128634351222855e+22,
+                    "particle_flux_s1": 5.289218003878101e+22,
+                    "row": 213
+                  },
+                  {
+                    "area_m2": 40.5221,
+                    "emitted_power_w": 92234.1468,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.326366424481949e+21,
+                    "particle_flux_s1": 9.426925288949999e+22,
+                    "row": 214
+                  }
+                ],
+                "nlim": 209,
+                "nsts": 6
+              }
+            }
+          },
+          {
+            "comparison": "no-wall-data",
+            "one_sided": null,
+            "rows": null,
+            "run": "variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat",
+            "sides": {
+              "new": "no-fort44",
+              "old": "absent"
+            },
+            "wall": null
+          }
+        ]
+      }
+    },
+    {
+      "analysis": {
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "convergence": {
+              "new": {
+                "n_active": 2,
+                "nrecords": 106,
+                "verdict": "near-plateau"
+              },
+              "old": null
+            },
+            "fields": [
+              {
+                "field": "te",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 568.6800083564569,
+                  "mean": 95.85092735780566,
+                  "min": 0.6652892654789523,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ti",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 498.8979577155848,
+                  "mean": 104.29704870247312,
+                  "min": 0.5628218380279225,
+                  "n_cells": 3456
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ne",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.0258417345624e+21,
+                  "mean": 1.3725464801491504e+20,
+                  "min": 6.8190613651951e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_0",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 36210008315.496,
+                  "mean": 11131782562.334251,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_1",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.0244321257006e+21,
+                  "mean": 1.3610232269477187e+20,
+                  "min": 6.7456719144622e+17,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_2",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 76776843902.017,
+                  "mean": 16997560503.833456,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_3",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 4.723038344833e+17,
+                  "mean": 3.685224890559697e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_4",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 3.7956883212136e+17,
+                  "mean": 2.9659718238138548e+16,
+                  "min": 30872720927.608,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_5",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.6011031531748e+17,
+                  "mean": 1.1519798271032912e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_6",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.2484758394034e+17,
+                  "mean": 7849818303528185.0,
+                  "min": 17641591184.3,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_7",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.4856957709902e+17,
+                  "mean": 7560871778518161.0,
+                  "min": 17671855279.153,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_8",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 7.7918548980355e+16,
+                  "mean": 5323377194977345.0,
+                  "min": 27700786838.869,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_9",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 6.7501695946176e+16,
+                  "mean": 7003453591553811.0,
+                  "min": 25299533689.438,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_10",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.5554195370761e+17,
+                  "mean": 4.610653199594199e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_11",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1.9241730565389e+17,
+                  "mean": 2.808109777442949e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_12",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 2.2378858426459e+17,
+                  "mean": 2.4984403359338604e+16,
+                  "min": 10000000000.0,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              },
+              {
+                "field": "po",
+                "shape": [
+                  96,
+                  36
+                ],
+                "side_stats": {
+                  "max": 112.74117893708,
+                  "mean": 24.627218788010087,
+                  "min": -130.97800759028,
+                  "n_cells": 3456
+                },
+                "unit": ""
+              }
+            ],
+            "grid": {
+              "ns": 13,
+              "nx": 96,
+              "ny": 36
+            },
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "note": "stats are new-side-only",
+              "side": "new"
+            },
+            "run": "variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport",
+            "state": "out/deltarun/extract/0b810bd50d72c639570fca636a6f0feb/AUG_28903_D+Ne_drifts/variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport/b2fstate"
+          }
+        ],
+        "summary_figure": {
+          "field": null,
+          "max_abs_rel": null,
+          "selected_by": "none"
+        },
+        "tier": "analyzed"
+      },
+      "code": {
+        "new": {
+          "extract_path": "out/deltarun/extract/0b810bd50d72c639570fca636a6f0feb/AUG_28903_D+Ne_drifts",
+          "md5": "0b810bd50d72c639570fca636a6f0feb",
+          "runs": [
+            {
+              "run": "variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport",
+              "stamps": [
+                {
+                  "file": "fort.44",
+                  "git_stamp": "68af8ded-dirty",
+                  "kind": "fort44",
+                  "resolution": {
+                    "base": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "hex": "68af8ded",
+                    "note": "stamped '68af8ded-dirty': build tree had uncommitted changes on modules/Eirene@68af8ded \u2014 exact state code state not publicly reproducible",
+                    "stamp": "68af8ded-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "20240627"
+                },
+                {
+                  "file": "fort.46",
+                  "git_stamp": "68af8ded-dirty",
+                  "kind": "fort46",
+                  "resolution": {
+                    "base": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "hex": "68af8ded",
+                    "note": "stamped '68af8ded-dirty': build tree had uncommitted changes on modules/Eirene@68af8ded \u2014 exact state code state not publicly reproducible",
+                    "stamp": "68af8ded-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "20170930"
+                },
+                {
+                  "file": "b2fstate",
+                  "git_stamp": "4a81a2ca-dirty",
+                  "kind": "b2fstate",
+                  "resolution": {
+                    "base": {
+                      "commit": "4a81a2ca367c23b1d2e202482b5f1cd81171d79d",
+                      "github": "https://github.com/iterorganization/B2.5",
+                      "repo": "modules/B2.5",
+                      "subject": "Initial 3.0.10 commit"
+                    },
+                    "hex": "4a81a2ca",
+                    "note": "stamped '4a81a2ca-dirty': build tree had uncommitted changes on modules/B2.5@4a81a2ca \u2014 exact state code state not publicly reproducible",
+                    "stamp": "4a81a2ca-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "03.000.010"
+                }
+              ]
+            }
+          ],
+          "side_state": "extracted"
+        },
+        "old": {
+          "md5": "201c4e133dc0d651597fdc8258f51322",
+          "note": "side bytes never obtained \u2014 code state not publicly reproducible",
+          "reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+          "side_state": "skipped",
+          "skip_kind": "zenodo-absent"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "convergence": {
+            "variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport": {
+              "n_active": 2,
+              "nrecords": 106,
+              "verdict": "near-plateau"
+            }
+          },
+          "extract_path": "out/deltarun/extract/0b810bd50d72c639570fca636a6f0feb/AUG_28903_D+Ne_drifts",
+          "md5": "0b810bd50d72c639570fca636a6f0feb",
+          "outcome": "extracted",
+          "run_dirs": [
+            "variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport"
+          ]
+        },
+        "old": {
+          "md5": "201c4e133dc0d651597fdc8258f51322",
+          "outcome": "skipped",
+          "skip_kind": "zenodo-absent",
+          "skip_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "AUG_28903_D+Ne_drifts.tar.gz",
+      "status": "changed",
+      "wall": {
+        "figure": {
+          "bytes": 60803,
+          "md5": "8a073127fe7483000e16c979e9e7f855",
+          "path": "figures/deltarun/79bb46bc_ab87f750/AUG_28903_D+Ne_drifts__wall.png"
+        },
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "driver_command": "../solps-reader/.venv/bin/python build_release_report.py 79bb46bc00c8 ab87f75097b1 --analyze AUG_28903_D+Ne_drifts.tar.gz",
+              "note": "no old side fetched \u2014 fetch to compare",
+              "side": "new"
+            },
+            "rows": null,
+            "run": "variant017_eirene_drift_Ne_puff2e18_alb0.81_test_transport",
+            "sides": {
+              "new": "ok",
+              "old": "absent"
+            },
+            "wall": {
+              "new": {
+                "integrated_si": {
+                  "atom": {
+                    "unit": "particles s-1",
+                    "value": 1.6533953022982e+23,
+                    "what": "net-emitted atom flux (wldpa)"
+                  },
+                  "eb": {
+                    "unit": "W",
+                    "value": 1009489.82818,
+                    "what": "power of emitted particles (wldpeb)"
+                  },
+                  "ion": {
+                    "unit": "particles s-1",
+                    "value": 2.572731771299201e+23,
+                    "what": "impinging plasma-ion flux (wldpp)"
+                  },
+                  "mol": {
+                    "unit": "particles s-1",
+                    "value": 4.596682342e+22,
+                    "what": "net-emitted molecule flux (wldpm)"
+                  }
+                },
+                "loaded_rows": [
+                  210,
+                  211,
+                  212,
+                  213,
+                  214
+                ],
+                "loaded_rows_si": [
+                  {
+                    "area_m2": 3.72697,
+                    "emitted_power_w": 26432.696,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 3.910194250520416e+22,
+                    "particle_flux_s1": 1.4573176665862075e+23,
+                    "row": 210
+                  },
+                  {
+                    "area_m2": 3.79066,
+                    "emitted_power_w": 883864.775,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 4.219003450206218e+22,
+                    "particle_flux_s1": 1.59928076185587e+23,
+                    "row": 211
+                  },
+                  {
+                    "area_m2": 1.64204,
+                    "emitted_power_w": 1779.80868,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 1.4070540442304688e+22,
+                    "particle_flux_s1": 2.310439022788199e+22,
+                    "row": 212
+                  },
+                  {
+                    "area_m2": 2.28711,
+                    "emitted_power_w": 10900.0508,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.372411228911175e+22,
+                    "particle_flux_s1": 5.425965445755038e+22,
+                    "row": 213
+                  },
+                  {
+                    "area_m2": 40.5498,
+                    "emitted_power_w": 86512.4977,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.109890634481551e+21,
+                    "particle_flux_s1": 8.55556432501e+22,
+                    "row": 214
+                  }
+                ],
+                "nlim": 209,
+                "nsts": 6
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "fa4e436b0503c9b05efb6d9a82a95d9c",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "ae8c02434e7f8fc1c484d7df4676d4d8",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "fa4e436b0503c9b05efb6d9a82a95d9c",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "ae8c02434e7f8fc1c484d7df4676d4d8",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "DIIID_3106_DN_D+C.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "5fd956103cb399e2e09dd09b2c30f7f3",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "c5af5f52d1da4a7340480980b0f605b6",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "5fd956103cb399e2e09dd09b2c30f7f3",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "c5af5f52d1da4a7340480980b0f605b6",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2171_D+He+Be+Ne.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "0e7150471008280494b1d2c00750ffe8",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "15bce1293b2433cf6b2274104246ba0d",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "0e7150471008280494b1d2c00750ffe8",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "15bce1293b2433cf6b2274104246ba0d",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2264_0.6Ne_100MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "convergence": {
+              "new": {
+                "n_active": 3,
+                "nrecords": 1000,
+                "verdict": "plateaued"
+              },
+              "old": null
+            },
+            "fields": [
+              {
+                "field": "te",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1158.2642422603824,
+                  "mean": 116.48901756774335,
+                  "min": 0.6263043074472899,
+                  "n_cells": 3240
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ti",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 1201.550126655948,
+                  "mean": 150.63494523705728,
+                  "min": 0.6554931037427051,
+                  "n_cells": 3240
+                },
+                "unit": "eV"
+              },
+              {
+                "field": "ne",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 5.96209885086e+20,
+                  "mean": 2.297744830827946e+19,
+                  "min": 2.8193026808373e+16,
+                  "n_cells": 3240
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_0",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 23274405868.63,
+                  "mean": 516433996.2360267,
+                  "min": 10000.0,
+                  "n_cells": 3240
+                },
+                "unit": ""
+              },
+              {
+                "field": "na_1",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 5.96209885086e+20,
+                  "mean": 2.297744830827946e+19,
+                  "min": 2.8193026808373e+16,
+                  "n_cells": 3240
+                },
+                "unit": ""
+              },
+              {
+                "field": "po",
+                "shape": [
+                  90,
+                  36
+                ],
+                "side_stats": {
+                  "max": 91.280158457343,
+                  "mean": 36.468835363071484,
+                  "min": 1.4123840455666,
+                  "n_cells": 3240
+                },
+                "unit": ""
+              }
+            ],
+            "grid": {
+              "ns": 2,
+              "nx": 90,
+              "ny": 36
+            },
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "note": "stats are new-side-only",
+              "side": "new"
+            },
+            "run": "run_restart",
+            "state": "out/deltarun/extract/cc6ecaabc5f7bd92fac59d50677deb5d/ITER_2275_Donly_20MW/run_restart/b2fstate"
+          }
+        ],
+        "summary_figure": {
+          "field": null,
+          "max_abs_rel": null,
+          "selected_by": "none"
+        },
+        "tier": "analyzed"
+      },
+      "code": {
+        "new": {
+          "extract_path": "out/deltarun/extract/cc6ecaabc5f7bd92fac59d50677deb5d/ITER_2275_Donly_20MW",
+          "md5": "cc6ecaabc5f7bd92fac59d50677deb5d",
+          "runs": [
+            {
+              "run": "run_restart",
+              "stamps": [
+                {
+                  "file": "fort.44",
+                  "git_stamp": "68af8ded",
+                  "kind": "fort44",
+                  "resolution": {
+                    "hex": "68af8ded",
+                    "hit": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "stamp": "68af8ded",
+                    "state": "resolved"
+                  },
+                  "version": "20240627"
+                },
+                {
+                  "file": "fort.46",
+                  "git_stamp": "68af8ded",
+                  "kind": "fort46",
+                  "resolution": {
+                    "hex": "68af8ded",
+                    "hit": {
+                      "commit": "68af8ded0c20631730fff6e3a9bd4fc4afd75448",
+                      "github": "https://github.com/iterorganization/EIRENE",
+                      "repo": "modules/Eirene",
+                      "subject": "Bug fix for OpenMP implementation (suggested by Gaurav Saxena)"
+                    },
+                    "stamp": "68af8ded",
+                    "state": "resolved"
+                  },
+                  "version": "20170930"
+                },
+                {
+                  "file": "b2fstate",
+                  "git_stamp": "4a81a2ca-dirty",
+                  "kind": "b2fstate",
+                  "resolution": {
+                    "base": {
+                      "commit": "4a81a2ca367c23b1d2e202482b5f1cd81171d79d",
+                      "github": "https://github.com/iterorganization/B2.5",
+                      "repo": "modules/B2.5",
+                      "subject": "Initial 3.0.10 commit"
+                    },
+                    "hex": "4a81a2ca",
+                    "note": "stamped '4a81a2ca-dirty': build tree had uncommitted changes on modules/B2.5@4a81a2ca \u2014 exact state code state not publicly reproducible",
+                    "stamp": "4a81a2ca-dirty",
+                    "state": "dirty",
+                    "suffix": "-dirty"
+                  },
+                  "version": "03.000.010"
+                }
+              ]
+            }
+          ],
+          "side_state": "extracted"
+        },
+        "old": {
+          "md5": "b539b7a5035f05f9534b56680b167cb5",
+          "note": "side bytes never obtained \u2014 code state not publicly reproducible",
+          "reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+          "side_state": "skipped",
+          "skip_kind": "zenodo-absent"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "convergence": {
+            "run_restart": {
+              "n_active": 3,
+              "nrecords": 1000,
+              "verdict": "plateaued"
+            }
+          },
+          "extract_path": "out/deltarun/extract/cc6ecaabc5f7bd92fac59d50677deb5d/ITER_2275_Donly_20MW",
+          "md5": "cc6ecaabc5f7bd92fac59d50677deb5d",
+          "outcome": "extracted",
+          "run_dirs": [
+            "run_restart"
+          ]
+        },
+        "old": {
+          "md5": "b539b7a5035f05f9534b56680b167cb5",
+          "outcome": "skipped",
+          "skip_kind": "zenodo-absent",
+          "skip_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2275_Donly_20MW.tar.gz",
+      "status": "changed",
+      "wall": {
+        "figure": {
+          "bytes": 58382,
+          "md5": "97fca343e2fbc7dc69d2c25b8aac8603",
+          "path": "figures/deltarun/79bb46bc_ab87f750/ITER_2275_Donly_20MW__wall.png"
+        },
+        "runs": [
+          {
+            "comparison": "one-sided",
+            "one_sided": {
+              "absent_side_outcome": "skipped",
+              "absent_side_reason": "md5 not carried by any record of the concept (OQ-DR2a-2: pre-Zenodo publish state) \u2014 Zenodo leg honestly absent",
+              "driver_command": "../solps-reader/.venv/bin/python build_release_report.py 79bb46bc00c8 ab87f75097b1 --analyze ITER_2275_Donly_20MW.tar.gz",
+              "note": "no old side fetched \u2014 fetch to compare",
+              "side": "new"
+            },
+            "rows": null,
+            "run": "run_restart",
+            "sides": {
+              "new": "ok",
+              "old": "absent"
+            },
+            "wall": {
+              "new": {
+                "integrated_si": {
+                  "atom": {
+                    "unit": "particles s-1",
+                    "value": 5.33335451459e+23,
+                    "what": "net-emitted atom flux (wldpa)"
+                  },
+                  "eb": {
+                    "unit": "W",
+                    "value": 1972632.7558349997,
+                    "what": "power of emitted particles (wldpeb)"
+                  },
+                  "ion": {
+                    "unit": "particles s-1",
+                    "value": 1.1482410324200001e+24,
+                    "what": "impinging plasma-ion flux (wldpp)"
+                  },
+                  "mol": {
+                    "unit": "particles s-1",
+                    "value": 3.0745279048299996e+23,
+                    "what": "net-emitted molecule flux (wldpm)"
+                  }
+                },
+                "loaded_rows": [
+                  181,
+                  182,
+                  183,
+                  184,
+                  185
+                ],
+                "loaded_rows_si": [
+                  {
+                    "area_m2": 29.8562,
+                    "emitted_power_w": 753257.975,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 3.2363035315947778e+22,
+                    "particle_flux_s1": 9.662372550000001e+23,
+                    "row": 181
+                  },
+                  {
+                    "area_m2": 52.285,
+                    "emitted_power_w": 1215663.17,
+                    "isrftype": 1,
+                    "particle_flux_density_m2_s1": 1.9294208702304676e+22,
+                    "particle_flux_s1": 1.008797702e+24,
+                    "row": 182
+                  },
+                  {
+                    "area_m2": 24.7174,
+                    "emitted_power_w": 328.34818,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.1271648251838782e+20,
+                    "particle_flux_s1": 5.257798385e+21,
+                    "row": 183
+                  },
+                  {
+                    "area_m2": 32.3634,
+                    "emitted_power_w": 590.756335,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 2.0564154887928958e+20,
+                    "particle_flux_s1": 6.655259703000001e+21,
+                    "row": 184
+                  },
+                  {
+                    "area_m2": 667.72,
+                    "emitted_power_w": 2792.50632,
+                    "isrftype": -3,
+                    "particle_flux_density_m2_s1": 3.1169641077098184e+18,
+                    "particle_flux_s1": 2.081259274e+21,
+                    "row": 185
+                  }
+                ],
+                "nlim": 180,
+                "nsts": 6
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "4c0b6c581ed5752752e4a1647274269f",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "ff1629c56c276b2bc702fe1c76f71428",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "4c0b6c581ed5752752e4a1647274269f",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "ff1629c56c276b2bc702fe1c76f71428",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2292_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "ae00c68bf7d1861beb3ab270faa47539",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "35861796ce6a59b22109a455cae1587e",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "ae00c68bf7d1861beb3ab270faa47539",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "35861796ce6a59b22109a455cae1587e",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2294_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "72ec3780e5d75f35e46d9ab7220c6963",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "c7bfa7a6f802c66403fa6cc35726bada",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "72ec3780e5d75f35e46d9ab7220c6963",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "c7bfa7a6f802c66403fa6cc35726bada",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2296_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "b0c5dd716f4c27e249db12c498226914",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "fb14b1172fecd322e947bf0cc198b332",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "b0c5dd716f4c27e249db12c498226914",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "fb14b1172fecd322e947bf0cc198b332",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2297_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "d8bb1980cff1353155357a4528ec5748",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "67c66d4ca1dfcf59794a50c1635b2c75",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "d8bb1980cff1353155357a4528ec5748",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "67c66d4ca1dfcf59794a50c1635b2c75",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2298_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "ed75e8cfc2862b9a12f400eacccf112b",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "3a589866c43cf079392b10a4b8c711bd",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "ed75e8cfc2862b9a12f400eacccf112b",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "3a589866c43cf079392b10a4b8c711bd",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2299_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "81aa029d91102209e864178fd9580ee2",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "e9ad5acf37903d66ffe2edfb459c2941",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "81aa029d91102209e864178fd9580ee2",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "e9ad5acf37903d66ffe2edfb459c2941",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2308_Honly_20MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "b08925f321412f858a661ef71a1233a8",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "8aa0e6d0952da6614a57c2b1f6091813",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "b08925f321412f858a661ef71a1233a8",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "8aa0e6d0952da6614a57c2b1f6091813",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2360_0.95He+0.05H_40MW.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "e053b504ea05b941a1743ade3c3269da",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "556d9d1469326abf568ea4669c0098c6",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "e053b504ea05b941a1743ade3c3269da",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "556d9d1469326abf568ea4669c0098c6",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2588_D+He+N.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "eed2729ba912a5d5366cbf3d188e68fb",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "5f42a02c8e9fbcc26f1bc1b9d4bee2e6",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "eed2729ba912a5d5366cbf3d188e68fb",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "5f42a02c8e9fbcc26f1bc1b9d4bee2e6",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_2588_drifts.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "32c6b5e034d8c8dd5f768781008882c4",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "9ae3e129fc1b3c2d08143a73dd17f39c",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "32c6b5e034d8c8dd5f768781008882c4",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "9ae3e129fc1b3c2d08143a73dd17f39c",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_535_D+He+Ar.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "6b05dd00fa79a15026a5901eb52e944a",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "12608abc862caf3881e98500fc75c64b",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "6b05dd00fa79a15026a5901eb52e944a",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "12608abc862caf3881e98500fc75c64b",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "ITER_Be-W_D+T+He+Ne.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "00573ff81439b96f51bc12abca2db4be",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "dd2a8dece29dbeb86de1cb0eeafb643e",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "00573ff81439b96f51bc12abca2db4be",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "dd2a8dece29dbeb86de1cb0eeafb643e",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "JTEXT_Limiter_H.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "f0e0a3b04438a4b6ea00399bc9addd6d",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "d1d48e94d762975e56e0302c9c2936b4",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "f0e0a3b04438a4b6ea00399bc9addd6d",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "d1d48e94d762975e56e0302c9c2936b4",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "MAST_U_SFminus_Donly.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "92278cbd2fa82c39157a6f83b9d476d5",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "b2aec9e35d19b580bf8a03ac3ab66b3e",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "92278cbd2fa82c39157a6f83b9d476d5",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "b2aec9e35d19b580bf8a03ac3ab66b3e",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "test_slab_ortho_standalone.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "2fffacbe5801fc53cef43f17f2dddad4",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "cdacedf68be031274c601ecacfa6551a",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "2fffacbe5801fc53cef43f17f2dddad4",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "cdacedf68be031274c601ecacfa6551a",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "tutorial-DivGeo_C-Mod-InitializeRun.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "2f16994590a288b699b8beaf02683204",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "79cc52417261677692fabdac98acad35",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "2f16994590a288b699b8beaf02683204",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "79cc52417261677692fabdac98acad35",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "tutorial-DivGeo_C-Mod.tar.gz",
+      "status": "changed"
+    },
+    {
+      "analysis": {
+        "tier": "manifest-only"
+      },
+      "code": {
+        "new": {
+          "md5": "1302360e62ddaefac914c6c0553ade5d",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "old": {
+          "md5": "240137ec7ef8e13bad2cba94cc3ba476",
+          "note": "no fetch report covers this side \u2014 run fetch_release_tarballs.py first",
+          "side_state": "not-fetched"
+        },
+        "stamp_pairs": []
+      },
+      "decks": {
+        "deck": null,
+        "new": {
+          "md5": "1302360e62ddaefac914c6c0553ade5d",
+          "note": "no new-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "old": {
+          "md5": "240137ec7ef8e13bad2cba94cc3ba476",
+          "note": "no old-side entry in any fetch report for this pair",
+          "outcome": "not-fetched"
+        },
+        "skipped_pairs": [],
+        "unmatched": []
+      },
+      "name": "tutorial-DivGeo_ITER_baseline_scenario-InitializeRun.tar.gz",
+      "status": "changed"
+    }
+  ],
+  "changelog": {
+    "entries": [],
+    "n_entries": 0,
+    "path": "doc/LOG",
+    "text": ""
+  },
+  "counts": {
+    "added": 0,
+    "changed": 26,
+    "identical": 1,
+    "removed": 0
+  },
+  "new": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+  "new_n_md5_files": 27,
+  "old": "79bb46bc00c8f4d70c9a437463a41e36e2a8ee2b",
+  "old_n_md5_files": 27,
+  "publish_compare_url": "https://github.com/iterorganization/SOLPS-ITER/compare/79bb46bc00c8f4d70c9a437463a41e36e2a8ee2b...ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+  "publish_subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options",
+  "schema": "catalog-deltarun-page/2",
+  "selection": {
+    "analyze": {
+      "default": false,
+      "names": [
+        "ITER_2275_Donly_20MW.tar.gz"
+      ],
+      "rule": "explicit"
+    },
+    "budgets": {
+      "force_full_record": false,
+      "per_tarball": 1073741824,
+      "total": 268435456
+    },
+    "command": "build_release_report.py 79bb46bc ab87f750 --analyze ITER_2275_Donly_20MW.tar.gz",
+    "fetch_counts": {
+      "downloaded_bytes": 0,
+      "fetched": 0,
+      "skipped": 1,
+      "warm-cache": 1
+    },
+    "new": {
+      "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+      "input": "ab87f750",
+      "version": null
+    },
+    "old": {
+      "commit": "79bb46bc00c8f4d70c9a437463a41e36e2a8ee2b",
+      "input": "79bb46bc",
+      "version": null
+    },
+    "schema": "catalog-deltarun-driver/1",
+    "stages": [
+      {
+        "cite": "release_manifest_diff():110",
+        "output": "out/deltarun/diffs/79bb46bc_ab87f750.json",
+        "script": "build_release_manifest_diff.py",
+        "stage": "diff"
+      },
+      {
+        "cite": "run():314",
+        "output": "out/deltarun/reports/79bb46bc_ab87f750__ITER_2275_Donly_20MW.json",
+        "script": "fetch_release_tarballs.py",
+        "stage": "fetch"
+      },
+      {
+        "cite": "code_diff():396",
+        "output": "out/deltarun/codediffs/79bb46bc_ab87f750.json",
+        "script": "build_release_code_diff.py",
+        "stage": "codediff"
+      },
+      {
+        "cite": "pair_decks():220",
+        "output": "out/deltarun/decks/79bb46bc_ab87f750.json",
+        "script": "build_release_pair_decks.py",
+        "stage": "decks"
+      },
+      {
+        "cite": "impact_stats():257",
+        "output": "out/deltarun/decks/79bb46bc_ab87f750.impact.json",
+        "script": "build_release_impact_stats.py",
+        "stage": "impact"
+      },
+      {
+        "cite": "wall_deck():284",
+        "output": "out/deltarun/decks/79bb46bc_ab87f750.wall.json",
+        "script": "build_release_wall_deck.py",
+        "stage": "wall"
+      },
+      {
+        "cite": "page_data():163",
+        "output": "out/deltarun_pages/79bb46bc_ab87f750.json",
+        "script": "build_release_page_data.py",
+        "stage": "pagedata"
+      }
+    ]
+  },
+  "sources": {
+    "codediff": "out/deltarun/codediffs/79bb46bc_ab87f750.json",
+    "decks": "out/deltarun/decks/79bb46bc_ab87f750.json",
+    "diff": "out/deltarun/diffs/79bb46bc_ab87f750.json",
+    "driver": "out/deltarun/runs/79bb46bc_ab87f750.json",
+    "impact": "out/deltarun/decks/79bb46bc_ab87f750.impact.json",
+    "wall": "out/deltarun/decks/79bb46bc_ab87f750.wall.json"
+  },
+  "tarballs": [
+    {
+      "name": "AUG_16151_D+C+He.tar.gz",
+      "new_md5": "a04335257c76e6bc8d79cf6ec1c1f6a7",
+      "old_md5": "4bce5844bf84bec382d99eb257b3845a",
+      "path": "runs/examples/AUG_16151_D+C+He.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "AUG_16151_D.tar.gz",
+      "new_md5": "4230093c5fef5065e12341456ab561d5",
+      "old_md5": "fc1623a6e21f4b5061159ed87e394bae",
+      "path": "runs/examples/AUG_16151_D.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "AUG_28903_D+N_drifts.tar.gz",
+      "new_md5": "710d9f4100d5b471192efae386f8424a",
+      "old_md5": "7fc2f69722e2478cac64cf0c6222f992",
+      "path": "runs/examples/AUG_28903_D+N_drifts.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "AUG_28903_D+Ne_drifts.tar.gz",
+      "new_md5": "0b810bd50d72c639570fca636a6f0feb",
+      "old_md5": "201c4e133dc0d651597fdc8258f51322",
+      "path": "runs/examples/AUG_28903_D+Ne_drifts.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "DIIID_3106_DN_D+C.tar.gz",
+      "new_md5": "fa4e436b0503c9b05efb6d9a82a95d9c",
+      "old_md5": "ae8c02434e7f8fc1c484d7df4676d4d8",
+      "path": "runs/examples/DIIID_3106_DN_D+C.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "598714a24b7fc12bf188f1b022ec34de754c87b9",
+          "subject": "Rebuilt DIIID CI test case after refactoring of b2mod_eirene + added new IPP TOK cluster configuration files in submodules"
+        },
+        {
+          "commit": "9b855848eb97d894d8ae11f5a3d6a8cd9396f4d2",
+          "subject": "Rebuilt D3D_3106_DN CI test case"
+        },
+        {
+          "commit": "c7c52b97ecdf8be6b8c7989e3529fa94e94c2f2c",
+          "subject": "Third pass at rebuilding DIII-D example case"
+        },
+        {
+          "commit": "85ee54cb4f72ff4843e6ae294fa62f73d4ee561c",
+          "subject": "Second pass at rebuilding DIII-D example case"
+        },
+        {
+          "commit": "34445a52a0a8018667326c9ac45a4c45cc35499e",
+          "subject": "Rebuilt DIII-D example with corrected flux limit on current term"
+        },
+        {
+          "commit": "8463ad1b48e706516257432b45bc5f4482ed67a9",
+          "subject": "One more flase negative CI test results to get rid of"
+        },
+        {
+          "commit": "9b40ddaf8ac1108a80929ba5f4fad6eec72e9b10",
+          "subject": "Avoiding false negatives for the DIII-D CI test case"
+        },
+        {
+          "commit": "c165268d2482a606b6b7ac89eaf4dfd4ea430e66",
+          "subject": "Second attempt at rebuilding DIII-D DN CI test case"
+        },
+        {
+          "commit": "4e4c29d2ea7b7eedbf1a40cc09aa23e17ee3a5f8",
+          "subject": "Pointer to Eirene submodule with safety when asking for JSON without a JSON executable + rebuilt DIII-D DN example and updated CI test script"
+        },
+        {
+          "commit": "49eac0c8b38a68281fb1ab9af06ea55d8504c3c6",
+          "subject": "- Pointer to Eirene submodule with bug fixes for code runs with JSON input - Added CI test for JSON input run - Added handling of JSON output check files to scripts and runs/Makefile - Updated documentation"
+        },
+        {
+          "commit": "11c37b9869fb94d3b37cf4c9f53b140e5f2cb6be",
+          "subject": "Rebuilt DIII-D DN example and CI test case"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2171_D+He+Be+Ne.tar.gz",
+      "new_md5": "5fd956103cb399e2e09dd09b2c30f7f3",
+      "old_md5": "c5af5f52d1da4a7340480980b0f605b6",
+      "path": "runs/examples/ITER_2171_D+He+Be+Ne.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "b7f43e1c49f6ba8a46af3fc25a7535e99ef6496e",
+          "subject": "Rebuilding ITER_2171 test case for OpenMP CI after correction to electron current flux limit"
+        },
+        {
+          "commit": "79dbcf5bb170cbc7170f52b3863ac6092f6a8a5b",
+          "subject": "Rebuilt ITER_2171 example"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2264_0.6Ne_100MW.tar.gz",
+      "new_md5": "0e7150471008280494b1d2c00750ffe8",
+      "old_md5": "15bce1293b2433cf6b2274104246ba0d",
+      "path": "runs/examples/ITER_2264_0.6Ne_100MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2275_Donly_20MW.tar.gz",
+      "new_md5": "cc6ecaabc5f7bd92fac59d50677deb5d",
+      "old_md5": "b539b7a5035f05f9534b56680b167cb5",
+      "path": "runs/examples/ITER_2275_Donly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2292_Honly_20MW.tar.gz",
+      "new_md5": "4c0b6c581ed5752752e4a1647274269f",
+      "old_md5": "ff1629c56c276b2bc702fe1c76f71428",
+      "path": "runs/examples/ITER_2292_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2294_Honly_20MW.tar.gz",
+      "new_md5": "ae00c68bf7d1861beb3ab270faa47539",
+      "old_md5": "35861796ce6a59b22109a455cae1587e",
+      "path": "runs/examples/ITER_2294_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2296_Honly_20MW.tar.gz",
+      "new_md5": "72ec3780e5d75f35e46d9ab7220c6963",
+      "old_md5": "c7bfa7a6f802c66403fa6cc35726bada",
+      "path": "runs/examples/ITER_2296_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2297_Honly_20MW.tar.gz",
+      "new_md5": "b0c5dd716f4c27e249db12c498226914",
+      "old_md5": "fb14b1172fecd322e947bf0cc198b332",
+      "path": "runs/examples/ITER_2297_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2298_Honly_20MW.tar.gz",
+      "new_md5": "d8bb1980cff1353155357a4528ec5748",
+      "old_md5": "67c66d4ca1dfcf59794a50c1635b2c75",
+      "path": "runs/examples/ITER_2298_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2299_Honly_20MW.tar.gz",
+      "new_md5": "ed75e8cfc2862b9a12f400eacccf112b",
+      "old_md5": "3a589866c43cf079392b10a4b8c711bd",
+      "path": "runs/examples/ITER_2299_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2308_Honly_20MW.tar.gz",
+      "new_md5": "81aa029d91102209e864178fd9580ee2",
+      "old_md5": "e9ad5acf37903d66ffe2edfb459c2941",
+      "path": "runs/examples/ITER_2308_Honly_20MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2360_0.95He+0.05H_40MW.tar.gz",
+      "new_md5": "b08925f321412f858a661ef71a1233a8",
+      "old_md5": "8aa0e6d0952da6614a57c2b1f6091813",
+      "path": "runs/examples/ITER_2360_0.95He+0.05H_40MW.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "e1aba989a901f19991ccf7cd22b810acdf80475e",
+          "subject": "Partial rebuild of CI tests"
+        },
+        {
+          "commit": "920a31907951577484767cc32ab9b0103bc02b4a",
+          "subject": "Hotfixes updates to master branch:"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2588_D+He+N.tar.gz",
+      "new_md5": "e053b504ea05b941a1743ade3c3269da",
+      "old_md5": "556d9d1469326abf568ea4669c0098c6",
+      "path": "runs/examples/ITER_2588_D+He+N.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_2588_drifts.tar.gz",
+      "new_md5": "eed2729ba912a5d5366cbf3d188e68fb",
+      "old_md5": "5f42a02c8e9fbcc26f1bc1b9d4bee2e6",
+      "path": "runs/examples/ITER_2588_drifts.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "ITER_535_D+He+Ar.tar.gz",
+      "new_md5": "32c6b5e034d8c8dd5f768781008882c4",
+      "old_md5": "9ae3e129fc1b3c2d08143a73dd17f39c",
+      "path": "runs/examples/ITER_535_D+He+Ar.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "ece6c967fc5d8194ebda46be877471a8da1a62a4",
+          "subject": "Rebuilt ITER_535 example CI test case after bug fix for electron current flux limit calculation"
+        },
+        {
+          "commit": "b9ab9d89f6dd2d35608f2a8ea1b40dbbc56a5c5e",
+          "subject": "Rebuilt ITER_535 test case for OpenMP CI + other related improvements"
+        }
+      ]
+    },
+    {
+      "name": "ITER_Be-W_D+T+He+Ne.tar.gz",
+      "new_md5": "6b05dd00fa79a15026a5901eb52e944a",
+      "old_md5": "12608abc862caf3881e98500fc75c64b",
+      "path": "runs/examples/ITER_Be-W_D+T+He+Ne.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "ffea10ee61748a7fe9cee2e8b895200968ae3fd6",
+          "subject": "Rebuilt ITER 98 species example with zh_vis_type=2"
+        }
+      ]
+    },
+    {
+      "name": "JTEXT_Limiter_H.tar.gz",
+      "new_md5": "00573ff81439b96f51bc12abca2db4be",
+      "old_md5": "dd2a8dece29dbeb86de1cb0eeafb643e",
+      "path": "runs/examples/JTEXT_Limiter_H.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "MAST_U_SFminus_Donly.tar.gz",
+      "new_md5": "f0e0a3b04438a4b6ea00399bc9addd6d",
+      "old_md5": "d1d48e94d762975e56e0302c9c2936b4",
+      "path": "runs/examples/MAST_U_SFminus_Donly.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "e7c0b91b747044999d749e204f97937093ad57c1",
+          "subject": "Updated documentation + rebuilt examples"
+        }
+      ]
+    },
+    {
+      "name": "test_slab_ortho_standalone.tar.gz",
+      "new_md5": "92278cbd2fa82c39157a6f83b9d476d5",
+      "old_md5": "b2aec9e35d19b580bf8a03ac3ab66b3e",
+      "path": "runs/examples/test_slab_ortho_standalone.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        },
+        {
+          "commit": "a9bc05bcf9e5d20764aa49946d627b5deb379491",
+          "subject": "Pointer to B2.5 submodule with corrected implementation of drift-compatible non-marginal sheath BCs + corrected documentation and example slab case"
+        },
+        {
+          "commit": "e1aba989a901f19991ccf7cd22b810acdf80475e",
+          "subject": "Partial rebuild of CI tests"
+        },
+        {
+          "commit": "920a31907951577484767cc32ab9b0103bc02b4a",
+          "subject": "Hotfixes updates to master branch:"
+        }
+      ]
+    },
+    {
+      "name": "tutorial-DivGeo_C-Mod-InitializeRun.tar.gz",
+      "new_md5": "2fffacbe5801fc53cef43f17f2dddad4",
+      "old_md5": "cdacedf68be031274c601ecacfa6551a",
+      "path": "runs/examples/tutorial-DivGeo_C-Mod-InitializeRun.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "tutorial-DivGeo_C-Mod.tar.gz",
+      "new_md5": "2f16994590a288b699b8beaf02683204",
+      "old_md5": "79cc52417261677692fabdac98acad35",
+      "path": "runs/examples/tutorial-DivGeo_C-Mod.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "e7c0b91b747044999d749e204f97937093ad57c1",
+          "subject": "Updated documentation + rebuilt examples"
+        }
+      ]
+    },
+    {
+      "name": "tutorial-DivGeo_ITER_baseline_scenario-InitializeRun.tar.gz",
+      "new_md5": "1302360e62ddaefac914c6c0553ade5d",
+      "old_md5": "240137ec7ef8e13bad2cba94cc3ba476",
+      "path": "runs/examples/tutorial-DivGeo_ITER_baseline_scenario-InitializeRun.tar.gz.md5",
+      "status": "changed",
+      "subjects": [
+        {
+          "commit": "ab87f75097b1426fd39b0b7b951f61c6e589c00a",
+          "subject": "Preparatory commit for 3.0.10 master release: - Updated code installation instructions for GitHub distribution - New code update scripts - Support of IMAS-ParaView with Intel toolchain at ITER - Upgrade to IMAS-ParaView/2.3.0 at ITER to fix a VTK issue - Revert to JSON-fortran v.8.5.2 at ITER to avoid a gfortran segmentation fault error - Pointer to B2.5 submodule with initial 3.0.10 commit, bug fixes to new netCDF quantities, IMAS DD/4.1.0 identifiers, conversion rule for b2.neoclassical_transport.parameters, IDS deallocation, ELM transport coefficient profiles - Pointer to Eirene submodule with LaTeX Manual clean-up - Bug fixes to netCDF plotting scripts - Correction to main Makefile for CMake version 4 (provided by Stefano Carli) - Corrections to PITAGORA X11 library location (reported by Elena Tonello) - Rebuilt examples with new last10 and netCDF analysis plots - Build separate nc2text executables with and without debug options"
+        }
+      ]
+    },
+    {
+      "name": "tutorial-DivGeo_ITER_baseline_scenario.tar.gz",
+      "new_md5": "a72923b464d0f93344899b6eb43460ae",
+      "old_md5": "a72923b464d0f93344899b6eb43460ae",
+      "path": "runs/examples/tutorial-DivGeo_ITER_baseline_scenario.tar.gz.md5",
+      "status": "identical",
+      "subjects": []
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "file_count": 27,
+  "files": {
+    "b2ag.dat": {
+      "bytes": 189,
+      "md5": "2c34dc4d48e24f685261f38e2d5cab28"
+    },
+    "b2ag.prt": {
+      "bytes": 51025,
+      "md5": "f20023032bf33e87cf0f923f45892724"
+    },
+    "b2ah.dat": {
+      "bytes": 13920,
+      "md5": "4f470c2e722d32e98cc991e6ef696c22"
+    },
+    "b2ah.prt": {
+      "bytes": 14359,
+      "md5": "2db9ff71f9e6b502b4bcf0afd4c6f420"
+    },
+    "b2ai.dat": {
+      "bytes": 374,
+      "md5": "6d3cc30e19d6da05daa72069023f6a9a"
+    },
+    "b2ai.prt": {
+      "bytes": 824,
+      "md5": "fbccf9e18706dad8beccaec5a01296de"
+    },
+    "b2ar.dat": {
+      "bytes": 361,
+      "md5": "0b7d7e77723ce7df5e410acddc343fc6"
+    },
+    "b2ar.prt": {
+      "bytes": 60932,
+      "md5": "671b4ea5eef77856bd39749784e3bc0f"
+    },
+    "b2fgmtry": {
+      "bytes": 3570181,
+      "md5": "9e8bb192d743202cb49530de18c3cf04"
+    },
+    "b2fpardf": {
+      "bytes": 21573,
+      "md5": "9fb9dc9c8da30364be6501bd1da72bb1"
+    },
+    "b2frates": {
+      "bytes": 604777,
+      "md5": "0cfe50806acec55427dfa06fd8e0d7fd"
+    },
+    "b2fstati": {
+      "bytes": 8915832,
+      "md5": "953f8d94328a447559e98fa36db03502"
+    },
+    "b2yg.dat": {
+      "bytes": 114,
+      "md5": "93b1c57204863094168fc4d2a9a9f450"
+    },
+    "b2yh.dat": {
+      "bytes": 43,
+      "md5": "1d1ca84106a2b9e20c56e4b8941a1a7e"
+    },
+    "b2yi.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2ym.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2yn.dat": {
+      "bytes": 56,
+      "md5": "0adf9643043e844b2e4bcec95ac9d4e1"
+    },
+    "b2yp.dat": {
+      "bytes": 114,
+      "md5": "93b1c57204863094168fc4d2a9a9f450"
+    },
+    "b2yq.dat": {
+      "bytes": 91,
+      "md5": "bdeba83801972553f1a9daf302fd4fc8"
+    },
+    "b2yt.dat": {
+      "bytes": 124,
+      "md5": "ca3bd9365cd85010eac205271f9f2ff3"
+    },
+    "fort.30": {
+      "bytes": 395439,
+      "md5": "c48c14b585b359349dffe54ac7f4e1c9"
+    },
+    "fort.33": {
+      "bytes": 164679,
+      "md5": "be9bc43fd939c0f80f0f112cdff7fa34"
+    },
+    "fort.34": {
+      "bytes": 216256,
+      "md5": "a43cf0a544032f1de3458e2f8578d147"
+    },
+    "fort.35": {
+      "bytes": 696796,
+      "md5": "b4feb65ba5b2dfaf731523ccb9d8fcec"
+    },
+    "iterm.carre.105": {
+      "bytes": 1391726,
+      "md5": "31927796de567f14fec5f319a85ec096"
+    },
+    "param.dg": {
+      "bytes": 47952,
+      "md5": "0a1ccf0ab8c1c7b008be1824eafc1f38"
+    },
+    "vertex_data.out": {
+      "bytes": 705862,
+      "md5": "c49c2e5078bf2b9e36ae53b288299bc3"
+    }
+  },
+  "geometry": {
+    "bytes": 3570181,
+    "md5": "9e8bb192d743202cb49530de18c3cf04"
+  },
+  "kind": "input_deck",
+  "machine": "ITER",
+  "name": "example-runs/ITER_2275_Donly_20MW/baserun",
+  "note": "sibling input deck of the family's run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run",
+  "run_family": "example-runs/ITER_2275_Donly_20MW",
+  "run_markers": {
+    "b2fstate": false,
+    "b2time.nc": false,
+    "fort.44": false
+  },
+  "total_bytes": 16873711
+}

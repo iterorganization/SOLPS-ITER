@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#f6f6f7" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#0a0f22" media="(prefers-color-scheme: dark)" />
+		<!-- the card this page shows when its URL is pasted
+		     somewhere that renders one — honest copy only, no marketing
+		     inflation: what it searches, how it ranks, what every hit
+		     carries. -->
+		<meta
+			name="description"
+			content="bm25 search over the SOLPS-ITER documentation corpus: manuals, changelog, code. Every hit cites its source, section and page."
+		/>
+		<meta property="og:title" content="askthedocs: SOLPS-ITER knowledge layer" />
+		<meta
+			property="og:description"
+			content="bm25 search over the SOLPS-ITER documentation corpus: manuals, changelog, code. Every hit cites its source, section and page."
+		/>
+		<meta property="og:type" content="website" />
+		<title>askthedocs</title>
+		%sveltekit.head%
+		<script>
+			// degraded mode, layer 1 (works without hydration):
+			// inline CLASSIC scripts execute on file:// too, so the
+			// protocol is flagged on <html> before first paint and the
+			// static notice below shows / the search form hides via CSS.
+			// (Layer 2 is the Svelte onMount guard in +page.svelte.)
+			if (window.location.protocol === 'file:') {
+				document.documentElement.setAttribute('data-proto', 'file');
+			}
+		</script>
+		<style>
+			/* First-paint canvas (the kit stylesheet lands a beat later):
+			   var() fallbacks keep this honest in both orders, and the
+			   dark override prevents a white flash before app.css. */
+			html {
+				background: var(--bg, #f6f6f7);
+			}
+			@media (prefers-color-scheme: dark) {
+				html {
+					background: var(--bg, #0a0f22);
+				}
+			}
+			.askthedocs-file-notice {
+				display: none;
+				max-width: 46rem;
+				margin: 3rem auto 4rem;
+				padding: 1rem 1.2rem 1.1rem;
+				border: 1px solid var(--line-strong, #b9b9bf);
+				border-left: 3px solid var(--plasma, #fdbb30);
+				border-radius: var(--r-3, 12px);
+				background: var(--surface, #ffffff);
+				color: var(--text, #212529);
+				font-family: var(--font-ui, 'Sora', sans-serif);
+				line-height: 1.55;
+			}
+			@media (prefers-color-scheme: dark) {
+				.askthedocs-file-notice {
+					border-color: var(--line-strong, #3d4a78);
+					background: var(--surface, #0f1632);
+					color: var(--text, #eef1f8);
+				}
+			}
+			.askthedocs-file-notice h2 {
+				font-size: 1.05rem;
+				margin: 0 0 0.5rem;
+			}
+			.askthedocs-file-notice p {
+				margin: 0.4rem 0;
+			}
+			.askthedocs-file-notice code {
+				font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+				font-size: 0.92em;
+			}
+			html[data-proto='file'] .askthedocs-file-notice {
+				display: block;
+			}
+			html[data-proto='file'] form[role='search'] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+		<div class="askthedocs-file-notice">
+			<h2>Offline copy: search is unavailable</h2>
+			<p>
+				This is a <code>file://</code> copy of the askthedocs site. Search
+				fetches its answers over HTTP, so it needs the site to be
+				served; the corpus pages themselves are plain files and remain
+				readable.
+			</p>
+			<p>
+				Search the same corpus from the terminal:
+				<code>askthedocs search QUERY</code> and
+				<code>askthedocs show CHUNK_ID</code>, or over MCP with the
+				<code>search_docs</code> / <code>get_chunk</code> tools.
+			</p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,57 @@
+state diff: A ../SOLPS-ITER/runs/examples/ITER_2171_D+He+Be+Ne/run/b2fstate -> B ../SOLPS-ITER/runs/examples/ITER_2171_D+He+Be+Ne/standalone/b2fstate
+grid         92x38 guard cells (nx=90 ny=36 interior) — MATCH
+species      ns=21 — MATCH
+  #0  zamin=0 zamax=0 zn=1 am=2  (neutral)
+  #1  zamin=1 zamax=1 zn=1 am=2  (charged)
+  #2  zamin=0 zamax=0 zn=2 am=4  (neutral)
+  #3  zamin=1 zamax=1 zn=2 am=4  (charged)
+  #4  zamin=2 zamax=2 zn=2 am=4  (charged)
+  #5  zamin=0 zamax=0 zn=4 am=9  (neutral)
+  #6  zamin=1 zamax=1 zn=4 am=9  (charged)
+  #7  zamin=2 zamax=2 zn=4 am=9  (charged)
+  #8  zamin=3 zamax=3 zn=4 am=9  (charged)
+  #9  zamin=4 zamax=4 zn=4 am=9  (charged)
+  #10  zamin=0 zamax=0 zn=10 am=20  (neutral)
+  #11  zamin=1 zamax=1 zn=10 am=20  (charged)
+  #12  zamin=2 zamax=2 zn=10 am=20  (charged)
+  #13  zamin=3 zamax=3 zn=10 am=20  (charged)
+  #14  zamin=4 zamax=4 zn=10 am=20  (charged)
+  #15  zamin=5 zamax=5 zn=10 am=20  (charged)
+  #16  zamin=6 zamax=6 zn=10 am=20  (charged)
+  #17  zamin=7 zamax=7 zn=10 am=20  (charged)
+  #18  zamin=8 zamax=8 zn=10 am=20  (charged)
+  #19  zamin=9 zamax=9 zn=10 am=20  (charged)
+  #20  zamin=10 zamax=10 zn=10 am=20  (charged)
+version      A=03.000.010 (git 3.0.10-31-g30b303dca)  B=03.000.010 (git 3.0.10-31-g30b303dca)
+time         A=1.000000e-05 s  B=1.500000e-05 s  (B-A=5.000000e-06 s)
+geometry     (ix, iy) index grid
+convergence  A: n/a (--b2time-a not given)
+convergence  B: n/a (--b2time-b not given)
+fields       te ti ne na_0 na_1 na_2 na_3 na_4 na_5 na_6 na_7 na_8 na_9 na_10 na_11 na_12 na_13 na_14 na_15 na_16 na_17 na_18 na_19 na_20 po
+
+name       unit            min A            max A            min B            max B         max|B-A|     max rel   (interior cells; rel over |A| >= 1% max|A|)
+te           eV     1.813491e-01     2.245553e+03     6.238438e-01     2.246429e+03     2.406386e+02   9.116e+00
+ti           eV     3.126640e-01     2.504254e+03     4.239698e-01     2.506409e+03     3.111887e+02   1.096e+01
+ne                  3.620401e+16     5.904638e+21     8.565540e+15     2.617369e+21     5.889426e+21   1.197e+01
+na_0                1.000000e+04     9.117063e+11     2.314733e+11     1.807948e+21     1.807948e+21   8.722e+10
+na_1                3.334699e+16     5.845215e+21     8.565540e+15     2.617337e+21     5.830648e+21   1.197e+01
+na_2                1.000000e+04     3.130297e+09     1.454946e+04     7.672468e+17     7.672468e+17   2.110e+10
+na_3                3.191742e+11     1.723868e+18     1.719294e+04     3.157201e+17     1.678875e+18   1.322e+01
+na_4                1.191076e+13     3.437910e+18     1.000000e+04     6.972113e+17     3.371148e+18   3.329e+00
+na_5                1.000000e+04     2.747666e+06     1.000000e+04     5.542208e+16     5.542208e+16   1.792e+12
+na_6                3.650246e+04     1.544914e+17     3.671484e+04     1.116607e+17     1.544909e+17   1.874e+00
+na_7                4.474775e+06     2.810157e+17     1.655101e+04     1.649873e+17     2.800655e+17   1.832e+01
+na_8                3.623781e+09     3.004504e+16     1.120697e+04     8.873053e+15     3.004006e+16   1.637e+01
+na_9                5.749792e+08     4.698805e+16     1.000000e+04     1.977617e+16     4.621706e+16   1.642e+01
+na_10               1.000000e+04     1.568477e+17     1.000000e+04     3.106571e+18     3.073853e+18   1.704e+03
+na_11               1.989186e+04     2.268096e+18     1.989566e+04     1.206945e+18     2.222604e+18   2.433e+01
+na_12               3.289392e+04     2.908172e+18     3.292716e+04     1.054307e+18     2.889064e+18   1.456e+01
+na_13               5.969539e+04     4.100736e+18     2.795456e+04     1.105656e+18     4.092535e+18   9.814e+00
+na_14               1.081386e+05     3.419936e+18     2.124108e+04     7.190394e+17     3.414123e+18   1.036e+01
+na_15               2.050761e+05     2.288407e+18     1.558701e+04     5.046958e+17     2.280513e+18   1.224e+01
+na_16               1.545710e+07     7.037267e+17     1.075545e+04     3.706892e+17     6.928104e+17   1.290e+01
+na_17               1.006624e+10     4.386560e+17     1.000000e+04     1.692652e+17     4.048604e+17   1.086e+01
+na_18               2.546144e+10     9.037066e+17     1.000000e+04     3.537362e+17     9.013370e+17   8.093e+00
+na_19               1.005452e+07     3.615415e+17     1.000000e+04     1.997377e+17     3.600690e+17   2.682e+01
+na_20               2.006858e+05     6.780590e+17     1.000000e+04     6.839702e+17     2.234845e+17   2.896e+01
+po                  3.678269e-01     1.524312e+02     1.824730e+00     3.241001e+02     2.817095e+02   5.012e+01

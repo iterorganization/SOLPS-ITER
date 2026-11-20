@@ -853,6 +853,7 @@ SOLPSTOP
 |   +---ITER.ifort64
 +---runs
 +---SETUP
++---tools
 \end{verbatim}
 
 In order to set up the appropriate environment variables and aliases, the command
@@ -1971,6 +1972,24 @@ placed in directories named {\tt Database} and placed in the corresponding
 post-processing or analysis scripts are now placed within the
 {\tt \$\{SOLPSTOP\}\allowbreak /scripts} directory. Please refer to the appropriate sections
 above for more details.
+
+\newpage\section{tools}
+\index{tools}
+
+The {\tt tools} directory ships two standalone Python packages for
+working with this distribution: {\tt solps-reader}, which reads the
+solver output files ({\tt fort.44}, {\tt fort.46}, the {\tt b2*.nc}
+monitors, {\tt b2fstate} and the {\tt b2fplasma} family) and builds
+a catalog of run directories, and {\tt askthedocs}, a ranked search
+over the manuals, the dated {\tt doc/LOG} change log, the
+{\tt b2mn.dat} switch inventory, and the {\tt B2.5} and {\tt Eirene} Fortran
+source. Both are installed from the repository folder with one
+command each; the {\tt README} file in the {\tt tools} directory and
+the documentation beside each package describe setup and use. The
+{\tt askthedocs} index needs a Python whose SQLite includes the
+FTS5 extension (on Linux {\tt x86\_64} a fallback wheel installs
+automatically with the package; the {\tt README} names the remedies for
+every other case).
 
 \chapter{Running the standalone version of B2.5}
 \label{cha:standaloneb2}

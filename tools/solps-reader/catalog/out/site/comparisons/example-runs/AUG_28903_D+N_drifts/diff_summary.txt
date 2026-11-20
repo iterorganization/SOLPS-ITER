@@ -1,0 +1,35 @@
+state diff: A ../SOLPS-ITER/runs/examples/AUG_28903_D+N_drifts/variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport/b2fstate -> B ../SOLPS-ITER/runs/examples/AUG_28903_D+N_drifts/variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat/b2fstate
+grid         98x38 guard cells (nx=96 ny=36 interior) — MATCH
+species      ns=10 — MATCH
+  #0  zamin=0 zamax=0 zn=1 am=2  (neutral)
+  #1  zamin=1 zamax=1 zn=1 am=2  (charged)
+  #2  zamin=0 zamax=0 zn=7 am=14  (neutral)
+  #3  zamin=1 zamax=1 zn=7 am=14  (charged)
+  #4  zamin=2 zamax=2 zn=7 am=14  (charged)
+  #5  zamin=3 zamax=3 zn=7 am=14  (charged)
+  #6  zamin=4 zamax=4 zn=7 am=14  (charged)
+  #7  zamin=5 zamax=5 zn=7 am=14  (charged)
+  #8  zamin=6 zamax=6 zn=7 am=14  (charged)
+  #9  zamin=7 zamax=7 zn=7 am=14  (charged)
+version      A=03.000.010 (git 4a81a2ca-dirty)  B=03.000.010 (git 51597834-dirty)  [NOTE: versions differ — records matched by name]
+time         A=1.000000e-02 s  B=2.500000e-02 s  (B-A=1.500000e-02 s)
+geometry     (ix, iy) index grid
+convergence  A: n/a (--b2time-a not given)
+convergence  B: n/a (--b2time-b not given)
+fields       te ti ne na_0 na_1 na_2 na_3 na_4 na_5 na_6 na_7 na_8 na_9 po
+
+name       unit            min A            max A            min B            max B         max|B-A|     max rel   (interior cells; rel over |A| >= 1% max|A|)
+te           eV     7.005800e-01     5.741864e+02     7.821349e-01     6.218959e+02     7.526856e+01   5.362e+00
+ti           eV     5.486532e-01     4.989381e+02     9.528933e-01     7.166181e+02     2.180354e+02   1.174e+01
+ne                  8.005616e+17     1.096811e+21     9.190699e+17     9.478042e+20     7.249065e+20   1.819e+00
+na_0                1.000000e+10     3.612907e+10     3.208834e+13     4.601498e+20     4.601498e+20   2.853e+10
+na_1                7.972620e+17     1.095684e+21     9.182267e+17     9.475951e+20     7.237688e+20   1.821e+00
+na_2                1.000000e+10     1.976989e+10     1.000000e+10     1.082408e+17     1.082407e+17   8.608e+06
+na_3                1.000000e+10     9.350471e+17     3.192249e+10     1.701461e+17     9.209741e+17   1.000e+00
+na_4                8.726313e+10     2.981043e+17     2.976044e+10     3.214512e+16     2.981017e+17   1.000e+00
+na_5                1.000000e+10     1.384240e+17     1.289902e+11     2.801223e+16     1.258417e+17   1.000e+00
+na_6                1.566334e+10     6.565694e+16     4.880737e+10     1.315754e+16     5.713960e+16   3.580e+00
+na_7                1.464718e+10     9.002038e+16     2.482361e+10     1.702414e+16     8.473456e+16   2.392e+00
+na_8                1.000000e+10     1.554803e+16     1.000000e+10     1.182554e+16     6.825213e+15   7.572e+00
+na_9                1.000000e+10     9.102478e+16     1.000000e+10     3.654364e+16     5.514179e+16   9.794e-01
+po                 -1.254512e+02     1.404520e+02    -6.094909e+02     1.670946e+02     6.519453e+02   3.792e+02
