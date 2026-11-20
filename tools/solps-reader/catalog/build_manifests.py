@@ -601,9 +601,13 @@ def build_manifest(run_dir: Path, root: Path, group_slug: str,
         "name": f"{group_slug}/{rel}",
         "machine": rel.parts[0].split("_")[0],   # ITER / AUG / MAST
         "run_family": f"{group_slug}/{rel.parts[0]}",
-        # Structural linkage only (FORMATS.md honesty rule): the sibling
-        # baserun exists; nothing here verifies the run started from it.
-        "input_deck": deck_slug if (run_dir.parent / DECK_DIR).is_dir() else None,
+        # Structural linkage only (FORMATS.md honesty rule): the FAMILY's
+        # top-level baserun exists — the one directory the deck pass
+        # below inventories and the family page shows (the same rule as
+        # the gate's mesh path).  A run nested deeper may sit next to
+        # its OWN baserun; that folder is not the family base deck, and
+        # linking it here pointed at a record nobody writes.
+        "input_deck": deck_slug if (root / rel.parts[0] / DECK_DIR).is_dir() else None,
         "files": analysis["files"],
     }
     for key in ("fort44", "wall", "fort46", "convergence"):
@@ -659,6 +663,25 @@ def deck_manifest(group_slug: str, family: str, deck_dir: Path) -> dict:
         "run_markers": {m: (deck_dir / m).exists() for m in MARKERS},
         "note": DECK_NOTE,
     }
+
+
+def verify_deck_links(manifests_dir: Path, index: list[dict]) -> None:
+    """The manifest stage's closing check: every non-null input_deck a
+    build just wrote must name a file the SAME build wrote.  The link
+    (at run-record time) and the deck record (at deck-pass time) agree
+    by construction; this makes any future disagreement a NAMED refusal
+    at the cheapest stage — never a page-stage FileNotFoundError after
+    the whole build's work (the iter/DMS field crash shape)."""
+    for r in index:
+        m = json.loads(
+            (manifests_dir / Path(r["manifest"]).name)
+            .read_text(encoding="utf-8"))
+        deck = m.get("input_deck")
+        if deck and not (manifests_dir / Path(deck).name).is_file():
+            raise BuildRefusal(
+                f"{r['name']}: the shared-deck link names a file this "
+                f"build did not write ({deck}); a builder bug — please "
+                "report it, with the runs tree if possible")
 
 
 def family_diff_pairs(
@@ -1074,6 +1097,9 @@ def main(argv: list[str] | None = None) -> int:
             m["input_deck"] = None
             mp.write_text(json.dumps(m, indent=2, sort_keys=True)
                           + "\n", encoding="utf-8")
+    # the closing check: after every write and every null, no run
+    # record may point at a deck record this build did not write
+    verify_deck_links(manifests_dir, index)
 
     comparisons: list[dict] = []
     for g in ok_groups:
