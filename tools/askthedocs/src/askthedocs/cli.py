@@ -294,6 +294,14 @@ def _d88_gate(repos: dict[str, Path], db_path: Path) -> None:
         for sub, initialized in sorted(declared.items()):
             if initialized:
                 continue
+            if sub == floor.EXCEPTED_SUBMODULE:
+                # the non-public submodule nobody can initialize
+                # (setup's own excepted line names it): absent on
+                # EVERY real clone by design, never a leg, never a
+                # demand — demanding it refused this verb on every
+                # actual checkout (the hermetic fixture trees carry
+                # no git, so no test ever walked this loop)
+                continue
             leg = f"{repo}/{sub}"
             if leg in recorded_legs:
                 print(f"carried: {leg} declared but not initialized "
