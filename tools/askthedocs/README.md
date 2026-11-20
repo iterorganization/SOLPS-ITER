@@ -41,7 +41,7 @@ Every refusal is loud and names its own fix. The three you might meet on day one
 - **The checkout is missing or half-initialized:** `setup` refuses and lists the submodule states with the missing ones named.
 - **No index yet:** every read face (search, web, MCP) refuses and points at `askthedocs setup`.
 - **The index home points somewhere empty:** the refusal names the index it is not reading and the two ways back (drop the redirect, or move the index).
-- **No FTS5 in your Python:** named as such, with the fix. The index needs an SQLite with the FTS5 extension; it is a compile-time option of SQLite, not a pip package. On Linux x86_64 the fallback wheel installs automatically with this package (no administrator anywhere). Elsewhere the remedy is `pip install pysqlite3-binary`, or a Python built with FTS5 (standard python.org installers and mainstream distributions ship it).
+- **No FTS5 in your Python:** named as such, with the fix. The index needs an SQLite with the FTS5 extension; it is a compile-time option of SQLite, not a pip package. On Linux x86_64 the fallback wheel installs automatically with this package (no administrator anywhere). Elsewhere the remedy is a Python built with FTS5 (standard python.org installers and mainstream distributions ship it); the pysqlite3-binary wheel is built for Linux x86_64 only.
 
 ## Three ways in
 

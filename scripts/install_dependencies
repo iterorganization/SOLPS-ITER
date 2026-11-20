@@ -2069,8 +2069,9 @@ if ( "$TOOLS_PYTHON" != "" ) then
     echo Remedy without administrator rights, inside the virtual
     echo environment the tools README creates:
     echo "    pip install pysqlite3-binary"
-    echo On Linux x86_64 that wheel installs automatically with the
-    echo package. Alternatively use a Python built with FTS5.
+    echo That wheel exists for Linux x86_64, where it installs
+    echo automatically with the package. Elsewhere use a Python
+    echo built with FTS5.
   endif
 
 else
