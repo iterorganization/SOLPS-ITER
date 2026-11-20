@@ -154,6 +154,34 @@ def test_nested_run_links_the_family_deck(
     assert "Family base deck" in fam_pg
 
 
+def test_completed_baserun_is_a_run_not_a_deck(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """A baserun that itself carries run output is cataloged as a run;
+    the deck pass names the fact in one line and writes no deck record
+    (the old behavior clobbered the run's record with the deck's)."""
+    root = tmp_path / "myruns"
+    _write_run(root / "SYNTH1_demo", "run1")
+    _write_run(root / "SYNTH1_demo", "baserun")
+    rc, captured, out = _build(checkout_factory, tmp_path, monkeypatch,
+                               capfd, root)
+    assert rc == 0, captured.err
+    assert "note: myruns/SYNTH1_demo/baserun carries run output" \
+        in captured.err
+    index = json.loads((out / "index.json").read_text(encoding="utf-8"))
+    assert [r["name"] for r in index["runs"]] == [
+        "myruns/SYNTH1_demo/baserun", "myruns/SYNTH1_demo/run1"]
+    assert index["decks"] == []
+    base = json.loads(
+        (out / "manifests" / "myruns__SYNTH1_demo__baserun.json")
+        .read_text(encoding="utf-8"))
+    assert base["name"] == "myruns/SYNTH1_demo/baserun"
+    assert "convergence" in base          # run-shaped, not deck-shaped
+    assert base.get("kind") != "input_deck"
+    fam_pg = (out / "site" / "myruns" / "SYNTH1_demo" / "index.html"
+              ).read_text(encoding="utf-8")
+    assert "no shared base deck" in fam_pg
+
+
 def test_dangling_deck_link_refuses_named(tmp_path: Path) -> None:
     """The closing check, unit-pinned: a run record whose link names a
     file the build did not write refuses HERE — named, exit-shaped as

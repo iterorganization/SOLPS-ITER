@@ -1060,6 +1060,21 @@ def main(argv: list[str] | None = None) -> int:
             deck_dir = g["path"] / family / DECK_DIR
             if not deck_dir.is_dir():
                 continue
+            carried = [mk for mk in MARKERS if (deck_dir / mk).exists()]
+            if carried:
+                # marker ABSENCE is the deck definition (deck_manifest's
+                # own note) — enforced here, not just asserted.  A baserun
+                # that itself carries run output was already cataloged as
+                # a RUN by the walk above; writing its deck record too
+                # would claim the same file name and clobber the run's
+                # record.  The family keeps its runs; the deck pass
+                # stays silent about it beyond this one named line.
+                print(f"note: {g['slug']}/{family}/{DECK_DIR} carries "
+                      f"run output ({', '.join(carried)}); it is "
+                      "cataloged as a run, so the family carries no "
+                      "deck record", file=sys.stderr)
+                deck_skipped.add(f"{g['slug']}/{family}")
+                continue
             try:
                 dm = deck_manifest(g["slug"], family, deck_dir)
                 mslug = f"{g['slug']}__{family}__{DECK_DIR}"
