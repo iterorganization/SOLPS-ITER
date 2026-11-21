@@ -197,12 +197,11 @@ def validate_store(path: Path) -> str:
     except sqlite3.OperationalError as exc:
         raise StoreValidationError(
             f"this Python's SQLite lacks the FTS5 module ({exc}); the "
-            "store needs an SQLite with FTS5: without any administrator, "
-            "'pip install pysqlite3-binary' provides one (a complete "
-            "SQLite, installed automatically with askthedocs on Linux "
-            "x86_64); alternatively use a Python built with FTS5 "
-            "(standard python.org installers have it); validation "
-            f"stopped at {path}") from None
+            "store needs an SQLite with FTS5. Without any administrator: "
+            "on Linux x86_64 the wheel pysqlite3-binary installs "
+            "automatically with askthedocs (a complete SQLite). Elsewhere "
+            "use a Python built with FTS5 (standard python.org installers "
+            f"have it). Validation stopped at {path}") from None
     except sqlite3.DatabaseError as exc:
         raise StoreValidationError(
             f"not an askthedocs chunk store: {path} ({exc})") from None

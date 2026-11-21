@@ -100,15 +100,21 @@ def test_no_fts5_anywhere_stays_on_stdlib(monkeypatch) -> None:
     assert _sqlite.has_fts5 is True
 
 
-def test_setup_refusal_names_the_no_admin_remedy(
+def test_setup_refusal_names_each_platforms_remedy(
         monkeypatch, capsys) -> None:
     """The setup gate refuses before any work when no binding carries
-    FTS5, and the message names the no-administrator remedy first."""
+    FTS5; the platform truth comes first: the wheel installs
+    automatically on Linux x86_64, and the elsewhere remedy is a
+    Python built with FTS5."""
     monkeypatch.setattr(_sqlite, "has_fts5", False)
     with pytest.raises(SystemExit) as ei:
         atd_setup._require_fts5()
     msg = str(ei.value)
     assert "lacks the FTS5" in msg
-    assert "pip install pysqlite3-binary" in msg
     assert "administrator" in msg
+    assert ("on Linux x86_64 the wheel pysqlite3-binary installs "
+            "automatically with askthedocs") in msg
+    assert "Elsewhere use a Python built with FTS5" in msg
+    assert "standard python.org installers have it" in msg
     assert "Nothing was built" in msg
+    assert msg.index("Linux x86_64") < msg.index("Elsewhere")

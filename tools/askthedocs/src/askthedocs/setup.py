@@ -48,10 +48,10 @@ def _require_fts5() -> None:
     raise SystemExit(
         "error: this Python's SQLite lacks the FTS5 extension; the "
         "index needs an SQLite with FTS5. Without any administrator: "
-        "'pip install pysqlite3-binary' provides one (a complete "
-        "SQLite; it installs automatically with askthedocs on Linux "
-        "x86_64). Alternatively use a Python built with FTS5 "
-        "(standard python.org installers have it). Nothing was built")
+        "on Linux x86_64 the wheel pysqlite3-binary installs "
+        "automatically with askthedocs (a complete SQLite). Elsewhere "
+        "use a Python built with FTS5 (standard python.org installers "
+        "have it). Nothing was built")
 
 
 def _merge_manifests(parts: list[dict], repos: dict[str, Path]) -> dict:

@@ -38,7 +38,7 @@ The line above runs from the clone root. From inside `tools/` the same install r
 
 The virtual environment is the isolation guarantee. Everything this package needs installs inside `.venv`, so nothing it installs can affect any other Python on the machine, and no package held by any other Python can affect it. The one case a private environment cannot cover is a property of the interpreter itself, not of its packages; the FTS5 paragraph below names it and its remedies.
 
-`setup` also probes the Python's SQLite for the FTS5 extension the index needs. Cluster Pythons are sometimes built without it; on Linux x86_64 the fallback wheel installs automatically with this package, and elsewhere the refusal names the one-command remedy (`pip install pysqlite3-binary`). No administrator is needed on any path.
+`setup` also probes the Python's SQLite for the FTS5 extension the index needs. Cluster Pythons are sometimes built without it; on Linux x86_64 the fallback wheel (pysqlite3-binary) installs automatically with this package, and elsewhere the refusal names the remedy that installs there: a Python built with FTS5 (standard python.org installers have it). No administrator is needed on any path.
 
 `setup` first checks the checkout. A missing or half-initialized clone is refused loudly, with the remedy named. It then builds the search index into the per-user location and installs the desktop icon. Over the full corpus set, the one-time build takes at most 6 minutes.
 
