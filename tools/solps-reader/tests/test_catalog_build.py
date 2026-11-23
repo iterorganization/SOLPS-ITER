@@ -385,6 +385,119 @@ def test_run_page_vs_base_delta(
     assert "b2mn.dat" in fam_pg
 
 
+def test_commented_out_switches_end_to_end(
+        checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
+    """The commented-out rule through the whole build: a quoted name
+    starting with '#' is never a set switch, never an unknown name,
+    never a table row — it lands in the per-run commented_out group
+    verbatim, the run page carries the grey line under the table, the
+    site-wide count moves, and both tool answers name it. A value
+    starting with '#' stays a visible set switch (the inert/visible
+    split is the whole point)."""
+    monkeypatch.setenv(floor.REPOS_ENV, str(checkout_factory()))
+    monkeypatch.setattr(Path, "home", lambda: tmp_path / "nohome")
+    monkeypatch.chdir(tmp_path)
+    cat = _catalog_copy(tmp_path)
+    fam = tmp_path / "myruns" / "FAM_E"
+    base = fam / "baserun"
+    base.mkdir(parents=True)
+    (base / "b2mn.dat").write_text(
+        "* synthetic base\n"
+        "*endphy\n"
+        "'synth_a'   '1.0'\n"
+        "'#synth_base_parked' '7'\n",
+        encoding="latin-1")
+    child1 = fam / "child1"
+    child1.mkdir()
+    (child1 / "fort.44").write_text(
+        "2 3 20170328 eirenehash00000000000000000000000000000\n"
+        "1 0 0\n"
+        "H\n",
+        encoding="ascii")
+    _write_b2time(child1 / "b2time.nc")
+    (child1 / "b2mn.dat").write_text(
+        "* child deck\n"
+        "*endphy\n"
+        "'synth_a'   '2.0'\n"
+        "'#synth_parked' '1'   trailing note ignored\n"
+        "'synth_hashval' '#3'\n",
+        encoding="latin-1")
+
+    rc = cli.main(["catalog", "build",
+                   "--runs", str(tmp_path / "myruns"),
+                   "--catalog", str(cat)])
+    assert rc == 0
+    capfd.readouterr()
+    seat = _share_out(tmp_path / "nohome")
+
+    ss = json.loads((seat / "switchsets.json").read_text(encoding="utf-8"))
+    entry = ss["runs"]["myruns/FAM_E/child1"]
+
+    # the artifact: excluded everywhere a set switch lives, recorded
+    # verbatim where the exclusion is readable
+    assert set(entry["switches"]) == {"synth_a", "synth_hashval"}
+    assert entry["switches"]["synth_hashval"]["value"] == "#3"
+    assert entry["switch_count"] == 2
+    assert "#synth_parked" not in entry["unknown_to_inventory"]
+    assert entry["commented_out"] == {"count": 1,
+                                      "switches": {"#synth_parked": "1"}}
+    assert ss["counts"]["commented_out_switches"] == 1
+    assert "commented_out_switches" in ss["counts"]
+
+    # the family base deck: the same rule, its own group
+    fd = ss["family_decks"]["myruns/FAM_E"]
+    assert fd["commented_out"] == {"count": 1,
+                                   "switches": {"#synth_base_parked": "7"}}
+    assert set(fd["switches"]) == {"synth_a"}
+
+    # the run page: no row, dropped count, the grey line verbatim,
+    # and the two-column naming table under it
+    pg = (seat / "site" / "myruns" / "FAM_E" / "child1"
+          / "index.html").read_text(encoding="utf-8")
+    tbl = pg.split('<table class="switches">', 1)[1].split("</table>", 1)[0]
+    assert "synth_parked" not in tbl
+    assert ">#3</td>" in tbl  # the value form stays a visible row
+    assert ("Commented out in this deck: 1 (kept in the deck file, "
+            "not used by the run)") in pg
+    co_tbl = (pg.split('<table class="switches commented-out">', 1)[1]
+              .split("</table>", 1)[0])
+    assert ('<tr><td class="mono" style="width:calc(13ch + 18px)">'
+            '#synth_parked</td>'
+            '<td class="mono">1</td></tr>') in co_tbl
+    assert '<th scope="col">Switch</th>' in co_tbl
+    assert '<th scope="col">Value</th>' in co_tbl
+    # the Value columns align: both first columns carry the SAME
+    # explicit width (the widest name either table renders, 13ch here:
+    # synth_hashval and #synth_parked tie; + the shared 18px cell
+    # padding, which border-box specified widths include)
+    assert ('<td class="mono" style="width:calc(13ch + 18px)">synth_a'
+            '</td>') in tbl
+    assert 'style="width:' not in tbl.replace(
+        'style="width:calc(13ch + 18px)">synth_a</td>', "")  # first row only
+
+    # the switch index: the ledger carries the site-wide count, the
+    # unknown footnote never lists the commented-out name
+    sw_pg = (seat / "site" / "switches" / "index.html"
+             ).read_text(encoding="utf-8")
+    assert "commented out" in sw_pg and "1 commented out" in sw_pg
+    assert "#synth_parked" not in sw_pg
+
+    # the tool answers: the run face names count and switches, the
+    # citation face names the runs that comment the asked name out
+    from solps_reader import mcp as mcp_face
+    answer = mcp_face.run_switches("myruns/FAM_E/child1", str(seat.parent))
+    assert ("commented out in this deck: 1 (kept in the deck file, "
+            "not used by the run): #synth_parked = 1") in answer
+    cited = mcp_face.switch_runs("#synth_parked", str(seat.parent))
+    assert "no cataloged run sets this switch" in cited
+    assert ("#synth_parked: commented out in 1 run(s) (kept in the deck "
+            "file, not used by the run): myruns/FAM_E/child1") in cited
+    # the plain name keeps its honest answer: set by no run
+    plain = mcp_face.switch_runs("synth_parked", str(seat.parent))
+    assert "no cataloged run sets this switch" in plain
+    assert "commented out" not in plain
+
+
 def test_catalog_build_groups_in_display_order(
         checkout_factory, tmp_path: Path, monkeypatch, capfd) -> None:
     """Two one-shot groups + a live examples group: display order is

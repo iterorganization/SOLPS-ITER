@@ -1607,16 +1607,15 @@ document.addEventListener("DOMContentLoaded", function () {
 <p class="sub">Switches the run's effective <span class="mono">b2mn.dat</span> sets, joined to the documented defaults: values verbatim from <span class="mono">out/switchsets.json</span> (schema <span class="mono">catalog-switchsets/1</span>).</p>
 <table class="kv">
 <tbody>
-<tr><th>switches set</th><td>115</td></tr>
-<tr><th>vs default</th><td><span class="badge" style="background:#e1ebf8;color:#1b4a89">same</span> 44 · <span class="badge" style="background:#fdc799;color:#7f3c04">differs</span> 48 · <span class="badge" style="background:#ebedf3;color:#4a5164">no_default_in_inventory</span> 21 · <span class="badge" style="background:#e9e5f8;color:#443a8e">unknown_to_inventory</span> 2</td></tr>
+<tr><th>switches set</th><td>114</td></tr>
+<tr><th>vs default</th><td><span class="badge" style="background:#e1ebf8;color:#1b4a89">same</span> 44 · <span class="badge" style="background:#fdc799;color:#7f3c04">differs</span> 48 · <span class="badge" style="background:#ebedf3;color:#4a5164">no_default_in_inventory</span> 21 · <span class="badge" style="background:#e9e5f8;color:#443a8e">unknown_to_inventory</span> 1</td></tr>
 </tbody>
 </table>
 
 <table class="switches">
 <thead><tr><th scope="col">Switch</th><th scope="col">Value</th><th scope="col">documented default</th><th scope="col">Source</th><th scope="col">vs default</th></tr></thead>
 <tbody>
-<tr><td class="mono">#b2stbr_eir_src_nhist</td><td class="mono">1</td><td class="ddef">—</td><td>run</td><td><span class="badge" style="background:#e9e5f8;color:#443a8e">unknown_to_inventory</span></td></tr>
-<tr><td class="mono">ank_tracing</td><td class="mono">1</td><td class="ddef ddef-val">0</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
+<tr><td class="mono" style="width:calc(34ch + 18px)">ank_tracing</td><td class="mono">1</td><td class="ddef ddef-val">0</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
 <tr><td class="mono">b2mndr_b2time</td><td class="mono">10</td><td class="ddef ddef-val">1</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
 <tr><td class="mono">b2mndr_cpu</td><td class="mono">170000.0</td><td class="ddef ddef-val">0.0</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
 <tr><td class="mono">b2mndr_dtim</td><td class="mono">1.0e-6</td><td class="ddef ddef-val">1.0</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
@@ -1732,9 +1731,15 @@ document.addEventListener("DOMContentLoaded", function () {
 <tr><td class="mono">eirene_ti_min</td><td class="mono">0.02</td><td class="ddef ddef-val">0.0</td><td>run</td><td><span class="badge" style="background:#fdc799;color:#7f3c04">differs</span></td></tr>
 </tbody>
 </table>
+<p class="sub">Commented out in this deck: 1 (kept in the deck file, not used by the run)</p>
+<table class="switches commented-out">
+<thead><tr><th scope="col">Switch</th><th scope="col">Value</th></tr></thead>
+<tbody>
+<tr><td class="mono" style="width:calc(34ch + 18px)">#b2stbr_eir_src_nhist</td><td class="mono">1</td></tr>
+</tbody>
+</table>
 <p class="sub">Unknown to the documented switch inventory (value read from the deck, no default to join):</p>
 <ul class="skips">
-<li><span class="mono">#b2stbr_eir_src_nhist</span></li>
 <li><span class="mono">eirene_ion_energy_src_corr_core</span></li>
 </ul>
 <p class="sub">documented:false in the inventory; value read, no default recorded (21):</p>

@@ -2,6 +2,7 @@
   "absent": {},
   "counts": {
     "absent_runs": 0,
+    "commented_out_switches": 2,
     "differs": 299,
     "distinct_switches_set": 167,
     "documented_not_set": 725,
@@ -9,7 +10,7 @@
     "no_default_in_inventory": 103,
     "runs": 9,
     "same": 285,
-    "unknown_to_inventory": 4
+    "unknown_to_inventory": 2
   },
   "documented_not_set": [
     "adas_extrap",
@@ -4585,6 +4586,7 @@
       }
     },
     "rules": {
+      "commented_out": "a switch line whose quoted NAME starts with '#' is commented out: the solver stores it under the hashed name (ipsetc, verbatim) but no consumer ever queries a '#'-name (ipgetc no-op, b2mod_ipmain.F:140-141), so it is inert \u2014 excluded from the switch map, the unknown ledger, and every count, kept verbatim in the per-run commented_out group. A VALUE starting with '#' is NOT commented out: the solver stores it, and a numeric read stops the run at startup with 'invalid stored value' (ipgeti.F/ipgetr.F err=91), so such a line stays a visible set switch",
       "default_display": "per-entry `default` = the pinned inventory row's default VERBATIM (usable values and 'See description' prose alike; null stays null; unknown_to_inventory names carry NO default key; display only, never re-compared, vs_default stays the vs_default rules; join over the indexed switches: 134 usable / 33 prose-or-null / 0 missing",
       "defaults": "absent keys are never ipsetc-ed, the consumer default survives (b2mnds.F:234-246; ipgetc no-action b2mod_ipmain.F:140-141): absent == not set, never unknown",
       "effective_deck": "whole-file shadowing, never key-merged: vpath %.dat .:baserundir searches the run dir first, then the family baserun (SOLPS-ITER/runs/Makefile:131; recipe cp $^ :192,194,196)",
@@ -4595,6 +4597,12 @@
   },
   "runs": {
     "example-runs/AUG_28903_D+N_drifts/variant042_eirene_drift_Npuff_2e18_alb0.81_test_transport": {
+      "commented_out": {
+        "count": 1,
+        "switches": {
+          "#b2stbr_eir_src_nhist": "1"
+        }
+      },
       "documented_false": {
         "count": 19,
         "switches": [
@@ -4619,13 +4627,8 @@
           "eirene_ionizing_core"
         ]
       },
-      "switch_count": 109,
+      "switch_count": 108,
       "switches": {
-        "#b2stbr_eir_src_nhist": {
-          "source_file": "run",
-          "value": "1",
-          "vs_default": "unknown_to_inventory"
-        },
         "ank_tracing": {
           "default": "0",
           "source_file": "run",
@@ -5275,11 +5278,16 @@
         }
       },
       "unknown_to_inventory": [
-        "#b2stbr_eir_src_nhist",
         "eirene_ion_energy_src_corr_core"
       ]
     },
     "example-runs/AUG_28903_D+N_drifts/variant101_mesh_10.04.2019_3.0.6_11pt_anti_YCUR_from_flat": {
+      "commented_out": {
+        "count": 1,
+        "switches": {
+          "#b2stbr_eir_src_nhist": "1"
+        }
+      },
       "documented_false": {
         "count": 21,
         "switches": [
@@ -5306,13 +5314,8 @@
           "eirene_ionizing_core"
         ]
       },
-      "switch_count": 115,
+      "switch_count": 114,
       "switches": {
-        "#b2stbr_eir_src_nhist": {
-          "source_file": "run",
-          "value": "1",
-          "vs_default": "unknown_to_inventory"
-        },
         "ank_tracing": {
           "default": "0",
           "source_file": "run",
@@ -5998,7 +6001,6 @@
         }
       },
       "unknown_to_inventory": [
-        "#b2stbr_eir_src_nhist",
         "eirene_ion_energy_src_corr_core"
       ]
     },

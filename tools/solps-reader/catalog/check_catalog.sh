@@ -228,6 +228,49 @@ for r in runs:
     d_ntim = entry["switches"]["b2mndr_ntim"]["default"]
     assert f'<td class="ddef ddef-val">{d_ntim}</td>' in tbl, \
         f"{name}: b2mndr_ntim documented default {d_ntim!r} not rendered"
+# the commented-out rule on the certified set: the two AUG_28903
+# decks that comment '#b2stbr_eir_src_nhist' out lose their unknown
+# mislabel — the unknown count drops to the real-drift names, the
+# exclusion is recorded in the artifact, and the run page names it
+# ONLY in the two-column table under the grey line (never a switch
+# table row, never an unknown-list entry)
+assert ss["counts"]["unknown_to_inventory"] == 2, \
+    f"unknown count {ss['counts']['unknown_to_inventory']} != 2 (real drift only)"
+assert ss["counts"].get("commented_out_switches") == 2, \
+    "commented-out count != 2 (the two AUG decks)"
+aug = [r["name"] for r in runs
+       if r["name"].startswith("example-runs/AUG_28903_D+N_drifts/")]
+assert len(aug) == 2, f"AUG_28903 runs {len(aug)} != 2"
+for name in aug:
+    page = _page(name).read_text()
+    co = (ss["runs"][name].get("commented_out") or {}).get("count", 0)
+    assert co == 1, f"{name}: commented_out group != 1 entry"
+    assert ("Commented out in this deck: 1 (kept in the deck file, "
+            "not used by the run)") in page, f"{name}: grey line missing"
+    main_tbl = page.split('<table class="switches">', 1)[1]
+    main_tbl = main_tbl.split("</table>", 1)[0]
+    assert "#b2stbr_eir_src_nhist" not in main_tbl, \
+        f"{name}: commented-out name back in the switch table"
+    co_tbl = page.split('<table class="switches commented-out">', 1)[1]
+    co_tbl = co_tbl.split("</table>", 1)[0]
+    assert re.search(
+        r'<tr><td class="mono"( style="width:[^"]*")?>'
+        r'#b2stbr_eir_src_nhist</td><td class="mono">1</td></tr>', co_tbl), \
+        f"{name}: commented-out naming table row missing"
+    # the Value columns align: both tables' first columns carry the
+    # same explicit width (the widest name either table renders, ch
+    # of the mono font + the shared cell padding)
+    wpat = r'<td class="mono" style="width:([^"]+)">'
+    w_main = re.search(wpat, main_tbl)
+    w_co = re.search(wpat, co_tbl)
+    assert w_main and w_co and w_main.group(1) == w_co.group(1), \
+        f"{name}: naming table's Value column not aligned with the table above"
+# and no other certified page carries the line
+for r in runs:
+    if r["name"] in aug:
+        continue
+    assert "Commented out in this deck" not in _page(r["name"]).read_text(), \
+        f"{r['name']}: grey line without commented switches"
 # the switch index page (switch -> runs) — one row per
 # inverted_index key (rows carry anchor ids, so they are counted as
 # '<tr id="' plus exactly one bare thead '<tr>' header), and both

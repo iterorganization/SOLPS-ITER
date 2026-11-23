@@ -802,6 +802,9 @@ def run_switches(run: str, catalog_dir: str = "") -> str:
     "is switch S at its default in run X". Served from the catalog
     SwitchJoin artifact (catalog-switchsets/1); the header carries the
     effective-deck and inventory MD5 pins, so an answer is self-citing.
+    A switch line whose quoted name starts with '#' is commented out:
+    excluded from the table and every count, named with its value in
+    one line (kept in the deck file, not used by the run).
     `run` is the catalog name or any unique substring of it
     ('run_with_drifts', '2275'), per the run_manifest rule. Chain to the
     docs with the askthedocs MCP face's search_docs('<switch>',
@@ -845,6 +848,7 @@ def run_switches(run: str, catalog_dir: str = "") -> str:
     undocumented = set(entry["documented_false"]["switches"])
 
     counts = Counter(e["vs_default"] for e in entry["switches"].values())
+    commented = entry.get("commented_out") or {}
     out = [
         f"run {name}: {entry['switch_count']} switches set in the effective deck",
         f"artifact: {SWITCHSETS_SCHEMA} ({catalog_dir}/out/switchsets.json)",
@@ -855,6 +859,15 @@ def run_switches(run: str, catalog_dir: str = "") -> str:
         f"{inv['counts']['documented']} documented)",
         "vs_default counts: "
         + " / ".join(f"{counts.get(v, 0)} {v}" for v in data["vs_default_values"]),
+    ]
+    if commented.get("count"):
+        co_names = ", ".join(
+            f"{n} = {v}" for n, v in sorted(
+                commented.get("switches", {}).items()))
+        out.append(f"commented out in this deck: {commented['count']} "
+                   "(kept in the deck file, not used by the run): "
+                   f"{co_names}")
+    out += [
         "",
         f"{'switch':<34} {'value':<12} {'from':<5} {'vs_default':<23} documented",
     ]
@@ -894,7 +907,9 @@ def switch_runs(switch: str, catalog_dir: str = "") -> str:
     section IS the name, zero fuzzy matching) or a comma-list for AND
     semantics ('b2news_facdrift_start,b2tfnb_drift_style' = runs setting
     BOTH). A switch no cataloged run sets is reported as such, with the
-    inventory size for orientation, never approximated.
+    inventory size for orientation, never approximated; a name that only
+    ever appears commented out (quoted name starting with '#') is
+    reported as commented out, with the runs that comment it out.
 
     Call for "which runs set switch S", "runs using facdrift/drifts",
     "turn this citation into run evidence"."""
@@ -935,6 +950,14 @@ def switch_runs(switch: str, catalog_dir: str = "") -> str:
 
     unknown = [n for n in names if not setting[n]]
     if unknown:
+        # a name no run sets but some runs COMMENT OUT (the quoted name
+        # starts with '#'): named, never silently absent — the same
+        # visibility rule the run pages carry
+        commented_hits = {
+            n: sorted(rn for rn, e in table.items()
+                      if n in (e.get("commented_out") or {}).get(
+                          "switches", {}))
+            for n in unknown}
         lines = []
         if len(unknown) == len(names):
             lines.append("no cataloged run sets this switch: "
@@ -954,6 +977,13 @@ def switch_runs(switch: str, catalog_dir: str = "") -> str:
         if any(n != n.lower() for n in unknown):
             lines.append("note: switch names are lowercase in decks (the "
                          "solver lowercases them); retry the lowercase form")
+        for n in unknown:
+            hits = commented_hits.get(n) or []
+            if hits:
+                lines.append(
+                    f"note: {n}: commented out in {len(hits)} "
+                    "run(s) (kept in the deck file, not used by the "
+                    "run): " + ", ".join(hits))
         lines.append(orientation)
         return "\n".join(lines)
 

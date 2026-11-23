@@ -43,6 +43,21 @@ cited per rule:
   storage (chcase, b2mod_ipmain.F:67-68); values stored verbatim
   (:96); re-setting replaces, so the LAST occurrence in file order wins
   (:83-87).
+- Commented out: a switch line whose quoted NAME starts with `#`.  The
+  solver stores it under the hashed name (ipsetc, verbatim like any
+  other), but no consumer ever queries a `#`-name (ipgetc on an absent
+  name is a no-op, b2mod_ipmain.F:140-141), so the line is inert: the
+  deck author's own deactivation spelling.  Such lines are excluded
+  from the switch map and every count/classification, and recorded
+  VERBATIM (name and value, same read as an active switch) in the
+  per-run `commented_out` group — never silently dropped.  A VALUE
+  starting with `#` (`'name' '#value'`) is NOT commented out: the
+  solver stores the value, and a numeric read of it stops the run at
+  startup ("invalid stored value", ipgeti.F/ipgetr.F err=91
+  xerrab), so the line stays a visible set switch — a never-working
+  value has diagnostic value.  Only provably-inert spellings are
+  hidden: the line-initial `#` comment (already skipped above) and
+  this in-name `#`.
 - Unreadable lines: the two-token read has no error branch, so a line
   whose quote never closes or whose name carries no value is a line
   the SOLVER itself cannot read; there is no correct reading to
@@ -130,6 +145,18 @@ RULES = {
         "b2input.xml form); both sides Fortran reals (D/d->E, e32.0 "
         "ipgetr.F:22) -> numeric equality; else exact string equality"
    ),
+    "commented_out": (
+        "a switch line whose quoted NAME starts with '#' is commented "
+        "out: the solver stores it under the hashed name (ipsetc, "
+        "verbatim) but no consumer ever queries a '#'-name (ipgetc "
+        "no-op, b2mod_ipmain.F:140-141), so it is inert — excluded "
+        "from the switch map, the unknown ledger, and every count, "
+        "kept verbatim in the per-run commented_out group. A VALUE "
+        "starting with '#' is NOT commented out: the solver stores it, "
+        "and a numeric read stops the run at startup with 'invalid "
+        "stored value' (ipgeti.F/ipgetr.F err=91), so such a line "
+        "stays a visible set switch"
+   ),
     "family_decks": (
         "the baserun/b2mn.dat of each family, parsed once with the "
         "same scan: the BASE the run pages' vs-base delta reads "
@@ -158,11 +185,19 @@ def is_comment(line: str) -> bool:
     return not line.strip() or line[0] in "*!#"
 
 
-def parse_deck(text: str) -> tuple[dict[str, str], list[dict]]:
+def parse_deck(
+        text: str) -> tuple[dict[str, str], list[dict], dict[str, str]]:
     """Effective switch map {lowercased name: stripped value} per the
     b2mnds.F post-*endphy scan (rules cited in the module docstring),
     plus one record per switch line the scan could not read:
-    {"line": <1-based number>, "reason": <plain words>}.
+    {"line": <1-based number>, "reason": <plain words>}, plus the
+    commented-out map {lowercased '#'-name: stripped value} — switch
+    lines whose quoted NAME starts with '#' (inert by construction;
+    see the module docstring's commented-out rule).  Commented-out
+    lines are read with the SAME two-token read as active switches
+    (value verbatim; unreadable ones land in the skip records like any
+    defect), so the per-run record is a faithful echo of what the
+    solver stored, never a re-interpretation.
 
     A line whose value quote never closes, whose name quote never
     closes, or whose switch name carries no value, is a line the
@@ -183,6 +218,7 @@ def parse_deck(text: str) -> tuple[dict[str, str], list[dict]]:
         raise ValueError("no *endphy terminator line") from None
     switches: dict[str, str] = {}
     skipped: list[dict] = []
+    commented: dict[str, str] = {}
     for n, ln in enumerate(lines[start:], start + 1):
         if is_comment(ln):
             continue
@@ -211,8 +247,14 @@ def parse_deck(text: str) -> tuple[dict[str, str], list[dict]]:
             value = vm.group(1)
         else:
             value = rest.split()[0]
-        switches[name.lower()] = value.strip()
-    return switches, skipped
+        # the commented-out rule: the quoted NAME starts with '#'
+        # (a VALUE starting with '#' stays a normal set switch — the
+        # stance and its startup-stop reason live in the rules text)
+        if name.startswith("#"):
+            commented[name.lower()] = value.strip()
+        else:
+            switches[name.lower()] = value.strip()
+    return switches, skipped, commented
 
 
 _REAL = re.compile(r"^[+-]?(\d+\.?\d*|\.\d+)([eEdD][+-]?\d+)?$")
@@ -324,7 +366,7 @@ def build(inventory_path: Path | None = None,
             continue
         disp = f"{group_slug}/{deck_file.relative_to(root).as_posix()}"
         try:
-            switches, skipped = parse_deck(
+            switches, skipped, commented = parse_deck(
                 deck_file.read_bytes().decode("latin-1"))
         except ValueError as exc:
             # a deck that IS present but is not the deck form this scan
@@ -366,6 +408,12 @@ def build(inventory_path: Path | None = None,
                     k for k in switches
                     if k in by_name and not by_name[k]["documented"]),
             },
+            # additive, only when the deck comments switches out: the
+            # verbatim record behind every exclusion (the parity rule
+            # solver echo = active + commented out reads THIS group)
+            **({"commented_out": {"count": len(commented),
+                                  "switches": commented}}
+               if commented else {}),
         }
         effective[name] = {
             # group-qualified runs-relative identity (stable under any
@@ -397,7 +445,7 @@ def build(inventory_path: Path | None = None,
         if not deck_file.is_file():
             continue
         try:
-            fam_switches, fam_skipped = parse_deck(
+            fam_switches, fam_skipped, fam_commented = parse_deck(
                 deck_file.read_bytes().decode("latin-1"))
         except ValueError as exc:
             # named once per family (families_failed): the honest
@@ -416,6 +464,11 @@ def build(inventory_path: Path | None = None,
             "bytes": deck_file.stat().st_size,
             "md5": md5_of(deck_file),
             **({"parse_skips": fam_skipped} if fam_skipped else {}),
+            # the same commented-out rule as the run decks (additive,
+            # only when the base deck comments switches out)
+            **({"commented_out": {"count": len(fam_commented),
+                                  "switches": fam_commented}}
+               if fam_commented else {}),
         }
 
     # Inverted index (citation -> runs): keys are exactly askthedocs
@@ -456,6 +509,9 @@ def build(inventory_path: Path | None = None,
         sum(len(rb.get("parse_skips", ())) for rb in runs_block.values())
         + sum(len(fd.get("parse_skips", ()))
               for fd in family_decks.values()))
+    commented_total = sum(
+        len(rb.get("commented_out", {}).get("switches", {}))
+        for rb in runs_block.values())
     return {
         "schema": SCHEMA,
         "vs_default_values": list(VS_DEFAULT_VALUES),
@@ -488,7 +544,12 @@ def build(inventory_path: Path | None = None,
                    # additive, only when lines were skipped: keeps a
                    # corpus of clean decks byte-identical
                    **({"skipped_switch_lines": skipped_total}
-                      if skipped_total else {})},
+                      if skipped_total else {}),
+                   # additive, only when switches were commented out
+                   # (run decks; the same key never appears on a clean
+                   # corpus)
+                   **({"commented_out_switches": commented_total}
+                      if commented_total else {})},
     }
 
 
@@ -540,13 +601,15 @@ def main(argv: list[str] | None = None) -> int:
                if c.get("absent_runs") else "")
     lines = (f", {c['skipped_switch_lines']} unreadable deck lines "
              "skipped" if c.get("skipped_switch_lines") else "")
+    commented = (f", {c['commented_out_switches']} commented out"
+                 if c.get("commented_out_switches") else "")
     print(f"switchsets -> {OUT / 'switchsets.json'}: {c['runs']} runs"
           f"{skipped}, "
           f"{sum(rb['switch_count'] for rb in art['runs'].values())} "
           f"switch entries ({c['same']} same / {c['differs']} differs / "
           f"{c['no_default_in_inventory']} no-default / "
           f"{c['unknown_to_inventory']} unknown_to_inventory)"
-          f"{lines}, "
+          f"{commented}{lines}, "
           f"{c['distinct_switches_set']} distinct indexed switches")
 
 

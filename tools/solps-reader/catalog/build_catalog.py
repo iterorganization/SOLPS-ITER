@@ -2872,8 +2872,11 @@ def switches_section(entry: dict | None,
     the "documented default" column beside the value (default_cell —
     displayed, never re-compared; the vs_default badges are unchanged).
     The honest-absence ledgers render verbatim too — unknown names and
-    the documented:false count + names are never summarized away.  A
-    run with no artifact entry renders the not-assessed note instead,
+    the documented:false count + names are never summarized away.
+    Commented-out switches ('#'-named lines) leave the table and the
+    counts, then render as the grey line plus a two-column naming
+    table directly under it: the exclusion is visible AND answerable.
+    A run with no artifact entry renders the not-assessed note instead,
     never an empty table (the honest-absence pattern).
     """
     if entry is None:
@@ -2888,13 +2891,33 @@ def switches_section(entry: dict | None,
     switches = entry["switches"]
     tallies = Counter(e["vs_default"] for e in switches.values())
     chips = " · ".join(f"{badge(v)} {tallies.get(v, 0)}" for v in VS_DEFAULT_ORDER)
+    # the naming table under the grey line aligns its Value column
+    # with this table's: both first columns carry the same explicit
+    # width, the widest name either table renders, in ch of the mono
+    # font the names use (ch scales with the font, px would not; the
+    # width is a floor, and each table's natural content sits under
+    # it by construction, so both columns land on exactly N ch).
+    # Emitted only when a naming table follows: a clean deck renders
+    # byte-identically to before.
+    commented = entry.get("commented_out") or {}
+    co_switches = commented.get("switches") or {}
+    first_w = ""
+    if co_switches:
+        names_w = max([len("Switch")]
+                      + [len(n) for n in switches]
+                      + [len(n) for n in co_switches])
+        # + 18px = the shared th,td padding-right (global border-box
+        # makes a specified width include it; the switch table's
+        # natural column is widest-name + that same padding)
+        first_w = f' style="width:calc({names_w}ch + 18px)"'
     rows = "\n".join(
-        f'<tr><td class="mono">{html.escape(name)}</td>'
+        f'<tr><td class="mono"{first_w if i == 0 else ""}>'
+        f'{html.escape(name)}</td>'
         f'<td class="mono">{html.escape(e["value"])}</td>'
         f"{default_cell(e)}"
         f'<td>{html.escape(e["source_file"])}</td>'
         f'<td>{badge(e["vs_default"])}</td></tr>'
-        for name, e in switches.items()
+        for i, (name, e) in enumerate(switches.items())
     )
     parts = [
         SWITCHES_HEAD,
@@ -2912,6 +2935,27 @@ def switches_section(entry: dict | None,
         '<th scope="col">vs default</th></tr></thead>\n'
         f"<tbody>\n{rows}\n</tbody>\n</table>",
     ]
+    # commented-out switches (the '#'NAME rule): rows gone, count
+    # dropped, one grey line under the table plus a two-column table
+    # naming each excluded switch and its value — the exclusion is
+    # visible and answerable, never silent.  The naming table's first
+    # column reuses first_w, so its Value column sits exactly under
+    # the switch table's.  Additive: a clean deck renders nothing.
+    if commented.get("count"):
+        parts.append(
+            f'<p class="sub">Commented out in this deck: '
+            f'{commented["count"]} (kept in the deck file, not used by '
+            "the run)</p>")
+        co_rows = "\n".join(
+            f'<tr><td class="mono"{first_w if i == 0 else ""}>'
+            f'{html.escape(name)}</td>'
+            f'<td class="mono">{html.escape(value)}</td></tr>'
+            for i, (name, value) in enumerate(sorted(co_switches.items())))
+        parts.append(
+            '<table class="switches commented-out">\n'
+            '<thead><tr><th scope="col">Switch</th>'
+            '<th scope="col">Value</th></tr></thead>\n'
+            f"<tbody>\n{co_rows}\n</tbody>\n</table>")
     unknown = entry.get("unknown_to_inventory") or []
     if unknown:
         parts.append(
@@ -2996,6 +3040,12 @@ def build_switches_page(switchsets: dict, artifact_md5: str) -> str:
         + "</li>"
         for n, runs in unknown.items())
     ledger = " · ".join(f"{badge(v)} {counts.get(v, 0)}" for v in VS_DEFAULT_ORDER)
+    # the site-wide commented-out count rides the same ledger when any
+    # exist (plain text, not a badge: it is not a vs_default class) —
+    # the ledger stays the one place a reader reconciles every entry
+    n_commented = counts.get("commented_out_switches", 0)
+    if n_commented:
+        ledger += f" · {n_commented} commented out"
     prov = switchsets["provenance"]["inventory"]
     rows_html = "\n".join(rows)
     head = (
