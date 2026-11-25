@@ -1,0 +1,150 @@
+/* ------------------------------------------------------------------ *
+ * askthedocs global styles
+ *
+ * Precision-instrument direction: deep-navy canvas (light: paper),
+ * plasma amber used SHARPLY (focus, ticks, badge fills — never washes),
+ * generous negative space, IBM Plex Mono for every machine value,
+ * Source Serif 4 for citation prose, Sora for UI.
+ *
+ * Fonts are SELF-HOSTED via @fontsource npm packages (latin subsets,
+ * one weight pair each) — zero external requests, the ITER-intranet
+ * constraint.  Tokens live in $lib/tokens.css (provenance there).
+ * ------------------------------------------------------------------ */
+
+@import '@fontsource/sora/latin-400.css';
+@import '@fontsource/sora/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';
+@import '@fontsource/source-serif-4/latin-400.css';
+@import './lib/tokens.css';
+
+/* ------------------------------------------------------------- canvas */
+
+html {
+	background: var(--bg);
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	font-family: var(--font-ui);
+	color: var(--text);
+	line-height: 1.55;
+	-webkit-font-smoothing: antialiased;
+	background:
+		radial-gradient(
+			1100px 480px at 82% -12%,
+			color-mix(in srgb, var(--plasma) 7%, transparent),
+			transparent 62%
+		),
+		radial-gradient(
+			900px 420px at 8% -8%,
+			color-mix(in srgb, var(--cyan) 5%, transparent),
+			transparent 58%
+		),
+		var(--bg);
+	background-attachment: fixed;
+}
+
+/* faint technical grid under everything (decorative, near-threshold) */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	background-image:
+		linear-gradient(var(--grid) 1px, transparent 1px),
+		linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+	background-size: 48px 48px;
+}
+
+::selection {
+	background: var(--plasma);
+	color: var(--ink);
+}
+
+/* ------------------------------------------------------------ details */
+
+mark {
+	background: var(--mark-bg);
+	color: var(--mark-text);
+	padding: 0 0.08em;
+	border-radius: var(--r-1);
+	/* a match that wraps to a second line keeps its padding
+	   and rounding on EVERY line box it occupies — without clone the
+	   continuation line renders as a bare color run with squared-off
+	   ends where the fragment starts mid-line */
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+code,
+kbd {
+	font-family: var(--font-mono);
+	font-size: 0.92em;
+}
+
+:where(a) {
+	color: var(--accent);
+}
+
+:where(a):hover {
+	text-decoration: none;
+}
+
+:focus-visible {
+	outline: 2px solid var(--focus-ring);
+	outline-offset: 2px;
+	border-radius: var(--r-1);
+}
+
+/* ------------------------------------------------- staggered load reveal
+ * One orchestrated entrance on first paint: masthead -> tagline ->
+ * search instrument, each 70 ms apart.  Defined ONLY inside the
+ * no-preference media block plus an explicit reduce kill-switch, so
+ * prefers-reduced-motion never sees motion at all AC). */
+
+@media (prefers-reduced-motion: no-preference) {
+	.reveal {
+		opacity: 0;
+		animation: reveal-rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+	}
+	.reveal-1 { animation-delay: 0.05s; }
+	.reveal-2 { animation-delay: 0.12s; }
+	.reveal-3 { animation-delay: 0.19s; }
+	.reveal-4 { animation-delay: 0.26s; }
+	.reveal-5 { animation-delay: 0.33s; }
+
+	@keyframes reveal-rise {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.card-in {
+		animation: card-in 0.3s ease-out both;
+	}
+
+	@keyframes card-in {
+		from { opacity: 0; transform: translateY(6px); }
+		to { opacity: 1; transform: none; }
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+	.reveal {
+		opacity: 1;
+	}
+}

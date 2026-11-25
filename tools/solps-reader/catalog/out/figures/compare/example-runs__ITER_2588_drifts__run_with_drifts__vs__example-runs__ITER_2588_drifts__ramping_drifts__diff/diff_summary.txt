@@ -1,0 +1,19 @@
+state diff: A ../../../SOLPS-ITER/runs/examples/ITER_2588_drifts/run_with_drifts/b2fstate -> B ../../../SOLPS-ITER/runs/examples/ITER_2588_drifts/ramping_drifts/b2fstate
+grid         92x38 guard cells (nx=90 ny=36 interior) — MATCH
+species      ns=2 — MATCH
+  #0  zamin=0 zamax=0 zn=1 am=2  (neutral)
+  #1  zamin=1 zamax=1 zn=1 am=2  (charged)
+version      A=03.000.010 (git 4a81a2ca-dirty)  B=03.000.010 (git 4a81a2ca-dirty)
+time         A=2.500000e-04 s  B=2.500000e-01 s  (B-A=2.497500e-01 s)
+geometry     (ix, iy) index grid
+convergence  A: n/a (--b2time-a not given)
+convergence  B: n/a (--b2time-b not given)
+fields       te ti ne na_0 na_1 po
+
+name       unit            min A            max A            min B            max B         max|B-A|     max rel   (interior cells; rel over |A| >= 1% max|A|)
+te           eV     1.711750e-01     9.620399e+02     1.713961e-01     9.620349e+02     6.929374e-02   6.423e-03
+ti           eV     6.093744e-01     9.644679e+02     6.093475e-01     9.644627e+02     1.300610e-01   4.977e-03
+ne                  2.887244e+17     1.895380e+21     2.890536e+17     1.894342e+21     1.383828e+19   9.960e-03
+na_0                6.303714e+11     6.082579e+20     6.303481e+11     6.074755e+20     2.582590e+18   5.855e-02
+na_1                2.887244e+17     1.895380e+21     2.890536e+17     1.894342e+21     1.383828e+19   9.960e-03
+po                 -4.038614e+01     1.341786e+02    -4.046679e+01     1.341002e+02     1.601180e-01   8.669e-03

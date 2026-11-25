@@ -1,0 +1,244 @@
+{
+  "file_count": 56,
+  "files": {
+    "28903.2400.AUGD.EQH.00.eq": {
+      "bytes": 611123,
+      "md5": "ccaafd46b667f2841fceaf949e69598a"
+    },
+    "28903.2400.AUGD.EQH.DivIId_mesh_10.04.2019.dg": {
+      "bytes": 92156,
+      "md5": "b85fce8e21b418e473da9c2d17e53e05"
+    },
+    "28903.2400.AUGD.EQH.DivIId_mesh_10.04.2019.dgo": {
+      "bytes": 41016,
+      "md5": "95546ab45dc29aea521808c864915080"
+    },
+    "28903.2400.AUGD.EQH.DivIId_mesh_10.04.2019.str": {
+      "bytes": 6723,
+      "md5": "f6e8d71e3e1e0222908e9b56674824f5"
+    },
+    "28903.2400.AUGD.EQH.DivIId_mesh_10.04.2019.trg": {
+      "bytes": 3602,
+      "md5": "1d7df767dbcbc5460cecd21643f1d508"
+    },
+    "28903.2400.AUGD.EQH.DivIId_mesh_10.04.2019.v001.geo": {
+      "bytes": 1042748,
+      "md5": "7c1ae2ab2b0b4f2a89bd3fcf28f0eaad"
+    },
+    "b2.user.parameters": {
+      "bytes": 241,
+      "md5": "20001b153aa3a75b00573a053368678e"
+    },
+    "b2ag.dat": {
+      "bytes": 294,
+      "md5": "5c7ea2467aa63f3389ab26e86618769a"
+    },
+    "b2ag.prt": {
+      "bytes": 53239,
+      "md5": "d0e270995bb9631043b9536ffe8aa068"
+    },
+    "b2ah.dat": {
+      "bytes": 39345,
+      "md5": "a17605ec675afea4acd92612ae4f9607"
+    },
+    "b2ah.prt": {
+      "bytes": 44735,
+      "md5": "36e7990aab74b765cc19268908e93b46"
+    },
+    "b2ai.dat": {
+      "bytes": 793,
+      "md5": "7551b664db197f097b7b7f56436d0980"
+    },
+    "b2ai.prt": {
+      "bytes": 1816,
+      "md5": "e2b52bc4e886a8641bcde778d0fda202"
+    },
+    "b2ar.dat": {
+      "bytes": 393,
+      "md5": "847ac2710a83f06b2f1d192edd983856"
+    },
+    "b2ar.prt": {
+      "bytes": 330534,
+      "md5": "23fd4fdb614fe513c8a1e63cba845063"
+    },
+    "b2fgmtry": {
+      "bytes": 3802665,
+      "md5": "b7194f882fd81036744a7856f7344657"
+    },
+    "b2fpardf": {
+      "bytes": 73365,
+      "md5": "db3af38916382587c55dd39e0de86b46"
+    },
+    "b2frates": {
+      "bytes": 3004804,
+      "md5": "cfd0650b4aebfbb8aab6e77966b9019e"
+    },
+    "b2fstati": {
+      "bytes": 28649044,
+      "md5": "dbd1dc83f047aa66f6780a645fac00f0"
+    },
+    "b2yr.dat": {
+      "bytes": 169,
+      "md5": "478a3eecbf050b0a46be2b92fd668169"
+    },
+    "b2yt.dat": {
+      "bytes": 101,
+      "md5": "ad9dba14ec6df00687a3ba337bc20df2"
+    },
+    "btor.dat": {
+      "bytes": 25,
+      "md5": "2c37e0d1cef25e66b4a44c52a5cdf40d"
+    },
+    "carre.dat": {
+      "bytes": 650,
+      "md5": "71d64f1636f95b8f9094e6b0718bf21b"
+    },
+    "carre.out": {
+      "bytes": 319671,
+      "md5": "d8704f7eeedaa6532daa5a6ab15103a9"
+    },
+    "dg.dgo": {
+      "bytes": 41016,
+      "md5": "95546ab45dc29aea521808c864915080"
+    },
+    "dg.equ": {
+      "bytes": 611123,
+      "md5": "ccaafd46b667f2841fceaf949e69598a"
+    },
+    "dg.str": {
+      "bytes": 6723,
+      "md5": "f6e8d71e3e1e0222908e9b56674824f5"
+    },
+    "dg.trg": {
+      "bytes": 3602,
+      "md5": "1d7df767dbcbc5460cecd21643f1d508"
+    },
+    "eirtria.log": {
+      "bytes": 12277,
+      "md5": "b65b35d1abe97c9d951dab6a3b0b6495"
+    },
+    "fort.30": {
+      "bytes": 449439,
+      "md5": "fc25fb803f4075504aaa84e20818e92e"
+    },
+    "fort.33": {
+      "bytes": 212919,
+      "md5": "31ee6f5ff0e5b66c415984cd3833119d"
+    },
+    "fort.34": {
+      "bytes": 277843,
+      "md5": "37c76d4afbfdc1db5c0fb9a4aa755799"
+    },
+    "fort.35": {
+      "bytes": 895243,
+      "md5": "626ef8dcb107984d626c1aad359510fc"
+    },
+    "input.dat": {
+      "bytes": 86078,
+      "md5": "247472e96b085a6ce2a72f01dc48a3a9"
+    },
+    "input.eir": {
+      "bytes": 90921,
+      "md5": "66b8e5bbc1dc8ea014a3afa2a5a42c18"
+    },
+    "input_avg.eir": {
+      "bytes": 90921,
+      "md5": "a93158825b556122d74b1452e707187c"
+    },
+    "input_fin.eir": {
+      "bytes": 90921,
+      "md5": "384b6cc905ec234270d3cc2f86758ed7"
+    },
+    "mesh.extra": {
+      "bytes": 12383,
+      "md5": "9fd52c9eb1faffea0a915b24fd1932e3"
+    },
+    "param.dg": {
+      "bytes": 41016,
+      "md5": "95546ab45dc29aea521808c864915080"
+    },
+    "rzpsi.dat": {
+      "bytes": 447237,
+      "md5": "a28754f67b581ba375ef8aee04aaf3c4"
+    },
+    "structure.dat": {
+      "bytes": 11790,
+      "md5": "73aa9d1089c6621e71868a4ee77b45ff"
+    },
+    "structures.dat": {
+      "bytes": 111686,
+      "md5": "acf86fa2821a9e091478390e121be064"
+    },
+    "template.a004.tria.ogr": {
+      "bytes": 344832,
+      "md5": "7d2d0dc955996e7de712cc53fce32822"
+    },
+    "template.g004.tria.ogr": {
+      "bytes": 1013120,
+      "md5": "d3ac87fd5660c420829c1c3bda7777ee"
+    },
+    "test.eir": {
+      "bytes": 90921,
+      "md5": "0e2926ba45d97a99377dcffd329d33c8"
+    },
+    "tria.elemente": {
+      "bytes": 95481,
+      "md5": "2eda7a62bd1d602dee74a421a15fcb63"
+    },
+    "tria.eps": {
+      "bytes": 167443,
+      "md5": "15b7a9c643f92b2f99d5591625a49d2b"
+    },
+    "tria.in": {
+      "bytes": 16354,
+      "md5": "52b6b2387536e5ed4be9d7b7aea34c23"
+    },
+    "tria.neighbor": {
+      "bytes": 158029,
+      "md5": "cba25a2b1b8693e3227616c8e573e84d"
+    },
+    "tria.nodes": {
+      "bytes": 72049,
+      "md5": "fc1d943eb6eaa42dffd7fb05f44c6566"
+    },
+    "triageom.eps": {
+      "bytes": 510576,
+      "md5": "7b79effe6a3e7c18b6ce171f1b99c3f3"
+    },
+    "triang.eir": {
+      "bytes": 90803,
+      "md5": "f52aec8a04e5d4c3c43cdc0f31ee1c4d"
+    },
+    "triang.hed": {
+      "bytes": 148,
+      "md5": "b6ab3a9dfba83d9d61d8f35762bd709c"
+    },
+    "uinput.dg": {
+      "bytes": 41016,
+      "md5": "95546ab45dc29aea521808c864915080"
+    },
+    "uinput.trg": {
+      "bytes": 3602,
+      "md5": "1d7df767dbcbc5460cecd21643f1d508"
+    },
+    "vertex_data.out": {
+      "bytes": 751414,
+      "md5": "4e94d96b8c0513dc6ba8bb60d3b2d7e0"
+    }
+  },
+  "geometry": {
+    "bytes": 3802665,
+    "md5": "b7194f882fd81036744a7856f7344657"
+  },
+  "kind": "input_deck",
+  "machine": "AUG",
+  "name": "example-runs/AUG_28903_D+N_drifts/baserun",
+  "note": "sibling input deck of the family's run dirs (runs/Makefile:131 vpath search path); run markers absent below: that absence is what makes this a deck, not a run",
+  "run_family": "example-runs/AUG_28903_D+N_drifts",
+  "run_markers": {
+    "b2fstate": false,
+    "b2time.nc": false,
+    "fort.44": false
+  },
+  "total_bytes": 44968178
+}

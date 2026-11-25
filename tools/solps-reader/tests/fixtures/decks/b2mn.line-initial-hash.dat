@@ -1,0 +1,9 @@
+# section header, line-initial hash
+*endphy
+# Turn off all electric currents in the simulation
+# 'b2tfhe_no_current'          '1'
+
+# Use SPb new form of calculating heat and particle fluxes
+'b2tfhe_mdf'         '1'
+'b2tfhi_mdf'         '1'
+'b2tfnb_mdf'         '1'

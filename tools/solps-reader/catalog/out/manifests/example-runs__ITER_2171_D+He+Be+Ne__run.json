@@ -1,0 +1,301 @@
+{
+  "convergence": {
+    "active_verdicts": {
+      "tmti": "plateaued"
+    },
+    "counts": {
+      "constant": 3,
+      "evolving": 1,
+      "near-plateau": 0,
+      "plateaued": 3
+    },
+    "n_active": 1,
+    "nrecords": 101,
+    "ntraces": 7,
+    "sparklines": {
+      "monitors": {
+        "tmti": {
+          "units": "eV",
+          "values": [
+            1.20562426933923e+25,
+            1.2056236856601675e+25,
+            1.2056230791011503e+25,
+            1.205622472568394e+25,
+            1.2056218666631657e+25,
+            1.2056212531888714e+25,
+            1.2056206464992889e+25,
+            1.2056200419660932e+25,
+            1.2056194376177176e+25,
+            1.2056188286286894e+25,
+            1.2056182146393025e+25,
+            1.2056176064113617e+25,
+            1.205616999094472e+25,
+            1.2056163893101498e+25,
+            1.20561578602035e+25,
+            1.20561518279081e+25,
+            1.2056145763577943e+25,
+            1.2056139690396117e+25,
+            1.205613364947098e+25,
+            1.2056127611471405e+25,
+            1.205612149408506e+25,
+            1.2056115423374198e+25,
+            1.2056109339804268e+25,
+            1.2056103234373182e+25,
+            1.205609714685876e+25,
+            1.2056091096970632e+25,
+            1.2056085056944973e+25,
+            1.205607897003855e+25,
+            1.2056072883917898e+25,
+            1.2056066838927813e+25,
+            1.2056060780302413e+25,
+            1.2056054737353206e+25,
+            1.20560486774999e+25,
+            1.2056042543537836e+25,
+            1.2056036408050252e+25,
+            1.205603030685499e+25,
+            1.2056024261444787e+25,
+            1.2056018135842583e+25,
+            1.2056012038683984e+25,
+            1.2056005943893547e+25,
+            1.205599990240887e+25,
+            1.2055993893865266e+25,
+            1.2055987841650743e+25,
+            1.205598180606169e+25,
+            1.2055975821550963e+25,
+            1.2055969797250633e+25,
+            1.2055963720730295e+25,
+            1.2055957642801452e+25,
+            1.2055951655501425e+25,
+            1.2055945662222802e+25,
+            1.2055939602328132e+25
+          ]
+        }
+      },
+      "time_span_s": {
+        "end": 9.999999999999914e-06,
+        "start": 1e-08
+      }
+    },
+    "time_bases": [
+      "timesa",
+      "tmne",
+      "tmte"
+    ],
+    "verdict": "plateaued"
+  },
+  "files": {
+    "b2fmovie": {
+      "bytes": 4125109,
+      "md5": "2ddf4739655b55983b6ca7e1ac74f306"
+    },
+    "b2fplasma": {
+      "bytes": 93906202,
+      "md5": "1d6f3d00e9f6ccd5c9c0e6e635c89333"
+    },
+    "b2fstate": {
+      "bytes": 61008381,
+      "md5": "7846d598f6b3fd430b225eb616b52e8c"
+    },
+    "b2mn.dat": {
+      "bytes": 1376,
+      "md5": "f385f1baf4580395619e947b2c0151af"
+    },
+    "b2time.nc": {
+      "bytes": 13159148,
+      "md5": "4e759b261c6def9c6eda69b648a426a1"
+    },
+    "fort.44": {
+      "bytes": 4464467,
+      "md5": "62789372579bcd0ba0edd47eaf35e4a4"
+    },
+    "fort.46": {
+      "bytes": 4266239,
+      "md5": "374b74890e1b41196c31421b4a19b024"
+    }
+  },
+  "fort44": {
+    "git_hash": "3.0.10-25-g8f458905",
+    "grid": {
+      "nx": 90,
+      "ny": 36
+    },
+    "species": [
+      "D",
+      "HE",
+      "BE",
+      "NE",
+      "D2",
+      "D2+"
+    ],
+    "version": 20240627
+  },
+  "fort46": {
+    "git_hash": "3.0.10-25-g8f458905",
+    "ntri": 8035,
+    "species": [
+      "D",
+      "HE",
+      "BE",
+      "NE",
+      "D2",
+      "D2+"
+    ],
+    "version": 20170930
+  },
+  "input_deck": "manifests/example-runs__ITER_2171_D+He+Be+Ne__baserun.json",
+  "machine": "ITER",
+  "name": "example-runs/ITER_2171_D+He+Be+Ne/run",
+  "run_family": "example-runs/ITER_2171_D+He+Be+Ne",
+  "wall": {
+    "integrated_raw": {
+      "atom": 4.627517143766255e+24,
+      "eb": 26406032.9171432,
+      "ion": 5.947032702804237e+24,
+      "mol": 6.59313640455e+23
+    },
+    "integrated_si": {
+      "atom": {
+        "unit": "particles s-1",
+        "value": 4.627517143766255e+24,
+        "what": "net-emitted atom flux (wldpa)"
+      },
+      "eb": {
+        "unit": "W",
+        "value": 26406032.9171432,
+        "what": "power of emitted particles (wldpeb)"
+      },
+      "ion": {
+        "unit": "particles s-1",
+        "value": 5.947032702804237e+24,
+        "what": "impinging plasma-ion flux (wldpp)"
+      },
+      "mol": {
+        "unit": "particles s-1",
+        "value": 6.59313640455e+23,
+        "what": "net-emitted molecule flux (wldpm)"
+      }
+    },
+    "loaded_rows": [
+      181,
+      182,
+      183,
+      184,
+      185
+    ],
+    "loaded_rows_si": [
+      {
+        "area_m2": 29.8264,
+        "emitted_power_w": 11986001.2,
+        "isrftype": 1,
+        "particle_flux_density_m2_s1": 1.3888805256416463e+23,
+        "particle_flux_s1": 4.1425306109998e+24,
+        "row": 181
+      },
+      {
+        "area_m2": 73.8315,
+        "emitted_power_w": 14419450.0,
+        "isrftype": 1,
+        "particle_flux_density_m2_s1": 9.593902794352e+22,
+        "particle_flux_s1": 7.083322341611998e+24,
+        "row": 182
+      },
+      {
+        "area_m2": 24.6727,
+        "emitted_power_w": 84.5040122,
+        "isrftype": -3,
+        "particle_flux_density_m2_s1": 5.452297431330256e+19,
+        "particle_flux_s1": 1.34522898833982e+21,
+        "row": 183
+      },
+      {
+        "area_m2": 32.41,
+        "emitted_power_w": 153.714165,
+        "isrftype": -3,
+        "particle_flux_density_m2_s1": 1.310507266964641e+20,
+        "particle_flux_s1": 4.247354052232401e+21,
+        "row": 184
+      },
+      {
+        "area_m2": 667.72,
+        "emitted_power_w": 343.498966,
+        "isrftype": -3,
+        "particle_flux_density_m2_s1": 3.6212055549049006e+18,
+        "particle_flux_s1": 2.4179513731211004e+21,
+        "row": 185
+      }
+    ],
+    "nlim": 180,
+    "nstra": 13,
+    "nsts": 6,
+    "polygon_segments_nonzero": 0,
+    "units": "per-element SI rates/powers (solps.tex :5064-5067, catalog/FORMATS.md): wldpp/wldpa/wldpm particles s-1 (ion impinging; atom/mol net-emitted), wldpeb W"
+  },
+  "wall_geometry": {
+    "dims": [
+      90,
+      36
+    ],
+    "figure": {
+      "bytes": 153255,
+      "figures_seat": "tree",
+      "md5": "92089010e4f7aa1e07732815b1aa54e7",
+      "path": "figures/example-runs__ITER_2171_D+He+Be+Ne__run.png"
+    },
+    "mesh": "example-runs/ITER_2171_D+He+Be+Ne/baserun/fort.30",
+    "patch": [
+      [
+        1,
+        21
+      ],
+      [
+        22,
+        72
+      ],
+      [
+        73,
+        93
+      ]
+    ],
+    "surfaces": [
+      {
+        "computed_m2": 606.3016732013656,
+        "rel": 5.390030618942946e-07,
+        "surface": "Core side 1",
+        "wlarea_m2": 606.302
+      },
+      {
+        "computed_m2": 29.826387632236745,
+        "rel": 4.146582643033434e-07,
+        "surface": "Target 1",
+        "wlarea_m2": 29.8264
+      },
+      {
+        "computed_m2": 73.83149533945051,
+        "rel": 6.312413391298191e-08,
+        "surface": "Target 2",
+        "wlarea_m2": 73.8315
+      },
+      {
+        "computed_m2": 24.672696697406924,
+        "rel": 1.3385616796947378e-07,
+        "surface": "PFR side 1",
+        "wlarea_m2": 24.6727
+      },
+      {
+        "computed_m2": 32.410005589542955,
+        "rel": 1.7246352848694766e-07,
+        "surface": "PFR side 2",
+        "wlarea_m2": 32.41
+      },
+      {
+        "computed_m2": 667.7198327374388,
+        "rel": 2.5049805496729146e-07,
+        "surface": "Outer side 1",
+        "wlarea_m2": 667.72
+      }
+    ],
+    "tol": 5e-06,
+    "verdict": "pass",
+    "worst_rel": 5.390030618942946e-07
+  }
+}

@@ -1,0 +1,196 @@
+/* ------------------------------------------------------------------ *
+ * askthedocs design tokens)
+ *
+ * BRAND TOKENS — pinned EXACTLY, do not adjust by eye.  Provenance:
+ * extracted 2026-09-24 from iter.org (homepage +
+ * /themes/custom/intuitiv/assets/css/intuitiv.style.css, 2.8 MB):
+ *   #0f1632 x272  #fdbb30 x209  #2c6ecb x112  #3ed9fd x29
+ *   neutrals #f6f6f7 #f0f0f0 #495057 #212529
+ * (Bootstrap defaults seen there — #0d6efd/#dc3545/#198754 — are
+ * framework noise, NOT brand; never adopted.)  Re-extract from the
+ * source before changing any of these seven.
+ *
+ * Everything below the brand block is DERIVED: theme-scoped surface,
+ * text and mark roles that keep every text-bearing pair at WCAG AA —
+ * verified by computation in tests/test_design_us001.py, not by eye.
+ * Amber (#fdbb30) is used SHARPLY: accents and badge fills with ink
+ * text, never as low-contrast text on light surfaces.
+ * ------------------------------------------------------------------ */
+
+:root {
+	/* brand (theme-invariant) */
+	--ink: #0f1632;        /* ITER midnight navy */
+	--plasma: #fdbb30;     /* plasma amber */
+	--iter-blue: #2c6ecb;  /* ITER blue */
+	--cyan: #3ed9fd;       /* plasma cyan */
+	--paper: #f6f6f7;      /* light canvas */
+	--slate: #495057;      /* secondary text on light */
+	--char: #212529;       /* body text on light */
+
+	/* identity fonts — self-hosted via @fontsource (app.css) */
+	--font-ui: 'Sora', 'Segoe UI', sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo,
+		monospace;
+	--font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+	/* shape — the radius system): three steps + pill, and
+	   every radius in the app maps to one of them.  Before this the
+	   stylesheet carried 4/5/6/8/10/12/14 + pill + ad-hoc 2/3px — nine
+	   values for four jobs.  The retune history lives in one place
+	   now: change a token, the system follows.  (app.html's
+	   pre-hydration notice reads these through a literal fallback —
+	   tokens.css may not have landed at first paint.) */
+	--r-1: 4px;      /* keys, badges, machine chips, marks */
+	--r-2: 8px;      /* controls: inputs, buttons, inner boxes */
+	--r-3: 12px;     /* cards: hits, panes, dialogs */
+	--r-pill: 999px; /* pills: filter chips, recent keys */
+
+	/* derived — LIGHT theme (default) */
+	--bg: var(--paper);
+	--surface: #ffffff;
+	--surface-2: #ececed;
+	--text: var(--char);
+	--text-2: var(--slate);
+	--accent: var(--iter-blue);
+	--accent-contrast: #ffffff;      /* text on accent fills */
+	--button-bg: var(--ink); /* search CTA fill pair) */
+	--button-fg: var(--paper);
+	--line: #d9d9dc;
+	--line-strong: #b9b9bf;
+	/* the keyboard selection's structural line): brand ink in
+	   light; in dark the theme's WRITING color stands in — brand ink is
+	   invisible on the lifted card (2.05:1) and on canvas (~1.1:1).
+	   Both floors pinned in tests/test_design_us001.py NON_TEXT */
+	--sel-line: var(--ink);
+	--focus-ring: var(--iter-blue);  /* visible on paper: 4.6:1 */
+	--mark-bg: #fce9b8;              /* amber wash, ink-grade text */
+	--mark-text: var(--char);
+	--danger: #b00020;
+	/* the freshness chip's verdict edges: green = verified fresh,
+	   yellow = the corpus cannot be found.  Both clear the 3:1
+	   non-text floor on their theme's surfaces (the danger pair's
+	   discipline); yellow is an amber-family INK in light (plasma
+	   amber itself is a wash, never an edge on paper) and the brand
+	   amber in dark. */
+	--fresh: #0d7d66;
+	--stale: #9a6b00;
+	--grid: rgba(44, 110, 203, 0.05);
+
+	/*  the CLUSTER palette (curated twelve, owner-directed:
+	   pills + badges).  Deep fills carrying WHITE text — the pair
+	   AND the 3:1 rest-state dot floor vs --surface are COMPUTED in
+	   tests/test_clusterpalette_us030.py, never eyeballed.  Amber's
+	   hue zone is deliberately empty: amber stays with matches and
+	   the all pill, sharpened). Unknown clusters fall back
+	   to the pre-030 look in the page CSS (--cc unset). */
+	--cluster-docs: #2c6ecb;           --cluster-docs-on: #ffffff;
+	--cluster-solps_docs: #0e7f9c;     --cluster-solps_docs-on: #ffffff;
+	--cluster-eirene_manual: #b04a21;  --cluster-eirene_manual-on: #ffffff;
+	--cluster-tutorials: #0d7d66;     --cluster-tutorials-on: #ffffff;
+	--cluster-amdata: #2e7d4f;         --cluster-amdata-on: #ffffff;
+	--cluster-fortran_source: #4a4fd8; --cluster-fortran_source-on: #ffffff;
+	--cluster-gui_docs: #7a3fc9;       --cluster-gui_docs-on: #ffffff;
+	--cluster-gui_figures: #c2426e;    --cluster-gui_figures-on: #ffffff;
+	--cluster-source_switch: #b03ba8;  --cluster-source_switch-on: #ffffff;
+	--cluster-divgeo: #5e46c0;         --cluster-divgeo-on: #ffffff;
+	--cluster-module_docs: #8a37b8;    --cluster-module_docs-on: #ffffff;
+	--cluster-course: #2f7d46;         --cluster-course-on: #ffffff;
+	--cluster-log: #5a6478;            --cluster-log-on: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+	/* auto-dark applies unless the visitor FORCED light via
+	   the toggle — the media query alone cannot be overridden, so
+	   the guard does it */
+	:root:not([data-theme='light']) {
+		/* derived — DARK theme: navy canvas, lifted surfaces
+		 * elevation re-step; every ratio below COMPUTED, see
+		 * tests/test_design_us001.py NON_TEXT — never eyeballed):
+		 *   surface  #3f4a6e  2.19:1 vs bg  (was --ink, 1.07:1 — the
+		 * audit's "fog"; ~2x lift per )
+		 *   surface-2 #182042 unchanged — now the INSET step below the
+		 *                     lifted card (1.72:1 surface-vs-band)
+		 *   line     #535e88  3.01:1 vs bg, 1.38:1 on surface
+		 *                    (was #2a3358, 1.55:1)
+		 *   line-strong #5c6a98  3.60:1 vs bg — search-input boundary
+		 *                    clears WCAG 1.4.11 3:1 (was 2.22:1)
+		 * text-2/danger re-stepped to hold AA on the lighter surface */
+		--bg: #0a0f22;
+		--surface: #3f4a6e;
+		--surface-2: #182042;
+		--text: #eef1f8;
+		--text-2: #b9c3d6;
+		--accent: var(--cyan);
+		--accent-contrast: var(--ink);
+		--button-bg: var(--paper);    /* CTA reads on navy: 17.6:1 */
+		--button-fg: var(--ink);
+		--line: #535e88;
+		--line-strong: #5c6a98;
+		--sel-line: var(--text);      /* dark's ink: 7.6:1 on surface */
+		--focus-ring: var(--plasma);  /* visible on navy: 10:1 */
+		--mark-bg: #3d3110;
+		--mark-text: #f7e6b8;
+		--danger: #ffaabb;
+		--fresh: #4fd6ab;
+		--stale: var(--plasma);
+		--grid: rgba(62, 217, 253, 0.04);
+
+		/* dark: the SAME twelve hues, lifted to pastel fills
+		   carrying INK text (the paper-CTA pattern) — pairs
+		   and dot floors computed for THIS surface (#3f4a6e), see
+		   tests/test_clusterpalette_us030.py */
+		--cluster-docs: #9db9ec;           --cluster-docs-on: #0f1632;
+		--cluster-solps_docs: #7ec8dd;     --cluster-solps_docs-on: #0f1632;
+		--cluster-eirene_manual: #eba98a;  --cluster-eirene_manual-on: #0f1632;
+		--cluster-tutorials: #7cc9b4;     --cluster-tutorials-on: #0f1632;
+		--cluster-amdata: #8fc9a4;         --cluster-amdata-on: #0f1632;
+		--cluster-fortran_source: #b1b4f2; --cluster-fortran_source-on: #0f1632;
+		--cluster-gui_docs: #c9a8ef;       --cluster-gui_docs-on: #0f1632;
+		--cluster-gui_figures: #eb9cb5;    --cluster-gui_figures-on: #0f1632;
+		--cluster-source_switch: #e39bdf;  --cluster-source_switch-on: #0f1632;
+		--cluster-divgeo: #a99aee;         --cluster-divgeo-on: #0f1632;
+		--cluster-module_docs: #d29bef;    --cluster-module_docs-on: #0f1632;
+		--cluster-course: #93cba4;         --cluster-course-on: #0f1632;
+		--cluster-log: #b9c0d1;            --cluster-log-on: #0f1632;
+	}
+}
+
+/*  FORCED dark: the toggle's explicit choice on a light
+   system.  CSS cannot share a declaration block with the media query
+   above, so this duplicates it EXACTLY — the duplication is pinned
+   equal by tests/test_themetoggle_us031.py; drift between the two
+   blocks is a bug, fix it here. */
+:root[data-theme='dark'] {
+	--bg: #0a0f22;
+	--surface: #3f4a6e;
+	--surface-2: #182042;
+	--text: #eef1f8;
+	--text-2: #b9c3d6;
+	--accent: var(--cyan);
+	--accent-contrast: var(--ink);
+	--button-bg: var(--paper);
+	--button-fg: var(--ink);
+	--line: #535e88;
+	--line-strong: #5c6a98;
+	--sel-line: var(--text);
+	--focus-ring: var(--plasma);
+	--mark-bg: #3d3110;
+	--mark-text: #f7e6b8;
+	--danger: #ffaabb;
+	--fresh: #4fd6ab;
+	--stale: var(--plasma);
+	--grid: rgba(62, 217, 253, 0.04);
+	--cluster-docs: #9db9ec;           --cluster-docs-on: #0f1632;
+	--cluster-solps_docs: #7ec8dd;     --cluster-solps_docs-on: #0f1632;
+	--cluster-eirene_manual: #eba98a;  --cluster-eirene_manual-on: #0f1632;
+	--cluster-tutorials: #7cc9b4;     --cluster-tutorials-on: #0f1632;
+	--cluster-amdata: #8fc9a4;         --cluster-amdata-on: #0f1632;
+	--cluster-fortran_source: #b1b4f2; --cluster-fortran_source-on: #0f1632;
+	--cluster-gui_docs: #c9a8ef;       --cluster-gui_docs-on: #0f1632;
+	--cluster-gui_figures: #eb9cb5;    --cluster-gui_figures-on: #0f1632;
+	--cluster-source_switch: #e39bdf;  --cluster-source_switch-on: #0f1632;
+	--cluster-divgeo: #a99aee;         --cluster-divgeo-on: #0f1632;
+	--cluster-module_docs: #d29bef;    --cluster-module_docs-on: #0f1632;
+	--cluster-course: #93cba4;         --cluster-course-on: #0f1632;
+	--cluster-log: #b9c0d1;            --cluster-log-on: #0f1632;
+}

@@ -1,0 +1,6 @@
+* the value quote opens and never closes; the good lines around
+* it still read, the unreadable line is named and skipped
+*endphy
+'b2eirene' '.true.'
+'b2ntde' '.true
+'b2nreal' '1.0'

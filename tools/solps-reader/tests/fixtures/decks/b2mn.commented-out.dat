@@ -1,0 +1,6 @@
+* the commented-out form: the '#' rides inside the name quotes
+*endphy
+'b2eirene'   '.true.'
+'#b2stbr_eir_src_nhist'           '1'   running average on nhist(=100) time steps
+'#b2ntde' '3.0'
+'b2nreal' 2.5e-7

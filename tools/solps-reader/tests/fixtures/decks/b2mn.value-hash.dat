@@ -1,0 +1,4 @@
+* the value form: a '#' on the VALUE is not commented out
+*endphy
+'b2nreal' '#1.5'
+'b2ntde' #2

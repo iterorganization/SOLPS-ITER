@@ -1,0 +1,9 @@
+{
+  "note": "The shipped reference set's own recorded comparisons (the pair the compare verb demonstrates itself with on every site, the certified build included). Group-qualified names, exactly the sources file's own shape; a user's catalog compare pairs join these in every build, theirs first. The pair answers a question the family's automatic deck does not: what the drifts change against the ramping case.",
+  "comparisons": [
+    {
+      "a": "example-runs/ITER_2588_drifts/run_with_drifts",
+      "b": "example-runs/ITER_2588_drifts/ramping_drifts"
+    }
+  ]
+}
