@@ -15617,14 +15617,18 @@ fchsapp \index{fchsapp}\index{b2time.nc, fchsapp} & poloidal current, x-pt priva
 \end{longtable}
 
 The following are vector time-dependent quantities stored in
-{\tt b2time.nc}.  These are quantities along lines of constant
-{\em ix} at the Western target ({\tt l})
+{\tt b2time.nc}.  These are quantities along the Western target ({\tt l})
 (inner for LSN, outer for USN, and lower inner for DN configurations),
 inner midplane ({\tt i}), outer midplane ({\tt a}) and Eastern target ({\tt r})
 (outer for LSN, inner for USN, and lower outer for DN configurations).  The
 positions of the inner and outer midplanes are defined by the
 {\tt RZIMP} and {\tt RZOMP} variables, respectively, in
-{\tt b2.user.parameters}.
+{\tt b2.user.parameters}. The targets are defined, preferentially,
+as the set of faces with the same face-region index as defined in
+Appendix~\ref{cha:regions}, or, if no such face-region definition is available,
+the set of faces with the same face label as declared in the {\tt b2fgmtry}
+file. For limiter cases, the {\tt l} and {\tt r} segments will correspond to
+both sides of the tangency point.
 
 Again, the total internal energy flux quantities {\tt ft3d..} are defined in the same way as the {\tt fetx} \btwoplot quantity (see Section~\ref{fetx}).\index{b2plot, fetx}
 
